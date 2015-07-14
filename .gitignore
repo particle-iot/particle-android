@@ -25,3 +25,11 @@ proguard/
 
 # Log Files
 *.log
+
+# IntelliJ project files that shouldn't be checked in
+/.idea/workspace.xml
+/.idea/libraries
+
+# OS X droppings  (how is this not in the default Android Studio .gitconfig?)
+.DS_Store
+
