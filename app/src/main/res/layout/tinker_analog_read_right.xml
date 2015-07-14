@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/tinker_analog_read_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tinker_analog_read_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="234"/>
+
+    <io.particle.android.sdk.tinker.ReversedProgressBar
+        android:id="@+id/tinker_analog_read_progress"
+        style="@style/TinkerProgress"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="8dip"
+        android:gravity="center_vertical"
+        android:progress="30"/>
+
+</LinearLayout>

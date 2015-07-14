@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="tinker_instructions"><![CDATA[Welcome to Tinker!\n\n
+Tinker is the fastest and easiest way to prototype and play with your Photon.\n\n
+You can access the basic input/output functions of the Photon without writing a line of code.\n\n
+Tap any pin to get started, select a pin function and tinker with the value. Hold a pin to reset its function. Start with pin D7 - select digitalWrite - blink the attached LED.\n\n
+For more information visit: docs.particle.io/photon/tinker/\n\n
+Enjoy!]]></string>
+    <string name="tinker_instructions_signature"><i>-The Particle Team</i></string>
+    <string name="title_device_list">Devices</string>
+    <string name="title_device_detail">Device rulsDetail</string>
+    <string name="clear_tinker">Reset all pin functions</string>
+    <string name="your_devices">Your Devices</string>
+    <string name="unnamed_device">(Unnamed device)</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="unclaim">Unclaim</string>
+    <string name="unclaim_device_dialog_content">Unclaim device?</string>
+    <string name="rename_menu_title">Rename…</string>
+    <string name="flash">Flash</string>
+    <string name="copy_device_id_to_clipboard">Copy device ID to clipboard</string>
+    <string name="docs_link_menu_particle_app_tinker">Particle app/Tinker</string>
+    <string name="docs_link_menu_setting_up_your_device">Setting up your Photon/Core</string>
+    <string name="docs_link_menu_create_your_own_android_app">Create your own Android app</string>
+    <string name="particle_support">Particle support</string>
+    <string name="particle_community">Particle community</string>
+
+</resources>

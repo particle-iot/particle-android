@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/tinker_instructions"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tinker_instructions_bg">
+
+    <!-- This layout below isn't useless, it confines all the children to @dimen/phone_width -->
+
+    <LinearLayout
+        android:layout_width="@dimen/content_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:id="@+id/main_tinker_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="@string/tinker_instructions"
+            android:textColor="@color/element_text_color"
+            android:textSize="@dimen/text_size_medium"/>
+
+        <TextView
+            fontPath="@string/italic_text_font_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dip"
+            android:text="@string/tinker_instructions_signature"
+            android:textColor="@color/element_text_color"
+            android:textSize="@dimen/text_size_medium"
+            tools:ignore="MissingPrefix"/>
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="uri_docs_particle_app_tinker">http://docs.particle.io/photon/tinker/#tinkering-with-tinker</string>
+    <string name="uri_docs_setting_up_your_device">http://docs.particle.io/photon/connect/#connecting-your-device</string>
+    <string name="uri_docs_create_your_own_android_app">http://docs.particle.io/photon/ios/#ios-cloud-sdk</string>
+    <string name="uri_support_community">http://community.particle.io/</string>
+    <string name="uri_support_site">http://support.particle.io/hc/en-us</string>
+</resources>

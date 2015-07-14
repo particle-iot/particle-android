@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/refresh_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/SectionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/your_devices"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:footerDividersEnabled="false"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/add_device_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="12dp"
+                fab:fab_labelStyle="@style/menu_labels_style">
+
+                <com.getbase.floatingactionbutton.AddFloatingActionButton
+                    android:id="@+id/action_set_up_a_core"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_addButtonStrokeVisible="true"
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white_pressed"
+                    fab:fab_plusIconColor="@color/element_background_color"
+                    fab:fab_size="mini"
+                    fab:fab_title="Set up a Core"/>
+
+                <com.getbase.floatingactionbutton.AddFloatingActionButton
+                    android:id="@+id/action_set_up_a_photon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_addButtonStrokeVisible="true"
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white_pressed"
+                    fab:fab_plusIconColor="@color/element_background_color"
+                    fab:fab_size="mini"
+                    fab:fab_title="Set up a Photon"/>
+
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        </FrameLayout>
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

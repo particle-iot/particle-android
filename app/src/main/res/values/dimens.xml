@@ -1,0 +1,6 @@
+<resources>
+
+    <dimen name="analog_write_parent_width">205dip</dimen>
+    <dimen name="analog_write_text_value_size">20sp</dimen>
+
+</resources>
