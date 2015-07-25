@@ -38,6 +38,7 @@ import io.particle.android.sdk.cloud.SparkDevice;
 import io.particle.android.sdk.tinker.Pin.OnAnalogWriteListener;
 import io.particle.android.sdk.ui.DeviceActionsHelper;
 import io.particle.android.sdk.utils.Async;
+import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.Prefs;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.Toaster;
@@ -86,20 +87,53 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
         prefs = Prefs.getInstance(getActivity());
         SparkCloud sparkCloud = SparkCloud.get(getActivity());
-        try {
-            String deviceId = getArguments().getString(ARG_DEVICE_ID);
-            device = sparkCloud.getDevice(deviceId);
-            if (device == null) {
-                throw new RuntimeException("No device found for ID " + deviceId);
-            }
-            api = new TinkerApi();
-        } catch (SparkCloudException e) {
-            // FIXME: handle gracefully
-            e.printStackTrace();
-        }
+        final String deviceId = getArguments().getString(ARG_DEVICE_ID);
 
+        // set a blank title until the device is retrieved
+        getActivity().setTitle("");
+
+        Async.executeAsync(sparkCloud, new Async.ApiWork<SparkCloud, SparkDevice>() {
+            @Override
+            public SparkDevice callApi(SparkCloud sparkCloud) throws SparkCloudException, IOException {
+                return sparkCloud.getDevice(deviceId);
+            }
+
+            @Override
+            public void onSuccess(final SparkDevice sparkDevice) {
+                onDeviceRetrieved(sparkDevice);
+            }
+
+            @Override
+            public void onFailure(SparkCloudException e) {
+                onDeviceRetrievalFailure();
+            }
+        });
+    }
+
+    private void onDeviceRetrievalFailure() {
+        if (isVisible()) {
+            Toaster.s(getActivity(), "Cannot communicate with device.");
+        }
+        getActivity().finish();
+    }
+
+    private void onDeviceRetrieved(SparkDevice device) {
+        this.device = device;
+        api = new TinkerApi();
         String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
         getActivity().setTitle(name);
+
+        Ui.findView(this, R.id.get_device_progress_spinner).setVisibility(View.GONE);
+
+        loadViews();
+        setupListeners();
+
+        if (TinkerPrefs.getInstance(getActivity()).isFirstVisit()) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.instructions_container, new InstructionsFragment())
+                    .addToBackStack("InstructionsFragment_TRANSACTION")
+                    .commit();
+        }
     }
 
     @Nullable
@@ -109,18 +143,9 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        loadViews();
-        setupListeners();
-
-		if (TinkerPrefs.getInstance(getActivity()).isFirstVisit()) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.instructions_container, new InstructionsFragment())
-                    .addToBackStack("InstructionsFragment_TRANSACTION")
-                    .commit();
-		}
+        Ui.findView(this, R.id.get_device_progress_spinner).setVisibility(View.VISIBLE);
     }
 
     @Override

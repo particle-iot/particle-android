@@ -9,6 +9,7 @@
     tools:context=".TinkerActivity">
 
     <RelativeLayout
+        android:id="@+id/tinker_content_view"
         android:layout_width="@dimen/content_width"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -179,5 +180,19 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_margin="16dp"/>
+
+    <FrameLayout
+        android:id="@+id/get_device_progress_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#5EEE"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="@android:style/Widget.Holo.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 
 </RelativeLayout>
