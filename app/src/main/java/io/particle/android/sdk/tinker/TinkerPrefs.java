@@ -32,7 +32,7 @@ public class TinkerPrefs {
     }
 
     public void setVisited(boolean isVisited) {
-        prefs.edit().putBoolean(KEY_IS_VISITED, isVisited).commit();
+        prefs.edit().putBoolean(KEY_IS_VISITED, isVisited).apply();
     }
 
 }

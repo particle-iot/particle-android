@@ -60,11 +60,10 @@ public class DevicesLoader extends BetterAsyncTaskLoader<List<SparkDevice>> {
     public List<SparkDevice> loadInBackground() {
         try {
             devices = cloud.getDevices();
-            return getLoadedContent();
         } catch (SparkCloudException e) {
             // FIXME: think more about error handling here
-            return getLoadedContent();
         }
+        return getLoadedContent();
     }
 
 

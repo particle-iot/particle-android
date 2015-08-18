@@ -748,6 +748,15 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             this.pinAction = pinAction;
             this.currentValue = currentValue;
         }
+
+        @Override
+        public String toString() {
+            return "PinStuff{" +
+                    "pinName='" + pinName + '\'' +
+                    ", pinAction=" + pinAction +
+                    ", currentValue=" + currentValue +
+                    '}';
+        }
     }
 
 
