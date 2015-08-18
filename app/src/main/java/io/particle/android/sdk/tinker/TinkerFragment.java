@@ -38,7 +38,6 @@ import io.particle.android.sdk.cloud.SparkDevice;
 import io.particle.android.sdk.tinker.Pin.OnAnalogWriteListener;
 import io.particle.android.sdk.ui.DeviceActionsHelper;
 import io.particle.android.sdk.utils.Async;
-import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.Prefs;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.Toaster;
@@ -69,6 +68,10 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     }
 
     private static final TLog log = TLog.get(TinkerFragment.class);
+
+    private static final int ANALOG_READ_MAX = 4095;
+    private static final int ANALOG_WRITE_MAX = 255;
+    private static final int ANALOG_WRITE_MAX_ALT = ANALOG_READ_MAX;
 
 
     private List<Pin> allPins = list();
@@ -257,13 +260,13 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                 allPins.add(new Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", noAnalogWrite));
                 allPins.add(new Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", noAnalogWrite));
                 allPins.add(new Pin(findPinView(R.id.tinker_a2), PinType.A, "A2", noAnalogWrite));
-                allPins.add(new Pin(findPinView(R.id.tinker_a3), PinType.A, "A3", allFunctionsDAC));
+                allPins.add(new Pin(findPinView(R.id.tinker_a3), PinType.A, "A3", allFunctionsDAC, "A3", ANALOG_WRITE_MAX_ALT));
                 // (II) Analog write duplicated to value in D3 (mention in UI)
                 allPins.add(new Pin(findPinView(R.id.tinker_a4), PinType.A, "A4", allFunctions));
                 // (I) Analog write duplicated to value in D2 (mention in UI)
                 allPins.add(new Pin(findPinView(R.id.tinker_a5), PinType.A, "A5", allFunctions));
-                allPins.add(new Pin(findPinView(R.id.tinker_a6), PinType.A, "A6", allFunctionsDAC, "DAC"));
-                allPins.add(new Pin(findPinView(R.id.tinker_a7), PinType.A, "A7", allFunctions, "WKP"));
+                allPins.add(new Pin(findPinView(R.id.tinker_a6), PinType.A, "A6", allFunctionsDAC, "DAC", ANALOG_WRITE_MAX_ALT));
+                allPins.add(new Pin(findPinView(R.id.tinker_a7), PinType.A, "A7", allFunctions, "WKP", ANALOG_WRITE_MAX));
 
                 allPins.add(new Pin(findPinView(R.id.tinker_d0), PinType.D, "D0", noAnalogRead));
                 allPins.add(new Pin(findPinView(R.id.tinker_d1), PinType.D, "D1", noAnalogRead));

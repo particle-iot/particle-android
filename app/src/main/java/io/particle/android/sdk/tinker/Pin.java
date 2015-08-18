@@ -39,6 +39,7 @@ public class Pin {
 
     private final PinType pinType;
     private final Set<PinAction> functions;
+    private final int maxAnalogWriteValue;
 
     private boolean muted = false;
     private PinAction configuredAction;
@@ -54,14 +55,17 @@ public class Pin {
     private DigitalValue digitalValue;
 
     public Pin(TextView view, PinType pinType, String name, EnumSet<PinAction> functions) {
-        this(view, pinType, name, functions, name);
+        this(view, pinType, name, functions, name, ANALOG_WRITE_MAX);
     }
 
-    // for some pins, the label and the name are not the same, which is what this constructor is for.
-    public Pin(TextView view, PinType pinType, String name, EnumSet<PinAction> functions, String label) {
+    // for some pins, the label and the name are not the same, and on A3 and DAC, the
+    // analog write value is different
+    public Pin(TextView view, PinType pinType, String name, EnumSet<PinAction> functions,
+               String label, int maxAnalogWriteValue) {
         this.view = view;
         this.pinType = pinType;
         this.name = name;
+        this.maxAnalogWriteValue = maxAnalogWriteValue;
         this.configuredAction = PinAction.NONE;
         this.label = label;
         this.functions = Collections.unmodifiableSet(functions);
@@ -263,13 +267,7 @@ public class Pin {
                     view.getContext(), R.drawable.progress_sunflower));
         }
 
-        int max = 1;
-        if (configuredAction == PinAction.ANALOG_READ) {
-            max = ANALOG_READ_MAX;
-        } else if (configuredAction == PinAction.ANALOG_WRITE) {
-            max = ANALOG_WRITE_MAX;
-        }
-
+        int max = getAnalogMax();
         barGraph.setMax(max);
         barGraph.setProgress(newValue);
         readValue.setText(String.valueOf(newValue));
@@ -334,6 +332,7 @@ public class Pin {
                 valueText.setText(String.valueOf(progress));
             }
         });
+        seekBar.setMax(getAnalogMax());
     }
 
     public void showAnalogWriteValue() {
@@ -499,6 +498,17 @@ public class Pin {
             return false;
         }
     }
+
+    private int getAnalogMax() {
+        int max = 1;
+        if (configuredAction == PinAction.ANALOG_READ) {
+            max = ANALOG_READ_MAX;
+        } else if (configuredAction == PinAction.ANALOG_WRITE) {
+            max = maxAnalogWriteValue;
+        }
+        return max;
+    }
+
 
     private static class CastCheckArgbEvaluator implements TypeEvaluator {
 
