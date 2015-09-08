@@ -9,8 +9,8 @@ import com.afollestad.materialdialogs.Theme;
 
 import java.io.IOException;
 
-import io.particle.android.sdk.cloud.SparkCloudException;
-import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.sdk.app.R;
@@ -18,7 +18,7 @@ import io.particle.sdk.app.R;
 
 public class UnclaimHelper {
 
-    public static void unclaimDeviceWithDialog(final FragmentActivity activity, final SparkDevice device) {
+    public static void unclaimDeviceWithDialog(final FragmentActivity activity, final ParticleDevice device) {
         new MaterialDialog.Builder(activity)
                 .content(R.string.unclaim_device_dialog_content)
                 .theme(Theme.LIGHT)
@@ -34,11 +34,11 @@ public class UnclaimHelper {
                 .show();
     }
 
-    private static void unclaim(final Activity activity, final SparkDevice device) {
-        Async.executeAsync(device, new Async.ApiWork<SparkDevice, Void>() {
+    private static void unclaim(final Activity activity, final ParticleDevice device) {
+        Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Void>() {
 
             @Override
-            public Void callApi(SparkDevice sparkDevice) throws SparkCloudException, IOException {
+            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.unclaim();
                 return null;
             }
@@ -50,7 +50,7 @@ public class UnclaimHelper {
             }
 
             @Override
-            public void onFailure(SparkCloudException exception) {
+            public void onFailure(ParticleCloudException exception) {
                 new MaterialDialog.Builder(activity)
                         .content("Error: unable to unclaim '" + device.getName() + "'")
                         .theme(Theme.LIGHT)

@@ -14,8 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import io.particle.android.sdk.cloud.SparkCloudException;
-import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.sdk.app.R;
@@ -24,7 +24,7 @@ public class FlashAppHelper {
 
 
     public static void flashAppFromBinaryWithDialog(final FragmentActivity activity,
-                                                    final SparkDevice device, final File path) {
+                                                    final ParticleDevice device, final File path) {
         new MaterialDialog.Builder(activity)
                 // FIXME: this is just for flashing Tinker for now, but later it could be used
                 // for whatever file the user wants to upload (and "known apps" will work for
@@ -44,7 +44,7 @@ public class FlashAppHelper {
     }
 
     public static void flashPhotonTinkerWithDialog(final FragmentActivity activity,
-                                                   final SparkDevice device) {
+                                                   final ParticleDevice device) {
         final InputStream inputStream = activity.getResources().openRawResource(R.raw.photon_tinker);
         new MaterialDialog.Builder(activity)
                 .content("Flash Tinker?")
@@ -62,8 +62,8 @@ public class FlashAppHelper {
 
 
     public static void flashKnownAppWithDialog(final FragmentActivity activity,
-                                               final SparkDevice device,
-                                               final SparkDevice.KnownApp knownApp) {
+                                               final ParticleDevice device,
+                                               final ParticleDevice.KnownApp knownApp) {
         new MaterialDialog.Builder(activity)
                 .content(String.format("Flash %s?", StringUtils.capitalize(knownApp.getAppName())))
                 .theme(Theme.LIGHT)
@@ -79,17 +79,17 @@ public class FlashAppHelper {
     }
 
     // FIXME: remove duplication between the following methods
-    private static void flashKnownApp(final Activity activity, final SparkDevice device,
-                                      final SparkDevice.KnownApp knownApp) {
-        Async.executeAsync(device, new Async.ApiProcedure<SparkDevice>() {
+    private static void flashKnownApp(final Activity activity, final ParticleDevice device,
+                                      final ParticleDevice.KnownApp knownApp) {
+        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
-            public Void callApi(SparkDevice sparkDevice) throws SparkCloudException, IOException {
+            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.flashKnownApp(knownApp);
                 return null;
             }
 
             @Override
-            public void onFailure(SparkCloudException exception) {
+            public void onFailure(ParticleCloudException exception) {
                 new MaterialDialog.Builder(activity)
                         .title("Unable to reflash " + StringUtils.capitalize(knownApp.getAppName()))
                         .content(exception.getBestMessage())
@@ -99,7 +99,7 @@ public class FlashAppHelper {
         }).andIgnoreCallbacksIfActivityIsFinishing(activity);
     }
 
-    private static void flashFromBinary(final Activity activity, final SparkDevice device,
+    private static void flashFromBinary(final Activity activity, final ParticleDevice device,
                                         final File binaryFile) {
         // FIXME: incroporate real error handling here
         try {
@@ -111,18 +111,18 @@ public class FlashAppHelper {
     }
 
 
-    private static void flashFromStream(final Activity activity, final SparkDevice device,
+    private static void flashFromStream(final Activity activity, final ParticleDevice device,
                                         final InputStream stream, final String name) {
-        Async.executeAsync(device, new Async.ApiProcedure<SparkDevice>() {
+        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
-            public Void callApi(SparkDevice sparkDevice) throws SparkCloudException, IOException {
+            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.flashBinaryFile(stream);
                 EZ.closeThisThingOrMaybeDont(stream);
                 return null;
             }
 
             @Override
-            public void onFailure(SparkCloudException exception) {
+            public void onFailure(ParticleCloudException exception) {
                 new MaterialDialog.Builder(activity)
                         .title("Unable to reflash from " + name)
                         .content(exception.getBestMessage())

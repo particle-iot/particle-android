@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import io.particle.android.sdk.accountsetup.LoginActivity;
-import io.particle.android.sdk.cloud.SparkCloud;
+import io.particle.android.sdk.cloud.ParticleCloud;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.SoftAPConfigRemover;
 import io.particle.android.sdk.utils.ui.Ui;
@@ -57,7 +58,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 
         deviceList = Ui.findFrag(this, R.id.device_list);
 
-        final SparkCloud cloud = SparkCloud.get(this);
+        final ParticleCloud cloud = ParticleCloud.get(this);
         Ui.findView(this, R.id.action_log_out).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,12 +84,9 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         }
     }
 
-    /**
-     * Callback method from {@link DeviceListFragment.Callbacks}
-     * indicating that the item with the given ID was selected.
-     */
+    //region DeviceListFragment.Callbacks
     @Override
-    public void onDeviceSelected(String id) {
+    public void onDeviceSelected(ParticleDevice device) {
         // FIXME: re-enable
 //
 //        return;
@@ -104,10 +102,9 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 //
 //        } else {
         // In single-pane mode, simply start the detail activity
-        // for the selected item ID.
-        startActivity(
-                new Intent(this, TinkerActivity.class)
-                        .putExtra(TinkerFragment.ARG_DEVICE_ID, id));
+        // for the selected item.
+        startActivity(TinkerActivity.buildIntent(this, device));
 //        }
     }
+    //endregion
 }

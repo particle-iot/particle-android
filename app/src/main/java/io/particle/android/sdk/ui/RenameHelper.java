@@ -2,30 +2,32 @@ package io.particle.android.sdk.ui;
 
 
 import android.support.v4.app.FragmentActivity;
+import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Set;
 
-import io.particle.android.sdk.cloud.SparkCloudException;
-import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.CoreNameGenerator;
 
 
 public class RenameHelper {
 
-    public static void renameDevice(FragmentActivity activity, SparkDevice device) {
+    public static void renameDevice(FragmentActivity activity, ParticleDevice device) {
         new RenameHelper(device, activity).showDialog();
     }
 
 
-    private final SparkDevice device;
+    private final ParticleDevice device;
     private final FragmentActivity activity;
 
-    private RenameHelper(SparkDevice device, FragmentActivity activity) {
+    private RenameHelper(ParticleDevice device, FragmentActivity activity) {
         this.device = device;
         this.activity = activity;
     }
@@ -33,8 +35,9 @@ public class RenameHelper {
 
     private void showDialog() {
         // FIXME: include "suggest different name" button
-        final String suggestedName = CoreNameGenerator.generateUniqueName(
-                device.getCloud().getDeviceNames());
+        // FIXME: device name cache is gone, re-implement this later.
+        Set<String> noNames = Collections.emptySet();
+        final String suggestedName = CoreNameGenerator.generateUniqueName(noNames);
 
         new MaterialDialog.Builder(activity)
                 .title("Rename Device")
@@ -59,13 +62,11 @@ public class RenameHelper {
                             }
                         };
 
-                        // use one-method-per-line style here on the off chance that
-                        // something really could be null here (it shouldn't be
-                        // possible at all)
-                        rename(dialog
-                                .getInputEditText()
-                                .getText()
-                                .toString(), onDupeName);
+                        EditText inputText = dialog.getInputEditText();
+                        if (inputText == null) {
+                            return;
+                        }
+                        rename(inputText.getText().toString(), onDupeName);
                     }
                 })
                 .show();
@@ -87,7 +88,9 @@ public class RenameHelper {
     }
 
     private void rename(String newName, Runnable runOnDupeName) {
-        Set<String> currentDeviceNames = device.getCloud().getDeviceNames();
+        // FIXME: device name cache is gone, re-implement this later.
+//        Set<String> currentDeviceNames = device.getCloud().getDeviceNames();
+        Set<String> currentDeviceNames = Collections.emptySet();
         if (currentDeviceNames.contains(newName) || newName.equals(device.getName())) {
             showDupeNameDialog(runOnDupeName);
         } else {
@@ -96,15 +99,15 @@ public class RenameHelper {
     }
 
     private void doRename(final String newName) {
-        Async.executeAsync(device, new Async.ApiProcedure<SparkDevice>() {
+        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
-            public Void callApi(SparkDevice sparkDevice) throws SparkCloudException, IOException {
+            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.setName(newName);
                 return null;
             }
 
             @Override
-            public void onFailure(SparkCloudException exception) {
+            public void onFailure(ParticleCloudException exception) {
                 new MaterialDialog.Builder(activity)
                         .theme(Theme.LIGHT)
                         .title("Unable to rename core")

@@ -1,5 +1,6 @@
 package io.particle.android.sdk.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.sdk.app.R;
 
@@ -20,6 +22,13 @@ import io.particle.sdk.app.R;
  * more than a {@link TinkerFragment}.
  */
 public class TinkerActivity extends BaseActivity {
+
+
+    public static Intent buildIntent(Context ctx, ParticleDevice device) {
+        return new Intent(ctx, TinkerActivity.class)
+                .putExtra(TinkerFragment.ARG_DEVICE, device);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +56,10 @@ public class TinkerActivity extends BaseActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            String deviceId = getIntent().getStringExtra(TinkerFragment.ARG_DEVICE_ID);
+            ParticleDevice device = getIntent().getParcelableExtra(TinkerFragment.ARG_DEVICE);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.device_detail_container, TinkerFragment.newInstance(deviceId))
+                    .add(R.id.device_detail_container, TinkerFragment.newInstance(device))
                     .commit();
         }
     }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import io.particle.android.sdk.cloud.SDKGlobals;
-import io.particle.android.sdk.cloud.SparkCloud;
+import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
@@ -73,7 +73,7 @@ public class SplashActivity extends BaseActivity {
             Intent intent;
             if (SDKGlobals.getAppDataStorage().getUserHasClaimedDevices()) {
                 intent = NextActivitySelector.getNextActivityIntent(this,
-                        SparkCloud.get(this),
+                        ParticleCloud.get(this),
                         SDKGlobals.getSensitiveDataStorage(),
                         SDKGlobals.getAppDataStorage());
             } else {

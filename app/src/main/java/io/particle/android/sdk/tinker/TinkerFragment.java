@@ -32,9 +32,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
-import io.particle.android.sdk.cloud.SparkCloud;
-import io.particle.android.sdk.cloud.SparkCloudException;
-import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.cloud.ParticleCloud;
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.tinker.Pin.OnAnalogWriteListener;
 import io.particle.android.sdk.ui.DeviceActionsHelper;
 import io.particle.android.sdk.utils.Async;
@@ -57,17 +57,19 @@ import static io.particle.android.sdk.utils.Py.truthy;
  */
 public class TinkerFragment extends Fragment implements OnClickListener {
 
-    // The device ID that this fragment represents
-    public static final String ARG_DEVICE_ID = "ARG_DEVICE_ID";
-
-
-    public static TinkerFragment newInstance(String deviceId) {
+    public static TinkerFragment newInstance(ParticleDevice device) {
         return FragmentBundlerCompat.make(new TinkerFragment())
-                .put(TinkerFragment.ARG_DEVICE_ID, deviceId)
+                .put(TinkerFragment.ARG_DEVICE, device)
                 .build();
     }
 
+    // The device that this fragment represents
+    public static final String ARG_DEVICE = "ARG_DEVICE";
+
     private static final TLog log = TLog.get(TinkerFragment.class);
+
+    // The device that this fragment represents
+    private static final String STATE_DEVICE = "STATE_DEVICE";
 
     private static final int ANALOG_READ_MAX = 4095;
     private static final int ANALOG_WRITE_MAX = 255;
@@ -79,7 +81,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
     private Pin selectedPin;
     private AlertDialog selectDialog;
-    private SparkDevice device;
+    private ParticleDevice device;
     private TinkerApi api;
     private Prefs prefs;
 
@@ -89,54 +91,15 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         setHasOptionsMenu(true);
 
         prefs = Prefs.getInstance(getActivity());
-        SparkCloud sparkCloud = SparkCloud.get(getActivity());
-        final String deviceId = getArguments().getString(ARG_DEVICE_ID);
-
-        // set a blank title until the device is retrieved
-        getActivity().setTitle("");
-
-        Async.executeAsync(sparkCloud, new Async.ApiWork<SparkCloud, SparkDevice>() {
-            @Override
-            public SparkDevice callApi(SparkCloud sparkCloud) throws SparkCloudException, IOException {
-                return sparkCloud.getDevice(deviceId);
-            }
-
-            @Override
-            public void onSuccess(final SparkDevice sparkDevice) {
-                onDeviceRetrieved(sparkDevice);
-            }
-
-            @Override
-            public void onFailure(SparkCloudException e) {
-                onDeviceRetrievalFailure();
-            }
-        });
-    }
-
-    private void onDeviceRetrievalFailure() {
-        if (isVisible()) {
-            Toaster.s(getActivity(), "Cannot communicate with device.");
+        if (savedInstanceState != null) {
+            device = savedInstanceState.getParcelable(STATE_DEVICE);
+        } else {
+            device = getArguments().getParcelable(ARG_DEVICE);
         }
-        getActivity().finish();
-    }
-
-    private void onDeviceRetrieved(SparkDevice device) {
-        this.device = device;
         api = new TinkerApi();
+
         String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
         getActivity().setTitle(name);
-
-        Ui.findView(this, R.id.get_device_progress_spinner).setVisibility(View.GONE);
-
-        loadViews();
-        setupListeners();
-
-        if (TinkerPrefs.getInstance(getActivity()).isFirstVisit()) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.instructions_container, new InstructionsFragment())
-                    .addToBackStack("InstructionsFragment_TRANSACTION")
-                    .commit();
-        }
     }
 
     @Nullable
@@ -148,7 +111,21 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Ui.findView(this, R.id.get_device_progress_spinner).setVisibility(View.VISIBLE);
+        loadViews();
+        setupListeners();
+
+        if (TinkerPrefs.getInstance(getActivity()).isFirstVisit()) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.instructions_container, new InstructionsFragment())
+                    .addToBackStack("InstructionsFragment_TRANSACTION")
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STATE_DEVICE, device);
     }
 
     @Override
@@ -238,24 +215,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                         PinAction.ANALOG_WRITE_DAC,
                         PinAction.DIGITAL_READ,
                         PinAction.DIGITAL_WRITE);
-
-                //        a0 = [[DevicePin alloc] initWithLabel:@"A0" 0" row:7 DigitalRead|DigitalWrite|AnalogRead];
-                //        a1 = [[DevicePin alloc] initWithLabel:@"A1" 1" row:6 DigitalRead|DigitalWrite|AnalogRead];
-                //        a2 = [[DevicePin alloc] initWithLabel:@"A2" 2" row:5 DigitalRead|DigitalWrite|AnalogRead];
-                //        a3 = [[DevicePin alloc] initWithLabel:@"A3" 3" row:4 DigitalRead|DigitalWrite|AnalogRead|AnalogWriteDAC];
-                //        a4 = [[DevicePin alloc] initWithLabel:@"A4" 4" row:3 ALL_FUNCTIONS]; // (II) Analog write duplicated to value in D3 (mention in UI)
-                //        a5 = [[DevicePin alloc] initWithLabel:@"A5" 5" row:2 ALL_FUNCTIONS]; // (I) Analog write duplicated to value in D2 (mention in UI)
-                //        a6 = [[DevicePin alloc] initWithLabel:@"DAC" 6" row:1 DigitalRead|DigitalWrite|AnalogRead|AnalogWriteDAC];
-                //        a7 = [[DevicePin alloc] initWithLabel:@"WKP" 7" row:0 ALL_FUNCTIONS];
-                //
-                //        d0 = [[DevicePin alloc] initWithLabel:@"D0" 0" row:7 DigitalRead|DigitalWrite|AnalogWrite];
-                //        d1 = [[DevicePin alloc] initWithLabel:@"D1" 1" row:6 DigitalRead|DigitalWrite|AnalogWrite];
-                //        d2 = [[DevicePin alloc] initWithLabel:@"D2" 2" row:5 DigitalRead|DigitalWrite|AnalogWrite];
-                //        d3 = [[DevicePin alloc] initWithLabel:@"D3" 3" row:4 DigitalRead|DigitalWrite|AnalogWrite]; // (II) Analog write duplicated to value in A3 (mention in UI)
-                //        d4 = [[DevicePin alloc] initWithLabel:@"D4" 4" row:3 DigitalRead|DigitalWrite]; // (II) Analog write duplicated to value in A4 (mention in UI)
-                //        d5 = [[DevicePin alloc] initWithLabel:@"D5" 5" row:2 DigitalRead|DigitalWrite];
-                //        d6 = [[DevicePin alloc] initWithLabel:@"D6" 6" row:1 DigitalRead|DigitalWrite];
-                //        d7 = [[DevicePin alloc] initWithLabel:@"D7" 7" row:0 DigitalRead|DigitalWrite];
 
                 allPins.add(new Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", noAnalogWrite));
                 allPins.add(new Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", noAnalogWrite));
@@ -655,7 +614,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     }
 
 
-    private abstract class TinkerWork extends Async.ApiWork<SparkDevice, Integer> {
+    private abstract class TinkerWork extends Async.ApiWork<ParticleDevice, Integer> {
 
         final PinStuff stuff;
 
@@ -664,7 +623,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         }
 
         @Override
-        public void onFailure(SparkCloudException exception) {
+        public void onFailure(ParticleCloudException exception) {
             onTinkerCallComplete(stuff, stuff.currentValue);
             // FIXME: do real error handling!
 //			ErrorsDelegate errorsDelegate = ((BaseActivity) getActivity()).getErrorsDelegate();
@@ -676,7 +635,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
     private class TinkerApi {
 
-        private final ArrayMap<PinAction, String> actionToFunctionName;
+        private final Map<PinAction, String> actionToFunctionName;
 
         TinkerApi() {
             actionToFunctionName = new ArrayMap<>(4);
@@ -689,7 +648,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         void write(final PinStuff stuff, final int newValue) {
             Async.executeAsync(device, new TinkerWork(stuff) {
                 @Override
-                public Integer callApi(SparkDevice sparkDevice) throws SparkCloudException, IOException {
+                public Integer callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                     String stringValue;
                     if (stuff.pinAction == PinAction.ANALOG_WRITE) {
                         stringValue = String.valueOf(newValue);
@@ -700,7 +659,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                         return (sparkDevice.callFunction(
                                 actionToFunctionName.get(stuff.pinAction),
                                 list(stuff.pinName, stringValue))==1) ? newValue : stuff.currentValue;
-                    } catch (final SparkDevice.FunctionDoesNotExistException e) {
+                    } catch (final ParticleDevice.FunctionDoesNotExistException e) {
                         Toaster.s(getActivity(), e.getMessage());
                         return stuff.currentValue; // it didn't change
                     }
@@ -717,13 +676,13 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         void read(PinStuff stuff) {
             Async.executeAsync(device, new TinkerWork(stuff) {
                 @Override
-                public Integer callApi(SparkDevice sparkDevice) throws SparkCloudException,
+                public Integer callApi(ParticleDevice sparkDevice) throws ParticleCloudException,
                         IOException {
                     try {
                         return sparkDevice.callFunction(
                                 actionToFunctionName.get(stuff.pinAction),
                                 list(stuff.pinName));
-                    } catch (SparkDevice.FunctionDoesNotExistException e) {
+                    } catch (ParticleDevice.FunctionDoesNotExistException e) {
                         Toaster.s(getActivity(), e.getMessage());
                         return stuff.currentValue;
                     }

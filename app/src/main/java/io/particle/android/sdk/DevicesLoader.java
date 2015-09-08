@@ -11,25 +11,25 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 import io.particle.android.sdk.cloud.BroadcastContract;
-import io.particle.android.sdk.cloud.SparkCloud;
-import io.particle.android.sdk.cloud.SparkCloudException;
-import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.cloud.ParticleCloud;
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.BetterAsyncTaskLoader;
 
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 
 
-public class DevicesLoader extends BetterAsyncTaskLoader<List<SparkDevice>> {
+public class DevicesLoader extends BetterAsyncTaskLoader<List<ParticleDevice>> {
 
-    private final SparkCloud cloud;
+    private final ParticleCloud cloud;
     private final LocalBroadcastManager broadcastManager;
     private final DevicesUpdatedReceiver devicesUpdatedReceiver;
-    private volatile List<SparkDevice> devices = list();
+    private volatile List<ParticleDevice> devices = list();
 
     public DevicesLoader(Context context) {
         super(context);
-        cloud = SparkCloud.get(context);
+        cloud = ParticleCloud.get(context);
         broadcastManager = LocalBroadcastManager.getInstance(context);
         devicesUpdatedReceiver = new DevicesUpdatedReceiver();
     }
@@ -52,15 +52,15 @@ public class DevicesLoader extends BetterAsyncTaskLoader<List<SparkDevice>> {
     }
 
     @Override
-    public List<SparkDevice> getLoadedContent() {
+    public List<ParticleDevice> getLoadedContent() {
         return ImmutableList.copyOf(devices);
     }
 
     @Override
-    public List<SparkDevice> loadInBackground() {
+    public List<ParticleDevice> loadInBackground() {
         try {
             devices = cloud.getDevices();
-        } catch (SparkCloudException e) {
+        } catch (ParticleCloudException e) {
             // FIXME: think more about error handling here
         }
         return getLoadedContent();

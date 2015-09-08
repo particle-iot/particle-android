@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.particle.android.sdk.DevicesLoader;
-import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.EZ;
@@ -49,10 +49,10 @@ import static io.particle.android.sdk.utils.Py.truthy;
  * interface.
  */
 public class DeviceListFragment extends ListFragment implements
-        LoaderManager.LoaderCallbacks<List<SparkDevice>> {
+        LoaderManager.LoaderCallbacks<List<ParticleDevice>> {
 
     public interface Callbacks {
-        void onDeviceSelected(String id);
+        void onDeviceSelected(ParticleDevice device);
     }
 
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
@@ -61,7 +61,8 @@ public class DeviceListFragment extends ListFragment implements
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
     private static final Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onDeviceSelected(String id) {
+        public void onDeviceSelected(ParticleDevice device) {
+            // no-op
         }
     };
 
@@ -154,7 +155,7 @@ public class DeviceListFragment extends ListFragment implements
         });
     }
 
-    public void showMenu(View v, final SparkDevice device) {
+    public void showMenu(View v, final ParticleDevice device) {
         PopupMenu popup = new PopupMenu(v.getContext(), v);
         popup.inflate(R.menu.context_device_row);
         popup.setOnMenuItemClickListener(DeviceActionsHelper.buildPopupMenuHelper(this, device));
@@ -197,7 +198,7 @@ public class DeviceListFragment extends ListFragment implements
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        final SparkDevice device = (SparkDevice) getListAdapter().getItem(position);
+        final ParticleDevice device = (ParticleDevice) getListAdapter().getItem(position);
 
         if (device.isFlashing()) {
             Toaster.s(getActivity(), "Device is being flashed, please wait for the flashing process to end first");
@@ -228,14 +229,14 @@ public class DeviceListFragment extends ListFragment implements
                         @Override
                         public void onNeutral(MaterialDialog dialog) {
                             super.onNeutral(dialog);
-                            mCallbacks.onDeviceSelected(device.getID());
+                            mCallbacks.onDeviceSelected(device);
                         }
                     })
                     .show();
 
 
         } else {
-            mCallbacks.onDeviceSelected(device.getID());
+            mCallbacks.onDeviceSelected(device);
         }
     }
 
@@ -277,12 +278,12 @@ public class DeviceListFragment extends ListFragment implements
     }
 
     @Override
-    public Loader<List<SparkDevice>> onCreateLoader(int i, Bundle bundle) {
+    public Loader<List<ParticleDevice>> onCreateLoader(int i, Bundle bundle) {
         return new DevicesLoader(getActivity());
     }
 
     @Override
-    public void onLoadFinished(Loader<List<SparkDevice>> loader, List<SparkDevice> sparkDevices) {
+    public void onLoadFinished(Loader<List<ParticleDevice>> loader, List<ParticleDevice> sparkDevices) {
         refreshLayout.setRefreshing(false);
         @SuppressWarnings("unchecked")
         DeviceListAdapter listAdapter = (DeviceListAdapter) getListAdapter();
@@ -291,15 +292,15 @@ public class DeviceListFragment extends ListFragment implements
     }
 
     @Override
-    public void onLoaderReset(Loader<List<SparkDevice>> loader) {
+    public void onLoaderReset(Loader<List<ParticleDevice>> loader) {
         // no-op
     }
 
 
-    class DeviceListAdapter extends ArrayAdapter<SparkDevice> {
+    class DeviceListAdapter extends ArrayAdapter<ParticleDevice> {
 
         public DeviceListAdapter(Context context, int resource) {
-            super(context, resource, new ArrayList<SparkDevice>());
+            super(context, resource, new ArrayList<ParticleDevice>());
         }
 
         @Override
@@ -311,7 +312,7 @@ public class DeviceListFragment extends ListFragment implements
                     convertView.setBackgroundResource(R.color.shaded_background);
                 }
             }
-            final SparkDevice device = getItem(position);
+            final ParticleDevice device = getItem(position);
 
             TextView modelName = Ui.findView(convertView, R.id.product_model_name);
             ImageView productImage = Ui.findView(convertView, R.id.product_image);
@@ -350,7 +351,7 @@ public class DeviceListFragment extends ListFragment implements
             return convertView;
         }
 
-        private Pair<String, Integer> getStatusTextAndColoredDot(SparkDevice device) {
+        private Pair<String, Integer> getStatusTextAndColoredDot(ParticleDevice device) {
             int dot;
             String msg;
             if (device.isFlashing()) {

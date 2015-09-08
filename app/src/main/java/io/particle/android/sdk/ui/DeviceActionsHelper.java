@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
 
-import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.sdk.app.R;
 
@@ -17,7 +17,7 @@ public class DeviceActionsHelper {
 
 
     public static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(final Fragment fragment,
-                                                                         final SparkDevice device) {
+                                                                         final ParticleDevice device) {
         return new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -28,7 +28,7 @@ public class DeviceActionsHelper {
 
 
     public static boolean takeActionForDevice(int actionId, FragmentActivity activity,
-                                              SparkDevice device) {
+                                              ParticleDevice device) {
         switch (actionId) {
             case R.id.action_device_rename:
                 RenameHelper.renameDevice(activity, device);
@@ -39,9 +39,9 @@ public class DeviceActionsHelper {
                 return true;
 
             case R.id.action_device_flash_tinker:
-                if (device.getDeviceType() == SparkDevice.SparkDeviceType.CORE) {
+                if (device.getDeviceType() == ParticleDevice.ParticleDeviceType.CORE) {
                     FlashAppHelper.flashKnownAppWithDialog(activity, device,
-                            SparkDevice.KnownApp.TINKER);
+                            ParticleDevice.KnownApp.TINKER);
                 } else {
                     FlashAppHelper.flashPhotonTinkerWithDialog(activity, device);
                 }
