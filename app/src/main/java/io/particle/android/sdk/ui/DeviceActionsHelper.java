@@ -15,15 +15,20 @@ import io.particle.sdk.app.R;
 
 public class DeviceActionsHelper {
 
-
-    public static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(final Fragment fragment,
-                                                                         final ParticleDevice device) {
+    public static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(
+            final FragmentActivity activity, final ParticleDevice device) {
         return new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                return takeActionForDevice(item.getItemId(), fragment.getActivity(), device);
+                return takeActionForDevice(item.getItemId(), activity, device);
             }
         };
+    }
+
+
+    public static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(final Fragment fragment,
+                                                                         final ParticleDevice device) {
+        return buildPopupMenuHelper(fragment.getActivity(), device);
     }
 
 

@@ -51,9 +51,10 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((DeviceListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.device_list))
-                    .setActivateOnItemClick(true);
+            // FIXME: need to impl in RecyclerView if we want two-pane mode
+//            ((DeviceListFragment) getSupportFragmentManager()
+//                    .findFragmentById(R.id.device_list))
+//                    .setActivateOnItemClick(true);
         }
 
         deviceList = Ui.findFrag(this, R.id.device_list);

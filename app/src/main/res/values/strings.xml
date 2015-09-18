@@ -26,4 +26,8 @@ Enjoy!]]></string>
     <string name="particle_support">Particle support</string>
     <string name="particle_community">Particle community</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="err_msg_device_is_offline">This device is offline, please turn it on and refresh in order to Tinker with it.</string>
+
 </resources>

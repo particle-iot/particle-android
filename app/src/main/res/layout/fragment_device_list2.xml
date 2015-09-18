@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.android.sdk.ui.DeviceListFragment"
+    tools:ignore="RtlHardcoded">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/device_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/add_device_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="12dp"
+        fab:fab_labelStyle="@style/menu_labels_style">
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/action_set_up_a_core"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_addButtonStrokeVisible="true"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_plusIconColor="@color/element_background_color"
+            fab:fab_size="mini"
+            fab:fab_title="Set up a Core"/>
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/action_set_up_a_photon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_addButtonStrokeVisible="true"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_plusIconColor="@color/element_background_color"
+            fab:fab_size="mini"
+            fab:fab_title="Set up a Photon"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</FrameLayout>
+
