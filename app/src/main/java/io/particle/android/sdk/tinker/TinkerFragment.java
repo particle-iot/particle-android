@@ -4,13 +4,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.ArrayMap;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -32,7 +37,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
-import io.particle.android.sdk.cloud.ParticleCloud;
+import io.particle.android.sdk.cloud.BroadcastContract;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.tinker.Pin.OnAnalogWriteListener;
@@ -85,6 +90,8 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     private TinkerApi api;
     private Prefs prefs;
 
+    private DevicesUpdatedListener devicesUpdatedListener = new DevicesUpdatedListener();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,9 +104,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             device = getArguments().getParcelable(ARG_DEVICE);
         }
         api = new TinkerApi();
-
-        String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
-        getActivity().setTitle(name);
     }
 
     @Nullable
@@ -120,6 +124,21 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                     .addToBackStack("InstructionsFragment_TRANSACTION")
                     .commit();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateTitle();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                devicesUpdatedListener, devicesUpdatedListener.buildIntentFilter());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(
+                devicesUpdatedListener);
     }
 
     @Override
@@ -156,6 +175,11 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void updateTitle() {
+        String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
+        getActivity().setTitle(name);
     }
 
     private TextView findPinView(int id) {
@@ -694,9 +718,21 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                 }
             });
         }
-
-
     }
+
+
+    private class DevicesUpdatedListener extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateTitle();
+        }
+
+        IntentFilter buildIntentFilter() {
+            return new IntentFilter(BroadcastContract.BROADCAST_DEVICES_UPDATED);
+        }
+    }
+
 
     // FIXME: rename to something more descriptive
     static class PinStuff {
