@@ -152,7 +152,6 @@ public class DeviceListFragment extends Fragment implements
             @Override
             public void onSetupSuccess(String id) {
                 log.d("Successfully set up " + id);
-                refreshDevices();
             }
 
             @Override
