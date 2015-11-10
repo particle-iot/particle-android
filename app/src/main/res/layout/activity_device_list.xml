@@ -41,7 +41,7 @@
 
 
     <fragment
-        android:id="@+id/device_list"
+        android:id="@+id/fragment_device_list"
         android:name="io.particle.android.sdk.ui.DeviceListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

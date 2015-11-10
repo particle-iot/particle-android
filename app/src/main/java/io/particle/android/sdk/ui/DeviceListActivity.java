@@ -57,7 +57,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 //                    .setActivateOnItemClick(true);
         }
 
-        deviceList = Ui.findFrag(this, R.id.device_list);
+        deviceList = Ui.findFrag(this, R.id.fragment_device_list);
 
         final ParticleCloud cloud = ParticleCloud.get(this);
         Ui.findView(this, R.id.action_log_out).setOnClickListener(new View.OnClickListener() {
