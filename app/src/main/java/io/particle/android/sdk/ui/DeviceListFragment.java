@@ -148,8 +148,8 @@ public class DeviceListFragment extends Fragment implements
 
         deviceSetupCompleteReceiver = new ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver() {
             @Override
-            public void onSetupSuccess(long l) {
-                log.d("Successfully set up " + l);
+            public void onSetupSuccess(String id) {
+                log.d("Successfully set up " + id);
                 refreshDevices();
             }
 
