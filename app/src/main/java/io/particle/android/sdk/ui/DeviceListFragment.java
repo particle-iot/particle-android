@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -319,6 +321,7 @@ public class DeviceListFragment extends Fragment implements
 
         private final List<ParticleDevice> devices = list();
         private final FragmentActivity activity;
+        private Drawable defaultBackground;
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
@@ -336,8 +339,18 @@ public class DeviceListFragment extends Fragment implements
         public void onBindViewHolder(ViewHolder holder, int position) {
             final ParticleDevice device = devices.get(position);
 
+            if (defaultBackground == null) {
+                defaultBackground = holder.topLevel.getBackground();
+            }
+
             if (position % 2 == 0) {
                 holder.topLevel.setBackgroundResource(R.color.shaded_background);
+            } else {
+                if (VERSION.SDK_INT >= 16) {
+                    holder.topLevel.setBackground(defaultBackground);
+                } else {
+                    holder.topLevel.setBackgroundDrawable(defaultBackground);
+                }
             }
 
             switch (device.getDeviceType()) {

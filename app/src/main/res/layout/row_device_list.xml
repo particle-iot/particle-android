@@ -58,6 +58,7 @@
         android:layout_alignParentRight="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:focusable="false"
+        android:tint="@android:color/transparent"
         android:focusableInTouchMode="false"
         android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"/>
 

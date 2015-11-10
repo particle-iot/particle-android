@@ -38,4 +38,6 @@
     <color name="tinker_selection_overlay_item_selected_bg">#66000000</color>
     <color name="tinker_bar_graph_background">#7f000000</color>
 
+    <drawable name="selectable_background">?attr/selectableItemBackground</drawable>
+
 </resources>

@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.cloud.ParticleCloud;
+import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
@@ -30,7 +30,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ParticleDeviceSetupLibrary.init(this.getApplicationContext(), DeviceListActivity.class);
 
         if (SPLASH_DISPLAY_TIME < 1) {
