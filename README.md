@@ -1,8 +1,16 @@
-# photon-tinker-android
-Photon Tinker app for Android
+# Particle Tinker app for Android
 
-Getting started
-===============
+Get connected and start building your Internet of Things project right away with Particle, the companion app to the Photon, a tiny but powerful Wi-Fi development board from the team at Particle. Your Photon and this app are all you need to get started with your project or prototype; the kit comes pre-loaded with our firmware libraries and is connected to the cloud out of the box.
+Download Particle to easily connect your Photon to a Wi-Fi network in a few simple steps. No coding required. The app will take you through the entire set-up process step by step until the LED on your board is breathing cyan - indicating it's connected and ready to be programmed!
+
+Additional resources:
+• Read the getting started guide at http://particle.io/start
+• Join the most active and helpful IoT community out there at http://community.particle.io
+• Learn more about Particle syntax and hardware at http://docs.particle.io
+• Start building your own code at http://particle.io/build
+• Find answers to common questions at http://support.particle.io
+
+### This is an open source project
 
 Requirements
 ------------
