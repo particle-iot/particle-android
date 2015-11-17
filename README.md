@@ -1,5 +1,7 @@
 # Particle Tinker app for Android
 
+![Particle](https://raw.githubusercontent.com/spark/photon-tinker-android/master/app/src/main/res/drawable-xxhdpi/ic_launcher.png)
+
 [Install on your Android device from Google Play store](https://play.google.com/store/apps/details?id=io.particle.android.app)
 
 Get connected and start building your Internet of Things project right away with Particle, the companion app to the Photon, a tiny but powerful Wi-Fi development board from the team at Particle. Your Photon and this app are all you need to get started with your project or prototype; the kit comes pre-loaded with our firmware libraries and is connected to the cloud out of the box.
