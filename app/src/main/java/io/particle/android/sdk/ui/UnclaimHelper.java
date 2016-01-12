@@ -2,10 +2,11 @@ package io.particle.android.sdk.ui;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
+import android.support.v7.app.AlertDialog;
 
 import java.io.IOException;
 
@@ -19,16 +20,18 @@ import io.particle.sdk.app.R;
 public class UnclaimHelper {
 
     public static void unclaimDeviceWithDialog(final FragmentActivity activity, final ParticleDevice device) {
-        new MaterialDialog.Builder(activity)
-                .content(R.string.unclaim_device_dialog_content)
-                .theme(Theme.LIGHT)
-                .autoDismiss(true)
-                .positiveText(R.string.unclaim)
-                .negativeText(R.string.cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.unclaim_device_dialog_content)
+                .setPositiveButton(R.string.unclaim, new OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(DialogInterface dialog, int which) {
                         unclaim(activity, device);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 })
                 .show();
@@ -38,7 +41,8 @@ public class UnclaimHelper {
         Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Void>() {
 
             @Override
-            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+            public Void callApi(@NonNull ParticleDevice sparkDevice)
+                    throws ParticleCloudException, IOException {
                 device.unclaim();
                 return null;
             }
@@ -51,13 +55,16 @@ public class UnclaimHelper {
 
             @Override
             public void onFailure(ParticleCloudException exception) {
-                new MaterialDialog.Builder(activity)
-                        .content("Error: unable to unclaim '" + device.getName() + "'")
-                        .theme(Theme.LIGHT)
-                        .autoDismiss(true)
-                        .positiveText("OK")
+                new AlertDialog.Builder(activity)
+                        .setMessage("Error: unable to unclaim '" + device.getName() + "'")
+                        .setPositiveButton(R.string.ok, new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
                         .show();
             }
-        });
+        }).andIgnoreCallbacksIfActivityIsFinishing(activity);
     }
 }

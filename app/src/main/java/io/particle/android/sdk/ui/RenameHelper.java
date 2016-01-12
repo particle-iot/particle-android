@@ -1,7 +1,10 @@
 package io.particle.android.sdk.ui;
 
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -15,6 +18,7 @@ import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.CoreNameGenerator;
+import io.particle.sdk.app.R;
 
 
 public class RenameHelper {
@@ -73,18 +77,17 @@ public class RenameHelper {
     }
 
     private void showDupeNameDialog(final Runnable runOnDupeName) {
-        new MaterialDialog.Builder(activity)
-                .content("Sorry, you've already got a core by that name, try another one.")
-                .theme(Theme.LIGHT)
-                .positiveText("OK")
-                .callback(new MaterialDialog.ButtonCallback() {
+        new AlertDialog.Builder(activity)
+                .setMessage("Sorry, you've already got a core by that name, try another one.")
+                .setPositiveButton(R.string.ok, new OnClickListener() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (runOnDupeName != null) {
                             runOnDupeName.run();
                         }
                     }
-                }).show();
+                })
+                .show();
     }
 
     private void rename(String newName, Runnable runOnDupeName) {

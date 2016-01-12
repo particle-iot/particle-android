@@ -3,6 +3,8 @@ package io.particle.android.sdk.ui;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -14,6 +16,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,9 +27,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.MaterialDialog.Builder;
-import com.afollestad.materialdialogs.Theme;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.tumblr.bookends.Bookends;
@@ -223,37 +223,41 @@ public class DeviceListFragment extends Fragment implements
                     "Device is being flashed, please wait for the flashing process to end first");
 
         } else if (!device.isConnected()) {
-            new Builder(getActivity())
-                    .theme(Theme.LIGHT)
-                    .title("Device offline")
-                    .content(R.string.err_msg_device_is_offline)
-                    .positiveText("OK")
-                    .show();
-
-        } else if (!device.isRunningTinker()) {
-            new MaterialDialog.Builder(getActivity())
-                    .theme(Theme.LIGHT)
-                    .title("Device not running Tinker")
-                    .content("This device is not running Tinker firmware.")
-                    .positiveText("Re-flash Tinker")
-                    .neutralText("Tinker anyway")
-                    .negativeText("Cancel")
-                    .callback(new MaterialDialog.ButtonCallback() {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Device offline")
+                    .setMessage(R.string.err_msg_device_is_offline)
+                    .setPositiveButton(R.string.ok, new OnClickListener() {
                         @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            DeviceActionsHelper.takeActionForDevice(
-                                    R.id.action_device_flash_tinker, getActivity(), device);
-                        }
-
-                        @Override
-                        public void onNeutral(MaterialDialog dialog) {
-                            super.onNeutral(dialog);
-                            callbacks.onDeviceSelected(device);
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
                     })
                     .show();
 
+        } else if (!device.isRunningTinker()) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Device not running Tinker")
+                    .setMessage("This device is not running Tinker firmware.")
+                    .setPositiveButton("Re-flash Tinker", new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DeviceActionsHelper.takeActionForDevice(
+                                    R.id.action_device_flash_tinker, getActivity(), device);
+                        }
+                    })
+                    .setNeutralButton("Tinker anyway", new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            callbacks.onDeviceSelected(device);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
 
         } else {
             callbacks.onDeviceSelected(device);
