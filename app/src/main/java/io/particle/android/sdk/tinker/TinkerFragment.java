@@ -63,7 +63,7 @@ import static io.particle.android.sdk.utils.Py.truthy;
 public class TinkerFragment extends Fragment implements OnClickListener {
 
     public static TinkerFragment newInstance(ParticleDevice device) {
-        return FragmentBundlerCompat.make(new TinkerFragment())
+        return FragmentBundlerCompat.create(new TinkerFragment())
                 .put(TinkerFragment.ARG_DEVICE, device)
                 .build();
     }
