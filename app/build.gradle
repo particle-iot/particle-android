@@ -47,13 +47,20 @@ dependencies {
     compile 'io.particle:cloudsdk:0.3.1'
     compile 'io.particle:devicesetup:0.3.3'
 
-    compile 'com.afollestad:material-dialogs:0.7.9.1'
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
     // implemented by hand (and as such, might not be worth it.)
     compile 'com.getbase:floatingactionbutton:1.10.0'
     compile('com.f2prateek.bundler:bundler:1.1.2') {
         exclude module: 'support-v4'
+    }
+
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
+        transitive = true
+    }
+
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') {
+        transitive = true
     }
 
     compile 'com.google.guava:guava:18.0'
