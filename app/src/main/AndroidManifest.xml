@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="io.particle.sdk.app"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest package="io.particle.sdk.app"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -51,19 +50,25 @@
                 android:value="io.particle.android.sdk.ui.DeviceListActivity"/>
         </activity>
 
-        <!-- All of the following are from the device setup lib, and must be present in your app's
-        manifest or you will not go to space today. -->
+        <!--
+        All of the following are from the device setup lib, and must be present in your app's
+        manifest or you will not go to space today.
+        -->
         <activity
             android:name="io.particle.android.sdk.accountsetup.CreateAccountActivity"
             android:label="@string/title_activity_create_account"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
+
             <!--
             FIXME: revisit using these custom schemes (or using
-            URI based auto-populating of fields at all -->
+            URI based auto-populating of fields at all
+            -->
 
-            <!-- start this activity with custom URI scheme
+
+            <!--
+            start this activity with custom URI scheme
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -79,7 +84,7 @@
                     android:path="/signup"
                     android:scheme="http" />
             </intent-filter>
-                -->
+            -->
         </activity>
         <activity
             android:name="io.particle.android.sdk.accountsetup.LoginActivity"
