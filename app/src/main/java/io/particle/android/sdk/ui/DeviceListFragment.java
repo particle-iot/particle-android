@@ -49,7 +49,7 @@ import static io.particle.android.sdk.utils.Py.truthy;
 
 
 public class DeviceListFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<List<ParticleDevice>>{
+        LoaderManager.LoaderCallbacks<List<ParticleDevice>> {
 
 
     public interface Callbacks {
@@ -126,17 +126,27 @@ public class DeviceListFragment extends Fragment implements
         fabMenu = Ui.findView(view, R.id.add_device_fab);
         AddFloatingActionButton addPhoton = Ui.findView(view, R.id.action_set_up_a_photon);
         AddFloatingActionButton addCore = Ui.findView(view, R.id.action_set_up_a_core);
+        AddFloatingActionButton addElectron = Ui.findView(view, R.id.action_set_up_an_electron);
 
         addPhoton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addPhotonDevice();
+                fabMenu.collapse();
             }
         });
         addCore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addSparkCoreDevice();
+                fabMenu.collapse();
+            }
+        });
+        addElectron.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addElectronDevice();
+                fabMenu.collapse();
             }
         });
 
@@ -275,7 +285,6 @@ public class DeviceListFragment extends Fragment implements
 
     private void addPhotonDevice() {
         ParticleDeviceSetupLibrary.startDeviceSetup(getActivity());
-        fabMenu.collapse();
     }
 
     private void addSparkCoreDevice() {
@@ -288,7 +297,10 @@ public class DeviceListFragment extends Fragment implements
                     .setData(Uri.parse("market://details?id=" + coreAppPkg));
         }
         startActivity(intent);
-        fabMenu.collapse();
+    }
+
+    private void addElectronDevice() {
+        startActivity(new Intent(getActivity(), ElectronSetupActivity.class));
     }
 
     private void refreshDevices() {
@@ -362,7 +374,12 @@ public class DeviceListFragment extends Fragment implements
                     holder.productImage.setImageResource(R.drawable.core_vector);
                     break;
 
-                default :
+                case ELECTRON:
+                    holder.modelName.setText("Electron");
+                    holder.productImage.setImageResource(R.drawable.electron_vector_small);
+                    break;
+
+                default:
                     holder.modelName.setText("Photon");
                     holder.productImage.setImageResource(R.drawable.photon_vector_small);
                     break;
