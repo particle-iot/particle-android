@@ -1,6 +1,7 @@
 package io.particle.android.sdk.ui.barcode_scanner;
 
 import android.Manifest;
+import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,17 +10,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,8 +40,8 @@ import java.io.IOException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
-
 
 
 // FIXME: ADD FLASHLIGHT FAB
@@ -44,7 +50,7 @@ import io.particle.sdk.app.R;
 
 
 @ParametersAreNonnullByDefault
-public class BarcodeScannerActivity extends Activity {
+public class BarcodeScannerActivity extends FragmentActivity {
 
     public static final String EXTRA_BARCODE = "EXTRA_BARCODE";
 
@@ -64,23 +70,29 @@ public class BarcodeScannerActivity extends Activity {
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
 
+    private FloatingActionButton torchFab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
+        mGraphicOverlay = Ui.findView(this, R.id.graphicOverlay);
 
-        // read parameters from the intent used to launch the activity.
-        boolean autoFocus = true;
-        boolean useFlash = true;
+        torchFab = Ui.findView(this, R.id.action_toggle_flash);
+        torchFab.setOnClickListener(
+                        new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                toggleFlash();
+                            }
+                        });
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (rc == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource(autoFocus, useFlash);
+            createCameraSource();
         } else {
             requestCameraPermission();
         }
@@ -88,8 +100,31 @@ public class BarcodeScannerActivity extends Activity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Point at SIM ICCID barcode", Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(mGraphicOverlay, R.string.point_at_sim_barcode, Snackbar.LENGTH_INDEFINITE)
                 .show();
+    }
+
+    private void toggleFlash() {
+        if (ActivityCompat.checkSelfPermission(this, permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // this is really unlikely, but I suppose it's possible.
+            return;
+        }
+
+        // we have to use the Camera.Parameters strings, and this will
+        // never come back null given how we set it up
+        @SuppressWarnings({"ConstantConditions", "deprecation"})
+        boolean isFlashOn = mCameraSource.getFlashMode().equals(Parameters.FLASH_MODE_TORCH);
+
+        Drawable iconDrawable = getResources().getDrawable(R.drawable.ic_flashlight_white_24dp);
+        String newFlashMode = Parameters.FLASH_MODE_TORCH;
+        if (isFlashOn) {
+            iconDrawable = getResources().getDrawable(R.drawable.ic_flashlight_off_white_24dp);
+            newFlashMode = Camera.Parameters.FLASH_MODE_OFF;
+        }
+
+        mCameraSource.setFlashMode(newFlashMode);
+        torchFab.setImageDrawable(iconDrawable);
     }
 
     private void requestCameraPermission() {
@@ -131,7 +166,7 @@ public class BarcodeScannerActivity extends Activity {
      * the constant.
      */
     @SuppressLint("InlinedApi")
-    private void createCameraSource(boolean autoFocus, boolean useFlash) {
+    private void createCameraSource() {
         Context context = getApplicationContext();
 
         // A barcode detector is created to track barcodes.  An associated multi-processor instance
@@ -175,8 +210,8 @@ public class BarcodeScannerActivity extends Activity {
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1600, 1024)
                 .setRequestedFps(15.0f)
-                .setFocusMode(autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null)
-                .setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
+                .setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+                .setFlashMode(Camera.Parameters.FLASH_MODE_OFF)
                 .build();
     }
 
@@ -215,9 +250,7 @@ public class BarcodeScannerActivity extends Activity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
-            boolean autoFocus = true;
-            boolean useFlash = true;
-            createCameraSource(autoFocus, useFlash);
+            createCameraSource();
             return;
         }
 

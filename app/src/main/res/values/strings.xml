@@ -45,5 +45,6 @@ Enjoy!]]></string>
     <string name="barcode_success">Barcode read successfully</string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
+    <string name="point_at_sim_barcode">Point at SIM ICCID barcode</string>
 
 </resources>

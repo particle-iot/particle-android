@@ -99,7 +99,7 @@ public class CameraSource {
             Camera.Parameters.FOCUS_MODE_MACRO
     })
     @Retention(RetentionPolicy.SOURCE)
-    private @interface FocusMode { }
+    public @interface FocusMode { }
 
 
     @StringDef({
@@ -110,7 +110,7 @@ public class CameraSource {
             Camera.Parameters.FLASH_MODE_TORCH
     })
     @Retention(RetentionPolicy.SOURCE)
-    private @interface FlashMode { }
+    public @interface FlashMode { }
 
 
     private Context mContext;

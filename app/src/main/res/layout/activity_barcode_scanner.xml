@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@android:color/black"
+    android:background="@color/primary_color"
     android:gravity="center"
     android:keepScreenOn="true"
     tools:context="io.particle.android.sdk.ui.barcode_scanner.BarcodeScannerActivity">
@@ -23,5 +23,14 @@
             android:layout_height="match_parent"/>
 
     </io.particle.android.sdk.ui.barcode_scanner.CameraSourcePreview>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/action_toggle_flash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="64dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_flashlight_off_white_24dp"/>
 
 </FrameLayout>
