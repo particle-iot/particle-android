@@ -83,6 +83,4 @@ dependencies {
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')
 //    compile(name:'devicesetup', ext:'aar')
-//    compile 'com.squareup.okhttp:okhttp:2.5.0'
-//    compile 'com.squareup.retrofit:retrofit:1.9.0'
 }
