@@ -29,9 +29,18 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.common.collect.Lists;
 import com.tumblr.bookends.Bookends;
 
+import org.apache.commons.collections4.comparators.BooleanComparator;
+import org.apache.commons.collections4.comparators.ComparatorChain;
+import org.apache.commons.collections4.comparators.NullComparator;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.particle.android.sdk.DevicesLoader;
 import io.particle.android.sdk.cloud.ParticleDevice;
@@ -48,6 +57,7 @@ import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 
 
+@ParametersAreNonnullByDefault
 public class DeviceListFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<List<ParticleDevice>> {
 
@@ -71,10 +81,10 @@ public class DeviceListFragment extends Fragment implements
     private FloatingActionsMenu fabMenu;
     private DeviceListAdapter adapter;
     private Bookends<DeviceListAdapter> bookends;
+    private final Comparator<ParticleDevice> comparator = new HelpfulOrderDeviceComparator();
 
     private Callbacks callbacks = dummyCallbacks;
     private DeviceSetupCompleteReceiver deviceSetupCompleteReceiver;
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -208,6 +218,12 @@ public class DeviceListFragment extends Fragment implements
     public void onLoadFinished(Loader<List<ParticleDevice>> loader, List<ParticleDevice> sparkDevices) {
         refreshLayout.setRefreshing(false);
         adapter.clear();
+
+        // defensive copy.  Shouldn't be necessary, but it's a small collection, so I'm erring
+        // on the side of safety.
+        sparkDevices = Lists.newArrayList(sparkDevices);
+        Collections.sort(sparkDevices, comparator);
+
         adapter.addAll(sparkDevices);
         bookends.notifyDataSetChanged();
     }
@@ -456,6 +472,38 @@ public class DeviceListFragment extends Fragment implements
                 msg = "Offline";
             }
             return Pair.create(msg, dot);
+        }
+    }
+
+
+    static class DeviceOnlineStatusComparator implements Comparator<ParticleDevice> {
+
+        @Override
+        public int compare(ParticleDevice lhs, ParticleDevice rhs) {
+            return BooleanComparator.getTrueFirstComparator().compare(
+                    lhs.isConnected(), rhs.isConnected());
+        }
+    }
+
+
+    static class UnnamedDevicesFirstComparator implements Comparator<ParticleDevice> {
+
+        private final NullComparator<String> nullComparator = new NullComparator<>(false);
+
+        @Override
+        public int compare(ParticleDevice lhs, ParticleDevice rhs) {
+            String lhname = lhs.getName();
+            String rhname = rhs.getName();
+            return nullComparator.compare(lhname, rhname);
+        }
+    }
+
+
+    static class HelpfulOrderDeviceComparator extends ComparatorChain<ParticleDevice> {
+
+        HelpfulOrderDeviceComparator() {
+            super(new DeviceOnlineStatusComparator(), false);
+            this.addComparator(new UnnamedDevicesFirstComparator(), false);
         }
     }
 
