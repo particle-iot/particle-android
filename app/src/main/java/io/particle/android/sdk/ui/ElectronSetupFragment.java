@@ -94,22 +94,12 @@ public class ElectronSetupFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SCAN_ICCID) {
-            if (resultCode == CommonStatusCodes.SUCCESS) {
-                if (data != null) {
+            if (resultCode == CommonStatusCodes.SUCCESS && data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeScannerActivity.EXTRA_BARCODE);
-
-                    Toaster.s(this, "Huzzah, barcode found: " + barcode.displayValue);
 
                     log.d("Barcode read: " + barcode.displayValue);
 
                     this.onBarcodeScanningFinished(barcode.displayValue);
-
-                } else {
-
-                    Toaster.s(this, "SOrry bro, no barcode.");
-
-                    log.d("No barcode captured, intent data is null");
-                }
             } else {
                 Toaster.s(this, "No barcode scanned.");
             }
