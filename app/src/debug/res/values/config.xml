@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="electron_setup_uri">https://setup.staging.particle.io</string>
+    <!--<string name="electron_setup_uri">https://setup.staging.particle.io</string>-->
+    <!--<string name="api_base_uri">https://api.staging.particle.io</string>-->
     <string name="http_log_level">FULL</string>
 
 </resources>
