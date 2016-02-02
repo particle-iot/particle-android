@@ -37,8 +37,7 @@ public class IntroActivity extends BaseActivity {
                 Intent intent = NextActivitySelector.getNextActivityIntent(
                         view.getContext(),
                         ParticleCloud.get(view.getContext()),
-                        SDKGlobals.getSensitiveDataStorage(),
-                        SDKGlobals.getAppDataStorage());
+                        SDKGlobals.getSensitiveDataStorage());
                 startActivity(intent);
                 finish();
             }

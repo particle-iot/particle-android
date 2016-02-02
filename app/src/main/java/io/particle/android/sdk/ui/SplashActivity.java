@@ -73,8 +73,7 @@ public class SplashActivity extends BaseActivity {
             if (SDKGlobals.getAppDataStorage().getUserHasClaimedDevices()) {
                 intent = NextActivitySelector.getNextActivityIntent(this,
                         ParticleCloud.get(this),
-                        SDKGlobals.getSensitiveDataStorage(),
-                        SDKGlobals.getAppDataStorage());
+                        SDKGlobals.getSensitiveDataStorage());
             } else {
                 intent = new Intent(this, IntroActivity.class);
             }
