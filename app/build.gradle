@@ -44,7 +44,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile 'io.particle:cloudsdk:0.3.3'
+    compile 'io.particle:cloudsdk:0.3.4'
     compile 'io.particle:devicesetup:0.3.4'
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.

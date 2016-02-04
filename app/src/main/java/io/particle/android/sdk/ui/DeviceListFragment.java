@@ -10,6 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.Snackbar.Callback;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -25,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
@@ -36,6 +40,7 @@ import org.apache.commons.collections4.comparators.BooleanComparator;
 import org.apache.commons.collections4.comparators.ComparatorChain;
 import org.apache.commons.collections4.comparators.NullComparator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -43,6 +48,7 @@ import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.particle.android.sdk.DevicesLoader;
+import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver;
@@ -58,8 +64,8 @@ import static io.particle.android.sdk.utils.Py.truthy;
 
 
 @ParametersAreNonnullByDefault
-public class DeviceListFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<List<ParticleDevice>> {
+public class DeviceListFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<DevicesLoadResult> {
 
 
     public interface Callbacks {
@@ -81,6 +87,11 @@ public class DeviceListFragment extends Fragment implements
     private FloatingActionsMenu fabMenu;
     private DeviceListAdapter adapter;
     private Bookends<DeviceListAdapter> bookends;
+    // FIXME: naming, document better
+    private ProgressBar partialContentBar;
+    private boolean isLoadingSnackbarVisible;
+
+    private final ReloadStateDelegate reloadStateDelegate = new ReloadStateDelegate();
     private final Comparator<ParticleDevice> comparator = new HelpfulOrderDeviceComparator();
 
     private Callbacks callbacks = dummyCallbacks;
@@ -93,8 +104,8 @@ public class DeviceListFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_device_list2, container, false);
 
         RecyclerView rv = Ui.findView(top, R.id.device_list);
@@ -105,15 +116,16 @@ public class DeviceListFragment extends Fragment implements
         @SuppressLint("InflateParams")
         View myHeader = inflater.inflate(R.layout.device_list_header, null);
         myHeader.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        @SuppressLint("InflateParams")
-        View myFooter = inflater.inflate(R.layout.device_list_header, null);
-        Ui.setText(myFooter, R.id.header_text, "");
+        partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, null);
+        partialContentBar.setVisibility(View.INVISIBLE);
+        partialContentBar.setLayoutParams(
+                new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         adapter = new DeviceListAdapter(getActivity());
         // Add them as headers / footers
         bookends = new Bookends<>(adapter);
         bookends.addHeader(myHeader);
-        bookends.addFooter(myFooter);
+        bookends.addFooter(partialContentBar);
 
         rv.setAdapter(bookends);
 
@@ -130,7 +142,7 @@ public class DeviceListFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         fabMenu = Ui.findView(view, R.id.add_device_fab);
@@ -182,6 +194,7 @@ public class DeviceListFragment extends Fragment implements
         deviceSetupCompleteReceiver.register(getActivity());
 
         getLoaderManager().initLoader(R.id.device_list_devices_loader_id, null, this);
+        refreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -195,6 +208,7 @@ public class DeviceListFragment extends Fragment implements
         super.onStop();
         refreshLayout.setRefreshing(false);
         fabMenu.collapse();
+        reloadStateDelegate.reset();
     }
 
     @Override
@@ -210,26 +224,26 @@ public class DeviceListFragment extends Fragment implements
     }
 
     @Override
-    public Loader<List<ParticleDevice>> onCreateLoader(int i, Bundle bundle) {
+    public Loader<DevicesLoadResult> onCreateLoader(int i, Bundle bundle) {
         return new DevicesLoader(getActivity());
     }
 
     @Override
-    public void onLoadFinished(Loader<List<ParticleDevice>> loader, List<ParticleDevice> sparkDevices) {
+    public void onLoadFinished(Loader<DevicesLoadResult> loader, DevicesLoadResult result) {
         refreshLayout.setRefreshing(false);
+
+        ArrayList<ParticleDevice> devices = Lists.newArrayList(result.devices);
+        Collections.sort(devices, comparator);
+
+        reloadStateDelegate.onDeviceLoadFinished(loader, result);
+
         adapter.clear();
-
-        // defensive copy.  Shouldn't be necessary, but it's a small collection, so I'm erring
-        // on the side of safety.
-        sparkDevices = Lists.newArrayList(sparkDevices);
-        Collections.sort(sparkDevices, comparator);
-
-        adapter.addAll(sparkDevices);
+        adapter.addAll(devices);
         bookends.notifyDataSetChanged();
     }
 
     @Override
-    public void onLoaderReset(Loader<List<ParticleDevice>> loader) {
+    public void onLoaderReset(Loader<DevicesLoadResult> loader) {
         // no-op
     }
 
@@ -505,6 +519,58 @@ public class DeviceListFragment extends Fragment implements
             super(new DeviceOnlineStatusComparator(), false);
             this.addComparator(new UnnamedDevicesFirstComparator(), false);
         }
+    }
+
+
+    class ReloadStateDelegate {
+
+        static final int MAX_RETRIES = 10;
+
+        int retryCount = 0;
+
+        void onDeviceLoadFinished(final Loader<DevicesLoadResult> loader, DevicesLoadResult result) {
+            if (!result.isPartialResult) {
+                reset();
+                return;
+            }
+
+            retryCount++;
+            if (retryCount > MAX_RETRIES) {
+                // tried too many times, giving up. :(
+                partialContentBar.setVisibility(View.INVISIBLE);
+                return;
+            }
+
+            if (!isLoadingSnackbarVisible) {
+                isLoadingSnackbarVisible = true;
+                Snackbar.make(getView(), "Unable to load all devices", Snackbar.LENGTH_SHORT)
+                        .setCallback(new Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                super.onDismissed(snackbar, event);
+                                isLoadingSnackbarVisible = false;
+                            }
+                        }).show();
+            }
+
+            partialContentBar.setVisibility(View.VISIBLE);
+            ((DevicesLoader) loader).setUseLongTimeoutsOnNextLoad(true);
+            // FIXME: is it OK to call forceLoad() in loader callbacks?  Test and be certain.
+            EZ.runOnMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (isResumed()) {
+                        loader.forceLoad();
+                    }
+                }
+            });
+        }
+
+        void reset() {
+            retryCount = 0;
+            partialContentBar.setVisibility(View.INVISIBLE);
+        }
+
     }
 
 }
