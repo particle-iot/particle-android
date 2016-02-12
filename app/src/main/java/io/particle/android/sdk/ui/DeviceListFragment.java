@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -330,7 +331,10 @@ public class DeviceListFragment extends Fragment
     }
 
     private void addElectronDevice() {
-        startActivity(new Intent(getActivity(), ElectronSetupActivity.class));
+        Intent intent = (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP)
+                ? new Intent(getActivity(), ElectronSetupActivity.class)
+                : new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)));
+        startActivity(intent);
     }
 
     private void refreshDevices() {
