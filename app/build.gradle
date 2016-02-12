@@ -8,8 +8,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 33
-        versionName "1.6.2"
+        versionCode 34
+        versionName "1.6.3"
     }
 
     compileOptions {
