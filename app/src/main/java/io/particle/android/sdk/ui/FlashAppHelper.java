@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,7 +29,7 @@ public class FlashAppHelper {
                 // FIXME: this is just for flashing Tinker for now, but later it could be used
                 // for whatever file the user wants to upload (and "known apps" will work for
                 // the Photon, too)
-                // .content(String.format("Flash %s?", StringUtils.capitalize(knownApp.getAppName())))
+                // .content(String.format("Flash %s?", capitalize(knownApp.getAppName())))
                 .setMessage("Flash Tinker?")
                 .setPositiveButton(R.string.flash, new OnClickListener() {
                     @Override
@@ -73,7 +71,7 @@ public class FlashAppHelper {
                                                final ParticleDevice device,
                                                final ParticleDevice.KnownApp knownApp) {
         new AlertDialog.Builder(activity)
-                .setMessage(String.format("Flash %s?", StringUtils.capitalize(knownApp.getAppName())))
+                .setMessage(String.format("Flash %s?", capitalize(knownApp.getAppName())))
                 .setPositiveButton(R.string.flash, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -102,7 +100,7 @@ public class FlashAppHelper {
             @Override
             public void onFailure(ParticleCloudException exception) {
                 new AlertDialog.Builder(activity)
-                        .setTitle("Unable to reflash " + StringUtils.capitalize(knownApp.getAppName()))
+                        .setTitle("Unable to reflash " + capitalize(knownApp.getAppName()))
                         .setMessage(exception.getBestMessage())
                         .setPositiveButton(R.string.ok, new OnClickListener() {
                             @Override
@@ -152,6 +150,32 @@ public class FlashAppHelper {
                         .show();
             }
         }).andIgnoreCallbacksIfActivityIsFinishing(activity);
+    }
+
+
+    // lifted from Apache commons-lang StringUtils
+    private static String capitalize(final String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return str;
+        }
+
+        final int firstCodepoint = str.codePointAt(0);
+        final int newCodePoint = Character.toTitleCase(firstCodepoint);
+        if (firstCodepoint == newCodePoint) {
+            // already capitalized
+            return str;
+        }
+
+        final int newCodePoints[] = new int[strLen]; // cannot be longer than the char array
+        int outOffset = 0;
+        newCodePoints[outOffset++] = newCodePoint; // copy the first codepoint
+        for (int inOffset = Character.charCount(firstCodepoint); inOffset < strLen; ) {
+            final int codepoint = str.codePointAt(inOffset);
+            newCodePoints[outOffset++] = codepoint; // copy the remaining ones
+            inOffset += Character.charCount(codepoint);
+        }
+        return new String(newCodePoints, 0, outOffset);
     }
 
 }

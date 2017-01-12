@@ -63,7 +63,6 @@ dependencies {
     compile 'com.tumblr:bookends:1.0.0'
     compile 'com.squareup.okio:okio:1.11.0'
     compile 'com.squareup.phrase:phrase:1.0.3'
-    compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
     compile 'com.android.support:appcompat-v7:25.1.0'
