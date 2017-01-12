@@ -69,7 +69,6 @@ dependencies {
     }
 
     compile 'commons-io:commons-io:2.4'
-    compile 'com.google.guava:guava:18.0'
     compile 'com.tumblr:bookends:1.0.0'
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.phrase:phrase:1.0.3'

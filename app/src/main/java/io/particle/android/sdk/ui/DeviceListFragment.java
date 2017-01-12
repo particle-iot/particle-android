@@ -34,7 +34,6 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.common.collect.Lists;
 import com.tumblr.bookends.Bookends;
 
 import org.apache.commons.collections4.comparators.BooleanComparator;
@@ -233,7 +232,7 @@ public class DeviceListFragment extends Fragment
     public void onLoadFinished(Loader<DevicesLoadResult> loader, DevicesLoadResult result) {
         refreshLayout.setRefreshing(false);
 
-        ArrayList<ParticleDevice> devices = Lists.newArrayList(result.devices);
+        ArrayList<ParticleDevice> devices = new ArrayList<>(result.devices);
         Collections.sort(devices, comparator);
 
         reloadStateDelegate.onDeviceLoadFinished(loader, result);
