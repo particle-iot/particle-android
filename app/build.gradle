@@ -59,7 +59,6 @@ dependencies {
     compile('com.f2prateek.bundler:bundler:1.1.2') {
         exclude module: 'support-v4'
     }
-    compile 'commons-io:commons-io:2.4'
     compile 'com.afollestad.material-dialogs:core:0.9.2.3'
     compile 'com.tumblr:bookends:1.0.0'
     compile 'com.squareup.okio:okio:1.11.0'

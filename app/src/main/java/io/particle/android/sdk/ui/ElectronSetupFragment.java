@@ -18,10 +18,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.gson.Gson;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
-import java.io.InputStream;
 
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.ui.barcode_scanner.BarcodeScannerActivity;
@@ -29,6 +26,8 @@ import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
+import okio.BufferedSource;
+import okio.Okio;
 
 
 public class ElectronSetupFragment extends Fragment {
@@ -114,16 +113,20 @@ public class ElectronSetupFragment extends Fragment {
     }
 
     private String readRawString(@RawRes int resId) {
-        InputStream inputStream = getResources().openRawResource(resId);
+        BufferedSource buffer = Okio.buffer(Okio.source(getResources().openRawResource(resId)));
         try {
-            return IOUtils.toString(inputStream);
+            return buffer.readUtf8();
 
         } catch (IOException e) {
             // if this happens, we're just doomed.  give up.
             throw new RuntimeException(e);
 
         } finally {
-            IOUtils.closeQuietly(inputStream);
+            try {
+                buffer.close();
+            } catch (IOException e) {
+                // nothing we need to do here
+            }
         }
     }
 
