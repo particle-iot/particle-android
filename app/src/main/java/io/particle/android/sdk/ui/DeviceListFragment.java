@@ -36,10 +36,6 @@ import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.tumblr.bookends.Bookends;
 
-import org.apache.commons.collections4.comparators.BooleanComparator;
-import org.apache.commons.collections4.comparators.ComparatorChain;
-import org.apache.commons.collections4.comparators.NullComparator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,6 +49,9 @@ import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver;
 import io.particle.android.sdk.ui.ItemClickSupport.OnItemClickListener;
+import io.particle.android.sdk.ui.Comparators.BooleanComparator;
+import io.particle.android.sdk.ui.Comparators.ComparatorChain;
+import io.particle.android.sdk.ui.Comparators.NullComparator;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.ui.Toaster;
@@ -92,7 +91,7 @@ public class DeviceListFragment extends Fragment
     private boolean isLoadingSnackbarVisible;
 
     private final ReloadStateDelegate reloadStateDelegate = new ReloadStateDelegate();
-    private final Comparator<ParticleDevice> comparator = new HelpfulOrderDeviceComparator();
+    private final Comparator<ParticleDevice> comparator = helpfulOrderDeviceComparator();
 
     private Callbacks callbacks = dummyCallbacks;
     private DeviceSetupCompleteReceiver deviceSetupCompleteReceiver;
@@ -493,35 +492,22 @@ public class DeviceListFragment extends Fragment
     }
 
 
-    static class DeviceOnlineStatusComparator implements Comparator<ParticleDevice> {
-
-        @Override
-        public int compare(ParticleDevice lhs, ParticleDevice rhs) {
-            return BooleanComparator.getTrueFirstComparator().compare(
-                    lhs.isConnected(), rhs.isConnected());
-        }
-    }
-
-
-    static class UnnamedDevicesFirstComparator implements Comparator<ParticleDevice> {
-
-        private final NullComparator<String> nullComparator = new NullComparator<>(false);
-
-        @Override
-        public int compare(ParticleDevice lhs, ParticleDevice rhs) {
+    private static Comparator<ParticleDevice> helpfulOrderDeviceComparator() {
+        Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> {
+            return BooleanComparator.getTrueFirstComparator()
+                    .compare(lhs.isConnected(), rhs.isConnected());
+        };
+        NullComparator<String> nullComparator = new NullComparator<>(false);
+        Comparator<ParticleDevice> unnamedDevicesFirstComparator  = (lhs, rhs) -> {
             String lhname = lhs.getName();
             String rhname = rhs.getName();
             return nullComparator.compare(lhname, rhname);
-        }
-    }
+        };
 
-
-    static class HelpfulOrderDeviceComparator extends ComparatorChain<ParticleDevice> {
-
-        HelpfulOrderDeviceComparator() {
-            super(new DeviceOnlineStatusComparator(), false);
-            this.addComparator(new UnnamedDevicesFirstComparator(), false);
-        }
+        ComparatorChain<ParticleDevice> chain;
+        chain = new ComparatorChain<>(deviceOnlineStatusComparator, false);
+        chain.addComparator(unnamedDevicesFirstComparator, false);
+        return chain;
     }
 
 
