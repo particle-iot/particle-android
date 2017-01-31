@@ -72,9 +72,7 @@ public class DeviceListFragment extends Fragment
     private static final TLog log = TLog.get(DeviceListFragment.class);
 
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
-    private static final Callbacks dummyCallbacks = device -> {
-        // no-op
-    };
+    private static final Callbacks dummyCallbacks = device -> { /* no-op */ };
 
     private SwipeRefreshLayout refreshLayout;
     private FloatingActionsMenu fabMenu;

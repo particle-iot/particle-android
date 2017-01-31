@@ -1,8 +1,6 @@
 package io.particle.android.sdk.ui;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
@@ -19,7 +17,7 @@ import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.sdk.app.R;
 
-//@Param
+
 public class FlashAppHelper {
 
 
@@ -31,38 +29,21 @@ public class FlashAppHelper {
                 // the Photon, too)
                 // .content(String.format("Flash %s?", capitalize(knownApp.getAppName())))
                 .setMessage("Flash Tinker?")
-                .setPositiveButton(R.string.flash, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        flashFromBinary(activity, device, path);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.flash, (dialog, which) -> flashFromBinary(
+                        activity, device, path))
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
 
     public static void flashPhotonTinkerWithDialog(final FragmentActivity activity,
                                                    final ParticleDevice device) {
         final InputStream inputStream = activity.getResources().openRawResource(R.raw.photon_tinker);
         new AlertDialog.Builder(activity)
                 .setMessage("Flash Tinker?")
-                .setPositiveButton(R.string.flash, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        flashFromStream(activity, device, inputStream, "Tinker");
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.flash, (dialog, which) -> flashFromStream(
+                        activity, device, inputStream, "Tinker"))
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -72,20 +53,12 @@ public class FlashAppHelper {
                                                final ParticleDevice.KnownApp knownApp) {
         new AlertDialog.Builder(activity)
                 .setMessage(String.format("Flash %s?", capitalize(knownApp.getAppName())))
-                .setPositiveButton(R.string.flash, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        flashKnownApp(activity, device, knownApp);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.flash, (dialog, which) -> flashKnownApp(
+                        activity, device, knownApp))
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
 
     // FIXME: remove duplication between the following methods
     private static void flashKnownApp(final Activity activity, final ParticleDevice device,
@@ -102,12 +75,7 @@ public class FlashAppHelper {
                 new AlertDialog.Builder(activity)
                         .setTitle("Unable to reflash " + capitalize(knownApp.getAppName()))
                         .setMessage(exception.getBestMessage())
-                        .setPositiveButton(R.string.ok, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
                         .show();
             }
         }).andIgnoreCallbacksIfActivityIsFinishing(activity);
@@ -141,12 +109,7 @@ public class FlashAppHelper {
                 new AlertDialog.Builder(activity)
                         .setTitle("Unable to reflash from " + name)
                         .setMessage(exception.getBestMessage())
-                        .setPositiveButton(R.string.ok, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
                         .show();
             }
         }).andIgnoreCallbacksIfActivityIsFinishing(activity);
