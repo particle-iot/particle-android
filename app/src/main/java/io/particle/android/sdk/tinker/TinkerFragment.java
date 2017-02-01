@@ -214,9 +214,9 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             case CORE:
                 allPins.add(new Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", allFunctions));
                 allPins.add(new Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", allFunctions));
-                allPins.add(new Pin(findPinView(R.id.tinker_a2), PinType.A, "A2", allFunctions));
+                allPins.add(new Pin(findPinView(R.id.tinker_a2), PinType.A, "A2", noAnalogWrite));
                 allPins.add(new Pin(findPinView(R.id.tinker_a3), PinType.A, "A3", noAnalogWrite));
-                allPins.add(new Pin(findPinView(R.id.tinker_a4), PinType.A, "A4", noAnalogWrite));
+                allPins.add(new Pin(findPinView(R.id.tinker_a4), PinType.A, "A4", allFunctions));
                 allPins.add(new Pin(findPinView(R.id.tinker_a5), PinType.A, "A5", allFunctions));
                 allPins.add(new Pin(findPinView(R.id.tinker_a6), PinType.A, "A6", allFunctions));
                 allPins.add(new Pin(findPinView(R.id.tinker_a7), PinType.A, "A7", allFunctions));
