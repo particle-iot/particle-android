@@ -27,8 +27,14 @@ proguard/
 *.log
 
 # IntelliJ project files that shouldn't be checked in
+*.iml
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/gradle.xml
+/.idea/tasks.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/qaplug_profiles.xml
 
 # OS X droppings  (how is this not in the default Android Studio .gitconfig?)
 .DS_Store
