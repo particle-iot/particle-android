@@ -3,8 +3,6 @@ package io.particle.android.sdk.ui;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -34,12 +32,7 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.common.collect.Lists;
 import com.tumblr.bookends.Bookends;
-
-import org.apache.commons.collections4.comparators.BooleanComparator;
-import org.apache.commons.collections4.comparators.ComparatorChain;
-import org.apache.commons.collections4.comparators.NullComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +46,9 @@ import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver;
-import io.particle.android.sdk.ui.ItemClickSupport.OnItemClickListener;
+import io.particle.android.sdk.ui.Comparators.BooleanComparator;
+import io.particle.android.sdk.ui.Comparators.ComparatorChain;
+import io.particle.android.sdk.ui.Comparators.NullComparator;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.ui.Toaster;
@@ -77,12 +72,7 @@ public class DeviceListFragment extends Fragment
     private static final TLog log = TLog.get(DeviceListFragment.class);
 
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
-    private static final Callbacks dummyCallbacks = new Callbacks() {
-        @Override
-        public void onDeviceSelected(ParticleDevice device) {
-            // no-op
-        }
-    };
+    private static final Callbacks dummyCallbacks = device -> { /* no-op */ };
 
     private SwipeRefreshLayout refreshLayout;
     private FloatingActionsMenu fabMenu;
@@ -93,7 +83,7 @@ public class DeviceListFragment extends Fragment
     private boolean isLoadingSnackbarVisible;
 
     private final ReloadStateDelegate reloadStateDelegate = new ReloadStateDelegate();
-    private final Comparator<ParticleDevice> comparator = new HelpfulOrderDeviceComparator();
+    private final Comparator<ParticleDevice> comparator = helpfulOrderDeviceComparator();
 
     private Callbacks callbacks = dummyCallbacks;
     private DeviceSetupCompleteReceiver deviceSetupCompleteReceiver;
@@ -130,13 +120,10 @@ public class DeviceListFragment extends Fragment
 
         rv.setAdapter(bookends);
 
-        ItemClickSupport.addTo(rv).setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                // subtracting 1 from position because of header.  This is gross, but it's simple
-                // and in this case adequate, so #SHIPIT.
-                onDeviceRowClicked(recyclerView, position - 1, v);
-            }
+        ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> {
+            // subtracting 1 from position because of header.  This is gross, but it's simple
+            // and in this case adequate, so #SHIPIT.
+            onDeviceRowClicked(recyclerView, position - 1, v);
         });
 
         return top;
@@ -151,35 +138,21 @@ public class DeviceListFragment extends Fragment
         AddFloatingActionButton addCore = Ui.findView(view, R.id.action_set_up_a_core);
         AddFloatingActionButton addElectron = Ui.findView(view, R.id.action_set_up_an_electron);
 
-        addPhoton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPhotonDevice();
-                fabMenu.collapse();
-            }
+        addPhoton.setOnClickListener(v -> {
+            addPhotonDevice();
+            fabMenu.collapse();
         });
-        addCore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addSparkCoreDevice();
-                fabMenu.collapse();
-            }
+        addCore.setOnClickListener(v -> {
+            addSparkCoreDevice();
+            fabMenu.collapse();
         });
-        addElectron.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addElectronDevice();
-                fabMenu.collapse();
-            }
+        addElectron.setOnClickListener(v -> {
+            addElectronDevice();
+            fabMenu.collapse();
         });
 
         refreshLayout = Ui.findView(view, R.id.refresh_layout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshDevices();
-            }
-        });
+        refreshLayout.setOnRefreshListener(this::refreshDevices);
 
         deviceSetupCompleteReceiver = new ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver() {
             @Override
@@ -233,7 +206,7 @@ public class DeviceListFragment extends Fragment
     public void onLoadFinished(Loader<DevicesLoadResult> loader, DevicesLoadResult result) {
         refreshLayout.setRefreshing(false);
 
-        ArrayList<ParticleDevice> devices = Lists.newArrayList(result.devices);
+        ArrayList<ParticleDevice> devices = new ArrayList<>(result.devices);
         Collections.sort(devices, comparator);
 
         reloadStateDelegate.onDeviceLoadFinished(loader, result);
@@ -267,37 +240,17 @@ public class DeviceListFragment extends Fragment
             new AlertDialog.Builder(getActivity())
                     .setTitle("Device offline")
                     .setMessage(R.string.err_msg_device_is_offline)
-                    .setPositiveButton(R.string.ok, new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
                     .show();
 
         } else if (!device.isRunningTinker()) {
             new AlertDialog.Builder(getActivity())
                     .setTitle("Device not running Tinker")
                     .setMessage("This device is not running Tinker firmware.")
-                    .setPositiveButton("Re-flash Tinker", new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            DeviceActionsHelper.takeActionForDevice(
-                                    R.id.action_device_flash_tinker, getActivity(), device);
-                        }
-                    })
-                    .setNeutralButton("Tinker anyway", new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            callbacks.onDeviceSelected(device);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setPositiveButton("Re-flash Tinker", (dialog, which) -> DeviceActionsHelper.takeActionForDevice(
+                            R.id.action_device_flash_tinker, getActivity(), device))
+                    .setNeutralButton("Tinker anyway", (dialog, which) -> callbacks.onDeviceSelected(device))
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .show();
 
         } else {
@@ -433,12 +386,7 @@ public class DeviceListFragment extends Fragment
             holder.deviceName.setText(name);
 
             holder.overflowMenuIcon.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            showMenu(view, device);
-                        }
-                    }
+                    view -> showMenu(view, device)
             );
         }
 
@@ -494,35 +442,22 @@ public class DeviceListFragment extends Fragment
     }
 
 
-    static class DeviceOnlineStatusComparator implements Comparator<ParticleDevice> {
-
-        @Override
-        public int compare(ParticleDevice lhs, ParticleDevice rhs) {
-            return BooleanComparator.getTrueFirstComparator().compare(
-                    lhs.isConnected(), rhs.isConnected());
-        }
-    }
-
-
-    static class UnnamedDevicesFirstComparator implements Comparator<ParticleDevice> {
-
-        private final NullComparator<String> nullComparator = new NullComparator<>(false);
-
-        @Override
-        public int compare(ParticleDevice lhs, ParticleDevice rhs) {
+    private static Comparator<ParticleDevice> helpfulOrderDeviceComparator() {
+        Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> {
+            return BooleanComparator.getTrueFirstComparator()
+                    .compare(lhs.isConnected(), rhs.isConnected());
+        };
+        NullComparator<String> nullComparator = new NullComparator<>(false);
+        Comparator<ParticleDevice> unnamedDevicesFirstComparator  = (lhs, rhs) -> {
             String lhname = lhs.getName();
             String rhname = rhs.getName();
             return nullComparator.compare(lhname, rhname);
-        }
-    }
+        };
 
-
-    static class HelpfulOrderDeviceComparator extends ComparatorChain<ParticleDevice> {
-
-        HelpfulOrderDeviceComparator() {
-            super(new DeviceOnlineStatusComparator(), false);
-            this.addComparator(new UnnamedDevicesFirstComparator(), false);
-        }
+        ComparatorChain<ParticleDevice> chain;
+        chain = new ComparatorChain<>(deviceOnlineStatusComparator, false);
+        chain.addComparator(unnamedDevicesFirstComparator, false);
+        return chain;
     }
 
 
@@ -560,12 +495,9 @@ public class DeviceListFragment extends Fragment
             partialContentBar.setVisibility(View.VISIBLE);
             ((DevicesLoader) loader).setUseLongTimeoutsOnNextLoad(true);
             // FIXME: is it OK to call forceLoad() in loader callbacks?  Test and be certain.
-            EZ.runOnMainThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (isResumed()) {
-                        loader.forceLoad();
-                    }
+            EZ.runOnMainThread(() -> {
+                if (isResumed()) {
+                    loader.forceLoad();
                 }
             });
         }

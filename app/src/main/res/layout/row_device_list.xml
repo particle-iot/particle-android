@@ -60,7 +60,7 @@
         android:focusable="false"
         android:tint="@android:color/transparent"
         android:focusableInTouchMode="false"
-        android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"/>
+        android:src="@drawable/ic_overflow"/>
 
     <TextView
         android:id="@+id/online_status"

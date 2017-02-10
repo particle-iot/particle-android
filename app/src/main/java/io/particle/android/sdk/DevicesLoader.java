@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.support.annotation.WorkerThread;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +107,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         }
 
         DevicesLoadResult resultToReturn = new DevicesLoadResult(
-                ImmutableList.copyOf(devices), isPartialList, unableToLoadAnyDevices);
+                new ArrayList<>(devices), isPartialList, unableToLoadAnyDevices);
 
         if (!unableToLoadAnyDevices) {
             latestResult = resultToReturn;
