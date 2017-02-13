@@ -1,3 +1,10 @@
+1.6.4
+======
+* Upgrade cloud sdk and setup library to latest versions
+* Lambdas
+* Remove dependency on commons and guava
+* Target api 25
+
 1.6.3
 ======
 * Workaround for Electron setup on Kit Kat and below
