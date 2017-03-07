@@ -4,6 +4,12 @@
 * Lambdas
 * Remove dependency on commons and guava
 * Target api 25
+* Forgot password fix
+* Core pin functionality fix
+* Fix related to Wifi configuration issues
+* Added account info fields on sign up
+* Analytics
+* Device naming at the end of setup process
 
 1.6.3
 ======
