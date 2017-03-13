@@ -284,9 +284,10 @@ public class DeviceListFragment extends Fragment
     }
 
     private void addElectronDevice() {
-        Intent intent = (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP)
-                ? new Intent(getActivity(), ElectronSetupActivity.class)
-                : new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)));
+        //        Intent intent = (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP)
+//                ? new Intent(getActivity(), ElectronSetupActivity.class)
+//                : new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)));
         startActivity(intent);
     }
 

@@ -2,6 +2,7 @@
 ======
 * Upgrade cloud sdk and setup library to latest versions
 * Lambdas
+* Electron setup directed to browser as temporary fix
 * Remove dependency on commons and guava
 * Target api 25
 * Forgot password fix
