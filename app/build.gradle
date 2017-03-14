@@ -50,7 +50,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile 'io.particle:cloudsdk:0.4.1'
-    compile 'io.particle:devicesetup:0.4.1'
+    compile 'io.particle:devicesetup:0.4.2'
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
