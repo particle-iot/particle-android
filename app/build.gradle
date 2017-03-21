@@ -50,7 +50,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile 'io.particle:cloudsdk:0.4.1'
-    compile 'io.particle:devicesetup:0.4.2'
+    compile 'io.particle:devicesetup:0.4.3'
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
@@ -65,11 +65,11 @@ dependencies {
     compile 'com.squareup.phrase:phrase:1.0.3'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:support-fragment:25.2.0'
-    compile 'com.android.support:support-annotations:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:recyclerview-v7:25.3.0'
+    compile 'com.android.support:support-fragment:25.3.0'
+    compile 'com.android.support:support-annotations:25.3.0'
 
     // for barcode scanning in Electron setup
     compile 'com.google.android.gms:play-services-vision:10.2.0'
@@ -80,4 +80,5 @@ dependencies {
 //    compile(name:'cloudsdk', ext:'aar')
 //    compile(name:'devicesetup', ext:'aar')
 }
+
 apply plugin: 'com.getkeepsafe.dexcount'
