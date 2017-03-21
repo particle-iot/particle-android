@@ -10,7 +10,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 35
-        versionName "1.6.4"
+        versionName "1.7.0"
     }
 
     dexOptions {
