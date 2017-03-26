@@ -275,35 +275,27 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         // Set up pin listeners
         for (final Pin pin : allPins) {
             for (View view : list(pin.view, (ViewGroup) pin.view.getParent())) {
-                view.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        Pin writeModePin = getPinInWriteMode();
-                        if (writeModePin != null && !pin.equals(selectedPin)) {
-                            writeModePin.showAnalogWriteValue();
-                            unmutePins();
-                            return;
-                        }
-                        selectedPin = pin;
-                        onPinClick(pin);
+                view.setOnClickListener(v -> {
+                    Pin writeModePin = getPinInWriteMode();
+                    if (writeModePin != null && !pin.equals(selectedPin)) {
+                        writeModePin.showAnalogWriteValue();
+                        unmutePins();
+                        return;
                     }
+                    selectedPin = pin;
+                    onPinClick(pin);
                 });
 
-                view.setOnLongClickListener(new OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View v) {
-                        Pin writeModePin = getPinInWriteMode();
-                        if (writeModePin != null && !pin.equals(selectedPin)) {
-                            writeModePin.showAnalogWriteValue();
-                            unmutePins();
-                            return true;
-                        }
-                        selectedPin = pin;
-                        showTinkerSelect(pin);
+                view.setOnLongClickListener(v -> {
+                    Pin writeModePin = getPinInWriteMode();
+                    if (writeModePin != null && !pin.equals(selectedPin)) {
+                        writeModePin.showAnalogWriteValue();
+                        unmutePins();
                         return true;
                     }
+                    selectedPin = pin;
+                    showTinkerSelect(pin);
+                    return true;
                 });
             }
         }
@@ -353,23 +345,13 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                 R.style.ParticleSetupTheme_DialogNoDimBackground)
                 .setView(selectDialogView)
                 .setCancelable(true)
-                .setOnCancelListener(new OnCancelListener() {
-
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        dialog.dismiss();
-                    }
-                })
+                .setOnCancelListener(DialogInterface::dismiss)
                 .create();
         selectDialog.setCanceledOnTouchOutside(true);
-        selectDialog.setOnDismissListener(new OnDismissListener() {
-
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                unmutePins();
-                toggleViewVisibilityWithFade(R.id.tinker_logo, true);
-                selectDialog = null;
-            }
+        selectDialog.setOnDismissListener(dialog -> {
+            unmutePins();
+            toggleViewVisibilityWithFade(R.id.tinker_logo, true);
+            selectDialog = null;
         });
 
         final View analogRead = Ui.findView(selectDialogView, R.id.tinker_button_analog_read);
@@ -378,44 +360,32 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         final View digitalWrite = Ui.findView(selectDialogView, R.id.tinker_button_digital_write);
         final List<View> allButtons = list(analogRead, analogWrite, digitalRead, digitalWrite);
 
-        analogRead.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(analogRead, allButtons);
-                }
-                return false;
+        analogRead.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(analogRead, allButtons);
             }
+            return false;
         });
 
-        analogWrite.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(analogWrite, allButtons);
-                }
-                return false;
+        analogWrite.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(analogWrite, allButtons);
             }
+            return false;
         });
 
-        digitalRead.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(digitalRead, allButtons);
-                }
-                return false;
+        digitalRead.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(digitalRead, allButtons);
             }
+            return false;
         });
 
-        digitalWrite.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(digitalWrite, allButtons);
-                }
-                return false;
+        digitalWrite.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(digitalWrite, allButtons);
             }
+            return false;
         });
 
         digitalRead.setOnClickListener(this);
@@ -586,20 +556,16 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     private void doAnalogWrite(final Pin pin) {
         mutePinsExcept(pin);
         toggleViewVisibilityWithFade(R.id.tinker_logo, false);
-        pin.showAnalogWrite(new OnAnalogWriteListener() {
-
-            @Override
-            public void onAnalogWrite(int value) {
-                for (Pin pin : allPins) {
-                    if (pin.isAnalogWriteMode()) {
-                        pin.showAnalogWriteValue();
-                    }
+        pin.showAnalogWrite(value -> {
+            for (Pin pin1 : allPins) {
+                if (pin1.isAnalogWriteMode()) {
+                    pin1.showAnalogWriteValue();
                 }
-                unmutePins();
-                hideTinkerSelect();
-                pin.animateYourself();
-                api.write(new PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.getAnalogValue()), value);
             }
+            unmutePins();
+            hideTinkerSelect();
+            pin.animateYourself();
+            api.write(new PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.getAnalogValue()), value);
         });
     }
 
@@ -767,13 +733,9 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.tinker_instructions, container, false);
-            v.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    TinkerPrefs.getInstance(getActivity()).setVisited(true);
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
+            v.setOnClickListener(v1 -> {
+                TinkerPrefs.getInstance(getActivity()).setVisited(true);
+                getActivity().getSupportFragmentManager().popBackStack();
             });
 
             return v;

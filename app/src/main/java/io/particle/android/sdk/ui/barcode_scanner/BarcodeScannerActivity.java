@@ -81,12 +81,7 @@ public class BarcodeScannerActivity extends FragmentActivity {
 
         torchFab = Ui.findView(this, R.id.action_toggle_flash);
         torchFab.setOnClickListener(
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                toggleFlash();
-                            }
-                        });
+                v -> toggleFlash());
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -140,13 +135,8 @@ public class BarcodeScannerActivity extends FragmentActivity {
         final Activity thisActivity = this;
         Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale,
                 Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ActivityCompat.requestPermissions(
-                                thisActivity, permissions, RC_HANDLE_CAMERA_PERM);
-                    }
-                })
+                .setAction(R.string.ok, view -> ActivityCompat.requestPermissions(
+                        thisActivity, permissions, RC_HANDLE_CAMERA_PERM))
                 .show();
     }
 
@@ -259,11 +249,7 @@ public class BarcodeScannerActivity extends FragmentActivity {
 
         new AlertDialog.Builder(this)
                 .setMessage(R.string.no_camera_permission)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                    }
-                })
+                .setPositiveButton(R.string.ok, (dialog, id) -> finish())
                 .show();
     }
 

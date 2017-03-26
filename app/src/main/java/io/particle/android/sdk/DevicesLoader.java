@@ -46,7 +46,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
     private final DevicesUpdatedReceiver devicesUpdatedReceiver;
 
     private volatile DevicesLoadResult latestResult = new DevicesLoadResult(
-            new ArrayList<ParticleDevice>(), false, false);
+            new ArrayList<>(), false, false);
     private volatile boolean useLongTimeoutsOnNextLoad = false;
 
     public DevicesLoader(Context context) {

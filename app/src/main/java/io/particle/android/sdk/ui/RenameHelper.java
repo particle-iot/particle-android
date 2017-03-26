@@ -47,24 +47,16 @@ public class RenameHelper {
                 .title("Rename Device")
                 .content("Set new name for your device:")
                 .theme(Theme.LIGHT)
-                .input("Name your device", suggestedName, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // FIXME: do validation here to prevent short names?
-                        // I think this is already done cloud-side.  Verify.
-                    }
+                .input("Name your device", suggestedName, (dialog, input) -> {
+                    // FIXME: do validation here to prevent short names?
+                    // I think this is already done cloud-side.  Verify.
                 })
                 .positiveText("Rename")
                 .negativeText("Cancel")
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        Runnable onDupeName = new Runnable() {
-                            @Override
-                            public void run() {
-                                showDialog();
-                            }
-                        };
+                        Runnable onDupeName = () -> showDialog();
 
                         EditText inputText = dialog.getInputEditText();
                         if (inputText == null) {
@@ -79,12 +71,9 @@ public class RenameHelper {
     private void showDupeNameDialog(final Runnable runOnDupeName) {
         new AlertDialog.Builder(activity)
                 .setMessage("Sorry, you've already got a core by that name, try another one.")
-                .setPositiveButton(R.string.ok, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (runOnDupeName != null) {
-                            runOnDupeName.run();
-                        }
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    if (runOnDupeName != null) {
+                        runOnDupeName.run();
                     }
                 })
                 .show();

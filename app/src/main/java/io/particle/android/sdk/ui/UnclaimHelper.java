@@ -2,8 +2,6 @@ package io.particle.android.sdk.ui;
 
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
@@ -22,18 +20,8 @@ public class UnclaimHelper {
     public static void unclaimDeviceWithDialog(final FragmentActivity activity, final ParticleDevice device) {
         new AlertDialog.Builder(activity)
                 .setMessage(R.string.unclaim_device_dialog_content)
-                .setPositiveButton(R.string.unclaim, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        unclaim(activity, device);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.unclaim, (dialog, which) -> unclaim(activity, device))
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -48,21 +36,16 @@ public class UnclaimHelper {
             }
 
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(@NonNull Void aVoid) {
                 // FIXME: what else should happen here?
                 Toaster.s(activity, "Unclaimed " + device.getName());
             }
 
             @Override
-            public void onFailure(ParticleCloudException exception) {
+            public void onFailure(@NonNull ParticleCloudException exception) {
                 new AlertDialog.Builder(activity)
                         .setMessage("Error: unable to unclaim '" + device.getName() + "'")
-                        .setPositiveButton(R.string.ok, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
                         .show();
             }
         }).andIgnoreCallbacksIfActivityIsFinishing(activity);
