@@ -40,7 +40,7 @@
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
             android:label="@string/title_device_list"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar"/>
+            android:theme="@style/DeviceListTheme"/>
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
             android:label="@string/title_device_detail"

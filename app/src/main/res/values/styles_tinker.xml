@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="DeviceListTheme" parent="ParticleSetupTheme.NoActionBar">
+        <item name="android:textAppearanceLargePopupMenu">@style/DevicePopupMenuText</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/DevicePopupMenuText</item>
+    </style>
+
+    <style name="DevicePopupMenuText" parent="PopupMenuText">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="TinkerSelectColorBox">
         <item name="android:layout_width">4dp</item>
         <item name="android:layout_height">match_parent</item>
