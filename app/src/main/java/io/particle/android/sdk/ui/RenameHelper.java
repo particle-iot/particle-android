@@ -3,6 +3,7 @@ package io.particle.android.sdk.ui;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.widget.EditText;
@@ -93,13 +94,13 @@ public class RenameHelper {
     private void doRename(final String newName) {
         Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
-            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+            public Void callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.setName(newName);
                 return null;
             }
 
             @Override
-            public void onFailure(ParticleCloudException exception) {
+            public void onFailure(@NonNull ParticleCloudException exception) {
                 new MaterialDialog.Builder(activity)
                         .theme(Theme.LIGHT)
                         .title("Unable to rename core")

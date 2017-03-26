@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?attr/listPreferredItemHeightLarge"
     android:background="?attr/selectableItemBackground">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/product_image"
         android:layout_width="60dp"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
@@ -23,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/product_image"
         android:layout_toRightOf="@id/product_image"
         android:paddingTop="3dp"
         android:text="Model name"
@@ -46,21 +49,23 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/product_model_name"
         android:layout_marginTop="3dp"
+        android:layout_toEndOf="@id/product_image"
         android:layout_toRightOf="@id/product_image"
         android:text="deadbeefcafedad"
         android:textSize="@dimen/material_text_size_caption"
         android:typeface="monospace"/>
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/context_menu"
         android:layout_width="32dp"
         android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:focusable="false"
-        android:tint="@android:color/transparent"
         android:focusableInTouchMode="false"
-        android:src="@drawable/ic_overflow"/>
+        android:tint="@android:color/transparent"
+        app:srcCompat="@drawable/ic_overflow"/>
 
     <TextView
         android:id="@+id/online_status"
@@ -68,6 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/context_menu"
+        android:layout_toStartOf="@id/context_menu"
+        android:drawableEnd="@drawable/online_dot"
         android:drawablePadding="8dp"
         android:drawableRight="@drawable/online_dot"
         android:text="@string/online"

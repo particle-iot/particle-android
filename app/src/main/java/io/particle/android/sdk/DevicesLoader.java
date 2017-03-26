@@ -88,7 +88,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         boolean useLongTimeouts = useLongTimeoutsOnNextLoad;
         useLongTimeoutsOnNextLoad = false;
 
-        List<ParticleDevice> devices = list();
+        List<ParticleDevice> devices;
         boolean isPartialList = false;
         boolean unableToLoadAnyDevices = false;
         try {

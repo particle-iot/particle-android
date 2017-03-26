@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -28,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.f2prateek.bundler.FragmentBundlerCompat;
@@ -613,7 +615,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         }
 
         @Override
-        public void onFailure(ParticleCloudException exception) {
+        public void onFailure(@NonNull ParticleCloudException exception) {
             onTinkerCallComplete(stuff, stuff.currentValue);
             // FIXME: do real error handling!
 //			ErrorsDelegate errorsDelegate = ((BaseActivity) getActivity()).getErrorsDelegate();
@@ -638,7 +640,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         void write(final PinStuff stuff, final int newValue) {
             Async.executeAsync(device, new TinkerWork(stuff) {
                 @Override
-                public Integer callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+                public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                     String stringValue;
                     if (stuff.pinAction == PinAction.ANALOG_WRITE) {
                         stringValue = String.valueOf(newValue);
@@ -657,7 +659,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                 }
 
                 @Override
-                public void onSuccess(Integer returnValue) {
+                public void onSuccess(@NonNull Integer returnValue) {
                     onTinkerCallComplete(stuff, returnValue);
                 }
             });
@@ -666,7 +668,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         void read(PinStuff stuff) {
             Async.executeAsync(device, new TinkerWork(stuff) {
                 @Override
-                public Integer callApi(ParticleDevice sparkDevice) throws ParticleCloudException,
+                public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException,
                         IOException {
                     try {
                         return sparkDevice.callFunction(
@@ -679,7 +681,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                 }
 
                 @Override
-                public void onSuccess(Integer returnValue) {
+                public void onSuccess(@NonNull Integer returnValue) {
                     onTinkerCallComplete(stuff, returnValue);
                 }
             });

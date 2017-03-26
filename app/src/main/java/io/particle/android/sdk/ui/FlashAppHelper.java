@@ -65,13 +65,13 @@ public class FlashAppHelper {
                                       final ParticleDevice.KnownApp knownApp) {
         Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
-            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+            public Void callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.flashKnownApp(knownApp);
                 return null;
             }
 
             @Override
-            public void onFailure(ParticleCloudException exception) {
+            public void onFailure(@NonNull ParticleCloudException exception) {
                 new AlertDialog.Builder(activity)
                         .setTitle("Unable to reflash " + capitalize(knownApp.getAppName()))
                         .setMessage(exception.getBestMessage())
@@ -105,7 +105,7 @@ public class FlashAppHelper {
             }
 
             @Override
-            public void onFailure(ParticleCloudException exception) {
+            public void onFailure(@NonNull ParticleCloudException exception) {
                 new AlertDialog.Builder(activity)
                         .setTitle("Unable to reflash from " + name)
                         .setMessage(exception.getBestMessage())

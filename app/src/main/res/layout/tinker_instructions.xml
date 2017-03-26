@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dip"
             android:text="@string/tinker_instructions_signature"
             android:textColor="@color/element_text_color"
