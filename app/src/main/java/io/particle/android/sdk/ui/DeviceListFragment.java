@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -444,10 +443,8 @@ public class DeviceListFragment extends Fragment
 
 
     private static Comparator<ParticleDevice> helpfulOrderDeviceComparator() {
-        Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> {
-            return BooleanComparator.getTrueFirstComparator()
-                    .compare(lhs.isConnected(), rhs.isConnected());
-        };
+        Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> BooleanComparator.getTrueFirstComparator()
+                .compare(lhs.isConnected(), rhs.isConnected());
         NullComparator<String> nullComparator = new NullComparator<>(false);
         Comparator<ParticleDevice> unnamedDevicesFirstComparator  = (lhs, rhs) -> {
             String lhname = lhs.getName();

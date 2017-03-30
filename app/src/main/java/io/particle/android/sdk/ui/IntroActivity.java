@@ -31,17 +31,14 @@ public class IntroActivity extends BaseActivity {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         }
 
-        Ui.findView(this, R.id.set_up_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = NextActivitySelector.getNextActivityIntent(
-                        view.getContext(),
-                        ParticleCloud.get(view.getContext()),
-                        SDKGlobals.getSensitiveDataStorage(),
-                        null);
-                startActivity(intent);
-                finish();
-            }
+        Ui.findView(this, R.id.set_up_button).setOnClickListener(view -> {
+            Intent intent = NextActivitySelector.getNextActivityIntent(
+                    view.getContext(),
+                    ParticleCloud.get(view.getContext()),
+                    SDKGlobals.getSensitiveDataStorage(),
+                    null);
+            startActivity(intent);
+            finish();
         });
     }
 

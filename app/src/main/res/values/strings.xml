@@ -10,6 +10,7 @@ Enjoy!]]></string>
     <string name="tinker_instructions_signature"><i>-The Particle Team</i></string>
     <string name="title_device_list">Devices</string>
     <string name="title_device_detail">Device rulsDetail</string>
+    <string name="title_inspector_detail">Inspector rulsDetail</string>
     <string name="clear_tinker">Reset all pin functions</string>
     <string name="your_devices">Your Devices</string>
     <string name="unnamed_device">(Unnamed device)</string>

@@ -40,10 +40,19 @@
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
             android:label="@string/title_device_list"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar"/>
+            android:theme="@style/DeviceListTheme"/>
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
             android:label="@string/title_device_detail"
+            android:parentActivityName="io.particle.android.sdk.ui.DeviceListActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.particle.android.sdk.ui.DeviceListActivity"/>
+        </activity>
+        <activity
+            android:name="io.particle.android.sdk.ui.InspectorActivity"
+            android:label="@string/title_inspector_detail"
             android:parentActivityName="io.particle.android.sdk.ui.DeviceListActivity"
             android:screenOrientation="portrait">
             <meta-data

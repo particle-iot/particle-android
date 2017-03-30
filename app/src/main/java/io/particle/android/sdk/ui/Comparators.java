@@ -44,8 +44,8 @@ class Comparators {
 
         @Override
         public int compare(final Boolean b1, final Boolean b2) {
-            boolean v1 = b1.booleanValue();
-            boolean v2 = b2.booleanValue();
+            boolean v1 = b1;
+            boolean v2 = b2;
 
             return (v1 ^ v2) ? ( (v1 ^ trueFirst) ? 1 : -1 ) : 0;
         }

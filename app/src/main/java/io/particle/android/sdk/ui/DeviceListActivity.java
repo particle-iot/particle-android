@@ -2,7 +2,7 @@ package io.particle.android.sdk.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.support.annotation.NonNull;
 
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
@@ -60,13 +60,10 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         deviceList = Ui.findFrag(this, R.id.fragment_device_list);
 
         final ParticleCloud cloud = ParticleCloud.get(this);
-        Ui.findView(this, R.id.action_log_out).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cloud.logOut();
-                startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
-                finish();
-            }
+        Ui.findView(this, R.id.action_log_out).setOnClickListener(view -> {
+            cloud.logOut();
+            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
+            finish();
         });
         // TODO: If exposing deep links into your app, handle intents here.
     }
@@ -87,7 +84,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 
     //region DeviceListFragment.Callbacks
     @Override
-    public void onDeviceSelected(ParticleDevice device) {
+    public void onDeviceSelected(@NonNull ParticleDevice device) {
         // FIXME: re-enable
 //
 //        return;

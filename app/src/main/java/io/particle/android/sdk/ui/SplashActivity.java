@@ -54,13 +54,9 @@ public class SplashActivity extends BaseActivity {
             return;
         }
 
-        EZ.runOnMainThreadDelayed(SPLASH_DISPLAY_TIME, new Runnable() {
-
-            @Override
-            public void run() {
-                finished = true;
-                onShowingSplashComplete();
-            }
+        EZ.runOnMainThreadDelayed(SPLASH_DISPLAY_TIME, () -> {
+            finished = true;
+            onShowingSplashComplete();
         });
     }
 
