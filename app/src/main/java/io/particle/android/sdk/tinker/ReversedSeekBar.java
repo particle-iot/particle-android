@@ -4,10 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.SeekBar;
 
 
-public class ReversedSeekBar extends SeekBar {
+public class ReversedSeekBar extends android.support.v7.widget.AppCompatSeekBar {
 
     public ReversedSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);

@@ -94,11 +94,11 @@ public class ElectronSetupFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SCAN_ICCID) {
             if (resultCode == CommonStatusCodes.SUCCESS && data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeScannerActivity.EXTRA_BARCODE);
+                Barcode barcode = data.getParcelableExtra(BarcodeScannerActivity.EXTRA_BARCODE);
 
-                    log.d("Barcode read: " + barcode.displayValue);
+                log.d("Barcode read: " + barcode.displayValue);
 
-                    this.onBarcodeScanningFinished(barcode.displayValue);
+                this.onBarcodeScanningFinished(barcode.displayValue);
             } else {
                 Toaster.s(this, "No barcode scanned.");
             }
@@ -160,12 +160,15 @@ public class ElectronSetupFragment extends Fragment {
 
     private void doElectronSetupShowNotification(boolean isSuccess, NotificationContent content) {
         // doing the same thing for both here, but keeping it split into an if/else just in case...
-        if (isSuccess) {
-            Snackbar.make(getView(), content.message, Snackbar.LENGTH_LONG)
-                    .show();
-        } else {
-            Snackbar.make(getView(), content.message, Snackbar.LENGTH_LONG)
-                    .show();
+        View view = getView();
+        if (view != null) {
+            if (isSuccess) {
+                Snackbar.make(view, content.message, Snackbar.LENGTH_LONG)
+                        .show();
+            } else {
+                Snackbar.make(view, content.message, Snackbar.LENGTH_LONG)
+                        .show();
+            }
         }
     }
 

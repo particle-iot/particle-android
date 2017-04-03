@@ -12,11 +12,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/brand_image_header"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="left|top"
+            android:layout_gravity="start|top"
             android:layout_weight="1"
             android:background="@color/shaded_background"
             android:padding="12dp"
@@ -32,7 +32,7 @@
             android:clickable="true"
             android:gravity="center"
             android:padding="4dp"
-            android:text="Log Out"
+            android:text="@string/log_out"
             android:textAllCaps="true"
             android:textSize="@dimen/material_text_size_body_button"
             tools:ignore="MissingPrefix"/>

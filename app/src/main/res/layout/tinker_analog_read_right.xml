@@ -20,6 +20,7 @@
         android:id="@+id/tinker_analog_read_progress"
         style="@style/TinkerProgress"
         android:layout_gravity="center_vertical"
+        android:layout_marginEnd="8dip"
         android:layout_marginRight="8dip"
         android:gravity="center_vertical"
         android:progress="30"/>

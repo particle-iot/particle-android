@@ -18,7 +18,6 @@ import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.BetterAsyncTaskLoader;
 
-import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 
 
@@ -88,7 +87,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         boolean useLongTimeouts = useLongTimeoutsOnNextLoad;
         useLongTimeoutsOnNextLoad = false;
 
-        List<ParticleDevice> devices = list();
+        List<ParticleDevice> devices;
         boolean isPartialList = false;
         boolean unableToLoadAnyDevices = false;
         try {

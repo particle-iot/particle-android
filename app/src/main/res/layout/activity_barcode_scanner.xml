@@ -28,8 +28,9 @@
         android:id="@+id/action_toggle_flash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_marginBottom="64dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_flashlight_off_white_24dp"/>
 

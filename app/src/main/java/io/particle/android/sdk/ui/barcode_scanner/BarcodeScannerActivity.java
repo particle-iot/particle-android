@@ -77,7 +77,8 @@ public class BarcodeScannerActivity extends FragmentActivity {
         mGraphicOverlay = Ui.findView(this, R.id.graphicOverlay);
 
         torchFab = Ui.findView(this, R.id.action_toggle_flash);
-        torchFab.setOnClickListener(v -> toggleFlash());
+        torchFab.setOnClickListener(
+                v -> toggleFlash());
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.

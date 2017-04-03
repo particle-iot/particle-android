@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="8dip"
+        android:layout_marginStart="8dip"
         android:gravity="center_vertical"
         android:text="234"/>
 

@@ -18,13 +18,13 @@ import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -302,11 +302,11 @@ public class DeviceListFragment extends Fragment
 
             final View topLevel;
             final TextView modelName;
-            final ImageView productImage;
+            final AppCompatImageView productImage;
             final TextView deviceName;
             final TextView statusTextWithIcon;
             final TextView productId;
-            final ImageView overflowMenuIcon;
+            final AppCompatImageView overflowMenuIcon;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -446,7 +446,7 @@ public class DeviceListFragment extends Fragment
         Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> BooleanComparator.getTrueFirstComparator()
                 .compare(lhs.isConnected(), rhs.isConnected());
         NullComparator<String> nullComparator = new NullComparator<>(false);
-        Comparator<ParticleDevice> unnamedDevicesFirstComparator  = (lhs, rhs) -> {
+        Comparator<ParticleDevice> unnamedDevicesFirstComparator = (lhs, rhs) -> {
             String lhname = lhs.getName();
             String rhname = rhs.getName();
             return nullComparator.compare(lhname, rhname);
@@ -480,14 +480,17 @@ public class DeviceListFragment extends Fragment
 
             if (!isLoadingSnackbarVisible) {
                 isLoadingSnackbarVisible = true;
-                Snackbar.make(getView(), "Unable to load all devices", Snackbar.LENGTH_SHORT)
-                        .setCallback(new Callback() {
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event) {
-                                super.onDismissed(snackbar, event);
-                                isLoadingSnackbarVisible = false;
-                            }
-                        }).show();
+                View view = getView();
+                if (view != null) {
+                    Snackbar.make(view, "Unable to load all devices", Snackbar.LENGTH_SHORT)
+                            .addCallback(new Callback() {
+                                @Override
+                                public void onDismissed(Snackbar snackbar, int event) {
+                                    super.onDismissed(snackbar, event);
+                                    isLoadingSnackbarVisible = false;
+                                }
+                            }).show();
+                }
             }
 
             partialContentBar.setVisibility(View.VISIBLE);
