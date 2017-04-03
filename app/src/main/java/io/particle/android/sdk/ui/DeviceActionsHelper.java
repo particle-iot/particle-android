@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.MenuItem;
 import android.widget.PopupMenu;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
