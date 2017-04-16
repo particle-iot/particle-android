@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/device_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/photon_vector_small"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_type_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/device_image"
+        app:layout_constraintStart_toStartOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_image"
+        tools:text="Photon"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_id_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:text="@string/id"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toTopOf="@+id/device_image"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_id_label"
+        tools:text="3432255252222f222f"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_last_heard_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/last_heard"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_id"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_last_heard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_last_heard_label"
+        tools:text="4 seconds ago"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_ip_address_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/ip_address"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_last_heard"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_ip_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_ip_address_label"
+        tools:text="78.60.66.224"/>
+</android.support.constraint.ConstraintLayout>

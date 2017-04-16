@@ -122,7 +122,7 @@ public class DeviceListFragment extends Fragment
         ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> {
             // subtracting 1 from position because of header.  This is gross, but it's simple
             // and in this case adequate, so #SHIPIT.
-            onDeviceRowClicked(recyclerView, position - 1, v);
+            onDeviceRowClicked(position - 1);
         });
 
         return top;
@@ -220,7 +220,7 @@ public class DeviceListFragment extends Fragment
         // no-op
     }
 
-    private void onDeviceRowClicked(RecyclerView recyclerView, int position, View view) {
+    private void onDeviceRowClicked(int position) {
         log.i("Clicked on item at position: #" + position);
         if (position >= bookends.getItemCount() || position == -1) {
             // we're at the header or footer view, do nothing.

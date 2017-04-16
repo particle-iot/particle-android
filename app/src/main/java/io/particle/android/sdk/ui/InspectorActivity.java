@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,15 +37,21 @@ public class InspectorActivity extends BaseActivity {
 
         // Show the Up button in the action bar.
         ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.setDisplayHomeAsUpEnabled(true);
-        // FIXME: do this with a theme attr instead.
-        ColorDrawable color = new ColorDrawable(getResources().getColor(
-                R.color.shaded_background));
-        supportActionBar.setBackgroundDrawable(color);
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            // FIXME: do this with a theme attr instead.
+            ColorDrawable color = new ColorDrawable(ContextCompat.getColor(this, R.color.shaded_background));
+            supportActionBar.setBackgroundDrawable(color);
+        }
 
         ParticleDevice device = getIntent().getParcelableExtra(EXTRA_DEVICE);
         String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
         setTitle(name);
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(new InspectorPager(getSupportFragmentManager(), device));
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

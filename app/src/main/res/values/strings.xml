@@ -47,5 +47,8 @@ Enjoy!]]></string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="point_at_sim_barcode">Point at SIM ICCID barcode</string>
+    <string name="id">ID</string>
+    <string name="ip_address">IP Address</string>
+    <string name="last_heard">Last heard</string>
 
 </resources>
