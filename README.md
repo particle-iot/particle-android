@@ -7,7 +7,7 @@
 Get connected and start building your Internet of Things project right away with Particle, the companion app to the Photon, a tiny but powerful Wi-Fi development board from the team at Particle. Your Photon and this app are all you need to get started with your project or prototype; the kit comes pre-loaded with our firmware libraries and is connected to the cloud out of the box.
 Download Particle to easily connect your Photon to a Wi-Fi network in a few simple steps. No coding required. The app will take you through the entire set-up process step by step until the LED on your board is breathing cyan - indicating it's connected and ready to be programmed!
 
-###Additional resources
+### Additional resources
 * Read the getting started guide at http://particle.io/start
 * Join the most active and helpful IoT community out there at http://community.particle.io
 * Learn more about Particle syntax and hardware at http://docs.particle.io
@@ -16,7 +16,7 @@ Download Particle to easily connect your Photon to a Wi-Fi network in a few simp
 
 ## Open source project
 
-###Requirements
+### Requirements
 
 1. [Android Studio 1.2](http://developer.android.com/sdk/index.html) or higher, and all the
 latest SDK components (Just launch the SDK Manager, wait for the progress bar at the bottom
@@ -34,7 +34,7 @@ get a cup of coffee during this part.  And then drink that coffee slowly, perhap
 reading [this documentation on how to speed up your Android Studio install](http://tools.android.com/tech-docs/configuration#TOC-Increasing-IDE-Memory).
 
 
-###FAQ
+### FAQ
 
 Q: I'm getting an error at build time, "The type java.nio.file.OpenOption cannot be resolved. It
 is indirectly referenced from required .class files"
@@ -43,6 +43,6 @@ A: You can ignore this error.  That class is never referred to, it's just the bu
 complaining.  See https://github.com/square/okhttp/issues/1052 ,
  _"OkHttp is careful to not exercise that code (and SPDY) where it is unsupported."_
 
-###License
+### License
 Apache 2.0
 
