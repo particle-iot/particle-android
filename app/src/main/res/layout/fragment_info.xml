@@ -37,13 +37,25 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/device_id"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/device_id_copy"
         app:layout_constraintStart_toEndOf="@+id/device_image"
         app:layout_constraintTop_toBottomOf="@+id/device_id_label"
         tools:text="3432255252222f222f"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/device_id_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBaseline_toBaselineOf="@+id/device_id_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_content_copy"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/device_last_heard_label"

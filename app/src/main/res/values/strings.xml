@@ -51,5 +51,13 @@ Enjoy!]]></string>
     <string name="ip_address">IP Address</string>
     <string name="last_heard">Last heard</string>
     <string name="event_filter">Event filter</string>
+    <string name="clipboard_copy_id_msg">Device ID was copied to the clipboard</string>
+    <string name="clipboard_copy_event_msg">Event payload was copied to the clipboard</string>
+    <string name="core">Core</string>
+    <string name="electron">Electron</string>
+    <string name="photon">Photon</string>
+    <string name="event">Event</string>
+    <string name="data">Data</string>
+    <string name="time">Time</string>
 
 </resources>

@@ -1,5 +1,7 @@
 package io.particle.android.sdk.ui;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.bundler.FragmentBundlerCompat;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,6 +39,7 @@ import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static io.particle.android.sdk.utils.Py.list;
 
 /**
@@ -160,13 +167,15 @@ public class EventsFragment extends Fragment {
         static class ViewHolder extends RecyclerView.ViewHolder {
             final View topLevel;
             final TextView eventName, eventData, eventTime;
+            final View copyButton;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 topLevel = itemView;
-                eventName = (TextView) itemView.findViewById(R.id.event_name);
-                eventData = (TextView) itemView.findViewById(R.id.event_data);
-                eventTime = (TextView) itemView.findViewById(R.id.event_time);
+                eventName = Ui.findView(itemView, R.id.event_name);
+                eventData = Ui.findView(itemView, R.id.event_data);
+                eventTime = Ui.findView(itemView, R.id.event_time);
+                copyButton = Ui.findView(itemView, R.id.event_copy);
             }
         }
 
@@ -192,6 +201,29 @@ public class EventsFragment extends Fragment {
             holder.eventData.setText(event.particleEvent.dataPayload);
             holder.eventTime.setText(new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault())
                     .format(event.particleEvent.publishedAt));
+
+            holder.copyButton.setOnClickListener(v -> {
+                Context context = holder.itemView.getContext();
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Event data", buildEventClipboardCopy(event));
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(context, R.string.clipboard_copy_event_msg, Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        private String buildEventClipboardCopy(Event event) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("Event", event.name);
+                jsonObject.put("DeviceID", event.particleEvent.deviceId);
+                jsonObject.put("Data", event.particleEvent.dataPayload);
+                String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm::ssZ",
+                        Locale.getDefault()).format(event.particleEvent.publishedAt);
+                jsonObject.put("Time", dateTime);
+                jsonObject.put("TTL", event.particleEvent.timeToLive);
+            } catch (JSONException ignore) {
+            }
+            return jsonObject.toString();
         }
 
         public void clear() {
