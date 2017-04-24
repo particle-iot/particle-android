@@ -50,6 +50,7 @@ public class InspectorActivity extends BaseActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(new InspectorPager(getSupportFragmentManager(), device));
+        viewPager.setOffscreenPageLimit(3);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
     }

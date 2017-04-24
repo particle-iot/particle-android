@@ -50,5 +50,6 @@ Enjoy!]]></string>
     <string name="id">ID</string>
     <string name="ip_address">IP Address</string>
     <string name="last_heard">Last heard</string>
+    <string name="event_filter">Event filter</string>
 
 </resources>
