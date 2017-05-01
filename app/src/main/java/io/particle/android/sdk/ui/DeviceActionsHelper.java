@@ -14,7 +14,7 @@ import io.particle.sdk.app.R;
 
 public class DeviceActionsHelper {
 
-    public static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(
+    static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(
             final FragmentActivity activity, final ParticleDevice device) {
         return item -> takeActionForDevice(item.getItemId(), activity, device);
     }

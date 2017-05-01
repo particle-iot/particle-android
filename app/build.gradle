@@ -75,7 +75,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // for barcode scanning in Electron setup
-    compile 'com.google.android.gms:play-services-vision:10.2.1'
+    compile 'com.google.android.gms:play-services-vision:10.2.4'
 
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
 

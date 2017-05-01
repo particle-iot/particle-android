@@ -3,7 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/variable_name"
@@ -20,7 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="3dp"
-        android:layout_marginStart="3dp"/>
+        android:layout_marginStart="3dp"
+        android:textSize="13sp"/>
 
     <View
         android:layout_width="0dp"

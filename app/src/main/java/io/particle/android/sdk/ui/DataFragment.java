@@ -1,5 +1,6 @@
 package io.particle.android.sdk.ui;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,16 +12,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.bundler.FragmentBundlerCompat;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.utils.AnimationUtil;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
@@ -95,11 +104,16 @@ public class DataFragment extends Fragment {
         }
 
         static class FunctionViewHolder extends BaseViewHolder {
-            final TextView name;
+            final TextView name, value;
+            final EditText argument;
+            final ImageView toggle;
 
             FunctionViewHolder(View itemView) {
                 super(itemView);
                 name = Ui.findView(itemView, R.id.function_name);
+                value = Ui.findView(itemView, R.id.function_value);
+                argument = Ui.findView(itemView, R.id.function_argument);
+                toggle = Ui.findView(itemView, R.id.function_toggle);
             }
         }
 
@@ -153,15 +167,11 @@ public class DataFragment extends Fragment {
                 defaultBackground = holder.topLevel.getBackground();
             }
 
-            if (position % 2 == 0) {
-                holder.topLevel.setBackgroundResource(R.color.shaded_background);
+            if (Build.VERSION.SDK_INT >= 16) {
+                holder.topLevel.setBackground(defaultBackground);
             } else {
-                if (Build.VERSION.SDK_INT >= 16) {
-                    holder.topLevel.setBackground(defaultBackground);
-                } else {
-                    //noinspection deprecation
-                    holder.topLevel.setBackgroundDrawable(defaultBackground);
-                }
+                //noinspection deprecation
+                holder.topLevel.setBackgroundDrawable(defaultBackground);
             }
 
             switch (getItemViewType(position)) {
@@ -169,6 +179,7 @@ public class DataFragment extends Fragment {
                     String header = (String) data.get(position);
                     HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                     headerViewHolder.headerText.setText(header);
+                    headerViewHolder.topLevel.setBackgroundResource(R.color.shaded_background);
                     break;
                 case VARIABLE:
                     Variable variable = (Variable) data.get(position);
@@ -176,13 +187,63 @@ public class DataFragment extends Fragment {
                     variableViewHolder.name.setText(variable.name);
                     setupVariableType(variableViewHolder, variable);
                     setupVariableValue(variableViewHolder, variable);
+                    variableViewHolder.itemView.setOnClickListener(v -> setupVariableValue(variableViewHolder, variable));
                     break;
                 case FUNCTION:
                     Function function = (Function) data.get(position);
                     FunctionViewHolder functionViewHolder = (FunctionViewHolder) holder;
                     functionViewHolder.name.setText(function.name);
+                    setupArgumentSend(functionViewHolder, function);
+                    setupArgumentExpandAndCollapse(functionViewHolder);
                     break;
             }
+        }
+
+        private void setupArgumentExpandAndCollapse(FunctionViewHolder functionViewHolder) {
+            functionViewHolder.toggle.setOnClickListener(v -> {
+                if (functionViewHolder.argument.getVisibility() == View.VISIBLE) {
+                    AnimationUtil.collapse(functionViewHolder.argument);
+                    functionViewHolder.toggle.setImageResource(R.drawable.ic_expand);
+                } else {
+                    AnimationUtil.expand(functionViewHolder.argument);
+                    functionViewHolder.toggle.setImageResource(R.drawable.ic_collapse);
+                }
+            });
+        }
+
+        private void setupArgumentSend(FunctionViewHolder holder, Function function) {
+            Context context = holder.itemView.getContext();
+            holder.argument.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Integer>() {
+                        @Override
+                        public Integer callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(holder.argument.getWindowToken(), 0);
+                                return particleDevice.callFunction(function.name, new ArrayList<>(Collections.
+                                        singletonList(holder.argument.getText().toString())));
+                            } catch (ParticleDevice.FunctionDoesNotExistException e) {
+                                e.printStackTrace();
+                            }
+                            return -1;
+                        }
+
+                        @Override
+                        public void onSuccess(@NonNull Integer value) {
+                            holder.value.setText(String.valueOf(value));
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull ParticleCloudException exception) {
+                            holder.value.setText("");
+                            Toast.makeText(context, R.string.sending_argument_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            });
         }
 
         private void setupVariableValue(VariableViewHolder holder, Variable variable) {
@@ -190,7 +251,13 @@ public class DataFragment extends Fragment {
                 @Override
                 public String callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
                     try {
-                        return String.valueOf(device.getVariable(variable.name));
+                        if (variable.variableType == ParticleDevice.VariableType.INT) {
+                            String value = String.valueOf(device.getVariable(variable.name));
+                            int dotIndex = value.indexOf(".");
+                            return value.substring(0, dotIndex > 0 ? dotIndex : value.length());
+                        } else {
+                            return String.valueOf(device.getVariable(variable.name));
+                        }
                     } catch (ParticleDevice.VariableDoesNotExistException e) {
                         throw new ParticleCloudException(e);
                     }

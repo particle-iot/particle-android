@@ -62,11 +62,9 @@ import static io.particle.android.sdk.utils.Py.truthy;
 public class DeviceListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<DevicesLoadResult> {
 
-
-    public interface Callbacks {
+    interface Callbacks {
         void onDeviceSelected(ParticleDevice device);
     }
-
 
     private static final TLog log = TLog.get(DeviceListFragment.class);
 
@@ -106,7 +104,7 @@ public class DeviceListFragment extends Fragment
         @SuppressLint("InflateParams")
         View myHeader = inflater.inflate(R.layout.device_list_header, null);
         myHeader.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, null);
+        partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, (ViewGroup) top, false);
         partialContentBar.setVisibility(View.INVISIBLE);
         partialContentBar.setLayoutParams(
                 new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -308,7 +306,7 @@ public class DeviceListFragment extends Fragment
             final TextView productId;
             final AppCompatImageView overflowMenuIcon;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 topLevel = itemView;
                 modelName = Ui.findView(itemView, R.id.product_model_name);
@@ -459,7 +457,7 @@ public class DeviceListFragment extends Fragment
     }
 
 
-    class ReloadStateDelegate {
+    private class ReloadStateDelegate {
 
         static final int MAX_RETRIES = 10;
 

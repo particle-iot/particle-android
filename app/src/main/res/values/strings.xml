@@ -59,5 +59,9 @@ Enjoy!]]></string>
     <string name="event">Event</string>
     <string name="data">Data</string>
     <string name="time">Time</string>
+    <string name="clear_events_title">Clear all events</string>
+    <string name="clear_events_message">All events data will be deleted. Are you sure?</string>
+    <string name="sending_argument_failed">Sending argument failed.</string>
+    <string name="arguments">(Arguments)</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 
+import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.utils.ui.Ui;
@@ -34,7 +35,7 @@ public class IntroActivity extends BaseActivity {
         Ui.findView(this, R.id.set_up_button).setOnClickListener(view -> {
             Intent intent = NextActivitySelector.getNextActivityIntent(
                     view.getContext(),
-                    ParticleCloud.get(view.getContext()),
+                    ParticleCloudSDK.getCloud(),
                     SDKGlobals.getSensitiveDataStorage(),
                     null);
             startActivity(intent);

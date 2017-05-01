@@ -2,21 +2,18 @@ package io.particle.android.sdk.tinker;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.ArrayMap;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,12 +35,12 @@ import io.particle.android.sdk.cloud.BroadcastContract;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.ui.DeviceActionsHelper;
+import io.particle.android.sdk.ui.DeviceMenuUrlHandler;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.Prefs;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
-import io.particle.android.sdk.utils.ui.WebViewActivity;
 import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.utils.Py.list;
@@ -52,9 +49,7 @@ import static io.particle.android.sdk.utils.Py.truthy;
 
 
 /**
- * A fragment representing a single Core detail screen. This fragment is either
- * contained in a {@link CoreListActivity} in two-pane mode (on tablets) or a
- * {@link CoreDetailActivity} on handsets.
+ * A fragment representing a single Tinker screen.
  */
 public class TinkerFragment extends Fragment implements OnClickListener {
 
@@ -165,11 +160,9 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             }
             return true;
 
-        } else if (DeviceMenuUrlHandler.handleActionItem(getActivity(), actionId, item.getTitle())) {
-            return true;
-
         } else {
-            return super.onOptionsItemSelected(item);
+            return DeviceMenuUrlHandler.handleActionItem(getActivity(), actionId, item.getTitle()) ||
+                    super.onOptionsItemSelected(item);
         }
     }
 
@@ -335,7 +328,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         toggleViewVisibilityWithFade(R.id.tinker_logo, false);
 
         final View selectDialogView = getActivity().getLayoutInflater().inflate(
-                R.layout.tinker_select, null);
+                R.layout.tinker_select, (ViewGroup) getView(), false);
 
         selectDialog = new AlertDialog.Builder(getActivity(),
                 R.style.ParticleSetupTheme_DialogNoDimBackground)
@@ -604,7 +597,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
         final PinStuff stuff;
 
-        protected TinkerWork(PinStuff stuff) {
+        TinkerWork(PinStuff stuff) {
             this.stuff = stuff;
         }
 
@@ -644,7 +637,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                     try {
                         return (sparkDevice.callFunction(
                                 actionToFunctionName.get(stuff.pinAction),
-                                list(stuff.pinName, stringValue))==1) ? newValue : stuff.currentValue;
+                                list(stuff.pinName, stringValue)) == 1) ? newValue : stuff.currentValue;
                     } catch (final ParticleDevice.FunctionDoesNotExistException e) {
                         Toaster.s(getActivity(), e.getMessage());
                         return stuff.currentValue; // it didn't change
@@ -697,7 +690,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
 
     // FIXME: rename to something more descriptive
-    static class PinStuff {
+    private static class PinStuff {
 
         final String pinName;
         final PinAction pinAction;
@@ -736,36 +729,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
             return v;
         }
-    }
-
-
-    static class DeviceMenuUrlHandler {
-
-        private static final SparseIntArray menuIdsToUris = new SparseIntArray();
-
-        static {
-            menuIdsToUris.put(R.id.action_show_docs_particle_app_tinker, R.string.uri_docs_particle_app_tinker);
-            menuIdsToUris.put(R.id.action_show_docs_setting_up_your_device, R.string.uri_docs_setting_up_your_device);
-            menuIdsToUris.put(R.id.action_show_docs_create_your_own_android_app, R.string.uri_docs_create_your_own_android_app);
-            menuIdsToUris.put(R.id.action_support_show_community, R.string.uri_support_community);
-            menuIdsToUris.put(R.id.action_support_show_support_site, R.string.uri_support_site);
-        }
-
-        /**
-         * Attempt to handle the action item with the given ID.
-         *
-         * @return true if action item was handled, else false.
-         */
-        public static boolean handleActionItem(Activity activity, int actionItemId, CharSequence titleToShow) {
-            if (menuIdsToUris.indexOfKey(actionItemId) < 0) {
-                // we don't handle this ID.
-                return false;
-            }
-            Uri uri = Uri.parse(activity.getString(menuIdsToUris.get(actionItemId)));
-            activity.startActivity(WebViewActivity.buildIntent(activity, uri, titleToShow));
-            return true;
-        }
-
     }
 
 }

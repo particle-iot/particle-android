@@ -18,7 +18,7 @@ import io.particle.android.sdk.utils.EZ;
 import io.particle.sdk.app.R;
 
 
-public class FlashAppHelper {
+class FlashAppHelper {
 
 
     public static void flashAppFromBinaryWithDialog(final FragmentActivity activity,
@@ -36,8 +36,8 @@ public class FlashAppHelper {
     }
 
 
-    public static void flashPhotonTinkerWithDialog(final FragmentActivity activity,
-                                                   final ParticleDevice device) {
+    static void flashPhotonTinkerWithDialog(final FragmentActivity activity,
+                                            final ParticleDevice device) {
         final InputStream inputStream = activity.getResources().openRawResource(R.raw.photon_tinker);
         new AlertDialog.Builder(activity)
                 .setMessage("Flash Tinker?")
@@ -48,9 +48,9 @@ public class FlashAppHelper {
     }
 
 
-    public static void flashKnownAppWithDialog(final FragmentActivity activity,
-                                               final ParticleDevice device,
-                                               final ParticleDevice.KnownApp knownApp) {
+    static void flashKnownAppWithDialog(final FragmentActivity activity,
+                                        final ParticleDevice device,
+                                        final ParticleDevice.KnownApp knownApp) {
         new AlertDialog.Builder(activity)
                 .setMessage(String.format("Flash %s?", capitalize(knownApp.getAppName())))
                 .setPositiveButton(R.string.flash, (dialog, which) -> flashKnownApp(

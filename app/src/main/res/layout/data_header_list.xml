@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
     android:id="@+id/header_text"
+    fontPath="@string/bold_text_font_name"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:textStyle="bold"/>
+    android:padding="10dp"/>

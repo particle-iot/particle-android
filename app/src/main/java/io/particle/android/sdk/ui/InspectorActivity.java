@@ -4,17 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
-import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.utils.Py.truthy;
@@ -30,6 +29,17 @@ public class InspectorActivity extends BaseActivity {
                 .putExtra(EXTRA_DEVICE, device);
     }
 
+    private final Runnable syncStatus = new Runnable() {
+        @Override
+        public void run() {
+            invalidateOptionsMenu();
+            handler.postDelayed(syncStatus, 1000 * 60L);
+        }
+    };
+
+    private ParticleDevice device;
+    private final Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,15 +54,11 @@ public class InspectorActivity extends BaseActivity {
             supportActionBar.setBackgroundDrawable(color);
         }
 
-        ParticleDevice device = getIntent().getParcelableExtra(EXTRA_DEVICE);
+        device = getIntent().getParcelableExtra(EXTRA_DEVICE);
         String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
         setTitle(name);
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(new InspectorPager(getSupportFragmentManager(), device));
-        viewPager.setOffscreenPageLimit(3);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
+        setupInspectorPages();
+        handler.postDelayed(syncStatus, 1000 * 60L);
     }
 
     @Override
@@ -68,37 +74,44 @@ public class InspectorActivity extends BaseActivity {
             //
             NavUtils.navigateUpTo(this, new Intent(this, DeviceListActivity.class));
             return true;
+        } else {
+            int actionId = item.getItemId();
+            return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
+                    DeviceMenuUrlHandler.handleActionItem(this, actionId, item.getTitle()) ||
+                    super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        // we handle both the context device row actions here and our own
-        getMenuInflater().inflate(R.menu.context_device_row, menu);
+        getMenuInflater().inflate(R.menu.inspector, menu);
+        MenuItem statusItem = menu.findItem(R.id.action_online_status);
+        statusItem.setIcon(getStatusColoredDot(device));
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int actionId = item.getItemId();
-//        if (DeviceActionsHelper.takeActionForDevice(actionId, getActivity(), device)) {
-//            return true;
-//
-//        } else if (actionId == R.id.action_device_clear_tinker) {
-//            prefs.clearTinker(device.getID());
-//            for (Pin pin : allPins) {
-//                pin.setConfiguredAction(PinAction.NONE);
-//                pin.reset();
-//            }
-//            return true;
-//
-//        } else if (DeviceMenuUrlHandler.handleActionItem(getActivity(), actionId, item.getTitle())) {
-//            return true;
-//
-//        } else {
-//            return super.onOptionsItemSelected(item);
-//        }
-//    }
+    private int getStatusColoredDot(ParticleDevice device) {
+        if (device.isFlashing()) {
+            return R.drawable.device_flashing_dot;
+        } else if (device.isConnected()) {
+            if (device.isRunningTinker()) {
+                return R.drawable.online_dot;
+
+            } else {
+                return R.drawable.online_non_tinker_dot;
+            }
+
+        } else {
+            return R.drawable.offline_dot;
+        }
+    }
+
+    private void setupInspectorPages() {
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(new InspectorPager(getSupportFragmentManager(), device));
+        viewPager.setOffscreenPageLimit(3);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+    }
 }

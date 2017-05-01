@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
+import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.SoftAPConfigRemover;
@@ -59,7 +60,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 
         deviceList = Ui.findFrag(this, R.id.fragment_device_list);
 
-        final ParticleCloud cloud = ParticleCloud.get(this);
+        final ParticleCloud cloud = ParticleCloudSDK.getCloud();
         Ui.findView(this, R.id.action_log_out).setOnClickListener(view -> {
             cloud.logOut();
             startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));

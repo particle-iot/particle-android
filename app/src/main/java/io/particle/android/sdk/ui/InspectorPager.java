@@ -6,15 +6,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
 
-/**
- * Created by Julius.
- */
-public class InspectorPager extends FragmentStatePagerAdapter {
+class InspectorPager extends FragmentStatePagerAdapter {
     private InfoFragment infoFragment;
     private DataFragment dataFragment;
     private EventsFragment eventsFragment;
 
-    public InspectorPager(FragmentManager fm, ParticleDevice device) {
+    InspectorPager(FragmentManager fm, ParticleDevice device) {
         super(fm);
         infoFragment = InfoFragment.newInstance(device);
         dataFragment = DataFragment.newInstance(device);

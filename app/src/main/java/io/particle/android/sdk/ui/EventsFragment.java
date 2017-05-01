@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,28 +63,40 @@ public class EventsFragment extends Fragment {
     private Long subscriptionId;
     private boolean subscribed;
 
+    private RecyclerView eventsRecyclerView;
+    private LinearLayoutManager eventsLayoutManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_events, container, false);
         device = getArguments().getParcelable(ARG_DEVICE);
 
-        RecyclerView rv = Ui.findView(top, R.id.events_list);
-        rv.setHasFixedSize(true);  // perf. optimization
-        LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
-        rv.setLayoutManager(layoutManager);
-        EventListAdapter adapter = new EventListAdapter(device);
-        rv.setAdapter(adapter);
-        rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        eventsRecyclerView = Ui.findView(top, R.id.events_list);
+        eventsRecyclerView.setHasFixedSize(true);  // perf. optimization
+        eventsLayoutManager = new LinearLayoutManager(inflater.getContext());
+        eventsRecyclerView.setLayoutManager(eventsLayoutManager);
+        EventListAdapter adapter = new EventListAdapter();
+        eventsRecyclerView.setAdapter(adapter);
+        eventsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
-        top.findViewById(R.id.events_clear).setOnClickListener(v -> adapter.clear());
+        setupClearListener(top, adapter);
         initEventSubscription(top, adapter);
         initFiltering(top, adapter);
         return top;
     }
 
+    private void setupClearListener(View rootView, EventListAdapter adapter) {
+        rootView.findViewById(R.id.events_clear).setOnClickListener(v -> new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.clear_events_title)
+                .setMessage(R.string.clear_events_message)
+                .setPositiveButton(R.string.ok, (dialog, which) -> adapter.clear())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .show());
+    }
+
     private void initFiltering(View top, EventListAdapter adapter) {
-        EditText filter = (EditText) top.findViewById(R.id.events_search);
+        EditText filter = Ui.findView(top, R.id.events_search);
         filter.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 adapter.filter(v.getText().toString());
@@ -93,6 +108,20 @@ public class EventsFragment extends Fragment {
                 return true;
             }
             return false;
+        });
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                adapter.filter(filter.getText().toString());
+            }
         });
     }
 
@@ -123,6 +152,9 @@ public class EventsFragment extends Fragment {
 
                     @Override
                     public void onEvent(String eventName, ParticleEvent particleEvent) {
+                        if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
+                            eventsRecyclerView.smoothScrollToPosition(0);
+                        }
                         adapter.add(new Event(eventName, particleEvent));
                     }
                 });
@@ -182,11 +214,6 @@ public class EventsFragment extends Fragment {
         private final List<Event> data = list();
         private final List<Event> filteredData = list();
         private String filter = "";
-        private ParticleDevice device;
-
-        EventListAdapter(ParticleDevice device) {
-            this.device = device;
-        }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -226,7 +253,7 @@ public class EventsFragment extends Fragment {
             return jsonObject.toString();
         }
 
-        public void clear() {
+        void clear() {
             filteredData.clear();
             data.clear();
             notifyDataSetChanged();
@@ -240,7 +267,7 @@ public class EventsFragment extends Fragment {
             }
         }
 
-        public void filter(String filterText) {
+        void filter(String filterText) {
             this.filter = filterText;
             filteredData.clear();
             notifyDataSetChanged();
