@@ -63,5 +63,9 @@ Enjoy!]]></string>
     <string name="clear_events_message">All events data will be deleted. Are you sure?</string>
     <string name="sending_argument_failed">Sending argument failed.</string>
     <string name="arguments">(Arguments)</string>
+    <string name="iccid">ICCID</string>
+    <string name="imei">IMEI</string>
+    <string name="data_usage">Data usage</string>
+    <string name="no_events">(No events)</string>
 
 </resources>

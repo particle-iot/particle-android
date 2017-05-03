@@ -65,12 +65,15 @@ public class EventsFragment extends Fragment {
 
     private RecyclerView eventsRecyclerView;
     private LinearLayoutManager eventsLayoutManager;
+    private View emptyView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_events, container, false);
         device = getArguments().getParcelable(ARG_DEVICE);
+        emptyView = Ui.findView(top, R.id.events_empty);
+        emptyView.setVisibility(View.VISIBLE);
 
         eventsRecyclerView = Ui.findView(top, R.id.events_list);
         eventsRecyclerView.setHasFixedSize(true);  // perf. optimization
@@ -90,7 +93,10 @@ public class EventsFragment extends Fragment {
         rootView.findViewById(R.id.events_clear).setOnClickListener(v -> new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
-                .setPositiveButton(R.string.ok, (dialog, which) -> adapter.clear())
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    emptyView.setVisibility(View.VISIBLE);
+                    adapter.clear();
+                })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show());
     }
@@ -156,6 +162,7 @@ public class EventsFragment extends Fragment {
                             eventsRecyclerView.smoothScrollToPosition(0);
                         }
                         adapter.add(new Event(eventName, particleEvent));
+                        getActivity().runOnUiThread(() -> emptyView.setVisibility(View.GONE));
                     }
                 });
                 return null;

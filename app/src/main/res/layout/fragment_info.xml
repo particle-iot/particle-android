@@ -20,6 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:background="@drawable/inspector_border"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/device_image"
         app:layout_constraintStart_toStartOf="@+id/device_image"
         app:layout_constraintTop_toBottomOf="@+id/device_image"
@@ -104,4 +106,92 @@
         app:layout_constraintStart_toEndOf="@+id/device_image"
         app:layout_constraintTop_toBottomOf="@+id/device_ip_address_label"
         tools:text="78.60.66.224"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_iccid_label"
+        fontPath="@string/italic_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/iccid"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_ip_address"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_iccid"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_iccid_label"
+        tools:text="552423272334"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/device_iccid_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/device_iccid_label"
+        app:srcCompat="@drawable/ic_content_copy"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_imei_label"
+        fontPath="@string/italic_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/imei"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_iccid"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_imei"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_imei_label"
+        tools:text="23333243234"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_data_usage_label"
+        fontPath="@string/italic_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/data_usage"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_imei_address"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/device_data_usage"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/device_image"
+        app:layout_constraintTop_toBottomOf="@+id/device_data_usage_label"
+        tools:text="0.000 MBs"/>
+
 </android.support.constraint.ConstraintLayout>

@@ -12,6 +12,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.sdk.app.R;
@@ -113,5 +115,24 @@ public class InspectorActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(3);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+        //hiding keyboard on tab changed
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                View view = getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        });
     }
 }

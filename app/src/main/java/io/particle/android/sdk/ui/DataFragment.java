@@ -95,11 +95,12 @@ public class DataFragment extends Fragment {
         }
 
         static class HeaderViewHolder extends BaseViewHolder {
-            final TextView headerText;
+            final TextView headerText, emptyText;
 
             HeaderViewHolder(View itemView) {
                 super(itemView);
                 headerText = Ui.findView(itemView, R.id.header_text);
+                emptyText = Ui.findView(itemView, R.id.header_empty);
             }
         }
 
@@ -180,6 +181,17 @@ public class DataFragment extends Fragment {
                     HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                     headerViewHolder.headerText.setText(header);
                     headerViewHolder.topLevel.setBackgroundResource(R.color.shaded_background);
+                    //check if there's any data
+                    if (device.getVariables().size() == 0) {
+                        if (position == 0) {
+                            headerViewHolder.emptyText.setText("(No exposed functions)");
+                        } else {
+                            headerViewHolder.emptyText.setText("(No exposed variables)");
+                        }
+                        headerViewHolder.emptyText.setVisibility(View.VISIBLE);
+                    } else {
+                        headerViewHolder.emptyText.setVisibility(View.GONE);
+                    }
                     break;
                 case VARIABLE:
                     Variable variable = (Variable) data.get(position);

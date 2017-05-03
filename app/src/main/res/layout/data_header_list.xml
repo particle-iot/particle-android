@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    android:id="@+id/header_text"
-    fontPath="@string/bold_text_font_name"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"/>
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/header_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        tools:text="Particle.function()"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/header_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header_text"
+        android:gravity="center"
+        android:padding="10dp"
+        android:visibility="gone"
+        tools:text="(No exposed functions)"/>
+</RelativeLayout>

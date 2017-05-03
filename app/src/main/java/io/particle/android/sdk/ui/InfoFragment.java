@@ -64,6 +64,14 @@ public class InfoFragment extends Fragment {
             case ELECTRON:
                 deviceType.setText(R.string.electron);
                 deviceImage.setImageResource(R.drawable.electron_vector_small);
+                //show extra fields
+//                Ui.findView(rootView, R.id.device_iccid_label).setVisibility(View.VISIBLE);
+//                Ui.findView(rootView, R.id.device_iccid).setVisibility(View.VISIBLE);
+//                Ui.findView(rootView, R.id.device_imei_label).setVisibility(View.VISIBLE);
+//                Ui.findView(rootView, R.id.device_imei).setVisibility(View.VISIBLE);
+//                Ui.findView(rootView, R.id.device_data_usage_label).setVisibility(View.VISIBLE);
+//                Ui.findView(rootView, R.id.device_data_usage).setVisibility(View.VISIBLE);
+//                Ui.findView(rootView, R.id.device_iccid_copy).setVisibility(View.VISIBLE);
                 break;
             default:
                 deviceType.setText(R.string.photon);
