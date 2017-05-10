@@ -16,7 +16,9 @@
         android:layout_marginStart="10dp"
         android:drawableLeft="@drawable/ic_v"
         android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_v"/>
+        android:drawableStart="@drawable/ic_v"
+        android:ellipsize="end"
+        android:lines="1"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/variable_type"
@@ -24,6 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="3dp"
         android:layout_marginStart="3dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:textSize="13sp"/>
 
     <View
@@ -36,5 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:ellipsize="end"
+        android:lines="1"/>
 </LinearLayout>

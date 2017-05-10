@@ -27,6 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:lines="1"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_name_label"
         app:layout_constraintEnd_toStartOf="@+id/event_copy"
         app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
@@ -59,6 +61,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:lines="1"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_data_label"
         app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
 
@@ -80,6 +84,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:lines="1"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_time_label"
         app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
 

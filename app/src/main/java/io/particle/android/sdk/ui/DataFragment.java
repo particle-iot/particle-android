@@ -182,12 +182,11 @@ public class DataFragment extends Fragment {
                     headerViewHolder.headerText.setText(header);
                     headerViewHolder.topLevel.setBackgroundResource(R.color.shaded_background);
                     //check if there's any data
-                    if (device.getVariables().size() == 0) {
-                        if (position == 0) {
-                            headerViewHolder.emptyText.setText("(No exposed functions)");
-                        } else {
-                            headerViewHolder.emptyText.setText("(No exposed variables)");
-                        }
+                    if (device.getVariables().size() == 0 && position != 0) {
+                        headerViewHolder.emptyText.setText("(No exposed variables)");
+                        headerViewHolder.emptyText.setVisibility(View.VISIBLE);
+                    } else if (device.getFunctions().size() == 0 && position == 0) {
+                        headerViewHolder.emptyText.setText("(No exposed functions)");
                         headerViewHolder.emptyText.setVisibility(View.VISIBLE);
                     } else {
                         headerViewHolder.emptyText.setVisibility(View.GONE);

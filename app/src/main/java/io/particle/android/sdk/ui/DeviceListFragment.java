@@ -86,8 +86,8 @@ public class DeviceListFragment extends Fragment
     private DeviceSetupCompleteReceiver deviceSetupCompleteReceiver;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         callbacks = EZ.getCallbacksOrThrow(this, Callbacks.class);
     }
 
@@ -232,24 +232,9 @@ public class DeviceListFragment extends Fragment
         if (device.isFlashing()) {
             Toaster.s(getActivity(),
                     "Device is being flashed, please wait for the flashing process to end first");
-
-        } else if (!device.isConnected()) {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Device offline")
-                    .setMessage(R.string.err_msg_device_is_offline)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
-                    .show();
-
-        } else if (!device.isRunningTinker()) {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Device not running Tinker")
-                    .setMessage("This device is not running Tinker firmware.")
-                    .setPositiveButton("Re-flash Tinker", (dialog, which) -> DeviceActionsHelper.takeActionForDevice(
-                            R.id.action_device_flash_tinker, getActivity(), device))
-                    .setNeutralButton("Tinker anyway", (dialog, which) -> callbacks.onDeviceSelected(device))
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                    .show();
-
+        } else if (!device.isConnected() || !device.isRunningTinker()) {
+            Activity activity = getActivity();
+            activity.startActivity(InspectorActivity.buildIntent(activity, device));
         } else {
             callbacks.onDeviceSelected(device);
         }
@@ -304,7 +289,6 @@ public class DeviceListFragment extends Fragment
             final TextView deviceName;
             final TextView statusTextWithIcon;
             final TextView productId;
-            final AppCompatImageView overflowMenuIcon;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -314,7 +298,6 @@ public class DeviceListFragment extends Fragment
                 deviceName = Ui.findView(itemView, R.id.product_name);
                 statusTextWithIcon = Ui.findView(itemView, R.id.online_status);
                 productId = Ui.findView(itemView, R.id.product_id);
-                overflowMenuIcon = Ui.findView(itemView, R.id.context_menu);
             }
         }
 
@@ -382,10 +365,6 @@ public class DeviceListFragment extends Fragment
                     ? device.getName()
                     : ctx.getString(R.string.unnamed_device);
             holder.deviceName.setText(name);
-
-            holder.overflowMenuIcon.setOnClickListener(
-                    view -> showMenu(view, device)
-            );
         }
 
         @Override
@@ -405,13 +384,6 @@ public class DeviceListFragment extends Fragment
 
         ParticleDevice getItem(int position) {
             return devices.get(position);
-        }
-
-        private void showMenu(View v, final ParticleDevice device) {
-            PopupMenu popup = new PopupMenu(v.getContext(), v);
-            popup.inflate(R.menu.context_device_row);
-            popup.setOnMenuItemClickListener(DeviceActionsHelper.buildPopupMenuHelper(activity, device));
-            popup.show();
         }
 
         private Pair<String, Integer> getStatusTextAndColoredDot(ParticleDevice device) {

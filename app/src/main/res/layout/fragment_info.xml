@@ -180,7 +180,7 @@
         android:text="@string/data_usage"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/device_image"
-        app:layout_constraintTop_toBottomOf="@+id/device_imei_address"/>
+        app:layout_constraintTop_toBottomOf="@+id/device_imei"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/device_data_usage"

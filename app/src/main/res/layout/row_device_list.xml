@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?attr/listPreferredItemHeightLarge"
@@ -38,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/product_model_name"
         android:layout_toRightOf="@id/product_image"
+        android:layout_toEndOf="@id/product_image"
         android:text="DEVICE_NAME"
         android:textSize="@dimen/material_text_size_subhead"
         tools:ignore="MissingPrefix"/>
@@ -55,25 +55,15 @@
         android:textSize="@dimen/material_text_size_caption"
         android:typeface="monospace"/>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/context_menu"
-        android:layout_width="32dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:tint="@android:color/transparent"
-        app:srcCompat="@drawable/ic_overflow"/>
-
     <TextView
         android:id="@+id/online_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/context_menu"
-        android:layout_toStartOf="@id/context_menu"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         android:drawableEnd="@drawable/online_dot"
         android:drawablePadding="8dp"
         android:drawableRight="@drawable/online_dot"

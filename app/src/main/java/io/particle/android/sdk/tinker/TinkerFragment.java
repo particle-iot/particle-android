@@ -142,7 +142,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         // we handle both the context device row actions here and our own
-        inflater.inflate(R.menu.context_device_row, menu);
+//        inflater.inflate(R.menu.context_device_row, menu);
         inflater.inflate(R.menu.tinker, menu);
     }
 
