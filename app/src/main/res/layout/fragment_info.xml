@@ -189,6 +189,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        android:text="0.000 MBs"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/device_image"
         app:layout_constraintTop_toBottomOf="@+id/device_data_usage_label"
