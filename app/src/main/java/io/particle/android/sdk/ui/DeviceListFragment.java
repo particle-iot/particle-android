@@ -17,7 +17,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,13 +24,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.tumblr.bookends.Bookends;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +43,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.particle.android.sdk.DevicesLoader;
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
+import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.models.DeviceStateChange;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver;
 import io.particle.android.sdk.ui.Comparators.BooleanComparator;
@@ -169,9 +172,31 @@ public class DeviceListFragment extends Fragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         refreshDevices();
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+
+        if (adapter != null) {
+            List<ParticleDevice> devices = adapter.getItems();
+            for (ParticleDevice device : devices) {
+                try {
+                    device.unsubscribeFromSystemEvents();
+                } catch (ParticleCloudException ignore) {
+                }
+            }
+        }
+        super.onPause();
     }
 
     @Override
@@ -211,6 +236,20 @@ public class DeviceListFragment extends Fragment
         adapter.clear();
         adapter.addAll(devices);
         bookends.notifyDataSetChanged();
+        //subscribe to system updates
+        for (ParticleDevice device : devices) {
+            try {
+                device.subscribeToSystemEvents();
+            } catch (ParticleCloudException ignore) {
+                //minor issue if we don't update online/offline states
+            }
+        }
+    }
+
+    @Subscribe
+    public void onEvent(DeviceStateChange deviceStateChange) {
+        //reload list to display online/offline states
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -384,6 +423,10 @@ public class DeviceListFragment extends Fragment
 
         ParticleDevice getItem(int position) {
             return devices.get(position);
+        }
+
+        List<ParticleDevice> getItems() {
+            return devices;
         }
 
         private Pair<String, Integer> getStatusTextAndColoredDot(ParticleDevice device) {

@@ -15,7 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.models.DeviceStateChange;
 import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.utils.Py.truthy;
@@ -64,6 +69,27 @@ public class InspectorActivity extends BaseActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+        try {
+            device.subscribeToSystemEvents();
+        } catch (ParticleCloudException ignore) {
+            //minor issue if we don't update online/offline states
+        }
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        try {
+            device.unsubscribeFromSystemEvents();
+        } catch (ParticleCloudException ignore) {
+        }
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -91,6 +117,12 @@ public class InspectorActivity extends BaseActivity {
         MenuItem statusItem = menu.findItem(R.id.action_online_status);
         statusItem.setIcon(getStatusColoredDot(device));
         return true;
+    }
+
+    @Subscribe
+    public void onEvent(DeviceStateChange deviceStateChange) {
+        //reload menu to display online/offline
+        invalidateOptionsMenu();
     }
 
     private int getStatusColoredDot(ParticleDevice device) {

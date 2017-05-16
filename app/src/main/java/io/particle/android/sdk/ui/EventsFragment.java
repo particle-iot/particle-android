@@ -280,7 +280,7 @@ public class EventsFragment extends Fragment {
             notifyDataSetChanged();
 
             for (Event event : data) {
-                if (event.name.contains(filter)) {
+                if (event.name.contains(filter) || event.particleEvent.dataPayload.contains(filter)) {
                     filteredData.add(event);
                     notifyItemInserted(data.indexOf(event));
                 }
