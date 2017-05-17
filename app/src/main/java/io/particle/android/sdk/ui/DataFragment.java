@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -108,6 +109,7 @@ public class DataFragment extends Fragment {
             final TextView name, value;
             final EditText argument;
             final ImageView toggle;
+            final ProgressBar progressBar;
 
             FunctionViewHolder(View itemView) {
                 super(itemView);
@@ -115,17 +117,20 @@ public class DataFragment extends Fragment {
                 value = Ui.findView(itemView, R.id.function_value);
                 argument = Ui.findView(itemView, R.id.function_argument);
                 toggle = Ui.findView(itemView, R.id.function_toggle);
+                progressBar = Ui.findView(itemView, R.id.function_progress);
             }
         }
 
         static class VariableViewHolder extends BaseViewHolder {
             final TextView name, type, value;
+            final ProgressBar progressBar;
 
             VariableViewHolder(View itemView) {
                 super(itemView);
                 name = Ui.findView(itemView, R.id.variable_name);
                 type = Ui.findView(itemView, R.id.variable_type);
                 value = Ui.findView(itemView, R.id.variable_value);
+                progressBar = Ui.findView(itemView, R.id.variable_progress);
             }
         }
 
@@ -226,6 +231,8 @@ public class DataFragment extends Fragment {
             Context context = holder.itemView.getContext();
             holder.argument.setOnEditorActionListener((v, actionId, event) -> {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    holder.progressBar.setVisibility(View.VISIBLE);
+                    holder.value.setVisibility(View.GONE);
                     Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Integer>() {
                         @Override
                         public Integer callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
@@ -243,12 +250,16 @@ public class DataFragment extends Fragment {
                         @Override
                         public void onSuccess(@NonNull Integer value) {
                             holder.value.setText(String.valueOf(value));
+                            holder.progressBar.setVisibility(View.GONE);
+                            holder.value.setVisibility(View.VISIBLE);
                         }
 
                         @Override
                         public void onFailure(@NonNull ParticleCloudException exception) {
                             holder.value.setText("");
                             Toast.makeText(context, R.string.sending_argument_failed, Toast.LENGTH_SHORT).show();
+                            holder.progressBar.setVisibility(View.GONE);
+                            holder.value.setVisibility(View.VISIBLE);
                         }
                     });
                     return true;
@@ -258,6 +269,8 @@ public class DataFragment extends Fragment {
         }
 
         private void setupVariableValue(VariableViewHolder holder, Variable variable) {
+            holder.progressBar.setVisibility(View.VISIBLE);
+            holder.value.setVisibility(View.GONE);
             Async.executeAsync(device, new Async.ApiWork<ParticleDevice, String>() {
                 @Override
                 public String callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
@@ -277,11 +290,15 @@ public class DataFragment extends Fragment {
                 @Override
                 public void onSuccess(@NonNull String value) {
                     holder.value.setText(value);
+                    holder.progressBar.setVisibility(View.GONE);
+                    holder.value.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onFailure(@NonNull ParticleCloudException exception) {
                     holder.value.setText("");
+                    holder.progressBar.setVisibility(View.GONE);
+                    holder.value.setVisibility(View.VISIBLE);
                 }
             });
         }

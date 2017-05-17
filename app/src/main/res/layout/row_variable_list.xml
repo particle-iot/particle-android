@@ -43,4 +43,11 @@
         android:layout_marginRight="10dp"
         android:ellipsize="end"
         android:lines="1"/>
+
+    <ProgressBar
+        android:padding="4dp"
+        android:visibility="gone"
+        android:id="@+id/variable_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
 </LinearLayout>
