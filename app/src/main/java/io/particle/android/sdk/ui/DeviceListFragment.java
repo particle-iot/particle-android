@@ -1,12 +1,10 @@
 package io.particle.android.sdk.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,12 +16,16 @@ import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -103,10 +105,8 @@ public class DeviceListFragment extends Fragment
         rv.setHasFixedSize(true);  // perf. optimization
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
         rv.setLayoutManager(layoutManager);
+        rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
-        @SuppressLint("InflateParams")
-        View myHeader = inflater.inflate(R.layout.device_list_header, null);
-        myHeader.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, (ViewGroup) top, false);
         partialContentBar.setVisibility(View.INVISIBLE);
         partialContentBar.setLayoutParams(
@@ -115,17 +115,10 @@ public class DeviceListFragment extends Fragment
         adapter = new DeviceListAdapter(getActivity());
         // Add them as headers / footers
         bookends = new Bookends<>(adapter);
-        bookends.addHeader(myHeader);
         bookends.addFooter(partialContentBar);
 
         rv.setAdapter(bookends);
-
-        ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> {
-            // subtracting 1 from position because of header.  This is gross, but it's simple
-            // and in this case adequate, so #SHIPIT.
-            onDeviceRowClicked(position - 1);
-        });
-
+        ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> onDeviceRowClicked(position));
         return top;
     }
 
@@ -324,19 +317,18 @@ public class DeviceListFragment extends Fragment
 
             final View topLevel;
             final TextView modelName;
-            final AppCompatImageView productImage;
+            final AppCompatImageView productImage, statusIcon;
             final TextView deviceName;
             final TextView statusTextWithIcon;
-            final TextView productId;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 topLevel = itemView;
                 modelName = Ui.findView(itemView, R.id.product_model_name);
                 productImage = Ui.findView(itemView, R.id.product_image);
+                statusIcon = Ui.findView(itemView, R.id.online_status_image);
                 deviceName = Ui.findView(itemView, R.id.product_name);
                 statusTextWithIcon = Ui.findView(itemView, R.id.online_status);
-                productId = Ui.findView(itemView, R.id.product_id);
             }
         }
 
@@ -364,16 +356,7 @@ public class DeviceListFragment extends Fragment
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.getBackground();
             }
-
-            if (position % 2 == 0) {
-                holder.topLevel.setBackgroundResource(R.color.shaded_background);
-            } else {
-                if (VERSION.SDK_INT >= 16) {
-                    holder.topLevel.setBackground(defaultBackground);
-                } else {
-                    holder.topLevel.setBackgroundDrawable(defaultBackground);
-                }
-            }
+            holder.topLevel.setBackgroundResource(R.color.device_item_bg);
 
             switch (device.getDeviceType()) {
                 case CORE:
@@ -394,10 +377,13 @@ public class DeviceListFragment extends Fragment
 
             Pair<String, Integer> statusTextAndColoredDot = getStatusTextAndColoredDot(device);
             holder.statusTextWithIcon.setText(statusTextAndColoredDot.first);
-            holder.statusTextWithIcon.setCompoundDrawablesWithIntrinsicBounds(
-                    0, 0, statusTextAndColoredDot.second, 0);
+            holder.statusIcon.setImageResource(statusTextAndColoredDot.second);
 
-            holder.productId.setText(device.getID().toUpperCase());
+            if (device.isConnected()) {
+                Animation animFade = AnimationUtils.loadAnimation(activity, R.anim.fade_in_out);
+                animFade.setStartOffset(position * 1000);
+                holder.statusIcon.startAnimation(animFade);
+            }
 
             Context ctx = holder.topLevel.getContext();
             String name = truthy(device.getName())
@@ -434,21 +420,21 @@ public class DeviceListFragment extends Fragment
             String msg;
             if (device.isFlashing()) {
                 dot = R.drawable.device_flashing_dot;
-                msg = "Flashing";
+                msg = "";
 
             } else if (device.isConnected()) {
                 if (device.isRunningTinker()) {
                     dot = R.drawable.online_dot;
-                    msg = "Online";
+                    msg = "Tinker";
 
                 } else {
                     dot = R.drawable.online_non_tinker_dot;
-                    msg = "Online, non-Tinker";
+                    msg = "";
                 }
 
             } else {
                 dot = R.drawable.offline_dot;
-                msg = "Offline";
+                msg = "";
             }
             return Pair.create(msg, dot);
         }

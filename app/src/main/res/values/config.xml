@@ -2,5 +2,24 @@
 <resources>
 
     <string name="electron_setup_uri">https://setup.particle.io</string>
+    <drawable name="screen_background">@drawable/ic_trianglify_background</drawable>
 
+    <!--<color name="link_text_color">@android:color/white</color>-->
+    <!--<color name="link_text_bg">#19AAAAAA</color>-->
+    <!--<color name="error_text_color">#FE4747</color>-->
+
+    <!--<color name="register_field_background_color_enabled">#E5FFFFFF</color>-->
+    <!--<color name="register_field_background_color_disabled">#AACCCCCC</color>-->
+<!---->
+<!---->
+    <color name="element_background_color">#E5FFFFFF</color>
+    <!--<color name="element_background_color_dark">#0083A6</color>-->
+    <color name="element_text_color">#00BAEC</color>
+    <!--<color name="element_text_disabled_color">#E0E0E0</color>-->
+
+    <!--<color name="primary_color">@color/element_background_color</color>-->
+    <!-- As named, just a darker variant of the primary color, used to color the status bar -->
+    <!--<color name="primary_color_dark">@color/shaded_background</color>-->
+    <!-- accent_color is used as the default value for tinting widgets -->
+    <!--<color name="accent_color">#00BAEC</color>-->
 </resources>

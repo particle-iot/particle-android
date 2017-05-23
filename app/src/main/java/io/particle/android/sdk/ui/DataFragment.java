@@ -108,7 +108,7 @@ public class DataFragment extends Fragment {
         static class FunctionViewHolder extends BaseViewHolder {
             final TextView name, value;
             final EditText argument;
-            final ImageView toggle;
+            final ImageView toggle, argumentIcon;
             final ProgressBar progressBar;
 
             FunctionViewHolder(View itemView) {
@@ -116,6 +116,7 @@ public class DataFragment extends Fragment {
                 name = Ui.findView(itemView, R.id.function_name);
                 value = Ui.findView(itemView, R.id.function_value);
                 argument = Ui.findView(itemView, R.id.function_argument);
+                argumentIcon = Ui.findView(itemView, R.id.function_argument_icon);
                 toggle = Ui.findView(itemView, R.id.function_toggle);
                 progressBar = Ui.findView(itemView, R.id.function_progress);
             }
@@ -185,7 +186,6 @@ public class DataFragment extends Fragment {
                     String header = (String) data.get(position);
                     HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                     headerViewHolder.headerText.setText(header);
-                    headerViewHolder.topLevel.setBackgroundResource(R.color.shaded_background);
                     //check if there's any data
                     if (device.getVariables().size() == 0 && position != 0) {
                         headerViewHolder.emptyText.setText("(No exposed variables)");
@@ -201,6 +201,7 @@ public class DataFragment extends Fragment {
                     Variable variable = (Variable) data.get(position);
                     VariableViewHolder variableViewHolder = (VariableViewHolder) holder;
                     variableViewHolder.name.setText(variable.name);
+                    variableViewHolder.topLevel.setBackgroundResource(R.color.device_item_bg);
                     setupVariableType(variableViewHolder, variable);
                     setupVariableValue(variableViewHolder, variable);
                     variableViewHolder.itemView.setOnClickListener(v -> setupVariableValue(variableViewHolder, variable));
@@ -209,6 +210,7 @@ public class DataFragment extends Fragment {
                     Function function = (Function) data.get(position);
                     FunctionViewHolder functionViewHolder = (FunctionViewHolder) holder;
                     functionViewHolder.name.setText(function.name);
+                    functionViewHolder.topLevel.setBackgroundResource(R.color.device_item_bg);
                     setupArgumentSend(functionViewHolder, function);
                     setupArgumentExpandAndCollapse(functionViewHolder);
                     break;
@@ -219,9 +221,11 @@ public class DataFragment extends Fragment {
             functionViewHolder.toggle.setOnClickListener(v -> {
                 if (functionViewHolder.argument.getVisibility() == View.VISIBLE) {
                     AnimationUtil.collapse(functionViewHolder.argument);
+                    AnimationUtil.collapse(functionViewHolder.argumentIcon);
                     functionViewHolder.toggle.setImageResource(R.drawable.ic_expand);
                 } else {
                     AnimationUtil.expand(functionViewHolder.argument);
+                    AnimationUtil.expand(functionViewHolder.argumentIcon);
                     functionViewHolder.toggle.setImageResource(R.drawable.ic_collapse);
                 }
             });

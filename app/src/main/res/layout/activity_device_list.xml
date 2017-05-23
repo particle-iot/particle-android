@@ -4,41 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:background="@color/default_light_background"
     android:orientation="vertical"
     tools:context="io.particle.android.sdk.ui.DeviceListActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/brand_image_header"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="start|top"
-            android:layout_weight="1"
-            android:background="@color/shaded_background"
-            android:padding="12dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/brand_image_horizontal"/>
-
-        <TextView
-            android:id="@+id/action_log_out"
-            fontPath="@string/bold_text_font_name"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/shaded_background"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="@string/log_out"
-            android:textAllCaps="true"
-            android:textSize="@dimen/material_text_size_body_button"
-            tools:ignore="MissingPrefix"/>
-
-    </LinearLayout>
-
 
     <fragment
         android:id="@+id/fragment_device_list"

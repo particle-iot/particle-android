@@ -6,6 +6,9 @@
     <color name="sunflower">#F1C40F</color>
     <color name="alizarin">#E74C3C</color>
 
+    <color name="device_item_bg">#11555555</color>
+    <color name="default_light_background">#EEEEEE</color>
+
     <array name="core_colors">
         <item>#1ABC9C</item>
         <item>#16A085</item>
@@ -28,8 +31,8 @@
 
     <!-- tinker -->
     <color name="tinker_instructions_bg">#A5000000</color>
-    <color name="tinker_pin_bg">#4C000000</color>
-    <color name="tinker_pin_bg_selected">#B2000000</color>
+    <color name="tinker_pin_bg">#A5000000</color>
+    <color name="tinker_pin_bg_selected">#A5000000</color>
     <color name="tinker_pin_bg_muted">#19000000</color>
     <color name="tinker_pin_text_muted">#19FFFFFF</color>
     <color name="tinker_pin_text_dark">#b2000000</color>

@@ -76,5 +76,8 @@ Enjoy!]]></string>
     <string name="imei">IMEI</string>
     <string name="data_usage">Data usage</string>
     <string name="no_events">(No events)</string>
+    <string name="log_out">Log out</string>
+    <string name="tinker">Tinker</string>
+    <string name="device_inspector">Device Inspector</string>
 
 </resources>

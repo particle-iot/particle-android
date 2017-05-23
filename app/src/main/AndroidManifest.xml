@@ -10,7 +10,7 @@
     <application
         android:name="io.particle.android.sdk.tinker.TinkerApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:isGame="false"
         android:label="@string/app_name"
         android:theme="@style/ParticleSetupTheme"
@@ -39,8 +39,7 @@
         <activity
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
             android:label="@string/title_device_list"
-            android:screenOrientation="portrait"
-            android:theme="@style/DeviceListTheme"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
             android:label="@string/title_device_detail"

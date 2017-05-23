@@ -3,17 +3,21 @@ package io.particle.android.sdk.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,6 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.cloud.models.DeviceStateChange;
+import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.utils.Py.truthy;
@@ -57,13 +62,20 @@ public class InspectorActivity extends BaseActivity {
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             // FIXME: do this with a theme attr instead.
-            ColorDrawable color = new ColorDrawable(ContextCompat.getColor(this, R.color.shaded_background));
-            supportActionBar.setBackgroundDrawable(color);
+            Drawable background = ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background);
+            supportActionBar.setBackgroundDrawable(background);
         }
+        setTitle(getString(R.string.device_inspector));
 
         device = getIntent().getParcelableExtra(EXTRA_DEVICE);
-        String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
-        setTitle(name);
+        TextView deviceNameView = Ui.findView(this, R.id.deviceName);
+        deviceNameView.setText(device.getName());
+
+        ImageView deviceStatus = Ui.findView(this, R.id.deviceStatus);
+        Animation animFade = AnimationUtils.loadAnimation(this, R.anim.fade_in_out);
+        deviceStatus.startAnimation(animFade);
+        deviceStatus.setImageResource(getStatusColoredDot(device));
+
         setupInspectorPages();
         handler.postDelayed(syncStatus, 1000 * 60L);
     }
@@ -107,8 +119,6 @@ public class InspectorActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.inspector, menu);
-        MenuItem statusItem = menu.findItem(R.id.action_online_status);
-        statusItem.setIcon(getStatusColoredDot(device));
         return true;
     }
 

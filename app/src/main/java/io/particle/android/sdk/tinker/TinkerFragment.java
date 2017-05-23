@@ -168,7 +168,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
     private void updateTitle() {
         String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
-        getActivity().setTitle(name);
     }
 
     private TextView findPinView(int id) {

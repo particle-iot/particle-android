@@ -18,7 +18,8 @@
         android:drawablePadding="5dp"
         android:drawableStart="@drawable/ic_v"
         android:ellipsize="end"
-        android:lines="1"/>
+        android:lines="1"
+        android:textColor="#00BAEC"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/variable_type"
@@ -28,6 +29,7 @@
         android:layout_marginStart="3dp"
         android:ellipsize="end"
         android:lines="1"
+        android:textColor="@android:color/black"
         android:textSize="13sp"/>
 
     <View
@@ -42,12 +44,13 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:ellipsize="end"
-        android:lines="1"/>
+        android:lines="1"
+        android:textColor="@android:color/black"/>
 
     <ProgressBar
-        android:padding="4dp"
-        android:visibility="gone"
         android:id="@+id/variable_progress"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:visibility="gone"/>
 </LinearLayout>

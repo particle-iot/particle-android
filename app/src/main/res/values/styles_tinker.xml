@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="DeviceListTheme" parent="ParticleSetupTheme.NoActionBar">
-        <item name="android:textAppearanceLargePopupMenu">@style/DevicePopupMenuText</item>
-        <item name="android:textAppearanceSmallPopupMenu">@style/DevicePopupMenuText</item>
-    </style>
-
-    <style name="DevicePopupMenuText" parent="TextAppearance.AppCompat.Widget.PopupMenu.Small">
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/shaded_background</item>
+        <item name="tabIndicatorColor">#00BAEC</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabPaddingStart">8dp</item>
         <item name="tabPaddingEnd">8dp</item>
-        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabBackground">@color/default_light_background</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabSelectedTextColor">#00BAEC</item>
     </style>
 
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">#00BAEC</item>
         <item name="textAllCaps">true</item>
     </style>
 

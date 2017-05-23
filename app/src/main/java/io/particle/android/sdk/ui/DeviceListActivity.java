@@ -1,8 +1,14 @@
 package io.particle.android.sdk.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
@@ -12,6 +18,8 @@ import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.SoftAPConfigRemover;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
+
+import static io.particle.android.sdk.utils.Py.truthy;
 
 /**
  * An activity representing a list of Devices. This activity
@@ -59,14 +67,16 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         }
 
         deviceList = Ui.findFrag(this, R.id.fragment_device_list);
-
-        final ParticleCloud cloud = ParticleCloudSDK.getCloud();
-        Ui.findView(this, R.id.action_log_out).setOnClickListener(view -> {
-            cloud.logOut();
-            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
-            finish();
-        });
         // TODO: If exposing deep links into your app, handle intents here.
+
+        // Show the Up button in the action bar.
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            // FIXME: do this with a theme attr instead.
+            Drawable background = ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background);
+            supportActionBar.setBackgroundDrawable(background);
+        }
+        setTitle(R.string.your_devices);
     }
 
     @Override
@@ -81,6 +91,24 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         if (deviceList == null || !deviceList.onBackPressed()) {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_log_out) {
+            final ParticleCloud cloud = ParticleCloudSDK.getCloud();
+            cloud.logOut();
+            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.device_list, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     //region DeviceListFragment.Callbacks

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:paddingBottom="5dp"
     android:paddingTop="5dp">
 
     <LinearLayout
+        android:id="@+id/function_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -24,7 +24,8 @@
             android:drawablePadding="5dp"
             android:drawableStart="@drawable/ic_f"
             android:ellipsize="end"
-            android:lines="1"/>
+            android:lines="1"
+            android:textColor="#00BAEC"/>
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/function_toggle"
@@ -45,7 +46,8 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:ellipsize="end"
-            android:lines="1"/>
+            android:lines="1"
+            android:textColor="@android:color/black"/>
 
         <ProgressBar
             android:id="@+id/function_progress"
@@ -55,21 +57,33 @@
             android:visibility="gone"/>
     </LinearLayout>
 
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/function_argument_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/function_container"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_sub"/>
+
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/function_argument"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_below="@+id/function_container"
         android:layout_marginEnd="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginStart="10dp"
-        android:drawableLeft="@drawable/ic_sub"
-        android:drawablePadding="15dp"
-        android:drawableStart="@drawable/ic_sub"
+        android:padding="5dp"
+        android:layout_toEndOf="@+id/function_argument_icon"
+        android:layout_toRightOf="@+id/function_argument_icon"
+        android:background="@color/default_light_background"
         android:hint="@string/arguments"
         android:imeOptions="actionSend"
         android:inputType="text"
         android:lines="1"
         android:maxLines="1"
+        android:textColor="#00BAEC"
+        android:textColorHint="@color/half_black"
         android:visibility="gone"/>
-</LinearLayout>
+</RelativeLayout>

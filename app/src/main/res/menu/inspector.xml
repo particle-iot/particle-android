@@ -3,12 +3,6 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_online_status"
-        android:icon="@drawable/online_dot"
-        android:title="Status"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@id/action_device_rename"
         android:icon="@drawable/ic_mode_edit_white_24dp"
         android:title="@string/rename_menu_title"
