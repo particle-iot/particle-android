@@ -19,7 +19,7 @@
         android:drawableStart="@drawable/ic_v"
         android:ellipsize="end"
         android:lines="1"
-        android:textColor="#00BAEC"/>
+        android:textColor="@color/teal"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/variable_type"

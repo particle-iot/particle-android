@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/inspector_border"
             android:paddingTop="3dp"
-            android:textColor="#00BAEC"
+            android:textColor="@color/teal"
             android:textSize="12sp"
             tools:text="Photon"/>
     </LinearLayout>

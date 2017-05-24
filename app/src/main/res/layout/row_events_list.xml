@@ -4,18 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="@color/shaded_background"
+    android:background="@color/device_item_bg"
     android:paddingBottom="5dp"
     android:paddingTop="5dp">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/event_name_label"
-        fontPath="@string/italic_text_font_name"
+        fontPath="@string/normal_text_font_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:text="@string/event"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -30,6 +31,7 @@
         android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:lines="1"
+        android:textColor="@android:color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_name_label"
         app:layout_constraintEnd_toStartOf="@+id/event_copy"
         app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
@@ -46,13 +48,14 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/event_data_label"
-        fontPath="@string/italic_text_font_name"
+        fontPath="@string/normal_text_font_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:text="@string/data"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_name_label"/>
 
@@ -66,19 +69,21 @@
         android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:lines="1"
+        android:textColor="@android:color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_data_label"
         app:layout_constraintEnd_toStartOf="@+id/event_copy"
         app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/event_time_label"
-        fontPath="@string/italic_text_font_name"
+        fontPath="@string/normal_text_font_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:text="@string/time"
+        android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_data_label"/>
 
@@ -92,6 +97,7 @@
         android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:lines="1"
+        android:textColor="@android:color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_time_label"
         app:layout_constraintEnd_toStartOf="@+id/event_copy"
         app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
