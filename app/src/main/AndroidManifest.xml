@@ -6,6 +6,7 @@
 
     <uses-feature android:name="android.hardware.camera.any"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="io.particle.android.sdk.tinker.TinkerApplication"
@@ -16,6 +17,9 @@
         android:theme="@style/ParticleSetupTheme"
         tools:ignore="UnusedAttribute">
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="" />
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
