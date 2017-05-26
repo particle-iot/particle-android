@@ -2,7 +2,6 @@ package io.particle.android.sdk.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -109,6 +108,7 @@ public class InspectorActivity extends BaseActivity {
             return true;
         } else {
             int actionId = item.getItemId();
+
             return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
                     DeviceMenuUrlHandler.handleActionItem(this, actionId, item.getTitle()) ||
                     super.onOptionsItemSelected(item);
@@ -120,6 +120,15 @@ public class InspectorActivity extends BaseActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.inspector, menu);
         return true;
+    }
+
+    @Subscribe
+    public void onEvent(ParticleDevice device) {
+        //update device and UI
+        //TODO update more fields
+        this.device = device;
+        TextView deviceNameView = Ui.findView(this, R.id.deviceName);
+        deviceNameView.setText(device.getName());
     }
 
     @Subscribe

@@ -9,6 +9,8 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
@@ -25,7 +27,6 @@ public class RenameHelper {
     public static void renameDevice(FragmentActivity activity, ParticleDevice device) {
         new RenameHelper(device, activity).showDialog();
     }
-
 
     private final ParticleDevice device;
     private final FragmentActivity activity;
@@ -94,6 +95,7 @@ public class RenameHelper {
             @Override
             public Void callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.setName(newName);
+                EventBus.getDefault().post(device);
                 return null;
             }
 
