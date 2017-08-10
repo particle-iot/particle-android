@@ -136,7 +136,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void initEventSubscription(View top, EventListAdapter adapter) {
-        ImageView eventButton = (ImageView) top.findViewById(R.id.events_pause);
+        ImageView eventButton = top.findViewById(R.id.events_pause);
         eventButton.setOnClickListener(v -> {
             if (subscribed) {
                 eventButton.setImageResource(R.drawable.ic_play);
@@ -166,7 +166,7 @@ public class EventsFragment extends Fragment {
                         if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
                             eventsRecyclerView.smoothScrollToPosition(0);
                         }
-                        getActivity().runOnUiThread(() -> emptyView.setVisibility(View.GONE));
+                        emptyView.post(() -> emptyView.setVisibility(View.GONE));
                     }
                 });
                 return null;

@@ -14,15 +14,17 @@
         android:background="?attr/selectableItemBackground"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/function_name"
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:drawableLeft="@drawable/ic_f"
-            android:drawablePadding="5dp"
-            android:drawableStart="@drawable/ic_f"
+            app:srcCompat="@drawable/ic_f"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/function_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
             android:textColor="@color/teal"/>
@@ -79,12 +81,13 @@
         android:background="@color/default_light_background"
         android:hint="@string/arguments"
         android:imeOptions="actionSend"
-        android:inputType="text"
+        android:inputType="textNoSuggestions"
         android:lines="1"
         android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/teal"
         android:textColorHint="@color/half_black"
+        android:textSize="12sp"
         android:theme="@style/Base.Theme.AppCompat.Light"
         android:visibility="gone"/>
 </RelativeLayout>

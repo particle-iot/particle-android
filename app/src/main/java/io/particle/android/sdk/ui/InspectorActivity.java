@@ -128,7 +128,7 @@ public class InspectorActivity extends BaseActivity {
         //TODO update more fields
         this.device = device;
         TextView deviceNameView = Ui.findView(this, R.id.deviceName);
-        deviceNameView.setText(device.getName());
+        deviceNameView.post(() -> deviceNameView.setText(device.getName()));
     }
 
     @Subscribe

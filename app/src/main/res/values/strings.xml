@@ -60,6 +60,7 @@ Enjoy!]]></string>
     <string name="last_heard">Last heard</string>
     <string name="event_filter">Event filter</string>
     <string name="clipboard_copy_id_msg">Device ID was copied to the clipboard</string>
+    <string name="clipboard_copy_variable">Variable value was copied to the clipboard</string>
     <string name="clipboard_copy_iccid_msg">Device SIM ICCID was copied to the clipboard</string>
     <string name="clipboard_copy_event_msg">Event payload was copied to the clipboard</string>
     <string name="core">Core</string>
@@ -79,5 +80,7 @@ Enjoy!]]></string>
     <string name="log_out">Log out</string>
     <string name="tinker">Tinker</string>
     <string name="device_inspector">Device Inspector</string>
+    <string name="close">Close</string>
+    <string name="action_clipboard">Copy to clipboard</string>
 
 </resources>

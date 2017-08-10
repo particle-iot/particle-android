@@ -15,7 +15,7 @@ public class TinkerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().build()).build());
         ParticleDeviceSetupLibrary.init(this, DeviceListActivity.class);
     }
 }

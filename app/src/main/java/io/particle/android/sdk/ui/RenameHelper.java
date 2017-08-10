@@ -40,8 +40,9 @@ public class RenameHelper {
     private void showDialog() {
         // FIXME: include "suggest different name" button
         // FIXME: device name cache is gone, re-implement this later.
-        Set<String> noNames = Collections.emptySet();
-        final String suggestedName = CoreNameGenerator.generateUniqueName(noNames);
+//        Set<String> noNames = Collections.emptySet();
+//        final String suggestedName = CoreNameGenerator.generateUniqueName(noNames);
+        final String suggestedName = device.getName();
 
         new MaterialDialog.Builder(activity)
                 .title("Rename Device")

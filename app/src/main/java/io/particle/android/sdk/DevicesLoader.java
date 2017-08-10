@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 
 import io.particle.android.sdk.cloud.BroadcastContract;
 import io.particle.android.sdk.cloud.ParallelDeviceFetcherAccessHack;
@@ -92,7 +93,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         boolean unableToLoadAnyDevices = false;
         try {
             devices = ParallelDeviceFetcherAccessHack.getDevicesParallel(cloud, useLongTimeouts);
-        } catch (ParticleCloudException e) {
+        } catch (ParticleCloudException | CancellationException e) {
             // FIXME: think more about error handling here
             // getting a PCE here means we couldn't even get the device list, so just return
             // whatever we have.

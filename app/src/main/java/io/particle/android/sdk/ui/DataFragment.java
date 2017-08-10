@@ -1,5 +1,8 @@
 package io.particle.android.sdk.ui;
 
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -37,6 +40,7 @@ import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static io.particle.android.sdk.utils.Py.list;
 
 public class DataFragment extends Fragment {
@@ -207,7 +211,8 @@ public class DataFragment extends Fragment {
                     variableViewHolder.topLevel.setBackgroundResource(R.color.device_item_bg);
                     setupVariableType(variableViewHolder, variable);
                     setupVariableValue(variableViewHolder, variable);
-                    variableViewHolder.itemView.setOnClickListener(v -> setupVariableValue(variableViewHolder, variable));
+                    variableViewHolder.name.setOnClickListener(v -> setupVariableValue(variableViewHolder, variable));
+                    variableViewHolder.type.setOnClickListener(v -> setupVariableValue(variableViewHolder, variable));
                     break;
                 case FUNCTION:
                     Function function = (Function) data.get(position);
@@ -218,6 +223,23 @@ public class DataFragment extends Fragment {
                     setupArgumentExpandAndCollapse(functionViewHolder);
                     break;
             }
+        }
+
+        private void createValuePopup(Context context, String title, String message) {
+            new AlertDialog.Builder(context)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.action_clipboard, (dialog, which) -> {
+                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText(title, message);
+                        if (clipboard != null) {
+                            clipboard.setPrimaryClip(clip);
+                        }
+                        Toast.makeText(context, R.string.clipboard_copy_variable, Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.close, ((dialogInterface, i) -> dialogInterface.dismiss()))
+                    .show();
         }
 
         private void setupArgumentExpandAndCollapse(FunctionViewHolder functionViewHolder) {
@@ -299,6 +321,7 @@ public class DataFragment extends Fragment {
                     holder.value.setText(value);
                     holder.progressBar.setVisibility(View.GONE);
                     holder.value.setVisibility(View.VISIBLE);
+                    holder.value.setOnClickListener(view -> createValuePopup(view.getContext(), variable.name, value));
                 }
 
                 @Override
