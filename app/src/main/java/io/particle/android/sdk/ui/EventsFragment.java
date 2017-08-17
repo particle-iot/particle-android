@@ -93,6 +93,20 @@ public class EventsFragment extends Fragment {
         return top;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!subscribed) {
+            startEventSubscription((EventListAdapter) eventsRecyclerView.getAdapter());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopEventSubscription();
+    }
+
     private void setupClearListener(View rootView, EventListAdapter adapter) {
         rootView.findViewById(R.id.events_clear).setOnClickListener(v -> new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.clear_events_title)

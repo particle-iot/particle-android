@@ -27,7 +27,7 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 46
+        versionCode 48
         versionName "2.0.0"
 
         vectorDrawables.useSupportLibrary = true
@@ -88,11 +88,11 @@ dependencies {
     compile 'com.squareup.phrase:phrase:1.0.3'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
-    compile 'com.android.support:appcompat-v7:26.0.0'
-    compile 'com.android.support:design:26.0.0'
-    compile 'com.android.support:recyclerview-v7:26.0.0'
-    compile 'com.android.support:support-fragment:26.0.0'
-    compile 'com.android.support:support-annotations:26.0.0'
+    compile 'com.android.support:appcompat-v7:26.0.1'
+    compile 'com.android.support:design:26.0.1'
+    compile 'com.android.support:recyclerview-v7:26.0.1'
+    compile 'com.android.support:support-fragment:26.0.1'
+    compile 'com.android.support:support-annotations:26.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // for barcode scanning in Electron setup
