@@ -1,3 +1,9 @@
+2.0.1
+======
+* Android libraries updated
+* NullPointerException and RejectedExecutionException
+* MultiDex enabled
+
 2.0.0
 ======
 * Device inspector: interact with your device's functions, variables and see its published events

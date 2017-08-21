@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.Snackbar.Callback;
@@ -55,7 +55,6 @@ import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetu
 import io.particle.android.sdk.ui.Comparators.BooleanComparator;
 import io.particle.android.sdk.ui.Comparators.ComparatorChain;
 import io.particle.android.sdk.ui.Comparators.NullComparator;
-import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.ui.Toaster;
@@ -65,7 +64,7 @@ import io.particle.sdk.app.R;
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 
-
+//FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
 @ParametersAreNonnullByDefault
 public class DeviceListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<DevicesLoadResult> {
@@ -235,32 +234,33 @@ public class DeviceListFragment extends Fragment
 
     private void subscribeToSystemEvents(List<ParticleDevice> devices, boolean revertSubscription) {
         for (ParticleDevice device : devices) {
-            Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
+            new AsyncTask<ParticleDevice, Void, Void>() {
                 @Override
-                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                    if (revertSubscription) {
-                        for (Long id : subscribeIds) {
-                            device.unsubscribeFromEvents(id);
-                        }
-                    } else {
-                        subscribeIds.add(device.subscribeToEvents("spark/status", new ParticleEventHandler() {
-                            @Override
-                            public void onEventError(Exception e) {
+                protected Void doInBackground(ParticleDevice... particleDevices) {
+                    try {
+                        if (revertSubscription) {
+                            for (Long id : subscribeIds) {
+                                device.unsubscribeFromEvents(id);
                             }
+                        } else {
+                            subscribeIds.add(device.subscribeToEvents("spark/status", new ParticleEventHandler() {
+                                @Override
+                                public void onEventError(Exception e) {
+                                    //ignore for now, events aren't vital
+                                }
 
-                            @Override
-                            public void onEvent(String eventName, ParticleEvent particleEvent) {
-                                refreshDevices();
-                            }
-                        }));
+                                @Override
+                                public void onEvent(String eventName, ParticleEvent particleEvent) {
+                                    refreshDevices();
+                                }
+                            }));
+                        }
+                    } catch (IOException | ParticleCloudException ignore) {
+                        //ignore for now, events aren't vital
                     }
                     return null;
                 }
-
-                @Override
-                public void onFailure(@NonNull ParticleCloudException exception) {
-                }
-            });
+            }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, device);
         }
     }
 

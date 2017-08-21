@@ -7,7 +7,6 @@ import android.view.View;
 
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.SDKGlobals;
-import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 

@@ -18,7 +18,6 @@ import java.util.Set;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
-import io.particle.android.sdk.utils.CoreNameGenerator;
 import io.particle.sdk.app.R;
 
 

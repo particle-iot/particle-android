@@ -27,8 +27,6 @@ import io.particle.android.sdk.cloud.models.DeviceStateChange;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
-import static io.particle.android.sdk.utils.Py.truthy;
-
 /**
  * An activity representing the Inspector screen for a Device.
  */

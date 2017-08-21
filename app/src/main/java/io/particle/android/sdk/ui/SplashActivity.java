@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
+
 import io.fabric.sdk.android.Fabric;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.SDKGlobals;

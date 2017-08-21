@@ -1,7 +1,6 @@
 package io.particle.android.sdk.ui;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,8 +17,6 @@ import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.SoftAPConfigRemover;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
-
-import static io.particle.android.sdk.utils.Py.truthy;
 
 /**
  * An activity representing a list of Devices. This activity
