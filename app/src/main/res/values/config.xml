@@ -2,5 +2,10 @@
 <resources>
 
     <string name="electron_setup_uri">https://setup.particle.io</string>
+    <drawable name="screen_background">@drawable/ic_trianglify_background</drawable>
 
+    <color name="element_background_color">#FFFFFF</color>
+    <color name="element_text_color">@color/teal</color>
+    <color name="primary_color_dark">#0C2D4D</color>
+    <color name="accent_color">@color/teal</color>
 </resources>

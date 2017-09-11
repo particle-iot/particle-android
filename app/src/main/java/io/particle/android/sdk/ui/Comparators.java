@@ -31,7 +31,9 @@ class Comparators {
 
         private static final BooleanComparator TRUE_FIRST = new BooleanComparator(true);
 
-        /** <code>true</code> iff <code>true</code> values sort before <code>false</code> values. */
+        /**
+         * <code>true</code> iff <code>true</code> values sort before <code>false</code> values.
+         */
         private boolean trueFirst = false;
 
         static BooleanComparator getTrueFirstComparator() {
@@ -44,10 +46,10 @@ class Comparators {
 
         @Override
         public int compare(final Boolean b1, final Boolean b2) {
-            boolean v1 = b1.booleanValue();
-            boolean v2 = b2.booleanValue();
+            boolean v1 = b1;
+            boolean v2 = b2;
 
-            return (v1 ^ v2) ? ( (v1 ^ trueFirst) ? 1 : -1 ) : 0;
+            return (v1 ^ v2) ? ((v1 ^ trueFirst) ? 1 : -1) : 0;
         }
 
         @Override
@@ -60,7 +62,7 @@ class Comparators {
         public boolean equals(final Object object) {
             return (this == object) ||
                     ((object instanceof BooleanComparator) &&
-                            (this.trueFirst == ((BooleanComparator)object).trueFirst));
+                            (this.trueFirst == ((BooleanComparator) object).trueFirst));
         }
 
     }
@@ -76,7 +78,7 @@ class Comparators {
         private final boolean nullsAreHigh;
         private final Comparator<? super E> nonNullComparator;
 
-        public NullComparator(boolean nullsAreHigh) {
+        NullComparator(boolean nullsAreHigh) {
             this.nullsAreHigh = nullsAreHigh;
             //noinspection unchecked
             this.nonNullComparator = COMP_COMP_INSTANCE;
@@ -84,9 +86,15 @@ class Comparators {
 
         @Override
         public int compare(final E o1, final E o2) {
-            if(o1 == o2) { return 0; }
-            if(o1 == null) { return this.nullsAreHigh ? 1 : -1; }
-            if(o2 == null) { return this.nullsAreHigh ? -1 : 1; }
+            if (o1 == o2) {
+                return 0;
+            }
+            if (o1 == null) {
+                return this.nullsAreHigh ? 1 : -1;
+            }
+            if (o2 == null) {
+                return this.nullsAreHigh ? -1 : 1;
+            }
             return this.nonNullComparator.compare(o1, o2);
         }
 
@@ -97,9 +105,15 @@ class Comparators {
 
         @Override
         public boolean equals(final Object obj) {
-            if(obj == null) { return false; }
-            if(obj == this) { return true; }
-            if(!obj.getClass().equals(this.getClass())) { return false; }
+            if (obj == null) {
+                return false;
+            }
+            if (obj == this) {
+                return true;
+            }
+            if (!obj.getClass().equals(this.getClass())) {
+                return false;
+            }
 
             final NullComparator<?> other = (NullComparator<?>) obj;
 
@@ -136,11 +150,17 @@ class Comparators {
 
     static class ComparatorChain<E> implements Comparator<E> {
 
-        /** The list of comparators in the chain. */
+        /**
+         * The list of comparators in the chain.
+         */
         private final List<Comparator<E>> comparatorChain;
-        /** Order - false (clear) = ascend; true (set) = descend. */
+        /**
+         * Order - false (clear) = ascend; true (set) = descend.
+         */
         private BitSet orderingBits = null;
-        /** Whether the chain has been "locked". */
+        /**
+         * Whether the chain has been "locked".
+         */
         private boolean isLocked = false;
 
 
@@ -148,7 +168,7 @@ class Comparators {
             comparatorChain = new ArrayList<>(1);
             comparatorChain.add(comparator);
             orderingBits = new BitSet(1);
-            if (reverse == true) {
+            if (reverse) {
                 orderingBits.set(0);
             }
         }
@@ -161,7 +181,7 @@ class Comparators {
             checkLocked();
 
             comparatorChain.add(comparator);
-            if (reverse == true) {
+            if (reverse) {
                 orderingBits.set(comparatorChain.size() - 1);
             }
         }
@@ -175,7 +195,7 @@ class Comparators {
         }
 
         private void checkLocked() {
-            if (isLocked == true) {
+            if (isLocked) {
                 throw new UnsupportedOperationException(
                         "Comparator ordering cannot be changed after the first comparison is performed");
             }
@@ -190,7 +210,7 @@ class Comparators {
 
         @Override
         public int compare(E o1, E o2) throws UnsupportedOperationException {
-            if (isLocked == false) {
+            if (!isLocked) {
                 checkChainIntegrity();
                 isLocked = true;
             }
@@ -200,10 +220,10 @@ class Comparators {
             for (int comparatorIndex = 0; comparators.hasNext(); ++comparatorIndex) {
 
                 final Comparator<? super E> comparator = comparators.next();
-                int retval = comparator.compare(o1,o2);
+                int retval = comparator.compare(o1, o2);
                 if (retval != 0) {
                     // invert the order if it is a reverse sort
-                    if (orderingBits.get(comparatorIndex) == true) {
+                    if (orderingBits.get(comparatorIndex)) {
                         if (retval > 0) {
                             retval = -1;
                         } else {

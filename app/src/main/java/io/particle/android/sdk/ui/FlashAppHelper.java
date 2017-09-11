@@ -18,7 +18,7 @@ import io.particle.android.sdk.utils.EZ;
 import io.particle.sdk.app.R;
 
 
-public class FlashAppHelper {
+class FlashAppHelper {
 
 
     public static void flashAppFromBinaryWithDialog(final FragmentActivity activity,
@@ -36,8 +36,8 @@ public class FlashAppHelper {
     }
 
 
-    public static void flashPhotonTinkerWithDialog(final FragmentActivity activity,
-                                                   final ParticleDevice device) {
+    static void flashPhotonTinkerWithDialog(final FragmentActivity activity,
+                                            final ParticleDevice device) {
         final InputStream inputStream = activity.getResources().openRawResource(R.raw.photon_tinker);
         new AlertDialog.Builder(activity)
                 .setMessage("Flash Tinker?")
@@ -48,9 +48,9 @@ public class FlashAppHelper {
     }
 
 
-    public static void flashKnownAppWithDialog(final FragmentActivity activity,
-                                               final ParticleDevice device,
-                                               final ParticleDevice.KnownApp knownApp) {
+    static void flashKnownAppWithDialog(final FragmentActivity activity,
+                                        final ParticleDevice device,
+                                        final ParticleDevice.KnownApp knownApp) {
         new AlertDialog.Builder(activity)
                 .setMessage(String.format("Flash %s?", capitalize(knownApp.getAppName())))
                 .setPositiveButton(R.string.flash, (dialog, which) -> flashKnownApp(
@@ -65,13 +65,13 @@ public class FlashAppHelper {
                                       final ParticleDevice.KnownApp knownApp) {
         Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
-            public Void callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+            public Void callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                 device.flashKnownApp(knownApp);
                 return null;
             }
 
             @Override
-            public void onFailure(ParticleCloudException exception) {
+            public void onFailure(@NonNull ParticleCloudException exception) {
                 new AlertDialog.Builder(activity)
                         .setTitle("Unable to reflash " + capitalize(knownApp.getAppName()))
                         .setMessage(exception.getBestMessage())
@@ -105,7 +105,7 @@ public class FlashAppHelper {
             }
 
             @Override
-            public void onFailure(ParticleCloudException exception) {
+            public void onFailure(@NonNull ParticleCloudException exception) {
                 new AlertDialog.Builder(activity)
                         .setTitle("Unable to reflash from " + name)
                         .setMessage(exception.getBestMessage())

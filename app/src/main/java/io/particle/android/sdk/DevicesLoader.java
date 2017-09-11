@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 
 import io.particle.android.sdk.cloud.BroadcastContract;
 import io.particle.android.sdk.cloud.ParallelDeviceFetcherAccessHack;
@@ -18,7 +19,6 @@ import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.BetterAsyncTaskLoader;
 
-import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 
 
@@ -46,7 +46,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
     private final DevicesUpdatedReceiver devicesUpdatedReceiver;
 
     private volatile DevicesLoadResult latestResult = new DevicesLoadResult(
-            new ArrayList<ParticleDevice>(), false, false);
+            new ArrayList<>(), false, false);
     private volatile boolean useLongTimeoutsOnNextLoad = false;
 
     public DevicesLoader(Context context) {
@@ -88,12 +88,12 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         boolean useLongTimeouts = useLongTimeoutsOnNextLoad;
         useLongTimeoutsOnNextLoad = false;
 
-        List<ParticleDevice> devices = list();
+        List<ParticleDevice> devices;
         boolean isPartialList = false;
         boolean unableToLoadAnyDevices = false;
         try {
             devices = ParallelDeviceFetcherAccessHack.getDevicesParallel(cloud, useLongTimeouts);
-        } catch (ParticleCloudException e) {
+        } catch (ParticleCloudException | CancellationException e) {
             // FIXME: think more about error handling here
             // getting a PCE here means we couldn't even get the device list, so just return
             // whatever we have.

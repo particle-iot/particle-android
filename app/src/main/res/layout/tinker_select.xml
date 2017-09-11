@@ -24,6 +24,7 @@
         <LinearLayout
             android:id="@+id/tinker_button_analog_read"
             style="@style/TinkerSelectButtonBg"
+            android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp">
 
             <View
@@ -59,6 +60,7 @@
         <LinearLayout
             android:id="@+id/tinker_button_analog_write"
             style="@style/TinkerSelectButtonBg"
+            android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp">
 
             <View

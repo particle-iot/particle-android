@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.MenuItem;
 import android.widget.PopupMenu;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
@@ -15,14 +14,9 @@ import io.particle.sdk.app.R;
 
 public class DeviceActionsHelper {
 
-    public static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(
+    static PopupMenu.OnMenuItemClickListener buildPopupMenuHelper(
             final FragmentActivity activity, final ParticleDevice device) {
-        return new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return takeActionForDevice(item.getItemId(), activity, device);
-            }
-        };
+        return item -> takeActionForDevice(item.getItemId(), activity, device);
     }
 
 
@@ -41,6 +35,10 @@ public class DeviceActionsHelper {
 
             case R.id.action_device_unclaim:
                 UnclaimHelper.unclaimDeviceWithDialog(activity, device);
+                return true;
+
+            case R.id.action_device_inspector:
+                activity.startActivity(InspectorActivity.buildIntent(activity, device));
                 return true;
 
             case R.id.action_device_flash_tinker:

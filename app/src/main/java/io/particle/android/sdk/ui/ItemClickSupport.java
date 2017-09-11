@@ -10,21 +10,19 @@ import io.particle.sdk.app.R;
  * <p/>
  * Taken from http://www.littlerobots.nl/blog/Handle-Android-RecyclerView-Clicks/
  */
-public class ItemClickSupport {
+class ItemClickSupport {
 
-    public interface OnItemClickListener {
-
+    interface OnItemClickListener {
         void onItemClicked(RecyclerView recyclerView, int position, View v);
     }
 
 
-    public interface OnItemLongClickListener {
-
+    interface OnItemLongClickListener {
         boolean onItemLongClicked(RecyclerView recyclerView, int position, View v);
     }
 
 
-    public static ItemClickSupport addTo(RecyclerView view) {
+    static ItemClickSupport addTo(RecyclerView view) {
         ItemClickSupport support = (ItemClickSupport) view.getTag(R.id.item_click_support);
         if (support == null) {
             support = new ItemClickSupport(view);
@@ -80,7 +78,7 @@ public class ItemClickSupport {
         }
     };
 
-    public ItemClickSupport setOnItemClickListener(OnItemClickListener listener) {
+    ItemClickSupport setOnItemClickListener(OnItemClickListener listener) {
         mOnItemClickListener = listener;
         return this;
     }

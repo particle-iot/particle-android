@@ -1,13 +1,11 @@
 package io.particle.android.sdk.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,15 +16,17 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -34,16 +34,22 @@ import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.tumblr.bookends.Bookends;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.particle.android.sdk.DevicesLoader;
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
+import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.ParticleEvent;
+import io.particle.android.sdk.cloud.ParticleEventHandler;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver;
 import io.particle.android.sdk.ui.Comparators.BooleanComparator;
@@ -58,16 +64,14 @@ import io.particle.sdk.app.R;
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 
-
+//FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
 @ParametersAreNonnullByDefault
 public class DeviceListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<DevicesLoadResult> {
 
-
-    public interface Callbacks {
+    interface Callbacks {
         void onDeviceSelected(ParticleDevice device);
     }
-
 
     private static final TLog log = TLog.get(DeviceListFragment.class);
 
@@ -81,6 +85,7 @@ public class DeviceListFragment extends Fragment
     // FIXME: naming, document better
     private ProgressBar partialContentBar;
     private boolean isLoadingSnackbarVisible;
+    private Queue<Long> subscribeIds = new ConcurrentLinkedQueue<Long>();
 
     private final ReloadStateDelegate reloadStateDelegate = new ReloadStateDelegate();
     private final Comparator<ParticleDevice> comparator = helpfulOrderDeviceComparator();
@@ -89,8 +94,8 @@ public class DeviceListFragment extends Fragment
     private DeviceSetupCompleteReceiver deviceSetupCompleteReceiver;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         callbacks = EZ.getCallbacksOrThrow(this, Callbacks.class);
     }
 
@@ -103,11 +108,9 @@ public class DeviceListFragment extends Fragment
         rv.setHasFixedSize(true);  // perf. optimization
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
         rv.setLayoutManager(layoutManager);
+        rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
-        @SuppressLint("InflateParams")
-        View myHeader = inflater.inflate(R.layout.device_list_header, null);
-        myHeader.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, null);
+        partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, (ViewGroup) top, false);
         partialContentBar.setVisibility(View.INVISIBLE);
         partialContentBar.setLayoutParams(
                 new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -115,17 +118,10 @@ public class DeviceListFragment extends Fragment
         adapter = new DeviceListAdapter(getActivity());
         // Add them as headers / footers
         bookends = new Bookends<>(adapter);
-        bookends.addHeader(myHeader);
         bookends.addFooter(partialContentBar);
 
         rv.setAdapter(bookends);
-
-        ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> {
-            // subtracting 1 from position because of header.  This is gross, but it's simple
-            // and in this case adequate, so #SHIPIT.
-            onDeviceRowClicked(recyclerView, position - 1, v);
-        });
-
+        ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> onDeviceRowClicked(position));
         return top;
     }
 
@@ -172,9 +168,27 @@ public class DeviceListFragment extends Fragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null) {
+            List<ParticleDevice> devices = adapter.getItems();
+            subscribeToSystemEvents(devices, false);
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         refreshDevices();
+    }
+
+    @Override
+    public void onPause() {
+        if (adapter != null) {
+            List<ParticleDevice> devices = adapter.getItems();
+            subscribeToSystemEvents(devices, true);
+        }
+        super.onPause();
     }
 
     @Override
@@ -214,6 +228,40 @@ public class DeviceListFragment extends Fragment
         adapter.clear();
         adapter.addAll(devices);
         bookends.notifyDataSetChanged();
+        //subscribe to system updates
+        subscribeToSystemEvents(devices, false);
+    }
+
+    private void subscribeToSystemEvents(List<ParticleDevice> devices, boolean revertSubscription) {
+        for (ParticleDevice device : devices) {
+            new AsyncTask<ParticleDevice, Void, Void>() {
+                @Override
+                protected Void doInBackground(ParticleDevice... particleDevices) {
+                    try {
+                        if (revertSubscription) {
+                            for (Long id : subscribeIds) {
+                                device.unsubscribeFromEvents(id);
+                            }
+                        } else {
+                            subscribeIds.add(device.subscribeToEvents("spark/status", new ParticleEventHandler() {
+                                @Override
+                                public void onEventError(Exception e) {
+                                    //ignore for now, events aren't vital
+                                }
+
+                                @Override
+                                public void onEvent(String eventName, ParticleEvent particleEvent) {
+                                    refreshDevices();
+                                }
+                            }));
+                        }
+                    } catch (IOException | ParticleCloudException ignore) {
+                        //ignore for now, events aren't vital
+                    }
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, device);
+        }
     }
 
     @Override
@@ -221,7 +269,7 @@ public class DeviceListFragment extends Fragment
         // no-op
     }
 
-    private void onDeviceRowClicked(RecyclerView recyclerView, int position, View view) {
+    private void onDeviceRowClicked(int position) {
         log.i("Clicked on item at position: #" + position);
         if (position >= bookends.getItemCount() || position == -1) {
             // we're at the header or footer view, do nothing.
@@ -235,24 +283,9 @@ public class DeviceListFragment extends Fragment
         if (device.isFlashing()) {
             Toaster.s(getActivity(),
                     "Device is being flashed, please wait for the flashing process to end first");
-
-        } else if (!device.isConnected()) {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Device offline")
-                    .setMessage(R.string.err_msg_device_is_offline)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
-                    .show();
-
-        } else if (!device.isRunningTinker()) {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Device not running Tinker")
-                    .setMessage("This device is not running Tinker firmware.")
-                    .setPositiveButton("Re-flash Tinker", (dialog, which) -> DeviceActionsHelper.takeActionForDevice(
-                            R.id.action_device_flash_tinker, getActivity(), device))
-                    .setNeutralButton("Tinker anyway", (dialog, which) -> callbacks.onDeviceSelected(device))
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                    .show();
-
+        } else if (!device.isConnected() || !device.isRunningTinker()) {
+            Activity activity = getActivity();
+            activity.startActivity(InspectorActivity.buildIntent(activity, device));
         } else {
             callbacks.onDeviceSelected(device);
         }
@@ -292,6 +325,10 @@ public class DeviceListFragment extends Fragment
     }
 
     private void refreshDevices() {
+        if (adapter != null) {
+            List<ParticleDevice> devices = adapter.getItems();
+            subscribeToSystemEvents(devices, true);
+        }
         Loader<Object> loader = getLoaderManager().getLoader(R.id.device_list_devices_loader_id);
         loader.forceLoad();
     }
@@ -303,21 +340,18 @@ public class DeviceListFragment extends Fragment
 
             final View topLevel;
             final TextView modelName;
-            final ImageView productImage;
+            final AppCompatImageView productImage, statusIcon;
             final TextView deviceName;
             final TextView statusTextWithIcon;
-            final TextView productId;
-            final ImageView overflowMenuIcon;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 topLevel = itemView;
                 modelName = Ui.findView(itemView, R.id.product_model_name);
                 productImage = Ui.findView(itemView, R.id.product_image);
+                statusIcon = Ui.findView(itemView, R.id.online_status_image);
                 deviceName = Ui.findView(itemView, R.id.product_name);
                 statusTextWithIcon = Ui.findView(itemView, R.id.online_status);
-                productId = Ui.findView(itemView, R.id.product_id);
-                overflowMenuIcon = Ui.findView(itemView, R.id.context_menu);
             }
         }
 
@@ -345,16 +379,7 @@ public class DeviceListFragment extends Fragment
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.getBackground();
             }
-
-            if (position % 2 == 0) {
-                holder.topLevel.setBackgroundResource(R.color.shaded_background);
-            } else {
-                if (VERSION.SDK_INT >= 16) {
-                    holder.topLevel.setBackground(defaultBackground);
-                } else {
-                    holder.topLevel.setBackgroundDrawable(defaultBackground);
-                }
-            }
+            holder.topLevel.setBackgroundResource(R.color.device_item_bg);
 
             switch (device.getDeviceType()) {
                 case CORE:
@@ -375,20 +400,19 @@ public class DeviceListFragment extends Fragment
 
             Pair<String, Integer> statusTextAndColoredDot = getStatusTextAndColoredDot(device);
             holder.statusTextWithIcon.setText(statusTextAndColoredDot.first);
-            holder.statusTextWithIcon.setCompoundDrawablesWithIntrinsicBounds(
-                    0, 0, statusTextAndColoredDot.second, 0);
+            holder.statusIcon.setImageResource(statusTextAndColoredDot.second);
 
-            holder.productId.setText(device.getID().toUpperCase());
+            if (device.isConnected()) {
+                Animation animFade = AnimationUtils.loadAnimation(activity, R.anim.fade_in_out);
+                animFade.setStartOffset(position * 1000);
+                holder.statusIcon.startAnimation(animFade);
+            }
 
             Context ctx = holder.topLevel.getContext();
             String name = truthy(device.getName())
                     ? device.getName()
                     : ctx.getString(R.string.unnamed_device);
             holder.deviceName.setText(name);
-
-            holder.overflowMenuIcon.setOnClickListener(
-                    view -> showMenu(view, device)
-            );
         }
 
         @Override
@@ -410,11 +434,8 @@ public class DeviceListFragment extends Fragment
             return devices.get(position);
         }
 
-        private void showMenu(View v, final ParticleDevice device) {
-            PopupMenu popup = new PopupMenu(v.getContext(), v);
-            popup.inflate(R.menu.context_device_row);
-            popup.setOnMenuItemClickListener(DeviceActionsHelper.buildPopupMenuHelper(activity, device));
-            popup.show();
+        List<ParticleDevice> getItems() {
+            return devices;
         }
 
         private Pair<String, Integer> getStatusTextAndColoredDot(ParticleDevice device) {
@@ -422,21 +443,21 @@ public class DeviceListFragment extends Fragment
             String msg;
             if (device.isFlashing()) {
                 dot = R.drawable.device_flashing_dot;
-                msg = "Flashing";
+                msg = "";
 
             } else if (device.isConnected()) {
                 if (device.isRunningTinker()) {
                     dot = R.drawable.online_dot;
-                    msg = "Online";
+                    msg = "Tinker";
 
                 } else {
                     dot = R.drawable.online_non_tinker_dot;
-                    msg = "Online, non-Tinker";
+                    msg = "";
                 }
 
             } else {
                 dot = R.drawable.offline_dot;
-                msg = "Offline";
+                msg = "";
             }
             return Pair.create(msg, dot);
         }
@@ -444,12 +465,10 @@ public class DeviceListFragment extends Fragment
 
 
     private static Comparator<ParticleDevice> helpfulOrderDeviceComparator() {
-        Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> {
-            return BooleanComparator.getTrueFirstComparator()
-                    .compare(lhs.isConnected(), rhs.isConnected());
-        };
+        Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> BooleanComparator.getTrueFirstComparator()
+                .compare(lhs.isConnected(), rhs.isConnected());
         NullComparator<String> nullComparator = new NullComparator<>(false);
-        Comparator<ParticleDevice> unnamedDevicesFirstComparator  = (lhs, rhs) -> {
+        Comparator<ParticleDevice> unnamedDevicesFirstComparator = (lhs, rhs) -> {
             String lhname = lhs.getName();
             String rhname = rhs.getName();
             return nullComparator.compare(lhname, rhname);
@@ -462,7 +481,7 @@ public class DeviceListFragment extends Fragment
     }
 
 
-    class ReloadStateDelegate {
+    private class ReloadStateDelegate {
 
         static final int MAX_RETRIES = 10;
 
@@ -483,14 +502,17 @@ public class DeviceListFragment extends Fragment
 
             if (!isLoadingSnackbarVisible) {
                 isLoadingSnackbarVisible = true;
-                Snackbar.make(getView(), "Unable to load all devices", Snackbar.LENGTH_SHORT)
-                        .setCallback(new Callback() {
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event) {
-                                super.onDismissed(snackbar, event);
-                                isLoadingSnackbarVisible = false;
-                            }
-                        }).show();
+                View view = getView();
+                if (view != null) {
+                    Snackbar.make(view, "Unable to load all devices", Snackbar.LENGTH_SHORT)
+                            .addCallback(new Callback() {
+                                @Override
+                                public void onDismissed(Snackbar snackbar, int event) {
+                                    super.onDismissed(snackbar, event);
+                                    isLoadingSnackbarVisible = false;
+                                }
+                            }).show();
+                }
             }
 
             partialContentBar.setVisibility(View.VISIBLE);

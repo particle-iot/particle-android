@@ -4,18 +4,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.any"/>
+
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name="io.particle.android.sdk.tinker.TinkerApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:isGame="false"
         android:label="@string/app_name"
         android:theme="@style/ParticleSetupTheme"
         tools:ignore="UnusedAttribute">
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value=""/>
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
@@ -39,8 +44,7 @@
         <activity
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
             android:label="@string/title_device_list"
-            android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
             android:label="@string/title_device_detail"
@@ -50,6 +54,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="io.particle.android.sdk.ui.DeviceListActivity"/>
         </activity>
+        <activity
+            android:name="io.particle.android.sdk.ui.InspectorActivity"
+            android:label="@string/title_inspector_detail"
+            android:screenOrientation="portrait"/>
+
 
         <!--
         All of the following are from the device setup lib, and must be present in your app's

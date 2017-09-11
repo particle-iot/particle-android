@@ -1,6 +1,7 @@
 package io.particle.android.sdk.cloud;
 
 import java.util.List;
+import java.util.concurrent.CancellationException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -15,7 +16,7 @@ public class ParallelDeviceFetcherAccessHack {
 
     public static List<ParticleDevice> getDevicesParallel(ParticleCloud cloud,
                                                           boolean useShortTimeouts)
-            throws ParticleCloudException, PartialDeviceListResultException {
+            throws ParticleCloudException, PartialDeviceListResultException, CancellationException {
         return cloud.getDevicesParallel(useShortTimeouts);
     }
 

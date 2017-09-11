@@ -37,7 +37,7 @@
             fab:fab_addButtonStrokeVisible="true"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_plusIconColor="@color/element_background_color"
+            fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
             fab:fab_title="Set up a Photon"/>
 
@@ -48,7 +48,7 @@
             fab:fab_addButtonStrokeVisible="true"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_plusIconColor="@color/element_background_color"
+            fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
             fab:fab_title="Set up an Electron"/>
 
@@ -59,7 +59,7 @@
             fab:fab_addButtonStrokeVisible="true"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_plusIconColor="@color/element_background_color"
+            fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
             fab:fab_title="Set up a Core"/>
 

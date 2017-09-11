@@ -2,22 +2,18 @@ package io.particle.android.sdk.tinker;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.ArrayMap;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +21,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -40,14 +34,13 @@ import java.util.Map;
 import io.particle.android.sdk.cloud.BroadcastContract;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
-import io.particle.android.sdk.tinker.Pin.OnAnalogWriteListener;
 import io.particle.android.sdk.ui.DeviceActionsHelper;
+import io.particle.android.sdk.ui.DeviceMenuUrlHandler;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.Prefs;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
-import io.particle.android.sdk.utils.ui.WebViewActivity;
 import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.utils.Py.list;
@@ -56,9 +49,7 @@ import static io.particle.android.sdk.utils.Py.truthy;
 
 
 /**
- * A fragment representing a single Core detail screen. This fragment is either
- * contained in a {@link CoreListActivity} in two-pane mode (on tablets) or a
- * {@link CoreDetailActivity} on handsets.
+ * A fragment representing a single Tinker screen.
  */
 public class TinkerFragment extends Fragment implements OnClickListener {
 
@@ -151,7 +142,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         // we handle both the context device row actions here and our own
-        inflater.inflate(R.menu.context_device_row, menu);
+//        inflater.inflate(R.menu.context_device_row, menu);
         inflater.inflate(R.menu.tinker, menu);
     }
 
@@ -169,17 +160,14 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             }
             return true;
 
-        } else if (DeviceMenuUrlHandler.handleActionItem(getActivity(), actionId, item.getTitle())) {
-            return true;
-
         } else {
-            return super.onOptionsItemSelected(item);
+            return DeviceMenuUrlHandler.handleActionItem(getActivity(), actionId, item.getTitle()) ||
+                    super.onOptionsItemSelected(item);
         }
     }
 
     private void updateTitle() {
         String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
-        getActivity().setTitle(name);
     }
 
     private TextView findPinView(int id) {
@@ -275,35 +263,27 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         // Set up pin listeners
         for (final Pin pin : allPins) {
             for (View view : list(pin.view, (ViewGroup) pin.view.getParent())) {
-                view.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        Pin writeModePin = getPinInWriteMode();
-                        if (writeModePin != null && !pin.equals(selectedPin)) {
-                            writeModePin.showAnalogWriteValue();
-                            unmutePins();
-                            return;
-                        }
-                        selectedPin = pin;
-                        onPinClick(pin);
+                view.setOnClickListener(v -> {
+                    Pin writeModePin = getPinInWriteMode();
+                    if (writeModePin != null && !pin.equals(selectedPin)) {
+                        writeModePin.showAnalogWriteValue();
+                        unmutePins();
+                        return;
                     }
+                    selectedPin = pin;
+                    onPinClick(pin);
                 });
 
-                view.setOnLongClickListener(new OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View v) {
-                        Pin writeModePin = getPinInWriteMode();
-                        if (writeModePin != null && !pin.equals(selectedPin)) {
-                            writeModePin.showAnalogWriteValue();
-                            unmutePins();
-                            return true;
-                        }
-                        selectedPin = pin;
-                        showTinkerSelect(pin);
+                view.setOnLongClickListener(v -> {
+                    Pin writeModePin = getPinInWriteMode();
+                    if (writeModePin != null && !pin.equals(selectedPin)) {
+                        writeModePin.showAnalogWriteValue();
+                        unmutePins();
                         return true;
                     }
+                    selectedPin = pin;
+                    showTinkerSelect(pin);
+                    return true;
                 });
             }
         }
@@ -347,29 +327,19 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         toggleViewVisibilityWithFade(R.id.tinker_logo, false);
 
         final View selectDialogView = getActivity().getLayoutInflater().inflate(
-                R.layout.tinker_select, null);
+                R.layout.tinker_select, (ViewGroup) getView(), false);
 
         selectDialog = new AlertDialog.Builder(getActivity(),
                 R.style.ParticleSetupTheme_DialogNoDimBackground)
                 .setView(selectDialogView)
                 .setCancelable(true)
-                .setOnCancelListener(new OnCancelListener() {
-
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        dialog.dismiss();
-                    }
-                })
+                .setOnCancelListener(DialogInterface::dismiss)
                 .create();
         selectDialog.setCanceledOnTouchOutside(true);
-        selectDialog.setOnDismissListener(new OnDismissListener() {
-
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                unmutePins();
-                toggleViewVisibilityWithFade(R.id.tinker_logo, true);
-                selectDialog = null;
-            }
+        selectDialog.setOnDismissListener(dialog -> {
+            unmutePins();
+            toggleViewVisibilityWithFade(R.id.tinker_logo, true);
+            selectDialog = null;
         });
 
         final View analogRead = Ui.findView(selectDialogView, R.id.tinker_button_analog_read);
@@ -378,44 +348,32 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         final View digitalWrite = Ui.findView(selectDialogView, R.id.tinker_button_digital_write);
         final List<View> allButtons = list(analogRead, analogWrite, digitalRead, digitalWrite);
 
-        analogRead.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(analogRead, allButtons);
-                }
-                return false;
+        analogRead.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(analogRead, allButtons);
             }
+            return false;
         });
 
-        analogWrite.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(analogWrite, allButtons);
-                }
-                return false;
+        analogWrite.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(analogWrite, allButtons);
             }
+            return false;
         });
 
-        digitalRead.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(digitalRead, allButtons);
-                }
-                return false;
+        digitalRead.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(digitalRead, allButtons);
             }
+            return false;
         });
 
-        digitalWrite.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTinkerSelectButtonSelected(digitalWrite, allButtons);
-                }
-                return false;
+        digitalWrite.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTinkerSelectButtonSelected(digitalWrite, allButtons);
             }
+            return false;
         });
 
         digitalRead.setOnClickListener(this);
@@ -586,20 +544,16 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     private void doAnalogWrite(final Pin pin) {
         mutePinsExcept(pin);
         toggleViewVisibilityWithFade(R.id.tinker_logo, false);
-        pin.showAnalogWrite(new OnAnalogWriteListener() {
-
-            @Override
-            public void onAnalogWrite(int value) {
-                for (Pin pin : allPins) {
-                    if (pin.isAnalogWriteMode()) {
-                        pin.showAnalogWriteValue();
-                    }
+        pin.showAnalogWrite(value -> {
+            for (Pin pin1 : allPins) {
+                if (pin1.isAnalogWriteMode()) {
+                    pin1.showAnalogWriteValue();
                 }
-                unmutePins();
-                hideTinkerSelect();
-                pin.animateYourself();
-                api.write(new PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.getAnalogValue()), value);
             }
+            unmutePins();
+            hideTinkerSelect();
+            pin.animateYourself();
+            api.write(new PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.getAnalogValue()), value);
         });
     }
 
@@ -642,12 +596,12 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
         final PinStuff stuff;
 
-        protected TinkerWork(PinStuff stuff) {
+        TinkerWork(PinStuff stuff) {
             this.stuff = stuff;
         }
 
         @Override
-        public void onFailure(ParticleCloudException exception) {
+        public void onFailure(@NonNull ParticleCloudException exception) {
             onTinkerCallComplete(stuff, stuff.currentValue);
             // FIXME: do real error handling!
 //			ErrorsDelegate errorsDelegate = ((BaseActivity) getActivity()).getErrorsDelegate();
@@ -672,7 +626,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         void write(final PinStuff stuff, final int newValue) {
             Async.executeAsync(device, new TinkerWork(stuff) {
                 @Override
-                public Integer callApi(ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+                public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                     String stringValue;
                     if (stuff.pinAction == PinAction.ANALOG_WRITE) {
                         stringValue = String.valueOf(newValue);
@@ -682,7 +636,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                     try {
                         return (sparkDevice.callFunction(
                                 actionToFunctionName.get(stuff.pinAction),
-                                list(stuff.pinName, stringValue))==1) ? newValue : stuff.currentValue;
+                                list(stuff.pinName, stringValue)) == 1) ? newValue : stuff.currentValue;
                     } catch (final ParticleDevice.FunctionDoesNotExistException e) {
                         Toaster.s(getActivity(), e.getMessage());
                         return stuff.currentValue; // it didn't change
@@ -691,7 +645,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                 }
 
                 @Override
-                public void onSuccess(Integer returnValue) {
+                public void onSuccess(@NonNull Integer returnValue) {
                     onTinkerCallComplete(stuff, returnValue);
                 }
             });
@@ -700,7 +654,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         void read(PinStuff stuff) {
             Async.executeAsync(device, new TinkerWork(stuff) {
                 @Override
-                public Integer callApi(ParticleDevice sparkDevice) throws ParticleCloudException,
+                public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException,
                         IOException {
                     try {
                         return sparkDevice.callFunction(
@@ -713,7 +667,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                 }
 
                 @Override
-                public void onSuccess(Integer returnValue) {
+                public void onSuccess(@NonNull Integer returnValue) {
                     onTinkerCallComplete(stuff, returnValue);
                 }
             });
@@ -735,7 +689,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
 
     // FIXME: rename to something more descriptive
-    static class PinStuff {
+    private static class PinStuff {
 
         final String pinName;
         final PinAction pinAction;
@@ -767,47 +721,13 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.tinker_instructions, container, false);
-            v.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    TinkerPrefs.getInstance(getActivity()).setVisited(true);
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
+            v.setOnClickListener(v1 -> {
+                TinkerPrefs.getInstance(getActivity()).setVisited(true);
+                getActivity().getSupportFragmentManager().popBackStack();
             });
 
             return v;
         }
-    }
-
-
-    static class DeviceMenuUrlHandler {
-
-        private static final SparseIntArray menuIdsToUris = new SparseIntArray();
-
-        static {
-            menuIdsToUris.put(R.id.action_show_docs_particle_app_tinker, R.string.uri_docs_particle_app_tinker);
-            menuIdsToUris.put(R.id.action_show_docs_setting_up_your_device, R.string.uri_docs_setting_up_your_device);
-            menuIdsToUris.put(R.id.action_show_docs_create_your_own_android_app, R.string.uri_docs_create_your_own_android_app);
-            menuIdsToUris.put(R.id.action_support_show_community, R.string.uri_support_community);
-            menuIdsToUris.put(R.id.action_support_show_support_site, R.string.uri_support_site);
-        }
-
-        /**
-         * Attempt to handle the action item with the given ID.
-         *
-         * @return true if action item was handled, else false.
-         */
-        public static boolean handleActionItem(Activity activity, int actionItemId, CharSequence titleToShow) {
-            if (menuIdsToUris.indexOfKey(actionItemId) < 0) {
-                // we don't handle this ID.
-                return false;
-            }
-            Uri uri = Uri.parse(activity.getString(menuIdsToUris.get(actionItemId)));
-            activity.startActivity(WebViewActivity.buildIntent(activity, uri, titleToShow));
-            return true;
-        }
-
     }
 
 }

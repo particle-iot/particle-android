@@ -7,9 +7,12 @@ You can access the basic input/output functions of the Photon without writing a 
 Tap any pin to get started, select a pin function and tinker with the value. Hold a pin to reset its function. Start with pin D7 - select digitalWrite - blink the attached LED.\n\n
 For more information visit: docs.particle.io/photon/tinker/\n\n
 Enjoy!]]></string>
-    <string name="tinker_instructions_signature"><i>-The Particle Team</i></string>
+    <string name="tinker_instructions_signature">
+        <i>-The Particle Team</i>
+    </string>
     <string name="title_device_list">Devices</string>
     <string name="title_device_detail">Device rulsDetail</string>
+    <string name="title_inspector_detail">Inspector rulsDetail</string>
     <string name="clear_tinker">Reset all pin functions</string>
     <string name="your_devices">Your Devices</string>
     <string name="unnamed_device">(Unnamed device)</string>
@@ -28,7 +31,9 @@ Enjoy!]]></string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="err_msg_device_is_offline">This device is offline, please turn it on and refresh in order to Tinker with it.</string>
+    <string name="err_msg_device_is_offline">This device is offline, please turn it on and refresh
+        in order to Tinker with it.
+    </string>
     <string name="title_activity_electron_setup">ElectronSetupActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_barcode_scanner">BarcodeScannerActivity</string>
@@ -36,8 +41,12 @@ Enjoy!]]></string>
     <!-- barcode scanning for Electron setup -->
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
-    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
-    <string name="low_storage_error">Barcode detector dependencies cannot be downloaded due to low device storage</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the
+        camera permission. The application will now exit.
+    </string>
+    <string name="low_storage_error">Barcode detector dependencies cannot be downloaded due to low
+        device storage
+    </string>
     <string name="barcode_header">Click &quot;Read Barcode&quot; to read a barcode</string>
     <string name="read_barcode">Read Barcode</string>
     <string name="auto_focus">Auto Focus</string>
@@ -46,5 +55,32 @@ Enjoy!]]></string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="point_at_sim_barcode">Point at SIM ICCID barcode</string>
+    <string name="id">ID</string>
+    <string name="ip_address">IP Address</string>
+    <string name="last_heard">Last heard</string>
+    <string name="event_filter">Event filter</string>
+    <string name="clipboard_copy_id_msg">Device ID was copied to the clipboard</string>
+    <string name="clipboard_copy_variable">Variable value was copied to the clipboard</string>
+    <string name="clipboard_copy_iccid_msg">Device SIM ICCID was copied to the clipboard</string>
+    <string name="clipboard_copy_event_msg">Event payload was copied to the clipboard</string>
+    <string name="core">Core</string>
+    <string name="electron">Electron</string>
+    <string name="photon">Photon</string>
+    <string name="event">Event</string>
+    <string name="data">Data</string>
+    <string name="time">Time</string>
+    <string name="clear_events_title">Clear all events</string>
+    <string name="clear_events_message">All events data will be deleted. Are you sure?</string>
+    <string name="sending_argument_failed">Sending argument failed.</string>
+    <string name="arguments">(Arguments)</string>
+    <string name="iccid">ICCID</string>
+    <string name="imei">IMEI</string>
+    <string name="data_usage">Data usage</string>
+    <string name="no_events">(No events)</string>
+    <string name="log_out">Log out</string>
+    <string name="tinker">Tinker</string>
+    <string name="device_inspector">Device Inspector</string>
+    <string name="close">Close</string>
+    <string name="action_clipboard">Copy to clipboard</string>
 
 </resources>

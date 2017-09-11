@@ -3,6 +3,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_device_inspector"
+        android:title="Inspect"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@id/action_device_clear_tinker"
         android:title="@string/clear_tinker"
         app:showAsAction="never"/>

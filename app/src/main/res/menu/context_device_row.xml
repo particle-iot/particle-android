@@ -20,4 +20,9 @@
         android:id="@id/action_device_unclaim"
         android:title="Unclaim"/>
 
+    <!--TODO port to other ids-->
+    <item
+        android:id="@+id/action_device_inspector"
+        android:title="Inspect"/>
+
 </menu>

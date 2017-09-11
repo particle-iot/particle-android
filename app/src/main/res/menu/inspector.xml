@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@id/action_device_rename"
+        android:icon="@drawable/ic_mode_edit_white_24dp"
+        android:title="@string/rename_menu_title"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@id/action_device_copy_id_to_clipboard"
+        android:title="@string/copy_device_id_to_clipboard"/>
+
+    <item
+        android:id="@id/action_device_flash_tinker"
+        android:title="Re-flash Tinker"/>
+
+    <item
+        android:id="@id/action_device_unclaim"
+        android:title="Unclaim"/>
+
+    <item
+        android:id="@+id/documentation"
+        android:title="Documentation">
+        <menu>
+            <item
+                android:id="@+id/action_show_docs_particle_app_tinker"
+                android:title="@string/docs_link_menu_particle_app_tinker"/>
+
+            <item
+                android:id="@+id/action_show_docs_setting_up_your_device"
+                android:title="@string/docs_link_menu_setting_up_your_device"/>
+
+            <!-- FIXME: enable when shipping -->
+            <item
+                android:id="@+id/action_show_docs_create_your_own_android_app"
+                android:title="@string/docs_link_menu_create_your_own_android_app"
+                android:visible="false"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/support"
+        android:title="Support">
+        <menu>
+            <item
+                android:id="@+id/action_support_show_community"
+                android:title="@string/particle_community"/>
+
+            <item
+                android:id="@+id/action_support_show_support_site"
+                android:title="@string/particle_support"/>
+        </menu>
+    </item>
+
+</menu>

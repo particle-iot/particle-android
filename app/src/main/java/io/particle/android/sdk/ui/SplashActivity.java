@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
@@ -30,6 +33,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         ParticleDeviceSetupLibrary.init(this.getApplicationContext(), DeviceListActivity.class);
 
         if (SPLASH_DISPLAY_TIME < 1) {
@@ -54,13 +58,9 @@ public class SplashActivity extends BaseActivity {
             return;
         }
 
-        EZ.runOnMainThreadDelayed(SPLASH_DISPLAY_TIME, new Runnable() {
-
-            @Override
-            public void run() {
-                finished = true;
-                onShowingSplashComplete();
-            }
+        EZ.runOnMainThreadDelayed(SPLASH_DISPLAY_TIME, () -> {
+            finished = true;
+            onShowingSplashComplete();
         });
     }
 
