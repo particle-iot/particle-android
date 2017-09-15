@@ -168,21 +168,25 @@ public class EventsFragment extends Fragment {
         Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
             public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                subscriptionId = device.subscribeToEvents(null, new ParticleEventHandler() {
-                    @Override
-                    public void onEventError(Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onEvent(String eventName, ParticleEvent particleEvent) {
-                        adapter.add(new Event(eventName, particleEvent));
-                        if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
-                            eventsRecyclerView.smoothScrollToPosition(0);
+                try {
+                    subscriptionId = device.subscribeToEvents(null, new ParticleEventHandler() {
+                        @Override
+                        public void onEventError(Exception e) {
+                            e.printStackTrace();
                         }
-                        emptyView.post(() -> emptyView.setVisibility(View.GONE));
-                    }
-                });
+
+                        @Override
+                        public void onEvent(String eventName, ParticleEvent particleEvent) {
+                            adapter.add(new Event(eventName, particleEvent));
+                            if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
+                                eventsRecyclerView.smoothScrollToPosition(0);
+                            }
+                            emptyView.post(() -> emptyView.setVisibility(View.GONE));
+                        }
+                    });
+                } catch (NullPointerException ignore) {
+                    //failed to subscribe to events, minor issue
+                }
                 return null;
             }
 

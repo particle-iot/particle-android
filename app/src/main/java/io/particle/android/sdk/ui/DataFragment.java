@@ -264,13 +264,14 @@ public class DataFragment extends Fragment {
                     holder.value.setVisibility(View.GONE);
                     Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Integer>() {
                         @Override
-                        public Integer callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                        public Integer callApi(@NonNull ParticleDevice particleDevice)
+                                throws ParticleCloudException, IOException {
                             try {
                                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(holder.argument.getWindowToken(), 0);
                                 return particleDevice.callFunction(function.name, new ArrayList<>(Collections.
                                         singletonList(holder.argument.getText().toString())));
-                            } catch (ParticleDevice.FunctionDoesNotExistException e) {
+                            } catch (ParticleDevice.FunctionDoesNotExistException | IllegalArgumentException e) {
                                 e.printStackTrace();
                             }
                             return -1;

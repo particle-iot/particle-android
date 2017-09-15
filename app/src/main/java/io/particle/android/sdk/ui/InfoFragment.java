@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.f2prateek.bundler.FragmentBundlerCompat;
 
 import java.io.IOException;
+import java.util.Date;
 
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
@@ -94,8 +95,13 @@ public class InfoFragment extends Fragment {
 
         TextView lastHeard = Ui.findView(rootView, R.id.device_last_heard);
         long now = System.currentTimeMillis();
-        lastHeard.setText(DateUtils.getRelativeTimeSpanString(device.getLastHeard().getTime(), now,
-                DateUtils.DAY_IN_MILLIS));
+        Date lastDate = device.getLastHeard();
+        if (lastDate == null) {
+            lastHeard.setText("-");
+        } else {
+            lastHeard.setText(DateUtils.getRelativeTimeSpanString(lastDate.getTime(), now,
+                    DateUtils.DAY_IN_MILLIS));
+        }
 
         TextView ipAddress = Ui.findView(rootView, R.id.device_ip_address);
         ipAddress.setText(device.getIpAddress());
