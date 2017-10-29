@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.23.0'
+        classpath 'io.fabric.tools:gradle:1.24.2'
     }
 }
 
@@ -16,12 +16,11 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId 'io.particle.android.app'
@@ -89,18 +88,17 @@ dependencies {
     compile 'com.squareup.phrase:phrase:1.0.3'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
-    compile 'com.android.support:appcompat-v7:26.0.1'
-    compile 'com.android.support:design:26.0.1'
-    compile 'com.android.support:recyclerview-v7:26.0.1'
-    compile 'com.android.support:support-fragment:26.0.1'
-    compile 'com.android.support:support-annotations:26.0.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:support-v13:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:support-fragment:26.1.0'
+    compile 'com.android.support:support-annotations:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.2'
 
     // for barcode scanning in Electron setup
-    compile 'com.google.android.gms:play-services-vision:11.0.4'
-
-    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.5.0'
+    compile 'com.google.android.gms:play-services-vision:11.4.2'
 
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')

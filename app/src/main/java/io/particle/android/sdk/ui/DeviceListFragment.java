@@ -85,7 +85,7 @@ public class DeviceListFragment extends Fragment
     // FIXME: naming, document better
     private ProgressBar partialContentBar;
     private boolean isLoadingSnackbarVisible;
-    private Queue<Long> subscribeIds = new ConcurrentLinkedQueue<Long>();
+    private Queue<Long> subscribeIds = new ConcurrentLinkedQueue<>();
 
     private final ReloadStateDelegate reloadStateDelegate = new ReloadStateDelegate();
     private final Comparator<ParticleDevice> comparator = helpfulOrderDeviceComparator();

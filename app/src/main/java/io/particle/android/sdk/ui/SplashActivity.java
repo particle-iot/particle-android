@@ -7,7 +7,7 @@ import android.view.View;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
-import io.particle.android.sdk.cloud.ParticleCloud;
+import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.utils.EZ;
@@ -45,8 +45,7 @@ public class SplashActivity extends BaseActivity {
         this.setContentView(R.layout.activity_splash);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         }
     }
 
@@ -72,7 +71,7 @@ public class SplashActivity extends BaseActivity {
             Intent intent;
             if (SDKGlobals.getAppDataStorage().getUserHasClaimedDevices()) {
                 intent = NextActivitySelector.getNextActivityIntent(this,
-                        ParticleCloud.get(this),
+                        ParticleCloudSDK.getCloud(),
                         SDKGlobals.getSensitiveDataStorage(),
                         null);
             } else {
