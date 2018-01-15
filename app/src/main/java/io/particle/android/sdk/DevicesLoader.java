@@ -32,8 +32,8 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         // FIXME: naming.  also, two booleans in a constructor, in a row.... no. just no.
         public final boolean unableToLoadAnyDevices;
 
-        public DevicesLoadResult(List<ParticleDevice> devices, boolean isPartialResult,
-                                 boolean unableToLoadAnyDevices) {
+        DevicesLoadResult(List<ParticleDevice> devices, boolean isPartialResult,
+                          boolean unableToLoadAnyDevices) {
             this.devices = devices;
             this.isPartialResult = isPartialResult;
             this.unableToLoadAnyDevices = unableToLoadAnyDevices;

@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.tumblr.bookends.Bookends;
 
@@ -44,6 +43,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.particle.android.sdk.DevicesLoader;
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
 import io.particle.android.sdk.cloud.ParticleCloudException;
@@ -78,8 +80,8 @@ public class DeviceListFragment extends Fragment
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
     private static final Callbacks dummyCallbacks = device -> { /* no-op */ };
 
-    private SwipeRefreshLayout refreshLayout;
-    private FloatingActionsMenu fabMenu;
+    @BindView(R.id.add_device_fab) FloatingActionsMenu fabMenu;
+    @BindView(R.id.refresh_layout) SwipeRefreshLayout refreshLayout;
     private DeviceListAdapter adapter;
     private Bookends<DeviceListAdapter> bookends;
     // FIXME: naming, document better
@@ -92,6 +94,24 @@ public class DeviceListFragment extends Fragment
 
     private Callbacks callbacks = dummyCallbacks;
     private DeviceSetupCompleteReceiver deviceSetupCompleteReceiver;
+
+    @OnClick(R.id.action_set_up_a_photon)
+    public void addPhoton() {
+        addPhotonDevice();
+        fabMenu.collapse();
+    }
+
+    @OnClick(R.id.action_set_up_a_core)
+    public void addCore() {
+        addSparkCoreDevice();
+        fabMenu.collapse();
+    }
+
+    @OnClick(R.id.action_set_up_an_electron)
+    public void addElectron() {
+        addElectronDevice();
+        fabMenu.collapse();
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -128,26 +148,8 @@ public class DeviceListFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
 
-        fabMenu = Ui.findView(view, R.id.add_device_fab);
-        AddFloatingActionButton addPhoton = Ui.findView(view, R.id.action_set_up_a_photon);
-        AddFloatingActionButton addCore = Ui.findView(view, R.id.action_set_up_a_core);
-        AddFloatingActionButton addElectron = Ui.findView(view, R.id.action_set_up_an_electron);
-
-        addPhoton.setOnClickListener(v -> {
-            addPhotonDevice();
-            fabMenu.collapse();
-        });
-        addCore.setOnClickListener(v -> {
-            addSparkCoreDevice();
-            fabMenu.collapse();
-        });
-        addElectron.setOnClickListener(v -> {
-            addElectronDevice();
-            fabMenu.collapse();
-        });
-
-        refreshLayout = Ui.findView(view, R.id.refresh_layout);
         refreshLayout.setOnRefreshListener(this::refreshDevices);
 
         deviceSetupCompleteReceiver = new ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver() {
@@ -339,19 +341,16 @@ public class DeviceListFragment extends Fragment
         static class ViewHolder extends RecyclerView.ViewHolder {
 
             final View topLevel;
-            final TextView modelName;
-            final AppCompatImageView productImage, statusIcon;
-            final TextView deviceName;
-            final TextView statusTextWithIcon;
+            @BindView(R.id.product_model_name) TextView modelName;
+            @BindView(R.id.product_image) AppCompatImageView productImage;
+            @BindView(R.id.online_status_image) AppCompatImageView statusIcon;
+            @BindView(R.id.product_name) TextView deviceName;
+            @BindView(R.id.online_status) TextView statusTextWithIcon;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 topLevel = itemView;
-                modelName = Ui.findView(itemView, R.id.product_model_name);
-                productImage = Ui.findView(itemView, R.id.product_image);
-                statusIcon = Ui.findView(itemView, R.id.online_status_image);
-                deviceName = Ui.findView(itemView, R.id.product_name);
-                statusTextWithIcon = Ui.findView(itemView, R.id.online_status);
+                ButterKnife.bind(this, itemView);
             }
         }
 
@@ -383,17 +382,17 @@ public class DeviceListFragment extends Fragment
 
             switch (device.getDeviceType()) {
                 case CORE:
-                    holder.modelName.setText("Core");
+                    holder.modelName.setText(R.string.core);
                     holder.productImage.setImageResource(R.drawable.core_vector);
                     break;
 
                 case ELECTRON:
-                    holder.modelName.setText("Electron");
+                    holder.modelName.setText(R.string.electron);
                     holder.productImage.setImageResource(R.drawable.electron_vector_small);
                     break;
 
                 default:
-                    holder.modelName.setText("Photon");
+                    holder.modelName.setText(R.string.photon);
                     holder.productImage.setImageResource(R.drawable.photon_vector_small);
                     break;
             }

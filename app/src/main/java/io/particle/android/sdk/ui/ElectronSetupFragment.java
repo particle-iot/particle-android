@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.support.design.widget.Snackbar;
@@ -20,11 +21,12 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.ui.barcode_scanner.BarcodeScannerActivity;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.ui.Toaster;
-import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 import okio.BufferedSource;
 import okio.Okio;
@@ -47,16 +49,16 @@ public class ElectronSetupFragment extends Fragment {
     private static final TLog log = TLog.get(ElectronSetupFragment.class);
 
 
-    private WebView webView;
+    @BindView(R.id.electron_setup_webview) WebView webView;
     private Gson gson = new Gson();
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_electron_setup, container, false);
+        ButterKnife.bind(this, view);
 
-        webView = Ui.findView(view, R.id.electron_setup_webview);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
 
@@ -85,7 +87,7 @@ public class ElectronSetupFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         webView.loadUrl(getString(R.string.electron_setup_uri));
     }
@@ -202,9 +204,9 @@ public class ElectronSetupFragment extends Fragment {
 
     public static class NotificationContent {
 
-        public final String level;
+        final String level;
         public final String title;
-        public final String message;
+        final String message;
 
         public NotificationContent(String level, String title, String message) {
             this.level = level;

@@ -30,8 +30,7 @@ public class TinkerActivity extends BaseActivity {
 
 
     public static Intent buildIntent(Context ctx, ParticleDevice device) {
-        return new Intent(ctx, TinkerActivity.class)
-                .putExtra(TinkerFragment.ARG_DEVICE, device);
+        return new Intent(ctx, TinkerActivity.class).putExtra(TinkerFragment.ARG_DEVICE, device);
     }
 
 
@@ -69,13 +68,19 @@ public class TinkerActivity extends BaseActivity {
                     .commit();
         }
 
-        TextView deviceNameView = Ui.findView(this, R.id.deviceName);
-        deviceNameView.setText(device.getName());
-
         ImageView deviceStatus = Ui.findView(this, R.id.deviceStatus);
         Animation animFade = AnimationUtils.loadAnimation(this, R.anim.fade_in_out);
         deviceStatus.startAnimation(animFade);
         deviceStatus.setImageResource(getStatusColoredDot(device));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        ParticleDevice device = getIntent().getParcelableExtra(TinkerFragment.ARG_DEVICE);
+
+        TextView deviceNameView = Ui.findView(this, R.id.deviceName);
+        deviceNameView.setText(device.getName());
     }
 
     @Override

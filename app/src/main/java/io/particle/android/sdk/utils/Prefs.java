@@ -39,11 +39,11 @@ public class Prefs {
                 .getSharedPreferences(BUCKET_NAME, Context.MODE_PRIVATE);
     }
 
-    public boolean getCompletedFirstLogin() {
+    private boolean getCompletedFirstLogin() {
         return prefs.getBoolean(KEY_COMPLETED_FIRST_LOGIN, false);
     }
 
-    public void saveCompletedFirstLogin(boolean value) {
+    private void saveCompletedFirstLogin(boolean value) {
         prefs.edit().putBoolean(KEY_COMPLETED_FIRST_LOGIN, value).commit();
     }
 

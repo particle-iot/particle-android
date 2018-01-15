@@ -38,6 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.cloud.ParticleEvent;
@@ -67,19 +69,19 @@ public class EventsFragment extends Fragment {
     private Long subscriptionId;
     private boolean subscribed;
 
-    private RecyclerView eventsRecyclerView;
+    @BindView(R.id.events_list) RecyclerView eventsRecyclerView;
+    @BindView(R.id.events_empty) View emptyView;
     private LinearLayoutManager eventsLayoutManager;
-    private View emptyView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_events, container, false);
+        ButterKnife.bind(this, top);
+
         device = getArguments().getParcelable(ARG_DEVICE);
-        emptyView = Ui.findView(top, R.id.events_empty);
         emptyView.setVisibility(View.VISIBLE);
 
-        eventsRecyclerView = Ui.findView(top, R.id.events_list);
         eventsRecyclerView.setHasFixedSize(true);  // perf. optimization
         eventsLayoutManager = new SpeedyLinearLayoutManager(inflater.getContext());
         eventsRecyclerView.setLayoutManager(eventsLayoutManager);

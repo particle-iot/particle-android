@@ -45,7 +45,7 @@ public class InfoFragment extends Fragment {
     private ParticleDevice device;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_info, container, false);
         device = getArguments().getParcelable(ARG_DEVICE);
@@ -54,7 +54,7 @@ public class InfoFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -144,12 +144,12 @@ public class InfoFragment extends Fragment {
 
             @Override
             public void onSuccess(@NonNull Float value) {
-                dataUsage.setText(value + " MBs");
+                dataUsage.setText(getString(R.string.value_mbs, value));
             }
 
             @Override
             public void onFailure(@NonNull ParticleCloudException exception) {
-                dataUsage.setText("0.000 MBs");
+                dataUsage.setText(R.string.default_mbs);
             }
         });
     }

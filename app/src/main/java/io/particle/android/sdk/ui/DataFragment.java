@@ -55,7 +55,7 @@ public class DataFragment extends Fragment {
     public static final String ARG_DEVICE = "ARG_DEVICE";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_data, container, false);
         ParticleDevice device = getArguments().getParcelable(ARG_DEVICE);
@@ -195,10 +195,10 @@ public class DataFragment extends Fragment {
                     headerViewHolder.headerText.setText(header);
                     //check if there's any data
                     if (device.getVariables().size() == 0 && position != 0) {
-                        headerViewHolder.emptyText.setText("(No exposed variables)");
+                        headerViewHolder.emptyText.setText(R.string.no_exposed_variable_msg);
                         headerViewHolder.emptyText.setVisibility(View.VISIBLE);
                     } else if (device.getFunctions().size() == 0 && position == 0) {
-                        headerViewHolder.emptyText.setText("(No exposed functions)");
+                        headerViewHolder.emptyText.setText(R.string.no_exposed_function_msg);
                         headerViewHolder.emptyText.setVisibility(View.VISIBLE);
                     } else {
                         headerViewHolder.emptyText.setVisibility(View.GONE);

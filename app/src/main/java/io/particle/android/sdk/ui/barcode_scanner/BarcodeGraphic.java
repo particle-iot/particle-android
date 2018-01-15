@@ -67,7 +67,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         this.mId = id;
     }
 
-    public Barcode getBarcode() {
+    Barcode getBarcode() {
         return mBarcode;
     }
 

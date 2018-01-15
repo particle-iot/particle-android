@@ -20,10 +20,4 @@ public class ReversedProgressBar extends ProgressBar {
 
         super.onDraw(c);
     }
-    //
-    // public boolean onTouchEvent(MotionEvent event) {
-    // event.setLocation(this.getWidth() - event.getX(), event.getY());
-    // return super.onTouchEvent(event);
-    // }
-
 }
