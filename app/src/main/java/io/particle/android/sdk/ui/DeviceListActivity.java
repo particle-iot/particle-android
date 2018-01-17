@@ -15,6 +15,7 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.SoftAPConfigRemover;
+import io.particle.android.sdk.utils.WifiFacade;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
@@ -46,7 +47,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
 
-        softAPConfigRemover = new SoftAPConfigRemover(this);
+        softAPConfigRemover = new SoftAPConfigRemover(this, WifiFacade.get(this));
 
         if (Ui.findView(this, R.id.device_detail_container) != null) {
             // The detail container view will be present only in the

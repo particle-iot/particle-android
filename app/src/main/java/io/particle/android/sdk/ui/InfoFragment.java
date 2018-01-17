@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.f2prateek.bundler.FragmentBundlerCompat;
 
 import java.io.IOException;
+import java.util.Date;
 
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
@@ -44,7 +45,7 @@ public class InfoFragment extends Fragment {
     private ParticleDevice device;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_info, container, false);
         device = getArguments().getParcelable(ARG_DEVICE);
@@ -53,7 +54,7 @@ public class InfoFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -94,8 +95,13 @@ public class InfoFragment extends Fragment {
 
         TextView lastHeard = Ui.findView(rootView, R.id.device_last_heard);
         long now = System.currentTimeMillis();
-        lastHeard.setText(DateUtils.getRelativeTimeSpanString(device.getLastHeard().getTime(), now,
-                DateUtils.DAY_IN_MILLIS));
+        Date lastDate = device.getLastHeard();
+        if (lastDate == null) {
+            lastHeard.setText("-");
+        } else {
+            lastHeard.setText(DateUtils.getRelativeTimeSpanString(lastDate.getTime(), now,
+                    DateUtils.DAY_IN_MILLIS));
+        }
 
         TextView ipAddress = Ui.findView(rootView, R.id.device_ip_address);
         ipAddress.setText(device.getIpAddress());
@@ -138,12 +144,12 @@ public class InfoFragment extends Fragment {
 
             @Override
             public void onSuccess(@NonNull Float value) {
-                dataUsage.setText(value + " MBs");
+                dataUsage.setText(getString(R.string.value_mbs, value));
             }
 
             @Override
             public void onFailure(@NonNull ParticleCloudException exception) {
-                dataUsage.setText("0.000 MBs");
+                dataUsage.setText(R.string.default_mbs);
             }
         });
     }

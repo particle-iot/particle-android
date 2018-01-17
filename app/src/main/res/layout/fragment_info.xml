@@ -201,11 +201,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
-        android:text="0.000 MBs"
+        android:text="@string/default_mbs"
         android:textColor="@android:color/black"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/device_image"
         app:layout_constraintTop_toBottomOf="@+id/device_data_usage_label"
-        tools:text="0.000 MBs"/>
+        tools:text="@string/default_mbs"/>
 
 </android.support.constraint.ConstraintLayout>

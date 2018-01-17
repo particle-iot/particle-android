@@ -21,9 +21,9 @@ import io.particle.android.sdk.utils.Async;
 import io.particle.sdk.app.R;
 
 
-public class RenameHelper {
+class RenameHelper {
 
-    public static void renameDevice(FragmentActivity activity, ParticleDevice device) {
+    static void renameDevice(FragmentActivity activity, ParticleDevice device) {
         new RenameHelper(device, activity).showDialog();
     }
 

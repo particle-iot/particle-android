@@ -45,7 +45,6 @@ import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.map;
-import static io.particle.android.sdk.utils.Py.truthy;
 
 
 /**
@@ -99,12 +98,12 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tinker, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         loadViews();
         setupListeners();
@@ -120,7 +119,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-        updateTitle();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 devicesUpdatedListener, devicesUpdatedListener.buildIntentFilter());
     }
@@ -133,7 +131,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(STATE_DEVICE, device);
     }
@@ -164,10 +162,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             return DeviceMenuUrlHandler.handleActionItem(getActivity(), actionId, item.getTitle()) ||
                     super.onOptionsItemSelected(item);
         }
-    }
-
-    private void updateTitle() {
-        String name = truthy(device.getName()) ? device.getName() : "(Unnamed device)";
     }
 
     private TextView findPinView(int id) {
@@ -553,6 +547,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             unmutePins();
             hideTinkerSelect();
             pin.animateYourself();
+            pin.showAnalogValue(value);
             api.write(new PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.getAnalogValue()), value);
         });
     }
@@ -641,7 +636,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                         Toaster.s(getActivity(), e.getMessage());
                         return stuff.currentValue; // it didn't change
                     }
-
                 }
 
                 @Override
@@ -679,7 +673,6 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateTitle();
         }
 
         IntentFilter buildIntentFilter() {
@@ -718,7 +711,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
         @Nullable
         @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.tinker_instructions, container, false);
             v.setOnClickListener(v1 -> {

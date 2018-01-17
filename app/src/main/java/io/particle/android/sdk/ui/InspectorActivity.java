@@ -152,10 +152,10 @@ public class InspectorActivity extends BaseActivity {
     }
 
     private void setupInspectorPages() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPager viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new InspectorPager(getSupportFragmentManager(), device));
         viewPager.setOffscreenPageLimit(3);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         //hiding keyboard on tab changed
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -170,8 +170,8 @@ public class InspectorActivity extends BaseActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
                 View view = getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (view != null && imm != null) {
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }

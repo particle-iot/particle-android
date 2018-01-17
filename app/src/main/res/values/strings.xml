@@ -82,5 +82,9 @@ Enjoy!]]></string>
     <string name="device_inspector">Device Inspector</string>
     <string name="close">Close</string>
     <string name="action_clipboard">Copy to clipboard</string>
+    <string name="no_exposed_variable_msg">(No exposed variables)</string>
+    <string name="no_exposed_function_msg">(No exposed functions)</string>
+    <string name="default_mbs">- MBs</string>
+    <string name="value_mbs">%1$f MBs</string>
 
 </resources>

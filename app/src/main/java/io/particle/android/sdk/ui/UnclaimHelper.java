@@ -15,9 +15,9 @@ import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.sdk.app.R;
 
 
-public class UnclaimHelper {
+class UnclaimHelper {
 
-    public static void unclaimDeviceWithDialog(final FragmentActivity activity, final ParticleDevice device) {
+    static void unclaimDeviceWithDialog(final FragmentActivity activity, final ParticleDevice device) {
         new AlertDialog.Builder(activity)
                 .setMessage(R.string.unclaim_device_dialog_content)
                 .setPositiveButton(R.string.unclaim, (dialog, which) -> unclaim(activity, device))

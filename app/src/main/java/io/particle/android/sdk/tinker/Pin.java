@@ -35,13 +35,12 @@ public class Pin {
 
     public final TextView view;
     public final String name;
-    public final String label;
+    final String label;
 
     private final PinType pinType;
     private final Set<PinAction> functions;
     private final int maxAnalogWriteValue;
 
-    private boolean muted = false;
     private PinAction configuredAction;
     private ObjectAnimator pinBackgroundAnim;
     private Animator endAnimation;
@@ -54,14 +53,14 @@ public class Pin {
     private int analogValue = 0;
     private DigitalValue digitalValue;
 
-    public Pin(TextView view, PinType pinType, String name, EnumSet<PinAction> functions) {
+    Pin(TextView view, PinType pinType, String name, EnumSet<PinAction> functions) {
         this(view, pinType, name, functions, name, ANALOG_WRITE_MAX);
     }
 
     // for some pins, the label and the name are not the same, and on A3 and DAC, the
     // analog write value is different
-    public Pin(TextView view, PinType pinType, String name, EnumSet<PinAction> functions,
-               String label, int maxAnalogWriteValue) {
+    Pin(TextView view, PinType pinType, String name, EnumSet<PinAction> functions,
+        String label, int maxAnalogWriteValue) {
         this.view = view;
         this.pinType = pinType;
         this.name = name;
@@ -73,16 +72,16 @@ public class Pin {
         reset();
     }
 
-    public Set<PinAction> getFunctions() {
+    Set<PinAction> getFunctions() {
         // made immutable in the constructor, doesn't need a defensive copy
         return functions;
     }
 
-    public int getAnalogValue() {
+    int getAnalogValue() {
         return analogValue;
     }
 
-    public void reset() {
+    void reset() {
         if (analogReadView != null) {
             analogReadView.setVisibility(View.GONE);
             // Reset the values
@@ -117,7 +116,6 @@ public class Pin {
         if (!stopAnimating()) {
             ((View) view.getParent()).setBackgroundColor(0);
         }
-        muted = false;
         analogValue = 0;
         digitalValue = DigitalValue.NONE;
     }
@@ -156,30 +154,28 @@ public class Pin {
         }
     }
 
-    public PinAction getConfiguredAction() {
+    PinAction getConfiguredAction() {
         return configuredAction;
     }
 
-    public void setConfiguredAction(PinAction action) {
+    void setConfiguredAction(PinAction action) {
         this.configuredAction = action;
         // Clear out any views
         updatePinColor();
     }
 
-    public boolean isAnalogWriteMode() {
+    boolean isAnalogWriteMode() {
         return (analogWriteView != null && analogWriteView.getVisibility() == View.VISIBLE);
     }
 
-    public void mute() {
-        muted = true;
+    void mute() {
         view.setBackgroundResource(R.drawable.tinker_pin_muted);
         view.setTextColor(view.getContext().getResources().getColor(
                 R.color.tinker_pin_text_muted));
         hideExtraViews();
     }
 
-    public void unmute() {
-        muted = false;
+    void unmute() {
         updatePinColor();
         showExtraViews();
     }
@@ -217,7 +213,7 @@ public class Pin {
         }
     }
 
-    public void showAnalogValue(int value) {
+    void showAnalogValue(int value) {
         analogValue = value;
         doShowAnalogValue(value);
     }
@@ -273,7 +269,7 @@ public class Pin {
         readValue.setText(String.valueOf(newValue));
     }
 
-    public void showAnalogWrite(final OnAnalogWriteListener listener) {
+    void showAnalogWrite(final OnAnalogWriteListener listener) {
         if (analogReadView != null) {
             analogReadView.setVisibility(View.GONE);
             analogReadView = null;
@@ -335,7 +331,7 @@ public class Pin {
         seekBar.setMax(getAnalogMax());
     }
 
-    public void showAnalogWriteValue() {
+    void showAnalogWriteValue() {
         doShowAnalogValue(analogValue);
     }
 
@@ -365,7 +361,7 @@ public class Pin {
         updatePinColor();
     }
 
-    public void showDigitalRead(DigitalValue newValue) {
+    void showDigitalRead(DigitalValue newValue) {
         this.digitalValue = newValue;
         ViewGroup parent = (ViewGroup) view.getParent();
         if (digitalReadView == null) {
@@ -425,11 +421,11 @@ public class Pin {
         return true;
     }
 
-    public DigitalValue getDigitalValue() {
+    DigitalValue getDigitalValue() {
         return digitalValue;
     }
 
-    public void animateYourself() {
+    void animateYourself() {
         final ViewGroup parent = (ViewGroup) view.getParent();
 
         if (pinBackgroundAnim != null) {
@@ -489,7 +485,7 @@ public class Pin {
         return animatorSet;
     }
 
-    public boolean stopAnimating() {
+    boolean stopAnimating() {
         if (pinBackgroundAnim != null) {
             pinBackgroundAnim.cancel();
             pinBackgroundAnim = null;

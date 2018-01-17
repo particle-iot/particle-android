@@ -1,3 +1,11 @@
+2.1.0
+======
+* Android & Particle libraries updated.
+* Removing retrolambda, native Java 8 support.
+* Moving view binding to ButterKnife.
+* Removing unnecessary manifest entries.
+* Analog Write value display fix.
+
 2.0.1
 ======
 * Android libraries updated
