@@ -1,3 +1,7 @@
+2.1.1
+======
+* NullPointerException fix on setup cancellation.
+
 2.1.0
 ======
 * Android & Particle libraries updated.

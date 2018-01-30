@@ -24,8 +24,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 50
-        versionName "2.1.0"
+        versionCode 51
+        versionName "2.1.1"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -67,7 +67,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile 'io.particle:cloudsdk:0.4.8'
-    compile 'io.particle:devicesetup:0.5.0'
+    compile 'io.particle:devicesetup:0.5.1'
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
