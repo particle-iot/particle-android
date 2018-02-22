@@ -1,5 +1,9 @@
 2.1.1
 ======
+* NullPointerException fix on event unsubscription in EventsFragment.
+
+2.1.1
+======
 * NullPointerException fix on setup cancellation.
 
 2.1.0

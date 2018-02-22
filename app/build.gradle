@@ -24,8 +24,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 51
-        versionName "2.1.1"
+        versionCode 52
+        versionName "2.1.2"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
