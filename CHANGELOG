@@ -1,4 +1,4 @@
-2.1.1
+2.1.2
 ======
 * NullPointerException fix on event unsubscription in EventsFragment.
 
