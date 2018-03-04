@@ -186,8 +186,9 @@ public class EventsFragment extends Fragment {
                             emptyView.post(() -> emptyView.setVisibility(View.GONE));
                         }
                     });
-                } catch (NullPointerException ignore) {
-                    //failed to subscribe to events, minor issue
+                } catch (NullPointerException ex) {
+                    //set not subscribed
+                    subscribed = false;
                 }
                 return null;
             }
@@ -204,7 +205,12 @@ public class EventsFragment extends Fragment {
         Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
             @Override
             public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                device.unsubscribeFromEvents(subscriptionId);
+                try {
+                    device.unsubscribeFromEvents(subscriptionId);
+                } catch (NullPointerException ignore) {
+                    //set to still subscribed
+                    subscribed = true;
+                }
                 return null;
             }
 

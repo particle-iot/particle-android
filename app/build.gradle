@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.24.4'
+        classpath 'io.fabric.tools:gradle:1.25.1'
     }
 }
 
@@ -24,8 +24,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 51
-        versionName "2.1.1"
+        versionCode 52
+        versionName "2.1.2"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -67,7 +67,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile 'io.particle:cloudsdk:0.4.8'
-    compile 'io.particle:devicesetup:0.5.1'
+    compile 'io.particle:devicesetup:0.5.2'
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
