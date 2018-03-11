@@ -386,14 +386,34 @@ public class DeviceListFragment extends Fragment
                     holder.productImage.setImageResource(R.drawable.core_vector);
                     break;
 
+                case PHOTON:
+                    holder.modelName.setText(R.string.photon);
+                    holder.productImage.setImageResource(R.drawable.photon_vector_small);
+                    break;
+
                 case ELECTRON:
                     holder.modelName.setText(R.string.electron);
                     holder.productImage.setImageResource(R.drawable.electron_vector_small);
                     break;
 
+                case RASPBERRY_PI:
+                    holder.modelName.setText(R.string.raspberry);
+                    holder.productImage.setImageResource(R.drawable.pi_vector);
+                    break;
+
+                case P1:
+                    holder.modelName.setText(R.string.p1);
+                    holder.productImage.setImageResource(R.drawable.p1_vector);
+                    break;
+
+                case RED_BEAR_DUO:
+                    holder.modelName.setText(R.string.read_bear_duo);
+                    holder.productImage.setImageResource(R.drawable.red_bear_duo_vector);
+                    break;
+
                 default:
-                    holder.modelName.setText(R.string.photon);
-                    holder.productImage.setImageResource(R.drawable.photon_vector_small);
+                    holder.modelName.setText(R.string.unknown);
+                    holder.productImage.setImageResource(R.drawable.unknown_vector);
                     break;
             }
 

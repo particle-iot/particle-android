@@ -66,6 +66,10 @@ Enjoy!]]></string>
     <string name="core">Core</string>
     <string name="electron">Electron</string>
     <string name="photon">Photon</string>
+    <string name="unknown">Unknown</string>
+    <string name="raspberry">Raspberry Pi</string>
+    <string name="read_bear_duo">Red Bear Duo</string>
+    <string name="p1">P1</string>
     <string name="event">Event</string>
     <string name="data">Data</string>
     <string name="time">Time</string>

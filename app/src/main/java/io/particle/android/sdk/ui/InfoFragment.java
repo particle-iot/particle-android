@@ -80,9 +80,25 @@ public class InfoFragment extends Fragment {
                 Ui.findView(rootView, R.id.device_iccid_copy).setVisibility(View.VISIBLE);
                 populateElectronInfoFields(rootView);
                 break;
-            default:
+            case PHOTON:
                 deviceType.setText(R.string.photon);
                 deviceImage.setImageResource(R.drawable.photon_vector_small);
+                break;
+            case RASPBERRY_PI:
+                deviceType.setText(R.string.raspberry);
+                deviceImage.setImageResource(R.drawable.pi_vector);
+                break;
+            case P1:
+                deviceType.setText(R.string.p1);
+                deviceImage.setImageResource(R.drawable.p1_vector);
+                break;
+            case RED_BEAR_DUO:
+                deviceType.setText(R.string.read_bear_duo);
+                deviceImage.setImageResource(R.drawable.red_bear_duo_vector);
+                break;
+            default:
+                deviceType.setText(R.string.unknown);
+                deviceImage.setImageResource(R.drawable.unknown_vector);
                 break;
         }
 
