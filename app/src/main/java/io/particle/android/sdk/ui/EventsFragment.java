@@ -252,14 +252,15 @@ public class EventsFragment extends Fragment {
         private final List<Event> filteredData = list();
         private String filter = "";
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_events_list, parent, false);
             return new ViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Event event = filteredData.get(position);
             holder.eventName.setText(event.name);
             holder.eventData.setText(event.particleEvent.dataPayload);

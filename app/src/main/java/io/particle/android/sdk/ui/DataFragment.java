@@ -158,8 +158,9 @@ public class DataFragment extends Fragment {
             }
         }
 
+        @NonNull
         @Override
-        public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == FUNCTION) {
                 View v = LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.row_function_list, parent, false);
@@ -176,7 +177,7 @@ public class DataFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(BaseViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.getBackground();
             }

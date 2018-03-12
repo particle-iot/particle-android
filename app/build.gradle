@@ -86,7 +86,6 @@ dependencies {
         transitive = true
     }
     compile 'com.afollestad.material-dialogs:core:0.9.4.7'
-    compile 'com.tumblr:bookends:1.0.0'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     compile 'com.jakewharton:butterknife:8.8.1'

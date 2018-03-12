@@ -43,6 +43,7 @@
             android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars"/>
         <activity
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
+            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars"
             android:label="@string/title_device_list"
             android:screenOrientation="portrait"/>
         <activity

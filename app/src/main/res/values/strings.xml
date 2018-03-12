@@ -68,8 +68,9 @@ Enjoy!]]></string>
     <string name="photon">Photon</string>
     <string name="unknown">Unknown</string>
     <string name="raspberry">Raspberry Pi</string>
-    <string name="read_bear_duo">Red Bear Duo</string>
+    <string name="red_bear_duo">Red Bear Duo</string>
     <string name="p1">P1</string>
+    <string name="filters">Filters:</string>
     <string name="event">Event</string>
     <string name="data">Data</string>
     <string name="time">Time</string>
@@ -82,6 +83,7 @@ Enjoy!]]></string>
     <string name="data_usage">Data usage</string>
     <string name="no_events">(No events)</string>
     <string name="log_out">Log out</string>
+    <string name="search">Search</string>
     <string name="tinker">Tinker</string>
     <string name="device_inspector">Device Inspector</string>
     <string name="close">Close</string>

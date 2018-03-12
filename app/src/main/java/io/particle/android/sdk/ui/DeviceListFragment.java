@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.Snackbar.Callback;
@@ -31,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.tumblr.bookends.Bookends;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,7 +83,6 @@ public class DeviceListFragment extends Fragment
     @BindView(R.id.add_device_fab) FloatingActionsMenu fabMenu;
     @BindView(R.id.refresh_layout) SwipeRefreshLayout refreshLayout;
     private DeviceListAdapter adapter;
-    private Bookends<DeviceListAdapter> bookends;
     // FIXME: naming, document better
     private ProgressBar partialContentBar;
     private boolean isLoadingSnackbarVisible;
@@ -132,15 +131,10 @@ public class DeviceListFragment extends Fragment
 
         partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, (ViewGroup) top, false);
         partialContentBar.setVisibility(View.INVISIBLE);
-        partialContentBar.setLayoutParams(
-                new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        partialContentBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         adapter = new DeviceListAdapter(getActivity());
-        // Add them as headers / footers
-        bookends = new Bookends<>(adapter);
-        bookends.addFooter(partialContentBar);
-
-        rv.setAdapter(bookends);
+        rv.setAdapter(adapter);
         ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> onDeviceRowClicked(position));
         return top;
     }
@@ -213,6 +207,7 @@ public class DeviceListFragment extends Fragment
         deviceSetupCompleteReceiver.unregister(getActivity());
     }
 
+    @NonNull
     @Override
     public Loader<DevicesLoadResult> onCreateLoader(int i, Bundle bundle) {
         return new DevicesLoader(getActivity());
@@ -229,7 +224,7 @@ public class DeviceListFragment extends Fragment
 
         adapter.clear();
         adapter.addAll(devices);
-        bookends.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         //subscribe to system updates
         subscribeToSystemEvents(devices, false);
     }
@@ -273,7 +268,7 @@ public class DeviceListFragment extends Fragment
 
     private void onDeviceRowClicked(int position) {
         log.i("Clicked on item at position: #" + position);
-        if (position >= bookends.getItemCount() || position == -1) {
+        if (position >= adapter.getItemCount() || position == -1) {
             // we're at the header or footer view, do nothing.
             return;
         }
@@ -335,6 +330,13 @@ public class DeviceListFragment extends Fragment
         loader.forceLoad();
     }
 
+    public void filter(ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList) {
+        adapter.filter(typeArrayList);
+    }
+
+    public void filter(String query) {
+        adapter.filter(query);
+    }
 
     static class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
 
@@ -356,13 +358,17 @@ public class DeviceListFragment extends Fragment
 
 
         private final List<ParticleDevice> devices = list();
+        private final List<ParticleDevice> filteredData = list();
         private final FragmentActivity activity;
         private Drawable defaultBackground;
+        private String textFilter = "";
+        private ArrayList<ParticleDevice.ParticleDeviceType> typeFilters = new ArrayList<>();
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
         }
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // create a new view
@@ -373,7 +379,7 @@ public class DeviceListFragment extends Fragment
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            final ParticleDevice device = devices.get(position);
+            final ParticleDevice device = filteredData.get(position);
 
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.getBackground();
@@ -407,7 +413,7 @@ public class DeviceListFragment extends Fragment
                     break;
 
                 case RED_BEAR_DUO:
-                    holder.modelName.setText(R.string.read_bear_duo);
+                    holder.modelName.setText(R.string.red_bear_duo);
                     holder.productImage.setImageResource(R.drawable.red_bear_duo_vector);
                     break;
 
@@ -436,17 +442,47 @@ public class DeviceListFragment extends Fragment
 
         @Override
         public int getItemCount() {
-            return devices.size();
+            return filteredData.size();
         }
 
         void clear() {
             devices.clear();
+            filteredData.clear();
             notifyDataSetChanged();
         }
 
         void addAll(List<ParticleDevice> toAdd) {
             devices.addAll(toAdd);
+            filteredData.addAll(toAdd);
             notifyDataSetChanged();
+        }
+
+        void filter(String query) {
+            textFilter = query;
+            filteredData.clear();
+            notifyDataSetChanged();
+
+            filter(query, typeFilters);
+        }
+
+        void filter(ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList) {
+            typeFilters = typeArrayList;
+            filteredData.clear();
+            notifyDataSetChanged();
+
+            filter(textFilter, typeArrayList);
+        }
+
+        void filter(String query, ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList) {
+            for (ParticleDevice device : devices) {
+                if ((containsFilter(device.getName(), query) || containsFilter(device.getDeviceType().name(), query)
+                        || containsFilter(device.getCurrentBuild(), query) || containsFilter(device.getIccid(), query)
+                        || containsFilter(device.getID(), query) || containsFilter(device.getImei(), query))
+                        && typeArrayList.contains(device.getDeviceType())) {
+                    filteredData.add(device);
+                    notifyItemInserted(devices.indexOf(device));
+                }
+            }
         }
 
         ParticleDevice getItem(int position) {
@@ -482,6 +518,9 @@ public class DeviceListFragment extends Fragment
         }
     }
 
+    private static boolean containsFilter(@Nullable String value, String query) {
+        return value != null && value.contains(query);
+    }
 
     private static Comparator<ParticleDevice> helpfulOrderDeviceComparator() {
         Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> BooleanComparator.getTrueFirstComparator()

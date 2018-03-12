@@ -93,7 +93,7 @@ public class InfoFragment extends Fragment {
                 deviceImage.setImageResource(R.drawable.p1_vector);
                 break;
             case RED_BEAR_DUO:
-                deviceType.setText(R.string.read_bear_duo);
+                deviceType.setText(R.string.red_bear_duo);
                 deviceImage.setImageResource(R.drawable.red_bear_duo_vector);
                 break;
             default:
