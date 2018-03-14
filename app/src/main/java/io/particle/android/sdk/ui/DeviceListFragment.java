@@ -21,6 +21,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,12 @@ import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO;
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 
@@ -362,7 +369,8 @@ public class DeviceListFragment extends Fragment
         private final FragmentActivity activity;
         private Drawable defaultBackground;
         private String textFilter = "";
-        private ArrayList<ParticleDevice.ParticleDeviceType> typeFilters = new ArrayList<>();
+        private List<ParticleDevice.ParticleDeviceType> typeFilters = list(PHOTON, CORE, ELECTRON,
+                RASPBERRY_PI, P1, RED_BEAR_DUO);
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
@@ -465,7 +473,7 @@ public class DeviceListFragment extends Fragment
             filter(query, typeFilters);
         }
 
-        void filter(ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList) {
+        void filter(List<ParticleDevice.ParticleDeviceType> typeArrayList) {
             typeFilters = typeArrayList;
             filteredData.clear();
             notifyDataSetChanged();
@@ -473,7 +481,7 @@ public class DeviceListFragment extends Fragment
             filter(textFilter, typeArrayList);
         }
 
-        void filter(String query, ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList) {
+        void filter(String query, List<ParticleDevice.ParticleDeviceType> typeArrayList) {
             for (ParticleDevice device : devices) {
                 if ((containsFilter(device.getName(), query) || containsFilter(device.getDeviceType().name(), query)
                         || containsFilter(device.getCurrentBuild(), query) || containsFilter(device.getIccid(), query)

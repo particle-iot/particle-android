@@ -49,6 +49,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet
     private boolean mTwoPane;
+    private boolean isAppBarExpanded = false;
     private SoftAPConfigRemover softAPConfigRemover;
     private DeviceListFragment deviceList;
 
@@ -58,6 +59,11 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
     @BindView(R.id.raspberryFilter) protected CheckBox raspberryFilter;
     @BindView(R.id.p1Filter) protected CheckBox p1Filter;
     @BindView(R.id.redBearFilter) protected CheckBox redBearFilter;
+    @BindView(R.id.appbar) protected AppBarLayout appBarLayout;
+    private SearchView searchView;
+
+    private AppBarLayout.OnOffsetChangedListener offsetChangedListener = (appBarLayout, verticalOffset) ->
+            isAppBarExpanded = Math.abs(verticalOffset) != appBarLayout.getTotalScrollRange();
 
     @OnCheckedChanged({R.id.photonFilter, R.id.electronFilter, R.id.coreFilter,
             R.id.raspberryFilter, R.id.p1Filter, R.id.redBearFilter})
@@ -111,7 +117,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
                 collapsingToolbar.setBackgroundDrawable(background);
             }
 
-            AppBarLayout appBarLayout = Ui.findView(this, R.id.appbar);
+            appBarLayout.addOnOffsetChangedListener(offsetChangedListener);
             appBarLayout.setExpanded(false);
         }
     }
@@ -124,22 +130,20 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
     }
 
     @Override
-    public void onBackPressed() {
-        if (deviceList == null || !deviceList.onBackPressed()) {
-            super.onBackPressed();
-        }
+    protected void onDestroy() {
+        appBarLayout.removeOnOffsetChangedListener(offsetChangedListener);
+        super.onDestroy();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_log_out) {
-            final ParticleCloud cloud = ParticleCloudSDK.getCloud();
-            cloud.logOut();
-            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
-            finish();
+    public void onBackPressed() {
+        if (isAppBarExpanded) {
+            appBarLayout.setExpanded(false);
+        } else if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+        } else if (deviceList == null || !deviceList.onBackPressed()) {
+            super.onBackPressed();
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -148,7 +152,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         MenuItem logoutItem = menu.findItem(R.id.action_log_out);
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView = (SearchView) searchItem.getActionView();
         //on show of search view hide title and logout menu option
         searchView.setOnSearchClickListener(v -> {
             logoutItem.setVisible(false);
@@ -173,6 +177,18 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_log_out) {
+            final ParticleCloud cloud = ParticleCloudSDK.getCloud();
+            cloud.logOut();
+            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //region DeviceListFragment.Callbacks
