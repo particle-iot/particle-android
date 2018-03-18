@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.SearchView;
 
@@ -62,8 +65,13 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
     @BindView(R.id.appbar) protected AppBarLayout appBarLayout;
     private SearchView searchView;
 
-    private AppBarLayout.OnOffsetChangedListener offsetChangedListener = (appBarLayout, verticalOffset) ->
-            isAppBarExpanded = Math.abs(verticalOffset) != appBarLayout.getTotalScrollRange();
+    private AppBarLayout.OnOffsetChangedListener offsetChangedListener = (appBarLayout, verticalOffset) -> {
+        isAppBarExpanded = Math.abs(verticalOffset) != appBarLayout.getTotalScrollRange();
+
+        if (!isAppBarExpanded && appBarLayout.isActivated()) {
+            lockAppBarClosed();
+        }
+    };
 
     @OnCheckedChanged({R.id.photonFilter, R.id.electronFilter, R.id.coreFilter,
             R.id.raspberryFilter, R.id.p1Filter, R.id.redBearFilter})
@@ -119,6 +127,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 
             appBarLayout.addOnOffsetChangedListener(offsetChangedListener);
             appBarLayout.setExpanded(false);
+            lockAppBarClosed();
         }
     }
 
@@ -151,16 +160,19 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         getMenuInflater().inflate(R.menu.device_list, menu);
         MenuItem logoutItem = menu.findItem(R.id.action_log_out);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+        MenuItem filterItem = menu.findItem(R.id.action_filter);
 
         searchView = (SearchView) searchItem.getActionView();
         //on show of search view hide title and logout menu option
         searchView.setOnSearchClickListener(v -> {
             logoutItem.setVisible(false);
+            filterItem.setVisible(false);
             searchView.requestFocus();
         });
         //on collapse of search bar show title and logout menu option
         searchView.setOnCloseListener(() -> {
             logoutItem.setVisible(true);
+            filterItem.setVisible(true);
             return false;
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -182,11 +194,17 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_log_out) {
-            final ParticleCloud cloud = ParticleCloudSDK.getCloud();
-            cloud.logOut();
-            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
-            finish();
+        switch (id) {
+            case R.id.action_log_out:
+                final ParticleCloud cloud = ParticleCloudSDK.getCloud();
+                cloud.logOut();
+                startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
+                finish();
+                break;
+            case R.id.action_filter:
+                unlockAppBarOpen();
+                appBarLayout.setExpanded(!isAppBarExpanded);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -214,4 +232,22 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 //        }
     }
     //endregion
+
+    private void lockAppBarClosed() {
+        appBarLayout.setExpanded(false, false);
+        appBarLayout.setActivated(false);
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        TypedValue tv = new TypedValue();
+
+        if (getTheme().resolveAttribute(R.attr.actionBarSize, tv, true)) {
+            lp.height = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+        }
+    }
+
+    private void unlockAppBarOpen() {
+        appBarLayout.setExpanded(true, false);
+        appBarLayout.setActivated(true);
+        appBarLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
 }

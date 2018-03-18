@@ -24,88 +24,93 @@
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <android.support.constraint.ConstraintLayout
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="top|start"
                 android:layout_marginBottom="?attr/actionBarSize">
 
-                <TextView
-                    android:id="@+id/filtersLabel"
+                <android.support.constraint.ConstraintLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="@string/filters"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    android:layout_height="match_parent">
 
-                <CheckBox
-                    android:id="@+id/photonFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:checked="true"
-                    android:text="@string/photon"
-                    app:layout_constraintEnd_toStartOf="@+id/electronFilter"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
+                    <TextView
+                        android:id="@+id/filtersLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="@string/filters"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
-                <CheckBox
-                    android:id="@+id/electronFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:checked="true"
-                    android:text="@string/electron"
-                    app:layout_constraintEnd_toStartOf="@+id/p1Filter"
-                    app:layout_constraintStart_toEndOf="@+id/photonFilter"
-                    app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
+                    <CheckBox
+                        android:id="@+id/photonFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:checked="true"
+                        android:text="@string/photon"
+                        app:layout_constraintEnd_toStartOf="@+id/electronFilter"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
 
-                <CheckBox
-                    android:id="@+id/p1Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:checked="true"
-                    android:text="@string/p1"
-                    app:layout_constraintStart_toEndOf="@+id/electronFilter"
-                    app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
+                    <CheckBox
+                        android:id="@+id/electronFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:checked="true"
+                        android:text="@string/electron"
+                        app:layout_constraintEnd_toStartOf="@+id/p1Filter"
+                        app:layout_constraintStart_toEndOf="@+id/photonFilter"
+                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
 
-                <CheckBox
-                    android:id="@+id/raspberryFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:checked="true"
-                    android:text="@string/raspberry"
-                    app:layout_constraintEnd_toStartOf="@+id/redBearFilter"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/photonFilter"/>
+                    <CheckBox
+                        android:id="@+id/p1Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:checked="true"
+                        android:text="@string/p1"
+                        app:layout_constraintStart_toEndOf="@+id/electronFilter"
+                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
 
-                <CheckBox
-                    android:id="@+id/redBearFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:checked="true"
-                    android:text="@string/red_bear_duo"
-                    app:layout_constraintEnd_toStartOf="@+id/coreFilter"
-                    app:layout_constraintStart_toEndOf="@+id/raspberryFilter"
-                    app:layout_constraintTop_toBottomOf="@+id/electronFilter"/>
+                    <CheckBox
+                        android:id="@+id/raspberryFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:checked="true"
+                        android:text="@string/raspberry"
+                        app:layout_constraintEnd_toStartOf="@+id/redBearFilter"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/photonFilter"/>
 
-                <CheckBox
-                    android:id="@+id/coreFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:checked="true"
-                    android:text="@string/core"
-                    app:layout_constraintStart_toEndOf="@+id/redBearFilter"
-                    app:layout_constraintTop_toBottomOf="@+id/p1Filter"/>
+                    <CheckBox
+                        android:id="@+id/redBearFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:checked="true"
+                        android:text="@string/red_bear_duo"
+                        app:layout_constraintEnd_toStartOf="@+id/coreFilter"
+                        app:layout_constraintStart_toEndOf="@+id/raspberryFilter"
+                        app:layout_constraintTop_toBottomOf="@+id/electronFilter"/>
 
-            </android.support.constraint.ConstraintLayout>
+                    <CheckBox
+                        android:id="@+id/coreFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:checked="true"
+                        android:text="@string/core"
+                        app:layout_constraintStart_toEndOf="@+id/redBearFilter"
+                        app:layout_constraintTop_toBottomOf="@+id/p1Filter"/>
+
+                </android.support.constraint.ConstraintLayout>
+            </HorizontalScrollView>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
