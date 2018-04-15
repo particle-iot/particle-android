@@ -170,7 +170,7 @@ public class EventsFragment extends Fragment {
         try {
             Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
                 @Override
-                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                public Void callApi(@NonNull ParticleDevice particleDevice) throws IOException {
                     try {
                         subscriptionId = device.subscribeToEvents(null, new ParticleEventHandler() {
                             @Override
@@ -210,7 +210,7 @@ public class EventsFragment extends Fragment {
         try {
             Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
                 @Override
-                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException {
                     try {
                         device.unsubscribeFromEvents(subscriptionId);
                     } catch (NullPointerException ignore) {
