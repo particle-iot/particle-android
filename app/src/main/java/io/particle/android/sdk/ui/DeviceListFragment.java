@@ -48,10 +48,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.particle.android.sdk.DevicesLoader;
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.cloud.ParticleEvent;
 import io.particle.android.sdk.cloud.ParticleEventHandler;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver;
 import io.particle.android.sdk.ui.Comparators.BooleanComparator;
@@ -88,6 +88,7 @@ public class DeviceListFragment extends Fragment
 
     @BindView(R.id.add_device_fab) FloatingActionsMenu fabMenu;
     @BindView(R.id.refresh_layout) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.empty_message) TextView emptyMessage;
     private DeviceListAdapter adapter;
     // FIXME: naming, document better
     private ProgressBar partialContentBar;
@@ -231,6 +232,8 @@ public class DeviceListFragment extends Fragment
         adapter.clear();
         adapter.addAll(devices);
         adapter.notifyDataSetChanged();
+
+        emptyMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         //subscribe to system updates
         subscribeToSystemEvents(devices, false);
     }
@@ -338,10 +341,12 @@ public class DeviceListFragment extends Fragment
 
     public void filter(ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList) {
         adapter.filter(typeArrayList);
+        emptyMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     public void filter(String query) {
         adapter.filter(query);
+        emptyMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     static class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
@@ -361,7 +366,6 @@ public class DeviceListFragment extends Fragment
                 ButterKnife.bind(this, itemView);
             }
         }
-
 
         private final List<ParticleDevice> devices = list();
         private final List<ParticleDevice> filteredData = list();

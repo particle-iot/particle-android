@@ -40,10 +40,10 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.cloud.ParticleEvent;
 import io.particle.android.sdk.cloud.ParticleEventHandler;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
@@ -167,58 +167,68 @@ public class EventsFragment extends Fragment {
 
     private void startEventSubscription(EventListAdapter adapter) {
         subscribed = true;
-        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
-            @Override
-            public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                try {
-                    subscriptionId = device.subscribeToEvents(null, new ParticleEventHandler() {
-                        @Override
-                        public void onEventError(Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        @Override
-                        public void onEvent(String eventName, ParticleEvent particleEvent) {
-                            adapter.add(new Event(eventName, particleEvent));
-                            if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
-                                eventsRecyclerView.smoothScrollToPosition(0);
+        try {
+            Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
+                @Override
+                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                    try {
+                        subscriptionId = device.subscribeToEvents(null, new ParticleEventHandler() {
+                            @Override
+                            public void onEventError(Exception e) {
+                                e.printStackTrace();
                             }
-                            emptyView.post(() -> emptyView.setVisibility(View.GONE));
-                        }
-                    });
-                } catch (NullPointerException ex) {
-                    //set not subscribed
-                    subscribed = false;
-                }
-                return null;
-            }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                exception.printStackTrace();
-            }
-        });
+                            @Override
+                            public void onEvent(String eventName, ParticleEvent particleEvent) {
+                                adapter.add(new Event(eventName, particleEvent));
+                                if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
+                                    eventsRecyclerView.smoothScrollToPosition(0);
+                                }
+                                emptyView.post(() -> emptyView.setVisibility(View.GONE));
+                            }
+                        });
+                    } catch (NullPointerException ex) {
+                        //set not subscribed
+                        subscribed = false;
+                    }
+                    return null;
+                }
+
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    exception.printStackTrace();
+                }
+            });
+        } catch (ParticleCloudException e) {
+            //set not subscribed
+            subscribed = false;
+        }
     }
 
     private void stopEventSubscription() {
         subscribed = false;
-        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
-            @Override
-            public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                try {
-                    device.unsubscribeFromEvents(subscriptionId);
-                } catch (NullPointerException ignore) {
-                    //set to still subscribed
-                    subscribed = true;
+        try {
+            Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
+                @Override
+                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                    try {
+                        device.unsubscribeFromEvents(subscriptionId);
+                    } catch (NullPointerException ignore) {
+                        //set to still subscribed
+                        subscribed = true;
+                    }
+                    return null;
                 }
-                return null;
-            }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                exception.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    exception.printStackTrace();
+                }
+            });
+        } catch (ParticleCloudException e) {
+            //set to still subscribed
+            subscribed = true;
+        }
     }
 
     private static class Event {

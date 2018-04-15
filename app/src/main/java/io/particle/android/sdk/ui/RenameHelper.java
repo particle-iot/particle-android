@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.Async;
 import io.particle.sdk.app.R;
 
@@ -91,24 +91,31 @@ class RenameHelper {
     }
 
     private void doRename(final String newName) {
-        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
-            @Override
-            public Void callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
-                device.setName(newName);
-                EventBus.getDefault().post(device);
-                return null;
-            }
+        try {
+            Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
+                @Override
+                public Void callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+                    device.setName(newName);
+                    EventBus.getDefault().post(device);
+                    return null;
+                }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                new MaterialDialog.Builder(activity)
-                        .theme(Theme.LIGHT)
-                        .title("Unable to rename core")
-                        .content(exception.getBestMessage())
-                        .positiveText("OK");
-            }
-        }).andIgnoreCallbacksIfActivityIsFinishing(activity);
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    new MaterialDialog.Builder(activity)
+                            .theme(Theme.LIGHT)
+                            .title("Unable to rename core")
+                            .content(exception.getBestMessage())
+                            .positiveText("OK");
+                }
+            }).andIgnoreCallbacksIfActivityIsFinishing(activity);
+        } catch (ParticleCloudException e) {
+            new MaterialDialog.Builder(activity)
+                    .theme(Theme.LIGHT)
+                    .title("Unable to rename core")
+                    .content(e.getBestMessage())
+                    .positiveText("OK");
+        }
     }
-
 
 }

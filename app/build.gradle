@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.1'
+        classpath 'io.fabric.tools:gradle:1.25.2'
     }
 }
 
@@ -17,9 +17,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 ext {
-    supportVersions = '27.1.0'
-    cloudSdkVersion = '0.4.8'
-    setupVersion = '0.5.2'
+    supportVersions = '27.1.1'
+    cloudSdkVersion = '0.5.0'
+    setupVersion = '0.5.3'
 }
 
 android {
@@ -97,11 +97,11 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersions"
     compile "com.android.support:support-fragment:$supportVersions"
     compile "com.android.support:support-annotations:$supportVersions"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.1.0'
     compile 'com.android.support:multidex:1.0.3'
 
     // for barcode scanning in Electron setup
-    compile 'com.google.android.gms:play-services-vision:11.8.0'
+    compile 'com.google.android.gms:play-services-vision:15.0.0'
 
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')

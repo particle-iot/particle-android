@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.particle.android.sdk.cloud.BroadcastContract;
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.ui.DeviceActionsHelper;
 import io.particle.android.sdk.ui.DeviceMenuUrlHandler;
 import io.particle.android.sdk.utils.Async;
@@ -619,52 +619,60 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         }
 
         void write(final PinStuff stuff, final int newValue) {
-            Async.executeAsync(device, new TinkerWork(stuff) {
-                @Override
-                public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
-                    String stringValue;
-                    if (stuff.pinAction == PinAction.ANALOG_WRITE) {
-                        stringValue = String.valueOf(newValue);
-                    } else {
-                        stringValue = (newValue == DigitalValue.HIGH.asInt()) ? "HIGH" : "LOW";
+            try {
+                Async.executeAsync(device, new TinkerWork(stuff) {
+                    @Override
+                    public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
+                        String stringValue;
+                        if (stuff.pinAction == PinAction.ANALOG_WRITE) {
+                            stringValue = String.valueOf(newValue);
+                        } else {
+                            stringValue = (newValue == DigitalValue.HIGH.asInt()) ? "HIGH" : "LOW";
+                        }
+                        try {
+                            return (sparkDevice.callFunction(
+                                    actionToFunctionName.get(stuff.pinAction),
+                                    list(stuff.pinName, stringValue)) == 1) ? newValue : stuff.currentValue;
+                        } catch (final ParticleDevice.FunctionDoesNotExistException e) {
+                            Toaster.s(getActivity(), e.getMessage());
+                            return stuff.currentValue; // it didn't change
+                        }
                     }
-                    try {
-                        return (sparkDevice.callFunction(
-                                actionToFunctionName.get(stuff.pinAction),
-                                list(stuff.pinName, stringValue)) == 1) ? newValue : stuff.currentValue;
-                    } catch (final ParticleDevice.FunctionDoesNotExistException e) {
-                        Toaster.s(getActivity(), e.getMessage());
-                        return stuff.currentValue; // it didn't change
-                    }
-                }
 
-                @Override
-                public void onSuccess(@NonNull Integer returnValue) {
-                    onTinkerCallComplete(stuff, returnValue);
-                }
-            });
+                    @Override
+                    public void onSuccess(@NonNull Integer returnValue) {
+                        onTinkerCallComplete(stuff, returnValue);
+                    }
+                });
+            } catch (ParticleCloudException e) {
+                // should we show a message here? ignore it all together?
+            }
         }
 
         void read(PinStuff stuff) {
-            Async.executeAsync(device, new TinkerWork(stuff) {
-                @Override
-                public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException,
-                        IOException {
-                    try {
-                        return sparkDevice.callFunction(
-                                actionToFunctionName.get(stuff.pinAction),
-                                list(stuff.pinName));
-                    } catch (ParticleDevice.FunctionDoesNotExistException e) {
-                        Toaster.s(getActivity(), e.getMessage());
-                        return stuff.currentValue;
+            try {
+                Async.executeAsync(device, new TinkerWork(stuff) {
+                    @Override
+                    public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException,
+                            IOException {
+                        try {
+                            return sparkDevice.callFunction(
+                                    actionToFunctionName.get(stuff.pinAction),
+                                    list(stuff.pinName));
+                        } catch (ParticleDevice.FunctionDoesNotExistException e) {
+                            Toaster.s(getActivity(), e.getMessage());
+                            return stuff.currentValue;
+                        }
                     }
-                }
 
-                @Override
-                public void onSuccess(@NonNull Integer returnValue) {
-                    onTinkerCallComplete(stuff, returnValue);
-                }
-            });
+                    @Override
+                    public void onSuccess(@NonNull Integer returnValue) {
+                        onTinkerCallComplete(stuff, returnValue);
+                    }
+                });
+            } catch (ParticleCloudException e) {
+                // should we show a message here? ignore it all together?
+            }
         }
     }
 

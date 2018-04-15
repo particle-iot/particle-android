@@ -20,8 +20,8 @@ import com.f2prateek.bundler.FragmentBundlerCompat;
 import java.io.IOException;
 import java.util.Date;
 
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
@@ -152,22 +152,26 @@ public class InfoFragment extends Fragment {
     private void pollDataUsage(View rootView) {
         TextView dataUsage = Ui.findView(rootView, R.id.device_data_usage);
 
-        Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Float>() {
-            @Override
-            public Float callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                return particleDevice.getCurrentDataUsage();
-            }
+        try {
+            Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Float>() {
+                @Override
+                public Float callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                    return particleDevice.getCurrentDataUsage();
+                }
 
-            @Override
-            public void onSuccess(@NonNull Float value) {
-                dataUsage.setText(getString(R.string.value_mbs, value));
-            }
+                @Override
+                public void onSuccess(@NonNull Float value) {
+                    dataUsage.setText(getString(R.string.value_mbs, value));
+                }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                dataUsage.setText(R.string.default_mbs);
-            }
-        });
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    dataUsage.setText(R.string.default_mbs);
+                }
+            });
+        } catch (ParticleCloudException e) {
+            dataUsage.setText(R.string.default_mbs);
+        }
     }
 
 }
