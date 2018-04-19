@@ -19,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -197,11 +198,14 @@ public class InspectorActivity extends BaseActivity {
                 .setPositiveButton("Publish", (dialog, which) -> {
                     TextView nameView = Ui.findView(publishDialogView, R.id.eventName);
                     TextView valueView = Ui.findView(publishDialogView, R.id.eventValue);
+                    RadioButton privateEventRadio = Ui.findView(publishDialogView, R.id.privateEvent);
 
                     String name = nameView.getText().toString();
                     String value = valueView.getText().toString();
+                    int eventVisibility = privateEventRadio.isChecked() ?
+                            ParticleEventVisibility.PRIVATE : ParticleEventVisibility.PUBLIC;
 
-                    publishEvent(name, value);
+                    publishEvent(name, value, eventVisibility);
                 })
                 .setNegativeButton("Cancel", null)
                 .setCancelable(true)
@@ -209,12 +213,12 @@ public class InspectorActivity extends BaseActivity {
                 .show();
     }
 
-    private void publishEvent(String name, String value) {
+    private void publishEvent(String name, String value, int eventVisibility) {
         try {
             Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
                 @Override
                 public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException {
-                    device.getCloud().publishEvent(name, value, ParticleEventVisibility.PRIVATE, 600);
+                    particleDevice.getCloud().publishEvent(name, value, eventVisibility, 600);
                     return null;
                 }
 
