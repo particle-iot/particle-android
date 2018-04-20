@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.SearchView;
@@ -161,16 +162,19 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         MenuItem logoutItem = menu.findItem(R.id.action_log_out);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         MenuItem filterItem = menu.findItem(R.id.action_filter);
+        View title = Ui.findView(this, android.R.id.title);
 
         searchView = (SearchView) searchItem.getActionView();
         //on show of search view hide title and logout menu option
         searchView.setOnSearchClickListener(v -> {
+            title.setVisibility(View.GONE);
             logoutItem.setVisible(false);
             filterItem.setVisible(false);
             searchView.requestFocus();
         });
         //on collapse of search bar show title and logout menu option
         searchView.setOnCloseListener(() -> {
+            title.setVisibility(View.VISIBLE);
             logoutItem.setVisible(true);
             filterItem.setVisible(true);
             return false;
