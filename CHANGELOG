@@ -1,3 +1,9 @@
+2.2.0
+======
+* Fixed Raspberry Pi shown as Photons bug.
+* Search and filter devices in main device list via search menu item in top action bar.
+* Enabled publishing events from the app via menu item in top action bar.
+
 2.1.2
 ======
 * NullPointerException fix on event unsubscription in EventsFragment.
