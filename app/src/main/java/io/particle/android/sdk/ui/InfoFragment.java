@@ -161,12 +161,16 @@ public class InfoFragment extends Fragment {
 
                 @Override
                 public void onSuccess(@NonNull Float value) {
-                    dataUsage.setText(getString(R.string.value_mbs, value));
+                    if (!isDetached()) {
+                        dataUsage.setText(getString(R.string.value_mbs, value));
+                    }
                 }
 
                 @Override
                 public void onFailure(@NonNull ParticleCloudException exception) {
-                    dataUsage.setText(R.string.default_mbs);
+                    if (!isDetached()) {
+                        dataUsage.setText(R.string.default_mbs);
+                    }
                 }
             });
         } catch (ParticleCloudException e) {

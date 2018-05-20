@@ -49,6 +49,7 @@
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
             android:label="@string/title_device_detail"
+            android:theme="@style/TinkerSetup"
             android:parentActivityName="io.particle.android.sdk.ui.DeviceListActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -58,8 +59,8 @@
         <activity
             android:name="io.particle.android.sdk.ui.InspectorActivity"
             android:label="@string/title_inspector_detail"
+            android:theme="@style/TinkerSetup"
             android:screenOrientation="portrait"/>
-
 
         <!--
         All of the following are from the device setup lib, and must be present in your app's

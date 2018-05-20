@@ -1,6 +1,7 @@
 package io.particle.android.sdk.ui;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -30,6 +31,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -216,7 +218,7 @@ public class DeviceListFragment extends Fragment
 
     @NonNull
     @Override
-    public Loader<DevicesLoadResult> onCreateLoader(int i, Bundle bundle) {
+    public Loader<DevicesLoadResult> onCreateLoader(int i, @Nullable Bundle bundle) {
         return new DevicesLoader(getActivity());
     }
 
@@ -307,19 +309,23 @@ public class DeviceListFragment extends Fragment
     }
 
     private void addPhotonDevice() {
-        ParticleDeviceSetupLibrary.startDeviceSetup(getActivity());
+        ParticleDeviceSetupLibrary.startDeviceSetup(getActivity(), DeviceListActivity.class);
     }
 
     private void addSparkCoreDevice() {
-        String coreAppPkg = "io.spark.core.android";
-        // Is the spark core app already installed?
-        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(coreAppPkg);
-        if (intent == null) {
-            // Nope.  Send the user to the store.
-            intent = new Intent(Intent.ACTION_VIEW)
-                    .setData(Uri.parse("market://details?id=" + coreAppPkg));
+        try {
+            String coreAppPkg = "io.spark.core.android";
+            // Is the spark core app already installed?
+            Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(coreAppPkg);
+            if (intent == null) {
+                // Nope.  Send the user to the store.
+                intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(Uri.parse("market://details?id=" + coreAppPkg));
+            }
+            startActivity(intent);
+        } catch (ActivityNotFoundException ignored) {
+            Toast.makeText(getActivity(), "Cannot find spark core application.", Toast.LENGTH_SHORT).show();
         }
-        startActivity(intent);
     }
 
     private void addElectronDevice() {

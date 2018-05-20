@@ -101,7 +101,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.3'
 
     // for barcode scanning in Electron setup
-    compile 'com.google.android.gms:play-services-vision:15.0.0'
+    compile 'com.google.android.gms:play-services-vision:15.0.2'
 
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')

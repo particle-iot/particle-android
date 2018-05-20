@@ -4,12 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
@@ -65,9 +63,6 @@ public class InspectorActivity extends BaseActivity {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            // FIXME: do this with a theme attr instead.
-            Drawable background = ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background);
-            supportActionBar.setBackgroundDrawable(background);
         }
         setTitle(getString(R.string.device_inspector));
 
@@ -189,8 +184,7 @@ public class InspectorActivity extends BaseActivity {
     }
 
     private void presentPublishDialog() {
-        final View publishDialogView = getLayoutInflater().inflate(
-                R.layout.publish_event, null);
+        final View publishDialogView = getLayoutInflater().inflate(R.layout.publish_event, null);
 
         new AlertDialog.Builder(this,
                 R.style.ParticleSetupTheme_DialogNoDimBackground)
