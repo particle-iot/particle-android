@@ -10,7 +10,6 @@ buildscript {
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
-    google()
 }
 
 apply plugin: 'com.android.application'
@@ -76,6 +75,8 @@ dependencies {
     implementation('com.f2prateek.bundler:bundler:1.1.2') {
         exclude module: 'support-v4'
     }
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-perf:16.0.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
         transitive = true
     }
@@ -102,3 +103,5 @@ dependencies {
 //    compile(name:'cloudsdk', ext:'aar')
 //    compile(name:'devicesetup', ext:'aar')
 }
+
+apply plugin: 'com.google.gms.google-services'
