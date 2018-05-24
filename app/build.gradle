@@ -97,7 +97,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // for barcode scanning in Electron setup
-    implementation 'com.google.android.gms:play-services-vision:15.0.2'
+    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
 
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')
