@@ -73,6 +73,7 @@ import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RA
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO;
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
+import static java.util.Objects.requireNonNull;
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
 @ParametersAreNonnullByDefault
@@ -95,8 +96,8 @@ public class DeviceListFragment extends Fragment
     // FIXME: naming, document better
     private ProgressBar partialContentBar;
     private boolean isLoadingSnackbarVisible;
-    private Queue<Long> subscribeIds = new ConcurrentLinkedQueue<>();
 
+    private final Queue<Long> subscribeIds = new ConcurrentLinkedQueue<>();
     private final ReloadStateDelegate reloadStateDelegate = new ReloadStateDelegate();
     private final Comparator<ParticleDevice> comparator = helpfulOrderDeviceComparator();
 
@@ -136,13 +137,13 @@ public class DeviceListFragment extends Fragment
         rv.setHasFixedSize(true);  // perf. optimization
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
         rv.setLayoutManager(layoutManager);
-        rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        rv.addItemDecoration(new DividerItemDecoration(requireNonNull(getContext()), LinearLayout.VERTICAL));
 
         partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, (ViewGroup) top, false);
         partialContentBar.setVisibility(View.INVISIBLE);
         partialContentBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-        adapter = new DeviceListAdapter(getActivity());
+        adapter = new DeviceListAdapter(requireNonNull(getActivity()));
         rv.setAdapter(adapter);
         ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> onDeviceRowClicked(position));
         return top;
@@ -170,6 +171,16 @@ public class DeviceListFragment extends Fragment
 
         getLoaderManager().initLoader(R.id.device_list_devices_loader_id, null, this);
         refreshLayout.setRefreshing(true);
+
+        if (savedInstanceState != null) {
+            adapter.filter(savedInstanceState.getString("txtFilterState"));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("txtFilterState", adapter.getTextFilter());
     }
 
     @Override
@@ -293,7 +304,10 @@ public class DeviceListFragment extends Fragment
                     "Device is being flashed, please wait for the flashing process to end first");
         } else if (!device.isConnected() || !device.isRunningTinker()) {
             Activity activity = getActivity();
-            activity.startActivity(InspectorActivity.buildIntent(activity, device));
+
+            if (activity != null) {
+                activity.startActivity(InspectorActivity.buildIntent(activity, device));
+            }
         } else {
             callbacks.onDeviceSelected(device);
         }
@@ -309,14 +323,14 @@ public class DeviceListFragment extends Fragment
     }
 
     private void addPhotonDevice() {
-        ParticleDeviceSetupLibrary.startDeviceSetup(getActivity(), DeviceListActivity.class);
+        ParticleDeviceSetupLibrary.startDeviceSetup(requireNonNull(getActivity()), DeviceListActivity.class);
     }
 
     private void addSparkCoreDevice() {
         try {
             String coreAppPkg = "io.spark.core.android";
             // Is the spark core app already installed?
-            Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(coreAppPkg);
+            Intent intent = requireNonNull(getActivity()).getPackageManager().getLaunchIntentForPackage(coreAppPkg);
             if (intent == null) {
                 // Nope.  Send the user to the store.
                 intent = new Intent(Intent.ACTION_VIEW)
@@ -353,6 +367,10 @@ public class DeviceListFragment extends Fragment
     public void filter(String query) {
         adapter.filter(query);
         emptyMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+
+    public String getTextFilter() {
+        return adapter != null ? adapter.getTextFilter() : null;
     }
 
     static class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
@@ -470,11 +488,10 @@ public class DeviceListFragment extends Fragment
 
         void addAll(List<ParticleDevice> toAdd) {
             devices.addAll(toAdd);
-            filteredData.addAll(toAdd);
-            notifyDataSetChanged();
+            filter(textFilter, typeFilters);
         }
 
-        void filter(String query) {
+        void filter(@Nullable String query) {
             textFilter = query;
             filteredData.clear();
             notifyDataSetChanged();
@@ -490,7 +507,7 @@ public class DeviceListFragment extends Fragment
             filter(textFilter, typeArrayList);
         }
 
-        void filter(String query, List<ParticleDevice.ParticleDeviceType> typeArrayList) {
+        void filter(@Nullable String query, List<ParticleDevice.ParticleDeviceType> typeArrayList) {
             for (ParticleDevice device : devices) {
                 if ((containsFilter(device.getName(), query) || containsFilter(device.getDeviceType().name(), query)
                         || containsFilter(device.getCurrentBuild(), query) || containsFilter(device.getIccid(), query)
@@ -508,6 +525,10 @@ public class DeviceListFragment extends Fragment
 
         List<ParticleDevice> getItems() {
             return devices;
+        }
+
+        String getTextFilter() {
+            return textFilter;
         }
 
         private Pair<String, Integer> getStatusTextAndColoredDot(ParticleDevice device) {
@@ -535,8 +556,8 @@ public class DeviceListFragment extends Fragment
         }
     }
 
-    private static boolean containsFilter(@Nullable String value, String query) {
-        return value != null && value.contains(query);
+    private static boolean containsFilter(@Nullable String value, @Nullable String query) {
+        return value != null && value.contains(query != null ? query : "");
     }
 
     private static Comparator<ParticleDevice> helpfulOrderDeviceComparator() {

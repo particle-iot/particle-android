@@ -103,18 +103,19 @@ public class InspectorActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        } else if (id == R.id.action_event_publish) {
-            presentPublishDialog();
-            return true;
-        } else {
-            int actionId = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_event_publish:
+                presentPublishDialog();
+                return true;
+            default:
+                int actionId = item.getItemId();
 
-            return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
-                    DeviceMenuUrlHandler.handleActionItem(this, actionId, item.getTitle()) ||
-                    super.onOptionsItemSelected(item);
+                return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
+                        DeviceMenuUrlHandler.handleActionItem(this, actionId, item.getTitle()) ||
+                        super.onOptionsItemSelected(item);
         }
     }
 
@@ -183,13 +184,14 @@ public class InspectorActivity extends BaseActivity {
         });
     }
 
+
     private void presentPublishDialog() {
-        final View publishDialogView = getLayoutInflater().inflate(R.layout.publish_event, null);
+        final View publishDialogView = View.inflate(this, R.layout.publish_event, null);
 
         new AlertDialog.Builder(this,
                 R.style.ParticleSetupTheme_DialogNoDimBackground)
                 .setView(publishDialogView)
-                .setPositiveButton("Publish", (dialog, which) -> {
+                .setPositiveButton(R.string.publish_positive_action, (dialog, which) -> {
                     TextView nameView = Ui.findView(publishDialogView, R.id.eventName);
                     TextView valueView = Ui.findView(publishDialogView, R.id.eventValue);
                     RadioButton privateEventRadio = Ui.findView(publishDialogView, R.id.privateEvent);
@@ -201,7 +203,7 @@ public class InspectorActivity extends BaseActivity {
 
                     publishEvent(name, value, eventVisibility);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .setCancelable(true)
                 .setOnCancelListener(DialogInterface::dismiss)
                 .show();

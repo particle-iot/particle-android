@@ -73,7 +73,7 @@ public class BarcodeScannerActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
+        mPreview = findViewById(R.id.preview);
         mGraphicOverlay = Ui.findView(this, R.id.graphicOverlay);
 
         torchFab = Ui.findView(this, R.id.action_toggle_flash);

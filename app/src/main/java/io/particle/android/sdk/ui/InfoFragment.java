@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.f2prateek.bundler.FragmentBundlerCompat;
 
-import java.io.IOException;
 import java.util.Date;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
@@ -27,6 +26,7 @@ import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Created by Julius.
@@ -48,7 +48,7 @@ public class InfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_info, container, false);
-        device = getArguments().getParcelable(ARG_DEVICE);
+        device = requireNonNull(getArguments()).getParcelable(ARG_DEVICE);
         displayDeviceInformation(top);
         return top;
     }
@@ -124,7 +124,7 @@ public class InfoFragment extends Fragment {
 
         Ui.findView(rootView, R.id.device_id_copy).setOnClickListener(v -> {
             Context context = getContext();
-            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+            ClipboardManager clipboard = (ClipboardManager) requireNonNull(context).getSystemService(CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Device ID", id.getText().toString());
             clipboard.setPrimaryClip(clip);
             Toast.makeText(context, R.string.clipboard_copy_id_msg, Toast.LENGTH_SHORT).show();
@@ -142,7 +142,7 @@ public class InfoFragment extends Fragment {
 
         Ui.findView(rootView, R.id.device_iccid_copy).setOnClickListener(v -> {
             Context context = getContext();
-            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+            ClipboardManager clipboard = (ClipboardManager) requireNonNull(context).getSystemService(CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Device ICCID", iccid.getText().toString());
             clipboard.setPrimaryClip(clip);
             Toast.makeText(context, R.string.clipboard_copy_iccid_msg, Toast.LENGTH_SHORT).show();
@@ -155,7 +155,7 @@ public class InfoFragment extends Fragment {
         try {
             Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Float>() {
                 @Override
-                public Float callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                public Float callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException {
                     return particleDevice.getCurrentDataUsage();
                 }
 

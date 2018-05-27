@@ -93,5 +93,8 @@ Enjoy!]]></string>
     <string name="no_exposed_function_msg">(No exposed functions)</string>
     <string name="default_mbs">- MBs</string>
     <string name="value_mbs">%1$f MBs</string>
+    <string name="publish_positive_action">Publish event</string>
+    <string name="cancel">Cancel</string>
+    <string name="logout_confirm_message">Are you sure you want to log out?</string>
 
 </resources>

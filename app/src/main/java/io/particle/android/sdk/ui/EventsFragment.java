@@ -50,6 +50,7 @@ import io.particle.sdk.app.R;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static io.particle.android.sdk.utils.Py.list;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Created by Julius.
@@ -79,7 +80,7 @@ public class EventsFragment extends Fragment {
         View top = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, top);
 
-        device = getArguments().getParcelable(ARG_DEVICE);
+        device = requireNonNull(getArguments()).getParcelable(ARG_DEVICE);
         emptyView.setVisibility(View.VISIBLE);
 
         eventsRecyclerView.setHasFixedSize(true);  // perf. optimization
@@ -87,7 +88,7 @@ public class EventsFragment extends Fragment {
         eventsRecyclerView.setLayoutManager(eventsLayoutManager);
         EventListAdapter adapter = new EventListAdapter();
         eventsRecyclerView.setAdapter(adapter);
-        eventsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        eventsRecyclerView.addItemDecoration(new DividerItemDecoration(requireNonNull(getContext()), LinearLayout.VERTICAL));
 
         setupClearListener(top, adapter);
         initEventSubscription(top, adapter);
@@ -110,7 +111,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void setupClearListener(View rootView, EventListAdapter adapter) {
-        rootView.findViewById(R.id.events_clear).setOnClickListener(v -> new AlertDialog.Builder(getActivity())
+        rootView.findViewById(R.id.events_clear).setOnClickListener(v -> new AlertDialog.Builder(requireNonNull(getActivity()))
                 .setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {

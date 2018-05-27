@@ -20,6 +20,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -185,7 +186,7 @@ public class ElectronSetupFragment extends Fragment {
     }
 
     private void doElectronSetupDone() {
-        getActivity().finish();
+        Objects.requireNonNull(getActivity()).finish();
     }
 
     private void onBarcodeScanningFinished(@Nullable String barcodeValue) {

@@ -10,6 +10,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -165,6 +166,7 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         View title = Ui.findView(this, android.R.id.title);
 
         searchView = (SearchView) searchItem.getActionView();
+        searchView.setQuery(deviceList.getTextFilter(), false);
         //on show of search view hide title and logout menu option
         searchView.setOnSearchClickListener(v -> {
             title.setVisibility(View.GONE);
@@ -200,10 +202,18 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         int id = item.getItemId();
         switch (id) {
             case R.id.action_log_out:
-                final ParticleCloud cloud = ParticleCloudSDK.getCloud();
-                cloud.logOut();
-                startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
-                finish();
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.logout_confirm_message)
+                        .setPositiveButton(R.string.log_out, (dialog, which) -> {
+                            final ParticleCloud cloud = ParticleCloudSDK.getCloud();
+                            cloud.logOut();
+                            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
+                            finish();
+
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                        .show();
                 break;
             case R.id.action_filter:
                 unlockAppBarOpen();
