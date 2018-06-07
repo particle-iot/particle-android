@@ -1,4 +1,4 @@
-package io.particle.sdk.app;
+package io.particle.android.sdk;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
