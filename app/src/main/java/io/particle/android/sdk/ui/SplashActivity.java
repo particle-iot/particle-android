@@ -33,7 +33,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
         ParticleDeviceSetupLibrary.init(this.getApplicationContext(), DeviceListActivity.class);
 
         if (SPLASH_DISPLAY_TIME < 1) {

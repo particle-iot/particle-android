@@ -19,9 +19,6 @@
         tools:ignore="UnusedAttribute">
 
         <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value=""/>
-        <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
 
