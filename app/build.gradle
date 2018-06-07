@@ -79,6 +79,20 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-perf:16.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
+
+    // Segment
+    //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
+    implementation 'com.segment.analytics.android:analytics:4.+'
+    //noinspection GradleDynamicVersion -- (see above)
+    implementation 'com.segment.analytics.android.integrations:firebase:+'
+    //noinspection GradleDynamicVersion -- (see above)
+    implementation 'com.segment.analytics.android.integrations:intercom:+'
+
+    //noinspection GradleDynamicVersion -- (see above)
+    implementation 'io.intercom.android:intercom-sdk-base:5.+'
+    //noinspection GradleDynamicVersion -- (see above)
+    implementation 'io.intercom.android:intercom-sdk-fcm:5.+'
+
     implementation 'com.afollestad.material-dialogs:core:0.9.4.7'
     implementation 'com.tumblr:bookends:1.0.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
