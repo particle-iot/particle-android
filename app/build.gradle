@@ -4,17 +4,17 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.1'
+        classpath 'io.fabric.tools:gradle:1.25.2'
     }
 }
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
-    google()
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'  /* uncomment for release builds */
+
 
 android {
     compileSdkVersion 27
@@ -64,43 +64,57 @@ android {
 //}
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile 'io.particle:cloudsdk:0.4.8'
-    compile 'io.particle:devicesetup:0.5.2'
+    implementation 'io.particle:cloudsdk:0.4.8'
+    implementation 'io.particle:devicesetup:0.5.2'
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
     // implemented by hand (and as such, might not be worth it.)
-    compile 'com.getbase:floatingactionbutton:1.10.1'
-    compile('com.f2prateek.bundler:bundler:1.1.2') {
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
+    implementation('com.f2prateek.bundler:bundler:1.1.2') {
         exclude module: 'support-v4'
     }
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true
-    }
-    compile 'com.afollestad.material-dialogs:core:0.9.4.7'
-    compile 'com.tumblr:bookends:1.0.0'
-    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    releaseImplementation 'com.google.firebase:firebase-core:16.0.0'
+    releaseImplementation 'com.google.firebase:firebase-perf:16.0.0'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
 
-    compile 'com.jakewharton:butterknife:8.8.1'
+    // Segment
+    //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
+    releaseImplementation 'com.segment.analytics.android:analytics:4.+'
+    //noinspection GradleDynamicVersion -- (see above)
+    releaseImplementation 'com.segment.analytics.android.integrations:firebase:+'
+    //noinspection GradleDynamicVersion -- (see above)
+    releaseImplementation 'com.segment.analytics.android.integrations:intercom:+'
+
+    //noinspection GradleDynamicVersion -- (see above)
+    releaseImplementation 'io.intercom.android:intercom-sdk-base:5.+'
+    //noinspection GradleDynamicVersion -- (see above)
+    releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
+
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.7'
+    implementation 'com.tumblr:bookends:1.0.0'
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support:support-v13:27.0.2'
-    compile 'com.android.support:recyclerview-v7:27.0.2'
-    compile 'com.android.support:support-fragment:27.0.2'
-    compile 'com.android.support:support-annotations:27.0.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:multidex:1.0.2'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:support-fragment:27.1.1'
+    implementation 'com.android.support:support-annotations:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support:multidex:1.0.3'
 
-    // for barcode scanning in Electron setup
-    compile 'com.google.android.gms:play-services-vision:11.8.0'
+    // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
+//    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
 
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')
 //    compile(name:'devicesetup', ext:'aar')
 }
 
-apply plugin: 'com.getkeepsafe.dexcount'
+//apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
