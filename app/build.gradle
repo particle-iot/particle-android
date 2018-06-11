@@ -106,7 +106,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:support-fragment:27.1.1'
     implementation 'com.android.support:support-annotations:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     implementation 'com.android.support:multidex:1.0.3'
 
     // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
