@@ -18,20 +18,12 @@ Download Particle to easily connect your Photon to a Wi-Fi network in a few simp
 
 ### Requirements
 
-1. [Android Studio 1.2](http://developer.android.com/sdk/index.html) or higher, and all the
-latest SDK components (Just launch the SDK Manager, wait for the progress bar at the bottom
-of the screen to finish, let it select all the updates, and hit the "Install X packages" button
-in the lower right corner)
+1. Get [the latest stable version of Android Studio](https://developer.android.com/studio/)
 2. Once you have Android Studio installed, launch it, and from the "Welcome to 
 Android Studio" screen, pick "Open an existing Android Studio project".  When it prompts 
 you for the project location, point it at the top-level 'build.gradle' file in the repo.
-3. Once AS has finished its initial cogitating\*, hit the "play" button on the toolbar 
-to build and run the app on a device.
-
-
-\* No, really, if you've just installed AS and are running it for the first time, you may want to
-get a cup of coffee during this part.  And then drink that coffee slowly, perhaps while
-reading [this documentation on how to speed up your Android Studio install](http://tools.android.com/tech-docs/configuration#TOC-Increasing-IDE-Memory).
+3. Once AS has finished its initial cogitating on the project, hit the "play" button on 
+the toolbar to build and run the app on a device.
 
 
 ### FAQ
