@@ -101,7 +101,6 @@ dependencies {
     releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
     implementation 'com.afollestad.material-dialogs:core:0.9.4.7'
-    implementation 'com.tumblr:bookends:1.0.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     implementation 'com.jakewharton:butterknife:8.8.1'
