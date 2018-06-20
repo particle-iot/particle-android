@@ -104,21 +104,8 @@
             android:name="io.particle.android.sdk.utils.ui.WebViewActivity"
             android:label="@string/title_activity_web_view"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar"/>
-        <activity
-            android:name="io.particle.android.sdk.ui.ElectronSetupActivity"
-            android:label="@string/title_activity_electron_setup"
-            android:parentActivityName="io.particle.android.sdk.ui.DeviceListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="io.particle.android.sdk.ui.DeviceListActivity"/>
-        </activity>
-        <activity
-            android:name="io.particle.android.sdk.ui.barcode_scanner.BarcodeScannerActivity"
-            android:label="@string/title_activity_barcode_scanner">
-        </activity>
+            android:theme="@style/ParticleSetupTheme.NoActionBar" />
+
     </application>
 
 </manifest>
