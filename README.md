@@ -1,6 +1,6 @@
 # Particle Tinker app for Android
 
-![Particle](https://raw.githubusercontent.com/spark/photon-tinker-android/master/app/src/main/res/drawable-xxhdpi/ic_launcher.png)
+![Particle](http://oi60.tinypic.com/116jd51.jpg)
 
 [Install on your Android device from Google Play store](https://play.google.com/store/apps/details?id=io.particle.android.app)
 
