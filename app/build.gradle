@@ -83,9 +83,9 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    releaseImplementation 'com.google.firebase:firebase-core:16.0.0'
+    releaseImplementation 'com.google.firebase:firebase-core:16.0.1'
     releaseImplementation 'com.google.firebase:firebase-perf:16.0.0'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
@@ -113,7 +113,7 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$supportVersions"
     implementation "com.android.support:support-fragment:$supportVersions"
     implementation "com.android.support:support-annotations:$supportVersions"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:multidex:1.0.3'
 
     // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
