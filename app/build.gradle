@@ -12,7 +12,9 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 //apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
@@ -74,6 +76,8 @@ dependencies {
 
     implementation "io.particle:cloudsdk:$cloudSdkVersion"
     implementation "io.particle:devicesetup:$setupVersion"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
