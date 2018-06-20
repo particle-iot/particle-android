@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="io.particle.sdk.app"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="io.particle.sdk.app">
 
-    <uses-feature android:name="android.hardware.camera.any"/>
+    <uses-feature android:name="android.hardware.camera.any" />
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- required by Segment  -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -25,7 +24,7 @@
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="barcode"/>
+            android:value="barcode" />
 
         <activity
             android:name="io.particle.android.sdk.ui.SplashActivity"
@@ -33,36 +32,40 @@
             android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="io.particle.android.sdk.ui.IntroActivity"
             android:label="@string/title_activity_intro"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars"/>
+            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars" />
+
         <activity
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
-            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars"
             android:label="@string/title_device_list"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars" />
+
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
             android:label="@string/title_device_detail"
-            android:theme="@style/TinkerSetup"
             android:parentActivityName="io.particle.android.sdk.ui.DeviceListActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/TinkerSetup">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="io.particle.android.sdk.ui.DeviceListActivity"/>
+                android:value="io.particle.android.sdk.ui.DeviceListActivity" />
         </activity>
+
         <activity
             android:name="io.particle.android.sdk.ui.InspectorActivity"
             android:label="@string/title_inspector_detail"
-            android:theme="@style/TinkerSetup"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/TinkerSetup" />
 
         <!--
         All of the following are from the device setup lib, and must be present in your app's
