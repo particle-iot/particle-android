@@ -21,7 +21,7 @@ Enjoy!]]></string>
     <string name="unclaim">Unclaim</string>
     <string name="unclaim_device_dialog_content">Unclaim device?</string>
     <string name="rename_menu_title">Rename…</string>
-    <string name="publish_menu_title">Publish</string>
+    <string name="publish_menu_title">Publish event</string>
     <string name="flash">Flash</string>
     <string name="copy_device_id_to_clipboard">Copy device ID to clipboard</string>
     <string name="docs_link_menu_particle_app_tinker">Particle app/Tinker</string>
