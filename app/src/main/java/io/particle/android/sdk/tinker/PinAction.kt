@@ -1,6 +1,6 @@
-package io.particle.android.sdk.tinker;
+package io.particle.android.sdk.tinker
 
-public enum PinAction {
+enum class PinAction {
     DIGITAL_READ,
     DIGITAL_WRITE,
     ANALOG_READ,

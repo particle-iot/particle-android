@@ -554,7 +554,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
     private void doDigitalRead(Pin pin) {
         pin.animateYourself();
-        api.read(new PinStuff(pin.name, PinAction.DIGITAL_READ, pin.getDigitalValue().asInt()));
+        api.read(new PinStuff(pin.name, PinAction.DIGITAL_READ, pin.getDigitalValue().getIntValue()));
         // pin.showDigitalRead(DigitalValue.HIGH);
     }
 
@@ -564,7 +564,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
         DigitalValue newValue = (currentValue == DigitalValue.HIGH)
                 ? DigitalValue.LOW
                 : DigitalValue.HIGH;
-        api.write(new PinStuff(pin.name, PinAction.DIGITAL_WRITE, currentValue.asInt()), newValue.asInt());
+        api.write(new PinStuff(pin.name, PinAction.DIGITAL_WRITE, currentValue.getIntValue()), newValue.getIntValue());
         // pin.showDigitalWrite(newValue);
     }
 
@@ -627,7 +627,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
                         if (stuff.pinAction == PinAction.ANALOG_WRITE) {
                             stringValue = String.valueOf(newValue);
                         } else {
-                            stringValue = (newValue == DigitalValue.HIGH.asInt()) ? "HIGH" : "LOW";
+                            stringValue = (newValue == DigitalValue.HIGH.getIntValue()) ? "HIGH" : "LOW";
                         }
                         try {
                             return (sparkDevice.callFunction(
@@ -653,8 +653,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             try {
                 Async.executeAsync(device, new TinkerWork(stuff) {
                     @Override
-                    public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException,
-                            IOException {
+                    public Integer callApi(@NonNull ParticleDevice sparkDevice) throws ParticleCloudException, IOException {
                         try {
                             return sparkDevice.callFunction(
                                     actionToFunctionName.get(stuff.pinAction),
