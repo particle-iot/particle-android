@@ -1,0 +1,106 @@
+package io.particle.particlemesh.bluetooth
+
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
+import io.particle.particlemesh.bluetooth.connecting.ConnectionState
+import io.particle.particlemesh.common.QATool
+import io.particle.particlemesh.common.android.livedata.setOnMainThread
+import io.particle.particlemesh.common.toHex
+import io.particle.particlemesh.common.truthy
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.ReceiveChannel
+import mu.KotlinLogging
+
+
+typealias CharacteristicAndStatus = Pair<BluetoothGattCharacteristic, GATTStatusCode>
+
+
+class ObservableBLECallbacks : BluetoothGattCallback() {
+
+    val connectionStateChangedLD: LiveData<ConnectionState?> = MutableLiveData()
+    val onServicesDiscoveredLD: LiveData<GATTStatusCode> = MutableLiveData()
+    val onCharacteristicWriteCompleteLD: LiveData<GATTStatusCode> = MutableLiveData()
+    val onCharacteristicReadFailureLD: LiveData<CharacteristicAndStatus> = MutableLiveData()
+    val onCharacteristicChangedFailureLD: LiveData<BluetoothGattCharacteristic> = MutableLiveData()
+
+    val readOrChangedReceiveChannel: ReceiveChannel<ByteArray>
+        get() = mutableReceiveChannel
+    private val mutableReceiveChannel = Channel<ByteArray>(128)
+
+
+    private val log = KotlinLogging.logger {}
+
+
+    fun closeChannel() {
+        mutableReceiveChannel.close()
+    }
+
+
+    override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+        val statusCode = GATTStatusCode.fromIntValue(status)
+        val state = ConnectionState.fromIntValue(newState)
+        log.debug { "onConnectionStateChange() gatt: $gatt with status=$statusCode and state=$state" }
+        (connectionStateChangedLD as MutableLiveData).setOnMainThread(state)
+    }
+
+    override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+        (onServicesDiscoveredLD as MutableLiveData).setOnMainThread(
+                GATTStatusCode.fromIntValue(status)
+        )
+    }
+
+    override fun onCharacteristicChanged(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic
+    ) {
+        if (!characteristic.value.truthy()) {
+            (onCharacteristicChangedFailureLD as MutableLiveData).setOnMainThread(characteristic)
+            return
+        }
+        receivePacket(characteristic.value)
+    }
+
+    override fun onCharacteristicRead(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            statusCode: Int
+    ) {
+        val status = GATTStatusCode.fromIntValue(statusCode)
+        if (!characteristic.value.truthy() || status != GATTStatusCode.SUCCESS) {
+            (onCharacteristicReadFailureLD as MutableLiveData).setOnMainThread(
+                    Pair(characteristic, status)
+            )
+            return
+        }
+        receivePacket(characteristic.value)
+    }
+
+    override fun onCharacteristicWrite(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            statusCode: Int
+    ) {
+        (onCharacteristicWriteCompleteLD as MutableLiveData).setOnMainThread(
+                GATTStatusCode.fromIntValue(statusCode)
+        )
+    }
+
+    override fun onReliableWriteCompleted(gatt: BluetoothGatt, statusCode: Int) {
+        log.debug { "onReliableWriteCompleted() for gatt=$gatt, status=$statusCode" }
+    }
+
+
+    private fun receivePacket(packet: ByteArray) {
+        log.debug { "Packet received: ${packet.toHex()}" }
+
+        if (!mutableReceiveChannel.isClosedForSend) {
+            QATool.runSafely({ mutableReceiveChannel.offer(packet) })
+        } else {
+            log.warn { "Channel is closed, cannot pass along packet" }
+        }
+    }
+
+}

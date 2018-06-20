@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="row_image" type="id" />
+    <item name="row_line_1" type="id" />
+    <item name="row_line_2" type="id" />
+
+    <item name="action_next" type="id" />
+    <item name="action_cancel" type="id" />
+
+</resources>

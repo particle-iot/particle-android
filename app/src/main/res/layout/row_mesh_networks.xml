@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp">
+
+    <TextView
+        android:id="@id/row_line_1"
+        style="@style/row_two_line_1st_line"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/row_line_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="nucleus" />
+
+    <TextView
+        android:id="@id/row_line_2"
+        style="@style/row_two_line_2nd_line"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/row_line_1"
+        tools:text="4 devices in this network" />
+
+
+</android.support.constraint.ConstraintLayout>

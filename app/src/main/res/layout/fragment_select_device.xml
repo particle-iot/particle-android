@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".meshsetup.ui.SelectDeviceFragment">
+
+    <TextView
+        android:id="@+id/setup_header_text"
+        style="@style/setup_header_text"
+        android:layout_marginTop="@dimen/setup_header_margin_top"
+        android:text="@string/choose_the_device_you_re_setting_up"
+        app:layout_constraintBottom_toTopOf="@+id/xenon_row"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/xenon_row"
+        layout="@layout/row_select_device"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
+
+</android.support.constraint.ConstraintLayout>

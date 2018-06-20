@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mesh_setup"
+    app:startDestination="@id/selectDeviceFragment">
+
+    <fragment
+        android:id="@+id/selectDeviceFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.SelectDeviceFragment"
+        android:label="fragment_select_device"
+        tools:layout="@layout/fragment_select_device">
+        <action
+            android:id="@+id/action_selectDeviceFragment_to_getReadyForSetupFragment"
+            app:destination="@id/getReadyForSetupFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/getReadyForSetupFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.GetReadyForSetupFragment"
+        android:label="fragment_get_ready_for_setup"
+        tools:layout="@layout/fragment_get_ready_for_setup" >
+        <action
+            android:id="@+id/action_getReadyForSetupFragment_to_scanCodeIntroFragment"
+            app:destination="@id/scanCodeIntroFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanCodeIntroFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.ScanCodeIntroFragment"
+        android:label="fragment_scan_code_intro"
+        tools:layout="@layout/fragment_scan_code_intro" >
+        <action
+            android:id="@+id/action_scanCodeIntroFragment_to_scanCodeFragment"
+            app:destination="@id/scanCodeFragment" />
+        <action
+            android:id="@+id/action_scanCodeIntroFragment_to_typeCodeManuallyFragment"
+            app:destination="@id/typeCodeManuallyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanCodeFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.ScanCodeFragment"
+        android:label="fragment_scan_code"
+        tools:layout="@layout/fragment_scan_code" >
+        <action
+            android:id="@+id/action_scanCodeFragment_to_BLEPairingProgressFragment"
+            app:destination="@id/BLEPairingProgressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/typeCodeManuallyFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.TypeCodeManuallyFragment"
+        android:label="fragment_type_code_manually"
+        tools:layout="@layout/fragment_type_code_manually" >
+        <action
+            android:id="@+id/action_typeCodeManuallyFragment_to_BLEPairingProgressFragment"
+            app:destination="@id/BLEPairingProgressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/BLEPairingProgressFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.BLEPairingProgressFragment"
+        android:label="fragment_ble_pairing_progress"
+        tools:layout="@layout/fragment_ble_pairing_progress" >
+        <action
+            android:id="@+id/action_BLEPairingProgressFragment_to_scanForMeshNetworksFragment"
+            app:destination="@id/scanForMeshNetworksFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanForMeshNetworksFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.ScanForMeshNetworksFragment"
+        android:label="fragment_scan_for_mesh_networks"
+        tools:layout="@layout/fragment_scan_for_mesh_networks" >
+        <action
+            android:id="@+id/action_scanForMeshNetworksFragment_to_manualCommissioningAddToNetworkFragment"
+            app:destination="@id/manualCommissioningAddToNetworkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manualCommissioningSelectDeviceFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.ManualCommissioningSelectDeviceFragment"
+        android:label="fragment_manual_commissioning_select_device"
+        tools:layout="@layout/fragment_manual_commissioning_select_device" >
+        <action
+            android:id="@+id/action_manualCommissioningSelectDeviceFragment_to_enterNetworkPasswordFragment"
+            app:destination="@id/enterNetworkPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manualCommissioningAddToNetworkFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.ManualCommissioningAddToNetworkFragment"
+        android:label="fragment_manual_commissioning_add_to_network"
+        tools:layout="@layout/fragment_manual_commissioning_add_to_network" >
+        <action
+            android:id="@+id/action_manualCommissioningAddToNetworkFragment_to_manualCommissioningSelectDeviceFragment"
+            app:destination="@id/manualCommissioningSelectDeviceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterNetworkPasswordFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.EnterNetworkPasswordFragment"
+        android:label="fragment_enter_network_password"
+        tools:layout="@layout/fragment_enter_network_password" >
+        <action
+            android:id="@+id/action_enterNetworkPasswordFragment_to_joiningMeshNetworkProgressFragment"
+            app:destination="@id/joiningMeshNetworkProgressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joiningMeshNetworkProgressFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.JoiningMeshNetworkProgressFragment"
+        android:label="fragment_joining_mesh_network_progress"
+        tools:layout="@layout/fragment_joining_mesh_network_progress" >
+        <action
+            android:id="@+id/action_joiningMeshNetworkProgressFragment_to_nameYourDeviceFragment"
+            app:destination="@id/nameYourDeviceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nameYourDeviceFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.NameYourDeviceFragment"
+        android:label="fragment_name_your_device"
+        tools:layout="@layout/fragment_name_your_device" >
+        <action
+            android:id="@+id/action_nameYourDeviceFragment_to_setupFinishedFragment"
+            app:destination="@id/setupFinishedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupFinishedFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.SetupFinishedFragment"
+        android:label="fragment_setup_finished"
+        tools:layout="@layout/fragment_setup_finished" />
+
+</navigation>
