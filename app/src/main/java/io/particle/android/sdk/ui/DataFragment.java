@@ -33,8 +33,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.AnimationUtil;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
@@ -42,6 +42,7 @@ import io.particle.sdk.app.R;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static io.particle.android.sdk.utils.Py.list;
+import static java.util.Objects.requireNonNull;
 
 public class DataFragment extends Fragment {
 
@@ -58,21 +59,21 @@ public class DataFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_data, container, false);
-        ParticleDevice device = getArguments().getParcelable(ARG_DEVICE);
+        ParticleDevice device = requireNonNull(getArguments()).getParcelable(ARG_DEVICE);
 
         RecyclerView rv = Ui.findView(top, R.id.data_list);
         rv.setHasFixedSize(true);  // perf. optimization
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
         rv.setLayoutManager(layoutManager);
-        DataListAdapter adapter = new DataListAdapter(device);
+        DataListAdapter adapter = new DataListAdapter(requireNonNull(device));
         rv.setAdapter(adapter);
-        rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        rv.addItemDecoration(new DividerItemDecoration(requireNonNull(getContext()), LinearLayout.VERTICAL));
         return top;
     }
 
     private static class Variable {
-        String name;
-        ParticleDevice.VariableType variableType;
+        final String name;
+        final ParticleDevice.VariableType variableType;
 
         Variable(String name, ParticleDevice.VariableType variableType) {
             this.name = name;
@@ -81,7 +82,7 @@ public class DataFragment extends Fragment {
     }
 
     private static class Function {
-        String name;
+        final String name;
 
         Function(String name) {
             this.name = name;
@@ -144,7 +145,7 @@ public class DataFragment extends Fragment {
 
         private final List<Object> data = list();
         private Drawable defaultBackground;
-        private ParticleDevice device;
+        private final ParticleDevice device;
 
         DataListAdapter(ParticleDevice device) {
             this.device = device;
@@ -158,25 +159,30 @@ public class DataFragment extends Fragment {
             }
         }
 
+        @NonNull
         @Override
-        public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == FUNCTION) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_function_list, parent, false);
-                return new FunctionViewHolder(v);
-            } else if (viewType == VARIABLE) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_variable_list, parent, false);
-                return new VariableViewHolder(v);
-            } else {
-                View v = LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.data_header_list, parent, false);
-                return new HeaderViewHolder(v);
+        public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            switch (viewType) {
+                case FUNCTION: {
+                    View v = LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.row_function_list, parent, false);
+                    return new FunctionViewHolder(v);
+                }
+                case VARIABLE: {
+                    View v = LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.row_variable_list, parent, false);
+                    return new VariableViewHolder(v);
+                }
+                default: {
+                    View v = LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.data_header_list, parent, false);
+                    return new HeaderViewHolder(v);
+                }
             }
         }
 
         @Override
-        public void onBindViewHolder(BaseViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.getBackground();
             }
@@ -259,39 +265,51 @@ public class DataFragment extends Fragment {
         private void setupArgumentSend(FunctionViewHolder holder, Function function) {
             Context context = holder.itemView.getContext();
             holder.argument.setOnEditorActionListener((v, actionId, event) -> {
+
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     holder.progressBar.setVisibility(View.VISIBLE);
                     holder.value.setVisibility(View.GONE);
-                    Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Integer>() {
-                        @Override
-                        public Integer callApi(@NonNull ParticleDevice particleDevice)
-                                throws ParticleCloudException, IOException {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(holder.argument.getWindowToken(), 0);
-                                return particleDevice.callFunction(function.name, new ArrayList<>(Collections.
-                                        singletonList(holder.argument.getText().toString())));
-                            } catch (ParticleDevice.FunctionDoesNotExistException | IllegalArgumentException e) {
-                                e.printStackTrace();
+
+                    try {
+                        Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Integer>() {
+                            @Override
+                            public Integer callApi(@NonNull ParticleDevice particleDevice)
+                                    throws ParticleCloudException, IOException {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                                    if (imm != null) {
+                                        imm.hideSoftInputFromWindow(holder.argument.getWindowToken(), 0);
+                                    }
+                                    return particleDevice.callFunction(function.name, new ArrayList<>(Collections.
+                                            singletonList(holder.argument.getText().toString())));
+                                } catch (ParticleDevice.FunctionDoesNotExistException | IllegalArgumentException e) {
+                                    e.printStackTrace();
+                                }
+                                return -1;
                             }
-                            return -1;
-                        }
 
-                        @Override
-                        public void onSuccess(@NonNull Integer value) {
-                            holder.value.setText(String.valueOf(value));
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.value.setVisibility(View.VISIBLE);
-                        }
+                            @Override
+                            public void onSuccess(@NonNull Integer value) {
+                                holder.value.setText(String.valueOf(value));
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.value.setVisibility(View.VISIBLE);
+                            }
 
-                        @Override
-                        public void onFailure(@NonNull ParticleCloudException exception) {
-                            holder.value.setText("");
-                            Toast.makeText(context, R.string.sending_argument_failed, Toast.LENGTH_SHORT).show();
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.value.setVisibility(View.VISIBLE);
-                        }
-                    });
+                            @Override
+                            public void onFailure(@NonNull ParticleCloudException exception) {
+                                holder.value.setText("");
+                                Toast.makeText(context, R.string.sending_argument_failed, Toast.LENGTH_SHORT).show();
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.value.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    } catch (ParticleCloudException e) {
+                        holder.value.setText("");
+                        Toast.makeText(context, R.string.sending_argument_failed, Toast.LENGTH_SHORT).show();
+                        holder.progressBar.setVisibility(View.GONE);
+                        holder.value.setVisibility(View.VISIBLE);
+                    }
                     return true;
                 }
                 return false;
@@ -301,37 +319,43 @@ public class DataFragment extends Fragment {
         private void setupVariableValue(VariableViewHolder holder, Variable variable) {
             holder.progressBar.setVisibility(View.VISIBLE);
             holder.value.setVisibility(View.GONE);
-            Async.executeAsync(device, new Async.ApiWork<ParticleDevice, String>() {
-                @Override
-                public String callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                    try {
-                        if (variable.variableType == ParticleDevice.VariableType.INT) {
-                            String value = String.valueOf(device.getVariable(variable.name));
-                            int dotIndex = value.indexOf(".");
-                            return value.substring(0, dotIndex > 0 ? dotIndex : value.length());
-                        } else {
-                            return String.valueOf(device.getVariable(variable.name));
+            try {
+                Async.executeAsync(device, new Async.ApiWork<ParticleDevice, String>() {
+                    @Override
+                    public String callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
+                        try {
+                            if (variable.variableType == ParticleDevice.VariableType.INT) {
+                                String value = String.valueOf(device.getVariable(variable.name));
+                                int dotIndex = value.indexOf(".");
+                                return value.substring(0, dotIndex > 0 ? dotIndex : value.length());
+                            } else {
+                                return String.valueOf(device.getVariable(variable.name));
+                            }
+                        } catch (ParticleDevice.VariableDoesNotExistException e) {
+                            throw new ParticleCloudException(e);
                         }
-                    } catch (ParticleDevice.VariableDoesNotExistException e) {
-                        throw new ParticleCloudException(e);
                     }
-                }
 
-                @Override
-                public void onSuccess(@NonNull String value) {
-                    holder.value.setText(value);
-                    holder.progressBar.setVisibility(View.GONE);
-                    holder.value.setVisibility(View.VISIBLE);
-                    holder.value.setOnClickListener(view -> createValuePopup(view.getContext(), variable.name, value));
-                }
+                    @Override
+                    public void onSuccess(@NonNull String value) {
+                        holder.value.setText(value);
+                        holder.progressBar.setVisibility(View.GONE);
+                        holder.value.setVisibility(View.VISIBLE);
+                        holder.value.setOnClickListener(view -> createValuePopup(view.getContext(), variable.name, value));
+                    }
 
-                @Override
-                public void onFailure(@NonNull ParticleCloudException exception) {
-                    holder.value.setText("");
-                    holder.progressBar.setVisibility(View.GONE);
-                    holder.value.setVisibility(View.VISIBLE);
-                }
-            });
+                    @Override
+                    public void onFailure(@NonNull ParticleCloudException exception) {
+                        holder.value.setText("");
+                        holder.progressBar.setVisibility(View.GONE);
+                        holder.value.setVisibility(View.VISIBLE);
+                    }
+                });
+            } catch (ParticleCloudException e) {
+                holder.value.setText("");
+                holder.progressBar.setVisibility(View.GONE);
+                holder.value.setVisibility(View.VISIBLE);
+            }
         }
 
         private void setupVariableType(VariableViewHolder holder, Variable variable) {

@@ -1,12 +1,14 @@
 package io.particle.android.sdk.ui;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.Snackbar.Callback;
@@ -29,9 +31,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.tumblr.bookends.Bookends;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,10 +50,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.particle.android.sdk.DevicesLoader;
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.cloud.ParticleEvent;
 import io.particle.android.sdk.cloud.ParticleEventHandler;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver;
 import io.particle.android.sdk.ui.Comparators.BooleanComparator;
@@ -63,8 +65,15 @@ import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO;
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
+import static java.util.Objects.requireNonNull;
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
 @ParametersAreNonnullByDefault
@@ -82,13 +91,13 @@ public class DeviceListFragment extends Fragment
 
     @BindView(R.id.add_device_fab) FloatingActionsMenu fabMenu;
     @BindView(R.id.refresh_layout) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.empty_message) TextView emptyMessage;
     private DeviceListAdapter adapter;
-    private Bookends<DeviceListAdapter> bookends;
     // FIXME: naming, document better
     private ProgressBar partialContentBar;
     private boolean isLoadingSnackbarVisible;
-    private Queue<Long> subscribeIds = new ConcurrentLinkedQueue<>();
 
+    private final Queue<Long> subscribeIds = new ConcurrentLinkedQueue<>();
     private final ReloadStateDelegate reloadStateDelegate = new ReloadStateDelegate();
     private final Comparator<ParticleDevice> comparator = helpfulOrderDeviceComparator();
 
@@ -128,19 +137,14 @@ public class DeviceListFragment extends Fragment
         rv.setHasFixedSize(true);  // perf. optimization
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
         rv.setLayoutManager(layoutManager);
-        rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        rv.addItemDecoration(new DividerItemDecoration(requireNonNull(getContext()), LinearLayout.VERTICAL));
 
         partialContentBar = (ProgressBar) inflater.inflate(R.layout.device_list_footer, (ViewGroup) top, false);
         partialContentBar.setVisibility(View.INVISIBLE);
-        partialContentBar.setLayoutParams(
-                new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        partialContentBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-        adapter = new DeviceListAdapter(getActivity());
-        // Add them as headers / footers
-        bookends = new Bookends<>(adapter);
-        bookends.addFooter(partialContentBar);
-
-        rv.setAdapter(bookends);
+        adapter = new DeviceListAdapter(requireNonNull(getActivity()));
+        rv.setAdapter(adapter);
         ItemClickSupport.addTo(rv).setOnItemClickListener((recyclerView, position, v) -> onDeviceRowClicked(position));
         return top;
     }
@@ -167,6 +171,16 @@ public class DeviceListFragment extends Fragment
 
         getLoaderManager().initLoader(R.id.device_list_devices_loader_id, null, this);
         refreshLayout.setRefreshing(true);
+
+        if (savedInstanceState != null) {
+            adapter.filter(savedInstanceState.getString("txtFilterState"));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("txtFilterState", adapter.getTextFilter());
     }
 
     @Override
@@ -213,8 +227,9 @@ public class DeviceListFragment extends Fragment
         deviceSetupCompleteReceiver.unregister(getActivity());
     }
 
+    @NonNull
     @Override
-    public Loader<DevicesLoadResult> onCreateLoader(int i, Bundle bundle) {
+    public Loader<DevicesLoadResult> onCreateLoader(int i, @Nullable Bundle bundle) {
         return new DevicesLoader(getActivity());
     }
 
@@ -229,7 +244,9 @@ public class DeviceListFragment extends Fragment
 
         adapter.clear();
         adapter.addAll(devices);
-        bookends.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+
+        emptyMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
         //subscribe to system updates
         subscribeToSystemEvents(devices, false);
     }
@@ -273,7 +290,7 @@ public class DeviceListFragment extends Fragment
 
     private void onDeviceRowClicked(int position) {
         log.i("Clicked on item at position: #" + position);
-        if (position >= bookends.getItemCount() || position == -1) {
+        if (position >= adapter.getItemCount() || position == -1) {
             // we're at the header or footer view, do nothing.
             return;
         }
@@ -287,7 +304,10 @@ public class DeviceListFragment extends Fragment
                     "Device is being flashed, please wait for the flashing process to end first");
         } else if (!device.isConnected() || !device.isRunningTinker()) {
             Activity activity = getActivity();
-            activity.startActivity(InspectorActivity.buildIntent(activity, device));
+
+            if (activity != null) {
+                activity.startActivity(InspectorActivity.buildIntent(activity, device));
+            }
         } else {
             callbacks.onDeviceSelected(device);
         }
@@ -303,19 +323,23 @@ public class DeviceListFragment extends Fragment
     }
 
     private void addPhotonDevice() {
-        ParticleDeviceSetupLibrary.startDeviceSetup(getActivity());
+        ParticleDeviceSetupLibrary.startDeviceSetup(requireNonNull(getActivity()), DeviceListActivity.class);
     }
 
     private void addSparkCoreDevice() {
-        String coreAppPkg = "io.spark.core.android";
-        // Is the spark core app already installed?
-        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(coreAppPkg);
-        if (intent == null) {
-            // Nope.  Send the user to the store.
-            intent = new Intent(Intent.ACTION_VIEW)
-                    .setData(Uri.parse("market://details?id=" + coreAppPkg));
+        try {
+            String coreAppPkg = "io.spark.core.android";
+            // Is the spark core app already installed?
+            Intent intent = requireNonNull(getActivity()).getPackageManager().getLaunchIntentForPackage(coreAppPkg);
+            if (intent == null) {
+                // Nope.  Send the user to the store.
+                intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(Uri.parse("market://details?id=" + coreAppPkg));
+            }
+            startActivity(intent);
+        } catch (ActivityNotFoundException ignored) {
+            Toast.makeText(getActivity(), "Cannot find spark core application.", Toast.LENGTH_SHORT).show();
         }
-        startActivity(intent);
     }
 
     private void addElectronDevice() {
@@ -335,6 +359,19 @@ public class DeviceListFragment extends Fragment
         loader.forceLoad();
     }
 
+    public void filter(ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList) {
+        adapter.filter(typeArrayList);
+        emptyMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+
+    public void filter(String query) {
+        adapter.filter(query);
+        emptyMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+
+    public String getTextFilter() {
+        return adapter != null ? adapter.getTextFilter() : null;
+    }
 
     static class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.ViewHolder> {
 
@@ -354,15 +391,19 @@ public class DeviceListFragment extends Fragment
             }
         }
 
-
         private final List<ParticleDevice> devices = list();
+        private final List<ParticleDevice> filteredData = list();
         private final FragmentActivity activity;
         private Drawable defaultBackground;
+        private String textFilter = "";
+        private List<ParticleDevice.ParticleDeviceType> typeFilters = list(PHOTON, CORE, ELECTRON,
+                RASPBERRY_PI, P1, RED_BEAR_DUO);
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
         }
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // create a new view
@@ -373,7 +414,7 @@ public class DeviceListFragment extends Fragment
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            final ParticleDevice device = devices.get(position);
+            final ParticleDevice device = filteredData.get(position);
 
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.getBackground();
@@ -386,14 +427,34 @@ public class DeviceListFragment extends Fragment
                     holder.productImage.setImageResource(R.drawable.core_vector);
                     break;
 
+                case PHOTON:
+                    holder.modelName.setText(R.string.photon);
+                    holder.productImage.setImageResource(R.drawable.photon_vector_small);
+                    break;
+
                 case ELECTRON:
                     holder.modelName.setText(R.string.electron);
                     holder.productImage.setImageResource(R.drawable.electron_vector_small);
                     break;
 
+                case RASPBERRY_PI:
+                    holder.modelName.setText(R.string.raspberry);
+                    holder.productImage.setImageResource(R.drawable.pi_vector);
+                    break;
+
+                case P1:
+                    holder.modelName.setText(R.string.p1);
+                    holder.productImage.setImageResource(R.drawable.p1_vector);
+                    break;
+
+                case RED_BEAR_DUO:
+                    holder.modelName.setText(R.string.red_bear_duo);
+                    holder.productImage.setImageResource(R.drawable.red_bear_duo_vector);
+                    break;
+
                 default:
-                    holder.modelName.setText(R.string.photon);
-                    holder.productImage.setImageResource(R.drawable.photon_vector_small);
+                    holder.modelName.setText(R.string.unknown);
+                    holder.productImage.setImageResource(R.drawable.unknown_vector);
                     break;
             }
 
@@ -416,17 +477,46 @@ public class DeviceListFragment extends Fragment
 
         @Override
         public int getItemCount() {
-            return devices.size();
+            return filteredData.size();
         }
 
         void clear() {
             devices.clear();
+            filteredData.clear();
             notifyDataSetChanged();
         }
 
         void addAll(List<ParticleDevice> toAdd) {
             devices.addAll(toAdd);
+            filter(textFilter, typeFilters);
+        }
+
+        void filter(@Nullable String query) {
+            textFilter = query;
+            filteredData.clear();
             notifyDataSetChanged();
+
+            filter(query, typeFilters);
+        }
+
+        void filter(List<ParticleDevice.ParticleDeviceType> typeArrayList) {
+            typeFilters = typeArrayList;
+            filteredData.clear();
+            notifyDataSetChanged();
+
+            filter(textFilter, typeArrayList);
+        }
+
+        void filter(@Nullable String query, List<ParticleDevice.ParticleDeviceType> typeArrayList) {
+            for (ParticleDevice device : devices) {
+                if ((containsFilter(device.getName(), query) || containsFilter(device.getDeviceType().name(), query)
+                        || containsFilter(device.getCurrentBuild(), query) || containsFilter(device.getIccid(), query)
+                        || containsFilter(device.getID(), query) || containsFilter(device.getImei(), query))
+                        && typeArrayList.contains(device.getDeviceType())) {
+                    filteredData.add(device);
+                    notifyItemInserted(devices.indexOf(device));
+                }
+            }
         }
 
         ParticleDevice getItem(int position) {
@@ -435,6 +525,10 @@ public class DeviceListFragment extends Fragment
 
         List<ParticleDevice> getItems() {
             return devices;
+        }
+
+        String getTextFilter() {
+            return textFilter;
         }
 
         private Pair<String, Integer> getStatusTextAndColoredDot(ParticleDevice device) {
@@ -462,6 +556,9 @@ public class DeviceListFragment extends Fragment
         }
     }
 
+    private static boolean containsFilter(@Nullable String value, @Nullable String query) {
+        return value != null && value.contains(query != null ? query : "");
+    }
 
     private static Comparator<ParticleDevice> helpfulOrderDeviceComparator() {
         Comparator<ParticleDevice> deviceOnlineStatusComparator = (lhs, rhs) -> BooleanComparator.getTrueFirstComparator()

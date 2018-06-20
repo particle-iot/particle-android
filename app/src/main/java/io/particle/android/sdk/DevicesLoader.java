@@ -14,9 +14,10 @@ import java.util.concurrent.CancellationException;
 import io.particle.android.sdk.cloud.BroadcastContract;
 import io.particle.android.sdk.cloud.ParallelDeviceFetcherAccessHack;
 import io.particle.android.sdk.cloud.ParticleCloud;
-import io.particle.android.sdk.cloud.ParticleCloud.PartialDeviceListResultException;
-import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.PartialDeviceListResultException;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.BetterAsyncTaskLoader;
 
 import static io.particle.android.sdk.utils.Py.truthy;
@@ -51,7 +52,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
 
     public DevicesLoader(Context context) {
         super(context);
-        cloud = ParticleCloud.get(context);
+        cloud = ParticleCloudSDK.getCloud();
         broadcastManager = LocalBroadcastManager.getInstance(context);
         devicesUpdatedReceiver = new DevicesUpdatedReceiver();
     }

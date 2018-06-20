@@ -40,16 +40,17 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.cloud.ParticleEvent;
 import io.particle.android.sdk.cloud.ParticleEventHandler;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static io.particle.android.sdk.utils.Py.list;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Created by Julius.
@@ -79,7 +80,7 @@ public class EventsFragment extends Fragment {
         View top = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, top);
 
-        device = getArguments().getParcelable(ARG_DEVICE);
+        device = requireNonNull(getArguments()).getParcelable(ARG_DEVICE);
         emptyView.setVisibility(View.VISIBLE);
 
         eventsRecyclerView.setHasFixedSize(true);  // perf. optimization
@@ -87,7 +88,7 @@ public class EventsFragment extends Fragment {
         eventsRecyclerView.setLayoutManager(eventsLayoutManager);
         EventListAdapter adapter = new EventListAdapter();
         eventsRecyclerView.setAdapter(adapter);
-        eventsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        eventsRecyclerView.addItemDecoration(new DividerItemDecoration(requireNonNull(getContext()), LinearLayout.VERTICAL));
 
         setupClearListener(top, adapter);
         initEventSubscription(top, adapter);
@@ -110,7 +111,7 @@ public class EventsFragment extends Fragment {
     }
 
     private void setupClearListener(View rootView, EventListAdapter adapter) {
-        rootView.findViewById(R.id.events_clear).setOnClickListener(v -> new AlertDialog.Builder(getActivity())
+        rootView.findViewById(R.id.events_clear).setOnClickListener(v -> new AlertDialog.Builder(requireNonNull(getActivity()))
                 .setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
@@ -167,58 +168,68 @@ public class EventsFragment extends Fragment {
 
     private void startEventSubscription(EventListAdapter adapter) {
         subscribed = true;
-        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
-            @Override
-            public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                try {
-                    subscriptionId = device.subscribeToEvents(null, new ParticleEventHandler() {
-                        @Override
-                        public void onEventError(Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        @Override
-                        public void onEvent(String eventName, ParticleEvent particleEvent) {
-                            adapter.add(new Event(eventName, particleEvent));
-                            if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
-                                eventsRecyclerView.smoothScrollToPosition(0);
+        try {
+            Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
+                @Override
+                public Void callApi(@NonNull ParticleDevice particleDevice) throws IOException {
+                    try {
+                        subscriptionId = device.subscribeToEvents(null, new ParticleEventHandler() {
+                            @Override
+                            public void onEventError(Exception e) {
+                                e.printStackTrace();
                             }
-                            emptyView.post(() -> emptyView.setVisibility(View.GONE));
-                        }
-                    });
-                } catch (NullPointerException ex) {
-                    //set not subscribed
-                    subscribed = false;
-                }
-                return null;
-            }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                exception.printStackTrace();
-            }
-        });
+                            @Override
+                            public void onEvent(String eventName, ParticleEvent particleEvent) {
+                                adapter.add(new Event(eventName, particleEvent));
+                                if (eventsLayoutManager.findFirstVisibleItemPosition() < 1) {
+                                    eventsRecyclerView.smoothScrollToPosition(0);
+                                }
+                                emptyView.post(() -> emptyView.setVisibility(View.GONE));
+                            }
+                        });
+                    } catch (NullPointerException ex) {
+                        //set not subscribed
+                        subscribed = false;
+                    }
+                    return null;
+                }
+
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    exception.printStackTrace();
+                }
+            });
+        } catch (ParticleCloudException e) {
+            //set not subscribed
+            subscribed = false;
+        }
     }
 
     private void stopEventSubscription() {
         subscribed = false;
-        Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
-            @Override
-            public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                try {
-                    device.unsubscribeFromEvents(subscriptionId);
-                } catch (NullPointerException ignore) {
-                    //set to still subscribed
-                    subscribed = true;
+        try {
+            Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
+                @Override
+                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException {
+                    try {
+                        device.unsubscribeFromEvents(subscriptionId);
+                    } catch (NullPointerException ignore) {
+                        //set to still subscribed
+                        subscribed = true;
+                    }
+                    return null;
                 }
-                return null;
-            }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                exception.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    exception.printStackTrace();
+                }
+            });
+        } catch (ParticleCloudException e) {
+            //set to still subscribed
+            subscribed = true;
+        }
     }
 
     private static class Event {
@@ -252,14 +263,15 @@ public class EventsFragment extends Fragment {
         private final List<Event> filteredData = list();
         private String filter = "";
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_events_list, parent, false);
             return new ViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Event event = filteredData.get(position);
             holder.eventName.setText(event.name);
             holder.eventData.setText(event.particleEvent.dataPayload);

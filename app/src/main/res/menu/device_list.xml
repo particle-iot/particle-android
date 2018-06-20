@@ -6,4 +6,17 @@
         android:id="@+id/action_log_out"
         android:title="@string/log_out"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_filter"
+        android:title=""
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always"/>
 </menu>

@@ -8,8 +8,8 @@ import android.support.v7.app.AlertDialog;
 
 import java.io.IOException;
 
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.sdk.app.R;
@@ -26,28 +26,35 @@ class UnclaimHelper {
     }
 
     private static void unclaim(final Activity activity, final ParticleDevice device) {
-        Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Void>() {
+        try {
+            Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Void>() {
 
-            @Override
-            public Void callApi(@NonNull ParticleDevice sparkDevice)
-                    throws ParticleCloudException, IOException {
-                device.unclaim();
-                return null;
-            }
+                @Override
+                public Void callApi(@NonNull ParticleDevice sparkDevice)
+                        throws ParticleCloudException, IOException {
+                    device.unclaim();
+                    return null;
+                }
 
-            @Override
-            public void onSuccess(@NonNull Void aVoid) {
-                // FIXME: what else should happen here?
-                Toaster.s(activity, "Unclaimed " + device.getName());
-            }
+                @Override
+                public void onSuccess(@NonNull Void aVoid) {
+                    // FIXME: what else should happen here?
+                    Toaster.s(activity, "Unclaimed " + device.getName());
+                }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                new AlertDialog.Builder(activity)
-                        .setMessage("Error: unable to unclaim '" + device.getName() + "'")
-                        .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
-                        .show();
-            }
-        }).andIgnoreCallbacksIfActivityIsFinishing(activity);
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    new AlertDialog.Builder(activity)
+                            .setMessage("Error: unable to unclaim '" + device.getName() + "'")
+                            .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+                            .show();
+                }
+            }).andIgnoreCallbacksIfActivityIsFinishing(activity);
+        } catch (ParticleCloudException e) {
+            new AlertDialog.Builder(activity)
+                    .setMessage("Error: unable to unclaim '" + device.getName() + "'")
+                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+                    .show();
+        }
     }
 }

@@ -17,16 +17,16 @@ import android.widget.Toast;
 
 import com.f2prateek.bundler.FragmentBundlerCompat;
 
-import java.io.IOException;
 import java.util.Date;
 
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Created by Julius.
@@ -48,7 +48,7 @@ public class InfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_info, container, false);
-        device = getArguments().getParcelable(ARG_DEVICE);
+        device = requireNonNull(getArguments()).getParcelable(ARG_DEVICE);
         displayDeviceInformation(top);
         return top;
     }
@@ -80,9 +80,25 @@ public class InfoFragment extends Fragment {
                 Ui.findView(rootView, R.id.device_iccid_copy).setVisibility(View.VISIBLE);
                 populateElectronInfoFields(rootView);
                 break;
-            default:
+            case PHOTON:
                 deviceType.setText(R.string.photon);
                 deviceImage.setImageResource(R.drawable.photon_vector_small);
+                break;
+            case RASPBERRY_PI:
+                deviceType.setText(R.string.raspberry);
+                deviceImage.setImageResource(R.drawable.pi_vector);
+                break;
+            case P1:
+                deviceType.setText(R.string.p1);
+                deviceImage.setImageResource(R.drawable.p1_vector);
+                break;
+            case RED_BEAR_DUO:
+                deviceType.setText(R.string.red_bear_duo);
+                deviceImage.setImageResource(R.drawable.red_bear_duo_vector);
+                break;
+            default:
+                deviceType.setText(R.string.unknown);
+                deviceImage.setImageResource(R.drawable.unknown_vector);
                 break;
         }
 
@@ -108,7 +124,7 @@ public class InfoFragment extends Fragment {
 
         Ui.findView(rootView, R.id.device_id_copy).setOnClickListener(v -> {
             Context context = getContext();
-            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+            ClipboardManager clipboard = (ClipboardManager) requireNonNull(context).getSystemService(CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Device ID", id.getText().toString());
             clipboard.setPrimaryClip(clip);
             Toast.makeText(context, R.string.clipboard_copy_id_msg, Toast.LENGTH_SHORT).show();
@@ -126,7 +142,7 @@ public class InfoFragment extends Fragment {
 
         Ui.findView(rootView, R.id.device_iccid_copy).setOnClickListener(v -> {
             Context context = getContext();
-            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+            ClipboardManager clipboard = (ClipboardManager) requireNonNull(context).getSystemService(CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Device ICCID", iccid.getText().toString());
             clipboard.setPrimaryClip(clip);
             Toast.makeText(context, R.string.clipboard_copy_iccid_msg, Toast.LENGTH_SHORT).show();
@@ -136,22 +152,30 @@ public class InfoFragment extends Fragment {
     private void pollDataUsage(View rootView) {
         TextView dataUsage = Ui.findView(rootView, R.id.device_data_usage);
 
-        Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Float>() {
-            @Override
-            public Float callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException, IOException {
-                return particleDevice.getCurrentDataUsage();
-            }
+        try {
+            Async.executeAsync(device, new Async.ApiWork<ParticleDevice, Float>() {
+                @Override
+                public Float callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException {
+                    return particleDevice.getCurrentDataUsage();
+                }
 
-            @Override
-            public void onSuccess(@NonNull Float value) {
-                dataUsage.setText(getString(R.string.value_mbs, value));
-            }
+                @Override
+                public void onSuccess(@NonNull Float value) {
+                    if (!isDetached()) {
+                        dataUsage.setText(getString(R.string.value_mbs, value));
+                    }
+                }
 
-            @Override
-            public void onFailure(@NonNull ParticleCloudException exception) {
-                dataUsage.setText(R.string.default_mbs);
-            }
-        });
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    if (!isDetached()) {
+                        dataUsage.setText(R.string.default_mbs);
+                    }
+                }
+            });
+        } catch (ParticleCloudException e) {
+            dataUsage.setText(R.string.default_mbs);
+        }
     }
 
 }

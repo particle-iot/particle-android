@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/action_event_publish"
+        android:icon="@drawable/ic_publish"
+        android:title="@string/publish_menu_title"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@id/action_device_copy_id_to_clipboard"
         android:title="@string/copy_device_id_to_clipboard"/>
 

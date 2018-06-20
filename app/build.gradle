@@ -16,6 +16,12 @@ apply plugin: 'com.android.application'
 //apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
+ext {
+    supportVersions = '27.1.1'
+    cloudSdkVersion = '0.5.0'
+    setupVersion = '0.5.3'
+}
+
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
@@ -24,8 +30,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 52
-        versionName "2.1.2"
+        versionCode 53
+        versionName "2.2.0"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -66,8 +72,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation 'io.particle:cloudsdk:0.4.8'
-    implementation 'io.particle:devicesetup:0.5.2'
+    implementation "io.particle:cloudsdk:$cloudSdkVersion"
+    implementation "io.particle:devicesetup:$setupVersion"
 
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
@@ -76,9 +82,10 @@ dependencies {
     implementation('com.f2prateek.bundler:bundler:1.1.2') {
         exclude module: 'support-v4'
     }
-    releaseImplementation 'com.google.firebase:firebase-core:16.0.0'
+
+    releaseImplementation 'com.google.firebase:firebase-core:16.0.1'
     releaseImplementation 'com.google.firebase:firebase-perf:16.0.0'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
@@ -94,19 +101,18 @@ dependencies {
     releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
     implementation 'com.afollestad.material-dialogs:core:0.9.4.7'
-    implementation 'com.tumblr:bookends:1.0.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:support-v13:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support:support-fragment:27.1.1'
-    implementation 'com.android.support:support-annotations:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation "com.android.support:appcompat-v7:$supportVersions"
+    implementation "com.android.support:design:$supportVersions"
+    implementation "com.android.support:support-v13:$supportVersions"
+    implementation "com.android.support:recyclerview-v7:$supportVersions"
+    implementation "com.android.support:support-fragment:$supportVersions"
+    implementation "com.android.support:support-annotations:$supportVersions"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:multidex:1.0.3'
 
     // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.

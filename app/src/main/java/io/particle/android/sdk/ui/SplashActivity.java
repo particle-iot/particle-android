@@ -4,12 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.SDKGlobals;
-import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.sdk.app.R;
@@ -33,7 +29,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParticleDeviceSetupLibrary.init(this.getApplicationContext(), DeviceListActivity.class);
 
         if (SPLASH_DISPLAY_TIME < 1) {
             // don't display the splash screen at all, immediately move to the next activity.

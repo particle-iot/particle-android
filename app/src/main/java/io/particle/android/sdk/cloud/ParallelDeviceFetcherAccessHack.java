@@ -5,7 +5,8 @@ import java.util.concurrent.CancellationException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import io.particle.android.sdk.cloud.ParticleCloud.PartialDeviceListResultException;
+import io.particle.android.sdk.cloud.exceptions.PartialDeviceListResultException;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 
 /**
  * A packaging hack to access the (temporarily) intentionally non-public API of

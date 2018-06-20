@@ -4,6 +4,8 @@ import android.support.multidex.MultiDexApplication;
 
 import io.particle.android.sdk.ReleaseBuildAppInitializer;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
+import io.particle.android.sdk.ui.DeviceListActivity;
+import io.particle.sdk.app.BuildConfig;
 
 
 public class TinkerApplication extends MultiDexApplication {
@@ -11,7 +13,6 @@ public class TinkerApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
         // HI THERE: doing a release build?  Read the rest of this comment.  (Otherwise, carry on.)
         //
         // ReleaseBuildAppInitializer is a per-build type file, intended to avoid initializing
@@ -23,6 +24,6 @@ public class TinkerApplication extends MultiDexApplication {
         // inside ReleaseBuildAppInitializer
         ReleaseBuildAppInitializer.onApplicationCreated(this);
 
-        ParticleDeviceSetupLibrary.init(this);
+        ParticleDeviceSetupLibrary.init(this, DeviceListActivity.class);
     }
 }

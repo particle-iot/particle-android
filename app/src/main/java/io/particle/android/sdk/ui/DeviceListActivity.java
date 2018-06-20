@@ -2,13 +2,28 @@ package io.particle.android.sdk.ui;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.SearchView;
 
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
@@ -39,13 +54,45 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet
     private boolean mTwoPane;
+    private boolean isAppBarExpanded = false;
     private SoftAPConfigRemover softAPConfigRemover;
     private DeviceListFragment deviceList;
+
+    @BindView(R.id.photonFilter) protected CheckBox photonFilter;
+    @BindView(R.id.electronFilter) protected CheckBox electronFilter;
+    @BindView(R.id.coreFilter) protected CheckBox coreFilter;
+    @BindView(R.id.raspberryFilter) protected CheckBox raspberryFilter;
+    @BindView(R.id.p1Filter) protected CheckBox p1Filter;
+    @BindView(R.id.redBearFilter) protected CheckBox redBearFilter;
+    @BindView(R.id.appbar) protected AppBarLayout appBarLayout;
+    private SearchView searchView;
+
+    private AppBarLayout.OnOffsetChangedListener offsetChangedListener = (appBarLayout, verticalOffset) -> {
+        isAppBarExpanded = Math.abs(verticalOffset) != appBarLayout.getTotalScrollRange();
+
+        if (!isAppBarExpanded && appBarLayout.isActivated()) {
+            lockAppBarClosed();
+        }
+    };
+
+    @OnCheckedChanged({R.id.photonFilter, R.id.electronFilter, R.id.coreFilter,
+            R.id.raspberryFilter, R.id.p1Filter, R.id.redBearFilter})
+    protected void onDeviceType() {
+        ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList = new ArrayList<>();
+        typeArrayList.add(photonFilter.isChecked() ? ParticleDevice.ParticleDeviceType.PHOTON : null);
+        typeArrayList.add(electronFilter.isChecked() ? ParticleDevice.ParticleDeviceType.ELECTRON : null);
+        typeArrayList.add(coreFilter.isChecked() ? ParticleDevice.ParticleDeviceType.CORE : null);
+        typeArrayList.add(raspberryFilter.isChecked() ? ParticleDevice.ParticleDeviceType.RASPBERRY_PI : null);
+        typeArrayList.add(p1Filter.isChecked() ? ParticleDevice.ParticleDeviceType.P1 : null);
+        typeArrayList.add(redBearFilter.isChecked() ? ParticleDevice.ParticleDeviceType.RED_BEAR_DUO : null);
+        deviceList.filter(typeArrayList);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
+        ButterKnife.bind(this);
 
         softAPConfigRemover = new SoftAPConfigRemover(this, WifiFacade.get(this));
 
@@ -68,13 +115,22 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         // TODO: If exposing deep links into your app, handle intents here.
 
         // Show the Up button in the action bar.
+        setSupportActionBar(Ui.findView(this, R.id.toolbar));
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
-            // FIXME: do this with a theme attr instead.
             Drawable background = ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background);
-            supportActionBar.setBackgroundDrawable(background);
+
+            CollapsingToolbarLayout collapsingToolbar = Ui.findView(this, R.id.collapsing_toolbar);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                collapsingToolbar.setBackground(background);
+            } else {
+                collapsingToolbar.setBackgroundDrawable(background);
+            }
+
+            appBarLayout.addOnOffsetChangedListener(offsetChangedListener);
+            appBarLayout.setExpanded(false);
+            lockAppBarClosed();
         }
-        setTitle(R.string.your_devices);
     }
 
     @Override
@@ -85,28 +141,86 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
     }
 
     @Override
+    protected void onDestroy() {
+        appBarLayout.removeOnOffsetChangedListener(offsetChangedListener);
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
-        if (deviceList == null || !deviceList.onBackPressed()) {
+        if (isAppBarExpanded) {
+            appBarLayout.setExpanded(false);
+        } else if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+        } else if (deviceList == null || !deviceList.onBackPressed()) {
             super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_log_out) {
-            final ParticleCloud cloud = ParticleCloudSDK.getCloud();
-            cloud.logOut();
-            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.device_list, menu);
+        MenuItem logoutItem = menu.findItem(R.id.action_log_out);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        MenuItem filterItem = menu.findItem(R.id.action_filter);
+        View title = Ui.findView(this, android.R.id.title);
+
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setQuery(deviceList.getTextFilter(), false);
+        //on show of search view hide title and logout menu option
+        searchView.setOnSearchClickListener(v -> {
+            title.setVisibility(View.GONE);
+            logoutItem.setVisible(false);
+            filterItem.setVisible(false);
+            searchView.requestFocus();
+        });
+        //on collapse of search bar show title and logout menu option
+        searchView.setOnCloseListener(() -> {
+            title.setVisibility(View.VISIBLE);
+            logoutItem.setVisible(true);
+            filterItem.setVisible(true);
+            return false;
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                deviceList.filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                deviceList.filter(newText);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.device_list, menu);
-        return super.onCreateOptionsMenu(menu);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_log_out:
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.logout_confirm_message)
+                        .setPositiveButton(R.string.log_out, (dialog, which) -> {
+                            final ParticleCloud cloud = ParticleCloudSDK.getCloud();
+                            cloud.logOut();
+                            startActivity(new Intent(DeviceListActivity.this, LoginActivity.class));
+                            finish();
+
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                        .show();
+                break;
+            case R.id.action_filter:
+                unlockAppBarOpen();
+                appBarLayout.setExpanded(!isAppBarExpanded);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //region DeviceListFragment.Callbacks
@@ -132,4 +246,22 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
 //        }
     }
     //endregion
+
+    private void lockAppBarClosed() {
+        appBarLayout.setExpanded(false, false);
+        appBarLayout.setActivated(false);
+        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        TypedValue tv = new TypedValue();
+
+        if (getTheme().resolveAttribute(R.attr.actionBarSize, tv, true)) {
+            lp.height = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+        }
+    }
+
+    private void unlockAppBarOpen() {
+        appBarLayout.setExpanded(true, false);
+        appBarLayout.setActivated(true);
+        appBarLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
 }

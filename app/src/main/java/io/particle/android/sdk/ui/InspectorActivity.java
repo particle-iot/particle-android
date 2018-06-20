@@ -1,12 +1,13 @@
 package io.particle.android.sdk.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
@@ -16,14 +17,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.ParticleEventVisibility;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.models.DeviceStateChange;
+import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.sdk.app.R;
 
@@ -58,9 +63,6 @@ public class InspectorActivity extends BaseActivity {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            // FIXME: do this with a theme attr instead.
-            Drawable background = ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background);
-            supportActionBar.setBackgroundDrawable(background);
         }
         setTitle(getString(R.string.device_inspector));
 
@@ -101,15 +103,19 @@ public class InspectorActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        } else {
-            int actionId = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_event_publish:
+                presentPublishDialog();
+                return true;
+            default:
+                int actionId = item.getItemId();
 
-            return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
-                    DeviceMenuUrlHandler.handleActionItem(this, actionId, item.getTitle()) ||
-                    super.onOptionsItemSelected(item);
+                return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
+                        DeviceMenuUrlHandler.handleActionItem(this, actionId, item.getTitle()) ||
+                        super.onOptionsItemSelected(item);
         }
     }
 
@@ -176,5 +182,51 @@ public class InspectorActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+
+    private void presentPublishDialog() {
+        final View publishDialogView = View.inflate(this, R.layout.publish_event, null);
+
+        new AlertDialog.Builder(this,
+                R.style.ParticleSetupTheme_DialogNoDimBackground)
+                .setView(publishDialogView)
+                .setPositiveButton(R.string.publish_positive_action, (dialog, which) -> {
+                    TextView nameView = Ui.findView(publishDialogView, R.id.eventName);
+                    TextView valueView = Ui.findView(publishDialogView, R.id.eventValue);
+                    RadioButton privateEventRadio = Ui.findView(publishDialogView, R.id.privateEvent);
+
+                    String name = nameView.getText().toString();
+                    String value = valueView.getText().toString();
+                    int eventVisibility = privateEventRadio.isChecked() ?
+                            ParticleEventVisibility.PRIVATE : ParticleEventVisibility.PUBLIC;
+
+                    publishEvent(name, value, eventVisibility);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setCancelable(true)
+                .setOnCancelListener(DialogInterface::dismiss)
+                .show();
+    }
+
+    private void publishEvent(String name, String value, int eventVisibility) {
+        try {
+            Async.executeAsync(device, new Async.ApiProcedure<ParticleDevice>() {
+                @Override
+                public Void callApi(@NonNull ParticleDevice particleDevice) throws ParticleCloudException {
+                    particleDevice.getCloud().publishEvent(name, value, eventVisibility, 600);
+                    return null;
+                }
+
+                @Override
+                public void onFailure(@NonNull ParticleCloudException exception) {
+                    Toast.makeText(InspectorActivity.this, "Failed to publish '" + name +
+                            "' event", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (ParticleCloudException e) {
+            Toast.makeText(this, "Failed to publish '" + name +
+                    "' event", Toast.LENGTH_SHORT).show();
+        }
     }
 }

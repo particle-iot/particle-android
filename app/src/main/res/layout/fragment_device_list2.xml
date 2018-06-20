@@ -18,8 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"/>
-
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/empty_message"
+        fontPath="@string/normal_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="No devices found.\nPress '+' to add your device."
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="@dimen/material_text_size_subhead"
+        android:visibility="gone"/>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/add_device_fab"

@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import io.particle.android.sdk.cloud.ParticleDevice;
 
 class InspectorPager extends FragmentStatePagerAdapter {
-    private InfoFragment infoFragment;
-    private DataFragment dataFragment;
-    private EventsFragment eventsFragment;
+    private final InfoFragment infoFragment;
+    private final DataFragment dataFragment;
+    private final EventsFragment eventsFragment;
 
     InspectorPager(FragmentManager fm, ParticleDevice device) {
         super(fm);

@@ -2,9 +2,7 @@ package io.particle.android.sdk.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.animation.Animation;
@@ -44,9 +42,6 @@ public class TinkerActivity extends BaseActivity {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            // FIXME: do this with a theme attr instead.
-            Drawable background = ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background);
-            supportActionBar.setBackgroundDrawable(background);
         }
         setTitle(getString(R.string.tinker));
 

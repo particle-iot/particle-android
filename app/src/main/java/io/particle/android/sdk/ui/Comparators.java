@@ -34,7 +34,7 @@ class Comparators {
         /**
          * <code>true</code> iff <code>true</code> values sort before <code>false</code> values.
          */
-        private boolean trueFirst = false;
+        private boolean trueFirst;
 
         static BooleanComparator getTrueFirstComparator() {
             return TRUE_FIRST;
@@ -157,7 +157,7 @@ class Comparators {
         /**
          * Order - false (clear) = ascend; true (set) = descend.
          */
-        private BitSet orderingBits = null;
+        private BitSet orderingBits;
         /**
          * Whether the chain has been "locked".
          */

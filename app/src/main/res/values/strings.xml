@@ -21,6 +21,7 @@ Enjoy!]]></string>
     <string name="unclaim">Unclaim</string>
     <string name="unclaim_device_dialog_content">Unclaim device?</string>
     <string name="rename_menu_title">Rename…</string>
+    <string name="publish_menu_title">Publish event</string>
     <string name="flash">Flash</string>
     <string name="copy_device_id_to_clipboard">Copy device ID to clipboard</string>
     <string name="docs_link_menu_particle_app_tinker">Particle app/Tinker</string>
@@ -66,6 +67,11 @@ Enjoy!]]></string>
     <string name="core">Core</string>
     <string name="electron">Electron</string>
     <string name="photon">Photon</string>
+    <string name="unknown">Unknown</string>
+    <string name="raspberry">Raspberry Pi</string>
+    <string name="red_bear_duo">Red Bear Duo</string>
+    <string name="p1">P1</string>
+    <string name="filters">Filters:</string>
     <string name="event">Event</string>
     <string name="data">Data</string>
     <string name="time">Time</string>
@@ -78,6 +84,7 @@ Enjoy!]]></string>
     <string name="data_usage">Data usage</string>
     <string name="no_events">(No events)</string>
     <string name="log_out">Log out</string>
+    <string name="search">Search</string>
     <string name="tinker">Tinker</string>
     <string name="device_inspector">Device Inspector</string>
     <string name="close">Close</string>
@@ -86,5 +93,8 @@ Enjoy!]]></string>
     <string name="no_exposed_function_msg">(No exposed functions)</string>
     <string name="default_mbs">- MBs</string>
     <string name="value_mbs">%1$f MBs</string>
+    <string name="publish_positive_action">Publish event</string>
+    <string name="cancel">Cancel</string>
+    <string name="logout_confirm_message">Are you sure you want to log out?</string>
 
 </resources>
