@@ -19,4 +19,5 @@
         android:title="@string/search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always"/>
+
 </menu>

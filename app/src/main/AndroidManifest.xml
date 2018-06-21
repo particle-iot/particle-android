@@ -103,9 +103,16 @@
             </intent-filter>
             -->
         </activity>
+
         <activity
             android:name="io.particle.android.sdk.utils.ui.WebViewActivity"
             android:label="@string/title_activity_web_view"
+            android:screenOrientation="portrait"
+            android:theme="@style/ParticleSetupTheme.NoActionBar" />
+
+        <activity
+            android:name="io.particle.particlemesh.ui.MainActivity"
+            android:label="Mesh Setup"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar" />
 

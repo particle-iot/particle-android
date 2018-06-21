@@ -16,17 +16,16 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.core.widget.toast
 import com.google.protobuf.GeneratedMessageV3
+import io.particle.firmwareprotos.ctrl.Common
+import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.common.android.livedata.distinct
 import io.particle.particlemesh.common.toHex
 import io.particle.particlemesh.common.truthy
-import io.particle.firmwareprotos.ctrl.Common
-import io.particle.firmwareprotos.ctrl.mesh.Mesh
-import io.particle.particlemesh.R
-import io.particle.particlemesh.jpake.JPAKEExample
 import io.particle.particlemesh.meshsetup.*
+import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_first_demo.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
@@ -84,11 +83,11 @@ class FirstDemoFragment : Fragment() {
 //            demo.runDemo()
 //        }
         launch {
-            val kotlinExample = JPAKEExample()
+//            val kotlinExample = JPAKEExample()
 //            val origExample = JPAKEExampleOrig()
 
             try {
-                kotlinExample.gogogo()
+//                kotlinExample.gogogo()
                 log.info { "Kotlin example completed successfully!" }
 //                origExample.gogogo()
 //                log.info { "Kotlin example completed successfully!" }

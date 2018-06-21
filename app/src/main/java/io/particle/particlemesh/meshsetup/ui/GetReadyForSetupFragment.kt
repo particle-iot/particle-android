@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.VideoView
 import androidx.navigation.Navigation
 import io.particle.common.buildRawResourceUri
-import io.particle.particlemesh.R
+import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.view.*
 
 

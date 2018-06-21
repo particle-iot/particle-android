@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import io.particle.particlemesh.R
+import io.particle.sdk.app.R
 
 
 class TypeCodeManuallyFragment : Fragment() {
