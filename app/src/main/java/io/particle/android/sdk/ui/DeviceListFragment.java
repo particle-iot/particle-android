@@ -63,6 +63,7 @@ import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
+import io.particle.particlemesh.ui.MainActivity;
 import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE;
@@ -103,6 +104,12 @@ public class DeviceListFragment extends Fragment
 
     private Callbacks callbacks = dummyCallbacks;
     private DeviceSetupCompleteReceiver deviceSetupCompleteReceiver;
+
+    @OnClick(R.id.action_set_up_a_xenon)
+    public void addXenon() {
+        addXenonDevice();
+        fabMenu.collapse();
+    }
 
     @OnClick(R.id.action_set_up_a_photon)
     public void addPhoton() {
@@ -320,6 +327,10 @@ public class DeviceListFragment extends Fragment
         } else {
             return false;
         }
+    }
+
+    private void addXenonDevice() {
+        startActivity(new Intent(getActivity(), MainActivity.class));
     }
 
     private void addPhotonDevice() {
