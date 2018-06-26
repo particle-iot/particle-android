@@ -17,6 +17,11 @@ public class ReleaseBuildAppInitializer {
 //                .use(IntercomIntegration.FACTORY)
 //                .build()
 //        );
+
+        if (!GDPRKt.isUserCoveredByGDPR()) {
+            // "MVP" level GDPR support: only enable crash reporting if the user is NOT in the EU.
+            FirebaseCrash.setCrashCollectionEnabled(true);
+        }
     }
 
 }
