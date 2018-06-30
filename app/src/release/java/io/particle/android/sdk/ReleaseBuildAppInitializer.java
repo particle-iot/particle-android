@@ -6,6 +6,9 @@ import com.segment.analytics.Analytics;
 import com.segment.analytics.android.integrations.firebase.FirebaseIntegration;
 import com.segment.analytics.android.integrations.intercom.IntercomIntegration;
 
+import io.particle.android.sdk.utils.GDPRKt;
+
+import com.google.firebase.crash.FirebaseCrash;
 
 public class ReleaseBuildAppInitializer {
 
