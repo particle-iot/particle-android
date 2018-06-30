@@ -89,6 +89,7 @@ dependencies {
 
     releaseImplementation 'com.google.firebase:firebase-core:16.0.1'
     releaseImplementation 'com.google.firebase:firebase-perf:16.0.0'
+    releaseImplementation 'com.google.firebase:firebase-crash:16.0.1'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
     // Segment
