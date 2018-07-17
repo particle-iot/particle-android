@@ -33,7 +33,7 @@ android {
 
     defaultConfig {
         applicationId 'io.particle.android.app'
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 53
         versionName "2.2.0"
