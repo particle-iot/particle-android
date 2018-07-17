@@ -41,43 +41,34 @@ public final class Mesh {
      * Extended PAN ID
      * </pre>
      *
-     * <code>string ext_pan = 2;</code>
+     * <code>string ext_pan_id = 2;</code>
      */
-    java.lang.String getExtPan();
+    java.lang.String getExtPanId();
     /**
      * <pre>
      * Extended PAN ID
      * </pre>
      *
-     * <code>string ext_pan = 2;</code>
+     * <code>string ext_pan_id = 2;</code>
      */
     com.google.protobuf.ByteString
-        getExtPanBytes();
+        getExtPanIdBytes();
 
     /**
      * <pre>
      * PAN ID
      * </pre>
      *
-     * <code>string pan = 3;</code>
+     * <code>uint32 pan_id = 3;</code>
      */
-    java.lang.String getPan();
-    /**
-     * <pre>
-     * PAN ID
-     * </pre>
-     *
-     * <code>string pan = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getPanBytes();
+    int getPanId();
 
     /**
      * <pre>
-     * Channel
+     * Channel number
      * </pre>
      *
-     * <code>int32 channel = 4;</code>
+     * <code>uint32 channel = 4;</code>
      */
     int getChannel();
   }
@@ -92,28 +83,34 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.NetworkInfo)
       NetworkInfoOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use NetworkInfo.newBuilder() to construct.
     private NetworkInfo(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private NetworkInfo() {
       name_ = "";
-      extPan_ = "";
-      pan_ = "";
+      extPanId_ = "";
+      panId_ = 0;
       channel_ = 0;
     }
 
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private NetworkInfo(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -123,7 +120,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -137,18 +135,17 @@ public final class Mesh {
             case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              extPan_ = s;
+              extPanId_ = s;
               break;
             }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 24: {
 
-              pan_ = s;
+              panId_ = input.readUInt32();
               break;
             }
             case 32: {
 
-              channel_ = input.readInt32();
+              channel_ = input.readUInt32();
               break;
             }
           }
@@ -159,6 +156,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -216,24 +214,24 @@ public final class Mesh {
       }
     }
 
-    public static final int EXT_PAN_FIELD_NUMBER = 2;
-    private volatile java.lang.Object extPan_;
+    public static final int EXT_PAN_ID_FIELD_NUMBER = 2;
+    private volatile java.lang.Object extPanId_;
     /**
      * <pre>
      * Extended PAN ID
      * </pre>
      *
-     * <code>string ext_pan = 2;</code>
+     * <code>string ext_pan_id = 2;</code>
      */
-    public java.lang.String getExtPan() {
-      java.lang.Object ref = extPan_;
+    public java.lang.String getExtPanId() {
+      java.lang.Object ref = extPanId_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        extPan_ = s;
+        extPanId_ = s;
         return s;
       }
     }
@@ -242,72 +240,43 @@ public final class Mesh {
      * Extended PAN ID
      * </pre>
      *
-     * <code>string ext_pan = 2;</code>
+     * <code>string ext_pan_id = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getExtPanBytes() {
-      java.lang.Object ref = extPan_;
+        getExtPanIdBytes() {
+      java.lang.Object ref = extPanId_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        extPan_ = b;
+        extPanId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int PAN_FIELD_NUMBER = 3;
-    private volatile java.lang.Object pan_;
+    public static final int PAN_ID_FIELD_NUMBER = 3;
+    private int panId_;
     /**
      * <pre>
      * PAN ID
      * </pre>
      *
-     * <code>string pan = 3;</code>
+     * <code>uint32 pan_id = 3;</code>
      */
-    public java.lang.String getPan() {
-      java.lang.Object ref = pan_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        pan_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * PAN ID
-     * </pre>
-     *
-     * <code>string pan = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getPanBytes() {
-      java.lang.Object ref = pan_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        pan_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getPanId() {
+      return panId_;
     }
 
     public static final int CHANNEL_FIELD_NUMBER = 4;
     private int channel_;
     /**
      * <pre>
-     * Channel
+     * Channel number
      * </pre>
      *
-     * <code>int32 channel = 4;</code>
+     * <code>uint32 channel = 4;</code>
      */
     public int getChannel() {
       return channel_;
@@ -328,15 +297,16 @@ public final class Mesh {
       if (!getNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
-      if (!getExtPanBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, extPan_);
+      if (!getExtPanIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, extPanId_);
       }
-      if (!getPanBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, pan_);
+      if (panId_ != 0) {
+        output.writeUInt32(3, panId_);
       }
       if (channel_ != 0) {
-        output.writeInt32(4, channel_);
+        output.writeUInt32(4, channel_);
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -347,21 +317,22 @@ public final class Mesh {
       if (!getNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
-      if (!getExtPanBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, extPan_);
+      if (!getExtPanIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, extPanId_);
       }
-      if (!getPanBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, pan_);
+      if (panId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(3, panId_);
       }
       if (channel_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, channel_);
+          .computeUInt32Size(4, channel_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -375,12 +346,13 @@ public final class Mesh {
       boolean result = true;
       result = result && getName()
           .equals(other.getName());
-      result = result && getExtPan()
-          .equals(other.getExtPan());
-      result = result && getPan()
-          .equals(other.getPan());
+      result = result && getExtPanId()
+          .equals(other.getExtPanId());
+      result = result && (getPanId()
+          == other.getPanId());
       result = result && (getChannel()
           == other.getChannel());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -393,10 +365,10 @@ public final class Mesh {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
-      hash = (37 * hash) + EXT_PAN_FIELD_NUMBER;
-      hash = (53 * hash) + getExtPan().hashCode();
-      hash = (37 * hash) + PAN_FIELD_NUMBER;
-      hash = (53 * hash) + getPan().hashCode();
+      hash = (37 * hash) + EXT_PAN_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getExtPanId().hashCode();
+      hash = (37 * hash) + PAN_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getPanId();
       hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
       hash = (53 * hash) + getChannel();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -534,9 +506,9 @@ public final class Mesh {
         super.clear();
         name_ = "";
 
-        extPan_ = "";
+        extPanId_ = "";
 
-        pan_ = "";
+        panId_ = 0;
 
         channel_ = 0;
 
@@ -563,8 +535,8 @@ public final class Mesh {
       public io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo buildPartial() {
         io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo result = new io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo(this);
         result.name_ = name_;
-        result.extPan_ = extPan_;
-        result.pan_ = pan_;
+        result.extPanId_ = extPanId_;
+        result.panId_ = panId_;
         result.channel_ = channel_;
         onBuilt();
         return result;
@@ -575,7 +547,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -588,12 +560,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -611,17 +583,17 @@ public final class Mesh {
           name_ = other.name_;
           onChanged();
         }
-        if (!other.getExtPan().isEmpty()) {
-          extPan_ = other.extPan_;
+        if (!other.getExtPanId().isEmpty()) {
+          extPanId_ = other.extPanId_;
           onChanged();
         }
-        if (!other.getPan().isEmpty()) {
-          pan_ = other.pan_;
-          onChanged();
+        if (other.getPanId() != 0) {
+          setPanId(other.getPanId());
         }
         if (other.getChannel() != 0) {
           setChannel(other.getChannel());
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -737,21 +709,21 @@ public final class Mesh {
         return this;
       }
 
-      private java.lang.Object extPan_ = "";
+      private java.lang.Object extPanId_ = "";
       /**
        * <pre>
        * Extended PAN ID
        * </pre>
        *
-       * <code>string ext_pan = 2;</code>
+       * <code>string ext_pan_id = 2;</code>
        */
-      public java.lang.String getExtPan() {
-        java.lang.Object ref = extPan_;
+      public java.lang.String getExtPanId() {
+        java.lang.Object ref = extPanId_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          extPan_ = s;
+          extPanId_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -762,16 +734,16 @@ public final class Mesh {
        * Extended PAN ID
        * </pre>
        *
-       * <code>string ext_pan = 2;</code>
+       * <code>string ext_pan_id = 2;</code>
        */
       public com.google.protobuf.ByteString
-          getExtPanBytes() {
-        java.lang.Object ref = extPan_;
+          getExtPanIdBytes() {
+        java.lang.Object ref = extPanId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          extPan_ = b;
+          extPanId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -782,15 +754,15 @@ public final class Mesh {
        * Extended PAN ID
        * </pre>
        *
-       * <code>string ext_pan = 2;</code>
+       * <code>string ext_pan_id = 2;</code>
        */
-      public Builder setExtPan(
+      public Builder setExtPanId(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        extPan_ = value;
+        extPanId_ = value;
         onChanged();
         return this;
       }
@@ -799,11 +771,11 @@ public final class Mesh {
        * Extended PAN ID
        * </pre>
        *
-       * <code>string ext_pan = 2;</code>
+       * <code>string ext_pan_id = 2;</code>
        */
-      public Builder clearExtPan() {
+      public Builder clearExtPanId() {
         
-        extPan_ = getDefaultInstance().getExtPan();
+        extPanId_ = getDefaultInstance().getExtPanId();
         onChanged();
         return this;
       }
@@ -812,74 +784,41 @@ public final class Mesh {
        * Extended PAN ID
        * </pre>
        *
-       * <code>string ext_pan = 2;</code>
+       * <code>string ext_pan_id = 2;</code>
        */
-      public Builder setExtPanBytes(
+      public Builder setExtPanIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        extPan_ = value;
+        extPanId_ = value;
         onChanged();
         return this;
       }
 
-      private java.lang.Object pan_ = "";
+      private int panId_ ;
       /**
        * <pre>
        * PAN ID
        * </pre>
        *
-       * <code>string pan = 3;</code>
+       * <code>uint32 pan_id = 3;</code>
        */
-      public java.lang.String getPan() {
-        java.lang.Object ref = pan_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          pan_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public int getPanId() {
+        return panId_;
       }
       /**
        * <pre>
        * PAN ID
        * </pre>
        *
-       * <code>string pan = 3;</code>
+       * <code>uint32 pan_id = 3;</code>
        */
-      public com.google.protobuf.ByteString
-          getPanBytes() {
-        java.lang.Object ref = pan_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          pan_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * PAN ID
-       * </pre>
-       *
-       * <code>string pan = 3;</code>
-       */
-      public Builder setPan(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        pan_ = value;
+      public Builder setPanId(int value) {
+        
+        panId_ = value;
         onChanged();
         return this;
       }
@@ -888,29 +827,11 @@ public final class Mesh {
        * PAN ID
        * </pre>
        *
-       * <code>string pan = 3;</code>
+       * <code>uint32 pan_id = 3;</code>
        */
-      public Builder clearPan() {
+      public Builder clearPanId() {
         
-        pan_ = getDefaultInstance().getPan();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * PAN ID
-       * </pre>
-       *
-       * <code>string pan = 3;</code>
-       */
-      public Builder setPanBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        pan_ = value;
+        panId_ = 0;
         onChanged();
         return this;
       }
@@ -918,20 +839,20 @@ public final class Mesh {
       private int channel_ ;
       /**
        * <pre>
-       * Channel
+       * Channel number
        * </pre>
        *
-       * <code>int32 channel = 4;</code>
+       * <code>uint32 channel = 4;</code>
        */
       public int getChannel() {
         return channel_;
       }
       /**
        * <pre>
-       * Channel
+       * Channel number
        * </pre>
        *
-       * <code>int32 channel = 4;</code>
+       * <code>uint32 channel = 4;</code>
        */
       public Builder setChannel(int value) {
         
@@ -941,10 +862,10 @@ public final class Mesh {
       }
       /**
        * <pre>
-       * Channel
+       * Channel number
        * </pre>
        *
-       * <code>int32 channel = 4;</code>
+       * <code>uint32 channel = 4;</code>
        */
       public Builder clearChannel() {
         
@@ -954,12 +875,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -982,7 +903,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new NetworkInfo(input, extensionRegistry);
+        return new NetworkInfo(input, extensionRegistry);
       }
     };
 
@@ -1034,6 +955,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.AuthRequest)
       AuthRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use AuthRequest.newBuilder() to construct.
     private AuthRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -1045,14 +967,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private AuthRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -1062,7 +989,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -1081,6 +1009,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -1153,6 +1082,7 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, password_);
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -1163,11 +1093,11 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, password_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1181,6 +1111,7 @@ public final class Mesh {
       boolean result = true;
       result = result && getPassword()
           .equals(other.getPassword());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -1360,7 +1291,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -1373,12 +1304,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1396,6 +1327,7 @@ public final class Mesh {
           password_ = other.password_;
           onChanged();
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -1512,12 +1444,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -1540,7 +1472,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new AuthRequest(input, extensionRegistry);
+        return new AuthRequest(input, extensionRegistry);
       }
     };
 
@@ -1576,6 +1508,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.AuthReply)
       AuthReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use AuthReply.newBuilder() to construct.
     private AuthReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -1586,13 +1519,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private AuthReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -1602,7 +1540,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -1615,6 +1554,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -1642,6 +1582,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -1649,11 +1590,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1665,6 +1606,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.AuthReply other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.AuthReply) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -1841,7 +1783,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -1854,12 +1796,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1873,6 +1815,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.AuthReply other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.AuthReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -1900,12 +1843,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -1928,7 +1871,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new AuthReply(input, extensionRegistry);
+        return new AuthReply(input, extensionRegistry);
       }
     };
 
@@ -1986,6 +1929,15 @@ public final class Mesh {
      */
     com.google.protobuf.ByteString
         getPasswordBytes();
+
+    /**
+     * <pre>
+     * Channel number
+     * </pre>
+     *
+     * <code>uint32 channel = 3;</code>
+     */
+    int getChannel();
   }
   /**
    * <pre>
@@ -1998,6 +1950,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.CreateNetworkRequest)
       CreateNetworkRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use CreateNetworkRequest.newBuilder() to construct.
     private CreateNetworkRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -2005,19 +1958,25 @@ public final class Mesh {
     private CreateNetworkRequest() {
       name_ = "";
       password_ = "";
+      channel_ = 0;
     }
 
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private CreateNetworkRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -2027,7 +1986,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -2044,6 +2004,11 @@ public final class Mesh {
               password_ = s;
               break;
             }
+            case 24: {
+
+              channel_ = input.readUInt32();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -2052,6 +2017,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -2151,6 +2117,19 @@ public final class Mesh {
       }
     }
 
+    public static final int CHANNEL_FIELD_NUMBER = 3;
+    private int channel_;
+    /**
+     * <pre>
+     * Channel number
+     * </pre>
+     *
+     * <code>uint32 channel = 3;</code>
+     */
+    public int getChannel() {
+      return channel_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -2169,6 +2148,10 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, password_);
       }
+      if (channel_ != 0) {
+        output.writeUInt32(3, channel_);
+      }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -2182,11 +2165,15 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, password_);
       }
+      if (channel_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(3, channel_);
+      }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -2202,6 +2189,9 @@ public final class Mesh {
           .equals(other.getName());
       result = result && getPassword()
           .equals(other.getPassword());
+      result = result && (getChannel()
+          == other.getChannel());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -2216,6 +2206,8 @@ public final class Mesh {
       hash = (53 * hash) + getName().hashCode();
       hash = (37 * hash) + PASSWORD_FIELD_NUMBER;
       hash = (53 * hash) + getPassword().hashCode();
+      hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
+      hash = (53 * hash) + getChannel();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2353,6 +2345,8 @@ public final class Mesh {
 
         password_ = "";
 
+        channel_ = 0;
+
         return this;
       }
 
@@ -2377,6 +2371,7 @@ public final class Mesh {
         io.particle.firmwareprotos.ctrl.mesh.Mesh.CreateNetworkRequest result = new io.particle.firmwareprotos.ctrl.mesh.Mesh.CreateNetworkRequest(this);
         result.name_ = name_;
         result.password_ = password_;
+        result.channel_ = channel_;
         onBuilt();
         return result;
       }
@@ -2386,7 +2381,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -2399,12 +2394,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2426,6 +2421,10 @@ public final class Mesh {
           password_ = other.password_;
           onChanged();
         }
+        if (other.getChannel() != 0) {
+          setChannel(other.getChannel());
+        }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -2629,14 +2628,52 @@ public final class Mesh {
         onChanged();
         return this;
       }
+
+      private int channel_ ;
+      /**
+       * <pre>
+       * Channel number
+       * </pre>
+       *
+       * <code>uint32 channel = 3;</code>
+       */
+      public int getChannel() {
+        return channel_;
+      }
+      /**
+       * <pre>
+       * Channel number
+       * </pre>
+       *
+       * <code>uint32 channel = 3;</code>
+       */
+      public Builder setChannel(int value) {
+        
+        channel_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Channel number
+       * </pre>
+       *
+       * <code>uint32 channel = 3;</code>
+       */
+      public Builder clearChannel() {
+        
+        channel_ = 0;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -2659,7 +2696,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new CreateNetworkRequest(input, extensionRegistry);
+        return new CreateNetworkRequest(input, extensionRegistry);
       }
     };
 
@@ -2720,6 +2757,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.CreateNetworkReply)
       CreateNetworkReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use CreateNetworkReply.newBuilder() to construct.
     private CreateNetworkReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -2730,14 +2768,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private CreateNetworkReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -2747,7 +2790,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -2773,6 +2817,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -2836,6 +2881,7 @@ public final class Mesh {
       if (network_ != null) {
         output.writeMessage(1, getNetwork());
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -2847,11 +2893,11 @@ public final class Mesh {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getNetwork());
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -2868,6 +2914,7 @@ public final class Mesh {
         result = result && getNetwork()
             .equals(other.getNetwork());
       }
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -3059,7 +3106,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -3072,12 +3119,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -3094,6 +3141,7 @@ public final class Mesh {
         if (other.hasNetwork()) {
           mergeNetwork(other.getNetwork());
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -3274,12 +3322,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -3302,7 +3350,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new CreateNetworkReply(input, extensionRegistry);
+        return new CreateNetworkReply(input, extensionRegistry);
       }
     };
 
@@ -3336,6 +3384,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.StartCommissionerRequest)
       StartCommissionerRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use StartCommissionerRequest.newBuilder() to construct.
     private StartCommissionerRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -3346,13 +3395,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private StartCommissionerRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -3362,7 +3416,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -3375,6 +3430,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -3402,6 +3458,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -3409,11 +3466,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -3425,6 +3482,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -3599,7 +3657,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -3612,12 +3670,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -3631,6 +3689,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -3658,12 +3717,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -3686,7 +3745,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new StartCommissionerRequest(input, extensionRegistry);
+        return new StartCommissionerRequest(input, extensionRegistry);
       }
     };
 
@@ -3721,6 +3780,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.StartCommissionerReply)
       StartCommissionerReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use StartCommissionerReply.newBuilder() to construct.
     private StartCommissionerReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -3731,13 +3791,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private StartCommissionerReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -3747,7 +3812,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -3760,6 +3826,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -3787,6 +3854,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -3794,11 +3862,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -3810,6 +3878,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerReply other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerReply) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -3985,7 +4054,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -3998,12 +4067,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -4017,6 +4086,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerReply other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -4044,12 +4114,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -4072,7 +4142,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new StartCommissionerReply(input, extensionRegistry);
+        return new StartCommissionerReply(input, extensionRegistry);
       }
     };
 
@@ -4106,6 +4176,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.StopCommissionerRequest)
       StopCommissionerRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use StopCommissionerRequest.newBuilder() to construct.
     private StopCommissionerRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -4116,13 +4187,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private StopCommissionerRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -4132,7 +4208,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -4145,6 +4222,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -4172,6 +4250,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -4179,11 +4258,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -4195,6 +4274,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -4369,7 +4449,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -4382,12 +4462,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -4401,6 +4481,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -4428,12 +4509,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -4456,7 +4537,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new StopCommissionerRequest(input, extensionRegistry);
+        return new StopCommissionerRequest(input, extensionRegistry);
       }
     };
 
@@ -4491,6 +4572,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.StopCommissionerReply)
       StopCommissionerReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use StopCommissionerReply.newBuilder() to construct.
     private StopCommissionerReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -4501,13 +4583,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private StopCommissionerReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -4517,7 +4604,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -4530,6 +4618,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -4557,6 +4646,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -4564,11 +4654,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -4580,6 +4670,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerReply other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerReply) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -4755,7 +4846,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -4768,12 +4859,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -4787,6 +4878,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerReply other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -4814,12 +4906,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -4842,7 +4934,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new StopCommissionerReply(input, extensionRegistry);
+        return new StopCommissionerReply(input, extensionRegistry);
       }
     };
 
@@ -4889,6 +4981,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.PrepareJoinerRequest)
       PrepareJoinerRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use PrepareJoinerRequest.newBuilder() to construct.
     private PrepareJoinerRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -4899,14 +4992,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private PrepareJoinerRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -4916,7 +5014,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -4942,6 +5041,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -4993,6 +5093,7 @@ public final class Mesh {
       if (network_ != null) {
         output.writeMessage(1, getNetwork());
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -5004,11 +5105,11 @@ public final class Mesh {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getNetwork());
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -5025,6 +5126,7 @@ public final class Mesh {
         result = result && getNetwork()
             .equals(other.getNetwork());
       }
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -5214,7 +5316,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -5227,12 +5329,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -5249,6 +5351,7 @@ public final class Mesh {
         if (other.hasNetwork()) {
           mergeNetwork(other.getNetwork());
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -5393,12 +5496,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -5421,7 +5524,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PrepareJoinerRequest(input, extensionRegistry);
+        return new PrepareJoinerRequest(input, extensionRegistry);
       }
     };
 
@@ -5493,6 +5596,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.PrepareJoinerReply)
       PrepareJoinerReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use PrepareJoinerReply.newBuilder() to construct.
     private PrepareJoinerReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -5505,14 +5609,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private PrepareJoinerReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -5522,7 +5631,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -5547,6 +5657,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -5664,6 +5775,7 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, password_);
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -5677,11 +5789,11 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, password_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -5697,6 +5809,7 @@ public final class Mesh {
           .equals(other.getEui64());
       result = result && getPassword()
           .equals(other.getPassword());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -5883,7 +5996,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -5896,12 +6009,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -5923,6 +6036,7 @@ public final class Mesh {
           password_ = other.password_;
           onChanged();
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -6128,12 +6242,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -6156,7 +6270,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PrepareJoinerReply(input, extensionRegistry);
+        return new PrepareJoinerReply(input, extensionRegistry);
       }
     };
 
@@ -6226,6 +6340,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.AddJoinerRequest)
       AddJoinerRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use AddJoinerRequest.newBuilder() to construct.
     private AddJoinerRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -6238,14 +6353,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private AddJoinerRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -6255,7 +6375,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -6280,6 +6401,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -6397,6 +6519,7 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, password_);
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -6410,11 +6533,11 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, password_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -6430,6 +6553,7 @@ public final class Mesh {
           .equals(other.getEui64());
       result = result && getPassword()
           .equals(other.getPassword());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -6614,7 +6738,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -6627,12 +6751,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -6654,6 +6778,7 @@ public final class Mesh {
           password_ = other.password_;
           onChanged();
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -6859,12 +6984,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -6887,7 +7012,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new AddJoinerRequest(input, extensionRegistry);
+        return new AddJoinerRequest(input, extensionRegistry);
       }
     };
 
@@ -6924,6 +7049,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.AddJoinerReply)
       AddJoinerReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use AddJoinerReply.newBuilder() to construct.
     private AddJoinerReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -6934,13 +7060,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private AddJoinerReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -6950,7 +7081,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -6963,6 +7095,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -6990,6 +7123,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -6997,11 +7131,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -7013,6 +7147,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerReply other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerReply) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -7190,7 +7325,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -7203,12 +7338,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -7222,6 +7357,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerReply other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -7249,12 +7385,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -7277,7 +7413,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new AddJoinerReply(input, extensionRegistry);
+        return new AddJoinerReply(input, extensionRegistry);
       }
     };
 
@@ -7329,6 +7465,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.RemoveJoinerRequest)
       RemoveJoinerRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use RemoveJoinerRequest.newBuilder() to construct.
     private RemoveJoinerRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -7340,14 +7477,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private RemoveJoinerRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -7357,7 +7499,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -7376,6 +7519,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -7448,6 +7592,7 @@ public final class Mesh {
       if (!getEui64Bytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, eui64_);
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -7458,11 +7603,11 @@ public final class Mesh {
       if (!getEui64Bytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, eui64_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -7476,6 +7621,7 @@ public final class Mesh {
       boolean result = true;
       result = result && getEui64()
           .equals(other.getEui64());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -7655,7 +7801,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -7668,12 +7814,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -7691,6 +7837,7 @@ public final class Mesh {
           eui64_ = other.eui64_;
           onChanged();
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -7807,12 +7954,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -7835,7 +7982,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new RemoveJoinerRequest(input, extensionRegistry);
+        return new RemoveJoinerRequest(input, extensionRegistry);
       }
     };
 
@@ -7872,6 +8019,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.RemoveJoinerReply)
       RemoveJoinerReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use RemoveJoinerReply.newBuilder() to construct.
     private RemoveJoinerReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -7882,13 +8030,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private RemoveJoinerReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -7898,7 +8051,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -7911,6 +8065,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -7938,6 +8093,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -7945,11 +8101,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -7961,6 +8117,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.RemoveJoinerReply other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.RemoveJoinerReply) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -8138,7 +8295,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -8151,12 +8308,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -8170,6 +8327,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.RemoveJoinerReply other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.RemoveJoinerReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -8197,12 +8355,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -8225,7 +8383,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new RemoveJoinerReply(input, extensionRegistry);
+        return new RemoveJoinerReply(input, extensionRegistry);
       }
     };
 
@@ -8259,6 +8417,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.JoinNetworkRequest)
       JoinNetworkRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use JoinNetworkRequest.newBuilder() to construct.
     private JoinNetworkRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -8269,13 +8428,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private JoinNetworkRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -8285,7 +8449,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -8298,6 +8463,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -8325,6 +8491,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -8332,11 +8499,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -8348,6 +8515,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -8522,7 +8690,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -8535,12 +8703,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -8554,6 +8722,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -8581,12 +8750,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -8609,7 +8778,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new JoinNetworkRequest(input, extensionRegistry);
+        return new JoinNetworkRequest(input, extensionRegistry);
       }
     };
 
@@ -8646,6 +8815,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.JoinNetworkReply)
       JoinNetworkReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use JoinNetworkReply.newBuilder() to construct.
     private JoinNetworkReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -8656,13 +8826,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private JoinNetworkReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -8672,7 +8847,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -8685,6 +8861,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -8712,6 +8889,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -8719,11 +8897,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -8735,6 +8913,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkReply other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkReply) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -8912,7 +9091,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -8925,12 +9104,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -8944,6 +9123,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkReply other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -8971,12 +9151,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -8999,7 +9179,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new JoinNetworkReply(input, extensionRegistry);
+        return new JoinNetworkReply(input, extensionRegistry);
       }
     };
 
@@ -9033,6 +9213,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.LeaveNetworkRequest)
       LeaveNetworkRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use LeaveNetworkRequest.newBuilder() to construct.
     private LeaveNetworkRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -9043,13 +9224,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private LeaveNetworkRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -9059,7 +9245,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -9072,6 +9259,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -9099,6 +9287,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -9106,11 +9295,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -9122,6 +9311,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkRequest) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -9296,7 +9486,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -9309,12 +9499,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -9328,6 +9518,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -9355,12 +9546,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -9383,7 +9574,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new LeaveNetworkRequest(input, extensionRegistry);
+        return new LeaveNetworkRequest(input, extensionRegistry);
       }
     };
 
@@ -9419,6 +9610,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.LeaveNetworkReply)
       LeaveNetworkReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use LeaveNetworkReply.newBuilder() to construct.
     private LeaveNetworkReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -9429,13 +9621,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private LeaveNetworkReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -9445,7 +9642,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -9458,6 +9656,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -9485,6 +9684,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -9492,11 +9692,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -9508,6 +9708,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkReply other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkReply) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -9684,7 +9885,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -9697,12 +9898,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -9716,6 +9917,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkReply other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -9743,12 +9945,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -9771,7 +9973,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new LeaveNetworkReply(input, extensionRegistry);
+        return new LeaveNetworkReply(input, extensionRegistry);
       }
     };
 
@@ -9805,6 +10007,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.GetNetworkInfoRequest)
       GetNetworkInfoRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use GetNetworkInfoRequest.newBuilder() to construct.
     private GetNetworkInfoRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -9815,13 +10018,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private GetNetworkInfoRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -9831,7 +10039,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -9844,6 +10053,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -9871,6 +10081,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -9878,11 +10089,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -9894,6 +10105,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoRequest) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -10068,7 +10280,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -10081,12 +10293,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -10100,6 +10312,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -10127,12 +10340,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -10155,7 +10368,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new GetNetworkInfoRequest(input, extensionRegistry);
+        return new GetNetworkInfoRequest(input, extensionRegistry);
       }
     };
 
@@ -10215,6 +10428,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.GetNetworkInfoReply)
       GetNetworkInfoReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use GetNetworkInfoReply.newBuilder() to construct.
     private GetNetworkInfoReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -10225,14 +10439,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private GetNetworkInfoReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -10242,7 +10461,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -10268,6 +10488,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -10331,6 +10552,7 @@ public final class Mesh {
       if (network_ != null) {
         output.writeMessage(1, getNetwork());
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -10342,11 +10564,11 @@ public final class Mesh {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getNetwork());
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -10363,6 +10585,7 @@ public final class Mesh {
         result = result && getNetwork()
             .equals(other.getNetwork());
       }
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -10553,7 +10776,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -10566,12 +10789,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -10588,6 +10811,7 @@ public final class Mesh {
         if (other.hasNetwork()) {
           mergeNetwork(other.getNetwork());
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -10768,12 +10992,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -10796,7 +11020,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new GetNetworkInfoReply(input, extensionRegistry);
+        return new GetNetworkInfoReply(input, extensionRegistry);
       }
     };
 
@@ -10830,6 +11054,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.ScanNetworksRequest)
       ScanNetworksRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use ScanNetworksRequest.newBuilder() to construct.
     private ScanNetworksRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -10840,13 +11065,18 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private ScanNetworksRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -10856,7 +11086,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -10869,6 +11100,7 @@ public final class Mesh {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -10896,6 +11128,7 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -10903,11 +11136,11 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -10919,6 +11152,7 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.ScanNetworksRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.ScanNetworksRequest) obj;
 
       boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -11093,7 +11327,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -11106,12 +11340,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -11125,6 +11359,7 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.ScanNetworksRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.ScanNetworksRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -11152,12 +11387,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -11180,7 +11415,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new ScanNetworksRequest(input, extensionRegistry);
+        return new ScanNetworksRequest(input, extensionRegistry);
       }
     };
 
@@ -11234,6 +11469,7 @@ public final class Mesh {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.mesh.ScanNetworksReply)
       ScanNetworksReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use ScanNetworksReply.newBuilder() to construct.
     private ScanNetworksReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -11245,14 +11481,19 @@ public final class Mesh {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private ScanNetworksReply(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -11262,7 +11503,8 @@ public final class Mesh {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -11287,6 +11529,7 @@ public final class Mesh {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           networks_ = java.util.Collections.unmodifiableList(networks_);
         }
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -11352,6 +11595,7 @@ public final class Mesh {
       for (int i = 0; i < networks_.size(); i++) {
         output.writeMessage(1, networks_.get(i));
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -11363,11 +11607,11 @@ public final class Mesh {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, networks_.get(i));
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -11381,6 +11625,7 @@ public final class Mesh {
       boolean result = true;
       result = result && getNetworksList()
           .equals(other.getNetworksList());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -11572,7 +11817,7 @@ public final class Mesh {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -11585,12 +11830,12 @@ public final class Mesh {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -11630,6 +11875,7 @@ public final class Mesh {
             }
           }
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -11898,12 +12144,12 @@ public final class Mesh {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -11926,7 +12172,7 @@ public final class Mesh {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new ScanNetworksReply(input, extensionRegistry);
+        return new ScanNetworksReply(input, extensionRegistry);
       }
     };
 
@@ -12070,32 +12316,33 @@ public final class Mesh {
   static {
     java.lang.String[] descriptorData = {
       "\n\nmesh.proto\022\022particle.ctrl.mesh\032\020extens" +
-      "ions.proto\"J\n\013NetworkInfo\022\014\n\004name\030\001 \001(\t\022" +
-      "\017\n\007ext_pan\030\002 \001(\t\022\013\n\003pan\030\003 \001(\t\022\017\n\007channel" +
-      "\030\004 \001(\005\"&\n\013AuthRequest\022\020\n\010password\030\001 \001(\t:" +
-      "\005\210\265\030\351\007\"\013\n\tAuthReply\"=\n\024CreateNetworkRequ" +
-      "est\022\014\n\004name\030\001 \001(\t\022\020\n\010password\030\002 \001(\t:\005\210\265\030" +
-      "\352\007\"F\n\022CreateNetworkReply\0220\n\007network\030\001 \001(" +
-      "\0132\037.particle.ctrl.mesh.NetworkInfo\"!\n\030St" +
-      "artCommissionerRequest:\005\210\265\030\353\007\"\030\n\026StartCo" +
-      "mmissionerReply\" \n\027StopCommissionerReque",
-      "st:\005\210\265\030\354\007\"\027\n\025StopCommissionerReply\"O\n\024Pr" +
-      "epareJoinerRequest\0220\n\007network\030\001 \001(\0132\037.pa" +
-      "rticle.ctrl.mesh.NetworkInfo:\005\210\265\030\355\007\"5\n\022P" +
-      "repareJoinerReply\022\r\n\005eui64\030\001 \001(\t\022\020\n\010pass" +
-      "word\030\002 \001(\t\":\n\020AddJoinerRequest\022\r\n\005eui64\030" +
-      "\001 \001(\t\022\020\n\010password\030\002 \001(\t:\005\210\265\030\356\007\"\020\n\016AddJoi" +
-      "nerReply\"+\n\023RemoveJoinerRequest\022\r\n\005eui64" +
-      "\030\001 \001(\t:\005\210\265\030\357\007\"\023\n\021RemoveJoinerReply\"\033\n\022Jo" +
-      "inNetworkRequest:\005\210\265\030\360\007\"\022\n\020JoinNetworkRe" +
-      "ply\"\034\n\023LeaveNetworkRequest:\005\210\265\030\361\007\"\023\n\021Lea",
-      "veNetworkReply\"\036\n\025GetNetworkInfoRequest:" +
-      "\005\210\265\030\362\007\"G\n\023GetNetworkInfoReply\0220\n\007network" +
-      "\030\001 \001(\0132\037.particle.ctrl.mesh.NetworkInfo\"" +
-      "\034\n\023ScanNetworksRequest:\005\210\265\030\363\007\"F\n\021ScanNet" +
-      "worksReply\0221\n\010networks\030\001 \003(\0132\037.particle." +
-      "ctrl.mesh.NetworkInfoB&\n$io.particle.fir" +
-      "mwareprotos.ctrl.meshb\006proto3"
+      "ions.proto\"P\n\013NetworkInfo\022\014\n\004name\030\001 \001(\t\022" +
+      "\022\n\next_pan_id\030\002 \001(\t\022\016\n\006pan_id\030\003 \001(\r\022\017\n\007c" +
+      "hannel\030\004 \001(\r\"&\n\013AuthRequest\022\020\n\010password\030" +
+      "\001 \001(\t:\005\210\265\030\351\007\"\013\n\tAuthReply\"N\n\024CreateNetwo" +
+      "rkRequest\022\014\n\004name\030\001 \001(\t\022\020\n\010password\030\002 \001(" +
+      "\t\022\017\n\007channel\030\003 \001(\r:\005\210\265\030\352\007\"F\n\022CreateNetwo" +
+      "rkReply\0220\n\007network\030\001 \001(\0132\037.particle.ctrl" +
+      ".mesh.NetworkInfo\"!\n\030StartCommissionerRe" +
+      "quest:\005\210\265\030\353\007\"\030\n\026StartCommissionerReply\" " +
+      "\n\027StopCommissionerRequest:\005\210\265\030\354\007\"\027\n\025Stop" +
+      "CommissionerReply\"O\n\024PrepareJoinerReques" +
+      "t\0220\n\007network\030\001 \001(\0132\037.particle.ctrl.mesh." +
+      "NetworkInfo:\005\210\265\030\355\007\"5\n\022PrepareJoinerReply" +
+      "\022\r\n\005eui64\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\":\n\020Add" +
+      "JoinerRequest\022\r\n\005eui64\030\001 \001(\t\022\020\n\010password" +
+      "\030\002 \001(\t:\005\210\265\030\356\007\"\020\n\016AddJoinerReply\"+\n\023Remov" +
+      "eJoinerRequest\022\r\n\005eui64\030\001 \001(\t:\005\210\265\030\357\007\"\023\n\021" +
+      "RemoveJoinerReply\"\033\n\022JoinNetworkRequest:" +
+      "\005\210\265\030\360\007\"\022\n\020JoinNetworkReply\"\034\n\023LeaveNetwo" +
+      "rkRequest:\005\210\265\030\361\007\"\023\n\021LeaveNetworkReply\"\036\n" +
+      "\025GetNetworkInfoRequest:\005\210\265\030\362\007\"G\n\023GetNetw" +
+      "orkInfoReply\0220\n\007network\030\001 \001(\0132\037.particle" +
+      ".ctrl.mesh.NetworkInfo\"\034\n\023ScanNetworksRe" +
+      "quest:\005\210\265\030\363\007\"F\n\021ScanNetworksReply\0221\n\010net" +
+      "works\030\001 \003(\0132\037.particle.ctrl.mesh.Network" +
+      "InfoB&\n$io.particle.firmwareprotos.ctrl." +
+      "meshb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -12115,7 +12362,7 @@ public final class Mesh {
     internal_static_particle_ctrl_mesh_NetworkInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_mesh_NetworkInfo_descriptor,
-        new java.lang.String[] { "Name", "ExtPan", "Pan", "Channel", });
+        new java.lang.String[] { "Name", "ExtPanId", "PanId", "Channel", });
     internal_static_particle_ctrl_mesh_AuthRequest_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_particle_ctrl_mesh_AuthRequest_fieldAccessorTable = new
@@ -12133,7 +12380,7 @@ public final class Mesh {
     internal_static_particle_ctrl_mesh_CreateNetworkRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_mesh_CreateNetworkRequest_descriptor,
-        new java.lang.String[] { "Name", "Password", });
+        new java.lang.String[] { "Name", "Password", "Channel", });
     internal_static_particle_ctrl_mesh_CreateNetworkReply_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_particle_ctrl_mesh_CreateNetworkReply_fieldAccessorTable = new

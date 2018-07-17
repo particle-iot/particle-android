@@ -198,6 +198,7 @@ public final class Common {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:particle.ctrl.IPAddress)
       IPAddressOrBuilder {
+  private static final long serialVersionUID = 0L;
     // Use IPAddress.newBuilder() to construct.
     private IPAddress(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -210,14 +211,19 @@ public final class Common {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return this.unknownFields;
     }
     private IPAddress(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
       int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -227,7 +233,8 @@ public final class Common {
               done = true;
               break;
             default: {
-              if (!input.skipField(tag)) {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -251,6 +258,7 @@ public final class Common {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
@@ -416,6 +424,7 @@ public final class Common {
       if (!address_.isEmpty()) {
         output.writeBytes(2, address_);
       }
+      unknownFields.writeTo(output);
     }
 
     public int getSerializedSize() {
@@ -431,11 +440,11 @@ public final class Common {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, address_);
       }
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    private static final long serialVersionUID = 0L;
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -450,6 +459,7 @@ public final class Common {
       result = result && protocol_ == other.protocol_;
       result = result && getAddress()
           .equals(other.getAddress());
+      result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
@@ -630,7 +640,7 @@ public final class Common {
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
@@ -643,12 +653,12 @@ public final class Common {
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+          int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+          java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -668,6 +678,7 @@ public final class Common {
         if (other.getAddress() != com.google.protobuf.ByteString.EMPTY) {
           setAddress(other.getAddress());
         }
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -768,12 +779,12 @@ public final class Common {
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+        return super.mergeUnknownFields(unknownFields);
       }
 
 
@@ -796,7 +807,7 @@ public final class Common {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new IPAddress(input, extensionRegistry);
+        return new IPAddress(input, extensionRegistry);
       }
     };
 
@@ -838,7 +849,7 @@ public final class Common {
       "\032\r\220\265\030\376\376\377\377\377\377\377\377\377\001\022\032\n\007TIMEOUT\020\002\032\r\220\265\030\340\376\377\377\377\377\377" +
       "\377\377\001\022\034\n\tNOT_FOUND\020\003\032\r\220\265\030\326\376\377\377\377\377\377\377\377\001\022 \n\rALR" +
       "EADY_EXIST\020\004\032\r\220\265\030\314\376\377\377\377\377\377\377\377\001\022 \n\rINVALID_S" +
-      "TATE\020\005\032\r\220\265\030\256\376\377\377\377\377\377\377\377\001\022\034\n\tNO_MEMORY\020\006\032\r\220\265",
+      "TATE\020\005\032\r\220\265\030\256\376\377\377\377\377\377\377\377\001\022\034\n\tNO_MEMORY\020\006\032\r\220\265" +
       "\030\374\375\377\377\377\377\377\377\377\001\022 \n\rINVALID_PARAM\020\007\032\r\220\265\030\362\375\377\377\377" +
       "\377\377\377\377\001B!\n\037io.particle.firmwareprotos.ctrl" +
       "P\000b\006proto3"
