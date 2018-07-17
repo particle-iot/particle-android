@@ -139,7 +139,10 @@ dependencies {
     implementation 'sk.baka.slf4j:slf4j-handroid:1.7.27'
 
     // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
-//    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.0.0'
 
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')
