@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.particle.sdk.app">
 
-    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +24,7 @@
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <meta-data
-            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
 
         <activity
