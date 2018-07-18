@@ -3,8 +3,6 @@ package io.particle.android.sdk.cloud;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import io.particle.android.sdk.cloud.exceptions.PartialDeviceListResultException;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 
@@ -12,7 +10,6 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
  * A packaging hack to access the (temporarily) intentionally non-public API of
  * getDevicesParallel()
  */
-@ParametersAreNonnullByDefault
 public class ParallelDeviceFetcherAccessHack {
 
     public static List<ParticleDevice> getDevicesParallel(ParticleCloud cloud,

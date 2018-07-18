@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -77,7 +75,7 @@ import static io.particle.android.sdk.utils.Py.truthy;
 import static java.util.Objects.requireNonNull;
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
-@ParametersAreNonnullByDefault
+//@ParametersAreNonnullByDefault
 public class DeviceListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<DevicesLoadResult> {
 
