@@ -35,8 +35,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 58
-        versionName "2.2.0-MESH-1"
+        versionCode 59
+        versionName "2.2.0-MESH-2"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -95,6 +95,11 @@ dependencies {
     releaseImplementation 'com.google.firebase:firebase-perf:16.0.0'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
+    // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
+    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.0.0'
+
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
     releaseImplementation 'com.segment.analytics.android:analytics:4.+'
@@ -137,12 +142,6 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-java:3.5.1'
     implementation 'com.squareup.okio:okio:1.14.0'
     implementation 'sk.baka.slf4j:slf4j-handroid:1.7.27'
-
-    // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
-    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.0.0'
 
     // TESTING ONLY (see other TESTING comments above)
 //    compile(name:'cloudsdk', ext:'aar')
