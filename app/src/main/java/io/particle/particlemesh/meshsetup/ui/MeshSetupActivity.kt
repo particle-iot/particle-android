@@ -1,17 +1,20 @@
-package io.particle.particlemesh.ui
+package io.particle.particlemesh.meshsetup.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.google.firebase.FirebaseApp
 import io.particle.sdk.app.BuildConfig
 import io.particle.sdk.app.R
+import mu.KotlinLogging
 import org.slf4j.impl.HandroidLoggerAdapter
 
 
-class MainActivity : AppCompatActivity() {
+class MeshSetupActivity : AppCompatActivity() {
+
+    private val log = KotlinLogging.logger {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        HandroidLoggerAdapter.DEBUG = BuildConfig.DEBUG
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }

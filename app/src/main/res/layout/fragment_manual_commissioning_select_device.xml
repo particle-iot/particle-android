@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meshsetup.ui.ManualCommissioningSelectDeviceFragment">
+    tools:context="io.particle.particlemesh.meshsetup.ui.ManualCommissioningSelectDeviceFragment">
 
     <TextView
         android:id="@+id/setup_header_text"
@@ -57,6 +57,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

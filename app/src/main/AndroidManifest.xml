@@ -6,6 +6,8 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -112,10 +114,10 @@
             android:theme="@style/ParticleSetupTheme.NoActionBar" />
 
         <activity
-            android:name="io.particle.particlemesh.ui.MainActivity"
+            android:name="io.particle.particlemesh.meshsetup.ui.MeshSetupActivity"
             android:label="Mesh Setup"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar" />
+            android:theme="@style/AppTheme" />
 
     </application>
 

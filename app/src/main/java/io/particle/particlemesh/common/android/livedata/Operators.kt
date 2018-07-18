@@ -68,24 +68,24 @@ fun <T> LiveData<T?>.first(predicate: (T?) -> Boolean): LiveData<T?> {
 fun <T> LiveData<T?>.distinct(): LiveData<T?> {
     val distinctLiveData = MediatorLiveData<T?>()
     distinctLiveData.addSource(
-        this,
-        object : Observer<T?> {
+            this,
+            object : Observer<T?> {
 
-            private var initialized = false
-            private var prevValue: T? = null
+                private var initialized = false
+                private var prevValue: T? = null
 
-            override fun onChanged(value: T?) {
-                if (!initialized) {
-                    initialized = true
-                    prevValue = value
-                    distinctLiveData.postValue(prevValue)
+                override fun onChanged(value: T?) {
+                    if (!initialized) {
+                        initialized = true
+                        prevValue = value
+                        distinctLiveData.postValue(prevValue)
 
-                } else if (prevValue != value) {
-                    prevValue = value
-                    distinctLiveData.postValue(prevValue)
+                    } else if (prevValue != value) {
+                        prevValue = value
+                        distinctLiveData.postValue(prevValue)
+                    }
                 }
-            }
-        })
+            })
 
     return distinctLiveData
 }
@@ -99,30 +99,30 @@ fun <T> LiveData<T?>.distinct(): LiveData<T?> {
 fun <T> LiveData<T?>.distinctAsync(): LiveData<T?> {
     val distinctLiveData = MediatorLiveData<T?>()
     distinctLiveData.addSource(
-        this,
+            this,
 
-        object : Observer<T?> {
+            object : Observer<T?> {
 
-            private var lock = Any()
-            private var initialized = false
-            private var previousValue: T? = null
+                private var lock = Any()
+                private var initialized = false
+                private var previousValue: T? = null
 
-            override fun onChanged(newValue: T?) {
-                launch {
-                    synchronized(lock) {
-                        if (!initialized) {
-                            initialized = true
-                            previousValue = newValue
-                            distinctLiveData.postValue(previousValue)
+                override fun onChanged(newValue: T?) {
+                    launch {
+                        synchronized(lock) {
+                            if (!initialized) {
+                                initialized = true
+                                previousValue = newValue
+                                distinctLiveData.postValue(previousValue)
 
-                        } else if (previousValue != newValue) {
-                            previousValue = newValue
-                            distinctLiveData.postValue(previousValue)
+                            } else if (previousValue != newValue) {
+                                previousValue = newValue
+                                distinctLiveData.postValue(previousValue)
+                            }
                         }
                     }
                 }
-            }
-        })
+            })
 
     return distinctLiveData
 }
@@ -141,15 +141,14 @@ fun <T> LiveData<T?>.debounce(debouncingTimeMillis: Long): LiveData<T?> {
         }
     }
 
-    debouncerRef.set(
-            ActionDebouncer(debouncingTimeMillis,
-                    { distinctLD.postValue(nextValueRef.get()) }
-            ))
+    debouncerRef.set(ActionDebouncer(debouncingTimeMillis) {
+        distinctLD.postValue(nextValueRef.get())
+    })
 
-    distinctLD.addSource(this, { value ->
+    distinctLD.addSource(this) { value ->
         nextValueRef.set(value)
         debouncerRef.get()!!.executeDebouncedAction()
-    })
+    }
 
     return distinctLD
 }

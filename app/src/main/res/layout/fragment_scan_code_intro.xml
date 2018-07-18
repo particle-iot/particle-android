@@ -1,69 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".meshsetup.ui.ScanCodeIntroFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".meshsetup.ui.ScanCodeIntroFragment">
 
-<TextView
-    android:id="@+id/setup_header_text"
-    style="@style/setup_header_text"
-    android:layout_marginTop="@dimen/setup_header_margin_top"
-    android:text="@string/pair_xenon_with_your_phone"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/setup_header_text"
+        style="@style/setup_header_text"
+        android:layout_marginTop="@dimen/setup_header_margin_top"
+        android:text="@string/pair_xenon_with_your_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<TextView
-    android:id="@+id/textView"
-    style="@style/setup_step_text"
-    android:layout_marginTop="16dp"
-    android:text="@string/find_the_qr_code_printed_on_the_front_of_your_device"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
+    <TextView
+        android:id="@+id/textView"
+        style="@style/setup_step_text"
+        android:layout_marginTop="16dp"
+        android:text="@string/find_the_qr_code_printed_on_the_front_of_your_device"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
 
-<ImageView
-    android:id="@+id/mainImage"
-    android:layout_width="200dp"
-    android:layout_height="200dp"
-    android:layout_marginTop="8dp"
-    android:src="@drawable/ic_bluetooth_connected_black_24dp"
-    app:layout_constraintBottom_toTopOf="@+id/action_next"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView" />
+    <ImageView
+        android:id="@+id/mainImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/xenon_vector"
+        app:layout_constraintBottom_toTopOf="@+id/action_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-<Button
-    android:id="@id/action_next"
-    style="@style/Widget.AppCompat.Button.Colored"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/scan_qr_code"
-    app:layout_constraintBottom_toTopOf="@+id/action_type_serial_number"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@id/action_next"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/scan_qr_code"
+        app:layout_constraintBottom_toTopOf="@+id/action_type_serial_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-<TextView
-    android:id="@+id/textView4"
-    style="@style/fine_print"
-    android:text="@string/having_trouble_scanning"
-    app:layout_constraintBaseline_toBaselineOf="@+id/action_type_serial_number"
-    app:layout_constraintEnd_toStartOf="@+id/action_type_serial_number"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintHorizontal_chainStyle="packed"
-    app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/fine_print"
+        android:text="@string/having_trouble_scanning"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@+id/action_type_serial_number"
+        app:layout_constraintEnd_toStartOf="@+id/action_type_serial_number"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
 
-<TextView
-    android:id="@+id/action_type_serial_number"
-    style="@style/fine_print_linkified"
-    android:layout_marginBottom="16dp"
-    android:text="@string/type_serial_number"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toEndOf="@+id/textView4" />
+    <TextView
+        android:id="@+id/action_type_serial_number"
+        style="@style/fine_print_linkified"
+        android:layout_marginBottom="16dp"
+        android:text="@string/type_serial_number"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView4" />
 
 
 </android.support.constraint.ConstraintLayout>

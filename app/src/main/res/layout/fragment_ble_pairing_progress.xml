@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meshsetup.ui.BLEPairingProgressFragment"
-    tools:layout_editor_absoluteY="81dp">
-
+    tools:context="io.particle.particlemesh.meshsetup.ui.BLEPairingProgressFragment">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -17,11 +15,11 @@
         app:layout_constraintBottom_toTopOf="@+id/status_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/state_success"
         tools:layout_editor_absoluteX="182dp" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/state_success"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:src="@android:drawable/checkbox_on_background"

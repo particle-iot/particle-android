@@ -11,11 +11,17 @@ import android.view.ViewGroup
 import android.widget.VideoView
 import androidx.navigation.Navigation
 import io.particle.common.buildRawResourceUri
+import io.particle.particlemesh.meshsetup.MeshSetupController
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.view.*
 
 
-class GetReadyForSetupFragment : Fragment() {
+class GetReadyForSetupFragment : BaseMeshSetupFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupController.fetchClaimCode()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -23,8 +29,8 @@ class GetReadyForSetupFragment : Fragment() {
 
         setUpVideoView(root.videoView)
         root.action_next.setOnClickListener(Navigation.createNavigateOnClickListener(
-                R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment)
-        )
+                R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment
+        ))
 
         return root
     }

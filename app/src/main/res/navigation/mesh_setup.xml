@@ -33,9 +33,6 @@
         <action
             android:id="@+id/action_scanCodeIntroFragment_to_scanCodeFragment"
             app:destination="@id/scanCodeFragment" />
-        <action
-            android:id="@+id/action_scanCodeIntroFragment_to_typeCodeManuallyFragment"
-            app:destination="@id/typeCodeManuallyFragment" />
     </fragment>
 
     <fragment
@@ -45,16 +42,6 @@
         tools:layout="@layout/fragment_scan_code">
         <action
             android:id="@+id/action_scanCodeFragment_to_BLEPairingProgressFragment"
-            app:destination="@id/BLEPairingProgressFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/typeCodeManuallyFragment"
-        android:name="io.particle.particlemesh.meshsetup.ui.TypeCodeManuallyFragment"
-        android:label="fragment_type_code_manually"
-        tools:layout="@layout/fragment_type_code_manually">
-        <action
-            android:id="@+id/action_typeCodeManuallyFragment_to_BLEPairingProgressFragment"
             app:destination="@id/BLEPairingProgressFragment" />
     </fragment>
 

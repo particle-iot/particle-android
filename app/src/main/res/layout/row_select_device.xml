@@ -7,15 +7,15 @@
 
     <ImageView
         android:id="@id/row_image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_bluetooth_black_24dp" />
+        app:srcCompat="@drawable/xenon_vector" />
 
     <TextView
         android:id="@id/row_line_1"
@@ -30,7 +30,7 @@
         style="@style/row_two_line_2nd_line"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="20dp"
-        android:text="This is a description"
+        android:text="This is a description!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/row_image" />
 

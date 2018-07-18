@@ -25,7 +25,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/status_text_requesting_permission_to_add"
+        app:layout_constraintBottom_toTopOf="@+id/status_stage_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_header_text"
@@ -33,37 +33,37 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/status_text_requesting_permission_to_add"
+        android:id="@+id/status_stage_1"
         style="@style/setup_step_text"
         android:layout_marginTop="32dp"
         android:text="@string/requesting_permission_to_add_to_mesh_network"
-        app:layout_constraintBottom_toTopOf="@+id/status_text_adding_to_mesh_network"
+        app:layout_constraintBottom_toTopOf="@+id/status_stage_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar4"
         tools:layout_editor_absoluteX="66dp" />
 
     <TextView
-        android:id="@+id/status_text_adding_to_mesh_network"
+        android:id="@+id/status_stage_2"
         style="@style/setup_step_text"
         android:layout_height="22dp"
         android:layout_marginTop="24dp"
         android:text="@string/adding_the_xenon_to_the_mesh_network"
-        app:layout_constraintBottom_toTopOf="@+id/status_text_connecting_device_to_device_cloud"
+        app:layout_constraintBottom_toTopOf="@+id/status_stage_3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_text_requesting_permission_to_add"
+        app:layout_constraintTop_toBottomOf="@+id/status_stage_1"
         tools:layout_editor_absoluteX="85dp" />
 
     <TextView
-        android:id="@+id/status_text_connecting_device_to_device_cloud"
+        android:id="@+id/status_stage_3"
         style="@style/setup_step_text"
         android:layout_marginTop="24dp"
         android:text="@string/connecting_xenon_to_device_cloud_via_gateway"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_text_adding_to_mesh_network"
+        app:layout_constraintTop_toBottomOf="@+id/status_stage_2"
         tools:layout_editor_absoluteX="66dp" />
 
 </android.support.constraint.ConstraintLayout>
