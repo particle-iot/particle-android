@@ -35,8 +35,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 59
-        versionName "2.2.0-MESH-2"
+        versionCode 62
+        versionName "2.2.0-MESH-4"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -135,7 +135,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:0.3'
 
 
-    def nav_version = "1.0.0-alpha02"
+    def nav_version = "1.0.0-alpha03"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
