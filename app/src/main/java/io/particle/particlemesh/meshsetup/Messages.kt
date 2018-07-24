@@ -216,6 +216,7 @@ class RequestSender internal constructor(
         if (callback != null) {
             callback(responseFrame)
         } else {
+            QATool.report(IllegalStateException("No callbacks found for request! ID: ${responseFrame.requestId}"))
 //            QATool.illegalState("No callbacks found for request! ID: ${responseFrame.requestId}")
             log.error { "No callbacks found for request! ID: ${responseFrame.requestId}" }
         }
