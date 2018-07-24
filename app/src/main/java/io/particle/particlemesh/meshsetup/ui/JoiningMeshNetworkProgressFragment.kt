@@ -63,6 +63,9 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
             handleResult(commish.sendAddJoiner(prepJoinerReply.eui64, prepJoinerReply.password))
             markProgress(R.id.status_stage_2)
 
+            // FIXME: some delay here appeared to be necessary or joining failed. Refine the number, see if it's even needed
+            delay(1000)
+
             handleResult(target.sendJoinNetwork())
             val deviceId = setupController.deviceToBeSetUpParams.value!!.deviceId!!
             val isInList = pollDevicesForNewDevice(deviceId)
