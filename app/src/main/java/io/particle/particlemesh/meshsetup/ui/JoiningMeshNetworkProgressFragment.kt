@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.widget.toast
 import androidx.navigation.fragment.findNavController
 import io.particle.android.sdk.cloud.ParticleCloud
@@ -66,7 +67,8 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
             val deviceId = setupController.deviceToBeSetUpParams.value!!.deviceId!!
             val isInList = pollDevicesForNewDevice(deviceId)
             if (!isInList) {
-                ctx.safeToast("Device with ID $deviceId not found in users' list of devices")
+                ctx.safeToast("Device with ID $deviceId not found in users' list of devices",
+                        duration = Toast.LENGTH_LONG)
                 return
             }
             markProgress(R.id.status_stage_3)
@@ -93,7 +95,7 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
             is Result.Absent -> {
                 val code = result.error
                 val msg = "Error response for ${T::class.java.simpleName}, code: $code"
-                ctx.toast(msg)
+                ctx.safeToast(msg)
                 throw IllegalStateException("Cannot continue flow: $msg")
             }
         }

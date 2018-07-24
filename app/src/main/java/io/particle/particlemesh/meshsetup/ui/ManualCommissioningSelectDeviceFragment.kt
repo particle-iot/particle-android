@@ -69,9 +69,9 @@ class ManualCommissioningSelectDeviceFragment : BaseMeshSetupFragment() {
         launch(UI) {
             val commissioner = setupController.connectToCommissioner(selected.deviceAddress)
             if (commissioner == null) {
-                ctx.toast("Unable to connect to device ${selected.name}")
+                ctx.safeToast("Unable to connect to device ${selected.name}")
             } else {
-                ctx.toast("Connected to ${selected.name}")
+                ctx.safeToast("Connected to ${selected.name}")
                 launch { onCommissionerConnected(commissioner) }
             }
         }

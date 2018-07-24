@@ -21,6 +21,7 @@ import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.common.android.livedata.distinct
 import io.particle.particlemesh.common.truthy
 import io.particle.particlemesh.meshsetup.*
+import io.particle.particlemesh.meshsetup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_first_demo.*
 import kotlinx.coroutines.experimental.android.UI
@@ -197,7 +198,7 @@ class FirstDemoFragment : Fragment() {
             val requestSender = rsFactory.buildRequestSender(btAddress, btAddress)
             log.info { "sender built" }
             if (requestSender == null) {
-                applicationContext.toast("Could not connect to $btAddress!")
+                applicationContext.safeToast("Could not connect to $btAddress!")
             } else {
 //                deviceConnections[btAddress] = UIRequestSender(this@FirstDemoFragment, requestSender)
             }
