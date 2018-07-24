@@ -153,7 +153,9 @@ class RequestSender internal constructor(
         return buildResult(response) { r -> PrepareJoinerReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendAddJoiner(eui64: String, joiningCredential: String): Result<AddJoinerReply, Common.ResultCode> {
+    suspend fun sendAddJoiner(eui64: String,
+                              joiningCredential: String
+    ): Result<AddJoinerReply, Common.ResultCode> {
         val response = sendRequest(
                 AddJoinerRequest.newBuilder()
                         .setEui64(eui64)
@@ -245,7 +247,7 @@ class RequestSender internal constructor(
         frameWriter.writeFrame(requestFrame)
     }
 
-    private fun <V: GeneratedMessageV3> buildResult(
+    private fun <V : GeneratedMessageV3> buildResult(
             response: ResponseFrame?,
             successTransformer: (ResponseFrame) -> V
     ): Result<V, Common.ResultCode> {
