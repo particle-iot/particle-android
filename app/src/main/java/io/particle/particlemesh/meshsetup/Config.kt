@@ -3,4 +3,5 @@ package io.particle.particlemesh.meshsetup
 
 // FIXME: REVIEW ALL THESE VALUES!
 
-const val BLE_PROTO_REQUEST_TIMEOUT_MILLIS = 8000
+// this has to be LONG for some of the messages to be processed (like AuthRequest)
+const val BLE_PROTO_REQUEST_TIMEOUT_MILLIS = 15000
