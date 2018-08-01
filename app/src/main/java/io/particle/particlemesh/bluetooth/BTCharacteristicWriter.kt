@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 @Volatile
 private var HANDLER_THREAD_ID = 1
 // FIXME: think more carefully about these numbers.  What should they be?
-private const val DELAY_BETWEEN_SENDS_MILLIS = 40
+private const val DELAY_BETWEEN_SENDS_MILLIS = 50
 private const val WRITE_ATTEMPTS_BEFORE_CLOSING_CONNECTION = 10
 
 
