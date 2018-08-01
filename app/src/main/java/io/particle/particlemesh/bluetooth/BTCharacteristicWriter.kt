@@ -123,7 +123,12 @@ class BTCharacteristicWriter(
                 return
             }
 
-            log.warn { "Error writing packet: $errMsg, writeAttempts=$writeAttempts" }
+            val msg = "Error writing packet: $errMsg, writeAttempts=$writeAttempts"
+            if (writeAttempts > 3) {
+                log.warn { msg }
+            } else {
+                log.trace { msg }
+            }
 
             scheduleDeque()
         }
