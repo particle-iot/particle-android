@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':cloudsdk'
+project(':cloudsdk').projectDir = new File('../spark-sdk-android/cloudsdk')

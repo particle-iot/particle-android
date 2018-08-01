@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
-import android.os.ParcelUuid
 import android.support.annotation.MainThread
 import io.particle.particlemesh.bluetooth.BTCharacteristicWriter
 import io.particle.particlemesh.bluetooth.ObservableBLECallbacks
@@ -25,7 +24,13 @@ import kotlinx.coroutines.experimental.channels.SendChannel
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
-import java.util.*
+
+
+enum class ConnectionPriority(val sdkVal: Int) {
+    HIGH(1),
+    BALANCED(0),
+    LOW_POWER(2)
+}
 
 
 class MeshSetupConnection(
@@ -42,6 +47,10 @@ class MeshSetupConnection(
 
     val packetReceiveChannel: ReceiveChannel<ByteArray>
         get() = closablePacketReceiveChannel
+
+    fun setConnectionPriority(priority: ConnectionPriority) {
+        gatt.requestConnectionPriority(priority.sdkVal)
+    }
 
     fun disconnect() {
         QATool.runSafely(
