@@ -22,13 +22,13 @@ data class RequestFrame(
 
 data class ResponseFrame(
         val requestId: Short,
-        val resultCode: Short,
+        val resultCode: Int,
         val payloadData: ByteArray
 )
 
 
 // There's no known max size, but data larger than 10KB seems absurd, so we're going with that.
-private val MAX_FRAME_SIZE = 10240
+private const val MAX_FRAME_SIZE = 10240
 
 
 class FrameReader(private val frameConsumer: (ResponseFrame) -> Unit) {
@@ -39,7 +39,7 @@ class FrameReader(private val frameConsumer: (ResponseFrame) -> Unit) {
 
     @Synchronized
     fun receivePacket(blePacket: ByteArray) {
-        log.info { "Processing packet: ${blePacket.toHex()}" }
+        log.debug { "Processing packet: ${blePacket.toHex()}" }
         try {
             if (inProgressFrame == null) {
                 inProgressFrame = FrameInProgress()
@@ -80,9 +80,10 @@ class FrameWriter(
     fun writeFrame(frame: RequestFrame) {
         buffer.clear()
 
+        buffer.putShort(frame.payloadData.size.toShort())
         buffer.putShort(frame.requestId)
         buffer.putShort(frame.messageType)
-        buffer.putInt(frame.payloadData.size)
+        buffer.putShort(0)  // for the "reserved" field
         buffer.put(frame.payloadData)
 
         buffer.flip()
@@ -97,12 +98,12 @@ internal class FrameInProgress {
 
     var requestId: Short? = null
         private set
-    var resultCode: Short? = null
+    var resultCode: Int? = null
         private set
     var isComplete = false
         private set
 
-    private var frameSize: Int? = null
+    private var frameSize: Short? = null
     private var finalFrameData: ByteArray? = null
 
     private val packetBuffer = ByteBuffer.allocate(MAX_FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN)
@@ -136,7 +137,7 @@ internal class FrameInProgress {
 
     @Synchronized
     fun consumeFrameData(): ByteArray {
-        require(isComplete, { "Cannot consume data, frame is not complete!" })
+        require(isComplete) { "Cannot consume data, frame is not complete!" }
 
         ensureFrameIsNotReused()
         isConsumed = true
@@ -145,16 +146,16 @@ internal class FrameInProgress {
     }
 
     private fun onFirstPacket() {
+        frameSize = packetBuffer.short
         requestId = packetBuffer.short
-        resultCode = packetBuffer.short
-        frameSize = packetBuffer.int
-        require(frameSize!! >= 0, { "Invalid frame size: $frameSize" })
-        frameDataBuffer.limit(frameSize!!)
+        resultCode = packetBuffer.int
+        require(frameSize!! >= 0) { "Invalid frame size: $frameSize" }
+        frameDataBuffer.limit(frameSize!!.toInt())
     }
 
     private fun onComplete() {
         frameDataBuffer.flip()
-        finalFrameData = frameDataBuffer.readByteArray(frameSize!!)
+        finalFrameData = frameDataBuffer.readByteArray(frameSize!!.toInt())
     }
 
     // Ensure that the remainder of a packet is all zeros
@@ -166,11 +167,11 @@ internal class FrameInProgress {
 
         while (packetBuffer.hasRemaining()) {
             val nextByte = packetBuffer.readByte().toInt()
-            require(nextByte == 0, {
+            require(nextByte == 0) {
                 val b = nextByte.toByte().toHex()
                 val remainder = packetBuffer.readByteArray().toHex()
                 "Found non-zero bytes in the remainder of a packet: byte=$b, remainder=$remainder"
-            })
+            }
         }
     }
 
