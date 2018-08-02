@@ -212,7 +212,10 @@ class RequestSender internal constructor(
 //    }
 
     fun receiveResponse(responseFrame: ResponseFrame) {
-        val callback = requestCallbacks.get(responseFrame.requestId.toInt())
+        val callback = synchronized(requestCallbacks) {
+            requestCallbacks.get(responseFrame.requestId.toInt())
+        }
+
         if (callback != null) {
             callback(responseFrame)
         } else {
