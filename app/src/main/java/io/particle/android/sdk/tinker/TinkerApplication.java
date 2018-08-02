@@ -2,13 +2,12 @@ package io.particle.android.sdk.tinker;
 
 import android.support.multidex.MultiDexApplication;
 
+import org.slf4j.impl.HandroidLoggerAdapter;
+
 import io.particle.android.sdk.ReleaseBuildAppInitializer;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.ui.DeviceListActivity;
 import io.particle.sdk.app.BuildConfig;
-import io.particle.ecjpake4j.EcJPake;
-import io.particle.ecjpake4j.EcJPakeImpl;
-import io.particle.ecjpake4j.Role;
 
 
 public class TinkerApplication extends MultiDexApplication {
@@ -27,9 +26,9 @@ public class TinkerApplication extends MultiDexApplication {
         // inside ReleaseBuildAppInitializer
         ReleaseBuildAppInitializer.onApplicationCreated(this);
 
-        ParticleDeviceSetupLibrary.init(this, DeviceListActivity.class);
+        HandroidLoggerAdapter.DEBUG = true;  //BuildConfig.DEBUG
+//        FirebaseApp.initializeApp(this);
 
-        EcJPakeImpl ecj = new EcJPakeImpl(Role.CLIENT, "LOLWUT");
-//        ecj.prepareResources();
+        ParticleDeviceSetupLibrary.init(this, DeviceListActivity.class);
     }
 }
