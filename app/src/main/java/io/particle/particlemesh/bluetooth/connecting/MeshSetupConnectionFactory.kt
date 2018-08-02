@@ -87,8 +87,8 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
         // If this returns null, we're finished, return null ourselves
         val (gatt, bleWriteChannel, callbacks) = doConnectToDevice(device) ?: return null
 
-
-        val messageWriteChannel = Channel<ByteArray>(128)
+        
+        val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
         launch(packetTxRxContext) {
             for (packet in messageWriteChannel) {
                 QATool.runSafely({ bleWriteChannel.writeToCharacteristic(packet) })
