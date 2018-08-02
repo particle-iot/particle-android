@@ -95,8 +95,6 @@ private const val BT_NAME_ID_LENGTH = 6
 private val log = KotlinLogging.logger {}
 private fun buildScanner(fragment: Fragment, serialNumber: String): LiveData<List<ScanResult>?> {
 
-//     FIXME: STOP THIS HACK
-//    val lastSix = "6EVFRE".toLowerCase()
     val lastSix = serialNumber.substring(serialNumber.length - BT_NAME_ID_LENGTH).toLowerCase()
     fragment.requireActivity().safeToast(
             "Scanning for devices ending with '$lastSix'",

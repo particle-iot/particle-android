@@ -2148,6 +2148,926 @@ public final class Config {
 
   }
 
+  public interface GetSystemVersionRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.GetSystemVersionRequest)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * <pre>
+   * Get the firmware version
+   * </pre>
+   *
+   * Protobuf type {@code particle.ctrl.GetSystemVersionRequest}
+   */
+  public  static final class GetSystemVersionRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.GetSystemVersionRequest)
+      GetSystemVersionRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetSystemVersionRequest.newBuilder() to construct.
+    private GetSystemVersionRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetSystemVersionRequest() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetSystemVersionRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest.class, io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest other = (io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * Get the firmware version
+     * </pre>
+     *
+     * Protobuf type {@code particle.ctrl.GetSystemVersionRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.GetSystemVersionRequest)
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest.class, io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest build() {
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest result = new io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.GetSystemVersionRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.GetSystemVersionRequest)
+    private static final io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetSystemVersionRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetSystemVersionRequest>() {
+      public GetSystemVersionRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetSystemVersionRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetSystemVersionRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetSystemVersionRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetSystemVersionReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.GetSystemVersionReply)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string version = 1;</code>
+     */
+    java.lang.String getVersion();
+    /**
+     * <code>string version = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getVersionBytes();
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.GetSystemVersionReply}
+   */
+  public  static final class GetSystemVersionReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.GetSystemVersionReply)
+      GetSystemVersionReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetSystemVersionReply.newBuilder() to construct.
+    private GetSystemVersionReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetSystemVersionReply() {
+      version_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetSystemVersionReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              version_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply.class, io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply.Builder.class);
+    }
+
+    public static final int VERSION_FIELD_NUMBER = 1;
+    private volatile java.lang.Object version_;
+    /**
+     * <code>string version = 1;</code>
+     */
+    public java.lang.String getVersion() {
+      java.lang.Object ref = version_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        version_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string version = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getVersionBytes() {
+      java.lang.Object ref = version_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        version_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getVersionBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, version_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getVersionBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, version_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply other = (io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply) obj;
+
+      boolean result = true;
+      result = result && getVersion()
+          .equals(other.getVersion());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + VERSION_FIELD_NUMBER;
+      hash = (53 * hash) + getVersion().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.GetSystemVersionReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.GetSystemVersionReply)
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply.class, io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        version_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetSystemVersionReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply build() {
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply result = new io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply(this);
+        result.version_ = version_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply.getDefaultInstance()) return this;
+        if (!other.getVersion().isEmpty()) {
+          version_ = other.version_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object version_ = "";
+      /**
+       * <code>string version = 1;</code>
+       */
+      public java.lang.String getVersion() {
+        java.lang.Object ref = version_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          version_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string version = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getVersionBytes() {
+        java.lang.Object ref = version_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          version_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string version = 1;</code>
+       */
+      public Builder setVersion(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        version_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string version = 1;</code>
+       */
+      public Builder clearVersion() {
+        
+        version_ = getDefaultInstance().getVersion();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string version = 1;</code>
+       */
+      public Builder setVersionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        version_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.GetSystemVersionReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.GetSystemVersionReply)
+    private static final io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetSystemVersionReply>
+        PARSER = new com.google.protobuf.AbstractParser<GetSystemVersionReply>() {
+      public GetSystemVersionReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetSystemVersionReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetSystemVersionReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetSystemVersionReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface SetClaimCodeRequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:particle.ctrl.SetClaimCodeRequest)
       com.google.protobuf.MessageOrBuilder {
@@ -11109,6 +12029,16 @@ public final class Config {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_particle_ctrl_GetSerialNumberReply_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_GetSystemVersionRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_GetSystemVersionRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_GetSystemVersionReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_GetSystemVersionReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_particle_ctrl_SetClaimCodeRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -11212,40 +12142,41 @@ public final class Config {
       "est:\004\210\265\030\024\"%\n\020GetDeviceIdReply\022\021\n\002id\030\001 \001(" +
       "\tB\005\222?\002\010\030\"\036\n\026GetSerialNumberRequest:\004\210\265\030\025" +
       "\"-\n\024GetSerialNumberReply\022\025\n\006serial\030\001 \001(\t" +
-      "B\005\222?\002\010\020\"1\n\023SetClaimCodeRequest\022\023\n\004code\030\001" +
-      " \001(\tB\005\222?\002\010@:\005\210\265\030\310\001\"\023\n\021SetClaimCodeReply\"" +
-      "\031\n\020IsClaimedRequest:\005\210\265\030\311\001\"!\n\016IsClaimedR" +
-      "eply\022\017\n\007claimed\030\001 \001(\010\"Z\n\025SetSecurityKeyR" +
-      "equest\022,\n\004type\030\001 \001(\0162\036.particle.ctrl.Sec" +
-      "urityKeyType\022\014\n\004data\030\002 \001(\014:\005\210\265\030\322\001\"\025\n\023Set" +
-      "SecurityKeyReply\"L\n\025GetSecurityKeyReques" +
+      "B\005\222?\002\010\020\"\037\n\027GetSystemVersionRequest:\004\210\265\030\036" +
+      "\"(\n\025GetSystemVersionReply\022\017\n\007version\030\001 \001" +
+      "(\t\"1\n\023SetClaimCodeRequest\022\023\n\004code\030\001 \001(\tB" +
+      "\005\222?\002\010@:\005\210\265\030\310\001\"\023\n\021SetClaimCodeReply\"\031\n\020Is" +
+      "ClaimedRequest:\005\210\265\030\311\001\"!\n\016IsClaimedReply\022" +
+      "\017\n\007claimed\030\001 \001(\010\"Z\n\025SetSecurityKeyReques" +
       "t\022,\n\004type\030\001 \001(\0162\036.particle.ctrl.Security" +
-      "KeyType:\005\210\265\030\323\001\"#\n\023GetSecurityKeyReply\022\014\n" +
-      "\004data\030\001 \001(\014\"{\n\027SetServerAddressRequest\0223" +
-      "\n\010protocol\030\001 \001(\0162!.particle.ctrl.ServerP" +
-      "rotocolType\022\026\n\007address\030\002 \001(\tB\005\222?\002\010@\022\014\n\004p" +
-      "ort\030\003 \001(\005:\005\210\265\030\334\001\"\027\n\025SetServerAddressRepl" +
-      "y\"U\n\027GetServerAddressRequest\0223\n\010protocol" +
-      "\030\001 \001(\0162!.particle.ctrl.ServerProtocolTyp" +
-      "e:\005\210\265\030\335\001\"6\n\025GetServerAddressReply\022\017\n\007add" +
-      "ress\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\"V\n\030SetServerPro" +
-      "tocolRequest\0223\n\010protocol\030\001 \001(\0162!.particl" +
-      "e.ctrl.ServerProtocolType:\005\210\265\030\336\001\"\030\n\026SetS" +
-      "erverProtocolReply\"!\n\030GetServerProtocolR" +
-      "equest:\005\210\265\030\337\001\"M\n\026GetServerProtocolReply\022" +
-      "3\n\010protocol\030\001 \001(\0162!.particle.ctrl.Server" +
-      "ProtocolType\"K\n\024SetSoftApSsidRequest\022\025\n\006" +
-      "prefix\030\001 \001(\tB\005\222?\002\010 \022\025\n\006suffix\030\002 \001(\tB\005\222?\002" +
-      "\010\020:\005\210\265\030\360\001\"\024\n\022SetSoftApSsidReply*\317\001\n\017Secu" +
-      "rityKeyType\022\030\n\024INVALID_SECURITY_KEY\020\000\022\032\n" +
-      "\026TCP_DEVICE_PRIVATE_KEY\020\001\022\031\n\025TCP_DEVICE_" +
-      "PUBLIC_KEY\020\002\022\031\n\025TCP_SERVER_PUBLIC_KEY\020\003\022" +
-      "\032\n\026UDP_DEVICE_PRIVATE_KEY\020\004\022\031\n\025UDP_DEVIC" +
-      "E_PUBLIC_KEY\020\005\022\031\n\025UDP_SERVER_PUBLIC_KEY\020" +
-      "\006*N\n\022ServerProtocolType\022\024\n\020INVALID_PROTO" +
-      "COL\020\000\022\020\n\014TCP_PROTOCOL\020\001\022\020\n\014UDP_PROTOCOL\020" +
-      "\002B!\n\037io.particle.firmwareprotos.ctrlb\006pr" +
-      "oto3"
+      "KeyType\022\014\n\004data\030\002 \001(\014:\005\210\265\030\322\001\"\025\n\023SetSecur" +
+      "ityKeyReply\"L\n\025GetSecurityKeyRequest\022,\n\004" +
+      "type\030\001 \001(\0162\036.particle.ctrl.SecurityKeyTy" +
+      "pe:\005\210\265\030\323\001\"#\n\023GetSecurityKeyReply\022\014\n\004data" +
+      "\030\001 \001(\014\"{\n\027SetServerAddressRequest\0223\n\010pro" +
+      "tocol\030\001 \001(\0162!.particle.ctrl.ServerProtoc" +
+      "olType\022\026\n\007address\030\002 \001(\tB\005\222?\002\010@\022\014\n\004port\030\003" +
+      " \001(\005:\005\210\265\030\334\001\"\027\n\025SetServerAddressReply\"U\n\027" +
+      "GetServerAddressRequest\0223\n\010protocol\030\001 \001(" +
+      "\0162!.particle.ctrl.ServerProtocolType:\005\210\265" +
+      "\030\335\001\"6\n\025GetServerAddressReply\022\017\n\007address\030" +
+      "\001 \001(\t\022\014\n\004port\030\002 \001(\005\"V\n\030SetServerProtocol" +
+      "Request\0223\n\010protocol\030\001 \001(\0162!.particle.ctr" +
+      "l.ServerProtocolType:\005\210\265\030\336\001\"\030\n\026SetServer" +
+      "ProtocolReply\"!\n\030GetServerProtocolReques" +
+      "t:\005\210\265\030\337\001\"M\n\026GetServerProtocolReply\0223\n\010pr" +
+      "otocol\030\001 \001(\0162!.particle.ctrl.ServerProto" +
+      "colType\"K\n\024SetSoftApSsidRequest\022\025\n\006prefi" +
+      "x\030\001 \001(\tB\005\222?\002\010 \022\025\n\006suffix\030\002 \001(\tB\005\222?\002\010\020:\005\210" +
+      "\265\030\360\001\"\024\n\022SetSoftApSsidReply*\317\001\n\017SecurityK" +
+      "eyType\022\030\n\024INVALID_SECURITY_KEY\020\000\022\032\n\026TCP_" +
+      "DEVICE_PRIVATE_KEY\020\001\022\031\n\025TCP_DEVICE_PUBLI" +
+      "C_KEY\020\002\022\031\n\025TCP_SERVER_PUBLIC_KEY\020\003\022\032\n\026UD" +
+      "P_DEVICE_PRIVATE_KEY\020\004\022\031\n\025UDP_DEVICE_PUB" +
+      "LIC_KEY\020\005\022\031\n\025UDP_SERVER_PUBLIC_KEY\020\006*N\n\022" +
+      "ServerProtocolType\022\024\n\020INVALID_PROTOCOL\020\000" +
+      "\022\020\n\014TCP_PROTOCOL\020\001\022\020\n\014UDP_PROTOCOL\020\002B!\n\037" +
+      "io.particle.firmwareprotos.ctrlb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -11285,110 +12216,122 @@ public final class Config {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetSerialNumberReply_descriptor,
         new java.lang.String[] { "Serial", });
-    internal_static_particle_ctrl_SetClaimCodeRequest_descriptor =
+    internal_static_particle_ctrl_GetSystemVersionRequest_descriptor =
       getDescriptor().getMessageTypes().get(4);
+    internal_static_particle_ctrl_GetSystemVersionRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_GetSystemVersionRequest_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_GetSystemVersionReply_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_particle_ctrl_GetSystemVersionReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_GetSystemVersionReply_descriptor,
+        new java.lang.String[] { "Version", });
+    internal_static_particle_ctrl_SetClaimCodeRequest_descriptor =
+      getDescriptor().getMessageTypes().get(6);
     internal_static_particle_ctrl_SetClaimCodeRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetClaimCodeRequest_descriptor,
         new java.lang.String[] { "Code", });
     internal_static_particle_ctrl_SetClaimCodeReply_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_particle_ctrl_SetClaimCodeReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetClaimCodeReply_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_IsClaimedRequest_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_particle_ctrl_IsClaimedRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_IsClaimedRequest_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_IsClaimedReply_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_particle_ctrl_IsClaimedReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_IsClaimedReply_descriptor,
         new java.lang.String[] { "Claimed", });
     internal_static_particle_ctrl_SetSecurityKeyRequest_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_particle_ctrl_SetSecurityKeyRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetSecurityKeyRequest_descriptor,
         new java.lang.String[] { "Type", "Data", });
     internal_static_particle_ctrl_SetSecurityKeyReply_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_particle_ctrl_SetSecurityKeyReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetSecurityKeyReply_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_GetSecurityKeyRequest_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_particle_ctrl_GetSecurityKeyRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetSecurityKeyRequest_descriptor,
         new java.lang.String[] { "Type", });
     internal_static_particle_ctrl_GetSecurityKeyReply_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_particle_ctrl_GetSecurityKeyReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetSecurityKeyReply_descriptor,
         new java.lang.String[] { "Data", });
     internal_static_particle_ctrl_SetServerAddressRequest_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_particle_ctrl_SetServerAddressRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetServerAddressRequest_descriptor,
         new java.lang.String[] { "Protocol", "Address", "Port", });
     internal_static_particle_ctrl_SetServerAddressReply_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_particle_ctrl_SetServerAddressReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetServerAddressReply_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_GetServerAddressRequest_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(16);
     internal_static_particle_ctrl_GetServerAddressRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetServerAddressRequest_descriptor,
         new java.lang.String[] { "Protocol", });
     internal_static_particle_ctrl_GetServerAddressReply_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(17);
     internal_static_particle_ctrl_GetServerAddressReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetServerAddressReply_descriptor,
         new java.lang.String[] { "Address", "Port", });
     internal_static_particle_ctrl_SetServerProtocolRequest_descriptor =
-      getDescriptor().getMessageTypes().get(16);
+      getDescriptor().getMessageTypes().get(18);
     internal_static_particle_ctrl_SetServerProtocolRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetServerProtocolRequest_descriptor,
         new java.lang.String[] { "Protocol", });
     internal_static_particle_ctrl_SetServerProtocolReply_descriptor =
-      getDescriptor().getMessageTypes().get(17);
+      getDescriptor().getMessageTypes().get(19);
     internal_static_particle_ctrl_SetServerProtocolReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetServerProtocolReply_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_GetServerProtocolRequest_descriptor =
-      getDescriptor().getMessageTypes().get(18);
+      getDescriptor().getMessageTypes().get(20);
     internal_static_particle_ctrl_GetServerProtocolRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetServerProtocolRequest_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_GetServerProtocolReply_descriptor =
-      getDescriptor().getMessageTypes().get(19);
+      getDescriptor().getMessageTypes().get(21);
     internal_static_particle_ctrl_GetServerProtocolReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetServerProtocolReply_descriptor,
         new java.lang.String[] { "Protocol", });
     internal_static_particle_ctrl_SetSoftApSsidRequest_descriptor =
-      getDescriptor().getMessageTypes().get(20);
+      getDescriptor().getMessageTypes().get(22);
     internal_static_particle_ctrl_SetSoftApSsidRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetSoftApSsidRequest_descriptor,
         new java.lang.String[] { "Prefix", "Suffix", });
     internal_static_particle_ctrl_SetSoftApSsidReply_descriptor =
-      getDescriptor().getMessageTypes().get(21);
+      getDescriptor().getMessageTypes().get(23);
     internal_static_particle_ctrl_SetSoftApSsidReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_SetSoftApSsidReply_descriptor,
