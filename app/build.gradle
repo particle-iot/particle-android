@@ -87,7 +87,7 @@ dependencies {
 //    implementation "io.particle:cloudsdk:$cloudSdkVersion"
     // FIXME: change this back before releasing
     implementation project(':cloudsdk')
-//    implementation project(':ecjpake4j')
+    implementation project(':ecjpake4j')
     implementation("io.particle:devicesetup:$setupVersion") {
         exclude group: 'io.particle', module: 'cloudsdk'
     }

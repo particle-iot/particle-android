@@ -30,5 +30,8 @@ public class TinkerApplication extends MultiDexApplication {
 //        FirebaseApp.initializeApp(this);
 
         ParticleDeviceSetupLibrary.init(this, DeviceListActivity.class);
+
+    //    EcJPakeImpl ecj = new EcJPakeImpl(Role.CLIENT, "LOLWUT");
+//        ecj.prepareResources();
     }
 }
