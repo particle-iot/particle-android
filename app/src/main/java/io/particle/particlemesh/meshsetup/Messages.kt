@@ -4,14 +4,17 @@ package io.particle.particlemesh.meshsetup
 import android.support.annotation.MainThread
 import android.util.SparseArray
 import com.google.protobuf.AbstractMessage
+import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
 import io.particle.firmwareprotos.ctrl.Common
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Config.*
 import io.particle.firmwareprotos.ctrl.Extensions
+import io.particle.firmwareprotos.ctrl.StorageOuterClass.*
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.*
 import io.particle.particlemesh.bluetooth.PacketMTUSplitter
 import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
+import io.particle.particlemesh.bluetooth.connecting.ConnectionPriority
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnection
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.bluetooth.packetTxRxContext
@@ -44,9 +47,8 @@ internal fun AbstractMessage.asRequest(): RequestFrame {
 
 
 // FIXME: rewrite using descriptors
-private fun Short.toResultCode(): Common.ResultCode {
-    val asInt = this.toInt()
-    return when (asInt) {
+private fun Int.toResultCode(): Common.ResultCode {
+    return when (this) {
         0 -> Common.ResultCode.OK
         -130 -> Common.ResultCode.NOT_ALLOWED
         -160 -> Common.ResultCode.TIMEOUT
@@ -72,10 +74,7 @@ class RequestSenderFactory(private val connectionFactory: MeshSetupConnectionFac
         val packetMTUSplitter = PacketMTUSplitter({ packet ->
             meshSetupConnection.packetSendChannel.offer(packet)
         })
-//        val loopbackChannel =
-//        val packetMTUSplitter = PacketMTUSplitter({ packet ->
-//            meshSetupConnection.packetSendChannel.offer(packet)
-//        })
+
         val frameWriter = FrameWriter { packetMTUSplitter.splitIntoPackets(it) }
 
         // 2. build the actual request sender
@@ -109,6 +108,39 @@ class RequestSender internal constructor(
 
     fun disconnect() {
         connection.disconnect()
+    }
+
+    fun setConnectionPriority(priority: ConnectionPriority) {
+        connection.setConnectionPriority(priority)
+    }
+
+    suspend fun sendStartFirmwareUpdate(firmwareSizeBytes: Int
+    ): Result<StartFirmwareUpdateReply, Common.ResultCode> {
+        val response = sendRequest(
+                StartFirmwareUpdateRequest.newBuilder()
+                        .setSize(firmwareSizeBytes)
+                        .build()
+        )
+        return buildResult(response) { r -> StartFirmwareUpdateReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendFirmwareUpdateData(chunk: ByteArray): Result<FirmwareUpdateDataReply, Common.ResultCode> {
+        val response = sendRequest(
+                FirmwareUpdateDataRequest.newBuilder()
+                        .setData(ByteString.copyFrom(chunk))
+                        .build()
+        )
+        return buildResult(response) { r -> FirmwareUpdateDataReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendFinishFirmwareUpdate(validateOnly: Boolean
+    ): Result<FinishFirmwareUpdateReply, Common.ResultCode> {
+        val response = sendRequest(
+                FinishFirmwareUpdateRequest.newBuilder()
+                        .setValidateOnly(validateOnly)
+                        .build()
+        )
+        return buildResult(response) { r -> FinishFirmwareUpdateReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendGetNetworkInfo(): Result<GetNetworkInfoReply, Common.ResultCode> {
@@ -205,12 +237,6 @@ class RequestSender internal constructor(
         return buildResult(response) { r -> GetSerialNumberReply.parseFrom(r.payloadData) }
     }
 
-
-//    suspend fun sendEchoRequest(bytes: ByteArray): Result<ByteArray, Common.ResultCode> {
-//        val response = sendRequest(RequestFrame(generateRequestId(), 1111, bytes))
-//        return buildResult(response) { r -> r.payloadData }
-//    }
-
     fun receiveResponse(responseFrame: ResponseFrame) {
         val callback = synchronized(requestCallbacks) {
             requestCallbacks.get(responseFrame.requestId.toInt())
@@ -219,8 +245,8 @@ class RequestSender internal constructor(
         if (callback != null) {
             callback(responseFrame)
         } else {
+            // FIXME: handle the timeout case here better
             QATool.report(IllegalStateException("No callbacks found for request! ID: ${responseFrame.requestId}"))
-//            QATool.illegalState("No callbacks found for request! ID: ${responseFrame.requestId}")
             log.error { "No callbacks found for request! ID: ${responseFrame.requestId}" }
         }
     }
@@ -234,10 +260,15 @@ class RequestSender internal constructor(
                 doSendRequest(requestFrame) { continuation.resume(it) }
             }
         }
-        // by the time we get to here, our callback has been used up,
-        // so we can remove it from the map
+
+        val id = requestFrame.requestId.toInt()
+        if (response == null) {
+            log.warn { "Timeout reached for request $id" }
+        }
+        // By the time we get to here, our callback has been used up,
+        // so we can remove it from the map.
         synchronized(requestCallbacks) {
-            requestCallbacks.remove(requestFrame.requestId.toInt())
+            requestCallbacks.remove(id)
         }
         return response
     }
@@ -259,7 +290,7 @@ class RequestSender internal constructor(
             return Result.Absent()
         }
 
-        return if (response.resultCode == 0.toShort()) {
+        return if (response.resultCode == 0) {
             val transformed = successTransformer(response)
             log.info { "Successful response ${transformed::class.java}: '$transformed'" }
             Result.Present(transformed)
