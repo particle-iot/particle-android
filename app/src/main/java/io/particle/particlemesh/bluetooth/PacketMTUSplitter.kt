@@ -19,7 +19,7 @@ class PacketMTUSplitter(
         buffer.flip()
 
         while (buffer.hasRemaining()) {
-            val packet = if (buffer.position() >= mtuSize) {
+            val packet = if (buffer.remaining() >= mtuSize) {
                 buffer.readByteArray(mtuSize)
             } else {
                 buffer.readByteArray()
