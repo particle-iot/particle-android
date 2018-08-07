@@ -1,5 +1,6 @@
 package io.particle.ecjpake4j
 
+
 interface EcJPake {
 
     /** Generate local round 1 ("c1")  */
@@ -20,8 +21,7 @@ interface EcJPake {
 }
 
 
-
-enum class Role(val asString: String) {
-    SERVER("server"),
-    CLIENT("client")
+enum class Role(val stringValue: String, val intValue: Int) {
+    CLIENT("client", 0),
+    SERVER("server", 1)
 }

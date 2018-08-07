@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         minSdkVersion 21
@@ -20,6 +21,18 @@ android {
             }
         }
     }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            // FIXME: change this back!
+            include "arm64-v8a"
+//            include "armeabi-v7a"
+            universalApk false
+        }
+    }
+
 
     buildTypes {
         release {

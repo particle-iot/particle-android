@@ -15,8 +15,8 @@ class JPakeTest {
 
     @Test
     fun jpakeExchangeWorks() {
-        jpakeClient = EcJPakeImpl(Role.CLIENT, SHARED_SECRET)
-        jpakeServer = EcJPakeImpl(Role.SERVER, SHARED_SECRET)
+        jpakeClient = ECJPakeImpl(Role.CLIENT, SHARED_SECRET)
+        jpakeServer = ECJPakeImpl(Role.SERVER, SHARED_SECRET)
 
         val (clientGenerated, serverGenerated) = performExchange()
 
@@ -25,8 +25,8 @@ class JPakeTest {
 
     @Test
     fun jpakeExchangeFailsOnDifferentPassword() {
-        jpakeClient = EcJPakeImpl(Role.CLIENT, SHARED_SECRET)
-        jpakeServer = EcJPakeImpl(Role.SERVER, "bad password")
+        jpakeClient = ECJPakeImpl(Role.CLIENT, SHARED_SECRET)
+        jpakeServer = ECJPakeImpl(Role.SERVER, "bad password")
 
         val (clientGenerated, serverGenerated) = performExchange()
 

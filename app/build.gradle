@@ -29,14 +29,14 @@ ext {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.1'
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 62
-        versionName "2.2.0-MESH-4"
+        versionCode 63
+        versionName "2.2.0-MESH-6"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -48,7 +48,8 @@ android {
             reset()
             // FIXME: change this back!
             include "arm64-v8a"
-            universalApk true
+//            include "armeabi-v7a"
+            universalApk false
         }
     }
 

@@ -27,9 +27,7 @@ class FirmwareUpdater(
     }
 
     private suspend fun doUpdateFirmware(firmwareData: ByteArray) {
-        ctx.safeToast("Starting FW update")
-
-        log.info { "Firmware MD5: ${Buffer().write(firmwareData).md5().hex()}" }
+        showFeedback("Starting firmware update")
 
         requestSender.setConnectionPriority(ConnectionPriority.HIGH)
 
@@ -41,7 +39,7 @@ class FirmwareUpdater(
                 throw IOException("Bad reply from device: ${startReplyResult.error}")
             }
         }
-        ctx.safeToast("Chunk size: $chunkSize")
+        showFeedback("Chunk size: $chunkSize")
 
         val buffer = Buffer()
         buffer.write(firmwareData)
@@ -64,7 +62,17 @@ class FirmwareUpdater(
             }
         }
 
-        requestSender.sendFinishFirmwareUpdate(false)
+        val firmwareUpdateReply = requestSender.sendFinishFirmwareUpdate(false)
+        val msg = when(firmwareUpdateReply) {
+            is Result.Present -> "Firmware update completed successfully"
+            is Result.Error,
+            is Result.Absent -> "Firmware update failed. Error: '${firmwareUpdateReply.error}'"
+        }
+        showFeedback(msg)
     }
 
+    private fun showFeedback(msg: String) {
+        ctx.safeToast(msg)
+        log.info { msg }
+    }
 }
