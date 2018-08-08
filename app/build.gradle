@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.2'
+        classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 
@@ -20,8 +20,8 @@ apply plugin: 'kotlin-android'
 
 ext {
     supportVersions = '27.1.1'
-    cloudSdkVersion = '0.5.0'
-    setupVersion = '0.5.3'
+    cloudSdkVersion = '0.5.1'
+    setupVersion = '0.6.0'
 }
 
 android {
@@ -32,8 +32,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 53
-        versionName "2.2.0"
+        versionCode 55
+        versionName "2.2.2"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
