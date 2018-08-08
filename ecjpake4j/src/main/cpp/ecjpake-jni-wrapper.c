@@ -24,6 +24,9 @@ typedef struct {
 } CryptoComponents;
 
 
+// The values here are taken from the io.particle.ecjpake4j.Role enum.
+// Strings are a more natural choice here, except string handling
+// in C is awful and error-prone, and ints are easy.
 mbedtls_ecjpake_role role_type_from_int(int32_t role_int) {
     if (role_int == 1) {
         return MBEDTLS_ECJPAKE_SERVER;
@@ -52,7 +55,7 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_createNativeComponents(JNIEnv *env, jobje
 
     const char *seed_data = (*env)->GetStringUTFChars(env, seedData, 0);
     jsize seedSize = (*env)->GetStringLength(env, seedData);
-    mbedtls_ctr_drbg_seed(
+    int result = mbedtls_ctr_drbg_seed(
             &components->rng_context,
             mbedtls_entropy_func,
             &components->entropy_context,
@@ -60,6 +63,10 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_createNativeComponents(JNIEnv *env, jobje
     );
 
     (*env)->ReleaseStringUTFChars(env, seedData, seed_data);
+
+    if (result != 0) {
+        return NULL;
+    }
 
     jobject pointerBuffer = (*env)->NewDirectByteBuffer(
             env,
@@ -105,7 +112,7 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_writeRoundOne(JNIEnv *env, jobject instan
     size_t bytes_written_to_buffer = 0;
     unsigned char round1_buffer[MAX_BUFFER_SIZE];
 
-    mbedtls_ecjpake_write_round_one(
+    int result = mbedtls_ecjpake_write_round_one(
             &cc->ecjpake_context,
             round1_buffer,
             (size_t) MAX_BUFFER_SIZE,
@@ -113,6 +120,10 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_writeRoundOne(JNIEnv *env, jobject instan
             cc->rng_function,
             &cc->rng_context
     );
+
+    if (result != 0) {
+        return NULL;
+    }
 
     jbyteArray round_one = (*env)->NewByteArray(env, (jsize) bytes_written_to_buffer);
     (*env)->SetByteArrayRegion(
@@ -134,15 +145,14 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_readRoundOne(JNIEnv *env, jobject instanc
     jbyte *remote_round1 = (*env)->GetByteArrayElements(env, remoteRoundOneMessageData_, NULL);
     int len = (*env)->GetArrayLength(env, remoteRoundOneMessageData_);
 
-    unsigned char round1_buffer[len];
-
-    for (int i=0; i < len; i++) {
-        round1_buffer[i] = (unsigned char) remote_round1[i];
-    }
+    int result = mbedtls_ecjpake_read_round_one(
+            &cc->ecjpake_context,
+            (const unsigned char *) remote_round1,
+            (size_t) len
+    );
 
     (*env)->ReleaseByteArrayElements(env, remoteRoundOneMessageData_, remote_round1, 0);
-
-    return mbedtls_ecjpake_read_round_one(&cc->ecjpake_context, round1_buffer, (size_t) len);
+    return result;
 }
 
 JNIEXPORT jbyteArray JNICALL
@@ -153,7 +163,7 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_writeRoundTwo(JNIEnv *env, jobject instan
     size_t bytes_written_to_buffer = 0;
     unsigned char round2_buffer[MAX_BUFFER_SIZE];
 
-    mbedtls_ecjpake_write_round_two(
+    int result = mbedtls_ecjpake_write_round_two(
             &cc->ecjpake_context,
             round2_buffer,
             (size_t) MAX_BUFFER_SIZE,
@@ -161,6 +171,10 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_writeRoundTwo(JNIEnv *env, jobject instan
             cc->rng_function,
             &cc->rng_context
     );
+
+    if (result != 0) {
+        return NULL;
+    }
 
     jbyteArray round_two = (*env)->NewByteArray(env, (jsize) bytes_written_to_buffer);
     (*env)->SetByteArrayRegion(
@@ -182,15 +196,14 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_readRoundTwo(JNIEnv *env, jobject instanc
     jbyte *remote_round2 = (*env)->GetByteArrayElements(env, remoteRoundTwoMessageData_, NULL);
     int len = (*env)->GetArrayLength(env, remoteRoundTwoMessageData_);
 
-    unsigned char round2_buffer[len];
-
-    for (int i=0; i < len; i++) {
-        round2_buffer[i] = (unsigned char) remote_round2[i];
-    }
+    int result = mbedtls_ecjpake_read_round_two(
+            &cc->ecjpake_context,
+            (const unsigned char *) remote_round2,
+            (size_t) len
+    );
 
     (*env)->ReleaseByteArrayElements(env, remoteRoundTwoMessageData_, remote_round2, 0);
-
-    return mbedtls_ecjpake_read_round_two(&cc->ecjpake_context, round2_buffer, (size_t) len);
+    return result;
 }
 
 JNIEXPORT jbyteArray JNICALL
@@ -203,12 +216,16 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_deriveSecret(JNIEnv *env, jobject instanc
     size_t bytes_written_to_buffer = 0;
     unsigned char secret_buffer[secret_size];
 
-    mbedtls_ecjpake_derive_secret(
+    int result = mbedtls_ecjpake_derive_secret(
             &cc->ecjpake_context,
             secret_buffer, secret_size, &bytes_written_to_buffer,
             cc->rng_function,
             &cc->rng_context
     );
+
+    if (result != 0) {
+        return NULL;
+    }
 
     jbyteArray secret = (*env)->NewByteArray(env, (jsize) bytes_written_to_buffer);
     (*env)->SetByteArrayRegion(
