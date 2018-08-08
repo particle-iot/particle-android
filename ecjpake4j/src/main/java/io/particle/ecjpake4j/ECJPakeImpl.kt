@@ -20,7 +20,7 @@ class ECJPakeImpl(
     }
 
     private fun prepareResources() {
-        System.loadLibrary("native-lib")
+        System.loadLibrary("ecjpake-jni-wrapper")
 
         // NOTE: some of these functions depend on the ordering below. Don't change the ordering
         // of these calls unless you understand exactly what each of these functions does

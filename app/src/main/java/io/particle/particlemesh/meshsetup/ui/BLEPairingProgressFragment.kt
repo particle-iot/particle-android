@@ -6,7 +6,6 @@ import android.arch.lifecycle.Observer
 import android.bluetooth.le.ScanFilter.Builder
 import android.bluetooth.le.ScanResult
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.ParcelUuid
 import android.support.v4.app.Fragment
@@ -15,7 +14,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.toast
 import androidx.navigation.fragment.findNavController
 import io.particle.particlemesh.common.android.livedata.distinct
 import io.particle.particlemesh.common.truthy
@@ -82,6 +80,7 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
         status_text.text = "Successfully paired with device $name"
 
         delay(2000)
+
 
         findNavController().navigate(
                 R.id.action_BLEPairingProgressFragment_to_scanForMeshNetworksFragment

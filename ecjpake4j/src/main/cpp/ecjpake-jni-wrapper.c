@@ -9,21 +9,19 @@
 #include "mbedtls/platform_time.h"
 
 
-const mbedtls_ecp_group_id DEFAULT_CURVE_TYPE = MBEDTLS_ECP_DP_SECP256R1;
-const mbedtls_md_type_t DEFAULT_HASH_TYPE = MBEDTLS_MD_SHA256;
+static const mbedtls_ecp_group_id DEFAULT_CURVE_TYPE = MBEDTLS_ECP_DP_SECP256R1;
+static const mbedtls_md_type_t DEFAULT_HASH_TYPE = MBEDTLS_MD_SHA256;
 static const size_t MAX_BUFFER_SIZE = MBEDTLS_SSL_MAX_CONTENT_LEN;
 
 typedef int (*Fn)(void*, unsigned char*, size_t);
 
 
-struct CryptoComponents {
+typedef struct {
     mbedtls_entropy_context entropy_context;
     mbedtls_ctr_drbg_context rng_context;
     mbedtls_ecjpake_context ecjpake_context;
     Fn rng_function;
-    // FIXME: remove?
-//    void* rng_arg;
-};
+} CryptoComponents;
 
 
 mbedtls_ecjpake_role role_type_from_int(int32_t role_int) {
@@ -34,8 +32,8 @@ mbedtls_ecjpake_role role_type_from_int(int32_t role_int) {
     }
 }
 
-struct CryptoComponents* get_components(JNIEnv *env, jobject componentsPtrBuffer) {
-    return (struct CryptoComponents*) (*env)->GetDirectBufferAddress(env, componentsPtrBuffer);
+CryptoComponents* get_components(JNIEnv *env, jobject componentsPtrBuffer) {
+    return (*env)->GetDirectBufferAddress(env, componentsPtrBuffer);
 }
 
 
@@ -44,11 +42,11 @@ JNIEXPORT jobject JNICALL
 Java_io_particle_ecjpake4j_ECJPakeImpl_createNativeComponents(JNIEnv *env, jobject instance,
                                                               jstring seedData
 ) {
-    struct CryptoComponents* components = malloc(sizeof(struct CryptoComponents));
+    CryptoComponents* components = malloc(sizeof(CryptoComponents));
 
-    mbedtls_entropy_init(&components->entropy_context);
-    mbedtls_ctr_drbg_init(&components->rng_context);
-    mbedtls_ecjpake_init(&components->ecjpake_context);
+    mbedtls_entropy_init(&(*components).entropy_context);
+    mbedtls_ctr_drbg_init(&(*components).rng_context);
+    mbedtls_ecjpake_init(&(*components).ecjpake_context);
 
     components->rng_function = &mbedtls_ctr_drbg_random;
 
@@ -60,15 +58,13 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_createNativeComponents(JNIEnv *env, jobje
             &components->entropy_context,
             (const unsigned char *) seed_data, (size_t) seedSize
     );
-    (*env)->ReleaseStringUTFChars(env, seedData, seedData);
 
-    // FIXME: REMOVE?
-//    components->rng_arg = &components->rng_context;
+    (*env)->ReleaseStringUTFChars(env, seedData, seed_data);
 
     jobject pointerBuffer = (*env)->NewDirectByteBuffer(
             env,
             (void *) components,
-            sizeof(struct CryptoComponents)
+            sizeof(CryptoComponents)
     );
     return pointerBuffer;
 }
@@ -80,7 +76,7 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_setupJpake(JNIEnv *env, jobject instance,
                                                   jint role_,
                                                   jstring secret_
 ) {
-    struct CryptoComponents* cc = get_components(env, componentsPtrBuffer);
+    CryptoComponents* cc = get_components(env, componentsPtrBuffer);
 
     const char *secret = (*env)->GetStringUTFChars(env, secret_, 0);
     long secret_size = (*env)->GetStringLength(env, secret_);
@@ -104,7 +100,7 @@ JNIEXPORT jbyteArray JNICALL
 Java_io_particle_ecjpake4j_ECJPakeImpl_writeRoundOne(JNIEnv *env, jobject instance,
                                                      jobject componentsPointer
 ) {
-    struct CryptoComponents* cc = get_components(env, componentsPointer);
+    CryptoComponents* cc = get_components(env, componentsPointer);
 
     size_t bytes_written_to_buffer = 0;
     unsigned char round1_buffer[MAX_BUFFER_SIZE];
@@ -133,7 +129,7 @@ JNIEXPORT jint JNICALL
 Java_io_particle_ecjpake4j_ECJPakeImpl_readRoundOne(JNIEnv *env, jobject instance,
                                                     jobject componentsPointer,
                                                     jbyteArray remoteRoundOneMessageData_) {
-    struct CryptoComponents* cc = get_components(env, componentsPointer);
+    CryptoComponents* cc = get_components(env, componentsPointer);
 
     jbyte *remote_round1 = (*env)->GetByteArrayElements(env, remoteRoundOneMessageData_, NULL);
     int len = (*env)->GetArrayLength(env, remoteRoundOneMessageData_);
@@ -152,7 +148,7 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_readRoundOne(JNIEnv *env, jobject instanc
 JNIEXPORT jbyteArray JNICALL
 Java_io_particle_ecjpake4j_ECJPakeImpl_writeRoundTwo(JNIEnv *env, jobject instance,
                                                      jobject componentsPointer) {
-    struct CryptoComponents* cc = get_components(env, componentsPointer);
+    CryptoComponents* cc = get_components(env, componentsPointer);
 
     size_t bytes_written_to_buffer = 0;
     unsigned char round2_buffer[MAX_BUFFER_SIZE];
@@ -181,7 +177,7 @@ JNIEXPORT jint JNICALL
 Java_io_particle_ecjpake4j_ECJPakeImpl_readRoundTwo(JNIEnv *env, jobject instance,
                                                     jobject componentsPointer,
                                                     jbyteArray remoteRoundTwoMessageData_) {
-    struct CryptoComponents* cc = get_components(env, componentsPointer);
+    CryptoComponents* cc = get_components(env, componentsPointer);
 
     jbyte *remote_round2 = (*env)->GetByteArrayElements(env, remoteRoundTwoMessageData_, NULL);
     int len = (*env)->GetArrayLength(env, remoteRoundTwoMessageData_);
@@ -200,7 +196,7 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_readRoundTwo(JNIEnv *env, jobject instanc
 JNIEXPORT jbyteArray JNICALL
 Java_io_particle_ecjpake4j_ECJPakeImpl_deriveSecret(JNIEnv *env, jobject instance,
                                                     jobject componentsPointer) {
-    struct CryptoComponents* cc = get_components(env, componentsPointer);
+    CryptoComponents* cc = get_components(env, componentsPointer);
 
     size_t secret_size = mbedtls_md_get_size(cc->ecjpake_context.md_info);
 
@@ -228,7 +224,7 @@ Java_io_particle_ecjpake4j_ECJPakeImpl_deriveSecret(JNIEnv *env, jobject instanc
 JNIEXPORT void JNICALL
 Java_io_particle_ecjpake4j_ECJPakeImpl_freePointers(JNIEnv *env, jobject instance,
                                                     jobject componentsPointer) {
-    struct CryptoComponents* cc = get_components(env, componentsPointer);
+    CryptoComponents* cc = get_components(env, componentsPointer);
 
     mbedtls_entropy_free(&cc->entropy_context);
     mbedtls_ctr_drbg_free(&cc->rng_context);

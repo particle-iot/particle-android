@@ -1,14 +1,23 @@
 package io.particle.ecjpake4j
 
-import org.junit.Assert.assertArrayEquals
+import androidx.test.runner.AndroidJUnit4
+import org.junit.Assert
+import org.junit.Assert.assertFalse
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.util.*
 
 
 private const val SHARED_SECRET = "tada, meat!"
 
 
-class JPakeTest {
+/**
+ * Instrumented test, which will execute on an Android device.
+ *
+ * @see [Testing documentation](http://d.android.com/tools/testing)
+ */
+@RunWith(AndroidJUnit4::class)
+class JPAKEInstrumentedTest {
 
     private lateinit var jpakeClient: EcJPake
     private lateinit var jpakeServer: EcJPake
@@ -20,18 +29,18 @@ class JPakeTest {
 
         val (clientGenerated, serverGenerated) = performExchange()
 
-        assertArrayEquals(clientGenerated, serverGenerated)
+        Assert.assertArrayEquals(clientGenerated, serverGenerated)
     }
 
     @Test
     fun jpakeExchangeFailsOnDifferentPassword() {
         jpakeClient = ECJPakeImpl(Role.CLIENT, SHARED_SECRET)
-        jpakeServer = ECJPakeImpl(Role.SERVER, "bad password")
+        jpakeServer = ECJPakeImpl(Role.SERVER, "LOL NO SECRET 4 U")
 
         val (clientGenerated, serverGenerated) = performExchange()
 
         val areEqual = Arrays.equals(clientGenerated, serverGenerated)
-        assert(!areEqual) { "Server and client secrets should not match!" }
+        assertFalse("Server and client secrets should not match!", areEqual)
     }
 
     private fun performExchange(): Pair<ByteArray, ByteArray> {
@@ -53,4 +62,5 @@ class JPakeTest {
 
         return Pair(clientGenerated, serverGenerated)
     }
+
 }

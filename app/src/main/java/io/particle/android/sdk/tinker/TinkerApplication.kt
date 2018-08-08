@@ -4,10 +4,7 @@ import android.support.multidex.MultiDexApplication
 import io.particle.android.sdk.ReleaseBuildAppInitializer
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.ui.DeviceListActivity
-import io.particle.ecjpake4j.ECJPakeImpl
-import io.particle.ecjpake4j.Role
 import mu.KotlinLogging
-import okio.Buffer
 import org.slf4j.impl.HandroidLoggerAdapter
 
 
@@ -32,12 +29,5 @@ class TinkerApplication : MultiDexApplication() {
         //        FirebaseApp.initializeApp(this);
 
         ParticleDeviceSetupLibrary.init(this, DeviceListActivity::class.java)
-
-        val ecj = ECJPakeImpl(Role.CLIENT, "LOLWUT")
-        log.info { "ECJPakeImpl initialized" }
-        val localRoundOne = ecj.createLocalRoundOne()
-        val asHex = Buffer().write(localRoundOne).readByteString().hex()
-        log.info { "ECJPakeImpl round one generated: $asHex" }
-        //        ecj.prepareResources();
     }
 }
