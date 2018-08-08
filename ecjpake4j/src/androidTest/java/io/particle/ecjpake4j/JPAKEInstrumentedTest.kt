@@ -13,14 +13,12 @@ private const val SHARED_SECRET = "tada, meat!"
 
 /**
  * Instrumented test, which will execute on an Android device.
- *
- * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 @RunWith(AndroidJUnit4::class)
 class JPAKEInstrumentedTest {
 
-    private lateinit var jpakeClient: EcJPake
-    private lateinit var jpakeServer: EcJPake
+    private lateinit var jpakeClient: ECJPake
+    private lateinit var jpakeServer: ECJPake
 
     @Test
     fun jpakeExchangeWorks() {
