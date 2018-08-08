@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
-import android.os.ParcelUuid
 import android.support.annotation.MainThread
 import io.particle.particlemesh.bluetooth.BTCharacteristicWriter
 import io.particle.particlemesh.bluetooth.ObservableBLECallbacks
@@ -25,7 +24,13 @@ import kotlinx.coroutines.experimental.channels.SendChannel
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
-import java.util.*
+
+
+enum class ConnectionPriority(val sdkVal: Int) {
+    HIGH(1),
+    BALANCED(0),
+    LOW_POWER(2)
+}
 
 
 class MeshSetupConnection(
@@ -42,6 +47,10 @@ class MeshSetupConnection(
 
     val packetReceiveChannel: ReceiveChannel<ByteArray>
         get() = closablePacketReceiveChannel
+
+    fun setConnectionPriority(priority: ConnectionPriority) {
+        gatt.requestConnectionPriority(priority.sdkVal)
+    }
 
     fun disconnect() {
         QATool.runSafely(
@@ -78,8 +87,8 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
         // If this returns null, we're finished, return null ourselves
         val (gatt, bleWriteChannel, callbacks) = doConnectToDevice(device) ?: return null
 
-
-        val messageWriteChannel = Channel<ByteArray>(128)
+        
+        val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
         launch(packetTxRxContext) {
             for (packet in messageWriteChannel) {
                 QATool.runSafely({ bleWriteChannel.writeToCharacteristic(packet) })
@@ -149,39 +158,12 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
 
     private fun initCharacteristics(gatt: BluetoothGatt): BluetoothGattCharacteristic? {
         log.debug { "Initializing characteristics" }
-
-
-
-
-
-
-
-
-        // FIXME: REMOVE!
-        val subscriber =
-//                if (gatt.device.address.toUpperCase() == "F8:6C:27:52:46:4B") {
-//            log.info { "BANANABNAANA: Using 'special' subscriptions" }
-//            CharacteristicSubscriber(
-//                    gatt,
-//                    UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E"),
-//                    UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e"),
-//                    UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e")
-//                    )
-//        } else {
-
-            CharacteristicSubscriber(
+        val subscriber = CharacteristicSubscriber(
                     gatt,
                     BT_SETUP_SERVICE_ID,
                     BT_SETUP_RX_CHARACTERISTIC_ID,
                     BT_SETUP_TX_CHARACTERISTIC_ID
             )
-//        }
-
-
-
-
-
-
         // return write characteristic
         return subscriber.subscribeToReadAndReturnWrite()
     }

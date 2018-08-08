@@ -7,6 +7,6 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 
-inline fun Context.safeToast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.safeToast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     launch(UI) { this@safeToast.toast(text, duration) }
 }
