@@ -5,7 +5,6 @@ import android.support.multidex.MultiDexApplication;
 import io.particle.android.sdk.ReleaseBuildAppInitializer;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.ui.DeviceListActivity;
-import io.particle.sdk.app.BuildConfig;
 
 
 public class TinkerApplication extends MultiDexApplication {
