@@ -13,9 +13,9 @@ import io.particle.particlemesh.bluetooth.btAdapter
 import io.particle.particlemesh.bluetooth.packetTxRxContext
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.truthy
-import io.particle.particlemesh.meshsetup.BT_SETUP_RX_CHARACTERISTIC_ID
-import io.particle.particlemesh.meshsetup.BT_SETUP_SERVICE_ID
-import io.particle.particlemesh.meshsetup.BT_SETUP_TX_CHARACTERISTIC_ID
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_SERVICE_ID
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
 import io.particle.particlemesh.meshsetup.utils.checkIsThisTheMainThread
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
@@ -160,9 +160,9 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
         log.debug { "Initializing characteristics" }
         val subscriber = CharacteristicSubscriber(
                     gatt,
-                    BT_SETUP_SERVICE_ID,
-                    BT_SETUP_RX_CHARACTERISTIC_ID,
-                    BT_SETUP_TX_CHARACTERISTIC_ID
+                BT_SETUP_SERVICE_ID,
+                BT_SETUP_RX_CHARACTERISTIC_ID,
+                BT_SETUP_TX_CHARACTERISTIC_ID
             )
         // return write characteristic
         return subscriber.subscribeToReadAndReturnWrite()

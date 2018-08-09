@@ -1,7 +1,6 @@
 package io.particle.particlemesh.meshsetup
 
-import io.particle.particlemesh.meshsetup.FrameReader
-import io.particle.particlemesh.meshsetup.readByteArray
+import io.particle.particlemesh.meshsetup.connection.FrameReader
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.nio.ByteBuffer

@@ -10,6 +10,8 @@ import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.common.android.livedata.setOnMainThread
+import io.particle.particlemesh.meshsetup.connection.RequestSender
+import io.particle.particlemesh.meshsetup.connection.RequestSenderFactory
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 

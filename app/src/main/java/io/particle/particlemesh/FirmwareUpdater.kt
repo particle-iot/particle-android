@@ -3,7 +3,7 @@ package io.particle.particlemesh
 import android.content.Context
 import io.particle.particlemesh.bluetooth.connecting.ConnectionPriority
 import io.particle.particlemesh.common.Result
-import io.particle.particlemesh.meshsetup.RequestSender
+import io.particle.particlemesh.meshsetup.connection.RequestSender
 import io.particle.particlemesh.meshsetup.utils.safeToast
 import mu.KotlinLogging
 import okio.Buffer

@@ -1,4 +1,4 @@
-package io.particle.particlemesh.meshsetup
+package io.particle.particlemesh.meshsetup.connection
 
 import java.util.*
 

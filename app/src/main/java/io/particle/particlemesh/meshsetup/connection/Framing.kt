@@ -1,7 +1,10 @@
-package io.particle.particlemesh.meshsetup
+package io.particle.particlemesh.meshsetup.connection
 
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.toHex
+import io.particle.particlemesh.meshsetup.putUntilFull
+import io.particle.particlemesh.meshsetup.readByte
+import io.particle.particlemesh.meshsetup.readByteArray
 import mu.KotlinLogging
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

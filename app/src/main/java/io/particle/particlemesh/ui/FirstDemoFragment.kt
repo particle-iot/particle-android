@@ -14,13 +14,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import androidx.core.widget.toast
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.common.android.livedata.distinct
 import io.particle.particlemesh.common.truthy
-import io.particle.particlemesh.meshsetup.*
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_SERVICE_ID
+import io.particle.particlemesh.meshsetup.connection.RequestSender
+import io.particle.particlemesh.meshsetup.connection.RequestSenderFactory
+import io.particle.particlemesh.meshsetup.connection.buildMeshDeviceScanner
 import io.particle.particlemesh.meshsetup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_first_demo.*
