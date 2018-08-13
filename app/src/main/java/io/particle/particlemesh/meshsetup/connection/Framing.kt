@@ -10,45 +10,37 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 
-data class RequestFrame(
-        val requestId: Short,
-        val messageType: Short,
-        val payloadData: ByteArray
-) {
-
-    init {
-        // ID "0" is reserved, shouldn't be used by a client
-        require(requestId != 0.toShort())
-    }
-}
-
-
-data class ResponseFrame(
-        val requestId: Short,
-        val resultCode: Int,
-        val payloadData: ByteArray
-)
-
-
 // There's no known max size, but data larger than 10KB seems absurd, so we're going with that.
-private const val MAX_FRAME_SIZE = 10240
+internal const val MAX_FRAME_SIZE = 10240
 
 
-class FrameReader(private val frameConsumer: (ResponseFrame) -> Unit) {
+// this class exists exclusively to make the pipeline more type safe,
+// and resistant to being improperly constructed
+class Frame(val frameData: ByteArray)
+
+
+// (see above re: type safety)
+class BlePacket(val data: ByteArray)
+
+
+class FrameReader(
+        var headerBytes: Int,
+        private val frameConsumer: (Frame) -> Unit
+) {
 
     private val log = KotlinLogging.logger {}
 
-    private var inProgressFrame: FrameInProgress? = null
+    private var inProgressFrame: InProgressFrame? = null
 
     @Synchronized
-    fun receivePacket(blePacket: ByteArray) {
-        log.debug { "Processing packet: ${blePacket.toHex()}" }
+    fun receivePacket(blePacket: BlePacket) {
+        log.debug { "Processing packet: ${blePacket.data.toHex()}" }
         try {
             if (inProgressFrame == null) {
-                inProgressFrame = FrameInProgress()
+                inProgressFrame = InProgressFrame(headerBytes)
             }
 
-            inProgressFrame!!.writePacket(blePacket)
+            inProgressFrame!!.writePacket(blePacket.data)
 
             if (inProgressFrame!!.isComplete) {
                 handleCompleteFrame()
@@ -62,47 +54,15 @@ class FrameReader(private val frameConsumer: (ResponseFrame) -> Unit) {
 
     private fun handleCompleteFrame() {
         val ipf = inProgressFrame!!
-        val completeFrame = ResponseFrame(
-                ipf.requestId!!,
-                ipf.resultCode!!,
-                ipf.consumeFrameData()
-        )
+        val completeFrame = Frame(ipf.consumeFrameData())
         inProgressFrame = null
         frameConsumer(completeFrame)
     }
 }
 
 
-class FrameWriter(
-        private val byteSink: (ByteArray) -> Unit
-) {
+class InProgressFrame(private val headerBytes: Int) {
 
-    private val buffer = ByteBuffer.allocate(MAX_FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN)
-
-    @Synchronized
-    fun writeFrame(frame: RequestFrame) {
-        buffer.clear()
-
-        buffer.putShort(frame.payloadData.size.toShort())
-        buffer.putShort(frame.requestId)
-        buffer.putShort(frame.messageType)
-        buffer.putShort(0)  // for the "reserved" field
-        buffer.put(frame.payloadData)
-
-        buffer.flip()
-
-        byteSink(buffer.readByteArray())
-    }
-
-}
-
-
-internal class FrameInProgress {
-
-    var requestId: Short? = null
-        private set
-    var resultCode: Int? = null
-        private set
     var isComplete = false
         private set
 
@@ -122,7 +82,7 @@ internal class FrameInProgress {
         packetBuffer.put(packet)
         packetBuffer.flip()
 
-        if (requestId == null) {
+        if (frameSize == null) {
             onFirstPacket()
         }
 
@@ -149,9 +109,10 @@ internal class FrameInProgress {
     }
 
     private fun onFirstPacket() {
-        frameSize = packetBuffer.short
-        requestId = packetBuffer.short
-        resultCode = packetBuffer.int
+        // add the header bytes because, unfortunately, the size field here reflects
+        // the *payload size*, not the *remaining frame size*, and the messaging stack
+        // has to handle the header bytes inbetween for itself...
+        frameSize = (headerBytes + packetBuffer.short).toShort()
         require(frameSize!! >= 0) { "Invalid frame size: $frameSize" }
         frameDataBuffer.limit(frameSize!!.toInt())
     }
