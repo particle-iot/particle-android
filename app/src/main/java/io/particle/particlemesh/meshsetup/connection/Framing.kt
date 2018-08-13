@@ -16,7 +16,10 @@ internal const val MAX_FRAME_SIZE = 10240
 
 // this class exists exclusively to make the pipeline more type safe,
 // and resistant to being improperly constructed
-class Frame(val frameData: ByteArray)
+class InboundFrame(val frameData: ByteArray)
+
+
+class OutboundFrame(val frameData: ByteArray, val payloadSize: Int)
 
 
 // (see above re: type safety)
@@ -25,7 +28,7 @@ class BlePacket(val data: ByteArray)
 
 class FrameReader(
         var headerBytes: Int,
-        private val frameConsumer: (Frame) -> Unit
+        private val frameConsumer: (InboundFrame) -> Unit
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -54,7 +57,7 @@ class FrameReader(
 
     private fun handleCompleteFrame() {
         val ipf = inProgressFrame!!
-        val completeFrame = Frame(ipf.consumeFrameData())
+        val completeFrame = InboundFrame(ipf.consumeFrameData())
         inProgressFrame = null
         frameConsumer(completeFrame)
     }
