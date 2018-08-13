@@ -4,16 +4,15 @@ import android.support.multidex.MultiDexApplication
 import io.particle.android.sdk.ReleaseBuildAppInitializer
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.ui.DeviceListActivity
-import mu.KotlinLogging
+import io.particle.particlemesh.common.QATool
 import org.slf4j.impl.HandroidLoggerAdapter
 
 
 class TinkerApplication : MultiDexApplication() {
 
-    private val log = KotlinLogging.logger {}
-
     override fun onCreate() {
         super.onCreate()
+
         // HI THERE: doing a release build?  Read the rest of this comment.  (Otherwise, carry on.)
         //
         // ReleaseBuildAppInitializer is a per-build type file, intended to avoid initializing
@@ -25,6 +24,7 @@ class TinkerApplication : MultiDexApplication() {
         // inside ReleaseBuildAppInitializer
         ReleaseBuildAppInitializer.onApplicationCreated(this)
 
+        QATool.isDebugBuild = true   //BuildConfig.DEBUG
         HandroidLoggerAdapter.DEBUG = true  //BuildConfig.DEBUG
         //        FirebaseApp.initializeApp(this);
 
