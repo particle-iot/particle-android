@@ -1,5 +1,6 @@
 package io.particle.particlemesh.meshsetup
 
+import okio.Buffer
 import java.nio.ByteBuffer
 
 
@@ -10,6 +11,14 @@ import java.nio.ByteBuffer
 
 fun ByteBuffer.readByte(): Byte = this.get()
 
+fun ByteBuffer.readUint16LE(): Int {
+    return ByteMath.readUint16LE(this)
+}
+
+fun ByteBuffer.writeUint16LE(value: Int): ByteBuffer {
+    ByteMath.writeUint16LE(this, value)
+    return this
+}
 
 fun ByteBuffer.putUntilFull(other: ByteBuffer) {
     // there's method call overhead here, but given the context, I'm not too concerned.
