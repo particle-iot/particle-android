@@ -2,11 +2,11 @@ package io.particle.particlemesh.meshsetup.connection.security
 
 import io.particle.ecjpake4j.ECJPake
 import io.particle.ecjpake4j.Role
+import io.particle.ecjpake4j.Role.CLIENT
 import io.particle.particlemesh.common.toHex
 import io.particle.particlemesh.meshsetup.connection.InboundFrameReader
 import io.particle.particlemesh.meshsetup.connection.OutboundFrame
 import io.particle.particlemesh.meshsetup.connection.OutboundFrameWriter
-import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
 import java.io.IOException
 import java.security.MessageDigest
@@ -110,27 +110,28 @@ class JpakeExchangeManager(
     }
 
     private fun generateClientConfirmationData(): ByteArray {
-        val hash = hashSha256(
+        val roundsHash = shaHash(
                 clientRoundOne!!,
                 serverRoundOne!!,
                 serverRoundTwo!!,
                 clientRoundTwo!!
         )
-        return hmacSha256(hash)
+
+        return hmacWithJpakeTagInKey(roundsHash, Role.CLIENT, Role.SERVER)
     }
 
     private fun generateFinalConfirmation(clientConfirmation: ByteArray): ByteArray {
-        val confirmationData = hashSha256(
+        val confirmationData = shaHash(
                 clientRoundOne!!,
                 serverRoundOne!!,
                 serverRoundTwo!!,
                 clientRoundTwo!!,
                 clientConfirmation
         )
-        return hmacSha256(confirmationData)
+        return hmacWithJpakeTagInKey(confirmationData, Role.SERVER, Role.CLIENT)
     }
 
-    private fun hashSha256(vararg byteArrays: ByteArray): ByteArray {
+    private fun shaHash(vararg byteArrays: ByteArray): ByteArray {
         val digest = MessageDigest.getInstance("SHA-256")
         for (array in byteArrays) {
             digest.update(array)
@@ -138,15 +139,21 @@ class JpakeExchangeManager(
         return digest.digest()
     }
 
-    private fun hmacSha256(includeInHmac: ByteArray): ByteArray {
-        val signingKey = SecretKeySpec(sharedSecret!!, HMAC_SHA256)
+    private fun hmacWithJpakeTagInKey(includeInHmac: ByteArray, role1: Role, role2: Role): ByteArray {
+        val macKeyMaterial = shaHash(sharedSecret!!, "JPAKE_KC".toByteArray())
+        val macKey = SecretKeySpec(macKeyMaterial, HMAC_SHA256)
         val mac = Mac.getInstance(HMAC_SHA256)
-        mac.init(signingKey)
-        mac.update(Role.CLIENT.stringValue.toByteArray())
+        mac.init(macKey)
+        mac.update("KC_1_U")
+        mac.update(role1.stringValue)
+        mac.update(role2.stringValue)
         mac.update(includeInHmac)
         return mac.doFinal()
     }
 }
 
+private fun Mac.update(str: String) {
+    this.update(str.toByteArray())
+}
 
 private const val HMAC_SHA256 = "HmacSHA256"
