@@ -41,7 +41,7 @@ class ECJPakeImpl(
     override fun receiveRemoteRoundOne(s1: ByteArray) {
         val result = readRoundOne(cryptoComponents, s1.copyOf())
         if (result != 0) {
-            throw IllegalStateException("Error occurred in mbedtls lib for receiveRemoteRoundOne()")
+            throw IllegalStateException("Error $result occurred in mbedtls lib for receiveRemoteRoundOne()")
         }
     }
 
