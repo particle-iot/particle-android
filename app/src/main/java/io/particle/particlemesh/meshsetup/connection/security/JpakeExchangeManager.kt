@@ -53,7 +53,7 @@ class JpakeExchangeManager(
     /** Perform the JPAKE exchange (including confirmation) and return the shared secret. */
     @Throws(IOException::class)
     suspend fun performJpakeExchange(): ByteArray {
-        log.info { "performJpakeExchange()" }
+        log.debug { "performJpakeExchange()" }
         try {
             sharedSecret = doPerformExchange()
             confirmSharedSecret()
@@ -70,42 +70,40 @@ class JpakeExchangeManager(
 
     private suspend fun doPerformExchange(): ByteArray {
         clientRoundOne = jpakeImpl.createLocalRoundOne()
-        log.info { "Sending round 1 to 'server', ${clientRoundOne?.size} bytes: ${clientRoundOne.toHex()}" }
+        log.debug { "Sending round 1 to 'server', ${clientRoundOne?.size} bytes: ${clientRoundOne.toHex()}" }
         msgTransceiver.send(clientRoundOne!!)
 
         serverRoundOne = msgTransceiver.receive()
-        log.info { "Received ${serverRoundOne!!.size}-byte round 1 from 'server': ${serverRoundOne.toHex()}" }
+        log.debug { "Received ${serverRoundOne!!.size}-byte round 1 from 'server': ${serverRoundOne.toHex()}" }
         serverRoundTwo = msgTransceiver.receive()
-        log.info { "Received ${serverRoundTwo!!.size}-byte round 2 from 'server': ${serverRoundTwo.toHex()}" }
+        log.debug { "Received ${serverRoundTwo!!.size}-byte round 2 from 'server': ${serverRoundTwo.toHex()}" }
 
-        log.info { "Applying round 1 from 'server'" }
+        log.debug { "Applying round 1 from 'server'" }
         jpakeImpl.receiveRemoteRoundOne(serverRoundOne!!)
-        log.info { "Applying round 2 from 'server'" }
+        log.debug { "Applying round 2 from 'server'" }
         jpakeImpl.receiveRemoteRoundTwo(serverRoundTwo!!)
 
         clientRoundTwo = jpakeImpl.createLocalRoundTwo()
-        log.info { "Sending round 2 to 'server', ${clientRoundTwo?.size} bytes: ${clientRoundTwo.toHex()}" }
+        log.debug { "Sending round 2 to 'server', ${clientRoundTwo?.size} bytes: ${clientRoundTwo.toHex()}" }
         msgTransceiver.send(clientRoundTwo!!)
 
-        log.info { "Calculating shared secret!" }
+        log.debug { "Calculating shared secret!" }
         return jpakeImpl.calculateSharedSecret()
     }
 
     private suspend fun confirmSharedSecret() {
-        // TODO: REMOVE THIS!
-
-        log.warn { "Shared secret: ${sharedSecret.toHex()}" }
+//        log.warn { "Shared secret: ${sharedSecret.toHex()}" }
 
         val clientConfirmation = generateClientConfirmationData()
-        log.info { "Sending ${clientConfirmation.size}-byte confirmation message: ${clientConfirmation.toHex()}" }
+        log.debug { "Sending ${clientConfirmation.size}-byte confirmation message: ${clientConfirmation.toHex()}" }
         msgTransceiver.send(clientConfirmation)
-        log.info { "Awaiting confirmation response" }
+        log.debug { "Awaiting confirmation response" }
         val serverConfirmation = msgTransceiver.receive()
-        log.info { "Confirmation response received with ${serverConfirmation.size} bytes: ${serverConfirmation.toHex()}" }
+        log.debug { "Confirmation response received with ${serverConfirmation.size} bytes: ${serverConfirmation.toHex()}" }
         val finalClientConfirmation = generateFinalConfirmation(clientConfirmation)
 
         if (Arrays.equals(serverConfirmation, finalClientConfirmation)) {
-            log.info { "Success!  Shared secret matches!" }
+            log.debug { "Success!  Shared secret matches!" }
         } else {
             throw IOException("Cannot connect: local key confirmation data does not match remote!")
         }
