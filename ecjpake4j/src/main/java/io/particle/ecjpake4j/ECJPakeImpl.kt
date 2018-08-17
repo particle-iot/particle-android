@@ -11,7 +11,7 @@ internal const val RNG_SEED_DATA = "android-mbedtls"
 class ECJPakeImpl(
         val role: Role,
         private val lowEntropySharedPassword: String
-) : EcJPake {
+) : ECJPake {
 
     private lateinit var cryptoComponents: CPointer
 
@@ -30,23 +30,44 @@ class ECJPakeImpl(
     }
 
     override fun createLocalRoundOne(): ByteArray {
-        return writeRoundOne(cryptoComponents).copyOf()
+        val result = writeRoundOne(cryptoComponents)
+        if (result != null) {
+            return result.copyOf()
+        } else {
+            throw IllegalStateException("Error occurred in mbedtls lib for createLocalRoundOne()")
+        }
     }
 
     override fun receiveRemoteRoundOne(s1: ByteArray) {
-        readRoundOne(cryptoComponents, s1.copyOf())
+        val result = readRoundOne(cryptoComponents, s1.copyOf())
+        if (result != 0) {
+            throw IllegalStateException("Error $result occurred in mbedtls lib for receiveRemoteRoundOne()")
+        }
     }
 
     override fun receiveRemoteRoundTwo(s2: ByteArray) {
-        readRoundTwo(cryptoComponents, s2.copyOf())
+        val result = readRoundTwo(cryptoComponents, s2.copyOf())
+        if (result != 0) {
+            throw IllegalStateException("Error occurred in mbedtls lib for receiveRemoteRoundTwo()")
+        }
     }
 
     override fun createLocalRoundTwo(): ByteArray {
-        return writeRoundTwo(cryptoComponents).copyOf()
+        val result = writeRoundTwo(cryptoComponents)
+        if (result != null) {
+            return result.copyOf()
+        } else {
+            throw IllegalStateException("Error occurred in mbedtls lib for createLocalRoundTwo()")
+        }
     }
 
     override fun calculateSharedSecret(): ByteArray {
-        return deriveSecret(cryptoComponents).copyOf()
+        val result = deriveSecret(cryptoComponents)
+        if (result != null) {
+            return result.copyOf()
+        } else {
+            throw IllegalStateException("Error occurred in mbedtls lib for calculateSharedSecret()")
+        }
     }
 
     // Finalizers aren't perfect, but they'll do here.
@@ -68,7 +89,7 @@ class ECJPakeImpl(
      *
      * @returns null if not successful
      */
-    private external fun writeRoundOne(cryptoComponents: CPointer): ByteArray
+    private external fun writeRoundOne(cryptoComponents: CPointer): ByteArray?
 
     /**
      * Call	mbedtls_ecjpake_read_round_one with the remote's round one message data.
@@ -82,7 +103,7 @@ class ECJPakeImpl(
      *
      * @returns null if not successful
      */
-    private external fun writeRoundTwo(cryptoComponents: CPointer): ByteArray
+    private external fun writeRoundTwo(cryptoComponents: CPointer): ByteArray?
 
     /**
      * Call	mbedtls_ecjpake_read_round_two with the remote's round two message data.
@@ -96,7 +117,7 @@ class ECJPakeImpl(
      *
      * @returns null if not successful
      */
-    private external fun deriveSecret(cryptoComponents: CPointer): ByteArray
+    private external fun deriveSecret(cryptoComponents: CPointer): ByteArray?
 
     /**
      * Free all pointers using their respective functions

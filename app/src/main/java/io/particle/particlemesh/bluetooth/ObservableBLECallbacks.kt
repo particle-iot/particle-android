@@ -94,7 +94,7 @@ class ObservableBLECallbacks : BluetoothGattCallback() {
 
 
     private fun receivePacket(packet: ByteArray) {
-        log.debug { "Packet received: ${packet.toHex()}" }
+        log.trace { "Packet received, size=${packet.size} contents=${packet.toHex()}" }
 
         if (!mutableReceiveChannel.isClosedForSend) {
             QATool.runSafely({ mutableReceiveChannel.offer(packet) })

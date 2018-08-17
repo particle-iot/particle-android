@@ -13,14 +13,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.toast
 import androidx.navigation.fragment.findNavController
 import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.common.android.livedata.distinct
-import io.particle.particlemesh.meshsetup.BT_SETUP_SERVICE_ID
-import io.particle.particlemesh.meshsetup.RequestSender
-import io.particle.particlemesh.meshsetup.buildMeshDeviceScanner
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_SERVICE_ID
+import io.particle.particlemesh.meshsetup.connection.RequestSender
+import io.particle.particlemesh.meshsetup.connection.buildMeshDeviceScanner
 import io.particle.particlemesh.meshsetup.ui.utils.easyDiffUtilCallback
 import io.particle.particlemesh.meshsetup.ui.utils.inflateRow
 import io.particle.particlemesh.meshsetup.utils.safeToast
@@ -67,7 +66,11 @@ class ManualCommissioningSelectDeviceFragment : BaseMeshSetupFragment() {
         val ctx = requireActivity().applicationContext
 
         launch(UI) {
-            val commissioner = setupController.connectToCommissioner(selected.deviceAddress)
+            val commissioner = setupController.connectToCommissioner(
+                    selected.deviceAddress,
+                    // FIXME: use real mobile secret for commissioner here
+                    "LOLWUTNOPE12345"
+            )
             if (commissioner == null) {
                 ctx.safeToast("Unable to connect to device ${selected.name}")
             } else {

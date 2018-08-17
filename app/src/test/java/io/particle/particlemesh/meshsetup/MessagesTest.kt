@@ -1,7 +1,7 @@
 package io.particle.particlemesh.meshsetup
 
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
-import io.particle.particlemesh.meshsetup.asRequest
+import io.particle.particlemesh.meshsetup.connection.asRequest
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test

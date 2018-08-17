@@ -17,8 +17,8 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import io.particle.particlemesh.common.android.livedata.distinct
 import io.particle.particlemesh.common.truthy
-import io.particle.particlemesh.meshsetup.BT_SETUP_SERVICE_ID
-import io.particle.particlemesh.meshsetup.buildMeshDeviceScanner
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_SERVICE_ID
+import io.particle.particlemesh.meshsetup.connection.buildMeshDeviceScanner
 import io.particle.particlemesh.meshsetup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_ble_pairing_progress.*
@@ -61,8 +61,10 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
 
         setupController.setBTDeviceName(device.name)
 
+        val mobileSecret = setupController.deviceToBeSetUpParams.value!!.mobileSecret!!
+
         launch(UI) {
-            val targetDevice = setupController.connectToTargetDevice(targetAddress)
+            val targetDevice = setupController.connectToTargetDevice(targetAddress, mobileSecret)
             if (targetDevice == null) {
                 ctx.quickDialog("Unable to connect to device ${device.name}.")
             } else {

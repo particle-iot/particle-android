@@ -10,6 +10,9 @@ import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.common.android.livedata.setOnMainThread
+import io.particle.particlemesh.meshsetup.connection.RequestSender
+import io.particle.particlemesh.meshsetup.connection.RequestSenderFactory
+import io.particle.particlemesh.meshsetup.connection.security.CryptoDelegateFactory
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
@@ -37,7 +40,10 @@ class MeshSetupStateViewModel(app: Application) : AndroidViewModel(app) {
 
     val meshSetupController = MeshSetupController(
             ParticleCloudSDK.getCloud(),
-            RequestSenderFactory(MeshSetupConnectionFactory(app))
+            RequestSenderFactory(
+                    MeshSetupConnectionFactory(app),
+                    CryptoDelegateFactory()
+            )
     )
 
     override fun onCleared() {
@@ -116,8 +122,11 @@ class MeshSetupController(
         }
     }
 
-    suspend fun connectToTargetDevice(address: BTDeviceAddress): RequestSender? {
-        val device = requestSenderFactory.buildRequestSender(address, "joiner")
+    suspend fun connectToTargetDevice(
+            address: BTDeviceAddress,
+            mobileSecret: String
+    ): RequestSender? {
+        val device = requestSenderFactory.buildRequestSender(address, "joiner", mobileSecret)
         if (device == null) {
             log.error { "Unable to connect to device!" }
             return null
@@ -164,8 +173,11 @@ class MeshSetupController(
         }
     }
 
-    suspend fun connectToCommissioner(address: BTDeviceAddress): RequestSender? {
-        val device = requestSenderFactory.buildRequestSender(address, "commissioner")
+    suspend fun connectToCommissioner(
+            address: BTDeviceAddress,
+            mobileSecret: String
+    ): RequestSender? {
+        val device = requestSenderFactory.buildRequestSender(address, "commissioner", mobileSecret)
         if (device != null) {
             commissioner = device
         } else {

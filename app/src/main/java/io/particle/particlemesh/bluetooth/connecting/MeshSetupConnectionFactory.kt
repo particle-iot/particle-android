@@ -13,9 +13,9 @@ import io.particle.particlemesh.bluetooth.btAdapter
 import io.particle.particlemesh.bluetooth.packetTxRxContext
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.truthy
-import io.particle.particlemesh.meshsetup.BT_SETUP_RX_CHARACTERISTIC_ID
-import io.particle.particlemesh.meshsetup.BT_SETUP_SERVICE_ID
-import io.particle.particlemesh.meshsetup.BT_SETUP_TX_CHARACTERISTIC_ID
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_SERVICE_ID
+import io.particle.particlemesh.meshsetup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
 import io.particle.particlemesh.meshsetup.utils.checkIsThisTheMainThread
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
@@ -118,12 +118,6 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
         log.info { "Got GATT and callbacks!" }
         val (gatt, callbacks) = gattAndCallbacks
 
-//        val bondingResult = bondToDevice(device)
-//        if (bondingResult != BondingResult.BONDED) {
-//            log.warn { "Bonding failed! result=$bondingResult" }
-//            return null
-//        }
-
         val services = discoverServices(gatt, callbacks)
         if (!services.truthy()) {
             log.warn { "Service discovery failed!" }
@@ -160,20 +154,12 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
         log.debug { "Initializing characteristics" }
         val subscriber = CharacteristicSubscriber(
                     gatt,
-                    BT_SETUP_SERVICE_ID,
-                    BT_SETUP_RX_CHARACTERISTIC_ID,
-                    BT_SETUP_TX_CHARACTERISTIC_ID
+                BT_SETUP_SERVICE_ID,
+                BT_SETUP_RX_CHARACTERISTIC_ID,
+                BT_SETUP_TX_CHARACTERISTIC_ID
             )
         // return write characteristic
         return subscriber.subscribeToReadAndReturnWrite()
-    }
-
-    private suspend fun bondToDevice(device: BluetoothDevice): BondingResult {
-        log.debug { "Attempting to bond..." }
-        val bonder = Bonder(ctx)
-        val result = bonder.bondToDevice(device)
-        log.debug { "Bonding result: $result" }
-        return result
     }
 
 }

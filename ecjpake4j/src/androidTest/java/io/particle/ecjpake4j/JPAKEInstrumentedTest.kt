@@ -8,19 +8,17 @@ import org.junit.runner.RunWith
 import java.util.*
 
 
-private const val SHARED_SECRET = "tada, meat!"
+private const val SHARED_SECRET = "weak password"
 
 
 /**
  * Instrumented test, which will execute on an Android device.
- *
- * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 @RunWith(AndroidJUnit4::class)
 class JPAKEInstrumentedTest {
 
-    private lateinit var jpakeClient: EcJPake
-    private lateinit var jpakeServer: EcJPake
+    private lateinit var jpakeClient: ECJPake
+    private lateinit var jpakeServer: ECJPake
 
     @Test
     fun jpakeExchangeWorks() {
@@ -29,6 +27,8 @@ class JPAKEInstrumentedTest {
 
         val (clientGenerated, serverGenerated) = performExchange()
 
+        // JPAKE shared secret material should be 32 bytes
+        Assert.assertEquals(32, clientGenerated.size)
         Assert.assertArrayEquals(clientGenerated, serverGenerated)
     }
 
