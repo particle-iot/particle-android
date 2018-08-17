@@ -110,7 +110,6 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
                 return
             }
         }
-        log.debug { "No usable barcodes found in latest batch: $foundBarcodes" }
     }
 
     private fun onBarcodeFound(barcodeData: BarcodeData) {

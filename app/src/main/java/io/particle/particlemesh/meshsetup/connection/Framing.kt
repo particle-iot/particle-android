@@ -2,10 +2,15 @@ package io.particle.particlemesh.meshsetup.connection
 
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.toHex
+import io.particle.particlemesh.meshsetup.connection.security.AesCcmDelegate
 import io.particle.particlemesh.meshsetup.putUntilFull
-import io.particle.particlemesh.meshsetup.readByte
 import io.particle.particlemesh.meshsetup.readByteArray
+import io.particle.particlemesh.meshsetup.readUint16LE
+import io.particle.particlemesh.meshsetup.writeUint16LE
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
+import okio.Buffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -26,10 +31,48 @@ class OutboundFrame(val frameData: ByteArray, val payloadSize: Int)
 class BlePacket(val data: ByteArray)
 
 
-class FrameReader(
-        var headerBytes: Int,
-        private val frameConsumer: (InboundFrame) -> Unit
+class OutboundFrameWriter(
+        private val byteSink: (ByteArray) -> Unit
 ) {
+
+    // Externally mutable state is less than awesome.  Patches welcome.
+    var cryptoDelegate: AesCcmDelegate? = null
+
+    private val buffer = ByteBuffer.allocate(MAX_FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN)
+
+    private val log = KotlinLogging.logger {}
+
+    @Synchronized
+    fun writeFrame(frame: OutboundFrame) {
+        buffer.clear()
+
+        buffer.writeUint16LE(frame.payloadSize)
+
+        val fml = Buffer()
+        fml.writeShortLe(frame.payloadSize)
+        val additionalData = fml.readByteArray()
+
+        val data = cryptoDelegate?.encrypt(frame.frameData, additionalData) ?: frame.frameData
+        log.info { "Sending frame with ${data.size} byte payload " }
+        buffer.put(data)
+        buffer.flip()
+
+        val finalFrame = buffer.readByteArray()
+        byteSink(finalFrame)
+        log.info { "Sent frame with ${finalFrame.size} total bytes" }
+    }
+
+}
+
+
+class InboundFrameReader {
+
+    val inboundFrameChannel = Channel<InboundFrame>(128)
+    // Externally mutable state is less than awesome.  Patches welcome.
+    var cryptoDelegate: AesCcmDelegate? = null
+    // Externally mutable state is less than awesome.  Patches welcome.
+    // Number of header bytes beyond just the "size" field
+    var extraHeaderBytes: Int = 0
 
     private val log = KotlinLogging.logger {}
 
@@ -40,13 +83,18 @@ class FrameReader(
         log.debug { "Processing packet: ${blePacket.data.toHex()}" }
         try {
             if (inProgressFrame == null) {
-                inProgressFrame = InProgressFrame(headerBytes)
+                inProgressFrame = InProgressFrame(extraHeaderBytes)
             }
 
-            inProgressFrame!!.writePacket(blePacket.data)
+            val bytesForNextFrame = inProgressFrame!!.writePacket(blePacket.data)
 
             if (inProgressFrame!!.isComplete) {
                 handleCompleteFrame()
+            }
+
+            if (bytesForNextFrame != null) {
+                log.info { "Processing bytes from next frame as new packet: ${bytesForNextFrame.toHex()}" }
+                receivePacket(BlePacket(bytesForNextFrame))
             }
 
         } catch (ex: Exception) {
@@ -57,29 +105,38 @@ class FrameReader(
 
     private fun handleCompleteFrame() {
         val ipf = inProgressFrame!!
-        val completeFrame = InboundFrame(ipf.consumeFrameData())
+        val frameData = ipf.consumeFrameData()
+        log.info { "Handling complete frame with ${frameData.size} bytes: ${frameData.toHex()}" }
+        val payloadSize = frameData.size - extraHeaderBytes
+        val additionalData = Buffer().writeShortLe(payloadSize).readByteArray()
+        val completeFrame = InboundFrame(
+                cryptoDelegate?.decrypt(frameData, additionalData) ?: frameData
+        )
         inProgressFrame = null
-        frameConsumer(completeFrame)
+        launch {
+            inboundFrameChannel.send(completeFrame)
+        }
+
     }
 }
 
 
-class InProgressFrame(private val headerBytes: Int) {
+class InProgressFrame(private val extraHeaderBytes: Int) {
 
     var isComplete = false
         private set
 
-    private var frameSize: Short? = null
+    private var frameSize: Int? = null // Int instead of Short because it's sent as a uint16_t
     private var finalFrameData: ByteArray? = null
 
     private val packetBuffer = ByteBuffer.allocate(MAX_FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN)
     // note that this field gets its limit set below
-    private val frameDataBuffer = ByteBuffer.allocate(MAX_FRAME_SIZE)
+    private val frameDataBuffer = ByteBuffer.allocate(MAX_FRAME_SIZE).order(ByteOrder.LITTLE_ENDIAN)
 
     private var isConsumed = false
 
     @Synchronized
-    fun writePacket(packet: ByteArray) {
+    fun writePacket(packet: ByteArray): ByteArray? {  // returns the "extra" bytes
         ensureFrameIsNotReused()
 
         packetBuffer.put(packet)
@@ -91,14 +148,15 @@ class InProgressFrame(private val headerBytes: Int) {
 
         frameDataBuffer.putUntilFull(packetBuffer)
 
+        var bytesForNextFrame: ByteArray? = null
         if (!frameDataBuffer.hasRemaining()) {
             isComplete = true
             onComplete()
-            // ensure the rest of the packet was just zeros
-            checkRemainderOfPacketIsZeros()
+            bytesForNextFrame = getBytesForNextFrame()
         }
-
         packetBuffer.clear()
+
+        return bytesForNextFrame
     }
 
     @Synchronized
@@ -115,7 +173,8 @@ class InProgressFrame(private val headerBytes: Int) {
         // add the header bytes because, unfortunately, the size field here reflects
         // the *payload size*, not the *remaining frame size*, and the messaging stack
         // has to handle the header bytes inbetween for itself...
-        frameSize = (headerBytes + packetBuffer.short).toShort()
+        val payloadSize = packetBuffer.short
+        frameSize = extraHeaderBytes + payloadSize
         require(frameSize!! >= 0) { "Invalid frame size: $frameSize" }
         frameDataBuffer.limit(frameSize!!.toInt())
     }
@@ -125,21 +184,27 @@ class InProgressFrame(private val headerBytes: Int) {
         finalFrameData = frameDataBuffer.readByteArray(frameSize!!.toInt())
     }
 
-    // Ensure that the remainder of a packet is all zeros
-    // (this is a sanity check to make ensure we don't receive bytes where we shouldn't)
-    private fun checkRemainderOfPacketIsZeros() {
-        if (!QATool.isDebugBuild) {
-            return
+    private fun getBytesForNextFrame(): ByteArray? {
+        if (packetBuffer.remaining() < 2) { // do we have a size header?
+            return null
         }
 
-        while (packetBuffer.hasRemaining()) {
-            val nextByte = packetBuffer.readByte().toInt()
-            require(nextByte == 0) {
-                val b = nextByte.toByte().toHex()
-                val remainder = packetBuffer.readByteArray().toHex()
-                "Found non-zero bytes in the remainder of a packet: byte=$b, remainder=$remainder"
-            }
+        val nextFrameSize = packetBuffer.readUint16LE()
+        if (nextFrameSize == 0) {
+            // remainder of the frame must be zeros; bail
+            return null
         }
+
+        val remaining = packetBuffer.readByteArray()
+
+        packetBuffer.clear()
+
+        packetBuffer.writeUint16LE(nextFrameSize)
+        packetBuffer.put(remaining)
+
+        packetBuffer.flip()
+
+        return packetBuffer.readByteArray()
     }
 
     private fun ensureFrameIsNotReused() {

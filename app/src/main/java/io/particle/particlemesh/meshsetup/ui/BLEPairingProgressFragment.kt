@@ -61,8 +61,10 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
 
         setupController.setBTDeviceName(device.name)
 
+        val mobileSecret = setupController.deviceToBeSetUpParams.value!!.mobileSecret!!
+
         launch(UI) {
-            val targetDevice = setupController.connectToTargetDevice(targetAddress)
+            val targetDevice = setupController.connectToTargetDevice(targetAddress, mobileSecret)
             if (targetDevice == null) {
                 ctx.quickDialog("Unable to connect to device ${device.name}.")
             } else {

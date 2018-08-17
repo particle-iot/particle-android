@@ -66,7 +66,11 @@ class ManualCommissioningSelectDeviceFragment : BaseMeshSetupFragment() {
         val ctx = requireActivity().applicationContext
 
         launch(UI) {
-            val commissioner = setupController.connectToCommissioner(selected.deviceAddress)
+            val commissioner = setupController.connectToCommissioner(
+                    selected.deviceAddress,
+                    // FIXME: use real mobile secret for commissioner here
+                    "LOLWUTNOPE12345"
+            )
             if (commissioner == null) {
                 ctx.safeToast("Unable to connect to device ${selected.name}")
             } else {

@@ -1,6 +1,5 @@
 package io.particle.particlemesh.meshsetup.connection.security
 
-import io.particle.particlemesh.common.toHex
 import mu.KotlinLogging
 import okio.Buffer
 import javax.crypto.Cipher
@@ -48,43 +47,29 @@ class AesCcmDelegate private constructor(
 
     private val log = KotlinLogging.logger {}
 
-    @Synchronized
     fun encrypt(bytes: ByteArray, additionalData: ByteArray): ByteArray {
-        // TODO: remove
-        // relevant slice of Node CLI code:
-//    const r = this._aesCcm.decrypt({
-//        data: this._rxBuf.slice(MESSAGE_HEADER_SIZE, msgSize),
-//        nonce: genReplyNonce(++this._repCount, this._repNonce),
-//        tag: this._rxBuf.slice(msgSize, packetSize),
-//        additionalData: this._rxBuf.slice(0, MESSAGE_HEADER_SIZE)
-
         val id = ++reqCount
         val buf = Buffer()
-        Nonces.writeReplyNonce(buf, id, requestNonce)
+        Nonces.writeRequestNonce(buf, id, requestNonce)
         val nonceVal = buf.readByteArray()
 
-        log.info { "Being asked to encrypt ${bytes.size} bytes: ${bytes.toHex()}" }
-
+        // FIXME: look into reusing the instance but calling `init()` multiple times
         val encryptCipher = Cipher.getInstance(ALGORITHM_TRANSFORMATION)
         encryptCipher.init(Cipher.ENCRYPT_MODE, aesKey, IvParameterSpec(nonceVal))
         encryptCipher.updateAAD(additionalData)
 
-        val encrypted = encryptCipher.doFinal(bytes)
-        log.info { "Final size of encrypted bytes: ${encrypted.size}" }
-        return encrypted
+        return encryptCipher.doFinal(bytes)
     }
 
-    @Synchronized
-    fun decrypt(bytes: ByteArray): ByteArray {
-
-        TODO("this is known not to work at the moment")
-
+    fun decrypt(bytes: ByteArray, additionalData: ByteArray): ByteArray {
         val id = ++respCount
         val buf = Buffer()
-        Nonces.writeReplyNonce(buf, id, requestNonce)
+        Nonces.writeReplyNonce(buf, id, replyNonce)
         val nonceVal = buf.readByteArray()
 
-//        decryptCipher.updateAAD(nonceVal)
-//        return decryptCipher.doFinal(bytes)
+        val cipher = Cipher.getInstance(ALGORITHM_TRANSFORMATION)
+        cipher.init(Cipher.DECRYPT_MODE, aesKey, IvParameterSpec(nonceVal))
+        cipher.updateAAD(additionalData)
+        return cipher.doFinal(bytes)
     }
 }

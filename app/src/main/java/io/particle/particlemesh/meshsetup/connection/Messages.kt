@@ -20,6 +20,7 @@ import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.bluetooth.packetTxRxContext
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.Result
+import io.particle.particlemesh.meshsetup.connection.security.CryptoDelegateFactory
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
@@ -27,6 +28,9 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.experimental.Continuation
 import kotlin.coroutines.experimental.suspendCoroutine
 
+
+private const val FULL_PROTOCOL_HEADER_SIZE = 6
+private const val AES_CCM_MAC_SIZE = 8
 
 private var requestIdGenerator = AtomicInteger()
 
@@ -36,8 +40,8 @@ private fun generateRequestId(): Short {
 }
 
 
-internal fun AbstractMessage.asRequest(): RequestFrame {
-    return RequestFrame(
+internal fun AbstractMessage.asRequest(): DeviceRequest {
+    return DeviceRequest(
             generateRequestId(),
             // get type ID from the message descriptor
             this.descriptorForType.options.getExtension(Extensions.typeId).toShort(),
@@ -62,29 +66,51 @@ private fun Int.toResultCode(): Common.ResultCode {
 }
 
 
-class RequestSenderFactory(private val connectionFactory: MeshSetupConnectionFactory) {
+class RequestSenderFactory(
+        private val connectionFactory: MeshSetupConnectionFactory,
+        private val cryptoDelegateFactory: CryptoDelegateFactory
+) {
 
     @MainThread
-    suspend fun buildRequestSender(address: BTDeviceAddress, name: String): RequestSender? {
-
+    suspend fun buildRequestSender(
+            address: BTDeviceAddress,
+            name: String,
+            jpakeLowEntropyPassword: String
+    ): RequestSender? {
 
         val meshSetupConnection = connectionFactory.connectToDevice(address) ?: return null
 
-        // 1. build up the "transmit" side
         val packetMTUSplitter = PacketMTUSplitter({ packet ->
             meshSetupConnection.packetSendChannel.offer(packet)
         })
-
-        val frameWriter = FrameWriter { packetMTUSplitter.splitIntoPackets(it) }
-
-        // 2. build the actual request sender
-        val requestSender = RequestSender(frameWriter, meshSetupConnection, name)
-
-        // 3. build up the "receive" side
-        val frameReader = FrameReader { response -> requestSender.receiveResponse(response) }
+        val frameWriter = OutboundFrameWriter { packetMTUSplitter.splitIntoPackets(it) }
+        val frameReader = InboundFrameReader()
         launch(packetTxRxContext) {
             for (packet in meshSetupConnection.packetReceiveChannel) {
-                QATool.runSafely({ frameReader.receivePacket(packet) })
+                QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
+            }
+        }
+
+        val cryptoDelegate = cryptoDelegateFactory.createCryptoDelegate(
+                meshSetupConnection,
+                frameWriter,
+                frameReader,
+                jpakeLowEntropyPassword
+        ) ?: return null
+
+        frameReader.cryptoDelegate = cryptoDelegate
+        frameWriter.cryptoDelegate = cryptoDelegate
+
+        // now that we've passed the security handshake, set the correct number of bytes to assume
+        // for the message headers
+        frameReader.extraHeaderBytes = FULL_PROTOCOL_HEADER_SIZE + AES_CCM_MAC_SIZE
+
+        val requestWriter = RequestWriter { frameWriter.writeFrame(it) }
+        val requestSender = RequestSender(requestWriter, meshSetupConnection, name)
+        val responseReader = ResponseReader { requestSender.receiveResponse(it) }
+        launch(packetTxRxContext) {
+            for (inboundFrame in frameReader.inboundFrameChannel) {
+                QATool.runSafely({ responseReader.receiveResponseFrame(inboundFrame) })
             }
         }
 
@@ -95,13 +121,13 @@ class RequestSenderFactory(private val connectionFactory: MeshSetupConnectionFac
 
 
 class RequestSender internal constructor(
-        private val frameWriter: FrameWriter,
+        private val requestWriter: RequestWriter,
         private val connection: MeshSetupConnection,
         private val connectionName: String
 ) {
 
     private val log = KotlinLogging.logger {}
-    private val requestCallbacks = SparseArray<(ResponseFrame?) -> Unit>()
+    private val requestCallbacks = SparseArray<(DeviceResponse?) -> Unit>()
 
     val isConnected: Boolean
         get() = connection.isConnected
@@ -237,7 +263,7 @@ class RequestSender internal constructor(
         return buildResult(response) { r -> GetSerialNumberReply.parseFrom(r.payloadData) }
     }
 
-    fun receiveResponse(responseFrame: ResponseFrame) {
+    fun receiveResponse(responseFrame: DeviceResponse) {
         val callback = synchronized(requestCallbacks) {
             requestCallbacks.get(responseFrame.requestId.toInt())
         }
@@ -252,11 +278,11 @@ class RequestSender internal constructor(
     }
 
     //region PRIVATE
-    private suspend fun sendRequest(message: GeneratedMessageV3): ResponseFrame? {
+    private suspend fun sendRequest(message: GeneratedMessageV3): DeviceResponse? {
         log.info { "Sending message ${message.javaClass} to $connectionName: '$message'" }
         val requestFrame = message.asRequest()
         val response = withTimeoutOrNull(BLE_PROTO_REQUEST_TIMEOUT_MILLIS) {
-            suspendCoroutine { continuation: Continuation<ResponseFrame?> ->
+            suspendCoroutine { continuation: Continuation<DeviceResponse?> ->
                 doSendRequest(requestFrame) { continuation.resume(it) }
             }
         }
@@ -273,18 +299,18 @@ class RequestSender internal constructor(
         return response
     }
 
-    private fun doSendRequest(requestFrame: RequestFrame,
-                              continuationCallback: (ResponseFrame?) -> Unit) {
-        val requestCallback = { frame: ResponseFrame? -> continuationCallback(frame) }
+    private fun doSendRequest(request: DeviceRequest,
+                              continuationCallback: (DeviceResponse?) -> Unit) {
+        val requestCallback = { frame: DeviceResponse? -> continuationCallback(frame) }
         synchronized(requestCallbacks) {
-            requestCallbacks.put(requestFrame.requestId.toInt(), requestCallback)
+            requestCallbacks.put(request.requestId.toInt(), requestCallback)
         }
-        frameWriter.writeFrame(requestFrame)
+        requestWriter.writeRequest(request)
     }
 
     private fun <V : GeneratedMessageV3> buildResult(
-            response: ResponseFrame?,
-            successTransformer: (ResponseFrame) -> V
+            response: DeviceResponse?,
+            successTransformer: (DeviceResponse) -> V
     ): Result<V, Common.ResultCode> {
         if (response == null) {
             return Result.Absent()

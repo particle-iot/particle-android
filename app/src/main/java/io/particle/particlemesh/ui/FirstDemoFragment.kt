@@ -191,21 +191,21 @@ class FirstDemoFragment : Fragment() {
     }
 
     private fun connect(btAddress: BTDeviceAddress) {
-        launch(UI) {
-            val rsFactory = RequestSenderFactory(
-                    MeshSetupConnectionFactory(applicationContext)
-            )
-
-            log.info { "building sender for " }
-            val requestSender = rsFactory.buildRequestSender(btAddress, btAddress)
-            log.info { "sender built" }
-            if (requestSender == null) {
-                applicationContext.safeToast("Could not connect to $btAddress!")
-            } else {
-//                deviceConnections[btAddress] = UIRequestSender(this@FirstDemoFragment, requestSender)
-            }
-            updateDeviceStatusIcons()
-        }
+//        launch(UI) {
+//            val rsFactory = RequestSenderFactory(
+//                    MeshSetupConnectionFactory(applicationContext)
+//            )
+//
+//            log.info { "building sender for " }
+//            val requestSender = rsFactory.buildRequestSender(btAddress, btAddress)
+//            log.info { "sender built" }
+//            if (requestSender == null) {
+//                applicationContext.safeToast("Could not connect to $btAddress!")
+//            } else {
+////                deviceConnections[btAddress] = UIRequestSender(this@FirstDemoFragment, requestSender)
+//            }
+//            updateDeviceStatusIcons()
+//        }
     }
 
     private fun disconnect(btAddress: BTDeviceAddress) {
@@ -253,24 +253,24 @@ class FirstDemoFragment : Fragment() {
     }
 
     private fun echoTest() {
-        launch(UI) {
-            log.info { "Building request sender factory" }
-            val rsFactory = RequestSenderFactory(
-                    MeshSetupConnectionFactory(applicationContext)
-            )
-            log.info { "building sender" }
-            val requestSender = rsFactory.buildRequestSender(ARGON_ADDY, "Argon")
-            log.info { "sender built" }
-            val beefBytes = byteArrayOf(
-                    0xDE.toByte(),
-                    0xAD.toByte(),
-                    0xBE.toByte(),
-                    0xEF.toByte()
-            )
+//        launch(UI) {
+//            log.info { "Building request sender factory" }
+//            val rsFactory = RequestSenderFactory(
+//                    MeshSetupConnectionFactory(applicationContext)
+//            )
+//            log.info { "building sender" }
+//            val requestSender = rsFactory.buildRequestSender(ARGON_ADDY, "Argon")
+//            log.info { "sender built" }
+//            val beefBytes = byteArrayOf(
+//                    0xDE.toByte(),
+//                    0xAD.toByte(),
+//                    0xBE.toByte(),
+//                    0xEF.toByte()
+//            )
 //            val response = requestSender!!.sendEchoRequest(beefBytes)
 //            val result = if (response.value?.contentEquals(beefBytes).truthy()) "WINNING" else "try again bro."
 //            log.info { "Expected response='${beefBytes.toHex()}', actual response=${response.value.toHex()}, result: $result" }
-        }
+//        }
     }
 
 }

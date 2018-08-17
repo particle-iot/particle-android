@@ -28,7 +28,6 @@ class CryptoDelegateFactory {
                 transceiver
         )
 
-//        TODO("this will break.  need the broadcast channel after all?")
         val jpakeMgrChannel = meshSetupConnection.packetReceiveChannel
         launch(packetTxRxContext) {
             for (packet in jpakeMgrChannel) {
@@ -37,7 +36,6 @@ class CryptoDelegateFactory {
         }
 
         val jpakeSecret = jpakeManager.performJpakeExchange()
-        jpakeMgrChannel.cancel()  // stop reading on this channel, it's no longer going to be used
 
         return AesCcmDelegate.newDelegateFromJpakeSecret(jpakeSecret)
     }

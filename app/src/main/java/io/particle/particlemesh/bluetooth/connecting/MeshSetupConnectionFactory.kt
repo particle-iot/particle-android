@@ -118,12 +118,6 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
         log.info { "Got GATT and callbacks!" }
         val (gatt, callbacks) = gattAndCallbacks
 
-//        val bondingResult = bondToDevice(device)
-//        if (bondingResult != BondingResult.BONDED) {
-//            log.warn { "Bonding failed! result=$bondingResult" }
-//            return null
-//        }
-
         val services = discoverServices(gatt, callbacks)
         if (!services.truthy()) {
             log.warn { "Service discovery failed!" }
@@ -166,14 +160,6 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
             )
         // return write characteristic
         return subscriber.subscribeToReadAndReturnWrite()
-    }
-
-    private suspend fun bondToDevice(device: BluetoothDevice): BondingResult {
-        log.debug { "Attempting to bond..." }
-        val bonder = Bonder(ctx)
-        val result = bonder.bondToDevice(device)
-        log.debug { "Bonding result: $result" }
-        return result
     }
 
 }

@@ -1,6 +1,6 @@
 package io.particle.particlemesh.meshsetup
 
-import io.particle.particlemesh.meshsetup.connection.FrameReader
+import io.particle.particlemesh.meshsetup.connection.InboundFrameReader
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.nio.ByteBuffer
@@ -13,7 +13,7 @@ class FramingTest {
     fun frameReaderReadsFrames() {
         val td = FrameTestData()
         var callbackCount = 0
-        val testSubject = FrameReader({ frame ->
+        val testSubject = InboundFrameReader({ frame ->
             assertEquals(td.expectedRequestId, frame.requestId)
             assertEquals(td.expectedResultCode, frame.resultCode)
             assertEquals(td.expectedPayload.size, frame.payloadData.size)
@@ -30,7 +30,7 @@ class FramingTest {
     fun handleFrameAcrossMultiplePackets() {
         val td = FrameTestData()
         var callbackCount = 0
-        val testSubject = FrameReader({ frame ->
+        val testSubject = InboundFrameReader({ frame ->
             assertEquals(td.expectedRequestId, frame.requestId)
             assertEquals(td.expectedResultCode, frame.resultCode)
             assertEquals(td.expectedPayload.size, frame.payloadData.size)
