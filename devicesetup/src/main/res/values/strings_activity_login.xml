@@ -1,0 +1,21 @@
+<resources>
+    <string name="title_activity_login">Log In</string>
+
+    <string name="prompt_first_name">first name</string>
+    <string name="prompt_last_name">last name</string>
+    <string name="prompt_company_name">company name</string>
+    <string name="prompt_company_account_disabled">This is a personal account</string>
+    <string name="prompt_company_account_enabled">This is a business account</string>
+    <string name="prompt_email">email</string>
+    <string name="prompt_password">password</string>
+    <string name="prompt_verify_password">verify password</string>
+    <string name="action_log_in">Log In</string>
+    <string name="action_log_in_short">LOG IN</string>
+
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_invalid_activation_code">This activation code is invalid</string>
+    <string name="error_field_required">This field is required</string>
+
+</resources>

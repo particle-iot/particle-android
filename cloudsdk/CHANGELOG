@@ -1,0 +1,107 @@
+0.5.1
+=====
+* New features - Two factor authentication.
+
+
+0.5.0
+=====
+* Exposing list of devices beyond package within PartialDeviceListResultException.
+
+
+0.4.9
+=====
+* Android libraries update, refactoring.
+
+
+0.4.8
+=====
+* Android libraries update, refactoring.
+* Reset password bug fix.
+
+
+0.4.7
+=====
+* Android libraries update, catching async task RejectedExecutionException.
+
+
+0.4.6
+=====
+* Adding refresh and inject session token methods.
+
+
+0.4.5
+=====
+* Exposing iccid and data usage for electron.
+
+
+0.4.4
+=====
+* Adding back organization endpoints as deprecated.
+
+
+0.4.3
+=====
+* Adding back email field for organization sign up
+
+
+0.4.2
+=====
+* Support for all device types/names by platform id
+* Global listener in ParticleCloud for system events
+* resetFlashingState - works with global system events instead of flashing timer
+* Fix for eventName emitting "message" most of the time
+* Org endpoints changed to product id
+* Password reset url changed to match url used in iOS.
+* Workaround/fix for sign up not throwing exception on error.
+
+
+0.4.1
+=====
+* Optional account information included in sign up api calls
+* Exposed new device fields
+
+
+0.4.0
+=====
+* Retrolambda support + some lambdafying of the code
+* Change target to API 25
+* Bug fixes: "Unsubscribing from events not working", "type bug in Funcy"
+
+
+0.3.4
+=====
+* fix an uncommon crasher bug
+* Use a much smarter config for building internal executor
+* Add (non-public, "preview") API for fetching ParticleDevices in parallel
+
+
+0.3.3
+=====
+* Fix for #7 to make subscribing to events for individual devices work again; thanks 
+  to reddigfabian for the PR.
+
+
+0.3.2
+=====
+* Electron support!
+* Use SharedPreferences.apply() instead of .commit() for an easy perf boost
+* Code cleanups, including switching to @ParametersAreNonnullByDefault
+
+
+0.3.1
+=====
+* Workaround for lame 3rd party packaging problems
+* Update GSON dependency
+
+
+0.3.0
+======
+* At last, event pub/sub support!
+
+
+0.2.2
+======
+* Fix `getVariable()` call by adding type-safe methods for getting variables of each supported type
+* Expose the "last heard" info for `ParticleDevice`s
+
+

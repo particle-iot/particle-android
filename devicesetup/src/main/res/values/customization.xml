@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="brand_name">Particle</string>
+    <string name="app_name">@string/brand_name</string>
+    <string name="device_name">Photon</string>
+    <drawable name="device_image">@drawable/photon_vector</drawable>
+    <drawable name="device_image_small">@drawable/photon_vector_small</drawable>
+
+    <drawable name="brand_image_horizontal">@drawable/particle_horizontal_blue</drawable>
+    <drawable name="brand_image_vertical">@drawable/particle_vertical_blue</drawable>
+    <drawable name="screen_background">@drawable/trianglifybackground</drawable>
+    <color name="brand_image_background_color">#641A1A1A</color>
+
+    <string name="mode_button_name">Setup button</string>
+    <string name="listen_mode_led_color_name">blue</string>
+    <string name="network_name_prefix">@string/device_name</string>
+
+    <string name="terms_of_service_uri">https://www.particle.io/tos</string>
+    <string name="privacy_policy_uri">https://www.particle.io/privacy</string>
+    <string name="forgot_password_uri">https://login.particle.io/forgot</string>
+    <string name="troubleshooting_uri">
+        https://community.particle.io/t/spark-core-troubleshooting-guide-spark-team/696
+    </string>
+
+    <!-- FIXME: support static HTML for all these -->
+    <string name="terms_of_service_html_file">NOT_DEFINED</string>
+    <string name="privacy_policy_html_file">NOT_DEFINED</string>
+    <string name="forgot_password_html_file">NOT_DEFINED</string>
+    <string name="troubleshooting_html_file">NOT_DEFINED</string>
+
+    <bool name="show_sign_up_page_fine_print">true</bool>
+
+    <color name="page_background_color">#F2F2F2</color>
+    <color name="form_field_background_color">@android:color/white</color>
+    <color name="normal_text_color">@android:color/white</color>
+    <color name="link_text_color">@android:color/white</color>
+    <color name="link_text_bg">#19AAAAAA</color>
+    <color name="error_text_color">#FE4747</color>
+
+    <color name="register_field_background_color_enabled">@color/form_field_background</color>
+    <color name="register_field_background_color_disabled">#AACCCCCC</color>
+
+
+    <color name="element_background_color">#00BAEC</color>
+    <color name="element_background_color_dark">#0083A6</color>
+    <color name="element_text_color">@android:color/white</color>
+    <color name="element_tint_color">@android:color/white</color>
+    <color name="element_text_disabled_color">#E0E0E0</color>
+
+    <!-- The font names below are the paths to the font you want to use, relative to the assets
+        folder.
+
+         e.g.: if you've put comic_sans.ttf in src/main/assets/fonts folder,
+          then below, then the values below would look like this:
+
+            <string name="normal_text_font_name">fonts/comic_sans.ttf</string>
+
+    -->
+    <string name="normal_text_font_name">fonts/roboto_regular.ttf</string>
+    <string name="bold_text_font_name">fonts/roboto_medium.ttf</string>
+    <string name="italic_text_font_name">fonts/roboto_thin_italic.ttf</string>
+    <string name="header_text_font_name">fonts/roboto_light.ttf</string>
+
+    <!-- enable invite codes, other APIs -->
+    <!-- {@deprecated Use productMode instead.} -->
+    <bool name="organization">false</bool>
+    <bool name="productMode">false</bool>
+    <!-- {@deprecated Organization settings have been deprecated - set product name and ID only.} -->
+    <string name="organization_slug">CHANGE_ME</string>
+    <!-- {@deprecated Set productId number instead.} -->
+    <string name="product_slug">CHANGE_ME</string>
+    <integer name="product_id">0</integer>
+
+    <!-- FIXME: apparently these values aren't customizable on the iOS app? -->
+    <string name="indicator_light">indicator light</string>
+    <string name="power_on_action">plugging it in</string>
+
+    <!-- FIXME: figure out how these should relate to the colors defined above -->
+    <!-- primary_color is used for the default action bar background -->
+    <color name="primary_color">@color/element_background_color</color>
+    <!-- As named, just a darker variant of the primary color, used to color the status bar -->
+    <color name="primary_color_dark">@color/shaded_background</color>
+    <!-- accent_color is used as the default value for tinting widgets -->
+    <color name="accent_color">@color/element_background_color</color>
+    <color name="system_bar_bg">@android:color/transparent</color>
+
+    <!-- the distance between EditText elements in a "form" like the register and login screens -->
+    <dimen name="edittext_form_element_gap">0dp</dimen>
+
+</resources>

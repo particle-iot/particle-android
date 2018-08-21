@@ -1,0 +1,87 @@
+apply plugin: 'com.android.library'
+
+// This is the library version used when deploying the artifact
+version = '0.5.1'
+
+ext {
+    bintrayRepo = 'android'
+    bintrayName = 'cloud-sdk'
+    bintrayOrg = 'particle'
+
+    publishedGroupId = 'io.particle'
+    libraryName = 'Particle (formerly Spark) Android Cloud SDK library '
+    artifact = 'cloudsdk'
+
+    libraryDescription = 'Particle (formerly Spark) Android Cloud SDK library\n' +
+            'The Particle Android Cloud SDK enables Android apps to interact with Particle-powered connected products via the Particle Cloud.\n' +
+            'Library will allow you to easily manage active user sessions to Particle cloud, query for device info,\n' +
+            'read and write data to/from Particle Core/Photon devices and (via exposed variables and functions)\n' +
+            'publish and subscribe events to/from the cloud or to/from devices (coming soon).'
+
+    siteUrl = 'https://github.com/spark/spark-sdk-android'
+    gitUrl = 'https://github.com/spark/spark-sdk-android.git'
+
+    libraryVersion = project.version
+
+    developerId = 'idok'
+    developerName = 'Ido Kleinman'
+    developerEmail = 'ido@particle.io'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '28.0.2'
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName project.version
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+}
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+
+    api 'com.google.code.findbugs:jsr305:3.0.2'
+    api 'com.google.code.gson:gson:2.8.2'
+    api 'com.squareup.okhttp:okhttp:2.7.5'
+    api 'com.squareup.okio:okio:1.14.0'
+    api 'com.squareup.retrofit:retrofit:1.9.0'
+    api 'org.greenrobot:eventbus:3.0.0'
+
+    api 'com.android.support:support-fragment:27.1.1'
+}
+
+repositories {
+    maven {
+        url 'https://maven.google.com'
+    }
+}
+
+apply from: '../pom_generator_v1.gradle'
+apply from: '../bintray_upload_v1.gradle'
+
+// disable insane, build-breaking doclint tool in Java 8
+if (JavaVersion.current().isJava8Compatible()) {
+    tasks.withType(Javadoc) {
+        //noinspection SpellCheckingInspection
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}

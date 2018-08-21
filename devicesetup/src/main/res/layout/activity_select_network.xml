@@ -1,0 +1,65 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="io.particle.android.sdk.devicesetup.ui.SelectNetworkActivity">
+
+    <include layout="@layout/brand_image_header"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:clipChildren="false"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <TextView
+            style="@style/SectionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_your_wifi_network"/>
+
+        <fragment
+            android:id="@+id/wifi_list_fragment"
+            android:name="io.particle.android.sdk.devicesetup.ui.WifiListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            tools:layout="@layout/row_wifi_scan_result"/>
+
+        <Button
+            android:id="@+id/action_manual_network_entry"
+            style="@style/SparkButton"
+            android:layout_marginTop="16dp"
+            android:onClick="onManualNetworkEntryClicked"
+            android:text="@string/manual_network_name"
+            android:textSize="14sp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/action_rescan"
+                style="@style/SparkButton.InSpinnerBox"
+                android:text="@string/rescan"
+                android:textSize="14sp"/>
+
+            <ProgressBar
+                android:id="@id/button_progress_indicator"
+                style="@style/SparkSpinner"
+                android:layout_alignLeft="@id/action_rescan"
+                tools:ignore="RtlHardcoded"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

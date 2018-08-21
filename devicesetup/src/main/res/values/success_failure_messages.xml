@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="setup_success_summary">Setup completed successfully!</string>
+    <string name="setup_success_details">Congrats! You\'ve successfully set up your {device_name}!</string>
+
+    <string name="setup_success_unknown_ownership_summary">Setup completed!</string>
+    <string name="setup_success_unknown_ownership_details">Setup was successful, but you\'re not the primary owner so we can\'t check if the {device_name} connected to the Internet. If you see the LED breathing cyan this means it worked! If not, please restart the setup process.</string>
+
+    <string name="setup_failure_claiming_summary">Oops!</string>
+    <string name="setup_failure_claiming_details">Setup process couldn\'t claim your {device_name}! If the {device_name} LED is blinking blue or green then you may have mistyped the Wi-Fi credentials and you should try setup again. If the LED is breathing cyan a server issue may have occurred - please contact support.</string>
+
+    <string name="setup_failure_no_disconnect_from_device_summary">Uh oh!</string>
+    <string name="setup_failure_no_disconnect_from_device_details">Setup process couldn\'t disconnect from the {device_name} Wi-Fi network. This is an internal problem with the device, so please try running setup again after resetting your {device_name} and putting it back in blinking blue listen mode if needed.</string>
+
+    <string name="setup_failure_configure_summary">Error!</string>
+    <string name="setup_failure_configure_details">Setup process couldn\'t configure the Wi-Fi credentials for your {device_name}, please try running setup again after resetting your {device_name} and putting it back in blinking blue listen mode if needed.</string>
+
+    <string name="setup_failure_lost_connection_to_device">Setup process lost connection to the {device_name} before being able to configure it to use the supplied Wi-fi credentials, please try running setup again after resetting your {device_name} and putting it back in listen mode if needed.</string>
+
+</resources>

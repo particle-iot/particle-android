@@ -1,0 +1,106 @@
+<io.particle.android.sdk.utils.ui.SoftKeyboardVisibilityDetectingLinearLayout
+    android:id="@+id/keyboard_change_detector_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="56dp"
+    android:animateLayoutChanges="true"
+    android:clipChildren="false"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="io.particle.android.sdk.accountsetup.LoginActivity">
+
+    <include layout="@layout/brand_image_header"/>
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clipChildren="false"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:id="@+id/log_in_header_text"
+                style="@style/SectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/log_in_header_text"
+                tools:ignore="MissingPrefix"/>
+
+            <EditText
+                android:id="@+id/email"
+                style="@style/SparkEditText"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:hint="@string/prompt_email"
+                android:inputType="textEmailAddress"/>
+
+            <EditText
+                android:id="@+id/password"
+                style="@style/SparkEditText"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/prompt_password"
+                android:imeActionId="@+id/action_log_in"
+                android:imeActionLabel="@string/action_log_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                tools:ignore="InvalidImeActionId"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/action_log_in"
+                    style="@style/SparkButton.InSpinnerBox"
+                    android:text="@string/action_log_in"/>
+
+                <ProgressBar
+                    android:id="@id/button_progress_indicator"
+                    style="@style/SparkSpinner"
+                    android:layout_alignLeft="@id/action_log_in"
+                    tools:ignore="RtlHardcoded"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/user_has_no_account"
+                style="@style/LinkText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="@string/msg_no_account"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="@dimen/text_size_small"/>
+
+            <TextView
+                android:id="@+id/forgot_password"
+                style="@style/LinkText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:onClick="onPasswordResetClicked"
+                android:text="@string/msg_forgot_password"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="@dimen/text_size_small"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</io.particle.android.sdk.utils.ui.SoftKeyboardVisibilityDetectingLinearLayout>

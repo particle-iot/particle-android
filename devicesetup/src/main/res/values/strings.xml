@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Phrase-templated strings -->
+    <string name="msg_device_not_listed">{device_name} not listed here? Hold the {setup_button_identifier} for three seconds to put it in setup mode; the {indicator_light} should turn {indicator_light_setup_color_name}</string>
+    <string name="get_ready_title_text">Time to set up your {device_name}!</string>
+    <string name="get_ready_text"><![CDATA[\n
+\u2022 Please power on your {device_name} by plugging it in.\n\n
+\u2022 The indicator light should blink {indicator_light_setup_color_name}. If this {device_name} has been set up before, hold the {setup_button_identifier} for 3 seconds to set up again.\n\n
+\u2022 Make sure your Android device is connected to the internet.\n\n
+\u2022 Tap the READY button to proceed.]]></string>
+    <string name="wifi_list_header_text">Choose your {device_name}</string>
+    <string name="connecting_text">Your {device_name} is connecting to</string>
+    <string name="your_device_is_connected">Your {device_name} is connected!</string>
+    <string name="msg_create_account_disclaimer"><![CDATA[By clicking "SIGN UP" you are indicating that you have read and agreed to the <a href="{tos_link}">Terms of Service</a> and <a href="{privacy_policy_link}">Privacy Policy.</a>]]></string>
+    <string name="create_account_header_text">Create {brand_name} account</string>
+    <string name="log_in_header_text">{brand_name} Login</string>
+    <string name="you_are_logged_in_as">You are logged in as: {username}</string>
+    <string name="set_up_another_device">Set up another {device_name}</string>
+    <string name="empty_soft_ap_list_text">(No {device_name} devices found)</string>
+    <string name="connecting_to_soft_ap">Connecting to {device_name}…</string>
+    <string name="unable_to_connect_to_soft_ap">Please try running setup again after resetting your {device_name} and putting it back in blinking blue listen mode if needed.</string>
+
+    <!-- regular strings -->
+    <string name="set_up_your_product">Get Started</string>
+    <string name="title_activity_web_view">WebView</string>
+    <string name="title_activity_get_ready">Get Ready</string>
+    <string name="title_activity_intro">Intro</string>
+    <string name="title_activity_manual_network_entry">Manual Network Entry</string>
+    <string name="title_activity_create_account">Create account</string>
+    <string name="title_activity_discover_device">Choose device</string>
+    <string name="title_activity_select_network">Choose Wi-Fi network</string>
+    <string name="title_activity_password_entry">Enter Wi-Fi password</string>
+    <string name="title_activity_connecting">Connecting</string>
+    <string name="title_activity_troubleshooting">Troubleshooting</string>
+    <string name="title_activity_success">Success!</string>
+    <string name="action_settings">Settings</string>
+    <string name="msg_no_account">&lt;u&gt;I don\'t have an account&lt;/u&gt;</string>
+    <string name="msg_forgot_password">&lt;u&gt;I forgot my password&lt;/u&gt;</string>
+    <string name="action_create_account_short">SIGN UP</string>
+    <string name="action_create_account">Sign Up</string>
+    <string name="msg_user_already_has_account">&lt;u&gt;I already have an account&lt;/u&gt;</string>
+    <string name="activation_code">activation code</string>
+    <string name="troubleshooting">&lt;u&gt;Troubleshooting&lt;/u&gt;</string>
+    <string name="im_ready">Ready</string>
+    <string name="connecting">Connecting</string>
+    <string name="connecting_text_2">This can take about a minute.</string>
+    <string name="cancel">Cancel</string>
+    <string name="test_connection">Test connection</string>
+    <string name="continue_str">Continue</string>
+    <string name="you_did_it">YOU DID IT</string>
+    <string name="rescan">Rescan</string>
+    <string name="log_out">Log out</string>
+    <string name="select_your_wifi_network">Select your Wi-Fi network</string>
+    <string name="no_wifi_networks_found">(No Wi-Fi networks found)</string>
+    <string name="check_for_internet_connectivity">Checking for internet connectivity</string>
+    <string name="connect_to_wifi_network">Connecting to Wi-Fi network</string>
+    <string name="reconnect_to_wifi_network">Disconnecting from softAP</string>
+    <string name="configure_device_wifi_credentials">Configuring device Wi-Fi credentials</string>
+    <string name="wait_for_device_cloud_connection">Waiting for device cloud connection</string>
+    <string name="verify_product_ownership">Verifying product ownership</string>
+    <string name="action_done">Done</string>
+    <string name="title_activity_password_reset">Password Reset</string>
+    <string name="manual_network_name">Manual network name</string>
+    <string name="manual_network_name_entry">Manual network name entry</string>
+    <string name="hint_network_name">network name</string>
+    <string name="network_requires_password">Network requires password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="request_password_reset">Request password reset</string>
+    <string name="this_network_requires_a_password">This network requires a password</string>
+    <string name="connect">Connect</string>
+    <string name="password">Password</string>
+    <string name="show_password">Show password</string>
+    <string name="change_network">Change network</string>
+    <string name="done">Done!</string>
+    <string name="get_ready_could_not_connect_to_cloud">Could not communicate with Photon cloud.  Make sure your Android device is connected to the internet and retry.</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="access_denied">Access denied</string>
+    <string name="wifi_required">Wi-Fi Required</string>
+    <string name="location_required">Location Required</string>
+    <string name="setup_requires_wifi">Setting up devices requires Wi-Fi.  Enable it now?</string>
+    <string name="enable_wifi">Enable Wi-Fi</string>
+    <string name="enable_location">Enable Location</string>
+    <string name="exit_setup">Exit setup</string>
+    <string name="location_permission_dialog_text">Setup needs to scan Wi-Fi to find your new device.\n\nBecause these scans could also reveal your location, setup requires the Location permission.\n\nSetup will continue after you press ALLOW on the next screen.</string>
+    <string name="location_permission_dialog_title">Permission needed</string>
+    <string name="got_it">got it</string>
+    <string name="location_permission_denied_dialog_title">Location permission required</string>
+    <string name="location_permission_denied_dialog_text"><![CDATA[The Location permission has been disabled for this app.  Please change this in Permissions for this app under Settings -> Apps.]]></string>
+    <string name="reset_password_dialog_title">Reset password</string>
+    <string name="reset_paassword_dialog_please_enter_a_valid_email">Please enter a valid email address.</string>
+    <string name="create_account_passswords_do_not_match">Passwords do not match.</string>
+    <string name="create_account_unknown_error">Unknown error</string>
+    <string name="create_account_error_communicating_with_server">Error communicating with server</string>
+    <string name="create_account_account_already_exists_for_email_address">An account with this email address may already exist.</string>
+    <string name="get_ready_must_be_logged_in_as_customer">Sorry, you must be logged in as a %s customer.</string>
+    <string name="location_permission_denied_cannot_start_setup">Location permission denied, cannot start setup</string>
+    <string name="enterprise_networks_not_supported">Enterprise Wi-Fi networks not supported for mobile setup.</string>
+    <string name="settings">Settings</string>
+    <string name="secured_with_wep">Secured with WEP</string>
+    <string name="secured_with_wpa">Secured with WPA</string>
+    <string name="secured_with_wpa2">Secured with WPA2</string>
+    <string name="dialog_title_owned_by_another_user">This %1$s is owned by another user.  Change owner to %2$s?</string>
+    <string name="change_owner_question">Change owner?</string>
+    <string name="change_owner">Change owner</string>
+    <string name="device_naming_hint">none</string>
+    <string name="device_naming_label">Name your new device:</string>
+    <string name="device_naming_failure">Failed to change device name</string>
+    <string name="location_required_message">This access allows you to pair your Android device with
+        your Photon to complete the setup process. Particle will not use location data for any other
+        purposes.
+    </string>
+
+</resources>

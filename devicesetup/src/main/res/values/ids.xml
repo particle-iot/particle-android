@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="brand_image" type="id"/>
+    <item name="button_progress_indicator" type="id"/>
+    <item name="fine_print" type="id"/>
+    <item name="tinker_button_color" type="id"/>
+
+    <item name="device_list_devices_loader_id" type="id"/>
+
+    <!-- device actions -->
+    <item name="action_device_rename" type="id"/>
+    <item name="action_device_unclaim" type="id"/>
+    <item name="action_device_flash_tinker" type="id"/>
+    <item name="action_device_clear_tinker" type="id"/>
+    <item name="action_device_copy_id_to_clipboard" type="id"/>
+
+</resources>

@@ -1,0 +1,63 @@
+// lifted from https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle
+// and copied into this repo to maintain a hermetic build
+apply plugin: 'com.jfrog.bintray'
+
+version = libraryVersion
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// FIXME: this feels hackish, but it works for now, and it shouldn't
+// have any side effects* for anyone building the lib locally,
+// so #SHIPIT
+//
+// * My apologies if this turns out not to be true.  Patches welcome!
+Properties authDataProps = new Properties()
+try {
+    authDataProps.load(project.rootProject.file('../bintray_user_auth_secrets.properties').newDataInputStream())
+} catch (Exception ignore) {
+    // do nothing; this is the default state for everyone who isn't publishing
+    // the lib.
+}
+
+bintray {
+    user = authDataProps.getProperty("bintray.user")
+    key = authDataProps.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        userOrg = bintrayOrg
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = false
+        version {
+//            desc = libraryDescription
+            gpg {
+                sign = false // Determines whether to GPG sign the files. The default is false
+                // passphrase = properties.getProperty("bintray.gpg.password") // Optional. The passphrase for GPG signing'
+            }
+        }
+    }
+}

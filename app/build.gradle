@@ -86,12 +86,10 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
 //    implementation "io.particle:cloudsdk:$cloudSdkVersion"
-    // FIXME: change this back before releasing
+//    implementation("io.particle:devicesetup:$setupVersion") {
     implementation project(':cloudsdk')
     implementation project(':ecjpake4j')
-    implementation("io.particle:devicesetup:$setupVersion") {
-        exclude group: 'io.particle', module: 'cloudsdk'
-    }
+    implementation project(':devicesetup')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.4'
