@@ -160,10 +160,6 @@ dependencies {
     implementation 'sk.baka.slf4j:slf4j-handroid:1.7.27'
 
     testImplementation 'junit:junit:4.12'
-    
-    // TESTING ONLY (see other TESTING comments above)
-//    compile(name:'cloudsdk', ext:'aar')
-//    compile(name:'devicesetup', ext:'aar')
 }
 
 kotlin {
