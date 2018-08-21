@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="ParticleSetupTheme" parent="Theme.AppCompat">
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/primary_color</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/accent_color</item>
+
+        <item name="colorButtonNormal">@color/primary_color</item>
+        <item name="colorControlNormal">@color/primary_color</item>
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight, and colorSwitchThumbNormal. -->
+
+        <!--        <item name="android:textColor">@color/normal_text_color</item>-->
+        <item name="android:windowBackground">@drawable/screen_background</item>
+
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/PopupMenuText</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/PopupMenuText</item>
+    </style>
+
+    <style name="PopupMenuParent">
+        <item name="overlapAnchor">true</item>
+        <item name="android:dropDownHorizontalOffset">-4dip</item>
+    </style>
+
+    <style name="PopupMenu" parent="PopupMenuParent">
+        <item name="android:dropDownSelector" tools:ignore="PrivateResource">@drawable/abc_list_selector_holo_dark</item>
+        <!--<item name="android:popupBackground">@drawable/abc_popup_background_mtrl_mult</item>-->
+        <item name="android:popupBackground">@android:color/white</item>
+    </style>
+
+    <style name="PopupMenuText" parent="TextAppearance.AppCompat.Widget.PopupMenu.Small">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ParticleSetupTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ParticleSetupTheme.NoActionBar.TranslucentSystemBars">
+        <!-- only applies to API 19 + 21, but we still need this here as a placeholder. -->
+    </style>
+
+    <style name="ParticleSetupTheme_DialogNoDimBackground"
+           parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+</resources>

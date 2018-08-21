@@ -1,0 +1,129 @@
+0.5.3
+=====
+* Particle CloudSdk update.
+* Android library update.
+
+0.5.2
+=====
+* Default name for mode button changed to "Setup".
+* Brought back generateClaimCode for organizations.
+* Adding customization option for tinting views (spinners, checkmarks, etc.) called element_tint_color.
+
+0.5.1
+=====
+* NullPointerException fix on setup cancellation.
+
+0.5.0
+=====
+* Code Refactoring - exporting tasks and steps to separate classes, removing dependencies and public access where it isn't needed.
+* Updating Android & Cloudsdk libraries
+* Initial test flow - tests go through setup flow automatically, minimal amount of assertions and mocks added, environment ready for further testing.
+* Removing retrolambda, native Java 8 support.
+* Dependency injection through dagger.
+* Moving view bindings to ButterKnife.
+* Manifest definitions inside setup library (no need to define in users manifest).
+* Replacing X509EncodedKeySpec with implementation from Spongycastle due to "generatePublic()" ParseException in 8.1.
+
+0.4.9
+=====
+* Android library update, ConnectingActivity null exception fix.
+
+0.4.8
+=====
+* Permission and location service request messages.
+
+0.4.7
+=====
+* Adding 'initWithSetupOnly', allows customer to setup WiFi without claiming device.
+* Updating Android & Cloudsdk libraries
+* Workaround for bug where WiFi scanning requires enabled Location services, user will be alerted to enable location services on Android M and later versions.
+
+0.4.6
+=====
+* Adding organization customization options as deprecated, trying to use deprecated organization option will result in exception.
+
+0.4.5
+=====
+* Adding back email field for organization sign up.
+
+0.4.4
+=====
+* Resetting password should be done through native screen.
+* Updating Android & Cloudsdk libraries
+* Replacing org & product slug with productId
+* Temporary fix for sign up "Invalid credentials" bug (sing up returning 200 response code bug)
+
+0.4.3
+=====
+* Popup text color changed to white
+* Password length check (must be at least 8 characters)
+* Font sizes for tablet devices
+
+0.4.2
+=====
+* UI for step disconnecting from softAP
+
+0.4.1
+=====
+* Device naming at the end of setup
+* Fix for setup wifi connection issues on Nougat
+* Cloudsdk version upgrade
+* Analytics
+* Added account info fields on signup
+
+0.4.0
+=====
+* Lambdas, android version upgrade, gradle upgrade to beta3, Refactoring
+* Wifi class replaced with WifiFacade
+* Kill trailing spaces from passwords
+* Introduce SSID class
+* Remove some noisy logging
+* Kill old hacky "not a socket factory" with an actual SocketFactory
+* Introduce SetupStepApReconnector
+* Abort on lint errors
+
+
+0.3.7
+=====
+* New callback option: now the SDK will optionally fire a supplied Intent at the completion of the setup process  (thanks to Charles Korn <ckorn@thoughtworks.com>)
+* Fix a crash for two-legged auth users
+
+
+0.3.6
+=====
+* Fix a few hard-coded user-facing strings
+* Don't require two-legged auth to have a username set
+
+
+0.3.5
+=====
+* Crash fixes
+
+
+0.3.4
+=====
+* Don't skip straight to Photon setup when the logged in user has no devices
+* Related to the above, don't immediately pull devices after login
+
+
+0.3.3
+======
+* Update to latest cloud SDK to fix really lame 3rd party packaging problem
+* ditch Material Dialogs library, which was causing a different build problem
+* update GSON dependency
+
+
+0.3.2
+======
+* Fix #6 , the "connect to AP" dialog dismissing too early
+* Do full debug logging by default in the example app
+* Dependency updates
+
+
+0.3.1
+======
+* Fix problem on Marshmallow with requesting permissions/stop sending users directly to settings to enable the permission
+* Don't allow user to exit the permission or "enable wifi" dialogs by tapping outside of them/tapping the back button
+* Update to latest cloud SDK and Android gradle plugin
+
+

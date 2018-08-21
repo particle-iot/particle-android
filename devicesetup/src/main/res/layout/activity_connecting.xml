@@ -1,0 +1,328 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:clipChildren="false"
+              android:orientation="vertical"
+              tools:context="io.particle.android.sdk.devicesetup.ui.ConnectingActivity"
+              tools:ignore="RtlHardcoded">
+
+    <include layout="@layout/brand_image_header"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            style="@style/SectionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/connecting"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="224dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/connecting_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/connecting_text"
+                    android:textSize="@dimen/text_size_medium"/>
+
+                <TextView
+                    android:id="@+id/network_name"
+                    fontPath="@string/bold_text_font_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="[network name]"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix,HardcodedText"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="@string/connecting_text_2"
+                    android:textSize="@dimen/text_size_medium"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/configure_device_wifi_credentials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ProgressBar
+                        android:id="@+id/spinner"
+                        style="@style/SparkSpinner"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_margin="0dp"
+                        android:visibility="visible"/>
+
+                    <ImageView
+                        android:id="@+id/checkbox"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:contentDescription="@null"
+                        android:src="@drawable/checkmark"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/configure_device_wifi_credentials"
+                        android:textSize="@dimen/text_size_small"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/connect_to_wifi_network"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ProgressBar
+                        android:id="@+id/spinner"
+                        style="@style/SparkSpinner"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_margin="0dp"
+                        android:visibility="visible"
+                        tools:ignore="DuplicateIds,RtlHardcoded"/>
+
+                    <ImageView
+                        android:id="@+id/checkbox"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:contentDescription="@null"
+                        android:src="@drawable/checkmark"
+                        android:visibility="gone"
+                        tools:ignore="DuplicateIds"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/connect_to_wifi_network"
+                        android:textSize="@dimen/text_size_small"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/reconnect_to_wifi_network"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ProgressBar
+                        android:id="@+id/spinner"
+                        style="@style/SparkSpinner"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_margin="0dp"
+                        android:visibility="visible"
+                        tools:ignore="DuplicateIds,RtlHardcoded"/>
+
+                    <ImageView
+                        android:id="@+id/checkbox"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:contentDescription="@null"
+                        android:src="@drawable/checkmark"
+                        android:visibility="gone"
+                        tools:ignore="DuplicateIds"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/reconnect_to_wifi_network"
+                        android:textSize="@dimen/text_size_small"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/wait_for_device_cloud_connection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ProgressBar
+                        android:id="@+id/spinner"
+                        style="@style/SparkSpinner"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_margin="0dp"
+                        android:visibility="visible"
+                        tools:ignore="DuplicateIds,RtlHardcoded"/>
+
+                    <ImageView
+                        android:id="@+id/checkbox"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:contentDescription="@null"
+                        android:src="@drawable/checkmark"
+                        android:visibility="gone"
+                        tools:ignore="DuplicateIds"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/wait_for_device_cloud_connection"
+                        android:textSize="@dimen/text_size_small"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/check_for_internet_connectivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ProgressBar
+                        android:id="@+id/spinner"
+                        style="@style/SparkSpinner"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_margin="0dp"
+                        android:visibility="visible"
+                        tools:ignore="DuplicateIds,RtlHardcoded"/>
+
+                    <ImageView
+                        android:id="@+id/checkbox"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:contentDescription="@null"
+                        android:src="@drawable/checkmark"
+                        android:visibility="gone"
+                        tools:ignore="DuplicateIds"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/check_for_internet_connectivity"
+                        android:textSize="@dimen/text_size_small"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/verify_product_ownership"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ProgressBar
+                        android:id="@+id/spinner"
+                        style="@style/SparkSpinner"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_margin="0dp"
+                        android:visibility="visible"
+                        tools:ignore="DuplicateIds,RtlHardcoded"/>
+
+                    <ImageView
+                        android:id="@+id/checkbox"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:contentDescription="@null"
+                        android:src="@drawable/checkmark"
+                        android:visibility="gone"
+                        tools:ignore="DuplicateIds"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/verify_product_ownership"
+                        android:textSize="@dimen/text_size_small"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/action_cancel"
+                style="@style/SparkButton"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/cancel"/>
+
+            <Button
+                android:id="@+id/action_done"
+                style="@style/SparkButton"
+                android:text="@string/done"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

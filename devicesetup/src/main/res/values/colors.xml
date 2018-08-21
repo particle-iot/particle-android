@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="shaded_background">#5222</color>
+    <color name="form_field_background">#E5FFFFFF</color>
+</resources>

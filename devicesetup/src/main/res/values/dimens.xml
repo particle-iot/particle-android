@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="brand_image_size">144dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">24dp</dimen>
+    <dimen name="activity_vertical_margin">24dp</dimen>
+    <dimen name="transparent_system_bar_window_inner_margin_top">0dp</dimen>
+    <dimen name="transparent_system_bar_window_inner_margin_bottom">0dp</dimen>
+
+    <dimen name="content_width">320dip</dimen>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="FinePrint">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/normal_text_color</item>
+        <item name="android:clickable">true</item>
+        <item name="android:linksClickable">true</item>
+        <item name="android:textColorLink">@color/link_text_color</item>
+    </style>
+
+</resources>

@@ -1,0 +1,108 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+
+// This is the library version used when deploying the artifact
+version = '0.5.3'
+
+ext {
+    bintrayRepo = 'android'
+    bintrayName = 'devicesetup'
+    bintrayOrg = 'particle'
+
+    publishedGroupId = 'io.particle'
+    libraryName = 'Particle (formerly Spark) Android Device Setup library'
+    artifact = 'devicesetup'
+
+    libraryDescription = "The Particle Device Setup library provides everything you need to " +
+            "offer your users a simple initial setup process for Particle-powered devices.  This " +
+            "includes all the necessary device communication code, an easily customizable UI, and " +
+            "a simple developer API."
+
+    siteUrl = 'https://github.com/spark/spark-setup-android'
+    gitUrl = 'https://github.com/spark/spark-setup-android.git'
+
+    libraryVersion = project.version
+
+    developerId = 'idok'
+    developerName = 'Ido Kleinman'
+    developerEmail = 'ido@particle.io'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '28.0.2'
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError true
+    }
+
+}
+
+// TESTING ONLY: to build against a locally built version of the cloud SDK, uncomment these
+// lines, and the "compile(name:'cloudsdk', ext:'aar')" line below under dependencies.
+// (If you don't know what this means or why we (the SDK maintainers at Particle) would want to
+// do this, then you can safely ignore all this and keep it commented out. :)
+//repositories {
+//    flatDir {
+//        dirs 'libs'
+//    }
+//}
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation project(':cloudsdk')
+    //compile 'io.particle:cloudsdk:0.4.9'
+
+    compile 'com.squareup.phrase:phrase:1.0.3'
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    compile 'com.segment.analytics.android:analytics:4.2.6'
+    compile 'com.madgag.spongycastle:core:1.58.0.0'
+
+    compile 'com.google.dagger:dagger:2.15'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
+
+    // TESTING ONLY (see other TESTING comments further up)
+//    compile(name: 'cloudsdk', ext: 'aar')
+}
+
+apply from: '../pom_generator_v1.gradle'
+apply from: '../bintray_upload_v1.gradle'
+
+// disable insane, build-breaking doclint tool in Java 8
+if (JavaVersion.current().isJava8Compatible()) {
+    tasks.withType(Javadoc) {
+        //noinspection SpellCheckingInspection
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}
