@@ -2,6 +2,7 @@ package io.particle.particlemesh.meshsetup.ui
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.IdRes
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
+import java.io.IOException
 
 
 class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
@@ -64,22 +66,14 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
             markProgress(R.id.status_stage_2)
 
             // FIXME: some delay here appeared to be necessary or joining failed. Refine the number, see if it's even needed
-            delay(1000)
+            delay(3000)
 
-            handleResult(target.sendJoinNetwork())
-            val deviceId = setupController.deviceToBeSetUpParams.value!!.deviceId!!
-            val isInList = pollDevicesForNewDevice(deviceId)
-            if (!isInList) {
-                ctx.safeToast("Device with ID $deviceId not found in users' list of devices",
-                        duration = Toast.LENGTH_LONG)
-                return
-            }
-            markProgress(R.id.status_stage_3)
-
-            delay(2000)
-            launch(UI) {
-                findNavController().navigate(
-                        R.id.action_joiningMeshNetworkProgressFragment_to_nameYourDeviceFragment
+            requireActivity().runOnUiThread {
+                Handler().postDelayed(
+                        {
+                            launch {stage3()}
+                        },
+                        1000
                 )
             }
 
@@ -88,6 +82,43 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
             ctx.safeToast("Error during setup: ${ex.message}")
             return
         }
+    }
+
+    private suspend fun stage3() {
+        val ctx = requireActivity().applicationContext
+        val target = setupController.targetDevice!!
+        val commish = setupController.commissioner!!
+
+        handleResult(target.sendJoinNetwork())
+
+        val deviceId = setupController.deviceToBeSetUpParams.value!!.deviceId!!
+        val isInList = pollDevicesForNewDevice(deviceId)
+        if (!isInList) {
+            ctx.safeToast("Device with ID $deviceId not found in users' list of devices",
+                    duration = Toast.LENGTH_LONG)
+            return
+        }
+        markProgress(R.id.status_stage_3)
+
+        commish.sendStopCommissioner()
+        commish.sendStopListeningMode()
+        target.sendStopListeningMode()
+
+        val setDoneResult = target.sendSetDeviceSetupDone()
+        when(setDoneResult) {
+            is Result.Error,
+            is Result.Absent -> QATool.report(IOException(
+                    "Unable to set 'done' flag after setup.  Result: ${setDoneResult.value}"
+            ))
+        }
+
+        delay(2000)
+        launch(UI) {
+            findNavController().navigate(
+                    R.id.action_joiningMeshNetworkProgressFragment_to_nameYourDeviceFragment
+            )
+        }
+
     }
 
     private inline fun <reified T> handleResult(result: Result<T, Common.ResultCode>): T {

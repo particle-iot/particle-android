@@ -22,28 +22,24 @@
         tools:layout="@layout/fragment_get_ready_for_setup">
         <action
             android:id="@+id/action_getReadyForSetupFragment_to_scanCodeIntroFragment"
-            app:destination="@id/scanCodeIntroFragment" />
+            app:destination="@id/scanJoinerCodeIntroFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/scanCodeIntroFragment"
-        android:name="io.particle.particlemesh.meshsetup.ui.ScanCodeIntroFragment"
-        android:label="fragment_scan_code_intro"
+        android:id="@+id/scanJoinerCodeIntroFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.ScanJoinerCodeIntroFragment"
+        android:label="fragment_scan_joiner_code_intro"
         tools:layout="@layout/fragment_scan_code_intro">
         <action
-            android:id="@+id/action_scanCodeIntroFragment_to_scanCodeFragment"
-            app:destination="@id/scanCodeFragment" />
+            android:id="@+id/action_scanCodeIntroFragment_to_BLEPairingProgressFragment"
+            app:destination="@id/BLEPairingProgressFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/scanCodeFragment"
         android:name="io.particle.particlemesh.meshsetup.ui.ScanCodeFragment"
         android:label="fragment_scan_code"
-        tools:layout="@layout/fragment_scan_code">
-        <action
-            android:id="@+id/action_scanCodeFragment_to_BLEPairingProgressFragment"
-            app:destination="@id/BLEPairingProgressFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_scan_code"></fragment>
 
     <fragment
         android:id="@+id/BLEPairingProgressFragment"
@@ -64,15 +60,6 @@
             android:id="@+id/action_scanForMeshNetworksFragment_to_manualCommissioningAddToNetworkFragment"
             app:destination="@id/manualCommissioningAddToNetworkFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/manualCommissioningSelectDeviceFragment"
-        android:name="io.particle.particlemesh.meshsetup.ui.ManualCommissioningSelectDeviceFragment"
-        android:label="fragment_manual_commissioning_select_device"
-        tools:layout="@layout/fragment_manual_commissioning_select_device">
-        <action
-            android:id="@+id/action_manualCommissioningSelectDeviceFragment_to_enterNetworkPasswordFragment"
-            app:destination="@id/enterNetworkPasswordFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/manualCommissioningAddToNetworkFragment"
@@ -80,8 +67,8 @@
         android:label="fragment_manual_commissioning_add_to_network"
         tools:layout="@layout/fragment_manual_commissioning_add_to_network">
         <action
-            android:id="@+id/action_manualCommissioningAddToNetworkFragment_to_manualCommissioningSelectDeviceFragment"
-            app:destination="@id/manualCommissioningSelectDeviceFragment" />
+            android:id="@+id/action_manualCommissioningAddToNetworkFragment_to_scanCommissionerCodeFragment"
+            app:destination="@id/scanCommissionerCodeFragment" />
     </fragment>
 
     <fragment
@@ -119,5 +106,15 @@
         android:name="io.particle.particlemesh.meshsetup.ui.SetupFinishedFragment"
         android:label="fragment_setup_finished"
         tools:layout="@layout/fragment_setup_finished" />
+    <action android:id="@+id/action_global_scanCodeFragment" app:destination="@id/scanCodeFragment" />
+    <fragment
+        android:id="@+id/scanCommissionerCodeFragment"
+        android:name="io.particle.particlemesh.meshsetup.ui.ScanCommissionerCodeFragment"
+        android:label="fragment_scan_commissioner_code"
+        tools:layout="@layout/fragment_scan_commissioner_code" >
+        <action
+            android:id="@+id/action_scanCommissionerCodeFragment_to_enterNetworkPasswordFragment"
+            app:destination="@id/enterNetworkPasswordFragment" />
+    </fragment>
 
 </navigation>

@@ -6,9 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.toast
 import androidx.navigation.fragment.findNavController
-
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_manual_commissioning_add_to_network.view.*
 
@@ -21,7 +19,7 @@ class ManualCommissioningAddToNetworkFragment : Fragment() {
 
         root.action_next.setOnClickListener {
             findNavController().navigate(
-                    R.id.action_manualCommissioningAddToNetworkFragment_to_manualCommissioningSelectDeviceFragment
+                    R.id.action_manualCommissioningAddToNetworkFragment_to_scanCommissionerCodeFragment
             )
         }
 

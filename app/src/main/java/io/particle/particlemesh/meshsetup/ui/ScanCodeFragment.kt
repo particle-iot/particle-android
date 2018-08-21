@@ -2,11 +2,16 @@ package io.particle.particlemesh.meshsetup.ui
 
 
 import android.Manifest
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback
+import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +25,7 @@ import io.particle.particlemesh.meshsetup.barcodescanning.CameraSource
 import io.particle.particlemesh.meshsetup.barcodescanning.CameraSourcePreview
 import io.particle.particlemesh.meshsetup.barcodescanning.GraphicOverlay
 import io.particle.particlemesh.meshsetup.barcodescanning.barcode.BarcodeScanningProcessor
+import io.particle.particlemesh.meshsetup.ui.ScanViewModel.Companion
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_code.view.*
 import mu.KotlinLogging
@@ -30,14 +36,61 @@ import java.util.*
 private const val PERMISSION_REQUESTS = 1
 
 
+class ScanViewModel : ViewModel() {
+
+    companion object {
+        fun getViewModel(activity: FragmentActivity): ScanViewModel {
+            return ViewModelProviders.of(activity).get(ScanViewModel::class.java)
+        }
+    }
+
+    val latestScannedBarcode: LiveData<BarcodeData>
+        get() = mutableLD
+
+    private val mutableLD = MutableLiveData<BarcodeData>()
+
+    fun updateBarcode(newBarcode: BarcodeData) {
+        mutableLD.postValue(newBarcode)
+    }
+
+    fun clearValue() {
+        mutableLD.postValue(null)
+    }
+
+}
+
+
+data class BarcodeData(
+        val serialNumber: String,
+        val mobileSecret: String
+) {
+
+    companion object {
+
+        fun fromRawData(rawBarcodeData: String?): BarcodeData? {
+            if (rawBarcodeData?.length != 31) {
+                return null
+            }
+            val split: List<String> = rawBarcodeData.split(" ")
+            if (split.size != 2 || split[0].length != 15 || split[1].length != 15) {
+                return null
+            }
+            return BarcodeData(split[0], split[1])
+        }
+    }
+}
+
+
 class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCallback {
 
     private lateinit var cloud: ParticleCloud
     private lateinit var preview: CameraSourcePreview
     private lateinit var graphicOverlay: GraphicOverlay
     private lateinit var barcodeScanningProcessor: BarcodeScanningProcessor
+    private lateinit var scanViewModel: ScanViewModel
 
     private val barcodeObserver = Observer<List<FirebaseVisionBarcode>> { onBarcodesScanned(it) }
+
 
     private var cameraSource: CameraSource? = null
 
@@ -47,6 +100,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cloud = ParticleCloudSDK.getCloud()
+        scanViewModel = ScanViewModel.getViewModel(requireActivity())
 
         barcodeScanningProcessor = BarcodeScanningProcessor()
         barcodeScanningProcessor.foundBarcodes.observe(this, barcodeObserver)
@@ -107,21 +161,15 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
             val barcode = BarcodeData.fromRawData(bcode.rawValue)
             if (barcode != null) {
                 onBarcodeFound(barcode)
+                findNavController().popBackStack()
                 return
             }
         }
     }
 
     private fun onBarcodeFound(barcodeData: BarcodeData) {
-        log.info { "Barcode found: $barcodeData" }
-
         barcodeScanningProcessor.foundBarcodes.removeObserver(barcodeObserver)
-
-        setupController.setTargetSerialNumber(barcodeData.serialNumber, barcodeData.mobileSecret)
-
-        findNavController().navigate(
-                R.id.action_scanCodeFragment_to_BLEPairingProgressFragment
-        )
+        scanViewModel.updateBarcode(barcodeData)
     }
 
     private fun createCameraSource() {
@@ -194,27 +242,4 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
         return false
     }
 
-}
-
-
-
-
-private data class BarcodeData(
-        val serialNumber: String,
-        val mobileSecret: String
-) {
-
-    companion object {
-
-        fun fromRawData(rawBarcodeData: String?): BarcodeData? {
-            if (rawBarcodeData?.length != 31) {
-                return null
-            }
-            val split: List<String> = rawBarcodeData.split(" ")
-            if (split.size != 2 || split[0].length != 15 || split[1].length != 15) {
-                return null
-            }
-            return BarcodeData(split[0], split[1])
-        }
-    }
 }

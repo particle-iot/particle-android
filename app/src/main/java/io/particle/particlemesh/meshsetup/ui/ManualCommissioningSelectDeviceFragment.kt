@@ -97,11 +97,21 @@ class ManualCommissioningSelectDeviceFragment : BaseMeshSetupFragment() {
             return
         }
 
-        launch(UI) {
-            findNavController().navigate(
-                    R.id.action_manualCommissioningSelectDeviceFragment_to_enterNetworkPasswordFragment
-            )
-        }
+
+
+
+
+
+//        launch(UI) {
+//            findNavController().navigate(
+//                    R.id.action_manualCommissioningSelectDeviceFragment_to_enterNetworkPasswordFragment
+//            )
+//        }
+
+
+
+
+
     }
 
     private fun mahtoast(msg: String) {
@@ -114,16 +124,10 @@ private val log = KotlinLogging.logger {}
 
 private fun buildScanner(fragment: Fragment, targetDeviceName: String): LiveData<List<ScanResult>?> {
 
-//    // FIXME: STOP USING OLD SERVICE UUID!
-//    log.warn { "STOP USING OLD SERVICE UUID!" }
-//    fragment.requireActivity().toast("STOP USING OLD SERVICE UUID!")
-//    val oldServiceUuid = ParcelUuid(UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E"))
-
     val scannerAndSwitch = buildMeshDeviceScanner(
             fragment.context!!.applicationContext,
             { sr -> sr.device.name != null && sr.device.name != targetDeviceName },
             Builder().setServiceUuid(ParcelUuid(BT_SETUP_SERVICE_ID)).build()
-//            Builder().setServiceUuid(oldServiceUuid).build()
     )
     scannerAndSwitch.toggleSwitch.value = true
     return scannerAndSwitch.scannerLD.distinct()

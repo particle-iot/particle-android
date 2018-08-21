@@ -28,7 +28,7 @@ class ObservableBLECallbacks : BluetoothGattCallback() {
 
     val readOrChangedReceiveChannel: ReceiveChannel<ByteArray>
         get() = mutableReceiveChannel
-    private val mutableReceiveChannel = Channel<ByteArray>(128)
+    private val mutableReceiveChannel = Channel<ByteArray>(256)
 
 
     private val log = KotlinLogging.logger {}

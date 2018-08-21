@@ -67,7 +67,7 @@ class OutboundFrameWriter(
 
 class InboundFrameReader {
 
-    val inboundFrameChannel = Channel<InboundFrame>(128)
+    val inboundFrameChannel = Channel<InboundFrame>(256)
     // Externally mutable state is less than awesome.  Patches welcome.
     var cryptoDelegate: AesCcmDelegate? = null
     // Externally mutable state is less than awesome.  Patches welcome.

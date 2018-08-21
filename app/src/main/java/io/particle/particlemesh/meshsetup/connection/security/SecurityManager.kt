@@ -1,6 +1,5 @@
 package io.particle.particlemesh.meshsetup.connection.security
 
-import mu.KotlinLogging
 import okio.Buffer
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -44,8 +43,6 @@ class AesCcmDelegate private constructor(
             return AesCcmDelegate(key, reqNonce, repNonce)
         }
     }
-
-    private val log = KotlinLogging.logger {}
 
     fun encrypt(bytes: ByteArray, additionalData: ByteArray): ByteArray {
         val id = ++reqCount

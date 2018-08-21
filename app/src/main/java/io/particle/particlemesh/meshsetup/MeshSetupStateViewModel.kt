@@ -13,6 +13,7 @@ import io.particle.particlemesh.common.android.livedata.setOnMainThread
 import io.particle.particlemesh.meshsetup.connection.RequestSender
 import io.particle.particlemesh.meshsetup.connection.RequestSenderFactory
 import io.particle.particlemesh.meshsetup.connection.security.CryptoDelegateFactory
+import io.particle.particlemesh.meshsetup.ui.BarcodeData
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
@@ -20,9 +21,8 @@ import mu.KotlinLogging
 data class DeviceToBeSetUpParams(
         val deviceType: ParticleDeviceType? = null,
         val claimCode: String? = null,
-        val serialNumber: String? = null,
+        val barcodeData: BarcodeData? = null,
         val deviceId: String? = null,
-        val mobileSecret: String? = null,
         val bluetoothDeviceName: String? = null
 )
 
@@ -30,6 +30,7 @@ data class DeviceToBeSetUpParams(
 data class OtherParams(  // best. naming. evar.
         val networkName: String? = null,
         val commissionerCredential: String? = null,
+        val commissionerBarcode: BarcodeData? = null,
         val networkInfo: Mesh.NetworkInfo? = null,
         val joinerEui64: String? = null,
         val joinerPassword: String? = null
@@ -97,10 +98,14 @@ class MeshSetupController(
         mutableOtherParams.setOnMainThread(params)
     }
 
-    fun setTargetSerialNumber(serialNumber: String, mobileSecret: String) {
-        updateDeviceParams(mutableDeviceParams.value!!.copy(
-                serialNumber = serialNumber,
-                mobileSecret = mobileSecret
+    fun setJoinerBarcode(barcodeData: BarcodeData) {
+        updateDeviceParams(mutableDeviceParams.value!!.copy(barcodeData = barcodeData))
+    }
+
+    fun setCommissionerBarcode(barcodeData: BarcodeData) {
+        log.info { "Setting commissioner barcode: $barcodeData" }
+        updateOtherParams(mutableOtherParams.value!!.copy(
+                commissionerBarcode = barcodeData
         ))
     }
 
@@ -157,7 +162,6 @@ class MeshSetupController(
             }
         }
 
-
         if (deviceParams.claimCode == null) {
             return device
         }
@@ -172,6 +176,10 @@ class MeshSetupController(
             }
         }
     }
+
+
+
+
 
     suspend fun connectToCommissioner(
             address: BTDeviceAddress,

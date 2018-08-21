@@ -2,14 +2,11 @@ package io.particle.particlemesh.meshsetup.connection.security
 
 import io.particle.ecjpake4j.ECJPakeImpl
 import io.particle.ecjpake4j.Role
-import io.particle.ecjpake4j.Role.CLIENT
-import io.particle.particlemesh.bluetooth.PacketMTUSplitter
-import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnection
-import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
-import io.particle.particlemesh.bluetooth.packetTxRxContext
 import io.particle.particlemesh.common.QATool
-import io.particle.particlemesh.meshsetup.connection.*
+import io.particle.particlemesh.meshsetup.connection.BlePacket
+import io.particle.particlemesh.meshsetup.connection.InboundFrameReader
+import io.particle.particlemesh.meshsetup.connection.OutboundFrameWriter
 import kotlinx.coroutines.experimental.launch
 
 
@@ -29,7 +26,7 @@ class CryptoDelegateFactory {
         )
 
         val jpakeMgrChannel = meshSetupConnection.packetReceiveChannel
-        launch(packetTxRxContext) {
+        launch {
             for (packet in jpakeMgrChannel) {
                 QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
             }

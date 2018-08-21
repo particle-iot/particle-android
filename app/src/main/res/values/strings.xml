@@ -96,5 +96,7 @@ Enjoy!]]></string>
     <string name="publish_positive_action">Publish event</string>
     <string name="cancel">Cancel</string>
     <string name="logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="pair_second_device_with_your_phone">Pair second device with your phone</string>
+    <string name="this_device_will_act_as_the_assisting_device">This device will act as the assisting device, to allow the Xenon to join the mesh network.</string>
 
 </resources>

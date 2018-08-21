@@ -10,7 +10,6 @@ import android.support.annotation.MainThread
 import io.particle.particlemesh.bluetooth.BTCharacteristicWriter
 import io.particle.particlemesh.bluetooth.ObservableBLECallbacks
 import io.particle.particlemesh.bluetooth.btAdapter
-import io.particle.particlemesh.bluetooth.packetTxRxContext
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.truthy
 import io.particle.particlemesh.meshsetup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
@@ -89,7 +88,7 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
 
         
         val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
-        launch(packetTxRxContext) {
+        launch {
             for (packet in messageWriteChannel) {
                 QATool.runSafely({ bleWriteChannel.writeToCharacteristic(packet) })
             }
