@@ -11,7 +11,6 @@ import mu.KotlinLogging
  */
 object QATool {
 
-    // NOTE: this must be manually set!
     @Volatile var isDebugBuild: Boolean = false
 
     @Volatile var implementation: QAToolImpl = DefaultImpl()

@@ -36,7 +36,7 @@ class BTCharacteristicWriter(
 
     private val lifecycleOwner = SimpleLifecycleOwner()
 
-    private val handlerThread = HandlerThread("BLE_WRITE_HNDLR_NUM_" + HANDLER_THREAD_ID++)
+    private val handlerThread = HandlerThread("BLE_WRITE_HANDLER_" + HANDLER_THREAD_ID++)
     private val workerThreadHandler: Handler
 
     @Volatile
@@ -69,13 +69,11 @@ class BTCharacteristicWriter(
             return
         }
 
-        lawg { "Enqueing packet: ${value.toHex()} to device: ${gatt.device.name}" }
         packetQueue.add(value)
         scheduleDeque()
     }
 
     fun onCharacteristicWritten() {
-        lawg { "onCharacteristicWritten()" }
         workerThreadHandler.post { this.deque() }
     }
 
@@ -107,11 +105,9 @@ class BTCharacteristicWriter(
         // retrieve the head from the queue WITHOUT removing it
         val packet = packetQueue.peek() ?: return
 
-        lawg { "Attempting to start packet write..." }
         val errMsg = writePacket(packet)
 
         if (errMsg == null) { // success
-            lawg { "Write operation was initiated successfully" }
             writeAttempts = 0
             packetQueue.poll()  // like .remove() but doesn't throw if the queue is empty
 
@@ -136,39 +132,14 @@ class BTCharacteristicWriter(
         // the "onCharacteristicWritten()" call will prompt us to write the next packet...
     }
 
-    private fun lawg(strFunc: () -> Any?) {
-        if (true) {
-            log.trace(strFunc)
-        }
-    }
-
     private fun writePacket(packet: ByteArray): String? {
         val valueSet = writeCharacteristic.setValue(packet)
         if (!valueSet) {
             return "Unable to set value on write characteristic"
         }
 
-        failcheck()
         val writeInitiated = gatt.writeCharacteristic(writeCharacteristic)
         return if (writeInitiated) null else "Unable to write characteristic to BLE GATT"
-    }
-
-    // FIXME: I'm not sure these are actually necessary.  I've never seen these problems; the only
-    // reason I'm including these checks is because they were in the legacy BT code.
-    // Consider removing this function.
-    private fun failcheck() {
-        val isNotWritableWithResp = writeCharacteristic.properties and BluetoothGattCharacteristic.PROPERTY_WRITE == 0
-        val isNotWritableNoResp = writeCharacteristic.properties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE == 0
-
-        if (isNotWritableNoResp && isNotWritableWithResp) {
-            log.warn { "FAILCHECK: not writable!" }
-            return
-        }
-
-        val serviceIsNull = writeCharacteristic.service == null
-        if (serviceIsNull) {
-            log.warn { "FAILCHECK: service is null!" }
-        }
     }
 
 }

@@ -35,8 +35,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 63
-        versionName "2.2.0-MESH-6"
+        versionCode 65
+        versionName "2.2.0-MESH-7"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -107,14 +107,14 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    releaseImplementation 'com.google.firebase:firebase-perf:16.0.0'
+    releaseImplementation 'com.google.firebase:firebase-perf:16.1.0'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 
     // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.0.0'
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.0'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
@@ -151,7 +151,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:0.3'
 
 
-    def nav_version = "1.0.0-alpha04"
+    def nav_version = "1.0.0-alpha05"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 

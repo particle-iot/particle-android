@@ -2,7 +2,6 @@ package io.particle.particlemesh.meshsetup.connection
 
 
 import android.support.annotation.MainThread
-import android.util.SparseArray
 import com.google.protobuf.AbstractMessage
 import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
@@ -17,13 +16,13 @@ import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.bluetooth.connecting.ConnectionPriority
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnection
 import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
-import io.particle.particlemesh.bluetooth.packetTxRxContext
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.meshsetup.connection.security.CryptoDelegateFactory
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.experimental.Continuation
 import kotlin.coroutines.experimental.suspendCoroutine
@@ -85,7 +84,7 @@ class RequestSenderFactory(
         })
         val frameWriter = OutboundFrameWriter { packetMTUSplitter.splitIntoPackets(it) }
         val frameReader = InboundFrameReader()
-        launch(packetTxRxContext) {
+        launch {
             for (packet in meshSetupConnection.packetReceiveChannel) {
                 QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
             }
@@ -108,7 +107,7 @@ class RequestSenderFactory(
         val requestWriter = RequestWriter { frameWriter.writeFrame(it) }
         val requestSender = RequestSender(requestWriter, meshSetupConnection, name)
         val responseReader = ResponseReader { requestSender.receiveResponse(it) }
-        launch(packetTxRxContext) {
+        launch {
             for (inboundFrame in frameReader.inboundFrameChannel) {
                 QATool.runSafely({ responseReader.receiveResponseFrame(inboundFrame) })
             }
@@ -127,7 +126,7 @@ class RequestSender internal constructor(
 ) {
 
     private val log = KotlinLogging.logger {}
-    private val requestCallbacks = SparseArray<(DeviceResponse?) -> Unit>()
+    private val requestCallbacks = ConcurrentHashMap<Int, (DeviceResponse?) -> Unit>()
 
     val isConnected: Boolean
         get() = connection.isConnected
@@ -138,6 +137,16 @@ class RequestSender internal constructor(
 
     fun setConnectionPriority(priority: ConnectionPriority) {
         connection.setConnectionPriority(priority)
+    }
+
+    suspend fun sendStopListeningMode(): Result<StopListeningModeReply, ResultCode> {
+        val response = sendRequest(StopListeningModeRequest.newBuilder().build())
+        return buildResult(response) { r -> StopListeningModeReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendSetDeviceSetupDone(): Result<SetDeviceSetupDoneReply, ResultCode> {
+        val response = sendRequest(SetDeviceSetupDoneRequest.newBuilder().build())
+        return buildResult(response) { r -> SetDeviceSetupDoneReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendStartFirmwareUpdate(firmwareSizeBytes: Int
@@ -264,10 +273,7 @@ class RequestSender internal constructor(
     }
 
     fun receiveResponse(responseFrame: DeviceResponse) {
-        val callback = synchronized(requestCallbacks) {
-            requestCallbacks.get(responseFrame.requestId.toInt())
-        }
-
+        val callback = requestCallbacks[responseFrame.requestId.toInt()]
         if (callback != null) {
             callback(responseFrame)
         } else {
@@ -293,18 +299,14 @@ class RequestSender internal constructor(
         }
         // By the time we get to here, our callback has been used up,
         // so we can remove it from the map.
-        synchronized(requestCallbacks) {
-            requestCallbacks.remove(id)
-        }
+        requestCallbacks.remove(id)
         return response
     }
 
     private fun doSendRequest(request: DeviceRequest,
                               continuationCallback: (DeviceResponse?) -> Unit) {
         val requestCallback = { frame: DeviceResponse? -> continuationCallback(frame) }
-        synchronized(requestCallbacks) {
-            requestCallbacks.put(request.requestId.toInt(), requestCallback)
-        }
+        requestCallbacks[request.requestId.toInt()] = requestCallback
         requestWriter.writeRequest(request)
     }
 
