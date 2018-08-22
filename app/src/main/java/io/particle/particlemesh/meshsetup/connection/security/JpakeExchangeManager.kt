@@ -70,13 +70,13 @@ class JpakeExchangeManager(
 
     private suspend fun doPerformExchange(): ByteArray {
         clientRoundOne = jpakeImpl.createLocalRoundOne()
-        log.debug { "Sending round 1 to 'server', ${clientRoundOne?.size} bytes: ${clientRoundOne.toHex()}" }
+        log.debug { "Sending round 1 to 'server', ${clientRoundOne?.size} bytes" }
         msgTransceiver.send(clientRoundOne!!)
 
         serverRoundOne = msgTransceiver.receive()
-        log.debug { "Received ${serverRoundOne!!.size}-byte round 1 from 'server': ${serverRoundOne.toHex()}" }
+        log.debug { "Received ${serverRoundOne!!.size}-byte round 1 from 'server'" }
         serverRoundTwo = msgTransceiver.receive()
-        log.debug { "Received ${serverRoundTwo!!.size}-byte round 2 from 'server': ${serverRoundTwo.toHex()}" }
+        log.debug { "Received ${serverRoundTwo!!.size}-byte round 2 from 'server'" }
 
         log.debug { "Applying round 1 from 'server'" }
         jpakeImpl.receiveRemoteRoundOne(serverRoundOne!!)
@@ -84,7 +84,7 @@ class JpakeExchangeManager(
         jpakeImpl.receiveRemoteRoundTwo(serverRoundTwo!!)
 
         clientRoundTwo = jpakeImpl.createLocalRoundTwo()
-        log.debug { "Sending round 2 to 'server', ${clientRoundTwo?.size} bytes: ${clientRoundTwo.toHex()}" }
+        log.debug { "Sending round 2 to 'server', ${clientRoundTwo?.size}" }
         msgTransceiver.send(clientRoundTwo!!)
 
         log.debug { "Calculating shared secret!" }
@@ -92,14 +92,14 @@ class JpakeExchangeManager(
     }
 
     private suspend fun confirmSharedSecret() {
-//        log.warn { "Shared secret: ${sharedSecret.toHex()}" }
+        log.debug { "Shared secret: ${sharedSecret!!.size} bytes" }
 
         val clientConfirmation = generateClientConfirmationData()
-        log.debug { "Sending ${clientConfirmation.size}-byte confirmation message: ${clientConfirmation.toHex()}" }
+        log.debug { "Sending ${clientConfirmation.size}-byte confirmation message" }
         msgTransceiver.send(clientConfirmation)
         log.debug { "Awaiting confirmation response" }
         val serverConfirmation = msgTransceiver.receive()
-        log.debug { "Confirmation response received with ${serverConfirmation.size} bytes: ${serverConfirmation.toHex()}" }
+        log.debug { "Confirmation response received with ${serverConfirmation.size}" }
         val finalClientConfirmation = generateFinalConfirmation(clientConfirmation)
 
         if (Arrays.equals(serverConfirmation, finalClientConfirmation)) {
