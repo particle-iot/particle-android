@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.common.truthy
-import io.particle.particlemesh.meshsetup.connection.RequestSender
+import io.particle.particlemesh.meshsetup.connection.ProtocolTranceiver
 import io.particle.particlemesh.meshsetup.ui.utils.buildMatchingDeviceScanner
 import io.particle.particlemesh.meshsetup.utils.safeToast
 import io.particle.sdk.app.R
@@ -59,7 +59,7 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
         }
     }
 
-    private suspend fun onCommissionerConnected(commissioner: RequestSender, ctx: Context) {
+    private suspend fun onCommissionerConnected(commissioner: ProtocolTranceiver, ctx: Context) {
         val networkInfoReply = commissioner.sendGetNetworkInfo()
         val targetNetwork = setupController.otherParams.value!!.networkInfo!!
         val commissionerNetwork = when (networkInfoReply) {

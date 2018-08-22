@@ -7,10 +7,10 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
-import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
+import io.particle.particlemesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.common.android.livedata.setOnMainThread
-import io.particle.particlemesh.meshsetup.connection.RequestSender
+import io.particle.particlemesh.meshsetup.connection.ProtocolTranceiver
 import io.particle.particlemesh.meshsetup.connection.RequestSenderFactory
 import io.particle.particlemesh.meshsetup.connection.security.CryptoDelegateFactory
 import io.particle.particlemesh.meshsetup.ui.BarcodeData
@@ -42,7 +42,7 @@ class MeshSetupStateViewModel(app: Application) : AndroidViewModel(app) {
     val meshSetupController = MeshSetupController(
             ParticleCloudSDK.getCloud(),
             RequestSenderFactory(
-                    MeshSetupConnectionFactory(app),
+                    BluetoothConnectionManager(app),
                     CryptoDelegateFactory()
             )
     )
@@ -62,9 +62,9 @@ class MeshSetupController(
         private val requestSenderFactory: RequestSenderFactory
 ) {
 
-    var targetDevice: RequestSender? = null
+    var targetDevice: ProtocolTranceiver? = null
         private set
-    var commissioner: RequestSender? = null
+    var commissioner: ProtocolTranceiver? = null
         private set
 
     val deviceToBeSetUpParams: LiveData<DeviceToBeSetUpParams?>
@@ -130,7 +130,7 @@ class MeshSetupController(
     suspend fun connectToTargetDevice(
             address: BTDeviceAddress,
             mobileSecret: String
-    ): RequestSender? {
+    ): ProtocolTranceiver? {
         val device = requestSenderFactory.buildRequestSender(address, "joiner", mobileSecret)
         if (device == null) {
             log.error { "Unable to connect to device!" }
@@ -184,7 +184,7 @@ class MeshSetupController(
     suspend fun connectToCommissioner(
             address: BTDeviceAddress,
             mobileSecret: String
-    ): RequestSender? {
+    ): ProtocolTranceiver? {
         val device = requestSenderFactory.buildRequestSender(address, "commissioner", mobileSecret)
         if (device != null) {
             commissioner = device

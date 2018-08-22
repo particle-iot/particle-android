@@ -16,14 +16,11 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
-import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
 import io.particle.particlemesh.common.android.livedata.distinct
 import io.particle.particlemesh.common.truthy
 import io.particle.particlemesh.meshsetup.connection.BT_SETUP_SERVICE_ID
-import io.particle.particlemesh.meshsetup.connection.RequestSender
-import io.particle.particlemesh.meshsetup.connection.RequestSenderFactory
+import io.particle.particlemesh.meshsetup.connection.ProtocolTranceiver
 import io.particle.particlemesh.meshsetup.connection.buildMeshDeviceScanner
-import io.particle.particlemesh.meshsetup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_first_demo.*
 import kotlinx.coroutines.experimental.android.UI
@@ -32,7 +29,7 @@ import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
 
-private val deviceConnections = mutableMapOf<BTDeviceAddress, RequestSender>()
+private val deviceConnections = mutableMapOf<BTDeviceAddress, ProtocolTranceiver>()
 
 
 private const val ARGON_ADDY = "F8:6C:27:52:46:4B"
@@ -178,7 +175,7 @@ class FirstDemoFragment : Fragment() {
         }
     }
 
-    private fun selectedSender(): RequestSender? {
+    private fun selectedSender(): ProtocolTranceiver? {
         return deviceConnections[selectedDeviceAddress]
     }
 
@@ -193,7 +190,7 @@ class FirstDemoFragment : Fragment() {
     private fun connect(btAddress: BTDeviceAddress) {
 //        launch(UI) {
 //            val rsFactory = RequestSenderFactory(
-//                    MeshSetupConnectionFactory(applicationContext)
+//                    BluetoothConnectionManager(applicationContext)
 //            )
 //
 //            log.info { "building sender for " }
@@ -256,7 +253,7 @@ class FirstDemoFragment : Fragment() {
 //        launch(UI) {
 //            log.info { "Building request sender factory" }
 //            val rsFactory = RequestSenderFactory(
-//                    MeshSetupConnectionFactory(applicationContext)
+//                    BluetoothConnectionManager(applicationContext)
 //            )
 //            log.info { "building sender" }
 //            val requestSender = rsFactory.buildRequestSender(ARGON_ADDY, "Argon")
@@ -278,7 +275,7 @@ class FirstDemoFragment : Fragment() {
 
 //class UIRequestSender(
 //        private val fragment: FirstDemoFragment,
-//        private val sender: RequestSender
+//        private val sender: ProtocolTranceiver
 //) : AbstractRequestSender {
 //    override suspend fun sendGetDeviceId(): Result<GetDeviceIdReply, ResultCode> {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

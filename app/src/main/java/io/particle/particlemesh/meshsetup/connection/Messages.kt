@@ -14,8 +14,8 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh.*
 import io.particle.particlemesh.bluetooth.PacketMTUSplitter
 import io.particle.particlemesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.particlemesh.bluetooth.connecting.ConnectionPriority
-import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnection
-import io.particle.particlemesh.bluetooth.connecting.MeshSetupConnectionFactory
+import io.particle.particlemesh.bluetooth.connecting.BluetoothConnection
+import io.particle.particlemesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.meshsetup.connection.security.CryptoDelegateFactory
@@ -66,7 +66,7 @@ private fun Int.toResultCode(): Common.ResultCode {
 
 
 class RequestSenderFactory(
-        private val connectionFactory: MeshSetupConnectionFactory,
+        private val connectionManager: BluetoothConnectionManager,
         private val cryptoDelegateFactory: CryptoDelegateFactory
 ) {
 
@@ -75,9 +75,9 @@ class RequestSenderFactory(
             address: BTDeviceAddress,
             name: String,
             jpakeLowEntropyPassword: String
-    ): RequestSender? {
+    ): ProtocolTranceiver? {
 
-        val meshSetupConnection = connectionFactory.connectToDevice(address) ?: return null
+        val meshSetupConnection = connectionManager.connectToDevice(address) ?: return null
 
         val packetMTUSplitter = PacketMTUSplitter({ packet ->
             meshSetupConnection.packetSendChannel.offer(packet)
@@ -105,7 +105,7 @@ class RequestSenderFactory(
         frameReader.extraHeaderBytes = FULL_PROTOCOL_HEADER_SIZE + AES_CCM_MAC_SIZE
 
         val requestWriter = RequestWriter { frameWriter.writeFrame(it) }
-        val requestSender = RequestSender(requestWriter, meshSetupConnection, name)
+        val requestSender = ProtocolTranceiver(requestWriter, meshSetupConnection, name)
         val responseReader = ResponseReader { requestSender.receiveResponse(it) }
         launch {
             for (inboundFrame in frameReader.inboundFrameChannel) {
@@ -119,9 +119,9 @@ class RequestSenderFactory(
 }
 
 
-class RequestSender internal constructor(
+class ProtocolTranceiver internal constructor(
         private val requestWriter: RequestWriter,
-        private val connection: MeshSetupConnection,
+        private val connection: BluetoothConnection,
         private val connectionName: String
 ) {
 

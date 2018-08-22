@@ -32,7 +32,7 @@ enum class ConnectionPriority(val sdkVal: Int) {
 }
 
 
-class MeshSetupConnection(
+class BluetoothConnection(
         val connectionStateChangedLD: LiveData<ConnectionState?>,
         val gatt: BluetoothGatt,
         // this channel receives arbitrary-length arrays (not limited to BLE MTU)
@@ -70,13 +70,13 @@ class MeshSetupConnection(
 typealias BTDeviceAddress = String
 
 
-class MeshSetupConnectionFactory(private val ctx: Context) {
+class BluetoothConnectionManager(private val ctx: Context) {
 
     private val log = KotlinLogging.logger {}
 
 
     @MainThread
-    suspend fun connectToDevice(address: BTDeviceAddress): MeshSetupConnection? {
+    suspend fun connectToDevice(address: BTDeviceAddress): BluetoothConnection? {
 
         checkIsThisTheMainThread()
 
@@ -94,7 +94,7 @@ class MeshSetupConnectionFactory(private val ctx: Context) {
             }
         }
 
-        return MeshSetupConnection(
+        return BluetoothConnection(
                 callbacks.connectionStateChangedLD,
                 gatt,
                 messageWriteChannel,
