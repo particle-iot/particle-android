@@ -8,19 +8,17 @@ cmake_minimum_required(VERSION 3.4.1)
 add_library(libmbedcrypto STATIC IMPORTED)
 set_target_properties(libmbedcrypto
         PROPERTIES
-        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/distribution/libmbedcrypto.a)
+        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/distribution/${ANDROID_ABI}/libmbedcrypto.a)
 
 add_library(libmbedx509 STATIC IMPORTED)
 set_target_properties(libmbedx509
         PROPERTIES
-        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/distribution/libmbedx509.a)
+        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/distribution/${ANDROID_ABI}/libmbedx509.a)
 
 add_library(libmbedtls STATIC IMPORTED)
 set_target_properties(libmbedtls
         PROPERTIES
-        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/distribution/libmbedtls.a)
-
-# IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/distribution/dcmtk/${ANDROID_ABI}/lib/libdcmrt.a )
+        IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/distribution/${ANDROID_ABI}/libmbedtls.a)
 
 
 # Creates and names a library, sets it as either STATIC
