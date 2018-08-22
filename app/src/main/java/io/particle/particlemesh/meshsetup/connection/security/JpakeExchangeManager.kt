@@ -20,12 +20,10 @@ class JpakeExchangeMessageTransceiver(
         private val frameReader: InboundFrameReader
 ) {
 
-    @Synchronized
     fun send(jpakeMessage: ByteArray) {
         frameWriter.writeFrame(OutboundFrame(jpakeMessage, jpakeMessage.size))
     }
 
-    @Synchronized
     suspend fun receive(): ByteArray {
         val jpakeFrame = frameReader.inboundFrameChannel.receive()
         return jpakeFrame.frameData
