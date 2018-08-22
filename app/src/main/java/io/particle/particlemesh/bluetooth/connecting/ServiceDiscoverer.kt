@@ -7,7 +7,7 @@ import android.bluetooth.BluetoothGattService
 import android.support.annotation.CheckResult
 import android.support.annotation.MainThread
 import io.particle.particlemesh.bluetooth.GATTStatusCode
-import io.particle.particlemesh.bluetooth.ObservableBLECallbacks
+import io.particle.particlemesh.bluetooth.BLELiveDataCallbacks
 import io.particle.particlemesh.common.android.SimpleLifecycleOwner
 import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
@@ -19,7 +19,7 @@ private val TIMEOUT = TimeUnit.SECONDS.toMillis(5)
 
 
 class ServiceDiscoverer(
-        private val observables: ObservableBLECallbacks,
+        private val observables: BLELiveDataCallbacks,
         private val gatt: BluetoothGatt
 ) {
 

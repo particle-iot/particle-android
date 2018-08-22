@@ -5,7 +5,7 @@ import android.arch.lifecycle.Observer
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.content.Context
-import io.particle.particlemesh.bluetooth.ObservableBLECallbacks
+import io.particle.particlemesh.bluetooth.BLELiveDataCallbacks
 import io.particle.particlemesh.bluetooth.btAdapter
 import io.particle.particlemesh.common.android.SimpleLifecycleOwner
 import io.particle.particlemesh.common.android.livedata.first
@@ -27,12 +27,12 @@ class GattConnector(private val ctx: Context) {
 
     suspend fun createGattConnection(
             device: BluetoothDevice
-    ): Pair<BluetoothGatt, ObservableBLECallbacks>? {
+    ): Pair<BluetoothGatt, BLELiveDataCallbacks>? {
         lifecycleOwner.setNewState(Lifecycle.State.RESUMED)
 
         this.ctx.btAdapter.cancelDiscovery()
 
-        val callbacks = ObservableBLECallbacks()
+        val callbacks = BLELiveDataCallbacks()
         val gatt = withTimeoutOrNull(INITIAL_CONNECTION_TIMEOUT) {
             doCreateGattConnection(device, ctx, callbacks)
         }
@@ -48,7 +48,7 @@ class GattConnector(private val ctx: Context) {
     private suspend fun doCreateGattConnection(
             device: BluetoothDevice,
             ctx: Context,
-            callbacks: ObservableBLECallbacks
+            callbacks: BLELiveDataCallbacks
     ): BluetoothGatt {
         return suspendCoroutine { continuation: Continuation<BluetoothGatt> ->
             doCreateGattConnection(device, ctx, callbacks, { continuation.resume(it) })
@@ -58,18 +58,18 @@ class GattConnector(private val ctx: Context) {
     private fun doCreateGattConnection(
             device: BluetoothDevice,
             ctx: Context,
-            observableCallbacks: ObservableBLECallbacks,
+            liveDataCallbacks: BLELiveDataCallbacks,
             callback: (BluetoothGatt) -> Unit
     ) {
         log.info { "About to connect to $device" }
-        val gattRef = device.connectGatt(ctx.applicationContext, false, observableCallbacks)
+        val gattRef = device.connectGatt(ctx.applicationContext, false, liveDataCallbacks)
         log.info { "Called connectGatt for $gattRef" }
 
-        observableCallbacks.connectionStateChangedLD.observe(lifecycleOwner, Observer {
+        liveDataCallbacks.connectionStateChangedLD.observe(lifecycleOwner, Observer {
             log.debug { "Connection state UpDaTeD to $it" }
         })
 
-        observableCallbacks.connectionStateChangedLD
+        liveDataCallbacks.connectionStateChangedLD
                 .first { it == ConnectionState.CONNECTED }
                 .observe(lifecycleOwner, Observer {
                     log.debug { "Connection state updated to $it" }

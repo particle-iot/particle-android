@@ -189,12 +189,12 @@ class FirstDemoFragment : Fragment() {
 
     private fun connect(btAddress: BTDeviceAddress) {
 //        launch(UI) {
-//            val rsFactory = RequestSenderFactory(
+//            val rsFactory = ProtocolTranceiverFactory(
 //                    BluetoothConnectionManager(applicationContext)
 //            )
 //
 //            log.info { "building sender for " }
-//            val requestSender = rsFactory.buildRequestSender(btAddress, btAddress)
+//            val requestSender = rsFactory.buildProtocolTranceiver(btAddress, btAddress)
 //            log.info { "sender built" }
 //            if (requestSender == null) {
 //                applicationContext.safeToast("Could not connect to $btAddress!")
@@ -252,11 +252,11 @@ class FirstDemoFragment : Fragment() {
     private fun echoTest() {
 //        launch(UI) {
 //            log.info { "Building request sender factory" }
-//            val rsFactory = RequestSenderFactory(
+//            val rsFactory = ProtocolTranceiverFactory(
 //                    BluetoothConnectionManager(applicationContext)
 //            )
 //            log.info { "building sender" }
-//            val requestSender = rsFactory.buildRequestSender(ARGON_ADDY, "Argon")
+//            val requestSender = rsFactory.buildProtocolTranceiver(ARGON_ADDY, "Argon")
 //            log.info { "sender built" }
 //            val beefBytes = byteArrayOf(
 //                    0xDE.toByte(),

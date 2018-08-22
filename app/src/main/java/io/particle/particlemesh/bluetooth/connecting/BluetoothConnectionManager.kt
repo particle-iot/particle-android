@@ -8,7 +8,7 @@ import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.support.annotation.MainThread
 import io.particle.particlemesh.bluetooth.BTCharacteristicWriter
-import io.particle.particlemesh.bluetooth.ObservableBLECallbacks
+import io.particle.particlemesh.bluetooth.BLELiveDataCallbacks
 import io.particle.particlemesh.bluetooth.btAdapter
 import io.particle.particlemesh.common.QATool
 import io.particle.particlemesh.common.truthy
@@ -104,7 +104,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
 
     private suspend fun doConnectToDevice(
             device: BluetoothDevice
-    ): Triple<BluetoothGatt, BTCharacteristicWriter, ObservableBLECallbacks>? {
+    ): Triple<BluetoothGatt, BTCharacteristicWriter, BLELiveDataCallbacks>? {
         val gattConnectionCreator = GattConnector(ctx)
         log.info { "Creating connection to device $device" }
         val gattAndCallbacks = gattConnectionCreator.createGattConnection(device)
@@ -139,7 +139,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
 
     private suspend fun discoverServices(
             gatt: BluetoothGatt,
-            btCallbacks: ObservableBLECallbacks
+            btCallbacks: BLELiveDataCallbacks
     ): List<BluetoothGattService>? {
         log.debug { "Discovering services" }
         val discoverer = ServiceDiscoverer(btCallbacks, gatt)

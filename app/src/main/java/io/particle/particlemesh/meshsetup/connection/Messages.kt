@@ -65,13 +65,13 @@ private fun Int.toResultCode(): Common.ResultCode {
 }
 
 
-class RequestSenderFactory(
+class ProtocolTranceiverFactory(
         private val connectionManager: BluetoothConnectionManager,
         private val cryptoDelegateFactory: CryptoDelegateFactory
 ) {
 
     @MainThread
-    suspend fun buildRequestSender(
+    suspend fun buildProtocolTranceiver(
             address: BTDeviceAddress,
             name: String,
             jpakeLowEntropyPassword: String

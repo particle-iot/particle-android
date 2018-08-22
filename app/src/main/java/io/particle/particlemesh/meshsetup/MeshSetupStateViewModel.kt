@@ -11,7 +11,7 @@ import io.particle.particlemesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.particlemesh.common.Result
 import io.particle.particlemesh.common.android.livedata.setOnMainThread
 import io.particle.particlemesh.meshsetup.connection.ProtocolTranceiver
-import io.particle.particlemesh.meshsetup.connection.RequestSenderFactory
+import io.particle.particlemesh.meshsetup.connection.ProtocolTranceiverFactory
 import io.particle.particlemesh.meshsetup.connection.security.CryptoDelegateFactory
 import io.particle.particlemesh.meshsetup.ui.BarcodeData
 import kotlinx.coroutines.experimental.launch
@@ -41,7 +41,7 @@ class MeshSetupStateViewModel(app: Application) : AndroidViewModel(app) {
 
     val meshSetupController = MeshSetupController(
             ParticleCloudSDK.getCloud(),
-            RequestSenderFactory(
+            ProtocolTranceiverFactory(
                     BluetoothConnectionManager(app),
                     CryptoDelegateFactory()
             )
@@ -59,7 +59,7 @@ class MeshSetupStateViewModel(app: Application) : AndroidViewModel(app) {
 // FIXME: attach setup state to *this*
 class MeshSetupController(
         private val cloud: ParticleCloud,
-        private val requestSenderFactory: RequestSenderFactory
+        private val protocolTranceiverFactory: ProtocolTranceiverFactory
 ) {
 
     var targetDevice: ProtocolTranceiver? = null
@@ -131,7 +131,7 @@ class MeshSetupController(
             address: BTDeviceAddress,
             mobileSecret: String
     ): ProtocolTranceiver? {
-        val device = requestSenderFactory.buildRequestSender(address, "joiner", mobileSecret)
+        val device = protocolTranceiverFactory.buildProtocolTranceiver(address, "joiner", mobileSecret)
         if (device == null) {
             log.error { "Unable to connect to device!" }
             return null
@@ -185,7 +185,7 @@ class MeshSetupController(
             address: BTDeviceAddress,
             mobileSecret: String
     ): ProtocolTranceiver? {
-        val device = requestSenderFactory.buildRequestSender(address, "commissioner", mobileSecret)
+        val device = protocolTranceiverFactory.buildProtocolTranceiver(address, "commissioner", mobileSecret)
         if (device != null) {
             commissioner = device
         } else {

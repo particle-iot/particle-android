@@ -18,7 +18,7 @@ import mu.KotlinLogging
 typealias CharacteristicAndStatus = Pair<BluetoothGattCharacteristic, GATTStatusCode>
 
 
-class ObservableBLECallbacks : BluetoothGattCallback() {
+class BLELiveDataCallbacks : BluetoothGattCallback() {
 
     val connectionStateChangedLD: LiveData<ConnectionState?> = MutableLiveData()
     val onServicesDiscoveredLD: LiveData<GATTStatusCode> = MutableLiveData()
@@ -40,9 +40,8 @@ class ObservableBLECallbacks : BluetoothGattCallback() {
 
 
     override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-        val statusCode = GATTStatusCode.fromIntValue(status)
         val state = ConnectionState.fromIntValue(newState)
-        log.debug { "onConnectionStateChange() gatt: $gatt with status=$statusCode and state=$state" }
+        log.debug { "onConnectionStateChange() gatt: $gatt, state=$state" }
         (connectionStateChangedLD as MutableLiveData).setOnMainThread(state)
     }
 
@@ -87,11 +86,6 @@ class ObservableBLECallbacks : BluetoothGattCallback() {
                 GATTStatusCode.fromIntValue(statusCode)
         )
     }
-
-    override fun onReliableWriteCompleted(gatt: BluetoothGatt, statusCode: Int) {
-        log.debug { "onReliableWriteCompleted() for gatt=$gatt, status=$statusCode" }
-    }
-
 
     private fun receivePacket(packet: ByteArray) {
         log.trace { "Packet received, size=${packet.size} contents=${packet.toHex()}" }
