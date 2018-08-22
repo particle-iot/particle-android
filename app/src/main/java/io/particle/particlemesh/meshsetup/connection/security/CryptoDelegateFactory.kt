@@ -13,7 +13,6 @@ import kotlinx.coroutines.experimental.launch
 class CryptoDelegateFactory {
 
     suspend fun createCryptoDelegate(
-            bluetoothConnection: BluetoothConnection,
             frameWriter: OutboundFrameWriter,
             frameReader: InboundFrameReader,
             jpakeLowEntropyPassword: String
@@ -24,13 +23,6 @@ class CryptoDelegateFactory {
                 ECJPakeImpl(Role.CLIENT, jpakeLowEntropyPassword),
                 transceiver
         )
-
-        val jpakeMgrChannel = bluetoothConnection.packetReceiveChannel
-        launch {
-            for (packet in jpakeMgrChannel) {
-                QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
-            }
-        }
 
         val jpakeSecret = jpakeManager.performJpakeExchange()
 

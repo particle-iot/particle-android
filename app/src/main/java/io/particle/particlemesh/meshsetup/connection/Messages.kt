@@ -91,7 +91,6 @@ class ProtocolTranceiverFactory(
         }
 
         val cryptoDelegate = cryptoDelegateFactory.createCryptoDelegate(
-                meshSetupConnection,
                 frameWriter,
                 frameReader,
                 jpakeLowEntropyPassword
