@@ -1,7 +1,7 @@
 package io.particle.mesh.setup.connection
 
-import io.particle.mesh.setup.readByteArray
-import io.particle.mesh.setup.readUint16LE
+import io.particle.mesh.setup.utils.readByteArray
+import io.particle.mesh.setup.utils.readUint16LE
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

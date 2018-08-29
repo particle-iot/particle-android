@@ -1,6 +1,6 @@
 package io.particle.mesh.bluetooth
 
-import io.particle.mesh.setup.readByteArray
+import io.particle.mesh.setup.utils.readByteArray
 import java.nio.ByteBuffer
 
 

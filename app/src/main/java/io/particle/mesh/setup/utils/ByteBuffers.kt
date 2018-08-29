@@ -1,4 +1,4 @@
-package io.particle.mesh.setup
+package io.particle.mesh.setup.utils
 
 import java.nio.ByteBuffer
 

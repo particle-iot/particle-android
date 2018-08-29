@@ -3,10 +3,10 @@ package io.particle.mesh.setup.connection
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.toHex
 import io.particle.mesh.setup.connection.security.AesCcmDelegate
-import io.particle.mesh.setup.putUntilFull
-import io.particle.mesh.setup.readByteArray
-import io.particle.mesh.setup.readUint16LE
-import io.particle.mesh.setup.writeUint16LE
+import io.particle.mesh.setup.utils.putUntilFull
+import io.particle.mesh.setup.utils.readByteArray
+import io.particle.mesh.setup.utils.readUint16LE
+import io.particle.mesh.setup.utils.writeUint16LE
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
