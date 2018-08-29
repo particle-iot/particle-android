@@ -8,7 +8,7 @@
     tools:context=".meshsetup.ui.ScanCodeFragment">
 
 
-    <io.particle.particlemesh.meshsetup.barcodescanning.CameraSourcePreview
+    <io.particle.mesh.setup.barcodescanning.CameraSourcePreview
         android:id="@+id/firePreview"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <io.particle.particlemesh.meshsetup.barcodescanning.GraphicOverlay
+        <io.particle.mesh.setup.barcodescanning.GraphicOverlay
             android:id="@+id/fireFaceOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,7 +30,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true" />
 
-    </io.particle.particlemesh.meshsetup.barcodescanning.CameraSourcePreview>
+    </io.particle.mesh.setup.barcodescanning.CameraSourcePreview>
 
 
     <!--<ImageView-->

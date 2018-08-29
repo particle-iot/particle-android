@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.particle.particlemesh.meshsetup.ui.BLEPairingProgressFragment">
+    tools:context="io.particle.mesh.setup.ui.BLEPairingProgressFragment">
 
     <ProgressBar
         android:id="@+id/progressBar"

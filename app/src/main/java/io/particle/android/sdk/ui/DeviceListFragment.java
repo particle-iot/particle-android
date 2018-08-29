@@ -61,7 +61,7 @@ import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
 import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
-import io.particle.particlemesh.meshsetup.ui.MeshSetupActivity;
+import io.particle.mesh.setup.ui.MeshSetupActivity;
 import io.particle.sdk.app.R;
 
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE;

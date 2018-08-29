@@ -114,7 +114,7 @@
             android:theme="@style/ParticleSetupTheme.NoActionBar" />
 
         <activity
-            android:name="io.particle.particlemesh.meshsetup.ui.MeshSetupActivity"
+            android:name="io.particle.mesh.setup.ui.MeshSetupActivity"
             android:label="Mesh Setup"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

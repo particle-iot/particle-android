@@ -29,7 +29,6 @@ ext {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId 'io.particle.android.app'
@@ -99,10 +98,10 @@ dependencies {
     }
 
     releaseImplementation 'com.google.firebase:firebase-perf:16.1.0'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
     // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
     implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.0'

@@ -9,8 +9,8 @@ import com.segment.analytics.android.integrations.intercom.IntercomIntegration;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.particle.particlemesh.common.QATool;
-import io.particle.particlemesh.common.QAToolImpl;
+import io.particle.mesh.common.QATool;
+import io.particle.mesh.common.QAToolImpl;
 
 
 public class ReleaseBuildAppInitializer {
