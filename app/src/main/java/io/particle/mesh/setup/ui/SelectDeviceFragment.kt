@@ -50,18 +50,14 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
     }
 
     private fun onItemClicked(deviceData: DeviceData) {
+        // FIXME: this should happen via FlowManager
         // check for internet access
         if (!requireActivity().localDeviceHasInternetConnection()) {
             showNoInternetDialog()
             return
         }
 
-        setupController.updateDeviceParams(
-                setupController.deviceToBeSetUpParams.value!!.copy(
-                        deviceType = deviceData.deviceType
-                )
-        )
-        findNavController().navigate(R.id.action_selectDeviceFragment_to_getReadyForSetupFragment)
+        FlowManagerAccessModel.getViewModel(this).startFlowForDevice(deviceData.deviceType)
     }
 
     private fun showNoInternetDialog() {
