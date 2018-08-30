@@ -17,16 +17,17 @@
                             <option name="y" value="280" />
                           </Point>
                         </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_BLEPairingProgressFragment_to_scanForMeshNetworksFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
                       </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="action_global_BLEPairingProgressFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_getReadyForSetupFragment">
+                    <value>
+                      <LayoutPositions />
                     </value>
                   </entry>
                   <entry key="action_global_scanCodeFragment">
@@ -144,8 +145,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1264" />
-                            <option name="y" value="615" />
+                            <option name="x" value="1152" />
+                            <option name="y" value="-132" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -196,14 +197,11 @@
                   <entry key="scanJoinerCodeIntroFragment">
                     <value>
                       <LayoutPositions>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_scanCodeIntroFragment_to_BLEPairingProgressFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="518" />
+                            <option name="y" value="280" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -216,15 +214,6 @@
                             <option name="x" value="12" />
                             <option name="y" value="280" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_selectDeviceFragment_to_getReadyForSetupFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

@@ -13,10 +13,8 @@ import io.particle.firmwareprotos.ctrl.Extensions
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.*
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.*
 import io.particle.mesh.bluetooth.PacketMTUSplitter
-import io.particle.mesh.bluetooth.connecting.BTDeviceAddress
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
-import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.security.CryptoDelegateFactory
@@ -65,27 +63,24 @@ private fun Int.toResultCode(): Common.ResultCode {
 }
 
 
-class ProtocolTranceiverFactory(
-        private val connectionManager: BluetoothConnectionManager,
+class ProtocolTransceiverFactory(
         private val cryptoDelegateFactory: CryptoDelegateFactory
 ) {
 
     @MainThread
-    suspend fun buildProtocolTranceiver(
-            address: BTDeviceAddress,
+    suspend fun buildProtocolTransceiver(
+            deviceConnection: BluetoothConnection,
             name: String,
             jpakeLowEntropyPassword: String
-    ): ProtocolTranceiver? {
-
-        val meshSetupConnection = connectionManager.connectToDevice(address) ?: return null
+    ): ProtocolTransceiver? {
 
         val packetMTUSplitter = PacketMTUSplitter({ packet ->
-            meshSetupConnection.packetSendChannel.offer(packet)
+            deviceConnection.packetSendChannel.offer(packet)
         })
         val frameWriter = OutboundFrameWriter { packetMTUSplitter.splitIntoPackets(it) }
         val frameReader = InboundFrameReader()
         launch {
-            for (packet in meshSetupConnection.packetReceiveChannel) {
+            for (packet in deviceConnection.packetReceiveChannel) {
                 QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
             }
         }
@@ -104,7 +99,7 @@ class ProtocolTranceiverFactory(
         frameReader.extraHeaderBytes = FULL_PROTOCOL_HEADER_SIZE + AES_CCM_MAC_SIZE
 
         val requestWriter = RequestWriter { frameWriter.writeFrame(it) }
-        val requestSender = ProtocolTranceiver(requestWriter, meshSetupConnection, name)
+        val requestSender = ProtocolTransceiver(requestWriter, deviceConnection, name)
         val responseReader = ResponseReader { requestSender.receiveResponse(it) }
         launch {
             for (inboundFrame in frameReader.inboundFrameChannel) {
@@ -118,7 +113,7 @@ class ProtocolTranceiverFactory(
 }
 
 
-class ProtocolTranceiver internal constructor(
+class ProtocolTransceiver internal constructor(
         private val requestWriter: RequestWriter,
         private val connection: BluetoothConnection,
         private val connectionName: String
@@ -129,6 +124,9 @@ class ProtocolTranceiver internal constructor(
 
     val isConnected: Boolean
         get() = connection.isConnected
+
+    val deviceName: String
+        get() = connection.deviceName
 
     fun disconnect() {
         connection.disconnect()

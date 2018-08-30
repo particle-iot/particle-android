@@ -1,5 +1,7 @@
 package io.particle.mesh.setup.ui
 
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
@@ -9,8 +11,12 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.setOnMainThread
+import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
+import io.particle.mesh.setup.connection.security.CryptoDelegateFactory
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
 import mu.KotlinLogging
@@ -44,7 +50,9 @@ class MeshSetupActivity : AppCompatActivity() {
 
 
 
-class FlowManagerAccessModel : ViewModel() {
+class FlowManagerAccessModel(
+        private val app: Application
+) : AndroidViewModel(app) {
 
     companion object {
 
@@ -59,12 +67,17 @@ class FlowManagerAccessModel : ViewModel() {
     }
 
     var flowManager: FlowManager? = null
+
+    private val btConnManager = BluetoothConnectionManager(app)
+    private val protocolFactory = ProtocolTransceiverFactory(CryptoDelegateFactory())
+    private val cloud = ParticleCloudSDK.getCloud()
+
     private var navReference = MutableLiveData<NavController?>()
 
 
     fun startFlowForDevice(deviceType: ParticleDeviceType) {
         resetState()
-        flowManager = FlowManager(deviceType, navReference)
+        flowManager = FlowManager(deviceType, cloud, navReference, btConnManager, protocolFactory)
         flowManager?.startFlow()
     }
 

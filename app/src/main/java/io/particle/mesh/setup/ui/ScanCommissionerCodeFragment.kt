@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.connection.ProtocolTranceiver
+import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameScanner
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
@@ -30,8 +30,8 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
 
         setupController.setCommissionerBarcode(barcodeData!!)
 
-        scannerLD = buildMatchingDeviceNameScanner(this, barcodeData.serialNumber)
-        scannerLD.observe(this, Observer { onMatchingDeviceFound(it) })
+//        scannerLD = buildMatchingDeviceNameScanner(this, barcodeData.serialNumber)
+//        scannerLD.observe(this, Observer { onMatchingDeviceFound(it) })
     }
 
     private fun onMatchingDeviceFound(results: List<ScanResult>?) {
@@ -59,7 +59,7 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
         }
     }
 
-    private suspend fun onCommissionerConnected(commissioner: ProtocolTranceiver, ctx: Context) {
+    private suspend fun onCommissionerConnected(commissioner: ProtocolTransceiver, ctx: Context) {
         val networkInfoReply = commissioner.sendGetNetworkInfo()
         val targetNetwork = setupController.otherParams.value!!.networkInfo!!
         val commissionerNetwork = when (networkInfoReply) {

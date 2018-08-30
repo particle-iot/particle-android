@@ -17,12 +17,6 @@ class ScanSetupTargetCodeIntroFragment : ScanIntroBaseFragment() {
 
         val flowManager = FlowManagerAccessModel.getViewModel(this).flowManager
         flowManager?.updateTargetDeviceBarcode(barcodeData)
-//        findNavController().navigate(
-//                R.id.action_scanCodeIntroFragment_to_BLEPairingProgressFragment
-//        )
     }
 
 }
-
-
-

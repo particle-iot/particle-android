@@ -44,6 +44,9 @@ class BluetoothConnection(
         private val closablePacketReceiveChannel: Channel<ByteArray>
 ) {
 
+    val deviceName: String
+        get() = gatt.device.name
+
     val isConnected: Boolean
         get() = connectionStateChangedLD.value == ConnectionState.CONNECTED
 
@@ -61,10 +64,10 @@ class BluetoothConnection(
                 { gatt.disconnect() }
         )
         // calling .close() *immediately* after .disconnect() was sometimes causing
-        // the disconnect to fail, thus the delay.
+        // the disconnect to fail, thus the delay.  Hacky, but it works. :-/
         launch(UI) {
             delay(50)
-            gatt.close()
+            QATool.runSafely({ gatt.close() })
         }
     }
 }

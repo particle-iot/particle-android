@@ -43,6 +43,7 @@ abstract class AsyncWorkSuspender<T> {
     }
 
     suspend fun awaitResult(): T {
+        beforeAwait()
         val result = awaitCondition()
         cleanUp()
         return result

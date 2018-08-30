@@ -10,16 +10,12 @@ import android.view.ViewGroup
 import android.widget.VideoView
 import androidx.navigation.Navigation
 import io.particle.common.buildRawResourceUri
+import io.particle.sdk.app.BuildConfig
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.view.*
 
 
 class GetReadyForSetupFragment : BaseMeshSetupFragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupController.fetchClaimCode()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,6 +30,10 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
     }
 
     private fun setUpVideoView(vidView: VideoView) {
+        if (BuildConfig.DEBUG) {
+            return
+        }
+
         vidView.setVideoURI(requireActivity().buildRawResourceUri(R.raw.sample_video_silent))
 
         lifecycle.addObserver(object : DefaultLifecycleObserver {

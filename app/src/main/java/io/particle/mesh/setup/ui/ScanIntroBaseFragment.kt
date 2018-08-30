@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import io.particle.sdk.app.R
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
 abstract class ScanIntroBaseFragment : BaseMeshSetupFragment() {
@@ -24,6 +27,14 @@ abstract class ScanIntroBaseFragment : BaseMeshSetupFragment() {
         super.onCreate(savedInstanceState)
         scanViewModel = ScanViewModel.getViewModel(requireActivity())
         scanViewModel.latestScannedBarcode.observe(this, Observer { doOnBarcodeUpdated(it) })
+
+        launch(UI) {
+            delay(1000)
+            log.warn { "USING DEBUG DATA FOR BARCODE!" }
+            doOnBarcodeUpdated(
+                    BarcodeData(serialNumber="XENHAB829GFWV4M", mobileSecret="LX5KELW2BYVWYE4")
+            )
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

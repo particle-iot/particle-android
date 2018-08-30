@@ -9,11 +9,7 @@
         android:id="@+id/selectDeviceFragment"
         android:name="io.particle.mesh.setup.ui.SelectDeviceFragment"
         android:label="fragment_select_device"
-        tools:layout="@layout/fragment_select_device">
-        <action
-            android:id="@+id/action_selectDeviceFragment_to_getReadyForSetupFragment"
-            app:destination="@id/getReadyForSetupFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_select_device"></fragment>
 
     <fragment
         android:id="@+id/getReadyForSetupFragment"
@@ -29,11 +25,7 @@
         android:id="@+id/scanJoinerCodeIntroFragment"
         android:name="io.particle.mesh.setup.ui.ScanSetupTargetCodeIntroFragment"
         android:label="fragment_scan_joiner_code_intro"
-        tools:layout="@layout/fragment_scan_code_intro">
-        <action
-            android:id="@+id/action_scanCodeIntroFragment_to_BLEPairingProgressFragment"
-            app:destination="@id/BLEPairingProgressFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_scan_code_intro"></fragment>
 
     <fragment
         android:id="@+id/scanCodeFragment"
@@ -45,11 +37,7 @@
         android:id="@+id/BLEPairingProgressFragment"
         android:name="io.particle.mesh.setup.ui.BLEPairingProgressFragment"
         android:label="fragment_ble_pairing_progress"
-        tools:layout="@layout/fragment_ble_pairing_progress">
-        <action
-            android:id="@+id/action_BLEPairingProgressFragment_to_scanForMeshNetworksFragment"
-            app:destination="@id/scanForMeshNetworksFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_ble_pairing_progress"></fragment>
 
     <fragment
         android:id="@+id/scanForMeshNetworksFragment"
@@ -116,5 +104,7 @@
             android:id="@+id/action_scanCommissionerCodeFragment_to_enterNetworkPasswordFragment"
             app:destination="@id/enterNetworkPasswordFragment" />
     </fragment>
+    <action android:id="@+id/action_global_getReadyForSetupFragment" app:destination="@id/getReadyForSetupFragment" />
+    <action android:id="@+id/action_global_BLEPairingProgressFragment" app:destination="@id/BLEPairingProgressFragment" />
 
 </navigation>

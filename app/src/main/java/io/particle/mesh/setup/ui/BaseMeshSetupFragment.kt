@@ -9,12 +9,17 @@ import io.particle.mesh.setup.MeshSetupStateViewModel
 
 open class BaseMeshSetupFragment : Fragment() {
 
+    protected lateinit var flowManagerVM: FlowManagerAccessModel
+
+    @Deprecated("Use FlowManager!")
     protected lateinit var setupController: MeshSetupController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val vm = ViewModelProviders.of(requireActivity()).get(MeshSetupStateViewModel::class.java)
         setupController = vm.meshSetupController
+
+        flowManagerVM = FlowManagerAccessModel.getViewModel(this)
     }
 
 }
