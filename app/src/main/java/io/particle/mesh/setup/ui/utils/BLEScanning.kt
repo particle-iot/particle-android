@@ -1,55 +1,61 @@
 package io.particle.mesh.setup.ui.utils
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanFilter.Builder
 import android.bluetooth.le.ScanResult
+import android.content.Context
 import android.os.ParcelUuid
-import android.support.v4.app.Fragment
-import android.widget.Toast
-import io.particle.mesh.common.android.livedata.distinct
+import io.particle.mesh.bluetooth.BluetoothAdapterStateLD
+import io.particle.mesh.bluetooth.btAdapter
+import io.particle.mesh.bluetooth.scanning.BLEScannerLD
+import io.particle.mesh.bluetooth.scanning.buildReactiveBluetoothScanner
+import io.particle.mesh.common.AsyncWorkSuspender
+import io.particle.mesh.common.Predicate
+import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
-import io.particle.mesh.setup.connection.buildMeshDeviceScanner
-import io.particle.mesh.setup.utils.safeToast
 import mu.KotlinLogging
 
-
-private const val BT_NAME_ID_LENGTH = 6
 
 private val log = KotlinLogging.logger {}
 
 
-fun buildMatchingDeviceScanner(
-        fragment: Fragment,
-        serialNumber: String
+fun buildMatchingDeviceNameScanner(
+        context: Context,
+        deviceName: String
 ): LiveData<List<ScanResult>?> {
-
-    val deviceType = getDeviceTypeName(serialNumber)
-    val lastSix = serialNumber.substring(serialNumber.length - BT_NAME_ID_LENGTH).toUpperCase()
-
-    val deviceName = "$deviceType-$lastSix"
-
-    fragment.requireActivity().safeToast("Scanning for device $deviceName", Toast.LENGTH_LONG)
     log.info { "Scanning for device $deviceName" }
 
-    val scannerAndSwitch = buildMeshDeviceScanner(
-            fragment.context!!.applicationContext,
-            { sr -> sr.device.name != null && sr.device.name == deviceName },
-            Builder().setServiceUuid(ParcelUuid(BT_SETUP_SERVICE_ID)).build()
+    val ctx = context.applicationContext
+
+    val toggleScanLD = MutableLiveData<Boolean>()
+    toggleScanLD.value = true
+    val scannerLD = buildReactiveBluetoothScanner(
+            toggleScanLD,
+            BluetoothAdapterStateLD(ctx),
+            BLEScannerLD(
+                    ctx.btAdapter,
+                    { sr -> sr.device.name != null && sr.device.name == deviceName },
+                    listOf(Builder().setServiceUuid(ParcelUuid(BT_SETUP_SERVICE_ID)).build())
+            )
     )
-    scannerAndSwitch.toggleSwitch.value = true
-    return scannerAndSwitch.scannerLD.distinct()
+
+    return scannerLD.distinct()
 }
 
 
+fun buildMatchingDeviceNameSuspender(
+        context: Context,
+        deviceName: String
+): AsyncWorkSuspender<ScanResult?> {
+    val scannerLD = buildMatchingDeviceNameScanner(context, deviceName)
+    return object: LiveDataSuspender<ScanResult?>() {
+        override fun buildLiveData(): LiveData<ScanResult?> {
+            return scannerLD.nonNull()
+                    .filter { it!!.isNotEmpty() }
+                    .map { it!![0] }
+        }
 
-private fun getDeviceTypeName(serialNumber: String): String {
-    val first4 = serialNumber.substring(0, 4)
-    return when(first4) {
-        "ARGH" -> "Argon"
-        "XENH" -> "Xenon"
-        "R40K",
-        "R31K" -> "Boron"
-        else -> "UNKNOWN"
     }
-
 }

@@ -15,6 +15,8 @@ import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
 import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import io.particle.mesh.setup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
+import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameScanner
+import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameSuspender
 import io.particle.mesh.setup.utils.checkIsThisTheMainThread
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
@@ -22,6 +24,7 @@ import kotlinx.coroutines.experimental.channels.ReceiveChannel
 import kotlinx.coroutines.experimental.channels.SendChannel
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
 
 
@@ -34,7 +37,7 @@ enum class ConnectionPriority(val sdkVal: Int) {
 
 class BluetoothConnection(
         val connectionStateChangedLD: LiveData<ConnectionState?>,
-        val gatt: BluetoothGatt,
+        private val gatt: BluetoothGatt,
         // this channel receives arbitrary-length arrays (not limited to BLE MTU)
         val packetSendChannel: SendChannel<ByteArray>,
         // this channel emits arbitrary-length arrays (not limited to BLE MTU)
@@ -69,6 +72,8 @@ class BluetoothConnection(
 
 typealias BTDeviceAddress = String
 
+const val CONNECTION_TIMEOUT_MILLIS = 10000
+
 
 class BluetoothConnectionManager(private val ctx: Context) {
 
@@ -76,9 +81,13 @@ class BluetoothConnectionManager(private val ctx: Context) {
 
 
     @MainThread
-    suspend fun connectToDevice(address: BTDeviceAddress): BluetoothConnection? {
-
+    suspend fun connectToDevice(
+            deviceName: String,
+            timeout: Int = CONNECTION_TIMEOUT_MILLIS
+    ): BluetoothConnection? {
         checkIsThisTheMainThread()
+
+        val address = scanForDevice(deviceName, timeout) ?: return null
 
         log.info { "Connecting to device $address" }
         // 1. Attempt to connect
@@ -86,7 +95,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         // If this returns null, we're finished, return null ourselves
         val (gatt, bleWriteChannel, callbacks) = doConnectToDevice(device) ?: return null
 
-        
+
         val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
         launch {
             for (packet in messageWriteChannel) {
@@ -100,6 +109,14 @@ class BluetoothConnectionManager(private val ctx: Context) {
                 messageWriteChannel,
                 callbacks.readOrChangedReceiveChannel as Channel<ByteArray>
         )
+    }
+
+    private suspend fun scanForDevice(deviceName: String, timeout: Int): BTDeviceAddress? {
+        val scannerSuspender = buildMatchingDeviceNameSuspender(ctx, deviceName)
+        val scanResult = withTimeoutOrNull(timeout) {
+            scannerSuspender.awaitResult()
+        }
+        return scanResult?.device?.address
     }
 
     private suspend fun doConnectToDevice(
@@ -152,11 +169,11 @@ class BluetoothConnectionManager(private val ctx: Context) {
     private fun initCharacteristics(gatt: BluetoothGatt): BluetoothGattCharacteristic? {
         log.debug { "Initializing characteristics" }
         val subscriber = CharacteristicSubscriber(
-                    gatt,
+                gatt,
                 BT_SETUP_SERVICE_ID,
                 BT_SETUP_RX_CHARACTERISTIC_ID,
                 BT_SETUP_TX_CHARACTERISTIC_ID
-            )
+        )
         // return write characteristic
         return subscriber.subscribeToReadAndReturnWrite()
     }

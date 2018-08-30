@@ -1,7 +1,7 @@
 package io.particle.mesh.setup.flow.modules.cloudconnection
 
+import android.support.annotation.WorkerThread
 import io.particle.android.sdk.cloud.ParticleCloud
-import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
 
@@ -13,16 +13,10 @@ class CloudConnectionModule(
 
     var claimCode: String? = null
 
+    @WorkerThread
     fun fetchClaimCode() {
-        launch {
-            if (claimCode != null) {
-                log.debug { "Claim code already fetched; skipping" }
-                return@launch
-            }
-            log.info { "Fetching new claim code" }
-            claimCode = cloud.generateClaimCode().claimCode
-        }
+        log.info { "Fetching new claim code" }
+        claimCode = cloud.generateClaimCode().claimCode
     }
-
 
 }

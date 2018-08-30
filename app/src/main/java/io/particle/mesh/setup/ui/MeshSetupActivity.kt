@@ -58,8 +58,8 @@ class FlowManagerAccessModel : ViewModel() {
         }
     }
 
+    var flowManager: FlowManager? = null
     private var navReference = MutableLiveData<NavController?>()
-    private var flowManager: FlowManager? = null
 
 
     fun startFlowForDevice(deviceType: ParticleDeviceType) {

@@ -82,7 +82,7 @@ class Bonder(ctx: Context) {
 
     private suspend fun doBondToDevice(device: BluetoothDevice): BondingResult {
         return suspendCoroutine { continuation: Continuation<BondingResult> ->
-            doBondToDevice(device, { continuation.resume(it) })
+            doBondToDevice(device) { continuation.resume(it) }
         }
     }
 

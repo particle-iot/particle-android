@@ -1,12 +1,11 @@
 package io.particle.mesh.setup.ui
 
 
-import androidx.navigation.fragment.findNavController
 import io.particle.mesh.common.QATool
 import io.particle.sdk.app.R
 
 
-class ScanJoinerCodeIntroFragment : ScanIntroBaseFragment() {
+class ScanSetupTargetCodeIntroFragment : ScanIntroBaseFragment() {
 
     override val layoutId = R.layout.fragment_scan_code_intro
 
@@ -16,10 +15,11 @@ class ScanJoinerCodeIntroFragment : ScanIntroBaseFragment() {
             return
         }
 
-        setupController.setJoinerBarcode(barcodeData)
-        findNavController().navigate(
-                R.id.action_scanCodeIntroFragment_to_BLEPairingProgressFragment
-        )
+        val flowManager = FlowManagerAccessModel.getViewModel(this).flowManager
+        flowManager?.updateTargetDeviceBarcode(barcodeData)
+//        findNavController().navigate(
+//                R.id.action_scanCodeIntroFragment_to_BLEPairingProgressFragment
+//        )
     }
 
 }

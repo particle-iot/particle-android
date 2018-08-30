@@ -9,7 +9,7 @@ import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTranceiver
-import io.particle.mesh.setup.ui.utils.buildMatchingDeviceScanner
+import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameScanner
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
@@ -30,7 +30,7 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
 
         setupController.setCommissionerBarcode(barcodeData!!)
 
-        scannerLD = buildMatchingDeviceScanner(this, barcodeData.serialNumber)
+        scannerLD = buildMatchingDeviceNameScanner(this, barcodeData.serialNumber)
         scannerLD.observe(this, Observer { onMatchingDeviceFound(it) })
     }
 

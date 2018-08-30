@@ -51,6 +51,12 @@ fun <T> LiveData<T?>.filter(predicate: (T?) -> Boolean): LiveData<T?> {
 
 
 @MainThread
+fun <T> LiveData<T?>.nonNull(): LiveData<T?> {
+    return this.filter { it != null }
+}
+
+
+@MainThread
 fun <T> LiveData<T?>.first(predicate: (T?) -> Boolean): LiveData<T?> {
     val result = MediatorLiveData<T?>()
     result.addSource(this) { x ->

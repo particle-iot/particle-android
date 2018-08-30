@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/scanJoinerCodeIntroFragment"
-        android:name="io.particle.mesh.setup.ui.ScanJoinerCodeIntroFragment"
+        android:name="io.particle.mesh.setup.ui.ScanSetupTargetCodeIntroFragment"
         android:label="fragment_scan_joiner_code_intro"
         tools:layout="@layout/fragment_scan_code_intro">
         <action

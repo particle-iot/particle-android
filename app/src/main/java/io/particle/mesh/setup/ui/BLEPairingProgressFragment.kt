@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.ui.utils.buildMatchingDeviceScanner
+import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameScanner
 import io.particle.mesh.setup.ui.utils.quickDialog
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
@@ -31,7 +31,7 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val serialNum = setupController.deviceToBeSetUpParams.value!!.barcodeData!!.serialNumber
-        scannerLD = buildMatchingDeviceScanner(this, serialNum)
+        scannerLD = buildMatchingDeviceNameScanner(this, serialNum)
         scannerLD.observe(this, Observer { onMatchingDeviceFound(it) })
     }
 
