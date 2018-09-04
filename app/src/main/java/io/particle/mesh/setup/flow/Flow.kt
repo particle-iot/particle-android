@@ -5,8 +5,8 @@ import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
+import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoReply
-import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.truthy
@@ -19,7 +19,7 @@ import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
 
 
-class Flow(
+open class Flow(
         private val flowManager: FlowManager,
         private val cloud: ParticleCloud
 ) {
@@ -72,7 +72,9 @@ class Flow(
         ensureResetNetworkCredentials()
 
         if (hasEthernet) {
-            TODO("FEATHERWING FLOW!")
+            throw IllegalStateException()
+            doEthernetFlow()
+
         } else {
             ensureJoinerVisibleMeshNetworksListPopulated()
             ensureShowPairingSuccessful()
@@ -84,15 +86,40 @@ class Flow(
             ensureTargetMeshNetworkPasswordCollected()
             ensureMeshNetworkJoinedShown()
             ensureMeshNetworkJoined()
-
-            ensureTargetDeviceClaimedByUser()
-            ensureTargetDeviceSetSetupDone()
-            ensureTargetDeviceIsNamed()
-            // TODO: review sub-steps in "FINISH" step of SDD
         }
+
+        ensureTargetDeviceClaimedByUser()
+        ensureTargetDeviceSetSetupDone()
+        ensureTargetDeviceIsNamed()
+        // TODO: review sub-steps in "FINISH" step of SDD
 
         ensureShowSetupFinishedUi()
     }
+
+    private suspend fun doEthernetFlow() {
+        // FIXME: break out this stuff into separate "ensure...()" methods
+
+        // FIXME: bust this out into a subsection of the cloud connection module
+        // FIXME: what is this step even doing??
+        val interfaceList = ensureGetInterfaceList()
+
+        // FIXME: user feedback if interface has no IP
+        targetXceiver!!.sendStopListeningMode()
+        ensureEthernetConnected()
+
+    }
+
+    private suspend fun ensureEthernetConnected() {
+        for (i in 0..14) { // 30 seconds
+            delay(500)
+            val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
+            if (statusReply.status == ConnectionStatus.CONNECTED) {
+                return
+            }
+        }
+        throw FlowException()
+    }
+
 
     private fun ensureClaimCodeFetched() {
         if (cloudConnModule.claimCode == null) {
@@ -170,7 +197,7 @@ class Flow(
     }
 
     private suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {
-        val ifaceListReply = targetXceiver!!.sendGetInterfaceListRequest().throwOnErrorOrAbsent()
+        val ifaceListReply = targetXceiver!!.sendGetInterfaceList().throwOnErrorOrAbsent()
         return ifaceListReply.interfacesList
     }
 
@@ -205,7 +232,7 @@ class Flow(
     }
 
     private suspend fun ensureResetNetworkCredentials() {
-        targetXceiver!!.sendResetNetworkCredentialsRequest().throwOnErrorOrAbsent()
+        targetXceiver!!.sendResetNetworkCredentials().throwOnErrorOrAbsent()
     }
 
     private suspend fun ensureJoinerVisibleMeshNetworksListPopulated() {

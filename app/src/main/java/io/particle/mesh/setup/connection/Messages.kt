@@ -13,6 +13,8 @@ import io.particle.firmwareprotos.ctrl.Extensions
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.*
+import io.particle.firmwareprotos.ctrl.cloud.Cloud.GetConnectionStatusReply
+import io.particle.firmwareprotos.ctrl.cloud.Cloud.GetConnectionStatusRequest
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.*
 import io.particle.mesh.bluetooth.PacketMTUSplitter
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
@@ -138,7 +140,12 @@ class ProtocolTransceiver internal constructor(
         connection.setConnectionPriority(priority)
     }
 
-    suspend fun sendResetNetworkCredentialsRequest(
+    suspend fun sendGetConnectionStatus(): Result<GetConnectionStatusReply, ResultCode> {
+        val response = sendRequest(GetConnectionStatusRequest.newBuilder().build())
+        return buildResult(response) { r -> GetConnectionStatusReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendResetNetworkCredentials(
     ): Result<Unit, ResultCode> {
 
         // FIXME: implement for real once we have the required protos
@@ -149,7 +156,7 @@ class ProtocolTransceiver internal constructor(
 //        return buildResult(response) { r -> ResetNetworkCredentialsReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendGetInterfaceListRequest(): Result<GetInterfaceListReply, ResultCode> {
+    suspend fun sendGetInterfaceList(): Result<GetInterfaceListReply, ResultCode> {
         val response = sendRequest(GetInterfaceListRequest.newBuilder().build())
         return buildResult(response) { r -> GetInterfaceListReply.parseFrom(r.payloadData) }
     }
