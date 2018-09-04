@@ -1,24 +1,19 @@
 package io.particle.mesh.setup.ui
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
-import io.particle.mesh.common.Result
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
 import io.particle.mesh.setup.ui.utils.inflateRow
-import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_for_mesh_networks.view.*
 import kotlinx.android.synthetic.main.row_mesh_networks.view.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 
 
 class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
@@ -27,50 +22,23 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        flowManagerVM.flowManager!!.targetDeviceVisibleMeshNetworksLD.observe(
+                this,
+                Observer { onNetworksUpdated(it) }
+        )
         adapter = ScannedMeshNetworksAdapter { onMeshNetworkSelected(it.meshNetworkInfo) }
         val root = inflater.inflate(R.layout.fragment_scan_for_mesh_networks, container, false)
         root.recyclerView.adapter = adapter
         return root
     }
 
-    override fun onResume() {
-        super.onResume()
-        launch { scan() }
+    private fun onNetworksUpdated(networks: List<NetworkInfo>?) {
+        adapter.submitList(networks?.map { ScannedMeshNetwork(it.name, it) })
     }
 
     private fun onMeshNetworkSelected(networkInfo: NetworkInfo) {
-        setupController.updateOtherParams(setupController.otherParams.value!!.copy(
-                networkInfo = networkInfo
-        ))
-        findNavController().navigate(
-                R.id.action_scanForMeshNetworksFragment_to_manualCommissioningAddToNetworkFragment
-        )
+        flowManagerVM.flowManager?.updateSelectedMeshNetworkToJoin(networkInfo)
     }
-
-    private suspend fun scan() {
-        val result = setupController.targetDevice!!.sendScanNetworks()
-        launch(UI) {
-            when (result) {
-                is Result.Error,
-                is Result.Absent -> {
-                    if (isResumed) {
-                        requireActivity().safeToast("Unable to scan for networks")
-                    }
-                }
-                is Result.Present -> {
-                    val networks = result.value.networksList
-                    if (!networks.isEmpty()) {
-                        adapter.submitList(networks.map { ScannedMeshNetwork(it.name, it) })
-                    }
-                    if (isResumed) {
-                        delay(1000)
-                        launch { scan() }
-                    }
-                }
-            }
-        }
-    }
-
 }
 
 
@@ -104,6 +72,5 @@ private class ScannedMeshNetworksAdapter(
 
         holder.rowRoot.setOnClickListener { onItemClicked(item) }
     }
-
 }
 

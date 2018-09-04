@@ -28,8 +28,9 @@ class SetupFinishedFragment : BaseMeshSetupFragment() {
 
     private fun endSetup(restart: Boolean) {
         val appCtx = requireActivity().applicationContext
-        setupController.clearData()
+        flowManagerVM.flowManager?.clearState()
         requireActivity().finish()
+
         if (restart) {
             launch(UI) {
                 delay(500)

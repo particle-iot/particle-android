@@ -21,11 +21,6 @@ class EnterNetworkPasswordFragment : BaseMeshSetupFragment() {
 
     private fun onPasswordEntered() {
         val password = view!!.deviceNameInputLayout.editText!!.text.toString()
-        setupController.updateOtherParams(setupController.otherParams.value!!.copy(
-                commissionerCredential = password
-        ))
-        findNavController().navigate(
-                R.id.action_enterNetworkPasswordFragment_to_joiningMeshNetworkProgressFragment
-        )
+        flowManagerVM.flowManager!!.updateTargetMeshNetworkCommissionerPassword(password)
     }
 }

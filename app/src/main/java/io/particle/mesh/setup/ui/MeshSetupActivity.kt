@@ -50,9 +50,7 @@ class MeshSetupActivity : AppCompatActivity() {
 
 
 
-class FlowManagerAccessModel(
-        private val app: Application
-) : AndroidViewModel(app) {
+class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
 
     companion object {
 

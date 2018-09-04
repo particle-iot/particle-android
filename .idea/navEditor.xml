@@ -13,8 +13,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="771" />
-                            <option name="y" value="280" />
+                            <option name="x" value="342" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -25,7 +25,27 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_enterNetworkPasswordFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_getReadyForSetupFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_joiningMeshNetworkProgressFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_manualCommissioningAddToNetworkFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_nameYourDeviceFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -35,23 +55,24 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_scanForMeshNetworksFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_setupFinishedFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="enterNetworkPasswordFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1783" />
-                            <option name="y" value="280" />
+                            <option name="x" value="672" />
+                            <option name="y" value="12" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_enterNetworkPasswordFragment_to_joiningMeshNetworkProgressFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -61,8 +82,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="265" />
-                            <option name="y" value="280" />
+                            <option name="x" value="181" />
+                            <option name="y" value="324" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -82,18 +103,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="2036" />
-                            <option name="y" value="280" />
+                            <option name="x" value="837" />
+                            <option name="y" value="12" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_joiningMeshNetworkProgressFragment_to_nameYourDeviceFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -103,8 +115,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1277" />
-                            <option name="y" value="280" />
+                            <option name="x" value="599" />
+                            <option name="y" value="324" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -124,18 +136,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="2289" />
-                            <option name="y" value="280" />
+                            <option name="x" value="1002" />
+                            <option name="y" value="12" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_nameYourDeviceFragment_to_setupFinishedFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -145,8 +148,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1152" />
-                            <option name="y" value="-132" />
+                            <option name="x" value="177" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -157,18 +160,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1530" />
-                            <option name="y" value="280" />
+                            <option name="x" value="852" />
+                            <option name="y" value="324" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_scanCommissionerCodeFragment_to_enterNetworkPasswordFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -178,18 +172,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1024" />
-                            <option name="y" value="280" />
+                            <option name="x" value="507" />
+                            <option name="y" value="12" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_scanForMeshNetworksFragment_to_manualCommissioningAddToNetworkFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -199,8 +184,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="518" />
-                            <option name="y" value="280" />
+                            <option name="x" value="434" />
+                            <option name="y" value="324" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -212,7 +197,7 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="12" />
-                            <option name="y" value="280" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -223,8 +208,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="2542" />
-                            <option name="y" value="280" />
+                            <option name="x" value="16" />
+                            <option name="y" value="324" />
                           </Point>
                         </option>
                       </LayoutPositions>

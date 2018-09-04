@@ -19,8 +19,8 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        flowManagerVM.flowManager!!.targetDeviceTransceiverLD.observe(this, Observer {
-            onDeviceConnected(it)
+        flowManagerVM.flowManager!!.targetDeviceConnectedLD.observe(this, Observer {
+            onTargetDeviceConnected()
         })
     }
 
@@ -29,17 +29,15 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_ble_pairing_progress, container, false)
     }
 
-    private fun onDeviceConnected(transceiver: ProtocolTransceiver?) {
+    private fun onTargetDeviceConnected() {
+        log.info { "onDeviceConnected()" }
+
         progressBar.visibility = View.GONE
         state_success.visibility = View.VISIBLE
 
-        status_text.text = "Successfully paired with device ${transceiver?.deviceName ?: '?'}"
-
-        requireActivity().safeToast("Connected device!")
-
-//        findNavController().navigate(
-//                R.id.action_BLEPairingProgressFragment_to_scanForMeshNetworksFragment
-//        )
+        val xceiver = flowManagerVM.flowManager!!.targetDeviceTransceiverLD.value
+        val msg = "Successfully paired with device ${xceiver?.deviceName ?: '?'}"
+        status_text.text = msg
     }
 
 }
