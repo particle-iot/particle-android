@@ -3,7 +3,6 @@ package io.particle.mesh.setup.ui
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -16,9 +15,10 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
-import io.particle.mesh.setup.connection.security.CryptoDelegateFactory
+import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
+import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
 
@@ -66,8 +66,9 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
 
     var flowManager: FlowManager? = null
 
+    private val securityManager = SecurityManager()
     private val btConnManager = BluetoothConnectionManager(app)
-    private val protocolFactory = ProtocolTransceiverFactory(CryptoDelegateFactory())
+    private val protocolFactory = ProtocolTransceiverFactory(securityManager)
     private val cloud = ParticleCloudSDK.getCloud()
 
     private var navReference = MutableLiveData<NavController?>()

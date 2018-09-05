@@ -1,5 +1,9 @@
 package io.particle.mesh.setup.connection.security
 
+import io.particle.ecjpake4j.ECJPakeImpl
+import io.particle.ecjpake4j.Role.CLIENT
+import io.particle.mesh.setup.connection.InboundFrameReader
+import io.particle.mesh.setup.connection.OutboundFrameWriter
 import okio.Buffer
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -16,20 +20,24 @@ private const val AES_CCM_FIXED_NONCE_SIZE = 8
 private const val ALGORITHM_TRANSFORMATION = "AES/CCM/NoPadding"
 
 
-//class SecurityManager {
-//
-//    fun encrypt(bytes: ByteArray, additionalData: ByteArray): ByteArray {
-//
-//    }
-//
-//    fun decrypt(bytes: ByteArray, additionalData: ByteArray): ByteArray {
-//
-//    }
-//
-//    fun negotiateKey() {
-//
-//    }
-//}
+class SecurityManager {
+
+    suspend fun createCryptoDelegate(
+            jpakeLowEntropyPassword: String,
+            frameWriter: OutboundFrameWriter,
+            frameReader: InboundFrameReader
+    ): AesCcmDelegate? {
+        val transceiver = JpakeExchangeMessageTransceiver(frameWriter, frameReader)
+        val jpakeManager = JpakeExchangeManager(
+                ECJPakeImpl(CLIENT, jpakeLowEntropyPassword),
+                transceiver
+        )
+
+        val jpakeSecret = jpakeManager.performJpakeExchange()
+
+        return AesCcmDelegate.newDelegateFromJpakeSecret(jpakeSecret)
+    }
+}
 
 
 

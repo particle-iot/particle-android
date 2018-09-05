@@ -8,20 +8,54 @@ import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
 import io.particle.firmwareprotos.ctrl.Common
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
-import io.particle.firmwareprotos.ctrl.Config.*
+import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdReply
+import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdRequest
+import io.particle.firmwareprotos.ctrl.Config.GetSerialNumberReply
+import io.particle.firmwareprotos.ctrl.Config.GetSerialNumberRequest
+import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeReply
+import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeRequest
+import io.particle.firmwareprotos.ctrl.Config.SetDeviceSetupDoneReply
+import io.particle.firmwareprotos.ctrl.Config.SetDeviceSetupDoneRequest
+import io.particle.firmwareprotos.ctrl.Config.StopListeningModeReply
+import io.particle.firmwareprotos.ctrl.Config.StopListeningModeRequest
 import io.particle.firmwareprotos.ctrl.Extensions
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest
-import io.particle.firmwareprotos.ctrl.StorageOuterClass.*
+import io.particle.firmwareprotos.ctrl.StorageOuterClass.FinishFirmwareUpdateReply
+import io.particle.firmwareprotos.ctrl.StorageOuterClass.FinishFirmwareUpdateRequest
+import io.particle.firmwareprotos.ctrl.StorageOuterClass.FirmwareUpdateDataReply
+import io.particle.firmwareprotos.ctrl.StorageOuterClass.FirmwareUpdateDataRequest
+import io.particle.firmwareprotos.ctrl.StorageOuterClass.StartFirmwareUpdateReply
+import io.particle.firmwareprotos.ctrl.StorageOuterClass.StartFirmwareUpdateRequest
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.GetConnectionStatusReply
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.GetConnectionStatusRequest
-import io.particle.firmwareprotos.ctrl.mesh.Mesh.*
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.AuthReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.AuthRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.CreateNetworkReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.CreateNetworkRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.LeaveNetworkRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.PrepareJoinerReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.PrepareJoinerRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.ScanNetworksReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.ScanNetworksRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerReply
+import io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest
 import io.particle.mesh.bluetooth.PacketMTUSplitter
-import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
+import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
-import io.particle.mesh.setup.connection.security.CryptoDelegateFactory
+import io.particle.mesh.setup.connection.security.SecurityManager
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
@@ -68,7 +102,7 @@ private fun Int.toResultCode(): Common.ResultCode {
 
 
 class ProtocolTransceiverFactory(
-        private val cryptoDelegateFactory: CryptoDelegateFactory
+        private val securityManager: SecurityManager
 ) {
 
     @MainThread
@@ -89,10 +123,10 @@ class ProtocolTransceiverFactory(
             }
         }
 
-        val cryptoDelegate = cryptoDelegateFactory.createCryptoDelegate(
+        val cryptoDelegate = securityManager.createCryptoDelegate(
+                jpakeLowEntropyPassword,
                 frameWriter,
-                frameReader,
-                jpakeLowEntropyPassword
+                frameReader
         ) ?: return null
 
         frameReader.cryptoDelegate = cryptoDelegate

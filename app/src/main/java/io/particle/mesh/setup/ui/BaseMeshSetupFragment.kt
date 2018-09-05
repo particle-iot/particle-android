@@ -2,7 +2,6 @@ package io.particle.mesh.setup.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import io.particle.mesh.setup.MeshSetupController
 
 
 open class BaseMeshSetupFragment : Fragment() {

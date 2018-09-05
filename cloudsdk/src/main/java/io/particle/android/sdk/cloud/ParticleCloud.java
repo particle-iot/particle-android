@@ -385,6 +385,15 @@ public class ParticleCloud {
         }
     }
 
+    @WorkerThread
+    public void getNetworks() throws ParticleCloudException {
+        try {
+            Response networks = mainApi.getNetworks();
+            log.i("/v1/networks response: " + networks.getBody());
+        } catch (RetrofitError error) {
+            throw new ParticleCloudException(error);
+        }
+    }
 
     // FIXME: devise a less temporary way to expose this method
     // FIXME: stop the duplication that's happening here
