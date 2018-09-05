@@ -64,7 +64,9 @@ import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.mesh.setup.ui.MeshSetupActivity;
 import io.particle.sdk.app.R;
 
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON;
@@ -406,7 +408,7 @@ public class DeviceListFragment extends Fragment
         private Drawable defaultBackground;
         private String textFilter = "";
         private List<ParticleDevice.ParticleDeviceType> typeFilters = list(PHOTON, CORE, ELECTRON,
-                RASPBERRY_PI, P1, RED_BEAR_DUO);
+                RASPBERRY_PI, P1, RED_BEAR_DUO, DIGISTUMP_OAK, BLUZ);
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
