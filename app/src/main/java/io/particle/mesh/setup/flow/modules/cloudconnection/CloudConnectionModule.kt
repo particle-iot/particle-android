@@ -8,6 +8,7 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
+import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
@@ -21,7 +22,7 @@ import mu.KotlinLogging
 class CloudConnectionModule(
         private val flowManager: FlowManager,
         private val cloud: ParticleCloud
-) {
+) : Clearable {
 
     private val log = KotlinLogging.logger {}
 
@@ -38,8 +39,15 @@ class CloudConnectionModule(
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
 
 
-    fun clearState() {
-        TODO("IMPLEMENT ME")
+    override fun clearState() {
+        claimCode = null
+        checkedIsTargetClaimedByUser = false
+        connectedToMeshNetworkAndOwnedUiShown = false
+
+        (targetDeviceShouldBeClaimedLD as MutableLiveData).postValue(null)
+        (targetOwnedByUserLD as MutableLiveData).postValue(null)
+        (targetDeviceNameToAssignLD as MutableLiveData).postValue(null)
+        (isTargetDeviceNamedLD as MutableLiveData).postValue(null)
     }
 
     fun updateTargetOwnedByUser(owned: Boolean) {
@@ -69,7 +77,7 @@ class CloudConnectionModule(
                 return
             }
         }
-        throw FlowException()
+        throw FlowException("Error ensuring ethernet connected")
     }
 
     // FIXME: where does this belong?
@@ -134,7 +142,7 @@ class CloudConnectionModule(
         val targetDeviceId = flowManager.bleConnectionModule.ensureTargetDeviceId()
         val isInList = pollDevicesForNewDevice(targetDeviceId)
         if (!isInList) {
-            throw FlowException()
+            throw FlowException("Target device does not appear to be claimed")
         }
 
         updateTargetOwnedByUser(true)
@@ -157,7 +165,7 @@ class CloudConnectionModule(
         }
 
         if (nameToAssign == null) {
-            throw FlowException()
+            throw FlowException("Error ensuring target device is named")
         }
 
         val targetDeviceId = flowManager.bleConnectionModule.ensureTargetDeviceId()

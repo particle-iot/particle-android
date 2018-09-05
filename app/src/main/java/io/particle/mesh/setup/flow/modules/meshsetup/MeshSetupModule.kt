@@ -10,6 +10,7 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
@@ -22,7 +23,7 @@ import kotlinx.coroutines.experimental.withContext
 class MeshSetupModule(
         private val flowManager: FlowManager,
         val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
-) {
+) : Clearable {
 
     val targetDeviceMeshNetworkToJoinLD: LiveData<NetworkInfo?> = MutableLiveData()
     val targetDeviceMeshNetworkToJoinCommissionerPassword: LiveData<String?> = MutableLiveData()
@@ -33,8 +34,11 @@ class MeshSetupModule(
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
 
 
-    fun clearState() {
-        TODO("IMPLEMENT ME")
+    override fun clearState() {
+        (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(null)
+        (targetDeviceMeshNetworkToJoinCommissionerPassword as MutableLiveData).postValue(null)
+        (targetJoinedMeshNetworkLD as MutableLiveData).postValue(null)
+        (commissionerStartedLD as MutableLiveData).postValue(null)
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {
@@ -64,12 +68,12 @@ class MeshSetupModule(
 
                 targetXceiver!!.sendLeaveNetwork().throwOnErrorOrAbsent()
             }
-            is Result.Absent -> throw FlowException()
+            is Result.Absent -> throw FlowException("No result received when getting existing network")
             is Result.Error -> {
                 if (reply.error == NOT_FOUND) {
                     return
                 } else {
-                    throw FlowException()
+                    throw FlowException("Error when getting existing network")
                 }
             }
         }
@@ -108,7 +112,7 @@ class MeshSetupModule(
         }
 
         if (password == null) {
-            throw FlowException()
+            throw FlowException("Error collecting mesh network password")
         }
     }
 

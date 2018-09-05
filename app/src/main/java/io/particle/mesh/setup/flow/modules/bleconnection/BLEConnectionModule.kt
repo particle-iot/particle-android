@@ -7,6 +7,7 @@ import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
+import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
@@ -23,7 +24,7 @@ class BLEConnectionModule(
         private val flowManager: FlowManager,
         private val btConnectionManager: BluetoothConnectionManager,
         private val transceiverFactory: ProtocolTransceiverFactory
-) {
+) : Clearable {
 
     private val log = KotlinLogging.logger {}
 
@@ -44,8 +45,19 @@ class BLEConnectionModule(
         get() = targetDeviceTransceiverLD.value
 
 
-    fun clearState() {
-        TODO("IMPLEMENT ME")
+    override fun clearState() {
+        targetDeviceId = null
+        connectingToTargetUiShown = false
+        shownTargetInitialIsConnectedScreen = false
+
+        (targetDeviceBarcodeLD as MutableLiveData).postValue(null)
+        targetDeviceTransceiverLD.value?.disconnect()
+        (targetDeviceTransceiverLD as MutableLiveData).postValue(null)
+        (targetDeviceConnectedLD as MutableLiveData).postValue(null)
+
+        (commissionerBarcodeLD as MutableLiveData).postValue(null)
+        commissionerTransceiverLD.value?.disconnect()
+        (commissionerTransceiverLD as MutableLiveData).postValue(null)
     }
 
     fun updateCommissionerBarcode(barcodeData: BarcodeData) {
@@ -74,7 +86,7 @@ class BLEConnectionModule(
         }
 
         if (barcodeData == null) {
-            throw FlowException()
+            throw FlowException("Error getting barcode data for target device")
         }
     }
 
@@ -96,7 +108,7 @@ class BLEConnectionModule(
         }
 
         if (transceiver == null) {
-            throw FlowException()
+            throw FlowException("Error ensuring target connected")
         }
     }
 
@@ -133,7 +145,7 @@ class BLEConnectionModule(
         }
 
         if (barcodeData == null) {
-            throw FlowException()
+            throw FlowException("Error getting barcode data for commissioner")
         }
     }
 
@@ -150,7 +162,7 @@ class BLEConnectionModule(
         }
 
         if (commissioner == null) {
-            throw FlowException()
+            throw FlowException("Error ensuring commissioner connected")
         }
 
         // FIXME: handle case of mismatched commissioner mesh vs target mesh!
@@ -172,7 +184,7 @@ class BLEConnectionModule(
             val targetTransceiver = withContext(UI) {
                 val barcode = targetDeviceBarcodeLD.value!!
                 return@withContext connect(barcode, "target")
-            } ?: throw FlowException()
+            } ?: throw FlowException("Error connecting target")
 
             log.debug { "Target device connected!" }
             (targetDeviceTransceiverLD as MutableLiveData).setOnMainThread(targetTransceiver)
@@ -185,7 +197,7 @@ class BLEConnectionModule(
             val commissioner = withContext(UI) {
                 val barcode = commissionerBarcodeLD.value!!
                 return@withContext connect(barcode, "commissioner")
-            } ?: throw FlowException()
+            } ?: throw FlowException("Error connecting commissioner")
 
             log.debug { "Commissioner connected!" }
             (commissionerTransceiverLD as MutableLiveData).setOnMainThread(commissioner)

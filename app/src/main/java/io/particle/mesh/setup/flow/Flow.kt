@@ -16,25 +16,23 @@ open class Flow(
         private val bleConnModule: BLEConnectionModule,
         private val meshSetupModule: MeshSetupModule,
         private val cloudConnModule: CloudConnectionModule
-) {
+) : Clearable {
 
     private val targetXceiver
         get() = bleConnModule.targetDeviceTransceiverLD.value
 
     private val log = KotlinLogging.logger {}
 
-    fun runFlow() {
-        launch {
-            try {
-                doRunFlow()
-            } catch (ex: Exception) {
-                TODO("HAND OFF TO ERROR HANDLER!")
-                // FIXME: or should error handling happen at the FlowManager level?
-            }
+    suspend fun runFlow() {
+        try {
+            doRunFlow()
+        } catch (ex: Exception) {
+            // FIXME: or should error handling happen at the FlowManager level?
+            throw ex
         }
     }
 
-    fun clearState() {
+    override fun clearState() {
         // FIXME: implement!
     }
 
@@ -58,7 +56,6 @@ open class Flow(
         meshSetupModule.ensureResetNetworkCredentials()
 
         if (hasEthernet) {
-            throw IllegalStateException()
             doEthernetFlow()
 
         } else {
@@ -116,18 +113,19 @@ private val log = KotlinLogging.logger {}
 
 // FIXME: feels like this belongs elsewhere.
 fun <V, E> Result<V, E>.throwOnErrorOrAbsent(): V {
-    return when(this) {
+    return when (this) {
         is Result.Error,
         is Result.Absent -> {
-            log.error { "Error making request: ${this.error}" }
-            throw FlowException()
+            val msg = "Error making request: ${this.error}"
+            log.error { msg }
+            throw FlowException(msg)
         }
         is Result.Present -> this.value
     }
 }
 
 
-class FlowException : Exception() {
+class FlowException(msg: String = "") : Exception(msg) {
     // FIXME: give this extra data
 }
 

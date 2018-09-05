@@ -8,6 +8,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
+import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
@@ -29,7 +30,7 @@ class FlowManager(
         private val navControllerRef: LiveData<NavController?>,
         btConnectionManager: BluetoothConnectionManager,
         transceiverFactory: ProtocolTransceiverFactory
-) {
+) : Clearable {
 
     val bleConnectionModule = BLEConnectionModule(this, btConnectionManager, transceiverFactory)
     val meshSetupModule: MeshSetupModule
@@ -39,7 +40,6 @@ class FlowManager(
 
     private val navController: NavController?
         get() = navControllerRef.value
-
 
     private val log = KotlinLogging.logger {}
 
@@ -51,20 +51,22 @@ class FlowManager(
     }
 
     fun startFlow() {
-        flow.runFlow()
+        launch {
+            for (i in 0..3) {
+                try {
+                    flow.runFlow()
+                    return@launch
+                } catch (ex: Exception) {
+                    QATool.report(ex)
+                }
+            }
+        }
     }
 
-    fun clearState() {
-
-        flow.clearState()
-        bleConnectionModule.clearState()
-        meshSetupModule.clearState()
-        cloudConnectionModule.clearState()
-//        targetDeviceTransceiverLD.value?.disconnect()
-//        (targetDeviceBarcodeLD as MutableLiveData).postValue(null)
-//        (targetDeviceTransceiverLD as MutableLiveData).postValue(null)
-//        commissionerTransceiverLD.value?.disconnect()
-        // FIXME: finish implementing!
+    override fun clearState() {
+        for (clearable in listOf(bleConnectionModule, meshSetupModule, cloudConnectionModule, flow)) {
+            clearable.clearState()
+        }
     }
 
     fun navigate(@IdRes idRes: Int) {

@@ -1,6 +1,9 @@
 package io.particle.mesh.common
 
+import android.util.Log
 import mu.KotlinLogging
+import com.crashlytics.android.Crashlytics
+
 
 /**
  * A simple tool for error reporting, to make it easy to ensure that if a problem occurred,
