@@ -18,7 +18,6 @@ import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
 

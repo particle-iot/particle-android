@@ -22,7 +22,7 @@ class NameYourDeviceFragment : BaseMeshSetupFragment() {
 
         root.action_next.setOnClickListener {
             val name = root.deviceNameInputLayout.editText!!.text.toString()
-            flowManagerVM.flowManager!!.updateTargetDeviceNameToAssign(name)
+            flowManagerVM.flowManager!!.cloudConnectionModule.updateTargetDeviceNameToAssign(name)
         }
 
         return root

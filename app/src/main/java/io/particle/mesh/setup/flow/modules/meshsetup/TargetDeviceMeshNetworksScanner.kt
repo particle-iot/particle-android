@@ -1,16 +1,18 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.WorkerThread
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
+import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.FlowManager
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
 class TargetDeviceMeshNetworksScanner(
-        private val flowManager: FlowManager
+        private val targetXceiverLD: LiveData<ProtocolTransceiver?>
 ) : MutableLiveData<List<Mesh.NetworkInfo>?>() {
 
     override fun onActive() {
@@ -36,7 +38,7 @@ class TargetDeviceMeshNetworksScanner(
 
     @WorkerThread
     private suspend fun doScan() {
-        val xceiver = flowManager.targetDeviceTransceiverLD.value!!
+        val xceiver = targetXceiverLD.value!!
         val networksReply = xceiver.sendScanNetworks()
         val networks = when(networksReply) {
             is Result.Present -> networksReply.value.networksList

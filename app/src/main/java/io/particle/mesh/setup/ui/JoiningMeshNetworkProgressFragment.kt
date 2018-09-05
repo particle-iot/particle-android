@@ -35,9 +35,9 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val fm = flowManagerVM.flowManager!!
-        fm.commissionerStartedLD.observe(this, Observer { markProgress(R.id.status_stage_1) })
-        fm.targetJoinedMeshNetworkLD.observe(this, Observer { markProgress(R.id.status_stage_2) })
-        fm.targetOwnedByUserLD.observe(this, Observer { markProgress(R.id.status_stage_3) })
+        fm.meshSetupModule.commissionerStartedLD.observe(this, Observer { markProgress(R.id.status_stage_1) })
+        fm.meshSetupModule.targetJoinedMeshNetworkLD.observe(this, Observer { markProgress(R.id.status_stage_2) })
+        fm.cloudConnectionModule.targetOwnedByUserLD.observe(this, Observer { markProgress(R.id.status_stage_3) })
     }
 
     private fun markProgress(@IdRes progressStage: Int) {

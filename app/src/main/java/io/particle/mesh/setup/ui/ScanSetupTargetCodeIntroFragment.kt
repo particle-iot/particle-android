@@ -15,8 +15,8 @@ class ScanSetupTargetCodeIntroFragment : ScanIntroBaseFragment() {
             return
         }
 
-        val flowManager = FlowManagerAccessModel.getViewModel(this).flowManager
-        flowManager?.updateTargetDeviceBarcode(barcodeData)
+        val flowManager = FlowManagerAccessModel.getViewModel(this).flowManager!!
+        flowManager.bleConnectionModule.updateTargetDeviceBarcode(barcodeData)
     }
 
 }

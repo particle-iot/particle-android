@@ -22,7 +22,7 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        flowManagerVM.flowManager!!.targetDeviceVisibleMeshNetworksLD.observe(
+        flowManagerVM.flowManager!!.meshSetupModule.targetDeviceVisibleMeshNetworksLD.observe(
                 this,
                 Observer { onNetworksUpdated(it) }
         )
@@ -37,7 +37,7 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
     }
 
     private fun onMeshNetworkSelected(networkInfo: NetworkInfo) {
-        flowManagerVM.flowManager?.updateSelectedMeshNetworkToJoin(networkInfo)
+        flowManagerVM.flowManager!!.meshSetupModule.updateSelectedMeshNetworkToJoin(networkInfo)
     }
 }
 

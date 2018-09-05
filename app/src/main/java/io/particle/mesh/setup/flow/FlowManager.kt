@@ -11,6 +11,9 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
+import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
+import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
+import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksScanner
 import io.particle.mesh.setup.ui.BarcodeData
 import io.particle.mesh.setup.utils.runOnMainThread
@@ -24,32 +27,15 @@ class FlowManager(
         val targetDeviceType: ParticleDeviceType,
         cloud: ParticleCloud,
         private val navControllerRef: LiveData<NavController?>,
-        private val btConnectionManager: BluetoothConnectionManager,
-        private val transceiverFactory: ProtocolTransceiverFactory
+        btConnectionManager: BluetoothConnectionManager,
+        transceiverFactory: ProtocolTransceiverFactory
 ) {
 
-    val targetDeviceBarcodeLD: LiveData<BarcodeData?> = MutableLiveData()
-    val targetDeviceTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
-    val targetDeviceShouldBeClaimedLD: LiveData<Boolean?> = MutableLiveData()
-    val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner =
-            TargetDeviceMeshNetworksScanner(this)
-    // FIXME: having 2 LDs, representing the transceiver & the uninitialized transceiver isn't great
-    val targetDeviceConnectedLD: LiveData<Boolean?> = MutableLiveData()
-    val targetDeviceMeshNetworkToJoin: LiveData<Mesh.NetworkInfo?> = MutableLiveData()
+    val bleConnectionModule = BLEConnectionModule(this, btConnectionManager, transceiverFactory)
+    val meshSetupModule: MeshSetupModule
+    val cloudConnectionModule: CloudConnectionModule
 
-    val commissionerBarcodeLD: LiveData<BarcodeData?> = MutableLiveData()
-    val commissionerTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
-
-    val targetDeviceMeshNetworkToJoinCommissionerPassword: LiveData<String?> = MutableLiveData()
-
-    val commissionerStartedLD: LiveData<Boolean?> = MutableLiveData()
-    val targetJoinedMeshNetworkLD: LiveData<Boolean?> = MutableLiveData()
-    val targetOwnedByUserLD: LiveData<Boolean?> = MutableLiveData()
-
-    val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
-    val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
-
-    private var flow: Flow = Flow(this, cloud)
+    private var flow: Flow
 
     private val navController: NavController?
         get() = navControllerRef.value
@@ -57,17 +43,27 @@ class FlowManager(
 
     private val log = KotlinLogging.logger {}
 
+    init {
+        val scanner = TargetDeviceMeshNetworksScanner(bleConnectionModule.targetDeviceTransceiverLD)
+        meshSetupModule = MeshSetupModule(this, scanner)
+        cloudConnectionModule = CloudConnectionModule(this, cloud)
+        flow = Flow(this, bleConnectionModule, meshSetupModule, cloudConnectionModule)
+    }
 
     fun startFlow() {
         flow.runFlow()
     }
 
     fun clearState() {
+
         flow.clearState()
-        targetDeviceTransceiverLD.value?.disconnect()
-        (targetDeviceBarcodeLD as MutableLiveData).postValue(null)
-        (targetDeviceTransceiverLD as MutableLiveData).postValue(null)
-        commissionerTransceiverLD.value?.disconnect()
+        bleConnectionModule.clearState()
+        meshSetupModule.clearState()
+        cloudConnectionModule.clearState()
+//        targetDeviceTransceiverLD.value?.disconnect()
+//        (targetDeviceBarcodeLD as MutableLiveData).postValue(null)
+//        (targetDeviceTransceiverLD as MutableLiveData).postValue(null)
+//        commissionerTransceiverLD.value?.disconnect()
         // FIXME: finish implementing!
     }
 
@@ -75,103 +71,7 @@ class FlowManager(
         runOnMainThread { navController?.navigate(idRes) }
     }
 
-    fun updateTargetDeviceBarcode(barcodeData: BarcodeData?) {
-        log.debug { "updateTargetDeviceBarcode(): barcodeData=$barcodeData" }
-        (targetDeviceBarcodeLD as MutableLiveData).postValue(barcodeData)
-    }
-
-    fun updateTargetDeviceConnectionInitialized(initialized: Boolean) {
-        (targetDeviceConnectedLD as MutableLiveData).postValue(initialized)
-    }
-
-    fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {
-        (targetDeviceMeshNetworkToJoin as MutableLiveData).postValue(meshNetworkToJoin)
-    }
-
-    fun updateCommissionerBarcode(barcodeData: BarcodeData) {
-        (commissionerBarcodeLD as MutableLiveData).postValue(barcodeData)
-    }
-
-    fun updateTargetMeshNetworkCommissionerPassword(password: String) {
-        (targetDeviceMeshNetworkToJoinCommissionerPassword as MutableLiveData).postValue(password)
-    }
-
-    fun updateCommissionerStarted(started: Boolean) {
-        (commissionerStartedLD as MutableLiveData).postValue(started)
-    }
-
-    fun updateTargetJoinedMeshNetwork(joined: Boolean) {
-        (targetJoinedMeshNetworkLD as MutableLiveData).postValue(joined)
-    }
-
-    fun updateTargetOwnedByUser(owned: Boolean) {
-        (targetOwnedByUserLD as MutableLiveData).postValue(owned)
-    }
-
-    fun updateIsTargetDeviceNamed(named: Boolean) {
-        (isTargetDeviceNamedLD as MutableLiveData).postValue(named)
-    }
-
-    fun updateTargetDeviceNameToAssign(name: String) {
-        (targetDeviceNameToAssignLD as MutableLiveData).postValue(name)
-    }
-
-    fun connectTargetDevice() {
-        log.info { "connectTargetDevice()" }
-        launch {
-            val targetTransceiver = withContext(UI) {
-                val barcode = targetDeviceBarcodeLD.value!!
-                return@withContext connect(barcode, "target")
-            } ?: throw FlowException()
-
-            log.debug { "Target device connected!" }
-            (targetDeviceTransceiverLD as MutableLiveData).setOnMainThread(targetTransceiver)
-        }
-    }
-
-    fun connectCommissioner() {
-        log.info { "connectCommissioner()" }
-        launch {
-            val commissioner = withContext(UI) {
-                val barcode = commissionerBarcodeLD.value!!
-                return@withContext connect(barcode, "commissioner")
-            } ?: throw FlowException()
-
-            log.debug { "Commissioner connected!" }
-            (commissionerTransceiverLD as MutableLiveData).setOnMainThread(commissioner)
-        }
-    }
-
     fun startNewFlow() {
         TODO("IMPLEMENT THIS")
     }
-
-    private suspend fun connect(barcode: BarcodeData, connName: String): ProtocolTransceiver? {
-        val device = btConnectionManager.connectToDevice(barcode.toDeviceName())
-            ?: return null
-        return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)
-    }
-}
-
-
-private const val BT_NAME_ID_LENGTH = 6
-
-
-private fun BarcodeData.toDeviceName(): String {
-
-    fun getDeviceTypeName(serialNumber: String): String {
-        val first4 = serialNumber.substring(0, 4)
-        return when (first4) {
-            "ARGH" -> "Argon"
-            "XENH" -> "Xenon"
-            "R40K",
-            "R31K" -> "Boron"
-            else -> "UNKNOWN"
-        }
-    }
-
-    val deviceType = getDeviceTypeName(this.serialNumber)
-    val lastSix = serialNumber.substring(serialNumber.length - BT_NAME_ID_LENGTH).toUpperCase()
-
-    return "$deviceType-$lastSix"
 }
