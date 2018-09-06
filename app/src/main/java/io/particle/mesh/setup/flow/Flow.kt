@@ -98,6 +98,8 @@ class Flow(
         meshSetupModule.ensureTargetMeshNetworkPasswordCollected()
         meshSetupModule.ensureMeshNetworkJoinedShown()
         meshSetupModule.ensureMeshNetworkJoined()
+        meshSetupModule.ensureCommissionerStopped()
+        meshSetupModule.ensureListeningStoppedForBothDevices()
     }
 
     suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {
@@ -134,4 +136,3 @@ fun <V, E> Result<V, E>.throwOnErrorOrAbsent(): V {
 class FlowException(msg: String = "") : Exception(msg) {
     // FIXME: give this extra data
 }
-

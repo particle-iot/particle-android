@@ -30,6 +30,8 @@ class MeshSetupModule(
     val targetJoinedMeshNetworkLD: LiveData<Boolean?> = MutableLiveData()
     val commissionerStartedLD: LiveData<Boolean?> = MutableLiveData()
 
+    private var targetJoinedSuccesfully = false
+
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
 
@@ -39,6 +41,7 @@ class MeshSetupModule(
         (targetDeviceMeshNetworkToJoinCommissionerPassword as MutableLiveData).postValue(null)
         (targetJoinedMeshNetworkLD as MutableLiveData).postValue(null)
         (commissionerStartedLD as MutableLiveData).postValue(null)
+        targetJoinedSuccesfully = false
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {
@@ -121,6 +124,11 @@ class MeshSetupModule(
     }
 
     suspend fun ensureMeshNetworkJoined() {
+        // FIXME: do a real check here -- just ASK the device if it has joined the network yet!
+        if (targetJoinedSuccesfully) {
+            return
+        }
+
         val joiner = targetXceiver!!
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
 
@@ -138,13 +146,20 @@ class MeshSetupModule(
         delay(2000)
         joiner.sendJoinNetwork().throwOnErrorOrAbsent()
 
+        targetJoinedSuccesfully = true
+    }
 
-        // FIXME: should these steps be broken out?  Feels like they should.
+    suspend fun ensureCommissionerStopped() {
+        val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
         commish.sendStopCommissioner()
+    }
+
+    suspend fun ensureListeningStoppedForBothDevices() {
+        val joiner = targetXceiver!!
+        val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
 
         commish.sendStopListeningMode()
         joiner.sendStopListeningMode()
     }
-
 
 }

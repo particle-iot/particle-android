@@ -279,7 +279,9 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> GetNetworkInfoReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendCreateNetwork(name: String, password: String
+    suspend fun sendCreateNetwork(
+            name: String,
+            password: String
     ): Result<CreateNetworkReply, Common.ResultCode> {
         val response = sendRequest(
                 CreateNetworkRequest.newBuilder()
