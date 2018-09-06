@@ -27,14 +27,14 @@ abstract class ScanIntroBaseFragment : BaseMeshSetupFragment() {
         super.onCreate(savedInstanceState)
         scanViewModel = ScanViewModel.getViewModel(requireActivity())
         scanViewModel.latestScannedBarcode.observe(this, Observer { doOnBarcodeUpdated(it) })
-
-        launch(UI) {
-            delay(1000)
-            log.warn { "USING DEBUG DATA FOR BARCODE!" }
-            doOnBarcodeUpdated(
-                    BarcodeData(serialNumber="XENHAB829GFWV4M", mobileSecret="LX5KELW2BYVWYE4")
-            )
-        }
+//
+//        launch(UI) {
+//            delay(1000)
+//            log.warn { "USING DEBUG DATA FOR BARCODE!" }
+//            doOnBarcodeUpdated(
+//                    BarcodeData(serialNumber="XENHAB829GFWV4M", mobileSecret="LX5KELW2BYVWYE4")
+//            )
+//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -21,6 +21,16 @@ import io.particle.firmwareprotos.ctrl.Config.StopListeningModeRequest
 import io.particle.firmwareprotos.ctrl.Extensions
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest
+import io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply
+import io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest
+import io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration
+import io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply
+import io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest
+import io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply
+import io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest
+import io.particle.firmwareprotos.ctrl.Network.NetworkSetConfigurationReply
+import io.particle.firmwareprotos.ctrl.Network.NetworkSetConfigurationRequest
+import io.particle.firmwareprotos.ctrl.Network.NetworkState
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.FinishFirmwareUpdateReply
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.FinishFirmwareUpdateRequest
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.FirmwareUpdateDataReply
@@ -190,6 +200,33 @@ class ProtocolTransceiver internal constructor(
 //        return buildResult(response) { r -> ResetNetworkCredentialsReply.parseFrom(r.payloadData) }
     }
 
+    suspend fun sendNetworkGetStatus(interfaceIndex: Int): Result<NetworkGetStatusReply, ResultCode> {
+        val response = sendRequest(
+                NetworkGetStatusRequest.newBuilder()
+                        .setInterface(interfaceIndex)
+                        .build()
+        )
+        return buildResult(response) { r -> NetworkGetStatusReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendNetworkGetConfig(interfaceIndex: Int): Result<NetworkGetConfigurationReply, ResultCode> {
+        val response = sendRequest(
+                NetworkGetConfigurationRequest.newBuilder()
+                        .setInterface(interfaceIndex)
+                        .build()
+        )
+        return buildResult(response) { r -> NetworkGetConfigurationReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendGetInterface(interfaceIndex: Int): Result<GetInterfaceReply, ResultCode> {
+        val response = sendRequest(
+                GetInterfaceRequest.newBuilder()
+                        .setIndex(interfaceIndex)
+                        .build()
+        )
+        return buildResult(response) { r -> GetInterfaceReply.parseFrom(r.payloadData) }
+    }
+
     suspend fun sendGetInterfaceList(): Result<GetInterfaceListReply, ResultCode> {
         val response = sendRequest(GetInterfaceListRequest.newBuilder().build())
         return buildResult(response) { r -> GetInterfaceListReply.parseFrom(r.payloadData) }
@@ -351,7 +388,7 @@ class ProtocolTransceiver internal constructor(
             message: GeneratedMessageV3,
             timeout: Int = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
     ): DeviceResponse? {
-        log.info { "Sending message ${message.javaClass} to $connectionName: '$message'" }
+        log.info { "Sending message ${message.javaClass} to '$connectionName': '$message'" }
         val requestFrame = message.asRequest()
         val response = withTimeoutOrNull(timeout) {
             suspendCoroutine { continuation: Continuation<DeviceResponse?> ->

@@ -1,22 +1,27 @@
 package io.particle.mesh.setup.flow
 
+import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.mesh.common.Result
+import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
+import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
 
 
-open class Flow(
+class Flow(
         private val flowManager: FlowManager,
         private val bleConnModule: BLEConnectionModule,
         private val meshSetupModule: MeshSetupModule,
         private val cloudConnModule: CloudConnectionModule
-) : Clearable {
+) {
 
     private val targetXceiver
         get() = bleConnModule.targetDeviceTransceiverLD.value
@@ -32,11 +37,9 @@ open class Flow(
         }
     }
 
-    override fun clearState() {
-        // FIXME: implement!
-    }
-
     private suspend fun doRunFlow() {
+        log.debug { "doRunFlow()" }
+
         cloudConnModule.ensureClaimCodeFetched()
 
         // connect to the device
@@ -59,16 +62,7 @@ open class Flow(
             doEthernetFlow()
 
         } else {
-            meshSetupModule.ensureJoinerVisibleMeshNetworksListPopulated()
-            bleConnModule.ensureShowPairingSuccessful()
-            meshSetupModule.ensureMeshNetworkSelected()
-
-            bleConnModule.ensureBarcodeDataForComissioner()
-            bleConnModule.ensureCommissionerConnected()
-
-            meshSetupModule.ensureTargetMeshNetworkPasswordCollected()
-            meshSetupModule.ensureMeshNetworkJoinedShown()
-            meshSetupModule.ensureMeshNetworkJoined()
+            doMeshSetupFlow()
         }
 
         cloudConnModule.ensureTargetDeviceClaimedByUser()
@@ -81,16 +75,29 @@ open class Flow(
     }
 
     private suspend fun doEthernetFlow() {
-        // FIXME: break out this stuff into separate "ensure...()" methods
-
-        // FIXME: bust this out into a subsection of the cloud connection module
-        // FIXME: what is this step even doing??
-        val interfaceList = ensureGetInterfaceList()
-
-        // FIXME: user feedback if interface has no IP
+        log.debug { "doEthernetFlow()" }
         targetXceiver!!.sendStopListeningMode()
-        cloudConnModule.ensureEthernetConnected()
+        delay(500)
+        cloudConnModule.ensureSetClaimCode()
+        delay(500)
+        cloudConnModule.ensureEthernetIsPluggedIn()
+        delay(500)
+        cloudConnModule.ensureEthernetConnectedToCloud()
+        delay(2500)
+    }
 
+    private suspend fun doMeshSetupFlow() {
+        log.debug { "doMeshSetupFlow()" }
+        meshSetupModule.ensureJoinerVisibleMeshNetworksListPopulated()
+        bleConnModule.ensureShowPairingSuccessful()
+        meshSetupModule.ensureMeshNetworkSelected()
+
+        bleConnModule.ensureBarcodeDataForComissioner()
+        bleConnModule.ensureCommissionerConnected()
+
+        meshSetupModule.ensureTargetMeshNetworkPasswordCollected()
+        meshSetupModule.ensureMeshNetworkJoinedShown()
+        meshSetupModule.ensureMeshNetworkJoined()
     }
 
     suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {
@@ -105,7 +112,6 @@ open class Flow(
     private suspend fun ensureShowSetupFinishedUi() {
         flowManager.navigate(R.id.action_global_setupFinishedFragment)
     }
-
 }
 
 

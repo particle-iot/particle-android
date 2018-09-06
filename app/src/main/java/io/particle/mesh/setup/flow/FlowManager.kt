@@ -9,6 +9,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
+import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
@@ -17,6 +18,8 @@ import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksScanner
 import io.particle.mesh.setup.ui.BarcodeData
+import io.particle.mesh.setup.ui.DialogResult
+import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.utils.runOnMainThread
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -28,6 +31,8 @@ class FlowManager(
         val targetDeviceType: ParticleDeviceType,
         cloud: ParticleCloud,
         private val navControllerRef: LiveData<NavController?>,
+        val dialogRequestLD: LiveData<DialogSpec>,
+        val dialogResultLD: LiveData<DialogResult>,
         btConnectionManager: BluetoothConnectionManager,
         transceiverFactory: ProtocolTransceiverFactory
 ) : Clearable {
@@ -52,7 +57,7 @@ class FlowManager(
 
     fun startFlow() {
         launch {
-            for (i in 0..3) {
+            for (i in 0..4) {
                 try {
                     flow.runFlow()
                     return@launch
@@ -63,8 +68,12 @@ class FlowManager(
         }
     }
 
+    fun startNewFlow() {
+        TODO("IMPLEMENT THIS")
+    }
+
     override fun clearState() {
-        for (clearable in listOf(bleConnectionModule, meshSetupModule, cloudConnectionModule, flow)) {
+        for (clearable in listOf(bleConnectionModule, meshSetupModule, cloudConnectionModule)) {
             clearable.clearState()
         }
     }
@@ -73,7 +82,14 @@ class FlowManager(
         runOnMainThread { navController?.navigate(idRes) }
     }
 
-    fun startNewFlow() {
-        TODO("IMPLEMENT THIS")
+    fun newDialogRequest(spec: DialogSpec) {
+        log.debug { "newDialogRequest()" }
+        (dialogRequestLD as MutableLiveData).postValue(spec)
     }
+
+    fun updateDialogResult(dialogResult: DialogResult) {
+        log.debug { "updateDialogResult(): $dialogResult" }
+        (dialogResultLD as MutableLiveData).postValue(dialogResult)
+    }
+
 }

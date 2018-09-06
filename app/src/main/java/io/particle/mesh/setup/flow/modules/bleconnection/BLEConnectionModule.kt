@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow.modules.bleconnection
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.support.annotation.MainThread
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.setOnMainThread
@@ -15,7 +16,6 @@ import io.particle.mesh.setup.ui.BarcodeData
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
 
@@ -91,12 +91,12 @@ class BLEConnectionModule(
     }
 
     suspend fun ensureTargetDeviceConnected() {
+        log.debug { "ensureTargetDeviceConnected()" }
         if (targetXceiver != null && targetXceiver!!.isConnected) {
             return
         }
 
-        // FIXME: don't track showing the UI, track if we've gathered the data from the UI.
-        if (targetDeviceConnectedLD.value != null) {
+        if (!connectingToTargetUiShown) {
             flowManager.navigate(R.id.action_global_BLEPairingProgressFragment)
             connectingToTargetUiShown = true
         }
@@ -178,32 +178,35 @@ class BLEConnectionModule(
 //        }
     }
 
-    private fun connectTargetDevice() {
+    @MainThread
+    private suspend fun connectTargetDevice() {
         log.info { "connectTargetDevice()" }
-        launch {
-            val targetTransceiver = withContext(UI) {
-                val barcode = targetDeviceBarcodeLD.value!!
-                return@withContext connect(barcode, "target")
-            } ?: throw FlowException("Error connecting target")
+        val barcode = targetDeviceBarcodeLD.value!!
+        val targetTransceiver = connect(barcode, "target")
 
-            log.debug { "Target device connected!" }
-            (targetDeviceTransceiverLD as MutableLiveData).setOnMainThread(targetTransceiver)
+        if (targetTransceiver == null) {
+            throw FlowException("Error connecting target")
         }
+
+        log.debug { "Target device connected!" }
+        (targetDeviceTransceiverLD as MutableLiveData).setOnMainThread(targetTransceiver)
     }
 
-    private fun connectCommissioner() {
+    @MainThread
+    private suspend fun connectCommissioner() {
         log.info { "connectCommissioner()" }
-        launch {
-            val commissioner = withContext(UI) {
-                val barcode = commissionerBarcodeLD.value!!
-                return@withContext connect(barcode, "commissioner")
-            } ?: throw FlowException("Error connecting commissioner")
+        val barcode = commissionerBarcodeLD.value!!
+        val commissioner = connect(barcode, "commissioner")
 
-            log.debug { "Commissioner connected!" }
-            (commissionerTransceiverLD as MutableLiveData).setOnMainThread(commissioner)
+        if (commissioner == null) {
+            throw FlowException("Error connecting commissioner")
         }
+
+        log.debug { "Commissioner connected!" }
+        (commissionerTransceiverLD as MutableLiveData).setOnMainThread(commissioner)
     }
 
+    @MainThread
     private suspend fun connect(barcode: BarcodeData, connName: String): ProtocolTransceiver? {
         val device = btConnectionManager.connectToDevice(barcode.toDeviceName())
             ?: return null

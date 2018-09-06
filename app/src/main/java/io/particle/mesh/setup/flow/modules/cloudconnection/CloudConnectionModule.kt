@@ -1,8 +1,11 @@
 package io.particle.mesh.setup.flow.modules.cloudconnection
 
+import android.R
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.firmwareprotos.ctrl.Network
+import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.liveDataSuspender
@@ -12,7 +15,9 @@ import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
+import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.sdk.app.R.id
+import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
@@ -63,13 +68,14 @@ class CloudConnectionModule(
     }
 
     suspend fun ensureClaimCodeFetched() {
+        log.debug { "ensureClaimCodeFetched(), claimCode=$claimCode" }
         if (claimCode == null) {
             log.info { "Fetching new claim code" }
             claimCode = cloud.generateClaimCode().claimCode
         }
     }
 
-    suspend fun ensureEthernetConnected() {
+    suspend fun ensureEthernetConnectedToCloud() {
         for (i in 0..14) { // 30 seconds
             delay(500)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
@@ -77,7 +83,7 @@ class CloudConnectionModule(
                 return
             }
         }
-        throw FlowException("Error ensuring ethernet connected")
+        throw FlowException("Error ensuring connection to cloud via ethernet")
     }
 
     // FIXME: where does this belong?
@@ -106,11 +112,46 @@ class CloudConnectionModule(
     }
 
     suspend fun ensureSetClaimCode() {
-        if (!targetDeviceShouldBeClaimedLD.value!!) {
+        if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
             return
         }
 
         targetXceiver!!.sendSetClaimCode(claimCode!!).throwOnErrorOrAbsent()
+    }
+
+    suspend fun ensureEthernetIsPluggedIn() {
+
+        // FIXME: remove?
+        suspend fun findEthernetInterface(): Network.InterfaceEntry? {
+            val ifaceListReply = targetXceiver!!.sendGetInterfaceList().throwOnErrorOrAbsent()
+            return ifaceListReply.interfacesList.firstOrNull { it.type == InterfaceType.ETHERNET }
+        }
+
+        val ethernet = findEthernetInterface()
+        requireNotNull(ethernet)
+
+        val reply = targetXceiver!!.sendGetInterface(ethernet!!.index).throwOnErrorOrAbsent()
+        val iface = reply.`interface`
+        for (addyList in listOf(iface.ipv4Config.addressesList, iface.ipv6Config.addressesList)) {
+            val address = addyList.firstOrNull {
+                it.address.v4.address != null || it.address.v6.address != null
+            }
+            if (address != null) {
+                log.debug { "IP address on ethernet (interface ${ethernet.index}) found: $address" }
+                return
+            }
+        }
+
+        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
+        withContext(UI) {
+            flowManager.newDialogRequest(DialogSpec(
+                    string.p_connecttocloud_xenon_gateway_needs_ethernet,
+                    R.string.ok
+            ))
+            ldSuspender.awaitResult()
+        }
+        delay(500)
+        throw FlowException("Ethernet connection not plugged in; user prompted.")
     }
 
     suspend fun ensureTargetDeviceClaimedByUser() {

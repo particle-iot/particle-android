@@ -1,22 +1,26 @@
 package io.particle.mesh.setup.ui
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.*
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
+import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
+import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
+import io.particle.mesh.setup.ui.DialogResult.NEGATIVE
+import io.particle.mesh.setup.ui.DialogResult.POSITIVE
 import io.particle.sdk.app.R
 import mu.KotlinLogging
 
@@ -24,6 +28,8 @@ import mu.KotlinLogging
 class MeshSetupActivity : AppCompatActivity() {
 
     private val log = KotlinLogging.logger {}
+
+    private lateinit var flowVM: FlowManagerAccessModel
 
     private val navController: NavController
         get() = findNavController(R.id.main_nav_host_fragment)
@@ -33,7 +39,9 @@ class MeshSetupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // do this to make sure we're always providing the correct NavController
-        FlowManagerAccessModel.getViewModel(this).setNavController(navController)
+        flowVM = FlowManagerAccessModel.getViewModel(this)
+        flowVM.setNavController(navController)
+        flowVM.dialogRequestLD.observe(this, Observer { onDialogSpecReceived(it) })
     }
 
     override fun onDestroy() {
@@ -45,8 +53,43 @@ class MeshSetupActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
+    private fun onDialogSpecReceived(spec: DialogSpec?) {
+        log.debug { "onDialogSpecReceived()" }
+        if (spec == null) {
+            log.warn { "Got null dialog spec?!" }
+            return
+        }
+
+        val builder = MaterialDialog.Builder(this)
+                .content(spec.text)
+                .canceledOnTouchOutside(false)
+                .positiveText(spec.positiveText)
+                .onPositive { _, _ -> flowVM.flowManager!!.updateDialogResult(DialogResult.POSITIVE) }
+
+        spec.negativeText?.let {
+            builder.negativeText(it)
+            builder.onNegative { _, _ -> flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE) }
+        }
+
+        spec.title?.let { builder.title(it) }
+
+        builder.show()
+    }
 }
 
+
+enum class DialogResult {
+    POSITIVE,
+    NEGATIVE,
+}
+
+
+data class DialogSpec(
+        @StringRes val text: Int,
+        @StringRes val positiveText: Int,
+        @StringRes val negativeText: Int? = null,
+        @StringRes val title: Int? = null
+)
 
 
 class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
@@ -63,6 +106,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    val dialogRequestLD: LiveData<DialogSpec> = ClearValueOnInactiveLiveData()
     var flowManager: FlowManager? = null
 
     private val securityManager = SecurityManager()
@@ -70,12 +114,23 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
     private val protocolFactory = ProtocolTransceiverFactory(securityManager)
     private val cloud = ParticleCloudSDK.getCloud()
 
-    private var navReference = MutableLiveData<NavController?>()
+    private val navReference = MutableLiveData<NavController?>()
 
+    private val log = KotlinLogging.logger {}
 
     fun startFlowForDevice(deviceType: ParticleDeviceType) {
         resetState()
-        flowManager = FlowManager(deviceType, cloud, navReference, btConnManager, protocolFactory)
+
+        flowManager = FlowManager(
+                deviceType,
+                cloud,
+                navReference,
+                dialogRequestLD,
+                ClearValueOnInactiveLiveData(),
+                btConnManager,
+                protocolFactory
+        )
+
         flowManager?.startFlow()
     }
 
