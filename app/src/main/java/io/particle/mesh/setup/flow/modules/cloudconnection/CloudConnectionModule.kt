@@ -8,6 +8,7 @@ import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
+import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
@@ -36,6 +37,7 @@ class CloudConnectionModule(
     val targetOwnedByUserLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
+    val targetDeviceEthernetConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
 
     private var checkedIsTargetClaimedByUser = false
     private var connectedToMeshNetworkAndOwnedUiShown = false
@@ -80,6 +82,7 @@ class CloudConnectionModule(
             delay(500)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
             if (statusReply.status == ConnectionStatus.CONNECTED) {
+                (targetDeviceEthernetConnectedToCloud as MutableLiveData).postValue(true)
                 return
             }
         }

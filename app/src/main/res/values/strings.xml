@@ -102,5 +102,13 @@ Enjoy!]]></string>
     <string name="this_device_will_act_as_the_assisting_device">This device will act as the assisting device, to allow the Xenon to join the mesh network.</string>
 
     <string name="p_connecttocloud_xenon_gateway_needs_ethernet">You must connect an ethernet cable to a switch/router with an active internet connection to proceed.</string>
+    <string name="p_checkethernetgateway_title">Connect Xenon to Device Cloud</string>
+    <string name="p_checkethernetgateway_device_cloud_intro">The Device Cloud is (larger network at play here, introduce the concept)</string>
+    <string name="p_checkethernetgateway_ensure_featherwing_is_plugged_in">Make sure an Ethernet Featherwing is plugged into the Xenon, and an ethernet cable is plugged into the Featherwing.</string>
+    <string name="p_action_connect_to_device_cloud">Connect to device cloud</string>
+    <string name="p_connectingtodevicecloud_title">Connecting to Device Cloud</string>
+    <string name="p_connectingtodevicecloud_step_1">Connecting to the internet via Ethernet</string>
+    <string name="p_connectingtodevicecloud_step_2">Starting a secure session with the Device Cloud</string>
+    <string name="p_connectingtodevicecloud_step_3">Connected to the Particle Device Cloud</string>
 
 </resources>

@@ -178,6 +178,12 @@ class BLEConnectionModule(
 //        }
     }
 
+    suspend fun ensureListeningStoppedForBothDevices() {
+        targetXceiver?.sendStopListeningMode()
+        flowManager.bleConnectionModule.commissionerTransceiverLD.value?.sendStopListeningMode()
+    }
+
+
     @MainThread
     private suspend fun connectTargetDevice() {
         log.info { "connectTargetDevice()" }

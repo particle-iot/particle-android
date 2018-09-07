@@ -65,13 +65,14 @@ class Flow(
             doMeshSetupFlow()
         }
 
+        bleConnModule.ensureListeningStoppedForBothDevices()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
-        ensureTargetDeviceSetSetupDone()  // FIXME: should this move elsewhere...?
+        ensureTargetDeviceSetSetupDone()
         cloudConnModule.ensureTargetDeviceIsNamed()
 
         // TODO: review sub-steps in "FINISH" step of SDD
 
-        ensureShowSetupFinishedUi()  // FIXME: should this move elsewhere...?
+        ensureShowSetupFinishedUi()
     }
 
     private suspend fun doEthernetFlow() {
@@ -99,7 +100,6 @@ class Flow(
         meshSetupModule.ensureMeshNetworkJoinedShown()
         meshSetupModule.ensureMeshNetworkJoined()
         meshSetupModule.ensureCommissionerStopped()
-        meshSetupModule.ensureListeningStoppedForBothDevices()
     }
 
     suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {

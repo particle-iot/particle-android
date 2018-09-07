@@ -19,7 +19,7 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceConnectedLD.observe(
+        flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceTransceiverLD.observe(
                 this,
                 Observer {
                     onTargetDeviceConnected()

@@ -91,5 +91,19 @@
     <action android:id="@+id/action_global_enterNetworkPasswordFragment" app:destination="@id/enterNetworkPasswordFragment" />
     <action android:id="@+id/action_global_joiningMeshNetworkProgressFragment" app:destination="@id/joiningMeshNetworkProgressFragment" />
     <action android:id="@+id/action_global_nameYourDeviceFragment" app:destination="@id/nameYourDeviceFragment" /><action android:id="@+id/action_global_setupFinishedFragment" app:destination="@id/setupFinishedFragment"/>
+    <fragment
+        android:id="@+id/checkEthernetGatewayFragment"
+        android:name="io.particle.mesh.setup.ui.CheckEthernetGatewayFragment"
+        android:label="fragment_check_ethernet_gateway"
+        tools:layout="@layout/fragment_check_ethernet_gateway" >
+        <action
+            android:id="@+id/action_checkEthernetGatewayFragment_to_connectingToDeviceCloudFragment"
+            app:destination="@id/connectingToDeviceCloudFragment" />
+    </fragment><action android:id="@+id/action_global_checkEthernetGatewayFragment" app:destination="@id/checkEthernetGatewayFragment"/>
+    <fragment
+        android:id="@+id/connectingToDeviceCloudFragment"
+        android:name="io.particle.mesh.setup.ui.ConnectingToDeviceCloudFragment"
+        android:label="fragment_connecting_to_device_cloud"
+        tools:layout="@layout/fragment_connecting_to_device_cloud" />
 
 </navigation>

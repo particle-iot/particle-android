@@ -153,13 +153,4 @@ class MeshSetupModule(
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
         commish.sendStopCommissioner()
     }
-
-    suspend fun ensureListeningStoppedForBothDevices() {
-        val joiner = targetXceiver!!
-        val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
-
-        commish.sendStopListeningMode()
-        joiner.sendStopListeningMode()
-    }
-
 }

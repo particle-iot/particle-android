@@ -25,6 +25,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_checkEthernetGatewayFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_enterNetworkPasswordFragment">
                     <value>
                       <LayoutPositions />
@@ -63,6 +68,39 @@
                   <entry key="action_global_setupFinishedFragment">
                     <value>
                       <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="checkEthernetGatewayFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="429" />
+                            <option name="y" value="-489" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_checkEthernetGatewayFragment_to_connectingToDeviceCloudFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="connectingToDeviceCloudFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="660" />
+                            <option name="y" value="-477" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
                     </value>
                   </entry>
                   <entry key="enterNetworkPasswordFragment">
