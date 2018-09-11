@@ -16,6 +16,8 @@ import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeReply
 import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeRequest
 import io.particle.firmwareprotos.ctrl.Config.SetDeviceSetupDoneReply
 import io.particle.firmwareprotos.ctrl.Config.SetDeviceSetupDoneRequest
+import io.particle.firmwareprotos.ctrl.Config.StartListeningModeReply
+import io.particle.firmwareprotos.ctrl.Config.StartListeningModeRequest
 import io.particle.firmwareprotos.ctrl.Config.StopListeningModeReply
 import io.particle.firmwareprotos.ctrl.Config.StopListeningModeRequest
 import io.particle.firmwareprotos.ctrl.Extensions
@@ -230,6 +232,11 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendGetInterfaceList(): Result<GetInterfaceListReply, ResultCode> {
         val response = sendRequest(GetInterfaceListRequest.newBuilder().build())
         return buildResult(response) { r -> GetInterfaceListReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendStartListeningMode(): Result<StartListeningModeReply, ResultCode> {
+        val response = sendRequest(StartListeningModeRequest.newBuilder().build())
+        return buildResult(response) { r -> StartListeningModeReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendStopListeningMode(): Result<StopListeningModeReply, ResultCode> {

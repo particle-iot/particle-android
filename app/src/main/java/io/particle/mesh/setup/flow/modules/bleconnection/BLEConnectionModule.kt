@@ -61,15 +61,17 @@ class BLEConnectionModule(
     }
 
     fun updateCommissionerBarcode(barcodeData: BarcodeData) {
+        log.info { "updateCommissionerBarcode()" }
         (commissionerBarcodeLD as MutableLiveData).postValue(barcodeData)
     }
 
     fun updateTargetDeviceBarcode(barcodeData: BarcodeData?) {
-        log.debug { "updateTargetDeviceBarcode(): barcodeData=$barcodeData" }
+        log.info { "updateTargetDeviceBarcode(): barcodeData=$barcodeData" }
         (targetDeviceBarcodeLD as MutableLiveData).postValue(barcodeData)
     }
 
     fun updateTargetDeviceConnectionInitialized(initialized: Boolean) {
+        log.info { "updateTargetDeviceConnectionInitialized(): $initialized" }
         (targetDeviceConnectedLD as MutableLiveData).postValue(initialized)
     }
 
@@ -91,7 +93,7 @@ class BLEConnectionModule(
     }
 
     suspend fun ensureTargetDeviceConnected() {
-        log.debug { "ensureTargetDeviceConnected()" }
+        log.info { "ensureTargetDeviceConnected()" }
         if (targetXceiver != null && targetXceiver!!.isConnected) {
             return
         }
@@ -113,6 +115,7 @@ class BLEConnectionModule(
     }
 
     suspend fun ensureTargetDeviceId(): String {
+        log.info { "ensureTargetDeviceId()" }
         if (targetDeviceId != null) {
             return targetDeviceId!!
         }
@@ -124,6 +127,7 @@ class BLEConnectionModule(
     }
 
     suspend fun ensureShowPairingSuccessful() {
+        log.info { "ensureShowPairingSuccessful()" }
         if (shownTargetInitialIsConnectedScreen) {
             return
         }
@@ -150,6 +154,7 @@ class BLEConnectionModule(
     }
 
     suspend fun ensureCommissionerConnected() {
+        log.info { "ensureCommissionerConnected()" }
         var commissioner = commissionerTransceiverLD.value
         if (commissioner != null && commissioner.isConnected) {
             return
@@ -179,6 +184,7 @@ class BLEConnectionModule(
     }
 
     suspend fun ensureListeningStoppedForBothDevices() {
+        log.info { "ensureListeningStoppedForBothDevices()" }
         targetXceiver?.sendStopListeningMode()
         flowManager.bleConnectionModule.commissionerTransceiverLD.value?.sendStopListeningMode()
     }

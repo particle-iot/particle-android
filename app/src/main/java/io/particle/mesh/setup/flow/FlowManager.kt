@@ -31,8 +31,8 @@ class FlowManager(
         val targetDeviceType: ParticleDeviceType,
         cloud: ParticleCloud,
         private val navControllerRef: LiveData<NavController?>,
-        val dialogRequestLD: LiveData<DialogSpec>,
-        val dialogResultLD: LiveData<DialogResult>,
+        val dialogRequestLD: LiveData<DialogSpec?>,
+        val dialogResultLD: LiveData<DialogResult?>,
         btConnectionManager: BluetoothConnectionManager,
         transceiverFactory: ProtocolTransceiverFactory
 ) : Clearable {

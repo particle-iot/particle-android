@@ -103,15 +103,18 @@ class Flow(
     }
 
     suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {
+        log.info { "ensureGetInterfaceList()" }
         val ifaceListReply = targetXceiver!!.sendGetInterfaceList().throwOnErrorOrAbsent()
         return ifaceListReply.interfacesList
     }
 
     private suspend fun ensureTargetDeviceSetSetupDone() {
+        log.info { "ensureTargetDeviceSetSetupDone()" }
         targetXceiver!!.sendSetDeviceSetupDone().throwOnErrorOrAbsent()
     }
 
     private suspend fun ensureShowSetupFinishedUi() {
+        log.info { "ensureShowSetupFinishedUi()" }
         flowManager.navigate(R.id.action_global_setupFinishedFragment)
     }
 }

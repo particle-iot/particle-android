@@ -18,6 +18,7 @@ import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
+import mu.KotlinLogging
 
 
 class MeshSetupModule(
@@ -35,6 +36,7 @@ class MeshSetupModule(
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
 
+    private val log = KotlinLogging.logger {}
 
     override fun clearState() {
         (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(null)
@@ -45,22 +47,27 @@ class MeshSetupModule(
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {
+        log.info { "updateSelectedMeshNetworkToJoin(): $meshNetworkToJoin" }
         (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(meshNetworkToJoin)
     }
 
     fun updateTargetMeshNetworkCommissionerPassword(password: String) {
+        log.info { "updateTargetMeshNetworkCommissionerPassword()" }
         (targetDeviceMeshNetworkToJoinCommissionerPassword as MutableLiveData).postValue(password)
     }
 
     fun updateCommissionerStarted(started: Boolean) {
+        log.info { "updateCommissionerStarted(): $started" }
         (commissionerStartedLD as MutableLiveData).postValue(started)
     }
 
     fun updateTargetJoinedMeshNetwork(joined: Boolean) {
+        log.info { "updateTargetJoinedMeshNetwork(): $joined" }
         (targetJoinedMeshNetworkLD as MutableLiveData).postValue(joined)
     }
 
     suspend fun ensureRemovedFromExistingNetwork() {
+        log.info { "ensureRemovedFromExistingNetwork()" }
         val reply: Result<GetNetworkInfoReply, ResultCode> = targetXceiver!!.sendGetNetworkInfo()
         when(reply) {
             is Result.Present -> {
@@ -83,14 +90,17 @@ class MeshSetupModule(
     }
 
     suspend fun ensureResetNetworkCredentials() {
+        log.info { "ensureResetNetworkCredentials()" }
         targetXceiver!!.sendResetNetworkCredentials().throwOnErrorOrAbsent()
     }
 
     suspend fun ensureJoinerVisibleMeshNetworksListPopulated() {
+        log.info { "ensureJoinerVisibleMeshNetworksListPopulated()" }
         targetDeviceVisibleMeshNetworksLD.forceSingleScan()
     }
 
     suspend fun ensureMeshNetworkSelected() {
+        log.info { "ensureMeshNetworkSelected()" }
         if (targetDeviceMeshNetworkToJoinLD.value != null) {
             return
         }
@@ -103,6 +113,7 @@ class MeshSetupModule(
     }
 
     suspend fun ensureTargetMeshNetworkPasswordCollected() {
+        log.info { "ensureTargetMeshNetworkPasswordCollected()" }
         if (targetDeviceMeshNetworkToJoinCommissionerPassword.value.truthy()) {
             return
         }
@@ -119,11 +130,13 @@ class MeshSetupModule(
         }
     }
 
-    suspend fun ensureMeshNetworkJoinedShown() {
+    suspend fun ensureMeshNetworkJoinedUiShown() {
+        log.info { "ensureMeshNetworkJoinedUiShown()" }
         flowManager.navigate(R.id.action_global_joiningMeshNetworkProgressFragment)
     }
 
     suspend fun ensureMeshNetworkJoined() {
+        log.info { "ensureMeshNetworkJoined()" }
         // FIXME: do a real check here -- just ASK the device if it has joined the network yet!
         if (targetJoinedSuccesfully) {
             return
@@ -150,6 +163,7 @@ class MeshSetupModule(
     }
 
     suspend fun ensureCommissionerStopped() {
+        log.info { "ensureCommissionerStopped()" }
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
         commish.sendStopCommissioner()
     }

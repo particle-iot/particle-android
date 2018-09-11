@@ -73,6 +73,7 @@ class MeshSetupActivity : AppCompatActivity() {
 
         spec.title?.let { builder.title(it) }
 
+        log.info { "Showing dialog for: $spec" }
         builder.show()
     }
 }
@@ -106,7 +107,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    val dialogRequestLD: LiveData<DialogSpec> = ClearValueOnInactiveLiveData()
+    val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>().nonNull()
     var flowManager: FlowManager? = null
 
     private val securityManager = SecurityManager()

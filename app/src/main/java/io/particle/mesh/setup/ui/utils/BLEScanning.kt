@@ -2,7 +2,6 @@ package io.particle.mesh.setup.ui.utils
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanFilter.Builder
 import android.bluetooth.le.ScanResult
 import android.content.Context
@@ -12,7 +11,6 @@ import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.scanning.BLEScannerLD
 import io.particle.mesh.bluetooth.scanning.buildReactiveBluetoothScanner
 import io.particle.mesh.common.AsyncWorkSuspender
-import io.particle.mesh.common.Predicate
 import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import mu.KotlinLogging

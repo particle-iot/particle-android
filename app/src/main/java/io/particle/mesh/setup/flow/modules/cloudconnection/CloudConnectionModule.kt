@@ -10,6 +10,7 @@ import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.toHex
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.Clearable
@@ -58,19 +59,22 @@ class CloudConnectionModule(
     }
 
     fun updateTargetOwnedByUser(owned: Boolean) {
+        log.info { "updateTargetOwnedByUser(): $owned" }
         (targetOwnedByUserLD as MutableLiveData).postValue(owned)
     }
 
     fun updateIsTargetDeviceNamed(named: Boolean) {
+        log.info { "updateIsTargetDeviceNamed(): $named" }
         (isTargetDeviceNamedLD as MutableLiveData).postValue(named)
     }
 
     fun updateTargetDeviceNameToAssign(name: String) {
+        log.info { "updateTargetDeviceNameToAssign(): $name" }
         (targetDeviceNameToAssignLD as MutableLiveData).postValue(name)
     }
 
     suspend fun ensureClaimCodeFetched() {
-        log.debug { "ensureClaimCodeFetched(), claimCode=$claimCode" }
+        log.info { "ensureClaimCodeFetched(), claimCode=$claimCode" }
         if (claimCode == null) {
             log.info { "Fetching new claim code" }
             claimCode = cloud.generateClaimCode().claimCode
@@ -78,6 +82,7 @@ class CloudConnectionModule(
     }
 
     suspend fun ensureEthernetConnectedToCloud() {
+        log.info { "ensureEthernetConnectedToCloud()" }
         for (i in 0..14) { // 30 seconds
             delay(500)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
@@ -91,10 +96,12 @@ class CloudConnectionModule(
 
     // FIXME: where does this belong?
     suspend fun ensureDeviceIsUsingEligibleFirmware() {
+        log.info { "ensureDeviceIsUsingEligibleFirmware()" }
         // TODO: TO BE IMPLEMENTED
     }
 
     suspend fun ensureCheckedIsClaimed(targetDeviceId: String) {
+        log.info { "ensureCheckedIsClaimed()" }
         if (checkedIsTargetClaimedByUser) {
             return
         }
@@ -115,6 +122,7 @@ class CloudConnectionModule(
     }
 
     suspend fun ensureSetClaimCode() {
+        log.info { "ensureSetClaimCode()" }
         if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
             return
         }
@@ -123,7 +131,7 @@ class CloudConnectionModule(
     }
 
     suspend fun ensureEthernetIsPluggedIn() {
-
+        log.info { "ensureEthernetIsPluggedIn()" }
         // FIXME: remove?
         suspend fun findEthernetInterface(): Network.InterfaceEntry? {
             val ifaceListReply = targetXceiver!!.sendGetInterfaceList().throwOnErrorOrAbsent()
@@ -136,6 +144,7 @@ class CloudConnectionModule(
         val reply = targetXceiver!!.sendGetInterface(ethernet!!.index).throwOnErrorOrAbsent()
         val iface = reply.`interface`
         for (addyList in listOf(iface.ipv4Config.addressesList, iface.ipv6Config.addressesList)) {
+
             val address = addyList.firstOrNull {
                 it.address.v4.address != null || it.address.v6.address != null
             }
@@ -158,6 +167,7 @@ class CloudConnectionModule(
     }
 
     suspend fun ensureTargetDeviceClaimedByUser() {
+        log.info { "ensureTargetDeviceClaimedByUser()" }
         if (targetOwnedByUserLD.value.truthy()) {
             return
         }
@@ -198,6 +208,7 @@ class CloudConnectionModule(
     }
 
     suspend fun ensureTargetDeviceIsNamed() {
+        log.info { "ensureTargetDeviceIsNamed()" }
         if (isTargetDeviceNamedLD.value.truthy()) {
             return
         }

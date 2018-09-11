@@ -53,13 +53,13 @@ class OutboundFrameWriter(
         val additionalData = fml.readByteArray()
 
         val data = cryptoDelegate?.encrypt(frame.frameData, additionalData) ?: frame.frameData
-        log.info { "Sending frame with ${data.size} byte payload " }
+        log.trace{ "Sending frame with ${data.size} byte payload " }
         buffer.put(data)
         buffer.flip()
 
         val finalFrame = buffer.readByteArray()
         byteSink(finalFrame)
-        log.info { "Sent frame with ${finalFrame.size} total bytes" }
+        log.trace { "Sent frame with ${finalFrame.size} total bytes" }
     }
 
 }
@@ -80,7 +80,7 @@ class InboundFrameReader {
 
     @Synchronized
     fun receivePacket(blePacket: BlePacket) {
-        log.debug { "Processing packet: ${blePacket.data.toHex()}" }
+        log.trace { "Processing packet: ${blePacket.data.toHex()}" }
         try {
             if (inProgressFrame == null) {
                 inProgressFrame = InProgressFrame(extraHeaderBytes)
@@ -93,7 +93,7 @@ class InboundFrameReader {
             }
 
             if (bytesForNextFrame != null) {
-                log.info { "Processing bytes from next frame as new packet: ${bytesForNextFrame.toHex()}" }
+                log.trace { "Processing bytes from next frame as new packet: ${bytesForNextFrame.toHex()}" }
                 receivePacket(BlePacket(bytesForNextFrame))
             }
 
@@ -106,7 +106,7 @@ class InboundFrameReader {
     private fun handleCompleteFrame() {
         val ipf = inProgressFrame!!
         val frameData = ipf.consumeFrameData()
-        log.info { "Handling complete frame with ${frameData.size} bytes: ${frameData.toHex()}" }
+        log.trace { "Handling complete frame with ${frameData.size} bytes: ${frameData.toHex()}" }
         val payloadSize = frameData.size - extraHeaderBytes
         val additionalData = Buffer().writeShortLe(payloadSize).readByteArray()
         val completeFrame = InboundFrame(
