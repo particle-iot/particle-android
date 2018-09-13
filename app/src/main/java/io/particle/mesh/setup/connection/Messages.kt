@@ -78,6 +78,7 @@ import kotlin.coroutines.experimental.suspendCoroutine
 
 private const val FULL_PROTOCOL_HEADER_SIZE = 6
 private const val AES_CCM_MAC_SIZE = 8
+private const val DEFAULT_NETWORK_CHANNEL = 11
 
 private var requestIdGenerator = AtomicInteger()
 
@@ -191,17 +192,6 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> GetConnectionStatusReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendResetNetworkCredentials(
-    ): Result<Unit, ResultCode> {
-
-        // FIXME: implement for real once we have the required protos
-
-        return Result.Present(Unit)
-//    ): Result<ResetNetworkCredentialsReply, ResultCode> {
-//        val response = sendRequest(ResetNetworkCredentialsRequest.newBuilder().build())
-//        return buildResult(response) { r -> ResetNetworkCredentialsReply.parseFrom(r.payloadData) }
-    }
-
     suspend fun sendNetworkGetStatus(interfaceIndex: Int): Result<NetworkGetStatusReply, ResultCode> {
         val response = sendRequest(
                 NetworkGetStatusRequest.newBuilder()
@@ -288,12 +278,14 @@ class ProtocolTransceiver internal constructor(
 
     suspend fun sendCreateNetwork(
             name: String,
-            password: String
+            password: String,
+            channel: Int = DEFAULT_NETWORK_CHANNEL
     ): Result<CreateNetworkReply, Common.ResultCode> {
         val response = sendRequest(
                 CreateNetworkRequest.newBuilder()
                         .setName(name)
                         .setPassword(password)
+                        .setChannel(channel)
                         .build()
         )
         return buildResult(response) { r -> CreateNetworkReply.parseFrom(r.payloadData) }

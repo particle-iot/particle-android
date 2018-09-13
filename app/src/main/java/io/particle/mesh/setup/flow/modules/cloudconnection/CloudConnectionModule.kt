@@ -1,23 +1,22 @@
 package io.particle.mesh.setup.flow.modules.cloudconnection
 
-import android.R
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
-import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
+import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.liveDataSuspender
-import io.particle.mesh.common.toHex
+import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.sdk.app.R
 import io.particle.sdk.app.R.id
 import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
@@ -39,38 +38,55 @@ class CloudConnectionModule(
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceEthernetConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
+    val connectToDeviceCloudButtonClicked: LiveData<Boolean?> = MutableLiveData()
 
     private var checkedIsTargetClaimedByUser = false
     private var connectedToMeshNetworkAndOwnedUiShown = false
+    private var checkEthernetGatewayUiShown = false
 
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
 
 
     override fun clearState() {
+
+        // FIXME: UPDATE THIS WITH ALL VALUES
+
         claimCode = null
         checkedIsTargetClaimedByUser = false
         connectedToMeshNetworkAndOwnedUiShown = false
+        checkEthernetGatewayUiShown = false
 
-        (targetDeviceShouldBeClaimedLD as MutableLiveData).postValue(null)
-        (targetOwnedByUserLD as MutableLiveData).postValue(null)
-        (targetDeviceNameToAssignLD as MutableLiveData).postValue(null)
-        (isTargetDeviceNamedLD as MutableLiveData).postValue(null)
+        val setToNulls = listOf(
+                targetDeviceShouldBeClaimedLD,
+                targetOwnedByUserLD,
+                targetDeviceNameToAssignLD,
+                isTargetDeviceNamedLD,
+                connectToDeviceCloudButtonClicked
+        )
+        for (ld in setToNulls) {
+            (ld as MutableLiveData).postValue(null)
+        }
     }
 
     fun updateTargetOwnedByUser(owned: Boolean) {
         log.info { "updateTargetOwnedByUser(): $owned" }
-        (targetOwnedByUserLD as MutableLiveData).postValue(owned)
+        targetOwnedByUserLD.castAndPost(owned)
     }
 
     fun updateIsTargetDeviceNamed(named: Boolean) {
         log.info { "updateIsTargetDeviceNamed(): $named" }
-        (isTargetDeviceNamedLD as MutableLiveData).postValue(named)
+        isTargetDeviceNamedLD.castAndPost(named)
     }
 
     fun updateTargetDeviceNameToAssign(name: String) {
         log.info { "updateTargetDeviceNameToAssign(): $name" }
-        (targetDeviceNameToAssignLD as MutableLiveData).postValue(name)
+        targetDeviceNameToAssignLD.castAndPost(name)
+    }
+
+    fun updateConnectToDeviceCloudButtonClicked(enteredConnectingScreen: Boolean) {
+        log.info { "updateUserEnteredConnectingToDeviceCloudScreen()" }
+        connectToDeviceCloudButtonClicked.castAndPost(enteredConnectingScreen)
     }
 
     suspend fun ensureClaimCodeFetched() {
@@ -113,6 +129,12 @@ class CloudConnectionModule(
         }
 
         // FIXME: FINISH IMPLEMENTING!
+
+
+        // FIXME: REMOVE!
+        (targetDeviceShouldBeClaimedLD as MutableLiveData).setOnMainThread(true)
+        // REMOVE ^^^
+
         // show dialog
 //        val ldSuspender = liveDataSuspender({ flowManager.targetDeviceShouldBeClaimedLD })
 //        val shouldClaim = withContext(UI) {
@@ -130,8 +152,8 @@ class CloudConnectionModule(
         targetXceiver!!.sendSetClaimCode(claimCode!!).throwOnErrorOrAbsent()
     }
 
-    suspend fun ensureEthernetIsPluggedIn() {
-        log.info { "ensureEthernetIsPluggedIn()" }
+    suspend fun ensureEthernetHasIP() {
+        log.info { "ensureEthernetHasIP()" }
         // FIXME: remove?
         suspend fun findEthernetInterface(): Network.InterfaceEntry? {
             val ifaceListReply = targetXceiver!!.sendGetInterfaceList().throwOnErrorOrAbsent()
@@ -155,15 +177,35 @@ class CloudConnectionModule(
         }
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
-        withContext(UI) {
+        val result = withContext(UI) {
             flowManager.newDialogRequest(DialogSpec(
                     string.p_connecttocloud_xenon_gateway_needs_ethernet,
-                    R.string.ok
+                    android.R.string.ok
             ))
             ldSuspender.awaitResult()
         }
+        log.info { "result from awaiting on 'ethernet must be plugged in dialog: $result" }
+        flowManager.clearDialogResult()
         delay(500)
         throw FlowException("Ethernet connection not plugged in; user prompted.")
+    }
+
+    suspend fun ensureCheckGatewayUiShown() {
+        log.info { "ensureCheckGatewayUiShown()" }
+        if (checkEthernetGatewayUiShown) {
+            // we've already shown this screen; bail.
+            return
+        }
+        flowManager.navigate(R.id.action_global_checkEthernetGatewayFragment)
+        checkEthernetGatewayUiShown = true
+        val ldSuspender = liveDataSuspender({connectToDeviceCloudButtonClicked})
+        withContext(UI) {
+            ldSuspender.awaitResult()
+        }
+    }
+
+    suspend fun ensureConnectingToDeviceCloudUiShown() {
+        flowManager.navigate(R.id.action_global_connectingToDeviceCloudFragment)
     }
 
     suspend fun ensureTargetDeviceClaimedByUser() {
@@ -212,6 +254,8 @@ class CloudConnectionModule(
         if (isTargetDeviceNamedLD.value.truthy()) {
             return
         }
+
+        // FIXME: show progress spinner
 
         val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD })
         val nameToAssign = withContext(UI) {

@@ -18,11 +18,9 @@ class CheckEthernetGatewayFragment : BaseMeshSetupFragment() {
         val root = inflater.inflate(R.layout.fragment_check_ethernet_gateway, container, false)
 
         root.action_next.setOnClickListener {
-            findNavController().navigate(
-                    R.id.action_checkEthernetGatewayFragment_to_connectingToDeviceCloudFragment
-            )
+            val ccm = flowManagerVM.flowManager!!.cloudConnectionModule
+            ccm.updateConnectToDeviceCloudButtonClicked(true)
         }
-
 
         return root
     }

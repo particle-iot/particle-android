@@ -79,7 +79,10 @@ class FlowManager(
     }
 
     fun navigate(@IdRes idRes: Int) {
-        runOnMainThread { navController?.navigate(idRes) }
+        runOnMainThread {
+            navController?.popBackStack()
+            navController?.navigate(idRes)
+        }
     }
 
     fun newDialogRequest(spec: DialogSpec) {
@@ -92,4 +95,11 @@ class FlowManager(
         (dialogResultLD as MutableLiveData).postValue(dialogResult)
     }
 
+    fun clearDialogResult() {
+        (dialogResultLD as MutableLiveData).postValue(null)
+    }
+
+    fun clearDialogRequest() {
+        (dialogRequestLD as MutableLiveData).postValue(null)
+    }
 }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch

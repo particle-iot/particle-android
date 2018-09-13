@@ -30,7 +30,17 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_connectingToDeviceCloudFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_enterNetworkPasswordFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_gatewaySetupFinishedFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -51,6 +61,11 @@
                     </value>
                   </entry>
                   <entry key="action_global_nameYourDeviceFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_newMeshNetworkNameFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -79,15 +94,6 @@
                             <option name="y" value="-489" />
                           </Point>
                         </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_checkEthernetGatewayFragment_to_connectingToDeviceCloudFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -110,6 +116,18 @@
                           <Point>
                             <option name="x" value="672" />
                             <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="gatewaySetupFinishedFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="954" />
+                            <option name="y" value="-340" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -176,6 +194,18 @@
                           <Point>
                             <option name="x" value="1002" />
                             <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="newMeshNetworkNameFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="109" />
+                            <option name="y" value="-435" />
                           </Point>
                         </option>
                       </LayoutPositions>

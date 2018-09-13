@@ -1,18 +1,14 @@
 package io.particle.mesh.setup.flow
 
-import io.particle.firmwareprotos.ctrl.Network
+import androidx.navigation.ui.NavigationUI
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.mesh.common.Result
-import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
-import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
 
 
@@ -40,6 +36,21 @@ class Flow(
     private suspend fun doRunFlow() {
         log.debug { "doRunFlow()" }
 
+        doInitialCommonSubflow()
+
+        // check interfaces!
+        val interfaceList = ensureGetInterfaceList()
+        val hasEthernet = null != interfaceList.firstOrNull { it.type == InterfaceType.ETHERNET }
+
+        if (hasEthernet) {
+            doEthernetSubflow()
+
+        } else {
+            doJoinerSubflow()
+        }
+    }
+
+    private suspend fun doInitialCommonSubflow() {
         cloudConnModule.ensureClaimCodeFetched()
 
         // connect to the device
@@ -50,59 +61,71 @@ class Flow(
         cloudConnModule.ensureDeviceIsUsingEligibleFirmware()
         val targetDeviceId = bleConnModule.ensureTargetDeviceId()
         cloudConnModule.ensureCheckedIsClaimed(targetDeviceId)
+    }
 
-        // check interfaces!
-        val interfaceList = ensureGetInterfaceList()
-        val hasEthernet = null != interfaceList.firstOrNull { it.type == InterfaceType.ETHERNET }
+    private suspend fun doEthernetSubflow() {
+        log.debug { "doEthernetSubflow()" }
+
+        // FIXME: UNCOMMENT?  Seems like that won't work; review later.
+//        cloudConnModule.ensureEthernetHasIP()
+
         cloudConnModule.ensureSetClaimCode()
         meshSetupModule.ensureRemovedFromExistingNetwork()
-        meshSetupModule.ensureResetNetworkCredentials()
+        bleConnModule.ensureShowPairingSuccessful()
 
-        if (hasEthernet) {
-            doEthernetFlow()
+        // FIXME: show "check gateway" UI here!
+        cloudConnModule.ensureCheckGatewayUiShown()
+        // FIXME: UNCOMMENT?  Why are we doing this in so many places?
+//        cloudConnModule.ensureEthernetHasIP()
+        cloudConnModule.ensureConnectingToDeviceCloudUiShown()
 
-        } else {
-            doMeshSetupFlow()
-        }
+        // FIXME: remove all unnecessary delays here
+
+
 
         bleConnModule.ensureListeningStoppedForBothDevices()
-        cloudConnModule.ensureTargetDeviceClaimedByUser()
-        ensureTargetDeviceSetSetupDone()
-        cloudConnModule.ensureTargetDeviceIsNamed()
+        delay(3000)
 
-        // TODO: review sub-steps in "FINISH" step of SDD
+        // FIXME: doing this here is technically against the spec but may be required.
+        cloudConnModule.ensureEthernetHasIP()
+        delay(3000)
 
-        ensureShowSetupFinishedUi()
-    }
-
-    private suspend fun doEthernetFlow() {
-        log.debug { "doEthernetFlow()" }
-        targetXceiver!!.sendStopListeningMode()
-        delay(500)
-        cloudConnModule.ensureSetClaimCode()
-        delay(500)
-        cloudConnModule.ensureEthernetIsPluggedIn()
-        delay(500)
         cloudConnModule.ensureEthernetConnectedToCloud()
-        delay(2500)
+        delay(3000)
+        cloudConnModule.ensureTargetDeviceClaimedByUser()
+        cloudConnModule.ensureTargetDeviceIsNamed()
+        ensureShowGatewaySetupFinishedUi()
     }
 
-    private suspend fun doMeshSetupFlow() {
-        log.debug { "doMeshSetupFlow()" }
+    private suspend fun doJoinerSubflow() {
+        log.debug { "doJoinerSubflow()" }
+        cloudConnModule.ensureSetClaimCode()
+        meshSetupModule.ensureRemovedFromExistingNetwork()
         meshSetupModule.ensureJoinerVisibleMeshNetworksListPopulated()
+
         bleConnModule.ensureShowPairingSuccessful()
+
         meshSetupModule.ensureMeshNetworkSelected()
 
         bleConnModule.ensureBarcodeDataForComissioner()
         bleConnModule.ensureCommissionerConnected()
+        meshSetupModule.ensureCommissionerIsOnNetworkToBeJoined()
 
         meshSetupModule.ensureTargetMeshNetworkPasswordCollected()
-        meshSetupModule.ensureMeshNetworkJoinedShown()
+
+        // FIXME: INSERT BILLING SCREEN SUPPORT!
+
+        meshSetupModule.ensureMeshNetworkJoinedUiShown()
         meshSetupModule.ensureMeshNetworkJoined()
         meshSetupModule.ensureCommissionerStopped()
+
+        bleConnModule.ensureListeningStoppedForBothDevices()
+        cloudConnModule.ensureTargetDeviceClaimedByUser()
+        ensureTargetDeviceSetSetupDone()
+        ensureShowJoinerSetupFinishedUi()
     }
 
-    suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {
+    private suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {
         log.info { "ensureGetInterfaceList()" }
         val ifaceListReply = targetXceiver!!.sendGetInterfaceList().throwOnErrorOrAbsent()
         return ifaceListReply.interfacesList
@@ -113,9 +136,14 @@ class Flow(
         targetXceiver!!.sendSetDeviceSetupDone().throwOnErrorOrAbsent()
     }
 
-    private suspend fun ensureShowSetupFinishedUi() {
-        log.info { "ensureShowSetupFinishedUi()" }
+    private suspend fun ensureShowJoinerSetupFinishedUi() {
+        log.info { "ensureShowJoinerSetupFinishedUi()" }
         flowManager.navigate(R.id.action_global_setupFinishedFragment)
+    }
+
+    private suspend fun ensureShowGatewaySetupFinishedUi() {
+        log.info { "ensureShowGatewaySetupFinishedUi()" }
+        flowManager.navigate(R.id.action_global_gatewaySetupFinishedFragment)
     }
 }
 

@@ -8,6 +8,7 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoReply
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 import io.particle.mesh.common.Result
+import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
@@ -73,10 +74,9 @@ class MeshSetupModule(
             is Result.Present -> {
 
 
-                // FIXME: PROMPT USER
+                // FIXME: PROMPT USER.  Bail early if user declines to leave network
 
 
-                targetXceiver!!.sendLeaveNetwork().throwOnErrorOrAbsent()
             }
             is Result.Absent -> throw FlowException("No result received when getting existing network")
             is Result.Error -> {
@@ -87,11 +87,24 @@ class MeshSetupModule(
                 }
             }
         }
+
+        targetXceiver!!.sendLeaveNetwork().throwOnErrorOrAbsent()
     }
 
-    suspend fun ensureResetNetworkCredentials() {
-        log.info { "ensureResetNetworkCredentials()" }
-        targetXceiver!!.sendResetNetworkCredentials().throwOnErrorOrAbsent()
+    suspend fun ensureCommissionerIsOnNetworkToBeJoined() {
+        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
+        val reply = commissioner.sendGetNetworkInfo().throwOnErrorOrAbsent()
+        val commissionerNetworkExtPanId = reply.network.extPanId
+        // network info == mesh network to connect to?
+
+        // FIXME: handle case of mismatched commissioner mesh vs target mesh!
+//        val targetMeshExtPanId = targetDeviceMeshNetworkToJoinLD.value!!.extPanId
+//        if (commissionerNetworkExtPanId != targetMeshExtPanId) {
+//        }
+//        commissioner.disconnect()
+//        flowManager.bleConnectionModule.updateCommissionerBarcode(null)
+//
+//        throw FlowException("Commissioner is on the wrong network")
     }
 
     suspend fun ensureJoinerVisibleMeshNetworksListPopulated() {
@@ -126,7 +139,18 @@ class MeshSetupModule(
         }
 
         if (password == null) {
-            throw FlowException("Error collecting mesh network password")
+            throw FlowException("Error while collecting mesh network password")
+        }
+
+        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
+        val sendAuthResult = commissioner.sendAuth(password)
+        when(sendAuthResult) {
+            is Result.Present -> return
+            is Result.Error,
+            is Result.Absent -> {
+                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
+                throw FlowException("Bad commissioner password")
+            }
         }
     }
 

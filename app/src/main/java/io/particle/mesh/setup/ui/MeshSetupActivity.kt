@@ -19,8 +19,6 @@ import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
-import io.particle.mesh.setup.ui.DialogResult.NEGATIVE
-import io.particle.mesh.setup.ui.DialogResult.POSITIVE
 import io.particle.sdk.app.R
 import mu.KotlinLogging
 
@@ -59,16 +57,27 @@ class MeshSetupActivity : AppCompatActivity() {
             log.warn { "Got null dialog spec?!" }
             return
         }
+        flowVM.flowManager?.clearDialogRequest()
 
         val builder = MaterialDialog.Builder(this)
                 .content(spec.text)
                 .canceledOnTouchOutside(false)
                 .positiveText(spec.positiveText)
-                .onPositive { _, _ -> flowVM.flowManager!!.updateDialogResult(DialogResult.POSITIVE) }
+                .onPositive { dialog, _ ->
+                    dialog.dismiss()
+//                    launch(UI) {
+                        flowVM.flowManager!!.updateDialogResult(DialogResult.POSITIVE)
+//                    }
+                }
 
         spec.negativeText?.let {
             builder.negativeText(it)
-            builder.onNegative { _, _ -> flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE) }
+            builder.onNegative { dialog, _ ->
+                dialog.dismiss()
+//                launch(UI) {
+                    flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE)
+//                }
+            }
         }
 
         spec.title?.let { builder.title(it) }
@@ -127,7 +136,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
                 cloud,
                 navReference,
                 dialogRequestLD,
-                ClearValueOnInactiveLiveData(),
+                ClearValueOnInactiveLiveData<DialogResult>().nonNull(),
                 btConnManager,
                 protocolFactory
         )

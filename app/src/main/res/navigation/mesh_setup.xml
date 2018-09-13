@@ -75,9 +75,9 @@
 
     <fragment
         android:id="@+id/setupFinishedFragment"
-        android:name="io.particle.mesh.setup.ui.SetupFinishedFragment"
+        android:name="io.particle.mesh.setup.ui.JoinerSetupFinishedFragment"
         android:label="fragment_setup_finished"
-        tools:layout="@layout/fragment_setup_finished" />
+        tools:layout="@layout/fragment_joiner_setup_finished" />
     <action android:id="@+id/action_global_scanCodeFragment" app:destination="@id/scanCodeFragment" />
     <fragment
         android:id="@+id/scanCommissionerCodeFragment"
@@ -95,15 +95,22 @@
         android:id="@+id/checkEthernetGatewayFragment"
         android:name="io.particle.mesh.setup.ui.CheckEthernetGatewayFragment"
         android:label="fragment_check_ethernet_gateway"
-        tools:layout="@layout/fragment_check_ethernet_gateway" >
-        <action
-            android:id="@+id/action_checkEthernetGatewayFragment_to_connectingToDeviceCloudFragment"
-            app:destination="@id/connectingToDeviceCloudFragment" />
-    </fragment><action android:id="@+id/action_global_checkEthernetGatewayFragment" app:destination="@id/checkEthernetGatewayFragment"/>
+        tools:layout="@layout/fragment_check_ethernet_gateway" ></fragment><action android:id="@+id/action_global_checkEthernetGatewayFragment" app:destination="@id/checkEthernetGatewayFragment"/>
     <fragment
         android:id="@+id/connectingToDeviceCloudFragment"
         android:name="io.particle.mesh.setup.ui.ConnectingToDeviceCloudFragment"
         android:label="fragment_connecting_to_device_cloud"
         tools:layout="@layout/fragment_connecting_to_device_cloud" />
+    <action android:id="@+id/action_global_connectingToDeviceCloudFragment" app:destination="@id/connectingToDeviceCloudFragment" />
+    <fragment
+        android:id="@+id/gatewaySetupFinishedFragment"
+        android:name="io.particle.mesh.setup.ui.GatewaySetupFinishedFragment"
+        android:label="fragment_gateway_setup_finished"
+        tools:layout="@layout/fragment_gateway_setup_finished" /><action android:id="@+id/action_global_gatewaySetupFinishedFragment" app:destination="@id/gatewaySetupFinishedFragment"/>
+    <fragment
+        android:id="@+id/newMeshNetworkNameFragment"
+        android:name="io.particle.mesh.setup.ui.NewMeshNetworkNameFragment"
+        android:label="fragment_new_mesh_network_name"
+        tools:layout="@layout/fragment_new_mesh_network_name" /><action android:id="@+id/action_global_newMeshNetworkNameFragment" app:destination="@id/newMeshNetworkNameFragment"/>
 
 </navigation>

@@ -60,7 +60,7 @@ class BLEConnectionModule(
         (commissionerTransceiverLD as MutableLiveData).postValue(null)
     }
 
-    fun updateCommissionerBarcode(barcodeData: BarcodeData) {
+    fun updateCommissionerBarcode(barcodeData: BarcodeData?) {
         log.info { "updateCommissionerBarcode()" }
         (commissionerBarcodeLD as MutableLiveData).postValue(barcodeData)
     }
@@ -103,6 +103,13 @@ class BLEConnectionModule(
             connectingToTargetUiShown = true
         }
 
+
+
+
+        // FIXME: consider what states we should be resetting here
+
+
+
         val ldSuspender = liveDataSuspender({ targetDeviceTransceiverLD })
         val transceiver = withContext(UI) {
             connectTargetDevice()
@@ -131,9 +138,9 @@ class BLEConnectionModule(
         if (shownTargetInitialIsConnectedScreen) {
             return
         }
-        delay(2000)
         shownTargetInitialIsConnectedScreen = true
         updateTargetDeviceConnectionInitialized(true)
+        delay(2000)
     }
 
     suspend fun ensureBarcodeDataForComissioner() {
@@ -160,6 +167,11 @@ class BLEConnectionModule(
             return
         }
 
+
+
+        // FIXME: consider what states we should be resetting here
+
+
         val xceiverSuspender = liveDataSuspender({ commissionerTransceiverLD })
         commissioner = withContext(UI) {
             connectCommissioner()
@@ -169,18 +181,6 @@ class BLEConnectionModule(
         if (commissioner == null) {
             throw FlowException("Error ensuring commissioner connected")
         }
-
-        // FIXME: handle case of mismatched commissioner mesh vs target mesh!
-        // FIXME: Split this out into another "step" method!
-
-        val reply = commissioner.sendGetNetworkInfo().throwOnErrorOrAbsent()
-        val commissionerNetworkExtPanId = reply.network.extPanId
-        // network info == mesh network to connect to?
-
-
-//        val targetMeshExtPanId = targetDeviceMeshNetworkToJoinLD.value!!.extPanId
-//        if (commissionerNetworkExtPanId != targetMeshExtPanId) {
-//        }
     }
 
     suspend fun ensureListeningStoppedForBothDevices() {

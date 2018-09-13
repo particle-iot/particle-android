@@ -110,5 +110,38 @@ Enjoy!]]></string>
     <string name="p_connectingtodevicecloud_step_1">Connecting to the internet via Ethernet</string>
     <string name="p_connectingtodevicecloud_step_2">Starting a secure session with the Device Cloud</string>
     <string name="p_connectingtodevicecloud_step_3">Connected to the Particle Device Cloud</string>
+    <string name="p_gatewaysetupfinished_title">Congrats! Your device is all set up!</string>
+    <string name="p_action_continue_to_mesh_setup">Continue onto Mesh setup</string>
+    <string name="p_gatewaysetupfinished_using_device_in_a_mesh_network">Using this device in a mesh network?</string>
+    <string name="p_gatewaysetupfinished_using_as_standalone_device">Using as a standalone device?</string>
+    <string name="p_action_start_tinkering">Start tinkering</string>
+    <string name="p_newmeshnetworkname_header">Give your network a name</string>
+    <string name="p_newmeshnetworkname_subheader_1">Easily identify your network once its created</string>
+    <string name="p_action_next_set_password">Next: set password</string>
+    <string name="p_newmeshnetworkname_name_hint_text">name</string>
+    <string name="p_newmeshnetworkpassword_title">Set network admin password</string>
+    <string name="p_newmeshnetworkpassword_subheader1">KEEP THIS PASSWORD SAFE\n\nYou\'ll need this password each time you want to add a new device to this mesh network</string>
+    <string name="p_newmeshnetworkpassword_password_hint_text">password</string>
+    <string name="p_action_set_admin_password">Set admin password</string>
+
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_title">Enjoy this new mesh network on us</string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text1"><![CDATA[All new networks begin as <i>micro networks</i>]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text2"><![CDATA[Micro networks include <b>10 total devices</b> and <b>1 gateway</b>]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text3"><![CDATA[Your first <b>10</b> <i>micro networks</i> using a Wi-Fi or Ethernet gateway are FREE]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_action">Create free network</string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_fine_print">You have 10 free micro networks left</string>
+
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_title">To create this network, enroll in a Device Cloud Subscription</string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text1"><![CDATA[All new networks begin as <i>micro networks</i>]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text2"><![CDATA[Micro networks include <b>10 total devices</b> and <b>1 gateway</b>]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text3"><![CDATA[You will be billed $1.99 per mo. for this network.  Full pricing]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_action">Your card ending in 4242 will be used for recurring Device Cloud subscription costs</string>
+
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_title">To create this network, enroll in a Device Cloud Subscription</string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text1"><![CDATA[All new networks begin as <i>micro networks</i>]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text2"><![CDATA[Micro networks include <b>10 total devices</b> and <b>1 gateway</b>]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text3"><![CDATA[You will be billed $1.99 per mo. for this network.  Full pricing]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_action">Enroll &amp; create network</string>
+
 
 </resources>
