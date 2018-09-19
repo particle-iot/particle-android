@@ -48,4 +48,7 @@
     <string name="start_building">Start Building</string>
     <string name="point_camera_at_qr_code_on_the_device">Point camera at QR code on the device</string>
 
+    <string name="p_newmeshnetworkname_invalid_name_dialog_text">Mesh network names must be fewer than 16 characters, and can only contain letters, numbers, and underscores.</string>
+    <string name="p_newmeshnetworkname_invalid_password_dialog_text">Passwords must be at least 6 characters long.</string>
+
 </resources>

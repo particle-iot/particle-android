@@ -23,20 +23,19 @@ apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 ext {
     supportVersions = '27.1.1'
-    cloudSdkVersion = '0.5.0'
-    setupVersion = '0.5.3'
+    cloudSdkVersion = '0.5.1'
+    setupVersion = '0.6.0'
 }
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 65
-        versionName "2.2.0-MESH-7"
+        versionCode 76
+        versionName "2.2.0-MESH-18"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -89,7 +88,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.23.4'
     implementation "io.github.microutils:kotlin-logging:1.5.4"
 
-
     // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
     // implemented by hand (and as such, might not be worth it.)
@@ -99,10 +97,10 @@ dependencies {
     }
 
     releaseImplementation 'com.google.firebase:firebase-perf:16.1.0'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
     // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
     implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.0'

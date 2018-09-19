@@ -115,6 +115,8 @@ public class ApiDefs {
         @DELETE("/v1/devices/{deviceID}")
         SimpleResponse unclaimDevice(@Path("deviceID") String deviceID);
 
+        @GET("/v1/networks")
+        Response getNetworks();
     }
 
     /**

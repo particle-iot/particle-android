@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
     <application
         android:name="io.particle.android.sdk.tinker.TinkerApplication"
         android:allowBackup="true"
@@ -28,6 +27,11 @@
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
+
+        <!-- Disable data collection by default for GDPR, re-enable at runtime  -->
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_crash_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
 
         <activity
             android:name="io.particle.android.sdk.ui.SplashActivity"
@@ -114,8 +118,9 @@
             android:theme="@style/ParticleSetupTheme.NoActionBar" />
 
         <activity
-            android:name="io.particle.particlemesh.meshsetup.ui.MeshSetupActivity"
+            android:name="io.particle.mesh.setup.ui.MeshSetupActivity"
             android:label="Mesh Setup"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

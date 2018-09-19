@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.particle.particlemesh.meshsetup.ui.ScanCommissionerCodeFragment">
+    tools:context="io.particle.mesh.setup.ui.ScanCommissionerCodeFragment">
 
     <TextView
         android:id="@+id/setup_header_text"

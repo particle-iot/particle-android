@@ -41,6 +41,14 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
     </style>
 
+    <style name="setup_fine_print">
+        <item name="android:gravity">center</item>
+        <item name="android:maxWidth">280dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+    </style>
+
     <style name="fine_print">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
