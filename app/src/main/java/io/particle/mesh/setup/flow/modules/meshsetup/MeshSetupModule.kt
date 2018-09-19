@@ -2,37 +2,52 @@ package io.particle.mesh.setup.flow.modules.meshsetup
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import io.particle.android.sdk.tinker.TinkerApplication
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoReply
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 import io.particle.mesh.common.Result
-import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
+import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
+import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
+import io.particle.mesh.setup.ui.DialogResult
+import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
+import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
+import java.lang.IllegalStateException
 
 
 class MeshSetupModule(
         private val flowManager: FlowManager,
         val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
+
 ) : Clearable {
 
-    val targetDeviceMeshNetworkToJoinLD: LiveData<NetworkInfo?> = MutableLiveData()
+    val targetDeviceMeshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
     val targetDeviceMeshNetworkToJoinCommissionerPassword: LiveData<String?> = MutableLiveData()
     val targetJoinedMeshNetworkLD: LiveData<Boolean?> = MutableLiveData()
     val commissionerStartedLD: LiveData<Boolean?> = MutableLiveData()
+    val newNetworkNameLD: LiveData<String?> = MutableLiveData()
+    val newNetworkPasswordLD: LiveData<String?> = MutableLiveData()
+    val createNetworkSent: LiveData<Boolean?> = MutableLiveData()
 
-    private var targetJoinedSuccesfully = false
+    var showNewNetworkOptionInScanner: Boolean = false
+
+    private var targetJoinedSuccessfully = false
+    private var newNetworkCreatedSuccessfully = false
 
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
@@ -40,16 +55,28 @@ class MeshSetupModule(
     private val log = KotlinLogging.logger {}
 
     override fun clearState() {
-        (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(null)
-        (targetDeviceMeshNetworkToJoinCommissionerPassword as MutableLiveData).postValue(null)
-        (targetJoinedMeshNetworkLD as MutableLiveData).postValue(null)
-        (commissionerStartedLD as MutableLiveData).postValue(null)
-        targetJoinedSuccesfully = false
+        val setToNulls = listOf(
+                targetDeviceMeshNetworkToJoinLD,
+                targetDeviceMeshNetworkToJoinCommissionerPassword,
+                targetJoinedMeshNetworkLD,
+                commissionerStartedLD,
+                newNetworkNameLD,
+                newNetworkPasswordLD,
+                createNetworkSent
+        )
+        for (ld in setToNulls) {
+            ld.castAndPost(null)
+        }
+
+        targetJoinedSuccessfully = false
+        newNetworkCreatedSuccessfully = false
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {
         log.info { "updateSelectedMeshNetworkToJoin(): $meshNetworkToJoin" }
-        (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(meshNetworkToJoin)
+        (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(
+                SelectedNetwork(meshNetworkToJoin)
+        )
     }
 
     fun updateTargetMeshNetworkCommissionerPassword(password: String) {
@@ -67,6 +94,21 @@ class MeshSetupModule(
         (targetJoinedMeshNetworkLD as MutableLiveData).postValue(joined)
     }
 
+    fun onUserSelectedCreateNewNetwork() {
+        log.info { "onUserSelectedCreateNewNetwork()" }
+        (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(CreateNewNetwork())
+    }
+
+    fun updateNewNetworkName(newName: String) {
+        log.info { "updateNewNetworkName(): $newName" }
+        (newNetworkNameLD as MutableLiveData).postValue(newName)
+    }
+
+    fun updateNewNetworkPassword(password: String) {
+        log.info { "updateNewNetworkPassword()" }
+        (newNetworkPasswordLD as MutableLiveData).postValue(password)
+    }
+
     suspend fun ensureRemovedFromExistingNetwork() {
         log.info { "ensureRemovedFromExistingNetwork()" }
         val reply: Result<GetNetworkInfoReply, ResultCode> = targetXceiver!!.sendGetNetworkInfo()
@@ -75,7 +117,6 @@ class MeshSetupModule(
 
 
                 // FIXME: PROMPT USER.  Bail early if user declines to leave network
-
 
             }
             is Result.Absent -> throw FlowException("No result received when getting existing network")
@@ -92,19 +133,37 @@ class MeshSetupModule(
     }
 
     suspend fun ensureCommissionerIsOnNetworkToBeJoined() {
+        log.info { "ensureCommissionerIsOnNetworkToBeJoined()" }
         val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
         val reply = commissioner.sendGetNetworkInfo().throwOnErrorOrAbsent()
-        val commissionerNetworkExtPanId = reply.network.extPanId
-        // network info == mesh network to connect to?
 
-        // FIXME: handle case of mismatched commissioner mesh vs target mesh!
-//        val targetMeshExtPanId = targetDeviceMeshNetworkToJoinLD.value!!.extPanId
-//        if (commissionerNetworkExtPanId != targetMeshExtPanId) {
-//        }
-//        commissioner.disconnect()
-//        flowManager.bleConnectionModule.updateCommissionerBarcode(null)
-//
-//        throw FlowException("Commissioner is on the wrong network")
+        val commissionerNetwork = reply.network
+        val toJoin = (targetDeviceMeshNetworkToJoinLD.value!! as SelectedNetwork)
+
+        if (commissionerNetwork?.extPanId == toJoin.networkToJoin.extPanId) {
+            return  // it's a match; we're done.
+        }
+
+        commissioner.disconnect()
+        flowManager.bleConnectionModule.commissionerTransceiverLD.castAndPost(null)
+        flowManager.bleConnectionModule.updateCommissionerBarcode(null)
+
+        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
+        val result = withContext(UI) {
+            flowManager.newDialogRequest(DialogSpec(
+                    R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
+                    android.R.string.ok
+            ))
+            var result: DialogResult? = null
+            while(result == null) {
+                result = ldSuspender.awaitResult()
+            }
+        }
+        log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
+        flowManager.clearDialogResult()
+        delay(500)
+
+        throw FlowException("Commissioner is on the wrong network")
     }
 
     suspend fun ensureJoinerVisibleMeshNetworksListPopulated() {
@@ -119,7 +178,7 @@ class MeshSetupModule(
         }
 
         flowManager.navigate(R.id.action_global_scanForMeshNetworksFragment)
-        val ldSuspender = liveDataSuspender({ targetDeviceMeshNetworkToJoinLD })
+        val ldSuspender = liveDataSuspender({ targetDeviceMeshNetworkToJoinLD.nonNull() })
         val meshNetworkToJoin = withContext(UI) {
             ldSuspender.awaitResult()
         }
@@ -142,16 +201,17 @@ class MeshSetupModule(
             throw FlowException("Error while collecting mesh network password")
         }
 
-        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
-        val sendAuthResult = commissioner.sendAuth(password)
-        when(sendAuthResult) {
-            is Result.Present -> return
-            is Result.Error,
-            is Result.Absent -> {
-                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
-                throw FlowException("Bad commissioner password")
-            }
-        }
+        // FIXME: re-introduce this
+//        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
+//        val sendAuthResult = commissioner.sendAuth(password)
+//        when(sendAuthResult) {
+//            is Result.Present -> return
+//            is Result.Error,
+//            is Result.Absent -> {
+//                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
+//                throw FlowException("Bad commissioner password")
+//            }
+//        }
     }
 
     suspend fun ensureMeshNetworkJoinedUiShown() {
@@ -162,7 +222,7 @@ class MeshSetupModule(
     suspend fun ensureMeshNetworkJoined() {
         log.info { "ensureMeshNetworkJoined()" }
         // FIXME: do a real check here -- just ASK the device if it has joined the network yet!
-        if (targetJoinedSuccesfully) {
+        if (targetJoinedSuccessfully) {
             return
         }
 
@@ -171,19 +231,33 @@ class MeshSetupModule(
 
         val password = targetDeviceMeshNetworkToJoinCommissionerPassword.value!!
         commish.sendAuth(password).throwOnErrorOrAbsent()
+        delay(5000)
+        commish.sendStopCommissioner()
+        delay(5000)
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
         updateCommissionerStarted(true)
 
-        val networkToJoin = targetDeviceMeshNetworkToJoinLD.value!!
+        val toJoinWrapper = targetDeviceMeshNetworkToJoinLD.value!!
+        val networkToJoin: NetworkInfo = when(toJoinWrapper) {
+            is MeshNetworkToJoin.SelectedNetwork -> toJoinWrapper.networkToJoin
+            is MeshNetworkToJoin.CreateNewNetwork -> throw IllegalStateException()
+        }
         val prepJoinerData = joiner.sendPrepareJoiner(networkToJoin).throwOnErrorOrAbsent()
+        delay(5000)
         commish.sendAddJoiner(prepJoinerData.eui64, prepJoinerData.password).throwOnErrorOrAbsent()
         updateTargetJoinedMeshNetwork(true)
 
         // FIXME: joining (sometimes?) fails here without a delay.  Revisit this value/try removing later?
-        delay(2000)
-        joiner.sendJoinNetwork().throwOnErrorOrAbsent()
+        delay(5000)
+        val start = System.currentTimeMillis()
+        // FIXME: basically never time out.
+        joiner.sendJoinNetwork(100000).throwOnErrorOrAbsent()
+        val totalMillis = System.currentTimeMillis() - start
+        TinkerApplication.appContext?.safeToast(
+                "JoinNetworkReply: device took ${totalMillis/1000}s"
+        )
 
-        targetJoinedSuccesfully = true
+        targetJoinedSuccessfully = true
     }
 
     suspend fun ensureCommissionerStopped() {
@@ -191,4 +265,54 @@ class MeshSetupModule(
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
         commish.sendStopCommissioner()
     }
+
+    suspend fun ensureNewNetworkName() {
+        log.info { "ensureNewNetworkName()" }
+        if (newNetworkNameLD.value != null) {
+            return
+        }
+
+        val ldSuspender = liveDataSuspender({ newNetworkNameLD.nonNull() })
+        withContext(UI) {
+            flowManager.navigate(R.id.action_global_newMeshNetworkNameFragment)
+            ldSuspender.awaitResult()
+        }
+    }
+
+    suspend fun ensureNewNetworkPassword() {
+        log.info { "ensureNewNetworkPassword()" }
+        if (newNetworkPasswordLD.value != null) {
+            return
+        }
+
+        val ldSuspender = liveDataSuspender({ newNetworkPasswordLD.nonNull() })
+        withContext(UI) {
+            flowManager.navigate(R.id.action_global_newMeshNetworkPasswordFragment)
+            ldSuspender.awaitResult()
+        }
+    }
+
+    suspend fun ensureCreatingNewNetworkUiShown() {
+        log.info { "ensureCreatingNewNetworkUiShown()" }
+        if (newNetworkCreatedSuccessfully) {
+            return
+        }
+
+        flowManager.navigate(R.id.action_global_creatingMeshNetworkFragment)
+    }
+
+    suspend fun ensureCreateNewNetworkMessageSent() {
+        log.info { "ensureCreateNewNetworkMessageSent()" }
+        if (createNetworkSent.value.truthy()) {
+            return
+        }
+
+        val name = newNetworkNameLD.value!!
+        val password = newNetworkPasswordLD.value!!
+
+        targetXceiver!!.sendCreateNetwork(name, password).throwOnErrorOrAbsent()
+
+        (createNetworkSent as MutableLiveData).setOnMainThread(true)
+    }
+
 }

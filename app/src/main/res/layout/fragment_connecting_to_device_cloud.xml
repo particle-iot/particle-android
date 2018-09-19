@@ -46,14 +46,12 @@
     <TextView
         android:id="@+id/status_stage_2"
         style="@style/setup_step_text"
-        android:layout_height="22dp"
         android:layout_marginTop="24dp"
         android:text="@string/p_connectingtodevicecloud_step_2"
         app:layout_constraintBottom_toTopOf="@+id/status_stage_3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_stage_1"
-        tools:layout_editor_absoluteX="85dp" />
+        app:layout_constraintTop_toBottomOf="@+id/status_stage_1" />
 
     <TextView
         android:id="@+id/status_stage_3"

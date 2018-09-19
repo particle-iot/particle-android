@@ -65,18 +65,14 @@ class MeshSetupActivity : AppCompatActivity() {
                 .positiveText(spec.positiveText)
                 .onPositive { dialog, _ ->
                     dialog.dismiss()
-//                    launch(UI) {
-                        flowVM.flowManager!!.updateDialogResult(DialogResult.POSITIVE)
-//                    }
+                    flowVM.flowManager!!.updateDialogResult(DialogResult.POSITIVE)
                 }
 
         spec.negativeText?.let {
             builder.negativeText(it)
             builder.onNegative { dialog, _ ->
                 dialog.dismiss()
-//                launch(UI) {
-                    flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE)
-//                }
+                flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE)
             }
         }
 
@@ -129,19 +125,18 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
     private val log = KotlinLogging.logger {}
 
     fun startFlowForDevice(deviceType: ParticleDeviceType) {
-        resetState()
-
-        flowManager = FlowManager(
-                deviceType,
-                cloud,
-                navReference,
-                dialogRequestLD,
-                ClearValueOnInactiveLiveData<DialogResult>().nonNull(),
-                btConnManager,
-                protocolFactory
-        )
-
-        flowManager?.startFlow()
+        if (flowManager == null) {
+            flowManager = FlowManager(
+                    deviceType,
+                    cloud,
+                    navReference,
+                    dialogRequestLD,
+                    ClearValueOnInactiveLiveData<DialogResult>().nonNull(),
+                    btConnManager,
+                    protocolFactory
+            )
+        }
+        flowManager?.startNewFlow()
     }
 
     fun setNavController(navController: NavController?) {
@@ -150,6 +145,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
 
     override fun onCleared() {
         super.onCleared()
+        log.info { "onCleared()" }
         resetState()
         setNavController(null)
     }

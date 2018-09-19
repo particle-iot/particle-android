@@ -1,6 +1,7 @@
 package io.particle.mesh.setup.ui
 
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -15,6 +16,7 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.firmwareprotos.ctrl.Common
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
+import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
@@ -35,12 +37,22 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val fm = flowManagerVM.flowManager!!
-        fm.meshSetupModule.commissionerStartedLD.observe(this, Observer { markProgress(R.id.status_stage_1) })
-        fm.meshSetupModule.targetJoinedMeshNetworkLD.observe(this, Observer { markProgress(R.id.status_stage_2) })
-        fm.cloudConnectionModule.targetOwnedByUserLD.observe(this, Observer { markProgress(R.id.status_stage_3) })
+        fm.meshSetupModule.commissionerStartedLD.observeForProgress(R.id.status_stage_1)
+        fm.meshSetupModule.targetJoinedMeshNetworkLD.observeForProgress(R.id.status_stage_2)
+        fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_3)
     }
 
-    private fun markProgress(@IdRes progressStage: Int) {
+    private fun LiveData<Boolean?>.observeForProgress(@IdRes progressStage: Int) {
+        this.observe(
+                this@JoiningMeshNetworkProgressFragment,
+                Observer { markProgress(it, progressStage) }
+        )
+    }
+
+    private fun markProgress(update: Boolean?, @IdRes progressStage: Int) {
+        if (!update.truthy()) {
+            return
+        }
         launch(UI) {
             val tv: TextView = view!!.findViewById(progressStage)
             tv.text = "✓ " + tv.text

@@ -1,11 +1,12 @@
 package io.particle.mesh.setup.flow
 
-import androidx.navigation.ui.NavigationUI
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
+import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
+import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.delay
@@ -33,20 +34,40 @@ class Flow(
         }
     }
 
+    suspend fun runMeshFlowForGatewayDevice() {
+        meshSetupModule.showNewNetworkOptionInScanner = true
+        try {
+            doMeshFlowForGatewayDevice()
+        } catch (ex: Exception) {
+            // FIXME: or should error handling happen at the FlowManager level?
+            throw ex
+        } finally {
+            meshSetupModule.showNewNetworkOptionInScanner = false
+        }
+    }
+
     private suspend fun doRunFlow() {
         log.debug { "doRunFlow()" }
 
         doInitialCommonSubflow()
-
         // check interfaces!
         val interfaceList = ensureGetInterfaceList()
         val hasEthernet = null != interfaceList.firstOrNull { it.type == InterfaceType.ETHERNET }
-
         if (hasEthernet) {
             doEthernetSubflow()
-
         } else {
             doJoinerSubflow()
+        }
+    }
+
+    private suspend fun doMeshFlowForGatewayDevice() {
+        // await the device
+        meshSetupModule.ensureMeshNetworkSelected()
+
+        val toJoin = meshSetupModule.targetDeviceMeshNetworkToJoinLD.value!!
+        when(toJoin) {
+            is SelectedNetwork -> doJoinerSubflow()
+            is CreateNewNetwork -> doCreateNetworkFlow()
         }
     }
 
@@ -61,37 +82,22 @@ class Flow(
         cloudConnModule.ensureDeviceIsUsingEligibleFirmware()
         val targetDeviceId = bleConnModule.ensureTargetDeviceId()
         cloudConnModule.ensureCheckedIsClaimed(targetDeviceId)
+        cloudConnModule.ensureSetClaimCode()
+        meshSetupModule.ensureRemovedFromExistingNetwork()
     }
 
     private suspend fun doEthernetSubflow() {
         log.debug { "doEthernetSubflow()" }
-
-        // FIXME: UNCOMMENT?  Seems like that won't work; review later.
-//        cloudConnModule.ensureEthernetHasIP()
-
-        cloudConnModule.ensureSetClaimCode()
-        meshSetupModule.ensureRemovedFromExistingNetwork()
         bleConnModule.ensureShowPairingSuccessful()
 
-        // FIXME: show "check gateway" UI here!
         cloudConnModule.ensureCheckGatewayUiShown()
-        // FIXME: UNCOMMENT?  Why are we doing this in so many places?
-//        cloudConnModule.ensureEthernetHasIP()
         cloudConnModule.ensureConnectingToDeviceCloudUiShown()
-
-        // FIXME: remove all unnecessary delays here
-
-
-
+        ensureTargetDeviceSetSetupDone(true)
         bleConnModule.ensureListeningStoppedForBothDevices()
-        delay(3000)
-
-        // FIXME: doing this here is technically against the spec but may be required.
+        // FIXME: remove all unnecessary delays here
+        delay(2000)
         cloudConnModule.ensureEthernetHasIP()
-        delay(3000)
-
-        cloudConnModule.ensureEthernetConnectedToCloud()
-        delay(3000)
+        cloudConnModule.ensureConnectedToCloud()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
         cloudConnModule.ensureTargetDeviceIsNamed()
         ensureShowGatewaySetupFinishedUi()
@@ -99,8 +105,6 @@ class Flow(
 
     private suspend fun doJoinerSubflow() {
         log.debug { "doJoinerSubflow()" }
-        cloudConnModule.ensureSetClaimCode()
-        meshSetupModule.ensureRemovedFromExistingNetwork()
         meshSetupModule.ensureJoinerVisibleMeshNetworksListPopulated()
 
         bleConnModule.ensureShowPairingSuccessful()
@@ -113,16 +117,28 @@ class Flow(
 
         meshSetupModule.ensureTargetMeshNetworkPasswordCollected()
 
-        // FIXME: INSERT BILLING SCREEN SUPPORT!
+        // FIXME: INSERT BILLING SCREEN!
 
         meshSetupModule.ensureMeshNetworkJoinedUiShown()
         meshSetupModule.ensureMeshNetworkJoined()
+        ensureTargetDeviceSetSetupDone(true)
         meshSetupModule.ensureCommissionerStopped()
 
         bleConnModule.ensureListeningStoppedForBothDevices()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
-        ensureTargetDeviceSetSetupDone()
         ensureShowJoinerSetupFinishedUi()
+    }
+
+    private suspend fun doCreateNetworkFlow() {
+        meshSetupModule.ensureNewNetworkName()
+        meshSetupModule.ensureNewNetworkPassword()
+
+        meshSetupModule.ensureCreatingNewNetworkUiShown()
+        meshSetupModule.ensureCreateNewNetworkMessageSent()
+        cloudConnModule.ensureConnectedToCloud()
+        cloudConnModule.ensureNetworkIsRegisteredWithCloud()
+
+        ensureShowCreateNetworkFinished()
     }
 
     private suspend fun ensureGetInterfaceList(): List<InterfaceEntry> {
@@ -131,9 +147,9 @@ class Flow(
         return ifaceListReply.interfacesList
     }
 
-    private suspend fun ensureTargetDeviceSetSetupDone() {
-        log.info { "ensureTargetDeviceSetSetupDone()" }
-        targetXceiver!!.sendSetDeviceSetupDone().throwOnErrorOrAbsent()
+    private suspend fun ensureTargetDeviceSetSetupDone(done: Boolean) {
+        log.info { "ensureTargetDeviceSetSetupDone() done=$done" }
+        targetXceiver!!.sendSetDeviceSetupDone(done).throwOnErrorOrAbsent()
     }
 
     private suspend fun ensureShowJoinerSetupFinishedUi() {
@@ -145,6 +161,10 @@ class Flow(
         log.info { "ensureShowGatewaySetupFinishedUi()" }
         flowManager.navigate(R.id.action_global_gatewaySetupFinishedFragment)
     }
+
+    private suspend fun ensureShowCreateNetworkFinished() {
+        log.info { "ensureShowCreateNetworkFinished()" }
+        flowManager.navigate(R.id.action_global_newMeshNetworkFinishedFragment)    }
 }
 
 

@@ -5,15 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.utils.CoreNameGenerator
-import io.particle.mesh.common.QATool
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_name_your_device.*
 import kotlinx.android.synthetic.main.fragment_name_your_device.view.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 
 class NameYourDeviceFragment : BaseMeshSetupFragment() {

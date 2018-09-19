@@ -6,10 +6,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
-import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
-import io.particle.mesh.common.android.livedata.castAndPost
-import io.particle.mesh.common.android.livedata.liveDataSuspender
-import io.particle.mesh.common.android.livedata.setOnMainThread
+import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
@@ -32,13 +29,15 @@ class CloudConnectionModule(
 
     private val log = KotlinLogging.logger {}
 
-    var claimCode: String? = null // FIXME: make this a LiveData?  Where is it used?
     val targetDeviceShouldBeClaimedLD: LiveData<Boolean?> = MutableLiveData()
     val targetOwnedByUserLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
-    val targetDeviceEthernetConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
+    val targetDeviceConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
     val connectToDeviceCloudButtonClicked: LiveData<Boolean?> = MutableLiveData()
+    val meshRegisteredWithCloud: LiveData<Boolean?> = MutableLiveData()
+
+    var claimCode: String? = null // FIXME: make this a LiveData?  Where is it used?
 
     private var checkedIsTargetClaimedByUser = false
     private var connectedToMeshNetworkAndOwnedUiShown = false
@@ -49,9 +48,6 @@ class CloudConnectionModule(
 
 
     override fun clearState() {
-
-        // FIXME: UPDATE THIS WITH ALL VALUES
-
         claimCode = null
         checkedIsTargetClaimedByUser = false
         connectedToMeshNetworkAndOwnedUiShown = false
@@ -62,10 +58,12 @@ class CloudConnectionModule(
                 targetOwnedByUserLD,
                 targetDeviceNameToAssignLD,
                 isTargetDeviceNamedLD,
-                connectToDeviceCloudButtonClicked
+                targetDeviceConnectedToCloud,
+                connectToDeviceCloudButtonClicked,
+                meshRegisteredWithCloud
         )
         for (ld in setToNulls) {
-            (ld as MutableLiveData).postValue(null)
+            ld.castAndPost(null)
         }
     }
 
@@ -97,13 +95,13 @@ class CloudConnectionModule(
         }
     }
 
-    suspend fun ensureEthernetConnectedToCloud() {
-        log.info { "ensureEthernetConnectedToCloud()" }
+    suspend fun ensureConnectedToCloud() {
+        log.info { "ensureConnectedToCloud()" }
         for (i in 0..14) { // 30 seconds
             delay(500)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
             if (statusReply.status == ConnectionStatus.CONNECTED) {
-                (targetDeviceEthernetConnectedToCloud as MutableLiveData).postValue(true)
+                targetDeviceConnectedToCloud.castAndPost(true)
                 return
             }
         }
@@ -132,7 +130,7 @@ class CloudConnectionModule(
 
 
         // FIXME: REMOVE!
-        (targetDeviceShouldBeClaimedLD as MutableLiveData).setOnMainThread(true)
+        targetDeviceShouldBeClaimedLD.castAndSetOnMainThread(true)
         // REMOVE ^^^
 
         // show dialog
@@ -274,6 +272,10 @@ class CloudConnectionModule(
         updateIsTargetDeviceNamed(true)
     }
 
-
+    suspend fun ensureNetworkIsRegisteredWithCloud() {
+        // Implement when we have this API
+        delay(3000)
+        meshRegisteredWithCloud.castAndPost(true)
+    }
 
 }

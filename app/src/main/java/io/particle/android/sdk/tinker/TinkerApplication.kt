@@ -1,5 +1,6 @@
 package io.particle.android.sdk.tinker
 
+import android.app.Application
 import android.support.multidex.MultiDexApplication
 import io.particle.android.sdk.ReleaseBuildAppInitializer
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
@@ -10,8 +11,15 @@ import org.slf4j.impl.HandroidLoggerAdapter
 
 class TinkerApplication : MultiDexApplication() {
 
+    companion object {
+        // NOTE: UGLY!  Only use this for testing!
+        var appContext: Application? = null
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        TinkerApplication.appContext = this
 
         // HI THERE: doing a release build?  Read the rest of this comment.  (Otherwise, carry on.)
         //

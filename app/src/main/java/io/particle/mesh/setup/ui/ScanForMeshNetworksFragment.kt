@@ -22,13 +22,21 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        flowManagerVM.flowManager!!.meshSetupModule.targetDeviceVisibleMeshNetworksLD.observe(
+        val fm = flowManagerVM.flowManager!!
+        fm.meshSetupModule.targetDeviceVisibleMeshNetworksLD.observe(
                 this,
                 Observer { onNetworksUpdated(it) }
         )
         adapter = ScannedMeshNetworksAdapter { onMeshNetworkSelected(it.meshNetworkInfo) }
         val root = inflater.inflate(R.layout.fragment_scan_for_mesh_networks, container, false)
         root.recyclerView.adapter = adapter
+
+        root.action_create_new_network.setOnClickListener {
+            fm.meshSetupModule.onUserSelectedCreateNewNetwork()
+        }
+        if (!fm.meshSetupModule.showNewNetworkOptionInScanner) {
+            root.action_create_new_network.visibility = View.GONE
+        }
         return root
     }
 

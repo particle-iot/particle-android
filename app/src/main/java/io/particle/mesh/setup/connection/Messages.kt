@@ -25,14 +25,10 @@ import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest
-import io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration
 import io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply
 import io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest
 import io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply
 import io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest
-import io.particle.firmwareprotos.ctrl.Network.NetworkSetConfigurationReply
-import io.particle.firmwareprotos.ctrl.Network.NetworkSetConfigurationRequest
-import io.particle.firmwareprotos.ctrl.Network.NetworkState
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.FinishFirmwareUpdateReply
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.FinishFirmwareUpdateRequest
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.FirmwareUpdateDataReply
@@ -234,8 +230,12 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> StopListeningModeReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendSetDeviceSetupDone(): Result<SetDeviceSetupDoneReply, ResultCode> {
-        val response = sendRequest(SetDeviceSetupDoneRequest.newBuilder().build())
+    suspend fun sendSetDeviceSetupDone(done: Boolean): Result<SetDeviceSetupDoneReply, ResultCode> {
+        val response = sendRequest(
+                SetDeviceSetupDoneRequest.newBuilder()
+                        .setDone(done)
+                        .build()
+        )
         return buildResult(response) { r -> SetDeviceSetupDoneReply.parseFrom(r.payloadData) }
     }
 
@@ -326,12 +326,12 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> AddJoinerReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendJoinNetwork(): Result<JoinNetworkReply, Common.ResultCode> {
+    // NOTE: yes, 60 seconds is a CRAZY timeout, but... this is how long it takes to receive
+    // a response sometimes.
+    suspend fun sendJoinNetwork(timeout: Int = 60000): Result<JoinNetworkReply, Common.ResultCode> {
         val response = sendRequest(
                 JoinNetworkRequest.newBuilder().build(),
-                // NOTE: yes, 25 seconds is a crazy timeout, but this is how long it takes to receive
-                // a response sometimes.
-                25000
+                timeout
         )
         return buildResult(response) { r -> JoinNetworkReply.parseFrom(r.payloadData) }
     }

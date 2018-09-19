@@ -120,6 +120,7 @@
         <activity
             android:name="io.particle.mesh.setup.ui.MeshSetupActivity"
             android:label="Mesh Setup"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

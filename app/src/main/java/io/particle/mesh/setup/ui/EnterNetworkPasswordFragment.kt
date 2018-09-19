@@ -23,5 +23,6 @@ class EnterNetworkPasswordFragment : BaseMeshSetupFragment() {
         val password = view!!.deviceNameInputLayout.editText!!.text.toString()
         val meshModule = flowManagerVM.flowManager!!.meshSetupModule
         meshModule.updateTargetMeshNetworkCommissionerPassword(password)
+
     }
 }

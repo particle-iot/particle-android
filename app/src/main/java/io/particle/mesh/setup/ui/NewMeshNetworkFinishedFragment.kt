@@ -6,28 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_gateway_setup_finished.view.*
+import kotlinx.android.synthetic.main.fragment_new_mesh_network_finished.view.*
 
 
-class GatewaySetupFinishedFragment : BaseMeshSetupFragment() {
+class NewMeshNetworkFinishedFragment : BaseMeshSetupFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_gateway_setup_finished, container, false)
+        val root = inflater.inflate(R.layout.fragment_new_mesh_network_finished, container, false)
 
         root.action_start_tinkering.setOnClickListener { endSetup() }
-        root.action_start_mesh_setup.setOnClickListener { startNewFlow() }
+        root.action_start_mesh_setup.setOnClickListener {
+            flowManagerVM.flowManager?.startNewFlowWithCommissioner()
+        }
 
         return root
     }
 
     private fun endSetup() {
         requireActivity().finish()
-    }
-
-    private fun startNewFlow() {
-        flowManagerVM.flowManager?.startMeshFlowForGateway()
     }
 
 }

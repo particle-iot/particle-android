@@ -4,8 +4,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.MainThread
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
+import io.particle.mesh.common.android.livedata.castAndPost
+import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
-import io.particle.mesh.common.android.livedata.setOnMainThread
+import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.Clearable
@@ -37,7 +39,6 @@ class BLEConnectionModule(
     val commissionerTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
 
     private var targetDeviceId: String? = null
-
     private var connectingToTargetUiShown = false
     private var shownTargetInitialIsConnectedScreen = false
 
@@ -50,14 +51,19 @@ class BLEConnectionModule(
         connectingToTargetUiShown = false
         shownTargetInitialIsConnectedScreen = false
 
-        (targetDeviceBarcodeLD as MutableLiveData).postValue(null)
         targetDeviceTransceiverLD.value?.disconnect()
-        (targetDeviceTransceiverLD as MutableLiveData).postValue(null)
-        (targetDeviceConnectedLD as MutableLiveData).postValue(null)
-
-        (commissionerBarcodeLD as MutableLiveData).postValue(null)
         commissionerTransceiverLD.value?.disconnect()
-        (commissionerTransceiverLD as MutableLiveData).postValue(null)
+
+        val setToNulls = listOf(
+                targetDeviceBarcodeLD,
+                targetDeviceTransceiverLD,
+                targetDeviceConnectedLD,
+                commissionerBarcodeLD,
+                commissionerTransceiverLD
+        )
+        for (ld in setToNulls) {
+            ld.castAndPost(null)
+        }
     }
 
     fun updateCommissionerBarcode(barcodeData: BarcodeData?) {
@@ -81,7 +87,7 @@ class BLEConnectionModule(
             return
         }
 
-        val liveDataSuspender = liveDataSuspender({ targetDeviceBarcodeLD })
+        val liveDataSuspender = liveDataSuspender({ targetDeviceBarcodeLD.nonNull() })
         val barcodeData = withContext(UI) {
             flowManager.navigate(R.id.action_global_getReadyForSetupFragment)
             liveDataSuspender.awaitResult()
@@ -149,6 +155,7 @@ class BLEConnectionModule(
             return
         }
 
+        log.debug { "No commissioner barcode found; showing UI" }
         val liveDataSuspender = liveDataSuspender({ commissionerBarcodeLD })
         val barcodeData = withContext(UI) {
             flowManager.navigate(R.id.action_global_manualCommissioningAddToNetworkFragment)
@@ -201,7 +208,7 @@ class BLEConnectionModule(
         }
 
         log.debug { "Target device connected!" }
-        (targetDeviceTransceiverLD as MutableLiveData).setOnMainThread(targetTransceiver)
+        targetDeviceTransceiverLD.castAndSetOnMainThread(targetTransceiver)
     }
 
     @MainThread
@@ -215,7 +222,7 @@ class BLEConnectionModule(
         }
 
         log.debug { "Commissioner connected!" }
-        (commissionerTransceiverLD as MutableLiveData).setOnMainThread(commissioner)
+        commissionerTransceiverLD.castAndSetOnMainThread(commissioner)
     }
 
     @MainThread

@@ -143,5 +143,22 @@ Enjoy!]]></string>
     <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text3"><![CDATA[You will be billed $1.99 per mo. for this network.  Full pricing]]></string>
     <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_action">Enroll &amp; create network</string>
 
+    <string name="p_creatingyournetwork_header">Creating your network</string>
+    <string name="p_creatingyournetwork_step_1">Sending network credentials to your Xenon</string>
+    <string name="p_creatingyournetwork_step_2">Device creating the mesh network locally</string>
+    <string name="p_creatingyournetwork_step_3">Registering the mesh network with the Device Cloud</string>
+    <string name="p_creatingyournetwork_step_4">Activating device as a gateway in the mesh network</string>
+    <string name="p_creatingyournetwork_step_5">Sprinkling magic fairy dust</string>
+
+    <string name="p_newmeshnetworkfinished_header">Congrats!</string>
+    <string name="p_newmeshnetworkfinished_start_tinkering_header">Ready to build?</string>
+
+    <string name="p_action_add_next_mesh_device">Add next mesh device</string>
+
+    <string name="p_newmeshnetworkfinished_start_mesh_setup_header">Add more devices to your network</string>
+    <string name="p_newmeshnetworkfinished_subheader_1">Your network has been set up with {device_name} acting as a gateway</string>
+    <string name="p_action_create_new_network">Create new network…</string>
+    <string name="p_manualcommissioning_commissioner_candidate_not_on_target_network">This device is not part the network you are trying to join.</string>
+
 
 </resources>
