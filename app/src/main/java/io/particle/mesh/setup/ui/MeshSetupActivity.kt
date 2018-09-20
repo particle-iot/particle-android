@@ -21,6 +21,7 @@ import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
 import mu.KotlinLogging
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MeshSetupActivity : AppCompatActivity() {
@@ -40,6 +41,9 @@ class MeshSetupActivity : AppCompatActivity() {
         flowVM = FlowManagerAccessModel.getViewModel(this)
         flowVM.setNavController(navController)
         flowVM.dialogRequestLD.observe(this, Observer { onDialogSpecReceived(it) })
+
+        p_meshactivity_username.text = ParticleCloudSDK.getCloud().loggedInUsername
+        p_action_close.setOnClickListener { showCloseSetupConfirmation() }
     }
 
     override fun onDestroy() {
