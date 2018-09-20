@@ -254,7 +254,8 @@ class MeshSetupModule(
         joiner.sendJoinNetwork(300000).throwOnErrorOrAbsent()
         val totalMillis = System.currentTimeMillis() - start
         TinkerApplication.appContext?.safeToast(
-                "JoinNetworkReply: device took ${totalMillis/1000}s"
+                "JoinNetworkReply: device took ${totalMillis/1000}s",
+                duration = Toast.LENGTH_LONG
         )
 
         targetJoinedSuccessfully = true
