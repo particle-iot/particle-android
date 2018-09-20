@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
-        android:layout_marginTop="@dimen/setup_header_margin_top"
+        style="@style/p_setup_header_text"
+        android:layout_marginTop="@dimen/p_setup_header_margin_top"
         android:text="@string/select_device_on_the_network"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

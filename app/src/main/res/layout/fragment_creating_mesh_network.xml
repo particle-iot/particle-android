@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
+        style="@style/p_setup_header_text"
         android:text="@string/p_creatingyournetwork_header"
         app:layout_constraintBottom_toTopOf="@+id/progressBar4"
         app:layout_constraintEnd_toEndOf="parent"

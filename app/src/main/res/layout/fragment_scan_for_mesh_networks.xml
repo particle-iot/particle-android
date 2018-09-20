@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
+        style="@style/p_setup_header_text"
         android:layout_marginTop="32dp"
         android:text="Your device is scanning for mesh networks to join"
         app:layout_constraintBottom_toTopOf="@+id/progressBar2"

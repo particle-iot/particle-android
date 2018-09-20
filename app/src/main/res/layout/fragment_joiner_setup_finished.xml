@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
+        style="@style/p_setup_header_text"
         android:layout_marginTop="16dp"
         android:text="@string/congrats_your_device_is_set_up_and_added_to_the_network"
         app:layout_constraintEnd_toEndOf="parent"
