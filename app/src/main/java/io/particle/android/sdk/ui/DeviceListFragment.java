@@ -72,6 +72,7 @@ import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON;
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 import static java.util.Objects.requireNonNull;
@@ -408,7 +409,7 @@ public class DeviceListFragment extends Fragment
         private Drawable defaultBackground;
         private String textFilter = "";
         private List<ParticleDevice.ParticleDeviceType> typeFilters = list(PHOTON, CORE, ELECTRON,
-                RASPBERRY_PI, P1, RED_BEAR_DUO, DIGISTUMP_OAK, BLUZ);
+                XENON, RASPBERRY_PI, P1, RED_BEAR_DUO, DIGISTUMP_OAK, BLUZ);
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
@@ -461,6 +462,11 @@ public class DeviceListFragment extends Fragment
                 case RED_BEAR_DUO:
                     holder.modelName.setText(R.string.red_bear_duo);
                     holder.productImage.setImageResource(R.drawable.red_bear_duo_vector);
+                    break;
+
+                case XENON:
+                    holder.modelName.setText(R.string.product_name_xenon);
+                    holder.productImage.setImageResource(R.drawable.xenon_vector);
                     break;
 
                 default:
