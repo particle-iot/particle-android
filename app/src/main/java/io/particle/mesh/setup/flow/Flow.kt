@@ -126,6 +126,7 @@ class Flow(
 
         bleConnModule.ensureListeningStoppedForBothDevices()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
+        cloudConnModule.ensureTargetDeviceIsNamed()
         ensureShowJoinerSetupFinishedUi()
     }
 
