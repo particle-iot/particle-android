@@ -250,8 +250,8 @@ class MeshSetupModule(
         // FIXME: joining (sometimes?) fails here without a delay.  Revisit this value/try removing later?
         delay(5000)
         val start = System.currentTimeMillis()
-        // FIXME: basically never time out.
-        joiner.sendJoinNetwork(100000).throwOnErrorOrAbsent()
+        // time out after *five minutes* (yep.)
+        joiner.sendJoinNetwork(300000).throwOnErrorOrAbsent()
         val totalMillis = System.currentTimeMillis() - start
         TinkerApplication.appContext?.safeToast(
                 "JoinNetworkReply: device took ${totalMillis/1000}s"
