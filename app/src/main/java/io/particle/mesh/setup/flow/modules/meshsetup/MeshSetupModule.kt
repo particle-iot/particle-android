@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow.modules.meshsetup
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.widget.Toast
 import io.particle.android.sdk.tinker.TinkerApplication
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
@@ -231,9 +232,6 @@ class MeshSetupModule(
 
         val password = targetDeviceMeshNetworkToJoinCommissionerPassword.value!!
         commish.sendAuth(password).throwOnErrorOrAbsent()
-        delay(5000)
-        commish.sendStopCommissioner()
-        delay(5000)
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
         updateCommissionerStarted(true)
 
@@ -243,7 +241,6 @@ class MeshSetupModule(
             is MeshNetworkToJoin.CreateNewNetwork -> throw IllegalStateException()
         }
         val prepJoinerData = joiner.sendPrepareJoiner(networkToJoin).throwOnErrorOrAbsent()
-        delay(5000)
         commish.sendAddJoiner(prepJoinerData.eui64, prepJoinerData.password).throwOnErrorOrAbsent()
         updateTargetJoinedMeshNetwork(true)
 
