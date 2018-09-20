@@ -44,10 +44,12 @@
 
     <drawable name="selectable_background">?attr/selectableItemBackground</drawable>
 
-
     <!-- FIXME: remove these?   -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#00AEEF</color>
+    <color name="colorAccent">@color/p_particle_cyan</color>
+
+    <color name="p_particle_cyan">#00AEEF</color>
+    <color name="p_text_color_primary">#333333</color>
 
 </resources>

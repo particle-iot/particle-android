@@ -122,7 +122,7 @@
             android:label="Mesh Setup"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/p_MeshTheme" />
 
     </application>
 
