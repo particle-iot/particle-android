@@ -1,5 +1,7 @@
 package io.particle.mesh.setup.ui
 
+import android.app.ActionBar
+import android.app.Activity
 import android.app.Application
 import android.arch.lifecycle.*
 import android.os.Bundle
@@ -21,7 +23,14 @@ import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
 import mu.KotlinLogging
+import android.bluetooth.BluetoothAdapter
+import android.content.Intent
+import io.particle.mesh.bluetooth.btAdapter
+import io.particle.mesh.setup.utils.safeToast
 import kotlinx.android.synthetic.main.activity_main.*
+
+
+private const val REQUEST_ENABLE_BT = 42
 
 
 class MeshSetupActivity : AppCompatActivity() {
@@ -44,6 +53,14 @@ class MeshSetupActivity : AppCompatActivity() {
 
         p_meshactivity_username.text = ParticleCloudSDK.getCloud().loggedInUsername
         p_action_close.setOnClickListener { showCloseSetupConfirmation() }
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        if (!btAdapter.isEnabled) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        }
     }
 
     override fun onDestroy() {
