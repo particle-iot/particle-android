@@ -161,6 +161,7 @@ Enjoy!]]></string>
     <string name="p_manualcommissioning_commissioner_candidate_not_on_target_network">This device is not part the network you are trying to join.</string>
     <string name="p_exitsetupconfirmation_exit">Exit setup</string>
     <string name="p_exitsetupconfirmation_content">Exit setup?</string>
+    <string name="p_scancode_title">Pair device with your phone</string>
 
 
 </resources>

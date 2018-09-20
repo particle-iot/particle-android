@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keepScreenOn="true"
-    tools:context=".meshsetup.ui.ScanCodeFragment">
+    android:keepScreenOn="true">
 
+    <TextView
+        android:id="@+id/textView12"
+        style="@style/p_setup_header_text"
+        android:layout_marginBottom="24dp"
+        android:text="@string/p_scancode_title"
+        app:layout_constraintBottom_toTopOf="@id/scanPreview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <io.particle.mesh.setup.barcodescanning.CameraSourcePreview
-        android:id="@+id/firePreview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/scanPreview"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginStart="@dimen/p_setup_header_margin_top"
-        android:layout_marginTop="@dimen/p_setup_header_margin_top"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/p_setup_header_margin_top"
-        app:layout_constraintDimensionRatio="w,3:4"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@id/textView6"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/textView12">
 
         <io.particle.mesh.setup.barcodescanning.GraphicOverlay
-            android:id="@+id/fireFaceOverlay"
+            android:id="@+id/scanPreviewOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
@@ -32,41 +41,15 @@
 
     </io.particle.mesh.setup.barcodescanning.CameraSourcePreview>
 
-
-    <!--<ImageView-->
-    <!--android:id="@+id/scannerView"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginStart="24dp"-->
-    <!--android:layout_marginTop="@dimen/setup_header_margin_top"-->
-    <!--android:layout_marginEnd="24dp"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:scaleType="fitCenter"-->
-    <!--android:src="@drawable/ic_bluetooth_connected_black_24dp"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
     <TextView
         android:id="@+id/textView6"
+        style="@style/p_setup_header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/point_camera_at_qr_code_on_the_device"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firePreview" />
-
-    <Button
-        android:id="@+id/action_cancel"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scanPreview" />
 
 </android.support.constraint.ConstraintLayout>

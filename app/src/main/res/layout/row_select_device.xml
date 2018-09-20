@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="?attr/listPreferredItemHeightLarge"
     android:background="?attr/selectableItemBackground">
 
     <ImageView
@@ -22,6 +22,7 @@
         style="@style/row_two_line_1st_line"
         android:layout_marginStart="16dp"
         android:text="@string/product_name_xenon"
+        android:textSize="@dimen/p_setup_list_row_primary_text_size"
         app:layout_constraintBottom_toTopOf="@id/row_line_2"
         app:layout_constraintStart_toEndOf="@id/row_image" />
 
@@ -31,6 +32,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="20dp"
         android:text="This is a description!"
+        android:textSize="@dimen/p_setup_list_row_secondary_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/row_image" />
 

@@ -26,7 +26,6 @@ import io.particle.mesh.setup.barcodescanning.CameraSourcePreview
 import io.particle.mesh.setup.barcodescanning.GraphicOverlay
 import io.particle.mesh.setup.barcodescanning.barcode.BarcodeScanningProcessor
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_scan_code.view.*
 import mu.KotlinLogging
 import java.io.IOException
 import java.util.*
@@ -112,9 +111,8 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_scan_code, container, false)
 
-        preview = root.findViewById(R.id.firePreview)
-        graphicOverlay = root.findViewById(R.id.fireFaceOverlay)
-        root.action_cancel.setOnClickListener{ requireActivity().finish() }
+        preview = root.findViewById(R.id.scanPreview)
+        graphicOverlay = root.findViewById(R.id.scanPreviewOverlay)
 
         return root
     }

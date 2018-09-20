@@ -66,11 +66,11 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
 
 //        setContentView(R.layout.activity_live_preview)
 
-        preview = findViewById(R.id.firePreview)
+        preview = findViewById(R.id.scanPreview)
         if (preview == null) {
             Log.d(TAG, "Preview is null")
         }
-        graphicOverlay = findViewById(R.id.fireFaceOverlay)
+        graphicOverlay = findViewById(R.id.scanPreviewOverlay)
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null")
         }

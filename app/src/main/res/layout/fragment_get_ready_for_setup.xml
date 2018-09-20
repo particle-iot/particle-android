@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meshsetup.ui.GetReadyForSetupFragment">
+    tools:context="io.particle.android.sdk.devicesetup.ui.GetReadyActivity">
 
     <TextView
         android:id="@+id/setup_header_text"
         style="@style/p_setup_header_text"
-        android:layout_marginTop="@dimen/p_setup_header_margin_top"
         android:text="@string/get_your_xenon_ready_for_setup"
+        app:layout_constraintBottom_toTopOf="@id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textView"
@@ -22,7 +23,9 @@
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
+        app:layout_constraintTop_toBottomOf="@+id/setup_header_text"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textView2"
@@ -37,27 +40,40 @@
         android:id="@+id/textView3"
         style="@style/setup_step_text"
         android:text="@string/confirm_your_device_is_blinking_blue"
-        app:layout_constraintBottom_toTopOf="@+id/videoView"
+        app:layout_constraintBottom_toTopOf="@+id/videoViewWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+    <FrameLayout
+        android:id="@+id/videoViewWrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/action_next"
+        app:layout_constraintDimensionRatio="6:5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="24dp" />
+
+    </FrameLayout>
 
     <Button
         android:id="@id/action_next"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/p_mesh_bottom_element_margin"
         android:text="@string/my_device_is_blinking_blue"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
