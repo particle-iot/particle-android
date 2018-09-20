@@ -55,6 +55,34 @@ class MeshSetupActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        showCloseSetupConfirmation(true)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
+            // FIXME: inform the user why we're exiting?
+            finish()
+        }
+    }
+
+    private fun showCloseSetupConfirmation(fromBackPress: Boolean = false) {
+        MaterialDialog.Builder(this)
+                .content(R.string.p_exitsetupconfirmation_content)
+                .positiveText(R.string.p_exitsetupconfirmation_exit)
+                .negativeText(android.R.string.cancel)
+                .onPositive { _, _ ->
+                    if (fromBackPress) {
+                        super.onBackPressed()
+                    } else {
+                        finish()
+                    }
+                }
+                .show()
+    }
+
     private fun onDialogSpecReceived(spec: DialogSpec?) {
         log.debug { "onDialogSpecReceived()" }
         if (spec == null) {
