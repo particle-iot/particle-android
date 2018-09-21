@@ -34,11 +34,11 @@ ext {
 
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName project.version
         consumerProguardFiles 'consumer-proguard-rules.pro'
