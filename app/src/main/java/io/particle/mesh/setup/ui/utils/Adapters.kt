@@ -11,13 +11,14 @@ fun <T, I> easyDiffUtilCallback(idFieldGetter: (T) -> I): DiffUtil.ItemCallback<
 
     return object: DiffUtil.ItemCallback<T>() {
 
+        override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
+            return oldItem == newItem
+        }
+
         override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
             return idFieldGetter(oldItem) == idFieldGetter(newItem)
         }
 
-        override fun areContentsTheSame(oldItem: T?, newItem: T?): Boolean {
-            return oldItem == newItem
-        }
     }
 }
 
