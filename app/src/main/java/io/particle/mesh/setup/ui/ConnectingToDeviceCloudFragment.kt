@@ -3,13 +3,16 @@ package io.particle.mesh.setup.ui
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.annotation.IdRes
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -39,15 +42,5 @@ class ConnectingToDeviceCloudFragment : BaseMeshSetupFragment() {
                 this@ConnectingToDeviceCloudFragment,
                 Observer { markProgress(it, progressStage) }
         )
-    }
-
-    private fun markProgress(update: Boolean?, @IdRes progressStage: Int) {
-        if (!update.truthy()) {
-            return
-        }
-        launch(UI) {
-            val tv: TextView? = view?.findViewById(progressStage)
-            tv?.text = "✓ " + tv?.text
-        }
     }
 }

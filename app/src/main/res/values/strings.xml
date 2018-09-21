@@ -110,9 +110,9 @@ Enjoy!]]></string>
     <string name="p_connectingtodevicecloud_step_1">Connecting to the internet via Ethernet</string>
     <string name="p_connectingtodevicecloud_step_2">Starting a secure session with the Device Cloud</string>
     <string name="p_connectingtodevicecloud_step_3">Connected to the Particle Device Cloud</string>
-    <string name="p_gatewaysetupfinished_title">Congrats! Your device is all set up!</string>
-    <string name="p_action_continue_to_mesh_setup">Continue onto Mesh setup</string>
-    <string name="p_gatewaysetupfinished_using_device_in_a_mesh_network">Using this device in a mesh network?</string>
+    <string name="p_gatewaysetupfinished_title">Your network has been set up with this device acting as a gateway</string>
+    <string name="p_action_add_next_mesh_setup">Add next mesh setup</string>
+    <string name="p_gatewaysetupfinished_text_2">Adding more devices to your mesh network</string>
     <string name="p_gatewaysetupfinished_using_as_standalone_device">Using as a standalone device?</string>
     <string name="p_action_start_tinkering">Start tinkering</string>
     <string name="p_newmeshnetworkname_header">Give your network a name</string>
@@ -162,6 +162,7 @@ Enjoy!]]></string>
     <string name="p_exitsetupconfirmation_exit">Exit setup</string>
     <string name="p_exitsetupconfirmation_content">Exit setup?</string>
     <string name="p_scancode_title">Pair device with your phone</string>
+    <string name="p_pairingprogress_congrats">Congrats</string>
 
 
 </resources>

@@ -202,17 +202,16 @@ class MeshSetupModule(
             throw FlowException("Error while collecting mesh network password")
         }
 
-        // FIXME: re-introduce this
-//        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
-//        val sendAuthResult = commissioner.sendAuth(password)
-//        when(sendAuthResult) {
-//            is Result.Present -> return
-//            is Result.Error,
-//            is Result.Absent -> {
-//                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
-//                throw FlowException("Bad commissioner password")
-//            }
-//        }
+        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
+        val sendAuthResult = commissioner.sendAuth(password)
+        when(sendAuthResult) {
+            is Result.Present -> return
+            is Result.Error,
+            is Result.Absent -> {
+                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
+                throw FlowException("Bad commissioner password")
+            }
+        }
     }
 
     suspend fun ensureMeshNetworkJoinedUiShown() {
@@ -230,8 +229,7 @@ class MeshSetupModule(
         val joiner = targetXceiver!!
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
 
-        val password = targetDeviceMeshNetworkToJoinCommissionerPassword.value!!
-        commish.sendAuth(password).throwOnErrorOrAbsent()
+        // no need to send auth msg here; we already authenticated when the password was collected
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
         updateCommissionerStarted(true)
 

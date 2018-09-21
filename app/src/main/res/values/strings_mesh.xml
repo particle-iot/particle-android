@@ -16,7 +16,7 @@
     <string name="confirm_your_device_is_blinking_blue">Confirm your device is blinking blue</string>
     <string name="p_action_scan_data_matrix">Scan data matrix</string>
     <string name="pair_xenon_with_your_phone">Pair Xenon with your phone</string>
-    <string name="p_scancodeintro_text_1">Find the data matrix printed on the front of your device.  Use your phone's camera to scan the code.</string>
+    <string name="p_scancodeintro_text_1">Find the data matrix printed on the front of your device.  Use your phone\'s camera to scan the code.</string>
     <string name="type_serial_number"><u>type serial number</u></string>
     <string name="having_trouble_scanning">Having trouble scanning?</string>
     <string name="pair_with_device">Pair with device</string>

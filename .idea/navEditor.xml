@@ -25,11 +25,6 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="action_global_checkEthernetGatewayFragment">
-                    <value>
-                      <LayoutPositions />
-                    </value>
-                  </entry>
                   <entry key="action_global_connectingToDeviceCloudFragment">
                     <value>
                       <LayoutPositions />
@@ -103,18 +98,6 @@
                   <entry key="action_global_setupFinishedFragment">
                     <value>
                       <LayoutPositions />
-                    </value>
-                  </entry>
-                  <entry key="checkEthernetGatewayFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="280" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
                     </value>
                   </entry>
                   <entry key="connectingToDeviceCloudFragment">

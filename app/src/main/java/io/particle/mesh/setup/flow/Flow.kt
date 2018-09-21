@@ -90,12 +90,11 @@ class Flow(
         log.debug { "doEthernetSubflow()" }
         bleConnModule.ensureShowPairingSuccessful()
 
-        cloudConnModule.ensureCheckGatewayUiShown()
         cloudConnModule.ensureConnectingToDeviceCloudUiShown()
         ensureTargetDeviceSetSetupDone(true)
         bleConnModule.ensureListeningStoppedForBothDevices()
         // FIXME: remove all unnecessary delays here
-        delay(2000)
+        delay(1000)
         cloudConnModule.ensureEthernetHasIP()
         cloudConnModule.ensureConnectedToCloud()
         cloudConnModule.ensureTargetDeviceClaimedByUser()

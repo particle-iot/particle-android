@@ -94,11 +94,6 @@
     <action android:id="@+id/action_global_joiningMeshNetworkProgressFragment" app:destination="@id/joiningMeshNetworkProgressFragment" />
     <action android:id="@+id/action_global_nameYourDeviceFragment" app:destination="@id/nameYourDeviceFragment" /><action android:id="@+id/action_global_setupFinishedFragment" app:destination="@id/setupFinishedFragment"/>
     <fragment
-        android:id="@+id/checkEthernetGatewayFragment"
-        android:name="io.particle.mesh.setup.ui.CheckEthernetGatewayFragment"
-        android:label="fragment_check_ethernet_gateway"
-        tools:layout="@layout/fragment_check_ethernet_gateway" ></fragment><action android:id="@+id/action_global_checkEthernetGatewayFragment" app:destination="@id/checkEthernetGatewayFragment"/>
-    <fragment
         android:id="@+id/connectingToDeviceCloudFragment"
         android:name="io.particle.mesh.setup.ui.ConnectingToDeviceCloudFragment"
         android:label="fragment_connecting_to_device_cloud"
