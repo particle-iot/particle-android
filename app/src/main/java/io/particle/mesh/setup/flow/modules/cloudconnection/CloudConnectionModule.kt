@@ -34,10 +34,9 @@ class CloudConnectionModule(
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
-    val connectToDeviceCloudButtonClicked: LiveData<Boolean?> = MutableLiveData()
     val meshRegisteredWithCloud: LiveData<Boolean?> = MutableLiveData()
 
-    var claimCode: String? = null // FIXME: make this a LiveData?  Where is it used?
+    var claimCode: String? = null
 
     private var checkedIsTargetClaimedByUser = false
     private var connectedToMeshNetworkAndOwnedUiShown = false
@@ -59,7 +58,6 @@ class CloudConnectionModule(
                 targetDeviceNameToAssignLD,
                 isTargetDeviceNamedLD,
                 targetDeviceConnectedToCloud,
-                connectToDeviceCloudButtonClicked,
                 meshRegisteredWithCloud
         )
         for (ld in setToNulls) {
@@ -80,11 +78,6 @@ class CloudConnectionModule(
     fun updateTargetDeviceNameToAssign(name: String) {
         log.info { "updateTargetDeviceNameToAssign(): $name" }
         targetDeviceNameToAssignLD.castAndPost(name)
-    }
-
-    fun updateConnectToDeviceCloudButtonClicked(enteredConnectingScreen: Boolean) {
-        log.info { "updateUserEnteredConnectingToDeviceCloudScreen()" }
-        connectToDeviceCloudButtonClicked.castAndPost(enteredConnectingScreen)
     }
 
     suspend fun ensureClaimCodeFetched() {
@@ -152,7 +145,7 @@ class CloudConnectionModule(
 
     suspend fun ensureEthernetHasIP() {
         log.info { "ensureEthernetHasIP()" }
-        // FIXME: remove?
+
         suspend fun findEthernetInterface(): Network.InterfaceEntry? {
             val ifaceListReply = targetXceiver!!.sendGetInterfaceList().throwOnErrorOrAbsent()
             return ifaceListReply.interfacesList.firstOrNull { it.type == InterfaceType.ETHERNET }
@@ -186,20 +179,6 @@ class CloudConnectionModule(
         flowManager.clearDialogResult()
         delay(500)
         throw FlowException("Ethernet connection not plugged in; user prompted.")
-    }
-
-    suspend fun ensureCheckGatewayUiShown() {
-        log.info { "ensureCheckGatewayUiShown()" }
-        if (checkEthernetGatewayUiShown) {
-            // we've already shown this screen; bail.
-            return
-        }
-        flowManager.navigate(R.id.action_global_checkEthernetGatewayFragment)
-        checkEthernetGatewayUiShown = true
-        val ldSuspender = liveDataSuspender({connectToDeviceCloudButtonClicked})
-        withContext(UI) {
-            ldSuspender.awaitResult()
-        }
     }
 
     suspend fun ensureConnectingToDeviceCloudUiShown() {
