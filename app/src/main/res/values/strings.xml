@@ -163,6 +163,7 @@ Enjoy!]]></string>
     <string name="p_exitsetupconfirmation_content">Exit setup?</string>
     <string name="p_scancode_title">Pair device with your phone</string>
     <string name="p_pairingprogress_congrats">Congrats</string>
+    <string name="p_action_next">next</string>
 
 
 </resources>

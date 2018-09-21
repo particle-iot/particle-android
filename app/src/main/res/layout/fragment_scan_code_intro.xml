@@ -18,6 +18,7 @@
     <TextView
         android:id="@+id/textView"
         style="@style/setup_step_text"
+        android:layout_marginBottom="64dp"
         android:text="@string/p_scancodeintro_text_1"
         app:layout_constraintBottom_toTopOf="@+id/mainImage"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,9 +31,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="24dp"
-        android:src="@drawable/xenon_vector"
+        android:src="@drawable/scan_data_matrix_android"
         app:layout_constraintBottom_toTopOf="@+id/action_next"
-        app:layout_constraintDimensionRatio="h,6:5"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
