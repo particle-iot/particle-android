@@ -27,6 +27,7 @@
         app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
 
     <android.support.design.widget.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/networkNameInputLayout"
         android:layout_width="395dp"
         android:layout_height="wrap_content"

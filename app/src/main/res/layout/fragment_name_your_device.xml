@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/deviceNameInputLayout"
         android:layout_width="395dp"
         android:layout_height="wrap_content"
