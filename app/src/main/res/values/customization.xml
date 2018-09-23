@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="normal_text_font_name">fonts/avenirnext_regular.ttf</string>
+    <string name="bold_text_font_name">fonts/avenirnext_demibold.ttf</string>
+    <string name="italic_text_font_name">fonts/avenirnext_italic.ttf</string>
+    <string name="header_text_font_name">fonts/avenirnext_ultralight.ttf</string>
+
+</resources>
