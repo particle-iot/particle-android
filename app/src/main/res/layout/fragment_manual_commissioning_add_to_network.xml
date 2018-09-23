@@ -4,20 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meshsetup.ui.ManualCommissioningAddToNetworkFragment">
+    tools:context=".meshsetup.ui.ManualCommissioningAddToNetworkFragment"
+    tools:ignore="MissingPrefix">
 
     <TextView
         android:id="@+id/setup_header_text"
         style="@style/p_setup_header_text"
         android:layout_marginTop="@dimen/p_setup_header_margin_top"
+        android:layout_marginBottom="40dp"
         android:text="@string/add_xenon_to_mesh_network"
+        app:layout_constraintBottom_toTopOf="@id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textView"
         style="@style/setup_step_text"
+        fontPath="@string/bold_text_font_name"
         android:text="@string/find_a_device_that_is_already_part_of_the_mesh_network"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +33,7 @@
     <TextView
         android:id="@+id/textView2"
         style="@style/setup_step_text"
+        fontPath="@string/bold_text_font_name"
         android:text="Press and hold the MODE button for 3 seconds"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,6 +43,8 @@
     <TextView
         android:id="@+id/textView3"
         style="@style/setup_step_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_marginBottom="48dp"
         android:text="@string/confirm_the_device_is_blinking_blue_and_your_phone_remains_close"
         app:layout_constraintBottom_toTopOf="@+id/videoView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,8 +53,8 @@
 
     <VideoView
         android:id="@+id/videoView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         app:layout_constraintBottom_toTopOf="@+id/action_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +63,12 @@
     <Button
         android:id="@id/action_next"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/my_device_is_blinking_blue"
+        android:text="@string/p_action_next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -36,6 +36,7 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
 
         progressBar.visibility = View.GONE
         state_success.visibility = View.VISIBLE
+        p_pairingprogress_congrats_text.visibility = View.VISIBLE
 
         val xceiver = flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceTransceiverLD.value
         val msg = "Successfully paired with device ${xceiver?.deviceName ?: '?'}"

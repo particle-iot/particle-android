@@ -1,9 +1,10 @@
 package io.particle.mesh.setup.ui
 
-import android.app.ActionBar
 import android.app.Activity
 import android.app.Application
 import android.arch.lifecycle.*
+import android.bluetooth.BluetoothAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
@@ -14,6 +15,8 @@ import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.ui.BaseActivity
+import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.nonNull
@@ -22,18 +25,14 @@ import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
-import mu.KotlinLogging
-import android.bluetooth.BluetoothAdapter
-import android.content.Intent
-import io.particle.mesh.bluetooth.btAdapter
-import io.particle.mesh.setup.utils.safeToast
 import kotlinx.android.synthetic.main.activity_main.*
+import mu.KotlinLogging
 
 
 private const val REQUEST_ENABLE_BT = 42
 
 
-class MeshSetupActivity : AppCompatActivity() {
+class MeshSetupActivity : BaseActivity() {
 
     private val log = KotlinLogging.logger {}
 
@@ -73,8 +72,7 @@ class MeshSetupActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-//        super.onBackPressed()
-        showCloseSetupConfirmation(true)
+        showCloseSetupConfirmation()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,18 +83,12 @@ class MeshSetupActivity : AppCompatActivity() {
         }
     }
 
-    private fun showCloseSetupConfirmation(fromBackPress: Boolean = false) {
+    private fun showCloseSetupConfirmation() {
         MaterialDialog.Builder(this)
                 .content(R.string.p_exitsetupconfirmation_content)
                 .positiveText(R.string.p_exitsetupconfirmation_exit)
                 .negativeText(android.R.string.cancel)
-                .onPositive { _, _ ->
-                    if (fromBackPress) {
-                        super.onBackPressed()
-                    } else {
-                        finish()
-                    }
-                }
+                .onPositive { _, _ -> finish() }
                 .show()
     }
 
