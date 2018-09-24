@@ -64,17 +64,14 @@
 
     <Button
         android:id="@id/action_next"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@style/p_mesh_button_style"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="@dimen/p_mesh_bottom_element_margin"
         android:text="@string/p_action_next"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

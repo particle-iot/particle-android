@@ -30,11 +30,30 @@
         android:id="@id/row_line_2"
         style="@style/row_two_line_2nd_line"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:text="This is a description!"
         android:textSize="@dimen/p_setup_list_row_secondary_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/row_image" />
+
+    <ImageView
+        android:id="@+id/p_selectdevice_capability1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/row_line_1"
+        app:layout_constraintTop_toTopOf="@id/row_line_1"
+        app:srcCompat="@drawable/p_mesh_ic_capability_mesh" />
+
+    <ImageView
+        android:id="@+id/p_selectdevice_capability2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/p_selectdevice_capability1"
+        app:layout_constraintTop_toTopOf="@id/row_line_1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

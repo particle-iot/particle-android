@@ -118,6 +118,7 @@ dependencies {
     releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.tolstykh.textviewrichdrawable:textview-rich-drawable:0.3.2'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     // using snapshot to unbreak Butterknife with AndroidX

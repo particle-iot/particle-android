@@ -73,9 +73,8 @@
 
     <Button
         android:id="@id/action_next"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@style/p_mesh_button_style"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/p_action_scan_data_matrix"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -76,9 +76,8 @@
 
     <Button
         android:id="@id/action_next"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="328dp"
-        android:layout_height="wrap_content"
+        style="@style/p_mesh_button_style"
+        android:layout_width="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
