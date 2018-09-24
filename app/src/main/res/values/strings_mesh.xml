@@ -31,9 +31,9 @@
     <string name="this_device_will_act_as_the_commissioner">This device will act as the <i>commissioner</i>, to allow the Xenon to join the mesh network.</string>
     <string name="scanning_for_nearby_devices">Scanning for nearby devices</string>
     <string name="enter_network_password">Enter network password</string>
-    <string name="this_is_the_password_you_set_when_this_mesh_network_was_first_created">This is the password you set when this mesh network was first created. This password is required to authenticate new devices getting added to the network.</string>
+    <string name="this_is_the_password_you_set_when_this_mesh_network_was_first_created">This is the password you set when this mesh network was first created. This password is required to securely add new devices to a mesh network.</string>
     <string name="join_network">Join Network</string>
-    <string name="password">password</string>
+    <string name="p_enterpassword_network_password">Network password</string>
     <string name="joining_mesh_network">Joining mesh network</string>
     <string name="requesting_permission_to_add_to_mesh_network">Requesting permission to add Xenon to mesh network</string>
     <string name="adding_the_xenon_to_the_mesh_network">Adding the Xenon to the mesh network</string>
