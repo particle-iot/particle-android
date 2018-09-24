@@ -93,8 +93,7 @@ class Flow(
         cloudConnModule.ensureConnectingToDeviceCloudUiShown()
         ensureTargetDeviceSetSetupDone(true)
         bleConnModule.ensureListeningStoppedForBothDevices()
-        // FIXME: remove all unnecessary delays here
-        delay(1000)
+        delay(3000)  // give it a moment to get an IP
         cloudConnModule.ensureEthernetHasIP()
         cloudConnModule.ensureConnectedToCloud()
         cloudConnModule.ensureTargetDeviceClaimedByUser()

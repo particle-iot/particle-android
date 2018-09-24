@@ -106,10 +106,10 @@ Enjoy!]]></string>
     <string name="p_checkethernetgateway_device_cloud_intro">The Device Cloud is (larger network at play here, introduce the concept)</string>
     <string name="p_checkethernetgateway_ensure_featherwing_is_plugged_in">Make sure an Ethernet Featherwing is plugged into the Xenon, and an ethernet cable is plugged into the Featherwing.</string>
     <string name="p_action_connect_to_device_cloud">Connect to device cloud</string>
-    <string name="p_connectingtodevicecloud_title">Connecting to Device Cloud</string>
+    <string name="p_connectingtodevicecloud_title">Your Xenon is connecting to the Particle Device Cloud</string>
     <string name="p_connectingtodevicecloud_step_1">Connecting to the internet via Ethernet</string>
-    <string name="p_connectingtodevicecloud_step_2">Starting a secure session with the Device Cloud</string>
-    <string name="p_connectingtodevicecloud_step_3">Connected to the Particle Device Cloud</string>
+    <string name="p_connectingtodevicecloud_step_2">Starting a secure session with the Particle Device Cloud</string>
+    <string name="p_connectingtodevicecloud_step_3">Connected successfully!</string>
     <string name="p_gatewaysetupfinished_title">Your network has been set up with this device acting as a gateway</string>
     <string name="p_action_add_next_mesh_setup">Add next mesh setup</string>
     <string name="p_gatewaysetupfinished_text_2">Adding more devices to your mesh network</string>
@@ -118,7 +118,7 @@ Enjoy!]]></string>
     <string name="p_newmeshnetworkname_header">Give your network a name</string>
     <string name="p_newmeshnetworkname_subheader_1">Easily identify your network once its created</string>
     <string name="p_action_next_set_password">Next: set password</string>
-    <string name="p_newmeshnetworkname_name_hint_text">name</string>
+    <string name="p_newmeshnetworkname_name_hint_text">Network name</string>
     <string name="p_newmeshnetworkpassword_title">Set network admin password</string>
     <string name="p_newmeshnetworkpassword_subheader1">KEEP THIS PASSWORD SAFE\n\nYou\'ll need this password each time you want to add a new device to this mesh network</string>
     <string name="p_newmeshnetworkpassword_password_hint_text">password</string>
@@ -172,5 +172,8 @@ Enjoy!]]></string>
     <string name="p_action_im_done">I\'m done</string>
     <string name="p_action_set_up_next_device">Set up next device</string>
 
+    <string name="p_scanfornetworks_gateway_flow_title">Your Xenon + Ethernet Featherwing will act as a gateway in a mesh network</string>
+    <string name="p_newmeshnetworkname_hintbox_content">Name your network something you will remember to help you easily identify it later</string>
+    <string name="p_action_create_network">Create network</string>
 
 </resources>

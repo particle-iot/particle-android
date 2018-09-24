@@ -227,6 +227,10 @@ class MeshSetupModule(
         val joiner = targetXceiver!!
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
 
+        // ensure the commissioner was stopped
+        commish.sendStopCommissioner().throwOnErrorOrAbsent()
+        delay(1000) // FIXME: verify that we need this
+
         // no need to send auth msg here; we already authenticated when the password was collected
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
         updateCommissionerStarted(true)

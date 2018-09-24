@@ -34,7 +34,10 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
         root.action_create_new_network.setOnClickListener {
             fm.meshSetupModule.onUserSelectedCreateNewNetwork()
         }
-        if (!fm.meshSetupModule.showNewNetworkOptionInScanner) {
+
+        if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
+            root.setup_header_text.setText(R.string.p_scanfornetworks_gateway_flow_title)
+        } else {
             root.action_create_new_network.visibility = View.GONE
         }
         return root

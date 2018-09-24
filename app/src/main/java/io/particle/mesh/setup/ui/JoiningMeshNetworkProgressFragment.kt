@@ -1,18 +1,15 @@
 package io.particle.mesh.setup.ui
 
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.annotation.IdRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import io.particle.mesh.common.truthy
+import androidx.annotation.IdRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 
 class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
@@ -36,15 +33,5 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
                 this@JoiningMeshNetworkProgressFragment,
                 Observer { markProgress(it, progressStage) }
         )
-    }
-
-    private fun markProgress(update: Boolean?, @IdRes progressStage: Int) {
-        if (!update.truthy()) {
-            return
-        }
-        launch(UI) {
-            val tv: TextView = view!!.findViewById(progressStage)
-            tv.text = "✓ " + tv.text
-        }
     }
 }
