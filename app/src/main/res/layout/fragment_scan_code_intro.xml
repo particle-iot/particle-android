@@ -38,10 +38,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <Button
+    <com.tolstykh.textviewrichdrawable.ButtonRichDrawable
         android:id="@id/action_next"
         style="@style/p_mesh_button_style"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:drawableStartVector="@drawable/p_mesh_ic_camera_24dp"
         android:layout_margin="16dp"
         android:text="@string/p_action_scan_data_matrix"
         app:layout_constraintBottom_toBottomOf="parent"
