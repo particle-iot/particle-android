@@ -1,8 +1,8 @@
 package io.particle.mesh.setup.flow
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.support.annotation.IdRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
@@ -92,8 +92,8 @@ class FlowManager(
             log.info { "New commissioner barcode value set: $it" }
         }
 
-        var commissionerBarcodeToUse: BarcodeData? = null
-        var commissionerTransceiverToUse: ProtocolTransceiver? = null
+        var commissionerBarcodeToUse: BarcodeData?
+        var commissionerTransceiverToUse: ProtocolTransceiver?
         if (bleConnectionModule.commissionerTransceiverLD.value != null) {
             log.info { "Retaining original commissioner" }
             commissionerBarcodeToUse = bleConnectionModule.commissionerBarcodeLD.value

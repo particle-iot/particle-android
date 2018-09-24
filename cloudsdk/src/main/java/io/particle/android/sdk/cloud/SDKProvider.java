@@ -1,8 +1,8 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;

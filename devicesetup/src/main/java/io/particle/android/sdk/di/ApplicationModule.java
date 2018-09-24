@@ -2,7 +2,7 @@ package io.particle.android.sdk.di;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import javax.inject.Singleton;
 

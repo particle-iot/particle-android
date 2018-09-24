@@ -1,6 +1,6 @@
 package io.particle.android.sdk.di;
 
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import dagger.Subcomponent;
 import io.particle.android.sdk.accountsetup.LoginActivity;

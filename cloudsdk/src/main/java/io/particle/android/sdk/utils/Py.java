@@ -1,6 +1,6 @@
 package io.particle.android.sdk.utils;
 
-import android.support.v4.util.ArrayMap;
+import androidx.collection.ArrayMap;
 
 import org.json.JSONArray;
 

@@ -3,9 +3,9 @@ package io.particle.android.sdk.cloud;
 
 import android.net.Uri;
 import android.net.Uri.Builder;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
-import android.support.v4.util.LongSparseArray;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+import androidx.collection.LongSparseArray;
 
 import com.google.gson.Gson;
 

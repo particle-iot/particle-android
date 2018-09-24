@@ -1,9 +1,9 @@
 package io.particle.mesh.common.android.livedata
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
-import android.support.annotation.CallSuper
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.annotation.CallSuper
 import io.particle.mesh.common.AsyncWorkSuspender
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import mu.KotlinLogging

@@ -185,7 +185,7 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/tinker_logo"
         android:layout_width="135dp"
         android:layout_height="wrap_content"

@@ -1,14 +1,13 @@
 package io.particle.mesh.setup.ui
 
 import android.os.Bundle
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
@@ -82,7 +81,7 @@ private data class DeviceData(
 }
 
 
-private class DeviceDataHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
+private class DeviceDataHolder(var rowRoot: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(rowRoot) {
     val rowLine1 = rowRoot.row_line_1
     val rowLine2 = rowRoot.row_line_2
     val image = rowRoot.row_image

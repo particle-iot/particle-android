@@ -1,8 +1,8 @@
 package io.particle.mesh.setup.ui
 
 
-import android.arch.lifecycle.DefaultLifecycleObserver
-import android.arch.lifecycle.LifecycleOwner
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/header_text"
         fontPath="@string/bold_text_font_name"
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:textColor="@android:color/black"
         tools:text="Particle.function()"/>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/header_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

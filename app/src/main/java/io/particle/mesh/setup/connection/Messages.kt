@@ -1,8 +1,8 @@
 package io.particle.mesh.setup.connection
 
 
-import android.support.annotation.MainThread
-import android.support.v4.util.SparseArrayCompat
+import androidx.annotation.MainThread
+import androidx.collection.SparseArrayCompat
 import com.google.protobuf.AbstractMessage
 import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
@@ -167,7 +167,7 @@ class ProtocolTransceiver internal constructor(
 ) {
 
     private val log = KotlinLogging.logger {}
-    private val requestCallbacks = SparseArrayCompat<(DeviceResponse?) -> Unit>()
+    private val requestCallbacks = androidx.collection.SparseArrayCompat<(DeviceResponse?) -> Unit>()
 
     val isConnected: Boolean
         get() = connection.isConnected

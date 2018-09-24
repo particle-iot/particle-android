@@ -1,29 +1,18 @@
 package io.particle.mesh.setup.ui
 
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.annotation.IdRes
+import androidx.annotation.IdRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
-import io.particle.android.sdk.cloud.ParticleCloud
-import io.particle.android.sdk.cloud.ParticleCloudSDK
-import io.particle.firmwareprotos.ctrl.Common
-import io.particle.mesh.common.QATool
-import io.particle.mesh.common.Result
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import mu.KotlinLogging
-import java.io.IOException
 
 
 class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {

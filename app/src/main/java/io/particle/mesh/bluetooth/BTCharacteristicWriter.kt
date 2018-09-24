@@ -1,13 +1,13 @@
 package io.particle.mesh.bluetooth
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Handler
 import android.os.HandlerThread
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import mu.KotlinLogging

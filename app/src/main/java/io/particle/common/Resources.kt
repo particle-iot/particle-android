@@ -2,7 +2,7 @@ package io.particle.common
 
 import android.content.Context
 import android.net.Uri
-import android.support.annotation.RawRes
+import androidx.annotation.RawRes
 
 
 fun Context.buildRawResourceUri(@RawRes rawRes: Int): Uri {

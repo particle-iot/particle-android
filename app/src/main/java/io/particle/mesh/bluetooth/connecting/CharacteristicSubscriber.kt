@@ -3,7 +3,7 @@ package io.particle.mesh.bluetooth.connecting
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
-import android.support.annotation.MainThread
+import androidx.annotation.MainThread
 import io.particle.mesh.common.QATool
 import mu.KotlinLogging
 import java.util.*

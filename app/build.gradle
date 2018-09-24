@@ -124,21 +124,20 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    implementation "com.android.support:appcompat-v7:$supportVersions"
-//    implementation 'com.google.android.material:material:1.0.0-rc02'
-    implementation "com.android.support:design:28.0.0-rc02"
-    implementation "com.android.support:support-v13:$supportVersions"
-    implementation "com.android.support:recyclerview-v7:$supportVersions"
-    implementation "com.android.support:support-fragment:$supportVersions"
-    implementation "com.android.support:support-annotations:$supportVersions"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.android.material:material:1.0.0-rc02'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.fragment:fragment:1.0.0'
+    implementation 'androidx.annotation:annotation:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.multidex:multidex:2.0.0'
 
-    implementation 'android.arch.lifecycle:common-java8:1.1.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    implementation "android.arch.lifecycle:livedata-core:1.1.1"
-    implementation 'android.arch.lifecycle:runtime:1.1.1'
-    implementation 'androidx.core:core-ktx:0.3'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation "androidx.lifecycle:lifecycle-livedata-core:2.0.0"
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
+    implementation 'androidx.core:core-ktx:1.0.0-rc02'
 
     def nav_version = "1.0.0-alpha06"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"

@@ -1,9 +1,9 @@
 package io.particle.android.sdk.ui;
 
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AlertDialog;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;

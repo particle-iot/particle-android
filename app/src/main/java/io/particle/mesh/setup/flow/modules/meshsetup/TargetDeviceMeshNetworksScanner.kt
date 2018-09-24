@@ -1,8 +1,8 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.support.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.annotation.WorkerThread
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread

@@ -1,11 +1,11 @@
 package io.particle.mesh.bluetooth.connecting
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattService
-import android.support.annotation.CheckResult
-import android.support.annotation.MainThread
+import androidx.annotation.CheckResult
+import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.GATTStatusCode
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.common.android.SimpleLifecycleOwner

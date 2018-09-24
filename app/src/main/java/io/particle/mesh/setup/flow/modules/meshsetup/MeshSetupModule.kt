@@ -1,7 +1,7 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.widget.Toast
 import io.particle.android.sdk.tinker.TinkerApplication
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
@@ -22,11 +22,9 @@ import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
-import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
-import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
 import java.lang.IllegalStateException
 

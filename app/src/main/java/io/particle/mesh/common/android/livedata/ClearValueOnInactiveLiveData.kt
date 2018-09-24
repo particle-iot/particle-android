@@ -1,6 +1,6 @@
 package io.particle.mesh.common.android.livedata
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import mu.KotlinLogging
 
 class ClearValueOnInactiveLiveData<T> : MutableLiveData<T>() {

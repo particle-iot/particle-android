@@ -2,20 +2,19 @@ package io.particle.mesh.setup.ui
 
 
 import android.Manifest
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback
-import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.particle.android.sdk.cloud.ParticleCloud
@@ -37,7 +36,7 @@ private const val PERMISSION_REQUESTS = 1
 class ScanViewModel : ViewModel() {
 
     companion object {
-        fun getViewModel(activity: FragmentActivity): ScanViewModel {
+        fun getViewModel(activity: androidx.fragment.app.FragmentActivity): ScanViewModel {
             return ViewModelProviders.of(activity).get(ScanViewModel::class.java)
         }
     }

@@ -2,7 +2,7 @@ package io.particle.android.sdk.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import com.segment.analytics.Analytics;
 import com.segment.analytics.Properties;

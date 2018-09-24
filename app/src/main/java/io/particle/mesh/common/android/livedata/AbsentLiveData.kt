@@ -1,7 +1,7 @@
 package io.particle.mesh.common.android.livedata
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 
 /**
  * A LiveData which has no data yet, for use with things like [Transformations.switchMap].

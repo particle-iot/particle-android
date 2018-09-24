@@ -1,7 +1,7 @@
 package io.particle.mesh.setup.ui.utils
 
-import android.support.annotation.LayoutRes
-import android.support.v7.util.DiffUtil
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

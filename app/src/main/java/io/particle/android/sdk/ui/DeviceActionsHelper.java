@@ -3,8 +3,8 @@ package io.particle.android.sdk.ui;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import android.widget.PopupMenu;
 
 import io.particle.android.sdk.cloud.ParticleDevice;

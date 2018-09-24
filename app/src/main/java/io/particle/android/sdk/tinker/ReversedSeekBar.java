@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 
-public class ReversedSeekBar extends android.support.v7.widget.AppCompatSeekBar {
+public class ReversedSeekBar extends androidx.appcompat.widget.AppCompatSeekBar {
 
     public ReversedSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);

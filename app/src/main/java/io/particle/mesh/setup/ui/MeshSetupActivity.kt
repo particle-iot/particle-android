@@ -2,14 +2,11 @@ package io.particle.mesh.setup.ui
 
 import android.app.Activity
 import android.app.Application
-import android.arch.lifecycle.*
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.StringRes
+import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
@@ -143,11 +140,11 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
 
     companion object {
 
-        fun getViewModel(activity: FragmentActivity): FlowManagerAccessModel {
+        fun getViewModel(activity: androidx.fragment.app.FragmentActivity): FlowManagerAccessModel {
             return ViewModelProviders.of(activity).get(FlowManagerAccessModel::class.java)
         }
 
-        fun getViewModel(fragment: Fragment): FlowManagerAccessModel {
+        fun getViewModel(fragment: androidx.fragment.app.Fragment): FlowManagerAccessModel {
             val activity = fragment.requireActivity()
             return getViewModel(activity)
         }

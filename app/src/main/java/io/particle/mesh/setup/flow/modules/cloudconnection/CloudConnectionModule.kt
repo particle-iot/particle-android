@@ -1,7 +1,7 @@
 package io.particle.mesh.setup.flow.modules.cloudconnection
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
@@ -159,7 +159,7 @@ class CloudConnectionModule(
         for (addyList in listOf(iface.ipv4Config.addressesList, iface.ipv6Config.addressesList)) {
 
             val address = addyList.firstOrNull {
-                it.address.v4.address != null || it.address.v6.address != null
+                it.address.v4.address.truthy() || it.address.v6.address.truthy()
             }
             if (address != null) {
                 log.debug { "IP address on ethernet (interface ${ethernet.index}) found: $address" }
