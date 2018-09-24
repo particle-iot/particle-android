@@ -89,4 +89,13 @@
         <item name="android:textColor">@color/p_mesh_element_border</item>
     </style>
 
+    <style name="p_spinner" parent="Widget.MaterialProgressBar.ProgressBar">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateDrawable">@drawable/p_mesh_progress_spinner</item>
+        <item name="android:indeterminateDuration">2000</item>
+    </style>
+
+
 </resources>

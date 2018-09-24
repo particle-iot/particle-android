@@ -9,9 +9,7 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/p_spinner"
         android:layout_marginBottom="16dp"
         android:indeterminate="true"
         app:layout_constraintBottom_toTopOf="@+id/state_success"
