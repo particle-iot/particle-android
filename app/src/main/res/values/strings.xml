@@ -98,8 +98,8 @@ Enjoy!]]></string>
     <string name="publish_positive_action">Publish event</string>
     <string name="cancel">Cancel</string>
     <string name="logout_confirm_message">Are you sure you want to log out?</string>
-    <string name="pair_second_device_with_your_phone">Pair second device with your phone</string>
-    <string name="this_device_will_act_as_the_assisting_device">This device will act as the assisting device, to allow the Xenon to join the mesh network.</string>
+    <string name="pair_assisting_device_with_your_phone">Pair assisting Xenon with your phone</string>
+    <string name="p_pairassistingdevice_subheader_1">Use your phone\'s camera to scan the sticker printed on the front of the assisting Xenon</string>
 
     <string name="p_connecttocloud_xenon_gateway_needs_ethernet">You must connect an ethernet cable to a switch/router with an active internet connection to proceed.</string>
     <string name="p_checkethernetgateway_title">Connect Xenon to Device Cloud</string>
@@ -165,6 +165,12 @@ Enjoy!]]></string>
     <string name="p_pairingprogress_congrats">Congrats!</string>
     <string name="p_action_next">next</string>
     <string name="p_meshnetworkscanning_header">Your device is scanning for mesh networks to join</string>
+    <string name="p_enterpassword_tipbox_header">Helpful tip!</string>
+    <string name="p_scancommissionercode_tip_content">This assisting device will be used to bring your new Xenon onto the mesh network.</string>
+    <string name="p_joiningmesh_header">Your Xenon is joining the mesh network</string>
+    <string name="p_namedevice_hint_content">Name your device something you will remember to help you easily identify it later.</string>
+    <string name="p_action_im_done">I\'m done</string>
+    <string name="p_action_set_up_next_device">Set up next device</string>
 
 
 </resources>

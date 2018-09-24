@@ -241,7 +241,12 @@ class MeshSetupModule(
         updateTargetJoinedMeshNetwork(true)
 
         // FIXME: joining (sometimes?) fails here without a delay.  Revisit this value/try removing later?
-        delay(5000)
+        delay(2000)
+
+        TinkerApplication.appContext?.safeToast(
+                "Sending JoinNetworkResponse...",
+                duration = Toast.LENGTH_LONG
+        )
         val start = System.currentTimeMillis()
         // time out after *five minutes* (yep.)
         joiner.sendJoinNetwork(300000).throwOnErrorOrAbsent()

@@ -56,7 +56,7 @@ private data class ScannedMeshNetwork(
 )
 
 
-private class ScannedMeshNetworkHolder(var rowRoot: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(rowRoot) {
+private class ScannedMeshNetworkHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
     val rowLine1 = rowRoot.row_line_1
     val rowLine2 = rowRoot.row_line_2
 }

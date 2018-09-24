@@ -74,4 +74,8 @@
         <item name="android:minWidth">250dp</item>
     </style>
 
+    <style name="p_mesh_hintbox_header_grey" parent="TextAppearance.Design.Hint">
+        <item name="android:textColor">@color/p_mesh_element_border</item>
+    </style>
+
 </resources>

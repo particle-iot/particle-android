@@ -22,7 +22,6 @@ apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
 ext {
-    supportVersions = '28.0.0'
     cloudSdkVersion = '0.5.1'
     setupVersion = '0.6.0'
 }
@@ -34,8 +33,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 76
-        versionName "2.2.0-MESH-18"
+        versionCode 77
+        versionName "2.2.0-MESH-19"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -121,23 +120,23 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    // using snapshot to unbreak Butterknife with AndroidX
+    implementation 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
 
-    implementation 'com.google.android.material:material:1.0.0-rc02'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.fragment:fragment:1.0.0'
     implementation 'androidx.annotation:annotation:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.multidex:multidex:2.0.0'
-
+    implementation 'androidx.core:core-ktx:1.0.0-rc02'
+    implementation 'androidx.fragment:fragment:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation "androidx.lifecycle:lifecycle-livedata-core:2.0.0"
     implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
-    implementation 'androidx.core:core-ktx:1.0.0-rc02'
+    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0-rc02'
 
     def nav_version = "1.0.0-alpha06"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
