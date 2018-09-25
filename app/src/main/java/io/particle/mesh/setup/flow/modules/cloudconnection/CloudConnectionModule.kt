@@ -32,6 +32,7 @@ class CloudConnectionModule(
     val targetDeviceShouldBeClaimedLD: LiveData<Boolean?> = MutableLiveData()
     val targetOwnedByUserLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
+    val currentDeviceName: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
     val meshRegisteredWithCloud: LiveData<Boolean?> = MutableLiveData()
@@ -58,7 +59,8 @@ class CloudConnectionModule(
                 targetDeviceNameToAssignLD,
                 isTargetDeviceNamedLD,
                 targetDeviceConnectedToCloud,
-                meshRegisteredWithCloud
+                meshRegisteredWithCloud,
+                currentDeviceName
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -77,6 +79,7 @@ class CloudConnectionModule(
 
     fun updateTargetDeviceNameToAssign(name: String) {
         log.info { "updateTargetDeviceNameToAssign(): $name" }
+        currentDeviceName.castAndPost(name)
         targetDeviceNameToAssignLD.castAndPost(name)
     }
 
@@ -218,6 +221,9 @@ class CloudConnectionModule(
             throw FlowException("Target device does not appear to be claimed")
         }
 
+        val device = cloud.getDevice(targetDeviceId)
+        currentDeviceName.castAndPost(device.name)
+
         updateTargetOwnedByUser(true)
 
         if (!connectedToMeshNetworkAndOwnedUiShown) {
@@ -233,6 +239,9 @@ class CloudConnectionModule(
         }
 
         // FIXME: show progress spinner
+
+
+
 
         val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD })
         val nameToAssign = withContext(UI) {
