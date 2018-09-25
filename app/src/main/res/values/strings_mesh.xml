@@ -43,7 +43,7 @@
     <string name="done">Done</string>
     <string name="add_next_mesh_device">Add next mesh device</string>
     <string name="congrats_your_device_is_set_up_and_added_to_the_network">Your device is all set up!</string>
-    <string name="adding_more_devices_to_your_network">Adding more devices to your network?</string>
+    <string name="adding_more_devices_to_your_network">Adding more devices to this network?</string>
     <string name="ready_to_build">Ready to build?</string>
     <string name="start_building">Start Building</string>
     <string name="point_camera_at_qr_code_on_the_device">Point the camera at the sticker</string>

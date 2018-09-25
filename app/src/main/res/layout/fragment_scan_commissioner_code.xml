@@ -19,7 +19,9 @@
     <TextView
         android:id="@+id/assistantText"
         style="@style/setup_step_text"
-        android:layout_marginTop="16dp"
+        android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/p_pairassistingdevice_subheader_1"
         app:layout_constraintBottom_toTopOf="@id/p_mesh_helpfulTip"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +38,6 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/mainImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/assistantText">
 
@@ -71,12 +72,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/p_mesh_helpfulTip" />
 
-    <Button
+    <com.tolstykh.textviewrichdrawable.ButtonRichDrawable
         android:id="@id/action_next"
         style="@style/p_mesh_button_style"
         android:layout_width="match_parent"
         android:layout_margin="16dp"
         android:text="@string/p_action_scan_data_matrix"
+        app:drawableStartVector="@drawable/p_mesh_ic_camera_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

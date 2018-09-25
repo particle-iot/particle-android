@@ -42,7 +42,9 @@ class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
     }
 
     private suspend fun markFakeProgress() {
-        delay(1000)
+        delay(1500)
+        markProgress(true, R.id.status_stage_4)
+        delay(1500)
         markProgress(true, R.id.status_stage_5)
     }
 }

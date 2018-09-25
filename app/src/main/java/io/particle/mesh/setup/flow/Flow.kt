@@ -114,9 +114,6 @@ class Flow(
         meshSetupModule.ensureCommissionerIsOnNetworkToBeJoined()
 
         meshSetupModule.ensureTargetMeshNetworkPasswordCollected()
-
-        // FIXME: INSERT BILLING SCREEN!
-
         meshSetupModule.ensureMeshNetworkJoinedUiShown()
         meshSetupModule.ensureMeshNetworkJoined()
         ensureTargetDeviceSetSetupDone(true)

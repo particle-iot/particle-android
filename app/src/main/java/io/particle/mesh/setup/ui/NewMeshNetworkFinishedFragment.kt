@@ -15,10 +15,10 @@ class NewMeshNetworkFinishedFragment : BaseMeshSetupFragment() {
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_new_mesh_network_finished, container, false)
 
-        root.action_start_tinkering.setOnClickListener { endSetup() }
-        root.action_start_mesh_setup.setOnClickListener {
+        root.action_add_next_mesh_device.setOnClickListener {
             flowManagerVM.flowManager?.startNewFlowWithCommissioner()
         }
+        root.action_start_building.setOnClickListener { endSetup() }
 
         return root
     }

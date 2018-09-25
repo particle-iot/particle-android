@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/status_stage_1"
-        style="@style/setup_step_text"
+        style="@style/p_setup_step_text_inactive"
         android:layout_marginTop="32dp"
         android:text="@string/requesting_permission_to_add_to_mesh_network"
         app:layout_constraintBottom_toTopOf="@+id/status_stage_2"
@@ -45,7 +45,7 @@
 
     <TextView
         android:id="@+id/status_stage_2"
-        style="@style/setup_step_text"
+        style="@style/p_setup_step_text_inactive"
         android:layout_height="22dp"
         android:layout_marginTop="24dp"
         android:text="@string/adding_the_xenon_to_the_mesh_network"
@@ -57,13 +57,23 @@
 
     <TextView
         android:id="@+id/status_stage_3"
-        style="@style/setup_step_text"
+        style="@style/p_setup_step_text_inactive"
         android:layout_marginTop="24dp"
         android:text="@string/connecting_xenon_to_device_cloud_via_gateway"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/status_stage_4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/status_stage_2"
         tools:layout_editor_absoluteX="66dp" />
+
+    <TextView
+        android:id="@+id/status_stage_4"
+        style="@style/p_setup_step_text_inactive"
+        android:layout_marginTop="24dp"
+        android:text="@string/p_joiningmeshnetwork_stage4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_stage_3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

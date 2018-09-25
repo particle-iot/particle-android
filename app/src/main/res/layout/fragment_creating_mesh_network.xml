@@ -66,7 +66,6 @@
         android:id="@+id/status_stage_4"
         style="@style/p_setup_step_text_inactive"
         android:text="@string/p_creatingyournetwork_step_4"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/status_stage_5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

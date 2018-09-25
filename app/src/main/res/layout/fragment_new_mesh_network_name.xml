@@ -22,7 +22,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/networkNameInputLayout"
         style="@style/p_mesh_edittextoutlined"
-        android:layout_width="328dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/p_newmeshnetworkname_name_hint_text"
         app:layout_constraintBottom_toTopOf="@+id/p_mesh_helpfulTip"

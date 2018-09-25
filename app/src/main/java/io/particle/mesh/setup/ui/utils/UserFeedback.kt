@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import io.particle.mesh.common.truthy
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
@@ -21,7 +22,7 @@ fun Context.quickDialog(text: String, optionalAction: (() -> Unit)? = null) {
 }
 
 
-internal fun androidx.fragment.app.Fragment.markProgress(update: Boolean?, @IdRes progressStage: Int) {
+internal fun Fragment.markProgress(update: Boolean?, @IdRes progressStage: Int) {
     if (!update.truthy()) {
         return
     }

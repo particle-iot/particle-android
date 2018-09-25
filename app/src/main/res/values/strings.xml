@@ -120,8 +120,8 @@ Enjoy!]]></string>
     <string name="p_action_next_set_password">Next: set password</string>
     <string name="p_newmeshnetworkname_name_hint_text">Network name</string>
     <string name="p_newmeshnetworkpassword_title">Set network admin password</string>
-    <string name="p_newmeshnetworkpassword_subheader1">KEEP THIS PASSWORD SAFE\n\nYou\'ll need this password each time you want to add a new device to this mesh network</string>
-    <string name="p_newmeshnetworkpassword_password_hint_text">password</string>
+    <string name="p_newmeshnetworkpassword_hint_content">You\'ll need this password each time you want to add a new device to this mesh network</string>
+    <string name="p_newmeshnetworkpassword_password_hint">Network password</string>
     <string name="p_action_set_admin_password">Set admin password</string>
 
     <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_title">Enjoy this new mesh network on us</string>
@@ -146,17 +146,17 @@ Enjoy!]]></string>
     <string name="p_creatingyournetwork_header">Creating your network</string>
     <string name="p_creatingyournetwork_step_1">Sending network credentials to your Xenon</string>
     <string name="p_creatingyournetwork_step_2">Device creating the mesh network locally</string>
-    <string name="p_creatingyournetwork_step_3">Registering the mesh network with the Device Cloud</string>
+    <string name="p_creatingyournetwork_step_3">Registering the mesh network with the Particle Device Cloud</string>
     <string name="p_creatingyournetwork_step_4">Activating device as a gateway in the mesh network</string>
-    <string name="p_creatingyournetwork_step_5">Sprinkling magic fairy dust</string>
+    <string name="p_creatingyournetwork_step_5">Created network successfully!</string>
 
     <string name="p_newmeshnetworkfinished_header">Congrats!</string>
     <string name="p_newmeshnetworkfinished_start_tinkering_header">Ready to build?</string>
 
     <string name="p_action_add_next_mesh_device">Add next mesh device</string>
 
-    <string name="p_newmeshnetworkfinished_start_mesh_setup_header">Add more devices to your network</string>
-    <string name="p_newmeshnetworkfinished_subheader_1">Your network has been set up with {device_name} acting as a gateway</string>
+    <string name="p_newmeshnetworkfinished_start_mesh_setup_header">Adding more devices to your network?</string>
+    <string name="p_newmeshnetworkfinished_subheader_1">Your network has been set up with this device acting as a gateway</string>
     <string name="p_action_create_new_network">Create new network…</string>
     <string name="p_manualcommissioning_commissioner_candidate_not_on_target_network">This device is not part the network you are trying to join.</string>
     <string name="p_exitsetupconfirmation_exit">Exit setup</string>
@@ -175,5 +175,13 @@ Enjoy!]]></string>
     <string name="p_scanfornetworks_gateway_flow_title">Your Xenon + Ethernet Featherwing will act as a gateway in a mesh network</string>
     <string name="p_newmeshnetworkname_hintbox_content">Name your network something you will remember to help you easily identify it later</string>
     <string name="p_action_create_network">Create network</string>
+    <string name="p_joiningmeshnetwork_stage4"><![CDATA[Joined mesh network & connected to Particle Device Cloud successfully!]]></string>
+    <string name="p_joinersetupfinished_done_header">Itching to get started?</string>
+    <string name="p_joinersetupfinished_continue_to_mesh_header">Using this device in a mesh network?</string>
+    <string name="p_gatewaysetupfinished_done_header">Using as a standalone device?</string>
+    <string name="p_action_continue_onto_mesh_setup">Continue onto mesh setup</string>
+    <string name="p_newmeshnetworkpassword_confirm_password_hint">Confirm network password</string>
+    <string name="p_newmeshnetworkpassword_passwords_do_not_match_dialog_content">Passwords do not match!</string>
+    <string name="p_newmeshnetworkpassword_hintbox_header">Keep this password safe!</string>
 
 </resources>

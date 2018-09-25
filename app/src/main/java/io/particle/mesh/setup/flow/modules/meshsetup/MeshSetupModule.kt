@@ -227,9 +227,10 @@ class MeshSetupModule(
         val joiner = targetXceiver!!
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
 
-        // ensure the commissioner was stopped
-        commish.sendStopCommissioner().throwOnErrorOrAbsent()
-        delay(1000) // FIXME: verify that we need this
+        // FIXME: PUT BACK IN?
+//        // ensure the commissioner was stopped
+//        commish.sendStopCommissioner().throwOnErrorOrAbsent()
+//        delay(1000) // FIXME: verify that we need this
 
         // no need to send auth msg here; we already authenticated when the password was collected
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
@@ -248,7 +249,7 @@ class MeshSetupModule(
         delay(2000)
 
         TinkerApplication.appContext?.safeToast(
-                "Sending JoinNetworkResponse...",
+                "Sending JoinNetworkRequest...",
                 duration = Toast.LENGTH_LONG
         )
         val start = System.currentTimeMillis()
@@ -261,6 +262,9 @@ class MeshSetupModule(
         )
 
         targetJoinedSuccessfully = true
+        
+        // let the success UI show for a moment
+        delay(2000)
     }
 
     suspend fun ensureCommissionerStopped() {

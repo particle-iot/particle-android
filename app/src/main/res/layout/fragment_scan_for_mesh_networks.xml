@@ -44,9 +44,8 @@
 
     <Button
         android:id="@+id/action_create_new_network"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        style="@style/p_mesh_button_style"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/p_action_create_new_network"
         app:layout_constraintBottom_toBottomOf="parent"
