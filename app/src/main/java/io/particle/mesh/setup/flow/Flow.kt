@@ -88,7 +88,7 @@ class Flow(
 
     private suspend fun doEthernetSubflow() {
         log.debug { "doEthernetSubflow()" }
-        bleConnModule.ensureShowPairingSuccessful()
+        bleConnModule.ensureShowTargetPairingSuccessful()
 
         cloudConnModule.ensureConnectingToDeviceCloudUiShown()
         ensureTargetDeviceSetSetupDone(true)
@@ -105,7 +105,7 @@ class Flow(
         log.debug { "doJoinerSubflow()" }
         meshSetupModule.ensureJoinerVisibleMeshNetworksListPopulated()
 
-        bleConnModule.ensureShowPairingSuccessful()
+        bleConnModule.ensureShowTargetPairingSuccessful()
 
         meshSetupModule.ensureMeshNetworkSelected()
 

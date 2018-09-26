@@ -169,5 +169,10 @@
         app:launchSingleTop="true"
         app:popUpTo="@+id/selectDeviceFragment"
         app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/assistingDevicePairingProgressFragment"
+        android:name="io.particle.mesh.setup.ui.AssistingDevicePairingProgressFragment"
+        android:label="fragment_assisting_device_pairing_progress"
+        tools:layout="@layout/fragment_assisting_device_pairing_progress" /><action android:id="@+id/action_global_assistingDevicePairingProgressFragment" app:destination="@id/assistingDevicePairingProgressFragment"/>
 
 </navigation>

@@ -19,9 +19,8 @@ class AssistingDevicePairingProgressFragment : BaseMeshSetupFragment() {
         super.onCreate(savedInstanceState)
         flowManagerVM.flowManager!!.bleConnectionModule.commissionerTransceiverLD.observe(
                 this,
-                Observer {
-                    onAssistingDeviceConnected()
-                })
+                Observer { onAssistingDeviceConnected() }
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

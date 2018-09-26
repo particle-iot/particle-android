@@ -37,10 +37,13 @@ class BLEConnectionModule(
 
     val commissionerBarcodeLD: LiveData<BarcodeData?> = MutableLiveData()
     val commissionerTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
+    val commissionerDeviceConnectedLD: LiveData<Boolean?> = MutableLiveData()
 
     private var targetDeviceId: String? = null
     private var connectingToTargetUiShown = false
+    private var connectingToAssistingDeviceUiShown = false
     private var shownTargetInitialIsConnectedScreen = false
+    private var shownAssistingDeviceInitialIsConnectedScreen = false
 
     private val targetXceiver
         get() = targetDeviceTransceiverLD.value
@@ -49,7 +52,9 @@ class BLEConnectionModule(
     override fun clearState() {
         targetDeviceId = null
         connectingToTargetUiShown = false
+        connectingToAssistingDeviceUiShown = false
         shownTargetInitialIsConnectedScreen = false
+        shownAssistingDeviceInitialIsConnectedScreen = false
 
         targetDeviceTransceiverLD.value?.disconnect()
         commissionerTransceiverLD.value?.disconnect()
@@ -78,7 +83,12 @@ class BLEConnectionModule(
 
     fun updateTargetDeviceConnectionInitialized(initialized: Boolean) {
         log.info { "updateTargetDeviceConnectionInitialized(): $initialized" }
-        (targetDeviceConnectedLD as MutableLiveData).postValue(initialized)
+        targetDeviceConnectedLD.castAndPost(initialized)
+    }
+
+    fun updateAssistingDeviceConnectionInitialized(initialized: Boolean) {
+        log.info { "updateAssistingDeviceConnectionInitialized(): $initialized" }
+        commissionerDeviceConnectedLD.castAndPost(initialized)
     }
 
     suspend fun ensureBarcodeDataForTargetDevice() {
@@ -139,13 +149,23 @@ class BLEConnectionModule(
         return deviceIdReply.id
     }
 
-    suspend fun ensureShowPairingSuccessful() {
-        log.info { "ensureShowPairingSuccessful()" }
+    suspend fun ensureShowTargetPairingSuccessful() {
+        log.info { "ensureShowTargetPairingSuccessful()" }
         if (shownTargetInitialIsConnectedScreen) {
             return
         }
         shownTargetInitialIsConnectedScreen = true
         updateTargetDeviceConnectionInitialized(true)
+        delay(2000)
+    }
+
+    suspend fun ensureShowAssistingDevicePairingSuccessful() {
+        log.info { "ensureShowAssistingDevicePairingSuccessful()" }
+        if (shownAssistingDeviceInitialIsConnectedScreen) {
+            return
+        }
+        shownAssistingDeviceInitialIsConnectedScreen = true
+        updateAssistingDeviceConnectionInitialized(true)
         delay(2000)
     }
 
@@ -175,6 +195,11 @@ class BLEConnectionModule(
         }
 
 
+        if (!connectingToAssistingDeviceUiShown) {
+            flowManager.navigate(R.id.action_global_assistingDevicePairingProgressFragment)
+            connectingToAssistingDeviceUiShown = true
+        }
+
 
         // FIXME: consider what states we should be resetting here
 
@@ -184,6 +209,9 @@ class BLEConnectionModule(
             connectCommissioner()
             xceiverSuspender.awaitResult()
         }
+
+        // FIXME: this is the wrong way to delay the progress UI
+        delay(2000)
 
         if (commissioner == null) {
             throw FlowException("Error ensuring commissioner connected")

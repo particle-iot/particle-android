@@ -25,6 +25,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_assistingDevicePairingProgressFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_connectingToDeviceCloudFragment">
                     <value>
                       <LayoutPositions />
@@ -98,6 +103,18 @@
                   <entry key="action_global_setupFinishedFragment">
                     <value>
                       <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="assistingDevicePairingProgressFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="-940" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
                     </value>
                   </entry>
                   <entry key="connectingToDeviceCloudFragment">
