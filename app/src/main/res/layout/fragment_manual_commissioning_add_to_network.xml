@@ -10,8 +10,8 @@
     <TextView
         android:id="@+id/setup_header_text"
         style="@style/p_setup_header_text"
-        android:layout_marginTop="@dimen/p_setup_header_margin_top"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/add_xenon_to_mesh_network"
         app:layout_constraintBottom_toTopOf="@id/textView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +27,7 @@
         android:text="@string/find_a_device_that_is_already_part_of_the_mesh_network"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
 
@@ -34,17 +35,18 @@
         android:id="@+id/textView2"
         style="@style/setup_step_text"
         fontPath="@string/bold_text_font_name"
-        android:text="Press and hold the MODE button for 3 seconds"
+        android:text="@string/p_connecttocommissionerintro_step2"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="16dp"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView3"
         style="@style/setup_step_text"
         fontPath="@string/bold_text_font_name"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/confirm_the_device_is_blinking_blue_and_your_phone_remains_close"
         app:layout_constraintBottom_toTopOf="@+id/videoView"
         app:layout_constraintEnd_toEndOf="parent"

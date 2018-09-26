@@ -16,6 +16,7 @@
         android:text="@string/point_camera_at_qr_code_on_the_device"
         app:layout_constraintBottom_toTopOf="@+id/scanPreview"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 
@@ -23,13 +24,13 @@
         android:id="@+id/scanPreview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="h,3:4"
+        app:layout_constraintDimensionRatio="w,4:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/textView6">
 
         <io.particle.mesh.setup.barcodescanning.GraphicOverlay
             android:id="@+id/scanPreviewOverlay"
