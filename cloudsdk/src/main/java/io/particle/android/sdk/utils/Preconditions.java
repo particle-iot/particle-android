@@ -1,6 +1,6 @@
 package io.particle.android.sdk.utils;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Like Guava's Preconditions, but without the overwhelming method count cost

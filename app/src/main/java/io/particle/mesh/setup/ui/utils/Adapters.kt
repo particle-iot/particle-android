@@ -1,7 +1,7 @@
 package io.particle.mesh.setup.ui.utils
 
-import android.support.annotation.LayoutRes
-import android.support.v7.util.DiffUtil
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +11,14 @@ fun <T, I> easyDiffUtilCallback(idFieldGetter: (T) -> I): DiffUtil.ItemCallback<
 
     return object: DiffUtil.ItemCallback<T>() {
 
+        override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
+            return oldItem == newItem
+        }
+
         override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
             return idFieldGetter(oldItem) == idFieldGetter(newItem)
         }
 
-        override fun areContentsTheSame(oldItem: T?, newItem: T?): Boolean {
-            return oldItem == newItem
-        }
     }
 }
 

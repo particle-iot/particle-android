@@ -1,7 +1,7 @@
 package io.particle.android.sdk.tinker
 
 import android.app.Application
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import io.particle.android.sdk.ReleaseBuildAppInitializer
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.ui.DeviceListActivity

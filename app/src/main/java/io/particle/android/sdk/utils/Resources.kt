@@ -1,7 +1,7 @@
 package io.particle.android.sdk.utils
 
 import android.content.Context
-import android.support.annotation.RawRes
+import androidx.annotation.RawRes
 import okio.Okio
 
 

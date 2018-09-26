@@ -1,53 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meshsetup.ui.NameYourDeviceFragment">
+    tools:context=".meshsetup.ui.NameYourDeviceFragment"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
-        android:layout_marginTop="@dimen/setup_header_margin_top"
-        android:text="@string/almost_done_name_your_xenon"
+        style="@style/p_setup_header_text"
+        android:text="@string/p_namedevice_header"
+        app:layout_constraintBottom_toTopOf="@+id/deviceNameInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/deviceNameInputLayout"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
+        style="@style/p_mesh_edittextoutlined"
+        android:layout_marginBottom="24dp"
+        android:hint="@string/device_name"
+        app:layout_constraintBottom_toTopOf="@+id/p_mesh_helpfulTip"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_header_text">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:hint="@string/device_name">
+            android:layout_height="wrap_content" />
 
-            <requestFocus />
-        </android.support.design.widget.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+    <LinearLayout
+        android:id="@+id/p_mesh_helpfulTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/p_mesh_hintbox_background"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/action_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deviceNameInputLayout">
+
+        <TextView
+            android:id="@+id/p_mesh_miniHeader"
+            style="@style/p_mesh_hintbox_header"
+            fontPath="@string/bold_text_font_name"
+            android:text="@string/p_enterpassword_tipbox_header"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/setup_step_text"
+            android:layout_width="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:gravity="start"
+            android:text="@string/p_namedevice_hint_content" />
+
+    </LinearLayout>
 
     <Button
         android:id="@id/action_next"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/done"
+        style="@style/p_mesh_button_style"
+        android:layout_width="0dp"
+        android:layout_margin="16dp"
+        android:text="@string/p_action_next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

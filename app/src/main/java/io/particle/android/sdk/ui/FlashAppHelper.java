@@ -1,9 +1,9 @@
 package io.particle.android.sdk.ui;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
 import java.io.FileInputStream;

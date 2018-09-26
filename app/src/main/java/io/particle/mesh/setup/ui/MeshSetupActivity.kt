@@ -1,17 +1,19 @@
 package io.particle.mesh.setup.ui
 
+import android.app.Activity
 import android.app.Application
-import android.arch.lifecycle.*
+import android.bluetooth.BluetoothAdapter
+import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.StringRes
+import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.ui.BaseActivity
+import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.nonNull
@@ -20,10 +22,14 @@ import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.activity_main.*
 import mu.KotlinLogging
 
 
-class MeshSetupActivity : AppCompatActivity() {
+private const val REQUEST_ENABLE_BT = 42
+
+
+class MeshSetupActivity : BaseActivity() {
 
     private val log = KotlinLogging.logger {}
 
@@ -40,6 +46,17 @@ class MeshSetupActivity : AppCompatActivity() {
         flowVM = FlowManagerAccessModel.getViewModel(this)
         flowVM.setNavController(navController)
         flowVM.dialogRequestLD.observe(this, Observer { onDialogSpecReceived(it) })
+
+        p_meshactivity_username.text = ParticleCloudSDK.getCloud().loggedInUsername
+        p_action_close.setOnClickListener { showCloseSetupConfirmation() }
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        if (!btAdapter.isEnabled) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        }
     }
 
     override fun onDestroy() {
@@ -51,6 +68,27 @@ class MeshSetupActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
+    override fun onBackPressed() {
+        showCloseSetupConfirmation()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
+            // FIXME: inform the user why we're exiting?
+            finish()
+        }
+    }
+
+    private fun showCloseSetupConfirmation() {
+        MaterialDialog.Builder(this)
+                .content(R.string.p_exitsetupconfirmation_content)
+                .positiveText(R.string.p_exitsetupconfirmation_exit)
+                .negativeText(android.R.string.cancel)
+                .onPositive { _, _ -> finish() }
+                .show()
+    }
+
     private fun onDialogSpecReceived(spec: DialogSpec?) {
         log.debug { "onDialogSpecReceived()" }
         if (spec == null) {
@@ -59,24 +97,36 @@ class MeshSetupActivity : AppCompatActivity() {
         }
         flowVM.flowManager?.clearDialogRequest()
 
+
         val builder = MaterialDialog.Builder(this)
-                .content(spec.text)
-                .canceledOnTouchOutside(false)
-                .positiveText(spec.positiveText)
+        when (spec) {
+            is DialogSpec.StringDialogSpec? -> {
+                builder.content(spec.text)
+                        .positiveText(android.R.string.ok)
+
+            }
+
+            is DialogSpec.ResDialogSpec? -> {
+                builder.content(spec.text)
+                        .positiveText(spec.positiveText)
+
+                spec.negativeText?.let {
+                    builder.negativeText(it)
+                    builder.onNegative { dialog, _ ->
+                        dialog.dismiss()
+                        flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE)
+                    }
+                }
+
+                spec.title?.let { builder.title(it) }
+            }
+        }
+
+        builder.canceledOnTouchOutside(false)
                 .onPositive { dialog, _ ->
                     dialog.dismiss()
                     flowVM.flowManager!!.updateDialogResult(DialogResult.POSITIVE)
                 }
-
-        spec.negativeText?.let {
-            builder.negativeText(it)
-            builder.onNegative { dialog, _ ->
-                dialog.dismiss()
-                flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE)
-            }
-        }
-
-        spec.title?.let { builder.title(it) }
 
         log.info { "Showing dialog for: $spec" }
         builder.show()
@@ -90,23 +140,31 @@ enum class DialogResult {
 }
 
 
-data class DialogSpec(
-        @StringRes val text: Int,
-        @StringRes val positiveText: Int,
-        @StringRes val negativeText: Int? = null,
-        @StringRes val title: Int? = null
-)
+sealed class DialogSpec {
+
+    data class ResDialogSpec(
+            @StringRes val text: Int,
+            @StringRes val positiveText: Int,
+            @StringRes val negativeText: Int? = null,
+            @StringRes val title: Int? = null
+    ) : DialogSpec()
+
+    data class StringDialogSpec(
+            val text: String
+    ) : DialogSpec()
+
+}
 
 
 class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
 
     companion object {
 
-        fun getViewModel(activity: FragmentActivity): FlowManagerAccessModel {
+        fun getViewModel(activity: androidx.fragment.app.FragmentActivity): FlowManagerAccessModel {
             return ViewModelProviders.of(activity).get(FlowManagerAccessModel::class.java)
         }
 
-        fun getViewModel(fragment: Fragment): FlowManagerAccessModel {
+        fun getViewModel(fragment: androidx.fragment.app.Fragment): FlowManagerAccessModel {
             val activity = fragment.requireActivity()
             return getViewModel(activity)
         }

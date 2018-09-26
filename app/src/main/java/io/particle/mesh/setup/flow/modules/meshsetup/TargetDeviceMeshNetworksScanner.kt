@@ -1,29 +1,33 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.support.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.annotation.WorkerThread
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiver
-import io.particle.mesh.setup.flow.FlowManager
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import mu.KotlinLogging
 
 class TargetDeviceMeshNetworksScanner(
         private val targetXceiverLD: LiveData<ProtocolTransceiver?>
 ) : MutableLiveData<List<Mesh.NetworkInfo>?>() {
 
+    private val log = KotlinLogging.logger {}
+
     override fun onActive() {
         super.onActive()
+        log.debug { "onActive()" }
         launch {
             scanWhileActive()
         }
     }
 
     fun forceSingleScan() {
+        log.debug { "forceSingleScan()" }
         launch {
             doScan()
         }
@@ -33,12 +37,13 @@ class TargetDeviceMeshNetworksScanner(
         // FIXME: add real error handling
         while (hasActiveObservers()) {
             doScan()
-            delay(500)
+            delay(2000)
         }
     }
 
     @WorkerThread
     private suspend fun doScan() {
+        log.debug { "doScan()" }
         val xceiver = targetXceiverLD.value!!
         val networksReply = xceiver.sendScanNetworks()
         val networks = when(networksReply) {

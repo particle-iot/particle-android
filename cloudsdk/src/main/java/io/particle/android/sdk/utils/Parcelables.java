@@ -4,7 +4,7 @@ package io.particle.android.sdk.utils;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.util.ArrayMap;
+import androidx.collection.ArrayMap;
 
 import java.io.Serializable;
 import java.util.ArrayList;

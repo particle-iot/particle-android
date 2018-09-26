@@ -1,7 +1,7 @@
 package io.particle.android.sdk.devicesetup.setupsteps;
 
 import android.content.Context;
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import java.security.PublicKey;
 

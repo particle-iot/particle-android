@@ -8,20 +8,20 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.Snackbar.Callback;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.snackbar.Snackbar.Callback;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.core.util.Pair;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +72,7 @@ import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON;
 import static io.particle.android.sdk.utils.Py.list;
 import static io.particle.android.sdk.utils.Py.truthy;
 import static java.util.Objects.requireNonNull;
@@ -408,7 +409,7 @@ public class DeviceListFragment extends Fragment
         private Drawable defaultBackground;
         private String textFilter = "";
         private List<ParticleDevice.ParticleDeviceType> typeFilters = list(PHOTON, CORE, ELECTRON,
-                RASPBERRY_PI, P1, RED_BEAR_DUO, DIGISTUMP_OAK, BLUZ);
+                XENON, RASPBERRY_PI, P1, RED_BEAR_DUO, DIGISTUMP_OAK, BLUZ);
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
@@ -461,6 +462,11 @@ public class DeviceListFragment extends Fragment
                 case RED_BEAR_DUO:
                     holder.modelName.setText(R.string.red_bear_duo);
                     holder.productImage.setImageResource(R.drawable.red_bear_duo_vector);
+                    break;
+
+                case XENON:
+                    holder.modelName.setText(R.string.product_name_xenon);
+                    holder.productImage.setImageResource(R.drawable.xenon_vector);
                     break;
 
                 default:

@@ -1,66 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meshsetup.ui.GetReadyForSetupFragment">
+    tools:context="io.particle.android.sdk.devicesetup.ui.GetReadyActivity"
+    tools:ignore="MissingPrefix">
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
-        android:layout_marginTop="@dimen/setup_header_margin_top"
+        style="@style/p_setup_header_text"
+        android:layout_marginBottom="48dp"
         android:text="@string/get_your_xenon_ready_for_setup"
+        app:layout_constraintBottom_toTopOf="@id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textView"
         style="@style/setup_step_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_marginBottom="24dp"
         android:text="@string/plug_your_device_into_a_power_source"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
-
-    <TextView
-        android:id="@+id/textView2"
-        style="@style/setup_step_text"
-        android:text="@string/if_you_have_an_external_antenna_connect_it_to_your_device"
         app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/setup_header_text"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textView3"
         style="@style/setup_step_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_marginBottom="32dp"
         android:text="@string/confirm_your_device_is_blinking_blue"
-        app:layout_constraintBottom_toTopOf="@+id/videoView"
+        app:layout_constraintBottom_toTopOf="@+id/videoViewWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+    <FrameLayout
+        android:id="@+id/videoViewWrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/action_next"
+        app:layout_constraintDimensionRatio="6:5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="32dp" />
+
+    </FrameLayout>
 
     <Button
         android:id="@id/action_next"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/my_device_is_blinking_blue"
+        style="@style/p_mesh_button_style"
+        android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/p_mesh_bottom_element_margin"
+        android:text="@string/p_action_next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.sdk.app.R
+import io.particle.sdk.app.R.string
 import kotlinx.android.synthetic.main.fragment_new_mesh_network_password.view.*
 
 
@@ -29,6 +30,16 @@ class NewMeshNetworkPasswordFragment : BaseMeshSetupFragment() {
                     .show()
             return
         }
+
+        val confirmation = view!!.networkPasswordConfirmInputLayout.editText!!.text.toString()
+        if (password != confirmation) {
+            MaterialDialog.Builder(requireActivity())
+                    .content(R.string.p_newmeshnetworkpassword_passwords_do_not_match_dialog_content)
+                    .positiveText(android.R.string.ok)
+                    .show()
+            return
+        }
+
         flowManagerVM.flowManager!!.meshSetupModule.updateNewNetworkPassword(password)
     }
 

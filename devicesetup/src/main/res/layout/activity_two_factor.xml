@@ -1,0 +1,93 @@
+<io.particle.android.sdk.utils.ui.SoftKeyboardVisibilityDetectingLinearLayout
+    android:id="@+id/keyboard_change_detector_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="56dp"
+    android:animateLayoutChanges="true"
+    android:clipChildren="false"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="io.particle.android.sdk.accountsetup.TwoFactorActivity">
+
+
+    <include layout="@layout/brand_image_header"/>
+
+    <ScrollView
+        android:id="@+id/authentication_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+        <LinearLayout
+            android:id="@+id/two_factor_authentication"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clipChildren="false"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:id="@+id/authentication_text_title"
+                style="@style/SectionHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_login_code_title"
+                tools:ignore="RtlHardcoded"/>
+
+            <TextView
+                android:id="@+id/authentication_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/authentication_info"/>
+
+            <EditText
+                android:id="@+id/verificationCode"
+                style="@style/SparkEditText"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:hint="@string/login_code_hint"
+                android:inputType="textNoSuggestions"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <Button
+                    android:id="@+id/action_verify"
+                    style="@style/SparkButton.InSpinnerBox"
+                    android:text="@string/verify_button_text"/>
+
+                <ProgressBar
+                    android:id="@id/button_progress_indicator"
+                    style="@style/SparkSpinner"
+                    android:layout_alignLeft="@id/action_verify"
+                    tools:ignore="RtlHardcoded"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/recover_auth"
+                style="@style/LinkText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="@string/recover_link_text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="@dimen/text_size_small"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</io.particle.android.sdk.utils.ui.SoftKeyboardVisibilityDetectingLinearLayout>

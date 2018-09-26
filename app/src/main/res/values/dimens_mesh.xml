@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="setup_header_margin_top">24dp</dimen>
+
+    <dimen name="p_setup_header_margin_top">16dp</dimen>
+
+    <dimen name="p_setup_header_text_size">18sp</dimen>
+    <dimen name="p_setup_text_size_small">13sp</dimen>
+    <dimen name="p_setup_list_row_primary_text_size">22sp</dimen>
+    <dimen name="p_setup_list_row_secondary_text_size">@dimen/p_setup_text_size_small</dimen>
+
+    <dimen name="p_setup_step_text_size">15sp</dimen>
+
 </resources>

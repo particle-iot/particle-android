@@ -1,14 +1,13 @@
 package io.particle.mesh.setup.ui
 
 import android.os.Bundle
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
@@ -86,6 +85,7 @@ private class DeviceDataHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowR
     val rowLine1 = rowRoot.row_line_1
     val rowLine2 = rowRoot.row_line_2
     val image = rowRoot.row_image
+    val capability2 = rowRoot.p_selectdevice_capability2
 }
 
 
@@ -106,7 +106,19 @@ private class MeshDeviceTypesAdapter(
         holder.rowLine1.setText(item.deviceTypeName)
         holder.rowLine2.setText(item.deviceTypeDescription)
 
-        holder.rowRoot.setOnClickListener { onItemClicked(item) }
+        if (item.deviceType == ParticleDeviceType.XENON) {
+            holder.rowRoot.setOnClickListener { onItemClicked(item) }
+        } else {
+            holder.rowRoot.isEnabled = false
+            holder.rowLine1.isEnabled = false
+            holder.rowLine2.isEnabled = false
+            val capabilityIcon = when(item.deviceType) {
+                ParticleDeviceType.ARGON -> R.drawable.p_mesh_ic_capability_wifi
+                ParticleDeviceType.BORON -> R.drawable.p_mesh_ic_capability_cellular
+                else -> -1
+            }
+            holder.capability2.setImageResource(capabilityIcon)
+        }
     }
 
 }

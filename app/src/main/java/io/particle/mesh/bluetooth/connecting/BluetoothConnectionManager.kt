@@ -1,12 +1,12 @@
 package io.particle.mesh.bluetooth.connecting
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
-import android.support.annotation.MainThread
+import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.BTCharacteristicWriter
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.btAdapter
@@ -15,7 +15,6 @@ import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
 import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import io.particle.mesh.setup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
-import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameScanner
 import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameSuspender
 import io.particle.mesh.setup.utils.checkIsThisTheMainThread
 import kotlinx.coroutines.experimental.android.UI

@@ -88,14 +88,12 @@ class Flow(
 
     private suspend fun doEthernetSubflow() {
         log.debug { "doEthernetSubflow()" }
-        bleConnModule.ensureShowPairingSuccessful()
+        bleConnModule.ensureShowTargetPairingSuccessful()
 
-        cloudConnModule.ensureCheckGatewayUiShown()
         cloudConnModule.ensureConnectingToDeviceCloudUiShown()
         ensureTargetDeviceSetSetupDone(true)
         bleConnModule.ensureListeningStoppedForBothDevices()
-        // FIXME: remove all unnecessary delays here
-        delay(2000)
+        delay(3000)  // give it a moment to get an IP
         cloudConnModule.ensureEthernetHasIP()
         cloudConnModule.ensureConnectedToCloud()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
@@ -107,7 +105,7 @@ class Flow(
         log.debug { "doJoinerSubflow()" }
         meshSetupModule.ensureJoinerVisibleMeshNetworksListPopulated()
 
-        bleConnModule.ensureShowPairingSuccessful()
+        bleConnModule.ensureShowTargetPairingSuccessful()
 
         meshSetupModule.ensureMeshNetworkSelected()
 
@@ -116,9 +114,6 @@ class Flow(
         meshSetupModule.ensureCommissionerIsOnNetworkToBeJoined()
 
         meshSetupModule.ensureTargetMeshNetworkPasswordCollected()
-
-        // FIXME: INSERT BILLING SCREEN!
-
         meshSetupModule.ensureMeshNetworkJoinedUiShown()
         meshSetupModule.ensureMeshNetworkJoined()
         ensureTargetDeviceSetSetupDone(true)
@@ -126,6 +121,7 @@ class Flow(
 
         bleConnModule.ensureListeningStoppedForBothDevices()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
+        cloudConnModule.ensureTargetDeviceIsNamed()
         ensureShowJoinerSetupFinishedUi()
     }
 

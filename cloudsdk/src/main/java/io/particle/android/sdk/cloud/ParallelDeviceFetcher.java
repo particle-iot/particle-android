@@ -1,7 +1,7 @@
 package io.particle.android.sdk.cloud;
 
-import android.support.annotation.CheckResult;
-import android.support.annotation.Nullable;
+import androidx.annotation.CheckResult;
+import androidx.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.List;

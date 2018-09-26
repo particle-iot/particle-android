@@ -10,7 +10,10 @@
         android:name="io.particle.mesh.setup.ui.SelectDeviceFragment"
         android:label="fragment_select_device"
         tools:layout="@layout/fragment_select_device">
-        <action android:id="@+id/action_selectDeviceFragment_pop" app:popUpTo="@id/selectDeviceFragment" app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_selectDeviceFragment_pop"
+            app:popUpTo="@id/selectDeviceFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -27,25 +30,25 @@
         android:id="@+id/scanJoinerCodeIntroFragment"
         android:name="io.particle.mesh.setup.ui.ScanSetupTargetCodeIntroFragment"
         android:label="fragment_scan_joiner_code_intro"
-        tools:layout="@layout/fragment_scan_code_intro"></fragment>
+        tools:layout="@layout/fragment_scan_code_intro" />
 
     <fragment
         android:id="@+id/scanCodeFragment"
         android:name="io.particle.mesh.setup.ui.ScanCodeFragment"
         android:label="fragment_scan_code"
-        tools:layout="@layout/fragment_scan_code"></fragment>
+        tools:layout="@layout/fragment_scan_code" />
 
     <fragment
         android:id="@+id/BLEPairingProgressFragment"
         android:name="io.particle.mesh.setup.ui.BLEPairingProgressFragment"
         android:label="fragment_ble_pairing_progress"
-        tools:layout="@layout/fragment_ble_pairing_progress"></fragment>
+        tools:layout="@layout/fragment_ble_pairing_progress" />
 
     <fragment
         android:id="@+id/scanForMeshNetworksFragment"
         android:name="io.particle.mesh.setup.ui.ScanForMeshNetworksFragment"
         android:label="fragment_scan_for_mesh_networks"
-        tools:layout="@layout/fragment_scan_for_mesh_networks"></fragment>
+        tools:layout="@layout/fragment_scan_for_mesh_networks" />
 
     <fragment
         android:id="@+id/manualCommissioningAddToNetworkFragment"
@@ -61,81 +64,115 @@
         android:id="@+id/enterNetworkPasswordFragment"
         android:name="io.particle.mesh.setup.ui.EnterNetworkPasswordFragment"
         android:label="fragment_enter_network_password"
-        tools:layout="@layout/fragment_enter_network_password"></fragment>
+        tools:layout="@layout/fragment_enter_network_password" />
 
     <fragment
         android:id="@+id/joiningMeshNetworkProgressFragment"
         android:name="io.particle.mesh.setup.ui.JoiningMeshNetworkProgressFragment"
         android:label="fragment_joining_mesh_network_progress"
-        tools:layout="@layout/fragment_joining_mesh_network_progress"></fragment>
+        tools:layout="@layout/fragment_joining_mesh_network_progress" />
 
     <fragment
         android:id="@+id/nameYourDeviceFragment"
         android:name="io.particle.mesh.setup.ui.NameYourDeviceFragment"
         android:label="fragment_name_your_device"
-        tools:layout="@layout/fragment_name_your_device"></fragment>
+        tools:layout="@layout/fragment_name_your_device" />
 
     <fragment
         android:id="@+id/setupFinishedFragment"
         android:name="io.particle.mesh.setup.ui.JoinerSetupFinishedFragment"
         android:label="fragment_setup_finished"
         tools:layout="@layout/fragment_joiner_setup_finished" />
-    <action android:id="@+id/action_global_scanCodeFragment" app:destination="@id/scanCodeFragment" />
+    <action
+        android:id="@+id/action_global_scanCodeFragment"
+        app:destination="@id/scanCodeFragment" />
     <fragment
         android:id="@+id/scanCommissionerCodeFragment"
         android:name="io.particle.mesh.setup.ui.ScanCommissionerCodeFragment"
         android:label="fragment_scan_commissioner_code"
-        tools:layout="@layout/fragment_scan_commissioner_code" ></fragment>
-    <action android:id="@+id/action_global_getReadyForSetupFragment" app:destination="@id/getReadyForSetupFragment" />
-    <action android:id="@+id/action_global_BLEPairingProgressFragment" app:destination="@id/BLEPairingProgressFragment" />
-    <action android:id="@+id/action_global_scanForMeshNetworksFragment" app:destination="@id/scanForMeshNetworksFragment" />
-    <action android:id="@+id/action_global_manualCommissioningAddToNetworkFragment" app:destination="@id/manualCommissioningAddToNetworkFragment" />
-    <action android:id="@+id/action_global_enterNetworkPasswordFragment" app:destination="@id/enterNetworkPasswordFragment" />
-    <action android:id="@+id/action_global_joiningMeshNetworkProgressFragment" app:destination="@id/joiningMeshNetworkProgressFragment" />
-    <action android:id="@+id/action_global_nameYourDeviceFragment" app:destination="@id/nameYourDeviceFragment" /><action android:id="@+id/action_global_setupFinishedFragment" app:destination="@id/setupFinishedFragment"/>
-    <fragment
-        android:id="@+id/checkEthernetGatewayFragment"
-        android:name="io.particle.mesh.setup.ui.CheckEthernetGatewayFragment"
-        android:label="fragment_check_ethernet_gateway"
-        tools:layout="@layout/fragment_check_ethernet_gateway" ></fragment><action android:id="@+id/action_global_checkEthernetGatewayFragment" app:destination="@id/checkEthernetGatewayFragment"/>
+        tools:layout="@layout/fragment_scan_commissioner_code" />
+    <action
+        android:id="@+id/action_global_getReadyForSetupFragment"
+        app:destination="@id/getReadyForSetupFragment" />
+    <action
+        android:id="@+id/action_global_BLEPairingProgressFragment"
+        app:destination="@id/BLEPairingProgressFragment" />
+    <action
+        android:id="@+id/action_global_scanForMeshNetworksFragment"
+        app:destination="@id/scanForMeshNetworksFragment" />
+    <action
+        android:id="@+id/action_global_manualCommissioningAddToNetworkFragment"
+        app:destination="@id/manualCommissioningAddToNetworkFragment" />
+    <action
+        android:id="@+id/action_global_enterNetworkPasswordFragment"
+        app:destination="@id/enterNetworkPasswordFragment" />
+    <action
+        android:id="@+id/action_global_joiningMeshNetworkProgressFragment"
+        app:destination="@id/joiningMeshNetworkProgressFragment" />
+    <action
+        android:id="@+id/action_global_nameYourDeviceFragment"
+        app:destination="@id/nameYourDeviceFragment" />
+    <action
+        android:id="@+id/action_global_setupFinishedFragment"
+        app:destination="@id/setupFinishedFragment" />
     <fragment
         android:id="@+id/connectingToDeviceCloudFragment"
         android:name="io.particle.mesh.setup.ui.ConnectingToDeviceCloudFragment"
         android:label="fragment_connecting_to_device_cloud"
         tools:layout="@layout/fragment_connecting_to_device_cloud" />
-    <action android:id="@+id/action_global_connectingToDeviceCloudFragment" app:destination="@id/connectingToDeviceCloudFragment" />
+    <action
+        android:id="@+id/action_global_connectingToDeviceCloudFragment"
+        app:destination="@id/connectingToDeviceCloudFragment" />
     <fragment
         android:id="@+id/gatewaySetupFinishedFragment"
         android:name="io.particle.mesh.setup.ui.GatewaySetupFinishedFragment"
         android:label="fragment_gateway_setup_finished"
-        tools:layout="@layout/fragment_gateway_setup_finished" /><action android:id="@+id/action_global_gatewaySetupFinishedFragment" app:destination="@id/gatewaySetupFinishedFragment"/>
+        tools:layout="@layout/fragment_gateway_setup_finished" />
+    <action
+        android:id="@+id/action_global_gatewaySetupFinishedFragment"
+        app:destination="@id/gatewaySetupFinishedFragment" />
     <fragment
         android:id="@+id/newMeshNetworkNameFragment"
         android:name="io.particle.mesh.setup.ui.NewMeshNetworkNameFragment"
         android:label="fragment_new_mesh_network_name"
-        tools:layout="@layout/fragment_new_mesh_network_name" /><action android:id="@+id/action_global_newMeshNetworkNameFragment" app:destination="@id/newMeshNetworkNameFragment"/>
+        tools:layout="@layout/fragment_new_mesh_network_name" />
+    <action
+        android:id="@+id/action_global_newMeshNetworkNameFragment"
+        app:destination="@id/newMeshNetworkNameFragment" />
     <fragment
         android:id="@+id/newMeshNetworkPasswordFragment"
         android:name="io.particle.mesh.setup.ui.NewMeshNetworkPasswordFragment"
         android:label="fragment_new_mesh_network_password"
         tools:layout="@layout/fragment_new_mesh_network_password" />
-    <action android:id="@+id/action_global_newMeshNetworkPasswordFragment" app:destination="@id/newMeshNetworkPasswordFragment" />
+    <action
+        android:id="@+id/action_global_newMeshNetworkPasswordFragment"
+        app:destination="@id/newMeshNetworkPasswordFragment" />
     <fragment
         android:id="@+id/creatingMeshNetworkFragment"
         android:name="io.particle.mesh.setup.ui.CreatingMeshNetworkFragment"
         android:label="fragment_creating_mesh_network"
-        tools:layout="@layout/fragment_creating_mesh_network" /><action android:id="@+id/action_global_creatingMeshNetworkFragment" app:destination="@id/creatingMeshNetworkFragment"/>
+        tools:layout="@layout/fragment_creating_mesh_network" />
+    <action
+        android:id="@+id/action_global_creatingMeshNetworkFragment"
+        app:destination="@id/creatingMeshNetworkFragment" />
     <fragment
         android:id="@+id/newMeshNetworkFinishedFragment"
         android:name="io.particle.mesh.setup.ui.NewMeshNetworkFinishedFragment"
         android:label="fragment_new_mesh_network_finished"
         tools:layout="@layout/fragment_new_mesh_network_finished" />
-    <action android:id="@+id/action_global_newMeshNetworkFinishedFragment" app:destination="@id/newMeshNetworkFinishedFragment" />
+    <action
+        android:id="@+id/action_global_newMeshNetworkFinishedFragment"
+        app:destination="@id/newMeshNetworkFinishedFragment" />
     <action
         android:id="@+id/action_global_selectDeviceFragment"
         app:destination="@+id/selectDeviceFragment"
         app:launchSingleTop="true"
         app:popUpTo="@+id/selectDeviceFragment"
         app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/assistingDevicePairingProgressFragment"
+        android:name="io.particle.mesh.setup.ui.AssistingDevicePairingProgressFragment"
+        android:label="fragment_assisting_device_pairing_progress"
+        tools:layout="@layout/fragment_assisting_device_pairing_progress" /><action android:id="@+id/action_global_assistingDevicePairingProgressFragment" app:destination="@id/assistingDevicePairingProgressFragment"/>
 
 </navigation>

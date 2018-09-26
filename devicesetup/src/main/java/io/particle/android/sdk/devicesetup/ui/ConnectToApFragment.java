@@ -3,7 +3,7 @@ package io.particle.android.sdk.devicesetup.ui;
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import javax.inject.Inject;
 

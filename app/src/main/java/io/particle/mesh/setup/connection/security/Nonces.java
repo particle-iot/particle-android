@@ -1,6 +1,6 @@
 package io.particle.mesh.setup.connection.security;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import okio.Buffer;
 

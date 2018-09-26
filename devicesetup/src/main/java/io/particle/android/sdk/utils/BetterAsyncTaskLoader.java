@@ -1,7 +1,7 @@
 package io.particle.android.sdk.utils;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
+import androidx.loader.content.AsyncTaskLoader;
 
 
 public abstract class BetterAsyncTaskLoader<T> extends AsyncTaskLoader<T> {

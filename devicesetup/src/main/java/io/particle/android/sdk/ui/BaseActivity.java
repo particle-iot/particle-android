@@ -3,8 +3,8 @@ package io.particle.android.sdk.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.RestrictTo;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RestrictTo;
+import androidx.appcompat.app.AppCompatActivity;
 
 import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.devicesetup.R;

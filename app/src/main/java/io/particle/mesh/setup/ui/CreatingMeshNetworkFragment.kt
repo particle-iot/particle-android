@@ -1,13 +1,13 @@
 package io.particle.mesh.setup.ui
 
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.annotation.IdRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
@@ -26,28 +26,25 @@ class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // this is an artificial distinction anyway, just mark it off.
-        markProgress(R.id.status_stage_1)
+        markProgress(true, R.id.status_stage_1)
 
         val fm = flowManagerVM.flowManager!!
-        fm.meshSetupModule.createNetworkSent.observe(this, Observer { markProgress(R.id.status_stage_2) })
+        fm.meshSetupModule.createNetworkSent.observe(this, Observer { markProgress(it, R.id.status_stage_2) })
         fm.cloudConnectionModule.meshRegisteredWithCloud.observe(
                 this,
                 Observer {
-                    markProgress(R.id.status_stage_3)
-                    launch(UI) { markFakeProgress() }
+                    markProgress(it, R.id.status_stage_3)
+                    if (it.truthy()) {
+                        launch(UI) { markFakeProgress() }
+                    }
                 }
         )
     }
 
-    private fun markProgress(@IdRes progressStage: Int) {
-        launch(UI) {
-            val tv: TextView? = view?.findViewById(progressStage)
-            tv?.text = "✓ " + tv?.text
-        }
-    }
-
     private suspend fun markFakeProgress() {
-        delay(1000)
-        markProgress(R.id.status_stage_5)
+        delay(1500)
+        markProgress(true, R.id.status_stage_4)
+        delay(1500)
+        markProgress(true, R.id.status_stage_5)
     }
 }

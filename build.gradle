@@ -2,21 +2,22 @@
 
 buildscript {
 
-    ext.kotlin_version = '1.2.70'
+    ext.kotlin_version = '1.2.71'
 
     repositories {
         google()
         jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" } // added for the Butterknife 9 snapshot to allow using AndroidX
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-rc03'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath 'com.google.gms:google-services:4.0.2'  // for the google-services plugin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha05"
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha06"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.4.0'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'
     }
 }
 
@@ -25,5 +26,6 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" } // added for the Butterknife 9 snapshot to allow using AndroidX
     }
 }

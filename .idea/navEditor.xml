@@ -25,7 +25,7 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="action_global_checkEthernetGatewayFragment">
+                  <entry key="action_global_assistingDevicePairingProgressFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -105,13 +105,13 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="checkEthernetGatewayFragment">
+                  <entry key="assistingDevicePairingProgressFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="12" />
-                            <option name="y" value="280" />
+                            <option name="y" value="-940" />
                           </Point>
                         </option>
                       </LayoutPositions>

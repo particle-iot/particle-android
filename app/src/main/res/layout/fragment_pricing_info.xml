@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
-        android:layout_marginTop="@dimen/setup_header_margin_top"
+        style="@style/p_setup_header_text"
+        android:layout_marginTop="@dimen/p_setup_header_margin_top"
         android:text="@string/p_pricinginfo_wifi_ethernet_within_free_allotment_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,6 @@
 
     <Button
         android:id="@id/action_next"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
@@ -68,4 +67,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_max="200dp" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

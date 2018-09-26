@@ -16,8 +16,8 @@ class GatewaySetupFinishedFragment : BaseMeshSetupFragment() {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.fragment_gateway_setup_finished, container, false)
 
-        root.action_start_tinkering.setOnClickListener { endSetup() }
-        root.action_start_mesh_setup.setOnClickListener { startNewFlow() }
+        root.action_start_building.setOnClickListener { endSetup() }
+        root.action_add_next_mesh_device.setOnClickListener { startNewFlow() }
 
         return root
     }

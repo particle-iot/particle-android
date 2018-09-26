@@ -9,7 +9,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.MainThread;
+import androidx.annotation.MainThread;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

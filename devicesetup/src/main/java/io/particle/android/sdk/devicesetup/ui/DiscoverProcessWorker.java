@@ -1,6 +1,6 @@
 package io.particle.android.sdk.devicesetup.ui;
 
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import java.io.IOException;
 import java.security.PublicKey;

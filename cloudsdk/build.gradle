@@ -34,11 +34,11 @@ ext {
 
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName project.version
         consumerProguardFiles 'consumer-proguard-rules.pro'
@@ -64,8 +64,7 @@ dependencies {
     api 'com.squareup.okio:okio:1.14.0'
     api 'com.squareup.retrofit:retrofit:1.9.0'
     api 'org.greenrobot:eventbus:3.0.0'
-
-    api 'com.android.support:support-fragment:27.1.1'
+    api 'androidx.fragment:fragment:1.0.0'
 }
 
 repositories {

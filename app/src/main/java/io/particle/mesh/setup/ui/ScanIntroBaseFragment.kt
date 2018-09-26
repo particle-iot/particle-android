@@ -1,15 +1,12 @@
 package io.particle.mesh.setup.ui
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 
 abstract class ScanIntroBaseFragment : BaseMeshSetupFragment() {

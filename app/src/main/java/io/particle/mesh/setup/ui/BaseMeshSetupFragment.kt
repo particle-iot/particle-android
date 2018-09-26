@@ -1,10 +1,10 @@
 package io.particle.mesh.setup.ui
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 
-open class BaseMeshSetupFragment : Fragment() {
+open class BaseMeshSetupFragment : androidx.fragment.app.Fragment() {
 
     protected lateinit var flowManagerVM: FlowManagerAccessModel
 

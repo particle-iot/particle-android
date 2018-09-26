@@ -1,10 +1,10 @@
 package io.particle.mesh.setup.ui
 
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +34,10 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
         root.action_create_new_network.setOnClickListener {
             fm.meshSetupModule.onUserSelectedCreateNewNetwork()
         }
-        if (!fm.meshSetupModule.showNewNetworkOptionInScanner) {
+
+        if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
+            root.setup_header_text.setText(R.string.p_scanfornetworks_gateway_flow_title)
+        } else {
             root.action_create_new_network.visibility = View.GONE
         }
         return root

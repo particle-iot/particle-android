@@ -1,7 +1,7 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

@@ -118,11 +118,18 @@
             android:theme="@style/ParticleSetupTheme.NoActionBar" />
 
         <activity
+            android:name="io.particle.android.sdk.accountsetup.TwoFactorActivity"
+            android:label="@string/title_activity_two_factor"
+            android:screenOrientation="portrait"
+            android:theme="@style/ParticleSetupTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+
+        <activity
             android:name="io.particle.mesh.setup.ui.MeshSetupActivity"
             android:label="Mesh Setup"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/p_MeshTheme" />
 
     </application>
 

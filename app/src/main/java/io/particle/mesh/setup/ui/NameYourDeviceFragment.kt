@@ -27,7 +27,16 @@ class NameYourDeviceFragment : BaseMeshSetupFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // get the current name
+        val cloudModule = flowManagerVM.flowManager!!.cloudConnectionModule
+        val currentName = cloudModule.currentDeviceName.value?.toString() ?: ""
+
+        // set the current name on the field
         val nameField = deviceNameInputLayout.editText!!
+        nameField.setText(currentName)
+
+        // is the name blank/null/empty?  Make one up.
         if (nameField.text.isNullOrBlank()) {
             // FIXME: implement protection against duplicate naming
             val uniqueName = CoreNameGenerator.generateUniqueName(setOf())

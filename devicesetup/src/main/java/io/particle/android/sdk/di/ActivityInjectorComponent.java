@@ -1,10 +1,11 @@
 package io.particle.android.sdk.di;
 
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 
 import dagger.Subcomponent;
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.accountsetup.PasswordResetActivity;
+import io.particle.android.sdk.accountsetup.TwoFactorActivity;
 import io.particle.android.sdk.devicesetup.ui.ConnectToApFragment;
 import io.particle.android.sdk.devicesetup.ui.ConnectingActivity;
 import io.particle.android.sdk.devicesetup.ui.ConnectingProcessWorkerTask;
@@ -40,6 +41,8 @@ public interface ActivityInjectorComponent {
     void inject(ConnectToApFragment connectToApFragment);
 
     void inject(ConnectingProcessWorkerTask connectingProcessWorkerTask);
+
+    void inject(TwoFactorActivity twoFactorActivity);
 
     @Subcomponent.Builder
     interface Builder {

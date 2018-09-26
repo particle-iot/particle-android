@@ -7,7 +7,7 @@
     android:layout_height="?attr/listPreferredItemHeight"
     android:background="?attr/selectableItemBackground">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/product_image"
         android:layout_width="60dp"
         android:layout_height="match_parent"
@@ -38,7 +38,7 @@
             android:textSize="@dimen/material_text_size_subhead"
             tools:ignore="MissingPrefix"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/product_model_name"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
         android:textColor="@color/half_black"
         android:textSize="12sp"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/online_status_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

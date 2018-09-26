@@ -1,6 +1,6 @@
 package io.particle.android.sdk.ui;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import io.particle.sdk.app.R;

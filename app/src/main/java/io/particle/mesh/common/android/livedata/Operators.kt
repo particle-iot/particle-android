@@ -1,10 +1,10 @@
 package io.particle.mesh.common.android.livedata
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.Transformations
-import android.support.annotation.MainThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
+import androidx.annotation.MainThread
 import io.particle.mesh.common.ActionDebouncer
 import io.particle.mesh.setup.utils.runOnMainThread
 import kotlinx.coroutines.experimental.launch

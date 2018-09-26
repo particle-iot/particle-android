@@ -2,7 +2,7 @@ package io.particle.android.sdk.cloud;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.util.Base64;
 
 import com.google.gson.Gson;

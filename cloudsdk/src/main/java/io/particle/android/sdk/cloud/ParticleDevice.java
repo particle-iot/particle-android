@@ -3,9 +3,9 @@ package io.particle.android.sdk.cloud;
 import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.MainThread;
-import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.MainThread;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;

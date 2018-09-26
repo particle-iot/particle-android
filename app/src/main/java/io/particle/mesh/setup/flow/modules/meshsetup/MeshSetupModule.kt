@@ -1,7 +1,8 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import android.widget.Toast
 import io.particle.android.sdk.tinker.TinkerApplication
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
@@ -19,13 +20,13 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedN
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
-import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
 import java.lang.IllegalStateException
 
@@ -150,7 +151,7 @@ class MeshSetupModule(
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
         val result = withContext(UI) {
-            flowManager.newDialogRequest(DialogSpec(
+            flowManager.newDialogRequest(ResDialogSpec(
                     R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
                     android.R.string.ok
             ))
@@ -201,17 +202,16 @@ class MeshSetupModule(
             throw FlowException("Error while collecting mesh network password")
         }
 
-        // FIXME: re-introduce this
-//        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
-//        val sendAuthResult = commissioner.sendAuth(password)
-//        when(sendAuthResult) {
-//            is Result.Present -> return
-//            is Result.Error,
-//            is Result.Absent -> {
-//                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
-//                throw FlowException("Bad commissioner password")
-//            }
-//        }
+        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
+        val sendAuthResult = commissioner.sendAuth(password)
+        when(sendAuthResult) {
+            is Result.Present -> return
+            is Result.Error,
+            is Result.Absent -> {
+                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
+                throw FlowException("Bad commissioner password")
+            }
+        }
     }
 
     suspend fun ensureMeshNetworkJoinedUiShown() {
@@ -229,11 +229,12 @@ class MeshSetupModule(
         val joiner = targetXceiver!!
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
 
-        val password = targetDeviceMeshNetworkToJoinCommissionerPassword.value!!
-        commish.sendAuth(password).throwOnErrorOrAbsent()
-        delay(5000)
-        commish.sendStopCommissioner()
-        delay(5000)
+        // FIXME: PUT BACK IN?
+//        // ensure the commissioner was stopped
+//        commish.sendStopCommissioner().throwOnErrorOrAbsent()
+//        delay(1000) // FIXME: verify that we need this
+
+        // no need to send auth msg here; we already authenticated when the password was collected
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
         updateCommissionerStarted(true)
 
@@ -243,21 +244,29 @@ class MeshSetupModule(
             is MeshNetworkToJoin.CreateNewNetwork -> throw IllegalStateException()
         }
         val prepJoinerData = joiner.sendPrepareJoiner(networkToJoin).throwOnErrorOrAbsent()
-        delay(5000)
         commish.sendAddJoiner(prepJoinerData.eui64, prepJoinerData.password).throwOnErrorOrAbsent()
         updateTargetJoinedMeshNetwork(true)
 
         // FIXME: joining (sometimes?) fails here without a delay.  Revisit this value/try removing later?
-        delay(5000)
+        delay(2000)
+
+        TinkerApplication.appContext?.safeToast(
+                "Sending JoinNetworkRequest...",
+                duration = Toast.LENGTH_LONG
+        )
         val start = System.currentTimeMillis()
-        // FIXME: basically never time out.
-        joiner.sendJoinNetwork(100000).throwOnErrorOrAbsent()
+        // time out after *five minutes* (yep.)
+        joiner.sendJoinNetwork(300000).throwOnErrorOrAbsent()
         val totalMillis = System.currentTimeMillis() - start
         TinkerApplication.appContext?.safeToast(
-                "JoinNetworkReply: device took ${totalMillis/1000}s"
+                "JoinNetworkReply: device took ${totalMillis/1000}s",
+                duration = Toast.LENGTH_LONG
         )
 
         targetJoinedSuccessfully = true
+        
+        // let the success UI show for a moment
+        delay(2000)
     }
 
     suspend fun ensureCommissionerStopped() {

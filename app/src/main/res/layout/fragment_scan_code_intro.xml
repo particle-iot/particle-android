@@ -1,72 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".meshsetup.ui.ScanCodeIntroFragment">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/setup_header_text"
-        style="@style/setup_header_text"
-        android:layout_marginTop="@dimen/setup_header_margin_top"
+        style="@style/p_setup_header_text"
         android:text="@string/pair_xenon_with_your_phone"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textView"
         style="@style/setup_step_text"
-        android:layout_marginTop="16dp"
-        android:text="@string/find_the_qr_code_printed_on_the_front_of_your_device"
+        android:layout_marginBottom="64dp"
+        android:text="@string/p_scancodeintro_text_1"
+        app:layout_constraintBottom_toTopOf="@+id/mainImage"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
 
     <ImageView
         android:id="@+id/mainImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/xenon_vector"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="24dp"
+        android:src="@drawable/scan_data_matrix_android"
         app:layout_constraintBottom_toTopOf="@+id/action_next"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <Button
+    <com.tolstykh.textviewrichdrawable.ButtonRichDrawable
         android:id="@id/action_next"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/scan_qr_code"
-        app:layout_constraintBottom_toTopOf="@+id/action_type_serial_number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView4"
-        style="@style/fine_print"
-        android:text="@string/having_trouble_scanning"
-        android:visibility="gone"
-        app:layout_constraintBaseline_toBaselineOf="@+id/action_type_serial_number"
-        app:layout_constraintEnd_toStartOf="@+id/action_type_serial_number"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/action_type_serial_number"
-        style="@style/fine_print_linkified"
-        android:layout_marginBottom="16dp"
-        android:text="@string/type_serial_number"
-        android:visibility="gone"
+        style="@style/p_mesh_button_style"
+        android:layout_width="0dp"
+        app:drawableStartVector="@drawable/p_mesh_ic_camera_24dp"
+        android:layout_margin="16dp"
+        android:text="@string/p_action_scan_data_matrix"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

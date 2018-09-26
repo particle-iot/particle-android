@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    tools:context=".meshsetup.ui.ScanCodeFragment">
+    tools:layout_editor_absoluteY="25dp">
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/p_setup_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/point_camera_at_qr_code_on_the_device"
+        app:layout_constraintBottom_toTopOf="@+id/scanPreview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <io.particle.mesh.setup.barcodescanning.CameraSourcePreview
-        android:id="@+id/firePreview"
-        android:layout_width="0dp"
+        android:id="@+id/scanPreview"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/setup_header_margin_top"
-        android:layout_marginTop="@dimen/setup_header_margin_top"
-        android:layout_marginEnd="@dimen/setup_header_margin_top"
-        app:layout_constraintDimensionRatio="w,3:4"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,3:4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/textView6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <io.particle.mesh.setup.barcodescanning.GraphicOverlay
-            android:id="@+id/fireFaceOverlay"
+            android:id="@+id/scanPreviewOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
@@ -32,41 +42,14 @@
 
     </io.particle.mesh.setup.barcodescanning.CameraSourcePreview>
 
+    <io.particle.mesh.setup.ui.views.OverlayWithHoleView
+        android:id="@+id/p_mesh_holeView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/scanPreview"
+        app:layout_constraintEnd_toEndOf="@id/scanPreview"
+        app:layout_constraintStart_toStartOf="@id/scanPreview"
+        app:layout_constraintTop_toTopOf="@id/scanPreview" />
 
-    <!--<ImageView-->
-    <!--android:id="@+id/scannerView"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginStart="24dp"-->
-    <!--android:layout_marginTop="@dimen/setup_header_margin_top"-->
-    <!--android:layout_marginEnd="24dp"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:scaleType="fitCenter"-->
-    <!--android:src="@drawable/ic_bluetooth_connected_black_24dp"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/point_camera_at_qr_code_on_the_device"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firePreview" />
-
-    <Button
-        android:id="@+id/action_cancel"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
