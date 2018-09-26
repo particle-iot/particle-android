@@ -106,15 +106,15 @@ class CloudConnectionModule(
 
     suspend fun ensureConnectedToCloud() {
         log.info { "ensureConnectedToCloud()" }
-        for (i in 0..14) { // 30 seconds
-            delay(500)
+        for (i in 0..45) { // loop for 45 seconds
+            delay(1000)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
             if (statusReply.status == ConnectionStatus.CONNECTED) {
                 targetDeviceConnectedToCloud.castAndPost(true)
                 return
             }
         }
-        throw FlowException("Error ensuring connection to cloud via ethernet")
+        throw FlowException("Error ensuring connection to cloud")
     }
 
     // FIXME: where does this belong?
