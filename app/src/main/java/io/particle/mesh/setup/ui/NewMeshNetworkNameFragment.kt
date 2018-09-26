@@ -35,7 +35,7 @@ class NewMeshNetworkNameFragment : BaseMeshSetupFragment() {
 
     private fun validateNetworkName(name: String): Boolean {
         val validations = listOf<(String) -> Boolean>(
-                { it.length < 16 },
+                { it.length <= 16 },
                 { it.isNotBlank() },
                 { hasValidCharacters(it) }
         )
