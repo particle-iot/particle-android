@@ -154,9 +154,13 @@ class CloudConnectionModule(
 
     suspend fun ensureSetClaimCode() {
         log.info { "ensureSetClaimCode()" }
-        if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
-            return
-        }
+        // FIXME: see above re: setting the claim code.
+        // If we hit this point, we must want to claim the device
+        // (if we haven't claimed it already)
+
+//        if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
+//            return
+//        }
 
         targetXceiver!!.sendSetClaimCode(claimCode!!).throwOnErrorOrAbsent()
     }
