@@ -13,6 +13,7 @@ import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
 import io.particle.sdk.app.R.id
 import io.particle.sdk.app.R.string
@@ -46,6 +47,16 @@ class CloudConnectionModule(
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
 
+
+    suspend fun ensureUnclaimed() {
+        val id = flowManager.bleConnectionModule.ensureTargetDeviceId()
+        val device = cloud.getDevice(id)
+        if (device == null) {
+            throw FlowException("No device found with ID $id")
+        }
+        device.unclaim()
+        throw FlowException("Unclaimed successfully (I guess?)")
+    }
 
     override fun clearState() {
         claimCode = null
@@ -117,8 +128,10 @@ class CloudConnectionModule(
         }
 
         val userOwnsDevice = cloud.userOwnsDevice(targetDeviceId)
+        log.warn { "User owns device?: $userOwnsDevice" }
         checkedIsTargetClaimedByUser = true
         if (userOwnsDevice) {
+            targetDeviceShouldBeClaimedLD.castAndSetOnMainThread(false)
             return
         }
 
@@ -172,7 +185,7 @@ class CloudConnectionModule(
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
         val result = withContext(UI) {
-            flowManager.newDialogRequest(DialogSpec(
+            flowManager.newDialogRequest(ResDialogSpec(
                     string.p_connecttocloud_xenon_gateway_needs_ethernet,
                     android.R.string.ok
             ))

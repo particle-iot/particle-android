@@ -41,8 +41,7 @@
     <TextView
         android:id="@+id/setup_header_text"
         style="@style/p_setup_header_text"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="72dp"
         android:text="@string/p_newmeshnetworkfinished_subheader_1"
         app:layout_constraintBottom_toTopOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"

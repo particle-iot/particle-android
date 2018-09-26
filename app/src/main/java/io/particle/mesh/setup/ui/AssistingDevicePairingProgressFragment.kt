@@ -7,38 +7,40 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_ble_pairing_progress.*
+import kotlinx.android.synthetic.main.fragment_assisting_device_pairing_progress.*
 import mu.KotlinLogging
 
 
-class BLEPairingProgressFragment : BaseMeshSetupFragment() {
+class AssistingDevicePairingProgressFragment : BaseMeshSetupFragment() {
 
     private val log = KotlinLogging.logger {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceTransceiverLD.observe(
+        flowManagerVM.flowManager!!.bleConnectionModule.commissionerTransceiverLD.observe(
                 this,
                 Observer {
-                    onTargetDeviceConnected()
+                    onAssistingDeviceConnected()
                 })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_ble_pairing_progress, container, false)
+        return inflater.inflate(R.layout.fragment_assisting_device_pairing_progress, container, false)
     }
 
-    private fun onTargetDeviceConnected() {
-        log.info { "onDeviceConnected()" }
+    private fun onAssistingDeviceConnected() {
+        log.info { "onAssistingDeviceConnected()" }
 
         progressBar.visibility = View.GONE
         state_success.visibility = View.VISIBLE
         p_pairingprogress_congrats_text.visibility = View.VISIBLE
 
-        val xceiver = flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceTransceiverLD.value
+        val xceiver = flowManagerVM.flowManager!!.bleConnectionModule.commissionerTransceiverLD.value
         val msg = "Successfully paired with device ${xceiver?.deviceName ?: '?'}"
         status_text.text = msg
     }
+
+
 
 }

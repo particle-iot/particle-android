@@ -20,8 +20,10 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedN
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
+import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
@@ -149,7 +151,7 @@ class MeshSetupModule(
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
         val result = withContext(UI) {
-            flowManager.newDialogRequest(DialogSpec(
+            flowManager.newDialogRequest(ResDialogSpec(
                     R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
                     android.R.string.ok
             ))

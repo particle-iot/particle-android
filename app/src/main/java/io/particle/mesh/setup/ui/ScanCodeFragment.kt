@@ -4,6 +4,7 @@ package io.particle.mesh.setup.ui
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -112,6 +113,10 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
 
         preview = root.findViewById(R.id.scanPreview)
         graphicOverlay = root.findViewById(R.id.scanPreviewOverlay)
+
+
+//        root.headLikeAHole.setCircle(RectF(100.0f, 100.0f, 300.0f, 300.0f), 150.0f)
+
 
         return root
     }

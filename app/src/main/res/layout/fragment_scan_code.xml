@@ -26,7 +26,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintDimensionRatio="h,3:4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -41,6 +41,14 @@
             android:layout_alignParentBottom="true" />
 
     </io.particle.mesh.setup.barcodescanning.CameraSourcePreview>
+
+    <io.particle.mesh.setup.ui.views.OverlayWithHoleView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/scanPreview"
+        app:layout_constraintEnd_toEndOf="@id/scanPreview"
+        app:layout_constraintStart_toStartOf="@id/scanPreview"
+        app:layout_constraintTop_toTopOf="@id/scanPreview" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

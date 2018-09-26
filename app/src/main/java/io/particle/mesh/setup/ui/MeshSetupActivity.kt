@@ -97,24 +97,36 @@ class MeshSetupActivity : BaseActivity() {
         }
         flowVM.flowManager?.clearDialogRequest()
 
+
         val builder = MaterialDialog.Builder(this)
-                .content(spec.text)
-                .canceledOnTouchOutside(false)
-                .positiveText(spec.positiveText)
+        when (spec) {
+            is DialogSpec.StringDialogSpec? -> {
+                builder.content(spec.text)
+                        .positiveText(android.R.string.ok)
+
+            }
+
+            is DialogSpec.ResDialogSpec? -> {
+                builder.content(spec.text)
+                        .positiveText(spec.positiveText)
+
+                spec.negativeText?.let {
+                    builder.negativeText(it)
+                    builder.onNegative { dialog, _ ->
+                        dialog.dismiss()
+                        flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE)
+                    }
+                }
+
+                spec.title?.let { builder.title(it) }
+            }
+        }
+
+        builder.canceledOnTouchOutside(false)
                 .onPositive { dialog, _ ->
                     dialog.dismiss()
                     flowVM.flowManager!!.updateDialogResult(DialogResult.POSITIVE)
                 }
-
-        spec.negativeText?.let {
-            builder.negativeText(it)
-            builder.onNegative { dialog, _ ->
-                dialog.dismiss()
-                flowVM.flowManager!!.updateDialogResult(DialogResult.NEGATIVE)
-            }
-        }
-
-        spec.title?.let { builder.title(it) }
 
         log.info { "Showing dialog for: $spec" }
         builder.show()
@@ -128,12 +140,20 @@ enum class DialogResult {
 }
 
 
-data class DialogSpec(
-        @StringRes val text: Int,
-        @StringRes val positiveText: Int,
-        @StringRes val negativeText: Int? = null,
-        @StringRes val title: Int? = null
-)
+sealed class DialogSpec {
+
+    data class ResDialogSpec(
+            @StringRes val text: Int,
+            @StringRes val positiveText: Int,
+            @StringRes val negativeText: Int? = null,
+            @StringRes val title: Int? = null
+    ) : DialogSpec()
+
+    data class StringDialogSpec(
+            val text: String
+    ) : DialogSpec()
+
+}
 
 
 class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {

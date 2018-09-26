@@ -18,6 +18,7 @@ import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksSca
 import io.particle.mesh.setup.ui.BarcodeData
 import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.utils.runOnMainThread
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
@@ -60,6 +61,9 @@ class FlowManager(
             try {
                 flow.runFlow()
             } catch (ex: Exception) {
+                newDialogRequest(
+                        StringDialogSpec("Error: " + ex.message.toString())
+                )
                 QATool.report(ex)
             }
         }
