@@ -120,6 +120,7 @@ class Flow(
         meshSetupModule.ensureCommissionerStopped()
 
         bleConnModule.ensureListeningStoppedForBothDevices()
+        cloudConnModule.ensureConnectedToCloud()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
         cloudConnModule.ensureTargetDeviceIsNamed()
         ensureShowJoinerSetupFinishedUi()
