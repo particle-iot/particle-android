@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Particle Mesh</string>
     <string name="choose_the_device_you_re_setting_up">Choose the device you\'re setting up</string>
 
     <string name="product_name_xenon">Xenon</string>
