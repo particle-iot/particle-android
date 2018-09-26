@@ -176,7 +176,7 @@ class ProtocolTransceiver internal constructor(
     val deviceName: String
         get() = connection.deviceName
 
-    suspend fun disconnect() {
+    fun disconnect() {
         launch {
             sendStopCommissioner()
             launch(UI) { connection.disconnect() }
