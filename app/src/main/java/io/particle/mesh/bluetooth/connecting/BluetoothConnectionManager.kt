@@ -65,7 +65,7 @@ class BluetoothConnection(
         // calling .close() *immediately* after .disconnect() was sometimes causing
         // the disconnect to fail, thus the delay.  Hacky, but it works. :-/
         launch(UI) {
-            delay(50)
+            delay(100)
             QATool.runSafely({ gatt.close() })
         }
     }
