@@ -247,8 +247,8 @@ class MeshSetupModule(
         commish.sendAddJoiner(prepJoinerData.eui64, prepJoinerData.password).throwOnErrorOrAbsent()
         updateTargetJoinedMeshNetwork(true)
 
-        // FIXME: joining (sometimes?) fails here without a delay.  Revisit this value/try removing later?
-        delay(2000)
+        // value here recommended by Sergey
+        delay(15000)
 
         TinkerApplication.appContext?.safeToast(
                 "Sending JoinNetworkRequest...",
