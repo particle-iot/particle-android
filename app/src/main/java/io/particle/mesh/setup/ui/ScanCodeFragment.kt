@@ -4,6 +4,8 @@ package io.particle.mesh.setup.ui
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,6 +28,11 @@ import io.particle.mesh.setup.barcodescanning.CameraSourcePreview
 import io.particle.mesh.setup.barcodescanning.GraphicOverlay
 import io.particle.mesh.setup.barcodescanning.barcode.BarcodeScanningProcessor
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.fragment_scan_code.*
+import kotlinx.android.synthetic.main.fragment_scan_code.view.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 import java.io.IOException
 import java.util.*
@@ -113,10 +120,6 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
 
         preview = root.findViewById(R.id.scanPreview)
         graphicOverlay = root.findViewById(R.id.scanPreviewOverlay)
-
-
-//        root.headLikeAHole.setCircle(RectF(100.0f, 100.0f, 300.0f, 300.0f), 150.0f)
-
 
         return root
     }

@@ -43,6 +43,7 @@
     </io.particle.mesh.setup.barcodescanning.CameraSourcePreview>
 
     <io.particle.mesh.setup.ui.views.OverlayWithHoleView
+        android:id="@+id/p_mesh_holeView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@id/scanPreview"
