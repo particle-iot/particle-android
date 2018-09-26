@@ -2,7 +2,6 @@ package io.particle.android.sdk.accountsetup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -12,6 +11,7 @@ import com.squareup.phrase.Phrase;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -20,6 +20,7 @@ import butterknife.OnTextChanged;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.SDKGlobals;
+import io.particle.android.sdk.cloud.exceptions.ParticleLoginException;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
 import io.particle.android.sdk.devicesetup.R2;
@@ -73,8 +74,15 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.particle_activity_login);
-        ParticleDeviceSetupLibrary.getInstance().getApplicationComponent().activityComponentBuilder()
-                .apModule(new ApModule()).build().inject(this);
+
+        ParticleDeviceSetupLibrary
+                .getInstance()
+                .getApplicationComponent()
+                .activityComponentBuilder()
+                .apModule(new ApModule())
+                .build()
+                .inject(this);
+
         ButterKnife.bind(this);
         ParticleUi.enableBrandLogoInverseVisibilityAgainstSoftKeyboard(this);
         SEGAnalytics.screen("Auth: Login Screen");
@@ -189,15 +197,22 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull ParticleCloudException error) {
-                log.d("onFailed(): " + error.getMessage());
-                SEGAnalytics.track("Auth: Login failure");
-                ParticleUi.showParticleButtonProgress(LoginActivity.this,
-                        R.id.action_log_in, false);
-                // FIXME: check specifically for 401 errors
-                // and set a better error message?  (Seems like
-                // this works fine already...)
-                passwordView.setError(error.getBestMessage());
-                passwordView.requestFocus();
+                ParticleUi.showParticleButtonProgress(LoginActivity.this, R.id.action_log_in, false);
+                ParticleLoginException loginException = (ParticleLoginException) error;
+
+                if (loginException.getMfaToken() != null) {
+                    Intent intent = TwoFactorActivity.buildIntent(LoginActivity.this, email,
+                            password, loginException.getMfaToken());
+                    startActivity(intent);
+                } else {
+                    log.d("onFailed(): " + error.getMessage());
+                    SEGAnalytics.track("Auth: Login failure");
+                    // FIXME: check specifically for 401 errors
+                    // and set a better error message?  (Seems like
+                    // this works fine already...)
+                    passwordView.setError(error.getBestMessage());
+                    passwordView.requestFocus();
+                }
             }
         });
     }

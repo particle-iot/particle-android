@@ -111,5 +111,12 @@
         your Photon to complete the setup process. Particle will not use location data for any other
         purposes.
     </string>
+    <string name="title_activity_two_factor">Two Step Authentication</string>
+    <string name="enter_login_code_title">Enter a login code</string>
+    <string name="login_code_hint">login code</string>
+    <string name="authentication_info">Open your authenticator app on your mobile device and enter the 6-digit login code</string>
+    <string name="verify_button_text">Verify</string>
+    <string name="recover_link_text">&lt;u&gt;Lost access to your phone? Recover your account.&lt;/u&gt;</string>
+    <string name="recovery_link">https://login.particle.io/account-info</string>
 
 </resources>
