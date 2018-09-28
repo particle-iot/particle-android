@@ -1,5 +1,7 @@
 package io.particle.mesh.setup.flow
 
+import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.annotation.IdRes
@@ -9,6 +11,8 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
+import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
@@ -19,11 +23,14 @@ import io.particle.mesh.setup.ui.BarcodeData
 import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
+import io.particle.mesh.setup.ui.ProgressHack
 import io.particle.mesh.setup.utils.runOnMainThread
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
 
 
@@ -31,11 +38,13 @@ class FlowManager(
         var targetDeviceType: ParticleDeviceType,
         cloud: ParticleCloud,
         private val navControllerRef: LiveData<NavController?>,
-        val dialogRequestLD: LiveData<DialogSpec?>,
+        private val dialogRequestLD: LiveData<DialogSpec?>,
         val dialogResultLD: LiveData<DialogResult?>,
         btConnectionManager: BluetoothConnectionManager,
-        transceiverFactory: ProtocolTransceiverFactory
-) : Clearable {
+        transceiverFactory: ProtocolTransceiverFactory,
+        private val everythingNeedsAContext: Application,
+        private val progressHackLD: MutableLiveData<ProgressHack?>
+) : Clearable, ProgressHack {
 
     val bleConnectionModule = BLEConnectionModule(this, btConnectionManager, transceiverFactory)
     val meshSetupModule: MeshSetupModule
@@ -58,13 +67,23 @@ class FlowManager(
     fun startNewFlow() {
         // FIXME: call "clearState()" here?  Probably?
         launch {
-            try {
-                flow.runFlow()
-            } catch (ex: Exception) {
-                newDialogRequest(
-                        StringDialogSpec("Error: " + ex.message.toString())
-                )
-                QATool.report(ex)
+            val error: Exception? = null
+            for (i in 0..10) {
+                try {
+                    flow.runFlow()
+                    return@launch
+                } catch (ex: Exception) {
+                    everythingNeedsAContext.safeToast("Error: " + ex.message.toString(), Toast.LENGTH_LONG)
+                    delay(1000)
+                    QATool.report(ex)
+                }
+            }
+            if (error != null) {
+                withContext(UI) {
+                    newDialogRequest(StringDialogSpec("Setup has encountered an error and cannot " +
+                            "continue. Please exit setup and try again."))
+                    clearDialogResult()
+                }
             }
         }
     }
@@ -75,10 +94,23 @@ class FlowManager(
         // FIXME: set/clear some states?  WHICH?
 
         launch {
-            try {
-                flow.runMeshFlowForGatewayDevice()
-            } catch (ex: Exception) {
-                QATool.report(ex)
+            val error: Exception? = null
+            for (i in 0..10) {
+                try {
+                    flow.runMeshFlowForGatewayDevice()
+                    return@launch
+                } catch (ex: Exception) {
+                    everythingNeedsAContext.safeToast("Error: " + ex.message.toString(), Toast.LENGTH_LONG)
+                    delay(1000)
+                    QATool.report(ex)
+                }
+            }
+            if (error != null) {
+                withContext(UI) {
+                    newDialogRequest(StringDialogSpec("Setup has encountered an error and cannot " +
+                            "continue. Please exit setup and try again."))
+                    clearDialogResult()
+                }
             }
         }
     }
@@ -135,6 +167,10 @@ class FlowManager(
         }
     }
 
+    override fun showGlobalProgressSpinner(show: Boolean) {
+        progressHackLD.value?.showGlobalProgressSpinner(show)
+    }
+
     fun navigate(@IdRes idRes: Int) {
         runOnMainThread {
             navController?.popBackStack()
@@ -143,7 +179,7 @@ class FlowManager(
     }
 
     fun newDialogRequest(spec: DialogSpec) {
-        log.debug { "newDialogRequest()" }
+        log.debug { "newDialogRequest(): $spec" }
         (dialogRequestLD as MutableLiveData).postValue(spec)
     }
 

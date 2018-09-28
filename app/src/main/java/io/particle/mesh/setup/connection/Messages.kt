@@ -1,6 +1,7 @@
 package io.particle.mesh.setup.connection
 
 
+import android.util.SparseArray
 import androidx.annotation.MainThread
 import androidx.collection.SparseArrayCompat
 import com.google.protobuf.AbstractMessage
@@ -64,11 +65,12 @@ import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.security.SecurityManager
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withTimeoutOrNull
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
 import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.experimental.Continuation
+import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.coroutines.experimental.suspendCoroutine
 
 
@@ -167,7 +169,7 @@ class ProtocolTransceiver internal constructor(
 ) {
 
     private val log = KotlinLogging.logger {}
-    private val requestCallbacks = androidx.collection.SparseArrayCompat<(DeviceResponse?) -> Unit>()
+    private val requestCallbacks = SparseArray<(DeviceResponse?) -> Unit>()
 
     val isConnected: Boolean
         get() = connection.isConnected
@@ -176,7 +178,10 @@ class ProtocolTransceiver internal constructor(
         get() = connection.deviceName
 
     fun disconnect() {
-        connection.disconnect()
+        launch {
+            sendStopCommissioner()
+            launch(UI) { connection.disconnect() }
+        }
     }
 
     fun setConnectionPriority(priority: ConnectionPriority) {
@@ -389,13 +394,18 @@ class ProtocolTransceiver internal constructor(
             message: GeneratedMessageV3,
             timeout: Int = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
     ): DeviceResponse? {
-        log.info { "Sending message ${message.javaClass} to '$connectionName': '$message'" }
         val requestFrame = message.asRequest()
+        log.info { "Sending message ${message.javaClass} to '$connectionName': '$message' " +
+             "with ID: ${requestFrame.requestId}" }
+
+
         val response = withTimeoutOrNull(timeout) {
             suspendCoroutine { continuation: Continuation<DeviceResponse?> ->
                 doSendRequest(requestFrame) { continuation.resume(it) }
             }
         }
+
+
 
         val id = requestFrame.requestId.toInt()
         if (response == null) {
@@ -403,7 +413,9 @@ class ProtocolTransceiver internal constructor(
         }
         // By the time we get to here, our callback has been used up,
         // so we can remove it from the map.
-        requestCallbacks.remove(id)
+        synchronized(requestCallbacks) {
+            requestCallbacks.remove(requestFrame.requestId.toInt())
+        }
         return response
     }
 
@@ -411,7 +423,9 @@ class ProtocolTransceiver internal constructor(
             request: DeviceRequest,
             continuationCallback: (DeviceResponse?) -> Unit) {
         val requestCallback = { frame: DeviceResponse? -> continuationCallback(frame) }
-        requestCallbacks.put(request.requestId.toInt(), requestCallback)
+        synchronized(requestCallbacks) {
+            requestCallbacks.put(request.requestId.toInt(), requestCallback)
+        }
         requestWriter.writeRequest(request)
     }
 

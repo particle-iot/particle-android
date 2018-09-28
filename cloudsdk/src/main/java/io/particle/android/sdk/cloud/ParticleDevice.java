@@ -138,7 +138,7 @@ public class ParticleDevice implements Parcelable {
         }
     }
 
-    private static final int MAX_PARTICLE_FUNCTION_ARG_LENGTH = 63;
+    private static final int MAX_PARTICLE_FUNCTION_ARG_LENGTH = 622;
 
     private static final TLog log = TLog.get(ParticleDevice.class);
 

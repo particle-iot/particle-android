@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -16,6 +17,7 @@ import io.particle.android.sdk.ui.BaseActivity
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
+import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
@@ -29,7 +31,7 @@ import mu.KotlinLogging
 private const val REQUEST_ENABLE_BT = 42
 
 
-class MeshSetupActivity : BaseActivity() {
+class MeshSetupActivity : ProgressHack, BaseActivity() {
 
     private val log = KotlinLogging.logger {}
 
@@ -45,7 +47,8 @@ class MeshSetupActivity : BaseActivity() {
         // do this to make sure we're always providing the correct NavController
         flowVM = FlowManagerAccessModel.getViewModel(this)
         flowVM.setNavController(navController)
-        flowVM.dialogRequestLD.observe(this, Observer { onDialogSpecReceived(it) })
+        flowVM.setProgressHack(this)
+        flowVM.dialogRequestLD.nonNull().observe(this, Observer { onDialogSpecReceived(it) })
 
         p_meshactivity_username.text = ParticleCloudSDK.getCloud().loggedInUsername
         p_action_close.setOnClickListener { showCloseSetupConfirmation() }
@@ -60,7 +63,8 @@ class MeshSetupActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        FlowManagerAccessModel.getViewModel(this).setNavController(null)
+        flowVM.setNavController(null)
+        flowVM.setProgressHack(null)
         super.onDestroy()
     }
 
@@ -78,6 +82,10 @@ class MeshSetupActivity : BaseActivity() {
             // FIXME: inform the user why we're exiting?
             finish()
         }
+    }
+
+    override fun showGlobalProgressSpinner(show: Boolean) {
+        runOnUiThread { p_mesh_globalProgressSpinner.isVisible = show }
     }
 
     private fun showCloseSetupConfirmation() {
@@ -133,6 +141,11 @@ class MeshSetupActivity : BaseActivity() {
     }
 }
 
+//p_mesh_globalProgressSpinner
+interface ProgressHack {
+    fun showGlobalProgressSpinner(show: Boolean)
+}
+
 
 enum class DialogResult {
     POSITIVE,
@@ -156,7 +169,7 @@ sealed class DialogSpec {
 }
 
 
-class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
+class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(app) {
 
     companion object {
 
@@ -170,7 +183,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>().nonNull()
+    val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>()
     var flowManager: FlowManager? = null
 
     private val securityManager = SecurityManager()
@@ -179,6 +192,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
     private val cloud = ParticleCloudSDK.getCloud()
 
     private val navReference = MutableLiveData<NavController?>()
+    private val progressHackReference = MutableLiveData<ProgressHack?>()
 
     private val log = KotlinLogging.logger {}
 
@@ -189,9 +203,11 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
                     cloud,
                     navReference,
                     dialogRequestLD,
-                    ClearValueOnInactiveLiveData<DialogResult>().nonNull(),
+                    ClearValueOnInactiveLiveData<DialogResult>(),
                     btConnManager,
-                    protocolFactory
+                    protocolFactory,
+                    app,
+                    progressHackReference
             )
         }
         flowManager?.startNewFlow()
@@ -199,6 +215,10 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
 
     fun setNavController(navController: NavController?) {
         navReference.setOnMainThread(navController)
+    }
+
+    fun setProgressHack(progressHack: ProgressHack?) {
+        progressHackReference.setOnMainThread(progressHack)
     }
 
     override fun onCleared() {

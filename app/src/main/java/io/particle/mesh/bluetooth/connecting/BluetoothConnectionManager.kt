@@ -10,6 +10,7 @@ import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.BTCharacteristicWriter
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.btAdapter
+import io.particle.mesh.bluetooth.connecting.ConnectionState.DISCONNECTED
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
@@ -43,6 +44,14 @@ class BluetoothConnection(
         private val closablePacketReceiveChannel: Channel<ByteArray>
 ) {
 
+    init {
+        connectionStateChangedLD.observeForever {
+            if (it == DISCONNECTED) {
+                disconnect(false)
+            }
+        }
+    }
+
     val deviceName: String
         get() = gatt.device.name
 
@@ -56,16 +65,19 @@ class BluetoothConnection(
         gatt.requestConnectionPriority(priority.sdkVal)
     }
 
-    fun disconnect() {
+    fun disconnect(closeGatt: Boolean = true) {
         QATool.runSafely(
                 { packetSendChannel.close() },
                 { closablePacketReceiveChannel.close() },
                 { gatt.disconnect() }
         )
+        if (!closeGatt) {
+            return
+        }
         // calling .close() *immediately* after .disconnect() was sometimes causing
         // the disconnect to fail, thus the delay.  Hacky, but it works. :-/
         launch(UI) {
-            delay(50)
+            delay(100)
             QATool.runSafely({ gatt.close() })
         }
     }

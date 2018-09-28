@@ -6,7 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.VideoView
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import io.particle.common.buildRawResourceUri
+import io.particle.sdk.app.BuildConfig
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_manual_commissioning_add_to_network.view.*
 
@@ -23,7 +28,25 @@ class ManualCommissioningAddToNetworkFragment : androidx.fragment.app.Fragment()
             )
         }
 
+        setUpVideoView(root.videoView)
+
         return root
+    }
+
+    private fun setUpVideoView(vidView: VideoView) {
+        vidView.setVideoURI(requireActivity().buildRawResourceUri(R.raw.commissioner_to_listening_mode))
+
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) {
+                vidView.start()
+            }
+
+            override fun onStop(owner: LifecycleOwner) {
+                vidView.stopPlayback()
+            }
+        })
+
+        vidView.setOnPreparedListener { player -> player.isLooping = true }
     }
 
 }

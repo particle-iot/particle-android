@@ -1,8 +1,8 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import android.widget.Toast
 import io.particle.android.sdk.tinker.TinkerApplication
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
@@ -18,8 +18,6 @@ import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
-import io.particle.mesh.setup.ui.DialogResult
-import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
@@ -28,13 +26,11 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
-import java.lang.IllegalStateException
 
 
 class MeshSetupModule(
         private val flowManager: FlowManager,
         val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
-
 ) : Clearable {
 
     val targetDeviceMeshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
@@ -149,16 +145,13 @@ class MeshSetupModule(
         flowManager.bleConnectionModule.commissionerTransceiverLD.castAndPost(null)
         flowManager.bleConnectionModule.updateCommissionerBarcode(null)
 
-        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
+        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
         val result = withContext(UI) {
             flowManager.newDialogRequest(ResDialogSpec(
                     R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
                     android.R.string.ok
             ))
-            var result: DialogResult? = null
-            while(result == null) {
-                result = ldSuspender.awaitResult()
-            }
+            ldSuspender.awaitResult()
         }
         log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
         flowManager.clearDialogResult()
@@ -185,6 +178,8 @@ class MeshSetupModule(
         }
     }
 
+    var shownNetworkPasswordUi = false
+
     suspend fun ensureTargetMeshNetworkPasswordCollected() {
         log.info { "ensureTargetMeshNetworkPasswordCollected()" }
         if (targetDeviceMeshNetworkToJoinCommissionerPassword.value.truthy()) {
@@ -192,9 +187,12 @@ class MeshSetupModule(
         }
 
         val ld = targetDeviceMeshNetworkToJoinCommissionerPassword
-        val ldSuspender = liveDataSuspender({ ld })
+        val ldSuspender = liveDataSuspender({ ld.nonNull() })
         val password = withContext(UI) {
-            flowManager.navigate(R.id.action_global_enterNetworkPasswordFragment)
+            if (!shownNetworkPasswordUi) {
+                flowManager.navigate(R.id.action_global_enterNetworkPasswordFragment)
+                shownNetworkPasswordUi = true
+            }
             ldSuspender.awaitResult()
         }
 
@@ -202,15 +200,32 @@ class MeshSetupModule(
             throw FlowException("Error while collecting mesh network password")
         }
 
-        val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
-        val sendAuthResult = commissioner.sendAuth(password)
-        when(sendAuthResult) {
-            is Result.Present -> return
-            is Result.Error,
-            is Result.Absent -> {
-                targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
-                throw FlowException("Bad commissioner password")
+        try {
+            flowManager.showGlobalProgressSpinner(true)
+            val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
+            val sendAuthResult = commissioner.sendAuth(password)
+            when(sendAuthResult) {
+                is Result.Present -> return
+                is Result.Error,
+                is Result.Absent -> {
+                    targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
+
+                    val ldSuspender2 = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
+                    val result = withContext(UI) {
+                        flowManager.newDialogRequest(ResDialogSpec(
+                                R.string.p_mesh_network_password_is_incorrect,
+                                android.R.string.ok
+                        ))
+                        ldSuspender2.awaitResult()
+                    }
+                    log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
+                    flowManager.clearDialogResult()
+
+                    throw FlowException("Bad commissioner password")
+                }
             }
+        } finally {
+            flowManager.showGlobalProgressSpinner(false)
         }
     }
 
@@ -247,16 +262,15 @@ class MeshSetupModule(
         commish.sendAddJoiner(prepJoinerData.eui64, prepJoinerData.password).throwOnErrorOrAbsent()
         updateTargetJoinedMeshNetwork(true)
 
-        // FIXME: joining (sometimes?) fails here without a delay.  Revisit this value/try removing later?
-        delay(2000)
+        // value here recommended by Sergey
+        delay(15000)
 
         TinkerApplication.appContext?.safeToast(
                 "Sending JoinNetworkRequest...",
                 duration = Toast.LENGTH_LONG
         )
         val start = System.currentTimeMillis()
-        // time out after *five minutes* (yep.)
-        joiner.sendJoinNetwork(300000).throwOnErrorOrAbsent()
+        joiner.sendJoinNetwork(60_000).throwOnErrorOrAbsent()
         val totalMillis = System.currentTimeMillis() - start
         TinkerApplication.appContext?.safeToast(
                 "JoinNetworkReply: device took ${totalMillis/1000}s",

@@ -6,10 +6,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
-import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
-import io.particle.mesh.common.android.livedata.castAndPost
-import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
@@ -106,15 +103,15 @@ class CloudConnectionModule(
 
     suspend fun ensureConnectedToCloud() {
         log.info { "ensureConnectedToCloud()" }
-        for (i in 0..14) { // 30 seconds
-            delay(500)
+        for (i in 0..9) { // loop for 45 seconds
+            delay(5000)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
             if (statusReply.status == ConnectionStatus.CONNECTED) {
                 targetDeviceConnectedToCloud.castAndPost(true)
                 return
             }
         }
-        throw FlowException("Error ensuring connection to cloud via ethernet")
+        throw FlowException("Error ensuring connection to cloud")
     }
 
     // FIXME: where does this belong?
@@ -154,9 +151,13 @@ class CloudConnectionModule(
 
     suspend fun ensureSetClaimCode() {
         log.info { "ensureSetClaimCode()" }
-        if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
-            return
-        }
+        // FIXME: see above re: setting the claim code.
+        // If we hit this point, we must want to claim the device
+        // (if we haven't claimed it already)
+
+//        if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
+//            return
+//        }
 
         targetXceiver!!.sendSetClaimCode(claimCode!!).throwOnErrorOrAbsent()
     }
@@ -185,7 +186,7 @@ class CloudConnectionModule(
             }
         }
 
-        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
+        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
         val result = withContext(UI) {
             flowManager.newDialogRequest(ResDialogSpec(
                     string.p_connecttocloud_xenon_gateway_needs_ethernet,
@@ -253,11 +254,6 @@ class CloudConnectionModule(
             return
         }
 
-        // FIXME: show progress spinner
-
-
-
-
         val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD })
         val nameToAssign = withContext(UI) {
             flowManager.navigate(id.action_global_nameYourDeviceFragment)
@@ -268,11 +264,18 @@ class CloudConnectionModule(
             throw FlowException("Error ensuring target device is named")
         }
 
-        val targetDeviceId = flowManager.bleConnectionModule.ensureTargetDeviceId()
-        val joiner = cloud.getDevice(targetDeviceId)
-        joiner.setName(nameToAssign)
+        try {
+            flowManager.showGlobalProgressSpinner(true)
 
-        updateIsTargetDeviceNamed(true)
+            val targetDeviceId = flowManager.bleConnectionModule.ensureTargetDeviceId()
+            val joiner = cloud.getDevice(targetDeviceId)
+            joiner.setName(nameToAssign)
+            updateIsTargetDeviceNamed(true)
+        } catch (ex: Exception) {
+            throw FlowException("Unable to rename device")
+        } finally {
+            flowManager.showGlobalProgressSpinner(false)
+        }
     }
 
     suspend fun ensureNetworkIsRegisteredWithCloud() {
