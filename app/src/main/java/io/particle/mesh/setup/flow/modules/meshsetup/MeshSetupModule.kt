@@ -34,7 +34,6 @@ import java.lang.IllegalStateException
 class MeshSetupModule(
         private val flowManager: FlowManager,
         val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
-
 ) : Clearable {
 
     val targetDeviceMeshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
@@ -149,16 +148,13 @@ class MeshSetupModule(
         flowManager.bleConnectionModule.commissionerTransceiverLD.castAndPost(null)
         flowManager.bleConnectionModule.updateCommissionerBarcode(null)
 
-        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
+        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
         val result = withContext(UI) {
             flowManager.newDialogRequest(ResDialogSpec(
                     R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
                     android.R.string.ok
             ))
-            var result: DialogResult? = null
-            while(result == null) {
-                result = ldSuspender.awaitResult()
-            }
+            ldSuspender.awaitResult()
         }
         log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
         flowManager.clearDialogResult()

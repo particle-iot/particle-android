@@ -45,7 +45,7 @@ class MeshSetupActivity : BaseActivity() {
         // do this to make sure we're always providing the correct NavController
         flowVM = FlowManagerAccessModel.getViewModel(this)
         flowVM.setNavController(navController)
-        flowVM.dialogRequestLD.observe(this, Observer { onDialogSpecReceived(it) })
+        flowVM.dialogRequestLD.nonNull().observe(this, Observer { onDialogSpecReceived(it) })
 
         p_meshactivity_username.text = ParticleCloudSDK.getCloud().loggedInUsername
         p_action_close.setOnClickListener { showCloseSetupConfirmation() }
@@ -170,7 +170,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>().nonNull()
+    val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>()
     var flowManager: FlowManager? = null
 
     private val securityManager = SecurityManager()
@@ -189,7 +189,7 @@ class FlowManagerAccessModel(app: Application) : AndroidViewModel(app) {
                     cloud,
                     navReference,
                     dialogRequestLD,
-                    ClearValueOnInactiveLiveData<DialogResult>().nonNull(),
+                    ClearValueOnInactiveLiveData<DialogResult>(),
                     btConnManager,
                     protocolFactory
             )

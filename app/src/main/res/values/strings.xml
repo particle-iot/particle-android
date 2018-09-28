@@ -182,5 +182,6 @@ Enjoy!]]></string>
     <string name="p_newmeshnetworkpassword_confirm_password_hint">Confirm network password</string>
     <string name="p_newmeshnetworkpassword_passwords_do_not_match_dialog_content">Passwords do not match!</string>
     <string name="p_newmeshnetworkpassword_hintbox_header">Keep this password safe!</string>
+    <string name="p_connecttocommissionerintro_step2">Press and hold the MODE button for 3 seconds</string>
 
 </resources>

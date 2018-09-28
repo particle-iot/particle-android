@@ -6,10 +6,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
-import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
-import io.particle.mesh.common.android.livedata.castAndPost
-import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
@@ -189,7 +186,7 @@ class CloudConnectionModule(
             }
         }
 
-        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD })
+        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
         val result = withContext(UI) {
             flowManager.newDialogRequest(ResDialogSpec(
                     string.p_connecttocloud_xenon_gateway_needs_ethernet,
