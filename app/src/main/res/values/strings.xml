@@ -183,5 +183,6 @@ Enjoy!]]></string>
     <string name="p_newmeshnetworkpassword_passwords_do_not_match_dialog_content">Passwords do not match!</string>
     <string name="p_newmeshnetworkpassword_hintbox_header">Keep this password safe!</string>
     <string name="p_connecttocommissionerintro_step2">Press and hold the MODE button for 3 seconds</string>
+    <string name="p_mesh_network_password_is_incorrect">Network password is incorrect</string>
 
 </resources>

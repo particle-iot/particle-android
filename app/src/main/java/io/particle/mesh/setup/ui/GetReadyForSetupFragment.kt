@@ -24,6 +24,7 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         setUpVideoView(root.videoView)
         root.action_next.setOnClickListener(Navigation.createNavigateOnClickListener(
                 R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment
+//                R.id.action_global_newMeshNetworkPasswordFragment
         ))
 
         // FIXME: when "use ethernet" is toggled, switch to R.raw.featherwing_power video

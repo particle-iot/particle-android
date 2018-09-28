@@ -24,7 +24,5 @@ class EnterNetworkPasswordFragment : BaseMeshSetupFragment() {
         val password = view!!.deviceNameInputLayout.editText!!.text.toString()
         val meshModule = flowManagerVM.flowManager!!.meshSetupModule
         meshModule.updateTargetMeshNetworkCommissionerPassword(password)
-        // FIXME: REMOVE WHEN PROGRESS SPINNER IS ADDED
-        action_next.isEnabled = false
     }
 }

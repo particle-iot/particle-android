@@ -103,8 +103,8 @@ class CloudConnectionModule(
 
     suspend fun ensureConnectedToCloud() {
         log.info { "ensureConnectedToCloud()" }
-        for (i in 0..45) { // loop for 45 seconds
-            delay(1000)
+        for (i in 0..9) { // loop for 45 seconds
+            delay(5000)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
             if (statusReply.status == ConnectionStatus.CONNECTED) {
                 targetDeviceConnectedToCloud.castAndPost(true)
@@ -254,11 +254,6 @@ class CloudConnectionModule(
             return
         }
 
-        // FIXME: show progress spinner
-
-
-
-
         val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD })
         val nameToAssign = withContext(UI) {
             flowManager.navigate(id.action_global_nameYourDeviceFragment)
@@ -269,11 +264,18 @@ class CloudConnectionModule(
             throw FlowException("Error ensuring target device is named")
         }
 
-        val targetDeviceId = flowManager.bleConnectionModule.ensureTargetDeviceId()
-        val joiner = cloud.getDevice(targetDeviceId)
-        joiner.setName(nameToAssign)
+        try {
+            flowManager.showGlobalProgressSpinner(true)
 
-        updateIsTargetDeviceNamed(true)
+            val targetDeviceId = flowManager.bleConnectionModule.ensureTargetDeviceId()
+            val joiner = cloud.getDevice(targetDeviceId)
+            joiner.setName(nameToAssign)
+            updateIsTargetDeviceNamed(true)
+        } catch (ex: Exception) {
+            throw FlowException("Unable to rename device")
+        } finally {
+            flowManager.showGlobalProgressSpinner(false)
+        }
     }
 
     suspend fun ensureNetworkIsRegisteredWithCloud() {

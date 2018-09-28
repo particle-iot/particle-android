@@ -56,6 +56,12 @@ class TargetDeviceMeshNetworksScanner(
         if (value.truthy() && networks.isEmpty()) {
             return  // don't replace results with non results (at least for MVP)
         }
-        setOnMainThread(networks)
+
+        val sortedUniqueNetworks = networks.map { it.extPanId to it }
+                .toMap()
+                .values
+                .sortedBy { it.name }
+
+        setOnMainThread(sortedUniqueNetworks)
     }
 }
