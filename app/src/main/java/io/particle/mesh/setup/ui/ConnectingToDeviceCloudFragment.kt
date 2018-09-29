@@ -9,8 +9,10 @@ import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.fragment_connecting_to_device_cloud.*
 
 
 class ConnectingToDeviceCloudFragment : BaseMeshSetupFragment() {
@@ -30,6 +32,10 @@ class ConnectingToDeviceCloudFragment : BaseMeshSetupFragment() {
         val fm = flowManagerVM.flowManager!!
         fm.cloudConnectionModule.targetDeviceConnectedToCloud.observeForProgress(R.id.status_stage_2)
         fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_3)
+
+        setup_header_text.text = Phrase.from(view, R.string.p_connectingtodevicecloud_title)
+                .put("product_type", fm.targetDeviceType.name)
+                .format()
     }
 
     private fun LiveData<Boolean?>.observeForProgress(@IdRes progressStage: Int) {

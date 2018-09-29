@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.fragment_joining_mesh_network_progress.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -30,6 +32,20 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
         fm.meshSetupModule.targetJoinedMeshNetworkLD.observeForProgress(R.id.status_stage_2)
         fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_3, 1000)
         fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_4, 2000)
+
+        val productName = fm.targetDeviceType.name
+
+        setup_header_text.text = Phrase.from(view, R.string.p_joiningmesh_header)
+                .put("product_type", productName)
+                .format()
+
+        status_stage_1.text = Phrase.from(view, R.string.requesting_permission_to_add_to_mesh_network)
+                .put("product_type", productName)
+                .format()
+
+        status_stage_2.text = Phrase.from(view, R.string.adding_the_xenon_to_the_mesh_network)
+                .put("product_type", productName)
+                .format()
     }
 
     private fun LiveData<Boolean?>.observeForProgress(

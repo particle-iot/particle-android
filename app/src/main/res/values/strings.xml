@@ -98,15 +98,15 @@ Enjoy!]]></string>
     <string name="publish_positive_action">Publish event</string>
     <string name="cancel">Cancel</string>
     <string name="logout_confirm_message">Are you sure you want to log out?</string>
-    <string name="pair_assisting_device_with_your_phone">Pair assisting Xenon with your phone</string>
-    <string name="p_pairassistingdevice_subheader_1">Use your phone\'s camera to scan the sticker printed on the front of the assisting Xenon</string>
+    <string name="pair_assisting_device_with_your_phone">Pair assisting {product_type} with your phone</string>
+    <string name="p_pairassistingdevice_subheader_1">Use your phone\'s camera to scan the sticker printed on the front of the assisting {product_type}</string>
 
     <string name="p_connecttocloud_xenon_gateway_needs_ethernet">You must connect an ethernet cable to a switch/router with an active internet connection to proceed.</string>
     <string name="p_checkethernetgateway_title">Connect Xenon to Device Cloud</string>
     <string name="p_checkethernetgateway_device_cloud_intro">The Device Cloud is (larger network at play here, introduce the concept)</string>
     <string name="p_checkethernetgateway_ensure_featherwing_is_plugged_in">Make sure an Ethernet Featherwing is plugged into the Xenon, and an ethernet cable is plugged into the Featherwing.</string>
     <string name="p_action_connect_to_device_cloud">Connect to device cloud</string>
-    <string name="p_connectingtodevicecloud_title">Your Xenon is connecting to the Particle Device Cloud</string>
+    <string name="p_connectingtodevicecloud_title">Your {product_type} is connecting to the Particle Device Cloud</string>
     <string name="p_connectingtodevicecloud_step_1">Connecting to the internet via Ethernet</string>
     <string name="p_connectingtodevicecloud_step_2">Starting a secure session with the Particle Device Cloud</string>
     <string name="p_connectingtodevicecloud_step_3">Connected successfully!</string>
@@ -143,7 +143,7 @@ Enjoy!]]></string>
     <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_action">Enroll &amp; create network</string>
 
     <string name="p_creatingyournetwork_header">Creating your network</string>
-    <string name="p_creatingyournetwork_step_1">Sending network credentials to your Xenon</string>
+    <string name="p_creatingyournetwork_step_1">Sending network credentials to your {product_type}</string>
     <string name="p_creatingyournetwork_step_2">Device creating the mesh network locally</string>
     <string name="p_creatingyournetwork_step_3">Registering the mesh network with the Particle Device Cloud</string>
     <string name="p_creatingyournetwork_step_4">Activating device as a gateway in the mesh network</string>
@@ -155,7 +155,7 @@ Enjoy!]]></string>
     <string name="p_action_add_next_mesh_device">Add next mesh device</string>
 
     <string name="p_newmeshnetworkfinished_start_mesh_setup_header">Adding more devices to your network?</string>
-    <string name="p_newmeshnetworkfinished_subheader_1">Your network has been set up with this device acting as a gateway</string>
+    <string name="p_newmeshnetworkfinished_subheader_1">Your network has been set up with {device_name} acting as a gateway</string>
     <string name="p_action_create_new_network">Create new network…</string>
     <string name="p_manualcommissioning_commissioner_candidate_not_on_target_network">This device is not part the network you are trying to join.</string>
     <string name="p_exitsetupconfirmation_exit">Exit setup</string>
@@ -163,20 +163,20 @@ Enjoy!]]></string>
     <string name="p_scancode_title">Pair device with your phone</string>
     <string name="p_pairingprogress_congrats">Congrats!</string>
     <string name="p_action_next">next</string>
-    <string name="p_meshnetworkscanning_header">Your device is scanning for mesh networks to join</string>
+    <string name="p_meshnetworkscanning_header">{device_name} is scanning for mesh networks to join</string>
     <string name="p_enterpassword_tipbox_header">Helpful tip!</string>
-    <string name="p_scancommissionercode_tip_content">This assisting device will be used to bring your new Xenon onto the mesh network.</string>
-    <string name="p_joiningmesh_header">Your Xenon is joining the mesh network</string>
+    <string name="p_scancommissionercode_tip_content">This assisting device will be used to bring your new {product_type} onto the mesh network.</string>
+    <string name="p_joiningmesh_header">Your {product_type} is joining the mesh network</string>
     <string name="p_namedevice_hint_content">Name your device something you will remember to help you easily identify it later.</string>
     <string name="p_action_im_done">I\'m done</string>
     <string name="p_action_set_up_next_device">Set up next device</string>
 
-    <string name="p_scanfornetworks_gateway_flow_title">Your Xenon + Ethernet Featherwing will act as a gateway in a mesh network</string>
+    <string name="p_scanfornetworks_gateway_flow_title">Your {product_type} + Ethernet Featherwing will act as a gateway in a mesh network</string>
     <string name="p_newmeshnetworkname_hintbox_content">Name your network something you will remember to help you easily identify it later</string>
     <string name="p_action_create_network">Create network</string>
     <string name="p_joiningmeshnetwork_stage4"><![CDATA[Joined mesh network & connected to Particle Device Cloud successfully!]]></string>
     <string name="p_joinersetupfinished_done_header">Itching to get started?</string>
-    <string name="p_joinersetupfinished_continue_to_mesh_header">Using this device in a mesh network?</string>
+    <string name="p_joinersetupfinished_continue_to_mesh_header">Using {device_name} in a mesh network?</string>
     <string name="p_gatewaysetupfinished_done_header">Using as a standalone device?</string>
     <string name="p_action_continue_onto_mesh_setup">Continue onto mesh setup</string>
     <string name="p_newmeshnetworkpassword_confirm_password_hint">Confirm network password</string>

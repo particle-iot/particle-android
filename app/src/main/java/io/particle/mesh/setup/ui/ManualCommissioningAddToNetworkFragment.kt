@@ -2,7 +2,6 @@ package io.particle.mesh.setup.ui
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +11,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import io.particle.common.buildRawResourceUri
 import io.particle.sdk.app.BuildConfig
+import com.squareup.phrase.Phrase
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_manual_commissioning_add_to_network.view.*
 
 
-class ManualCommissioningAddToNetworkFragment : androidx.fragment.app.Fragment() {
+class ManualCommissioningAddToNetworkFragment : BaseMeshSetupFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -27,6 +27,16 @@ class ManualCommissioningAddToNetworkFragment : androidx.fragment.app.Fragment()
                     R.id.action_manualCommissioningAddToNetworkFragment_to_scanCommissionerCodeFragment
             )
         }
+
+        val productName = flowManagerVM.flowManager!!.targetDeviceType.name
+
+        root.setup_header_text.text = Phrase.from(view, R.string.add_xenon_to_mesh_network)
+                .put("product_type", productName)
+                .format()
+
+        root.textView.text = Phrase.from(view, R.string.this_device_will_act_as_the_commissioner)
+                .put("product_type", productName)
+                .format()
 
         setUpVideoView(root.videoView)
 
