@@ -42,7 +42,7 @@ class FlowManager(
         val dialogResultLD: LiveData<DialogResult?>,
         btConnectionManager: BluetoothConnectionManager,
         transceiverFactory: ProtocolTransceiverFactory,
-        private val everythingNeedsAContext: Application,
+        val everythingNeedsAContext: Application,
         private val progressHackLD: MutableLiveData<ProgressHack?>
 ) : Clearable, ProgressHack {
 

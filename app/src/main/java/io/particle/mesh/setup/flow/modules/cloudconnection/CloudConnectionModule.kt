@@ -1,5 +1,6 @@
 package io.particle.mesh.setup.flow.modules.cloudconnection
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
@@ -13,6 +14,8 @@ import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
+import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import io.particle.sdk.app.R.id
 import io.particle.sdk.app.R.string
@@ -97,7 +100,11 @@ class CloudConnectionModule(
         log.info { "ensureClaimCodeFetched(), claimCode=$claimCode" }
         if (claimCode == null) {
             log.info { "Fetching new claim code" }
+            val ctx = flowManager.everythingNeedsAContext
+            ctx.safeToast("Fetching claim code...")
             claimCode = cloud.generateClaimCode().claimCode
+            delay(5000)
+            ctx.safeToast("${claimCode?.length}-char claim code fetched: $claimCode")
         }
     }
 
@@ -158,8 +165,20 @@ class CloudConnectionModule(
 //        if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
 //            return
 //        }
-
-        targetXceiver!!.sendSetClaimCode(claimCode!!).throwOnErrorOrAbsent()
+        val ctx = flowManager.everythingNeedsAContext
+        ctx.safeToast("Setting ${claimCode?.length ?: "0"}-char claim code: $claimCode")
+        val result = targetXceiver!!.sendSetClaimCode(claimCode!!)
+        try {
+            result.throwOnErrorOrAbsent()
+        } catch (ex: Exception) {
+            flowManager.newDialogRequest(
+                    StringDialogSpec("Error sending claim code!  Error code: '${result.error?.name}'"))
+            flowManager.clearDialogResult()
+            throw ex
+        }
+        delay(2000)
+        ctx.safeToast("Claim code sent successfully!  Response code: 'OK'", Toast.LENGTH_LONG)
+        delay(3000)
     }
 
     suspend fun ensureEthernetHasIP() {
