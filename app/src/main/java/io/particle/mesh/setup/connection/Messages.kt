@@ -333,10 +333,9 @@ class ProtocolTransceiver internal constructor(
 
     // NOTE: yes, 60 seconds is a CRAZY timeout, but... this is how long it takes to receive
     // a response sometimes.
-    suspend fun sendJoinNetwork(timeout: Int = 60000): Result<JoinNetworkReply, Common.ResultCode> {
+    suspend fun sendJoinNetwork(): Result<JoinNetworkReply, Common.ResultCode> {
         val response = sendRequest(
-                JoinNetworkRequest.newBuilder().build(),
-                timeout
+                JoinNetworkRequest.newBuilder().build()
         )
         return buildResult(response) { r -> JoinNetworkReply.parseFrom(r.payloadData) }
     }

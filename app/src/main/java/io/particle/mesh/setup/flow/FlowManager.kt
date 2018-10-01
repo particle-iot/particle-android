@@ -152,6 +152,7 @@ class FlowManager(
         }
 
         clearState()
+
         launch(UI) {
             delay(100)
             bleConnectionModule.commissionerBarcodeLD.castAndSetOnMainThread(commissionerBarcodeToUse)
