@@ -17,7 +17,7 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val productName = flowManagerVM.flowManager!!.targetDeviceType.name
+        val productName = flowManagerVM.flowManager!!.getTypeName(view.context)
 
         textView.text = Phrase.from(view, R.string.p_scancommissionercode_tip_content)
                 .put("product_type", productName)

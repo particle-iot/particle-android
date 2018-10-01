@@ -29,7 +29,7 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
 
         // FIXME: when "use ethernet" is toggled, switch to R.raw.featherwing_power video
 
-        val productName = flowManagerVM.flowManager!!.targetDeviceType.name
+        val productName = flowManagerVM.flowManager!!.getTypeName(root.context)
 
         root.setup_header_text.text = Phrase.from(root, R.string.get_your_xenon_ready_for_setup)
                 .put("product_type", productName)

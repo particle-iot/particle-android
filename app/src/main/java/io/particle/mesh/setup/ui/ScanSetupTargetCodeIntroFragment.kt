@@ -16,7 +16,7 @@ class ScanSetupTargetCodeIntroFragment : ScanIntroBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val productName = flowManagerVM.flowManager!!.targetDeviceType.name
+        val productName = flowManagerVM.flowManager!!.getTypeName(view.context)
 
         setup_header_text.text = Phrase.from(view, R.string.pair_xenon_with_your_phone)
                 .put("product_type", productName)

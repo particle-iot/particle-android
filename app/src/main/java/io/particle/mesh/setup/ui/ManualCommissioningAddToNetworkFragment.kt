@@ -28,7 +28,7 @@ class ManualCommissioningAddToNetworkFragment : BaseMeshSetupFragment() {
             )
         }
 
-        val productName = flowManagerVM.flowManager!!.targetDeviceType.name
+        val productName = flowManagerVM.flowManager!!.getTypeName(root.context)
 
         root.setup_header_text.text = Phrase.from(view, R.string.add_xenon_to_mesh_network)
                 .put("product_type", productName)

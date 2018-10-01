@@ -40,7 +40,7 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
         if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
             root.setup_header_text.text = Phrase.from(view, R.string.p_scanfornetworks_gateway_flow_title)
-                    .put("product_type", fm.targetDeviceType.name)
+                    .put("product_type", fm.getTypeName(root.context))
                     .format()
         } else {
             fm.cloudConnectionModule.currentDeviceName.observe(this, Observer {

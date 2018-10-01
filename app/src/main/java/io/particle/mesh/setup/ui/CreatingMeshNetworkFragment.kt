@@ -43,7 +43,7 @@ class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
         )
 
         status_stage_1.text = Phrase.from(view, R.string.p_creatingyournetwork_step_1)
-                .put("product_type", fm.targetDeviceType.name)
+                .put("product_type", fm.getTypeName(view.context))
                 .format()
     }
 

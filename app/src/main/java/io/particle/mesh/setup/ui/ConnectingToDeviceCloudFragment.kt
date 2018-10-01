@@ -34,7 +34,7 @@ class ConnectingToDeviceCloudFragment : BaseMeshSetupFragment() {
         fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_3)
 
         setup_header_text.text = Phrase.from(view, R.string.p_connectingtodevicecloud_title)
-                .put("product_type", fm.targetDeviceType.name)
+                .put("product_type", fm.getTypeName(view.context))
                 .format()
     }
 
