@@ -231,9 +231,9 @@ class CloudConnectionModule(
 
         suspend fun pollDevicesForNewDevice(deviceId: String): Boolean {
             val idLower = deviceId.toLowerCase()
-            for (i in 0..14) { // 30 seconds
+            for (i in 0..23) { // 45 seconds
                 // FIXME: what should the timing be here?
-                delay(500)
+                delay(2000)
                 val userOwnsDevice = try {
                     cloud.userOwnsDevice(idLower)
                 } catch (ex: Exception) {
