@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.squareup.phrase.Phrase
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
+import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
 import io.particle.mesh.setup.ui.utils.inflateRow
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_for_mesh_networks.view.*
 import kotlinx.android.synthetic.main.row_mesh_networks.view.*
+import java.lang.NullPointerException
 
 
 class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
@@ -36,8 +39,20 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
         }
 
         if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
-            root.setup_header_text.setText(R.string.p_scanfornetworks_gateway_flow_title)
+            root.setup_header_text.text = Phrase.from(view, R.string.p_scanfornetworks_gateway_flow_title)
+                    .put("product_type", fm.getTypeName(root.context))
+                    .format()
         } else {
+            fm.cloudConnectionModule.currentDeviceName.observe(this, Observer {
+                if (it == null) {
+                    QATool.report(NullPointerException("Device name is null."))
+                }
+
+                root.setup_header_text.text = Phrase.from(view, R.string.p_meshnetworkscanning_header)
+                        .put("product_type", it ?: getString(R.string.default_device_name))
+                        .format()
+            })
+
             root.action_create_new_network.visibility = View.GONE
         }
         return root
