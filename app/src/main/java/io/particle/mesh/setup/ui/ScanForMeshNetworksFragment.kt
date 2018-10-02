@@ -37,6 +37,9 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
         if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
             root.setup_header_text.setText(R.string.p_scanfornetworks_gateway_flow_title)
+            root.progressBar2.visibility = View.INVISIBLE
+            root.recyclerView.visibility = View.INVISIBLE
+            root.action_create_new_network.visibility = View.VISIBLE
         } else {
             root.action_create_new_network.visibility = View.GONE
         }

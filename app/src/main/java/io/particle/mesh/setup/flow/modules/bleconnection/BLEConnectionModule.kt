@@ -176,7 +176,7 @@ class BLEConnectionModule(
         }
 
         log.debug { "No commissioner barcode found; showing UI" }
-        val liveDataSuspender = liveDataSuspender({ commissionerBarcodeLD })
+        val liveDataSuspender = liveDataSuspender({ commissionerBarcodeLD.nonNull() })
         val barcodeData = withContext(UI) {
             flowManager.navigate(R.id.action_global_manualCommissioningAddToNetworkFragment)
             liveDataSuspender.awaitResult()

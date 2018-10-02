@@ -13,6 +13,9 @@ import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
 
 
+private const val RESET_ONLY_MODE = false
+
+
 class Flow(
         private val flowManager: FlowManager,
         private val bleConnModule: BLEConnectionModule,
@@ -50,6 +53,10 @@ class Flow(
         log.debug { "doRunFlow()" }
 
         doInitialCommonSubflow()
+        if (RESET_ONLY_MODE) {
+            return
+        }
+
         // check interfaces!
         val interfaceList = ensureGetInterfaceList()
         val hasEthernet = null != interfaceList.firstOrNull { it.type == InterfaceType.ETHERNET }
@@ -78,12 +85,21 @@ class Flow(
         bleConnModule.ensureBarcodeDataForTargetDevice()
         bleConnModule.ensureTargetDeviceConnected()
 
+        if (RESET_ONLY_MODE) {
+            ensureTargetDeviceSetSetupDone(false)
+            meshSetupModule.ensureRemovedFromExistingNetwork()
+            return
+        }
+
         // gather initial data, perform upfront checks
         cloudConnModule.ensureDeviceIsUsingEligibleFirmware()
         val targetDeviceId = bleConnModule.ensureTargetDeviceId()
-        cloudConnModule.ensureCheckedIsClaimed(targetDeviceId)
-        cloudConnModule.ensureSetClaimCode()
-        meshSetupModule.ensureRemovedFromExistingNetwork()
+
+        if (!meshSetupModule.targetJoinedSuccessfully) {
+            cloudConnModule.ensureCheckedIsClaimed(targetDeviceId)
+            cloudConnModule.ensureSetClaimCode()
+            meshSetupModule.ensureRemovedFromExistingNetwork()
+        }
     }
 
     private suspend fun doEthernetSubflow() {

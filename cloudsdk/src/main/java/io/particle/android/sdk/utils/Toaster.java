@@ -32,6 +32,8 @@ public class Toaster {
 
     private static void showToast(@NonNull final Activity activity, @Nullable final String msg,
                                   final int length) {
+        Preconditions.checkNotNull(activity, "Activity must not be null!");
+
         Runnable toastRunnable = () -> Toast.makeText(activity, msg, length).show();
 
         if (EZ.isThisTheMainThread()) {

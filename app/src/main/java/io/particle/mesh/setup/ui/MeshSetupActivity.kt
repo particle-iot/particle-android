@@ -206,7 +206,6 @@ class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(ap
                     ClearValueOnInactiveLiveData<DialogResult>(),
                     btConnManager,
                     protocolFactory,
-                    app,
                     progressHackReference
             )
         }

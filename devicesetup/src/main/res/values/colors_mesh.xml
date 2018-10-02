@@ -7,6 +7,6 @@
     <color name="p_faded_gray">#9C9C9C</color>
     <color name="p_setup_step_text_inactive">#B1B1B1</color>
     <color name="p_mesh_element_border">#C7C7C7</color>
-    <color name="p_mesh_hintbox_bg">#F7F7F7</color>
+    <color name="p_mesh_hintbox_bg">#F5F5F5</color>
 
 </resources>
