@@ -1,18 +1,14 @@
 package io.particle.mesh.setup.flow
 
-import android.app.Application
-import android.widget.Toast
+import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataSuspender
-import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
@@ -25,7 +21,6 @@ import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.ui.ProgressHack
 import io.particle.mesh.setup.utils.runOnMainThread
-import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
@@ -42,7 +37,6 @@ class FlowManager(
         val dialogResultLD: LiveData<DialogResult?>,
         btConnectionManager: BluetoothConnectionManager,
         transceiverFactory: ProtocolTransceiverFactory,
-        val everythingNeedsAContext: Application,
         private val progressHackLD: MutableLiveData<ProgressHack?>
 ) : Clearable, ProgressHack {
 
@@ -73,7 +67,6 @@ class FlowManager(
                     flow.runFlow()
                     return@launch
                 } catch (ex: Exception) {
-                    everythingNeedsAContext.safeToast("Error: " + ex.message.toString(), Toast.LENGTH_LONG)
                     delay(1000)
                     QATool.report(ex)
                 }
@@ -100,7 +93,6 @@ class FlowManager(
                     flow.runMeshFlowForGatewayDevice()
                     return@launch
                 } catch (ex: Exception) {
-                    everythingNeedsAContext.safeToast("Error: " + ex.message.toString(), Toast.LENGTH_LONG)
                     delay(1000)
                     QATool.report(ex)
                 }
