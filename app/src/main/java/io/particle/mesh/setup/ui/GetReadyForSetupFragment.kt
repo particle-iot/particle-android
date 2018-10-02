@@ -26,8 +26,8 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         action_next.setOnClickListener(Navigation.createNavigateOnClickListener(
-//                R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment
-                R.id.action_global_newMeshNetworkPasswordFragment
+                R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment
+//                R.id.action_global_newMeshNetworkPasswordFragment
         ))
 
         p_getreadyforsetup_use_ethernet_switch.setOnCheckedChangeListener { _, isChecked ->
@@ -51,7 +51,7 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         )
         for ((view, res) in textViews.entries) {
             if (res == null) {
-                view.visibility = View.GONE
+                view.visibility = View.INVISIBLE
             } else {
                 view.visibility = View.VISIBLE
                 view.setText(res)
