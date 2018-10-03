@@ -1,3 +1,8 @@
+2.3.0
+=====
+* Mesh setup support!
+* Move to a monorepo!
+
 2.2.2
 ======
 * New feature for extra security - Two-step authentication.
