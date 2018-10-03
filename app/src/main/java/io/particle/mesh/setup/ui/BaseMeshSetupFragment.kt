@@ -1,7 +1,6 @@
 package io.particle.mesh.setup.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 
 
 open class BaseMeshSetupFragment : androidx.fragment.app.Fragment() {

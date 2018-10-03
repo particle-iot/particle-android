@@ -1,6 +1,8 @@
 package io.particle.mesh.setup.ui
 
 
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation
 import io.particle.common.buildRawResourceUri
+import io.particle.sdk.app.BuildConfig
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
 

@@ -1,14 +1,19 @@
 package io.particle.mesh.setup.flow
 
-import androidx.annotation.IdRes
+import android.app.Application
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
+import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
@@ -21,6 +26,7 @@ import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.ui.ProgressHack
 import io.particle.mesh.setup.utils.runOnMainThread
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
@@ -187,5 +193,22 @@ class FlowManager(
 
     fun clearDialogRequest() {
         (dialogRequestLD as MutableLiveData).postValue(null)
+    }
+
+    fun getTypeName(context: Context): String {
+        val resource = when (targetDeviceType) {
+            ParticleDeviceType.CORE -> R.string.core
+            ParticleDeviceType.PHOTON -> R.string.photon
+            ParticleDeviceType.P1 -> R.string.p1
+            ParticleDeviceType.RASPBERRY_PI -> R.string.raspberry
+            ParticleDeviceType.RED_BEAR_DUO -> R.string.red_bear_duo
+            ParticleDeviceType.BLUZ -> R.string.bluz
+            ParticleDeviceType.DIGISTUMP_OAK -> R.string.oak
+            ParticleDeviceType.ELECTRON -> R.string.electron
+            ParticleDeviceType.ARGON -> R.string.product_name_argon
+            ParticleDeviceType.BORON -> R.string.product_name_boron
+            ParticleDeviceType.XENON -> R.string.product_name_xenon
+        }
+        return context.getString(resource)
     }
 }
