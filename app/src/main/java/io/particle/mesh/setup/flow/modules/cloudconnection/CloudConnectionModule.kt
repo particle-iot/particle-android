@@ -6,10 +6,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
-import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
-import io.particle.mesh.common.android.livedata.castAndPost
-import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
@@ -17,7 +14,6 @@ import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
-import io.particle.sdk.app.R.id
 import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
@@ -258,7 +254,7 @@ class CloudConnectionModule(
 
         val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD.nonNull() })
         val nameToAssign = withContext(UI) {
-            flowManager.navigate(id.action_global_nameYourDeviceFragment)
+            flowManager.navigate(R.id.action_global_nameYourDeviceFragment)
             ldSuspender.awaitResult()
         }
 
