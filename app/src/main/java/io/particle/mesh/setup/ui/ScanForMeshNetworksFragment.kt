@@ -47,7 +47,12 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
     }
 
     private fun onNetworksUpdated(networks: List<NetworkInfo>?) {
-        adapter.submitList(networks?.map { ScannedMeshNetwork(it.name, it) })
+        adapter.submitList(
+                networks?.asSequence()
+                        ?.map { ScannedMeshNetwork(it.name, it) }
+                        ?.sortedBy { it.name }
+                        ?.toList()
+        )
     }
 
     private fun onMeshNetworkSelected(networkInfo: NetworkInfo) {
