@@ -8,11 +8,11 @@
     <string name="product_name_boron">Boron</string>
     <string name="product_description_boron">Mesh + Cellular</string>
 
-    <string name="get_your_xenon_ready_for_setup">Get your {product_type} ready for setup</string>
+    <string name="p_getreadyforsetup_header_mesh_only">Get your {product_type} ready for setup</string>
     <string name="my_device_is_blinking_blue">My device is blinking blue</string>
-    <string name="plug_your_device_into_a_power_source">Plug your {product_type} into a power source</string>
+    <string name="p_getreadyforsetup_step1_mesh_only">Plug your {product_type} into a power source</string>
     <string name="if_you_have_an_external_antenna_connect_it_to_your_device">If you have an external antenna, connect it to your device</string>
-    <string name="confirm_your_device_is_blinking_blue">Confirm your {product_type} is blinking blue</string>
+    <string name="p_getreadyforsetup_step2_mesh_only">Confirm your {product_type} is blinking blue</string>
     <string name="p_action_scan_data_matrix">Scan sticker</string>
     <string name="pair_xenon_with_your_phone">Pair {product_type} with your phone</string>
     <string name="p_scancodeintro_text_1">Use your phone\'s camera to scan the sticker printed on the front of the {product_type}</string>
@@ -49,6 +49,12 @@
 
     <string name="p_newmeshnetworkname_invalid_name_dialog_text">Mesh network names must be fewer than 16 characters, and can only contain letters, numbers, and underscores.</string>
     <string name="p_newmeshnetworkname_invalid_password_dialog_text">Passwords must be at least 6 characters long.</string>
+
+    <string name="p_getreadyforsetup_header_ethernet">Attach your Ethernet Featherwing</string>
+    <string name="p_getreadyforsetup_step1_ethernet">Line up Xenon pin headers and gently push the Xenon into the Featherwing until flush</string>
+    <string name="p_getreadyforsetup_step2_ethernet">Insert an ethernet cable into the port</string>
+    <string name="p_getreadyforsetup_step3_ethernet">Plug your Xenon into a power source</string>
+    <string name="p_getreadyforsetup_step4_ethernet">Confirm your Xenon is blinking blue</string>
 
     <string name="default_device_name">device</string>
 </resources>

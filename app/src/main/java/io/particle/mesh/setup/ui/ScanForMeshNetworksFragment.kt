@@ -42,6 +42,9 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
             root.setup_header_text.text = Phrase.from(view, R.string.p_scanfornetworks_gateway_flow_title)
                     .put("product_type", fm.getTypeName(root.context))
                     .format()
+            root.progressBar2.visibility = View.INVISIBLE
+            root.recyclerView.visibility = View.INVISIBLE
+            root.action_create_new_network.visibility = View.VISIBLE
         } else {
             fm.cloudConnectionModule.currentDeviceName.observe(this, Observer {
                 if (it == null) {
@@ -59,7 +62,12 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
     }
 
     private fun onNetworksUpdated(networks: List<NetworkInfo>?) {
-        adapter.submitList(networks?.map { ScannedMeshNetwork(it.name, it) })
+        adapter.submitList(
+                networks?.asSequence()
+                        ?.map { ScannedMeshNetwork(it.name, it) }
+                        ?.sortedBy { it.name }
+                        ?.toList()
+        )
     }
 
     private fun onMeshNetworkSelected(networkInfo: NetworkInfo) {

@@ -257,7 +257,7 @@ public class AuthenticatedSseEventSourceImpl extends SseEventSourceImpl {
 
         @Override
         public void streamOpened() {
-            _LOG.d("entering " + _CLASS_NAME + ".streamOpened");
+//            _LOG.d("entering " + _CLASS_NAME + ".streamOpened");
             connectionOpened();
         }
 

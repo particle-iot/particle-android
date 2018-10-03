@@ -43,7 +43,6 @@ class FlowManager(
         val dialogResultLD: LiveData<DialogResult?>,
         btConnectionManager: BluetoothConnectionManager,
         transceiverFactory: ProtocolTransceiverFactory,
-        private val everythingNeedsAContext: Application,
         private val progressHackLD: MutableLiveData<ProgressHack?>
 ) : Clearable, ProgressHack {
 
@@ -74,7 +73,6 @@ class FlowManager(
                     flow.runFlow()
                     return@launch
                 } catch (ex: Exception) {
-                    everythingNeedsAContext.safeToast("Error: " + ex.message.toString(), Toast.LENGTH_LONG)
                     delay(1000)
                     QATool.report(ex)
                 }
@@ -101,7 +99,6 @@ class FlowManager(
                     flow.runMeshFlowForGatewayDevice()
                     return@launch
                 } catch (ex: Exception) {
-                    everythingNeedsAContext.safeToast("Error: " + ex.message.toString(), Toast.LENGTH_LONG)
                     delay(1000)
                     QATool.report(ex)
                 }
@@ -153,6 +150,7 @@ class FlowManager(
         }
 
         clearState()
+
         launch(UI) {
             delay(100)
             bleConnectionModule.commissionerBarcodeLD.castAndSetOnMainThread(commissionerBarcodeToUse)

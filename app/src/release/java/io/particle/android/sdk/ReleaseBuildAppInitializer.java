@@ -8,6 +8,7 @@ import com.segment.analytics.android.integrations.firebase.FirebaseIntegration;
 import com.segment.analytics.android.integrations.intercom.IntercomIntegration;
 import io.fabric.sdk.android.Fabric;
 import org.jetbrains.annotations.NotNull;
+import android.util.Log;
 
 import io.particle.android.sdk.utils.GDPRKt;
 
@@ -21,8 +22,8 @@ public class ReleaseBuildAppInitializer {
 	boolean coveredByGDPR = GDPRKt.isUserCoveredByGDPR()
 
         if (!coveredByGDPR) {
-            // "MVP" level GDPR support: only enable crash reporting if the user is NOT in the EU.
-            Fabric.with(this, new Crashlytics());
+             "MVP" level GDPR support: only enable crash reporting if the user is NOT in the EU.
+            Fabric.with(app, new Crashlytics());
         }
 
         QATool.INSTANCE.setImplementation(new QAToolImpl() {
@@ -32,6 +33,7 @@ public class ReleaseBuildAppInitializer {
 		if (coveredByGDPR) {
 		    return
 		}
+                Log.e("ParticleApp", "Sending error to Crashlytics:", exception);
                 Crashlytics.logException(exception);
             }
 

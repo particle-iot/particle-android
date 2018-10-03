@@ -10,9 +10,10 @@
     <TextView
         android:id="@+id/setup_header_text"
         style="@style/p_setup_header_text"
-        android:layout_marginBottom="48dp"
-        android:text="@string/get_your_xenon_ready_for_setup"
-        app:layout_constraintBottom_toTopOf="@id/textView"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="@dimen/p_getreadyforsetup_text_bottom_margin"
+        android:text="@string/p_getreadyforsetup_header_mesh_only"
+        app:layout_constraintBottom_toTopOf="@id/p_mesh_step1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,12 +21,16 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/p_mesh_step1"
         style="@style/setup_step_text"
         fontPath="@string/bold_text_font_name"
-        android:layout_marginBottom="24dp"
-        android:text="@string/plug_your_device_into_a_power_source"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/p_getreadyforsetup_text_bottom_margin"
+        android:maxWidth="400dp"
+        android:text="@string/p_getreadyforsetup_step1_mesh_only"
+        app:layout_constraintBottom_toTopOf="@+id/p_mesh_step2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setup_header_text"
@@ -33,34 +38,70 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/p_mesh_step2"
         style="@style/setup_step_text"
         fontPath="@string/bold_text_font_name"
-        android:layout_marginBottom="32dp"
-        android:text="@string/confirm_your_device_is_blinking_blue"
-        app:layout_constraintBottom_toTopOf="@+id/videoViewWrapper"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/p_getreadyforsetup_text_bottom_margin"
+        android:maxWidth="400dp"
+        android:text="@string/p_getreadyforsetup_step2_mesh_only"
+        app:layout_constraintBottom_toTopOf="@+id/p_mesh_step3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/p_mesh_step1" />
 
-    <FrameLayout
-        android:id="@+id/videoViewWrapper"
+    <TextView
+        android:id="@+id/p_mesh_step3"
+        style="@style/setup_step_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/p_getreadyforsetup_text_bottom_margin"
+        android:maxWidth="400dp"
+        android:text="@string/p_getreadyforsetup_step2_mesh_only"
+        app:layout_constraintBottom_toTopOf="@+id/p_mesh_step4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_mesh_step2" />
+
+    <TextView
+        android:id="@+id/p_mesh_step4"
+        style="@style/setup_step_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/p_getreadyforsetup_text_bottom_margin"
+        android:maxWidth="400dp"
+        android:text="@string/p_getreadyforsetup_step2_mesh_only"
+        app:layout_constraintBottom_toTopOf="@id/p_getreadyforsetup_weight_modifier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_mesh_step3" />
+
+    <View
+        android:id="@+id/p_getreadyforsetup_weight_modifier"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/videoView"
+        app:layout_constraintTop_toBottomOf="@id/p_mesh_step4"
+        app:layout_constraintVertical_weight="1" />
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/p_getreadyforsetup_video_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/action_next"
-        app:layout_constraintDimensionRatio="6:5"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="32dp" />
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@id/p_getreadyforsetup_weight_modifier" />
 
     <Button
         android:id="@id/action_next"
@@ -68,10 +109,43 @@
         android:layout_width="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="@dimen/p_mesh_bottom_element_margin"
+        android:layout_marginBottom="8dp"
         android:text="@string/p_action_next"
+        app:layout_constraintBottom_toTopOf="@+id/p_getreadyforsetup_use_ethernet_box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/p_getreadyforsetup_use_ethernet_box"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/p_mesh_hintbox_bg"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/p_mesh_hintbox_header"
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:text="@string/p_getreadyforsetup_use_ethernet_hintbox_header" />
+
+        <Switch
+            android:id="@+id/p_getreadyforsetup_use_ethernet_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/p_getreadyforsetup_use_ethernet_switch"
+            android:textAppearance="@style/p_ParticleText"
+            android:textSize="13sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

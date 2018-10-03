@@ -14,7 +14,6 @@ import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
-import io.particle.sdk.app.R.id
 import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
@@ -158,7 +157,6 @@ class CloudConnectionModule(
 //        if (!targetDeviceShouldBeClaimedLD.value.truthy()) {
 //            return
 //        }
-
         targetXceiver!!.sendSetClaimCode(claimCode!!).throwOnErrorOrAbsent()
     }
 
@@ -212,9 +210,9 @@ class CloudConnectionModule(
 
         suspend fun pollDevicesForNewDevice(deviceId: String): Boolean {
             val idLower = deviceId.toLowerCase()
-            for (i in 0..14) { // 30 seconds
+            for (i in 0..23) { // 45 seconds
                 // FIXME: what should the timing be here?
-                delay(500)
+                delay(2000)
                 val userOwnsDevice = try {
                     cloud.userOwnsDevice(idLower)
                 } catch (ex: Exception) {
@@ -254,9 +252,9 @@ class CloudConnectionModule(
             return
         }
 
-        val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD })
+        val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD.nonNull() })
         val nameToAssign = withContext(UI) {
-            flowManager.navigate(id.action_global_nameYourDeviceFragment)
+            flowManager.navigate(R.id.action_global_nameYourDeviceFragment)
             ldSuspender.awaitResult()
         }
 

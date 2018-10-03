@@ -1,9 +1,7 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.particle.android.sdk.tinker.TinkerApplication
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
@@ -19,9 +17,7 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNew
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
-import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
-import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
@@ -31,6 +27,7 @@ import mu.KotlinLogging
 class MeshSetupModule(
         private val flowManager: FlowManager,
         val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
+
 ) : Clearable {
 
     val targetDeviceMeshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
@@ -43,7 +40,7 @@ class MeshSetupModule(
 
     var showNewNetworkOptionInScanner: Boolean = false
 
-    private var targetJoinedSuccessfully = false
+    var targetJoinedSuccessfully = false
     private var newNetworkCreatedSuccessfully = false
 
     private val targetXceiver
@@ -260,22 +257,12 @@ class MeshSetupModule(
         }
         val prepJoinerData = joiner.sendPrepareJoiner(networkToJoin).throwOnErrorOrAbsent()
         commish.sendAddJoiner(prepJoinerData.eui64, prepJoinerData.password).throwOnErrorOrAbsent()
-        updateTargetJoinedMeshNetwork(true)
 
         // value here recommended by Sergey
-        delay(15000)
+        delay(10000)
 
-        TinkerApplication.appContext?.safeToast(
-                "Sending JoinNetworkRequest...",
-                duration = Toast.LENGTH_LONG
-        )
-        val start = System.currentTimeMillis()
-        joiner.sendJoinNetwork(60_000).throwOnErrorOrAbsent()
-        val totalMillis = System.currentTimeMillis() - start
-        TinkerApplication.appContext?.safeToast(
-                "JoinNetworkReply: device took ${totalMillis/1000}s",
-                duration = Toast.LENGTH_LONG
-        )
+        joiner.sendJoinNetwork().throwOnErrorOrAbsent()
+        updateTargetJoinedMeshNetwork(true)
 
         targetJoinedSuccessfully = true
         
