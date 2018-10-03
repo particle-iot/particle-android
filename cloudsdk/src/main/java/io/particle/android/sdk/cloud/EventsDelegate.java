@@ -94,7 +94,7 @@ class EventsDelegate {
         synchronized (eventReaders) {
             EventReader reader = eventReaders.get(eventListenerID);
             if (reader == null) {
-                log.w("No event listener subscription found for ID '" + eventListenerID + "'!");
+//                log.w("No event listener subscription found for ID '" + eventListenerID + "'!");
                 return;
             }
             eventReaders.remove(eventListenerID);
@@ -138,7 +138,7 @@ class EventsDelegate {
             EventReader reader = new EventReader(handler, executor, gson, uri, eventSourceFactory);
             eventReaders.put(subscriptionId, reader);
 
-            log.d("Created event subscription with ID " + subscriptionId + " for URI " + uri);
+//            log.d("Created event subscription with ID " + subscriptionId + " for URI " + uri);
 
             reader.startListening();
 
