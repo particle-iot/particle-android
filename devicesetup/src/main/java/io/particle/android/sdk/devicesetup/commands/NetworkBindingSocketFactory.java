@@ -82,7 +82,7 @@ public class NetworkBindingSocketFactory extends SocketFactory {
 
     @TargetApi(VERSION_CODES.LOLLIPOP)
     private void bindSocketToSoftAp(Socket socket) throws IOException {
-        Network softAp = wifiFacade.getNetworkForSSID(softAPSSID);
+        Network softAp = wifiFacade.getNetworkObjectForCurrentWifiConnection();
 
         if (softAp == null) {
             // If this ever fails, fail VERY LOUDLY to make sure we hear about it...
