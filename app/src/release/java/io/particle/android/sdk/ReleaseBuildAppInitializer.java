@@ -34,7 +34,7 @@ public class ReleaseBuildAppInitializer {
             @Override
             public void doReport(@NotNull Throwable exception) {
                 if (coveredByGDPR) {
-                    return
+                    return;
                 }
                 Log.e("ParticleApp", "Sending error to Crashlytics:", exception);
                 Crashlytics.logException(exception);
@@ -43,7 +43,7 @@ public class ReleaseBuildAppInitializer {
             @Override
             public void doLog(@NotNull String msg) {
                 if (coveredByGDPR) {
-                    return
+                    return;
                 }
                 Crashlytics.log(msg);
             }
