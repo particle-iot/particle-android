@@ -29,13 +29,13 @@ class ManualCommissioningAddToNetworkFragment : BaseMeshSetupFragment() {
             )
         }
 
-        val productName = flowManagerVM.flowManager!!.getTypeName(root.context)
+        val productName = flowManagerVM.flowManager!!.getTypeName(requireContext())
 
-        root.setup_header_text.text = Phrase.from(view, R.string.add_xenon_to_mesh_network)
+        root.setup_header_text.text = Phrase.from(root, R.string.add_xenon_to_mesh_network)
                 .put("product_type", productName)
                 .format()
 
-        root.textView.text = Phrase.from(view, R.string.this_device_will_act_as_the_commissioner)
+        root.textView.text = Phrase.from(root, R.string.this_device_will_act_as_the_commissioner)
                 .put("product_type", productName)
                 .format()
 

@@ -33,7 +33,7 @@ class AssistingDevicePairingProgressFragment : BaseMeshSetupFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         status_text.text = Phrase.from(view, R.string.pairing_with_your_device)
-                .put("product_type", flowManagerVM.flowManager!!.targetDeviceType.name)
+                .put("product_type", flowManagerVM.flowManager!!.getTypeName(requireContext()))
                 .format()
     }
 

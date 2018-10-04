@@ -10,11 +10,11 @@
     <TextView
         android:id="@+id/setup_header_text"
         style="@style/p_setup_header_text"
-        android:text="@string/p_meshnetworkscanning_header"
         app:layout_constraintBottom_toTopOf="@+id/progressBar2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/p_meshnetworkscanning_header" />
 
     <ProgressBar
         android:id="@+id/progressBar2"
@@ -36,10 +36,10 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/action_create_new_network"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_weight="1"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar2"
+        app:layout_constraintVertical_weight="1"
         tools:listitem="@layout/row_mesh_networks" />
 
     <Button

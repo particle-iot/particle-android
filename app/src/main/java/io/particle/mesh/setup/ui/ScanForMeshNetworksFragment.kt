@@ -39,23 +39,17 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
         }
 
         if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
-            root.setup_header_text.text = Phrase.from(view, R.string.p_scanfornetworks_gateway_flow_title)
+            root.setup_header_text.text = Phrase.from(root, R.string.p_scanfornetworks_gateway_flow_title)
                     .put("product_type", fm.getTypeName(root.context))
                     .format()
             root.progressBar2.visibility = View.INVISIBLE
             root.recyclerView.visibility = View.INVISIBLE
             root.action_create_new_network.visibility = View.VISIBLE
+
         } else {
-            fm.cloudConnectionModule.currentDeviceName.observe(this, Observer {
-                if (it == null) {
-                    QATool.report(NullPointerException("Device name is null."))
-                }
-
-                root.setup_header_text.text = Phrase.from(view, R.string.p_meshnetworkscanning_header)
-                        .put("product_type", it ?: getString(R.string.default_device_name))
-                        .format()
-            })
-
+            root.setup_header_text.text = Phrase.from(root, R.string.p_meshnetworkscanning_header)
+                    .put("product_type", fm.getTypeName(root.context))
+                    .format()
             root.action_create_new_network.visibility = View.GONE
         }
         return root

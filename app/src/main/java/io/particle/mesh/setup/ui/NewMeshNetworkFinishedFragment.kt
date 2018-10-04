@@ -30,8 +30,8 @@ class NewMeshNetworkFinishedFragment : BaseMeshSetupFragment() {
             }
             val deviceName = it ?: getString(R.string.default_device_name)
 
-            root.setup_header_text.text = Phrase.from(view, R.string.p_newmeshnetworkfinished_subheader_1)
-                    .put("product_type", deviceName)
+            root.setup_header_text.text = Phrase.from(root, R.string.p_newmeshnetworkfinished_subheader_1)
+                    .put("device_name", deviceName)
                     .format()
         })
 
