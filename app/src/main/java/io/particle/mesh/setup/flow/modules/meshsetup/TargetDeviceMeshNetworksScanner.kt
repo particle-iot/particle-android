@@ -37,7 +37,7 @@ class TargetDeviceMeshNetworksScanner(
         // FIXME: add real error handling
         while (hasActiveObservers()) {
             doScan()
-            delay(2000)
+            delay(3000)
         }
     }
 
