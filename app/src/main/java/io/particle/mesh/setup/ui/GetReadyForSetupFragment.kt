@@ -31,7 +31,6 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         super.onViewCreated(view, savedInstanceState)
         action_next.setOnClickListener(Navigation.createNavigateOnClickListener(
                 R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment
-//                R.id.action_global_newMeshNetworkPasswordFragment
         ))
 
         p_getreadyforsetup_use_ethernet_switch.setOnCheckedChangeListener { _, isChecked ->

@@ -11,9 +11,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.loader.content.Loader;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AlertDialog.Builder;
 import android.view.View;
 
 import com.squareup.phrase.Phrase;
@@ -22,6 +19,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.loader.content.Loader;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.particle.android.sdk.accountsetup.LoginActivity;
