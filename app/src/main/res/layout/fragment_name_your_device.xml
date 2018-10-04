@@ -23,7 +23,7 @@
         android:id="@+id/deviceNameInputLayout"
         style="@style/p_mesh_edittextoutlined"
         android:layout_marginBottom="24dp"
-        android:hint="@string/device_name"
+        android:hint="@string/p_nameyourdevice_device_name_hint"
         app:layout_constraintBottom_toTopOf="@+id/p_mesh_helpfulTip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

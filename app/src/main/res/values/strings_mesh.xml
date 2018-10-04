@@ -38,7 +38,7 @@
     <string name="adding_the_xenon_to_the_mesh_network">Adding {product_type} to the mesh network</string>
     <string name="connecting_xenon_to_device_cloud_via_gateway">Starting a secure session with the Particle Device Cloud via gateway</string>
     <string name="p_namedevice_header">Give your {product_type} a name</string>
-    <string name="device_name">device name</string>
+    <string name="p_nameyourdevice_device_name_hint">device name</string>
     <string name="done">Done</string>
     <string name="add_next_mesh_device">Add next mesh device</string>
     <string name="congrats_your_device_is_set_up_and_added_to_the_network">{device_name} is all set up!</string>
