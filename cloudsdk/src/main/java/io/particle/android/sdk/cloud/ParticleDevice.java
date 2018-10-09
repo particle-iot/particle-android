@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
@@ -62,8 +63,7 @@ public class ParticleDevice implements Parcelable {
         BORON,
         XENON;
 
-        // FIXME: ADD MESH TYPES BELOW
-
+        @NonNull
         public static ParticleDeviceType fromInt(int intValue) {
             switch (intValue) {
                 case 0:
