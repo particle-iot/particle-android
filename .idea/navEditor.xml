@@ -30,6 +30,16 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_bleOtaFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_bleOtaIntroFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_connectingToDeviceCloudFragment">
                     <value>
                       <LayoutPositions />
@@ -112,6 +122,30 @@
                           <Point>
                             <option name="x" value="12" />
                             <option name="y" value="-940" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="bleOtaFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-652" />
+                            <option name="y" value="-986" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="bleOtaIntroFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="422" />
+                            <option name="y" value="-818" />
                           </Point>
                         </option>
                       </LayoutPositions>

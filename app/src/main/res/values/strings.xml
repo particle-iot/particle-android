@@ -191,5 +191,9 @@ Enjoy!]]></string>
     <string name="p_bleotaintro_subheader_1">Update your device to the latest-and-greatest version of <i>Device OS</i> to continue setup</string>
     <string name="p_bleotaintro_tipbox_content">Your device may <b>receive multiple files</b> as part of this Device OS update. It will reboot in-between each file it receives from Device Cloud.</string>
     <string name="p_action_begin_update">Begin update</string>
+    <string name="p_bleota_hintbox_header">Important!</string>
+    <string name="p_bleota_hintbox_content">Please keep your phone awake with this app open during this Device OS update.</string>
+    <string name="p_bleota_header">Updating Device OS</string>
+    <string name="p_bleota_progress_format">File %1$d - %2$d%% done</string>
 
 </resources>
