@@ -1,4 +1,4 @@
-package io.particle.mesh
+package io.particle.mesh.ota
 
 import android.content.Context
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
