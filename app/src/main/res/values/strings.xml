@@ -187,4 +187,9 @@ Enjoy!]]></string>
     <string name="p_getreadyforsetup_use_ethernet_hintbox_header">Use with ethernet?</string>
     <string name="p_getreadyforsetup_use_ethernet_switch">Toggle Ethernet Featherwing setup</string>
 
+    <string name="p_bleotaintro_header">Let\'s get your device updated</string>
+    <string name="p_bleotaintro_subheader_1">Update your device to the latest-and-greatest version of <i>Device OS</i> to continue setup</string>
+    <string name="p_bleotaintro_tipbox_content">Your device may <b>receive multiple files</b> as part of this Device OS update. It will reboot in-between each file it receives from Device Cloud.</string>
+    <string name="p_action_begin_update">Begin update</string>
+
 </resources>
