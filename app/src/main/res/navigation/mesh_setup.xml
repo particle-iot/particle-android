@@ -174,5 +174,15 @@
         android:name="io.particle.mesh.setup.ui.AssistingDevicePairingProgressFragment"
         android:label="fragment_assisting_device_pairing_progress"
         tools:layout="@layout/fragment_assisting_device_pairing_progress" /><action android:id="@+id/action_global_assistingDevicePairingProgressFragment" app:destination="@id/assistingDevicePairingProgressFragment"/>
+    <fragment
+        android:id="@+id/bleOtaIntroFragment"
+        android:name="io.particle.mesh.setup.ui.ota.BleOtaIntroFragment"
+        android:label="fragment_ble_ota_intro"
+        tools:layout="@layout/fragment_ble_ota_intro" />
+    <fragment
+        android:id="@+id/bleOtaFragment"
+        android:name="io.particle.mesh.setup.ui.ota.BleOtaFragment"
+        android:label="fragment_ble_ota"
+        tools:layout="@layout/fragment_ble_ota" /><action android:id="@+id/action_global_bleOtaFragment" app:destination="@id/bleOtaFragment"/><action android:id="@+id/action_global_bleOtaIntroFragment" app:destination="@id/bleOtaIntroFragment"/>
 
 </navigation>
