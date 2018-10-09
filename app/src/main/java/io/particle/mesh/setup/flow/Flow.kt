@@ -13,8 +13,6 @@ import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
 
 
-private const val RESET_ONLY_MODE = false
-
 
 class Flow(
         private val flowManager: FlowManager,
@@ -53,9 +51,6 @@ class Flow(
         log.debug { "doRunFlow()" }
 
         doInitialCommonSubflow()
-        if (RESET_ONLY_MODE) {
-            return
-        }
 
         // check interfaces!
         val interfaceList = ensureGetInterfaceList()
@@ -84,12 +79,6 @@ class Flow(
         // connect to the device
         bleConnModule.ensureBarcodeDataForTargetDevice()
         bleConnModule.ensureTargetDeviceConnected()
-
-        if (RESET_ONLY_MODE) {
-            ensureTargetDeviceSetSetupDone(false)
-            meshSetupModule.ensureRemovedFromExistingNetwork()
-            return
-        }
 
         // gather initial data, perform upfront checks
         cloudConnModule.ensureDeviceIsUsingEligibleFirmware()
