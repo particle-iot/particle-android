@@ -54,7 +54,7 @@
             android:id="@+id/p_mesh_miniHeader"
             style="@style/p_mesh_hintbox_header"
             fontPath="@string/bold_text_font_name"
-            android:text="@string/p_enterpassword_tipbox_header"
+            android:text="@string/p_mesh_tipbox_header_helpful_tip"
             tools:ignore="MissingPrefix" />
 
         <TextView

@@ -164,7 +164,7 @@ Enjoy!]]></string>
     <string name="p_pairingprogress_congrats">Congrats!</string>
     <string name="p_action_next">next</string>
     <string name="p_meshnetworkscanning_header">Your {product_type} is scanning for mesh networks to join</string>
-    <string name="p_enterpassword_tipbox_header">Helpful tip!</string>
+    <string name="p_mesh_tipbox_header_helpful_tip">Helpful tip!</string>
     <string name="p_scancommissionercode_tip_content">This assisting device will be used to bring your new {product_type} onto the mesh network.</string>
     <string name="p_joiningmesh_header">Your {product_type} is joining the mesh network</string>
     <string name="p_namedevice_hint_content">Name your device something you will remember to help you easily identify it later.</string>
