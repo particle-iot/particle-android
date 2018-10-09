@@ -10,6 +10,7 @@ import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.BTCharacteristicWriter
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.btAdapter
+import io.particle.mesh.bluetooth.connecting.ConnectionPriority.BALANCED
 import io.particle.mesh.bluetooth.connecting.ConnectionState.DISCONNECTED
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.truthy
@@ -117,12 +118,16 @@ class BluetoothConnectionManager(private val ctx: Context) {
             }
         }
 
-        return BluetoothConnection(
+        val conn = BluetoothConnection(
                 callbacks.connectionStateChangedLD,
                 gatt,
                 messageWriteChannel,
                 callbacks.readOrChangedReceiveChannel as Channel<ByteArray>
         )
+        // this is the default, but ensure that the OS isn't remembering it from the
+        // previous connection to the device
+        conn.setConnectionPriority(ConnectionPriority.BALANCED)
+        return conn
     }
 
     private suspend fun scanForDevice(deviceName: String, timeout: Int): BTDeviceAddress? {
