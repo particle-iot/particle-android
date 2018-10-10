@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Collection;
@@ -565,7 +566,7 @@ public class ParticleCloud {
 
     @WorkerThread
     @Nullable
-    public HttpUrl getFirmwareUpdateInfo(
+    public URL getFirmwareUpdateInfo(
             int platformId,
             @NonNull String currentSystemFwVersion,
             @Nullable String currentNcpFwVersion,
@@ -576,9 +577,14 @@ public class ParticleCloud {
                     currentSystemFwVersion,
                     currentNcpFwVersion,
                     currentNcpFwModuleVersion);
-            return HttpUrl.parse(response.nextFileUrl);
+
+            return new URL(response.nextFileUrl);
+
         } catch (RetrofitError error) {
             throw new ParticleCloudException(error);
+
+        } catch (MalformedURLException e) {
+            throw new ParticleCloudException(e);
         }
     }
     //endregion
