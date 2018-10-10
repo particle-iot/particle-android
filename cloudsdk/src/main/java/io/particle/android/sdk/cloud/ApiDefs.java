@@ -124,12 +124,12 @@ public class ApiDefs {
         @GET("/v1/networks")
         Response getNetworks();
 
-        @GET("/v1/binaries/upgrade")
+        @GET("/v1/system_firmware/upgrade")
         FirmwareUpdateInfoResponse getFirmwareUpdateInfo(
                 @Query("platform_id") int platformId,
                 @NonNull @Query("current_system_firmware_version") String currentSystemFwVersion,
                 @Nullable @Query("current_ncp_firmware_version") String currentNcpFwVersion,
-                @Nullable @Query("current_ncp_firmware_module_version") String currentNcpFwModuleVersion
+                @Nullable @Query("current_ncp_firmware_module_version") Integer currentNcpFwModuleVersion
         );
     }
 

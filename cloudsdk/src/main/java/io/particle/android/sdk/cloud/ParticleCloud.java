@@ -569,7 +569,7 @@ public class ParticleCloud {
             int platformId,
             @NonNull String currentSystemFwVersion,
             @Nullable String currentNcpFwVersion,
-            @Nullable String currentNcpFwModuleVersion
+            @Nullable Integer currentNcpFwModuleVersion
     ) throws ParticleCloudException {
         try {
             FirmwareUpdateInfoResponse response = mainApi.getFirmwareUpdateInfo(platformId,
