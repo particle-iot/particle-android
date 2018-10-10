@@ -1,9 +1,6 @@
 package io.particle.mesh.setup.connection
 
-
 import android.util.SparseArray
-import androidx.annotation.MainThread
-import androidx.collection.SparseArrayCompat
 import com.google.protobuf.AbstractMessage
 import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
@@ -63,113 +60,26 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerReply
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerReply
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest
-import io.particle.mesh.bluetooth.PacketMTUSplitter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
-import io.particle.mesh.setup.connection.security.SecurityManager
-import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.experimental.Continuation
-import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.coroutines.experimental.suspendCoroutine
 
 
-private const val FULL_PROTOCOL_HEADER_SIZE = 6
-private const val AES_CCM_MAC_SIZE = 8
 private const val DEFAULT_NETWORK_CHANNEL = 11
-
-private var requestIdGenerator = AtomicInteger()
-
-
-private fun generateRequestId(): Short {
-    return requestIdGenerator.incrementAndGet().toShort()
-}
-
-
-internal fun AbstractMessage.asRequest(): DeviceRequest {
-    return DeviceRequest(
-            generateRequestId(),
-            // get type ID from the message descriptor
-            this.descriptorForType.options.getExtension(Extensions.typeId).toShort(),
-            this.toByteArray()
-    )
-}
-
-
-// FIXME: rewrite using descriptors
-private fun Int.toResultCode(): Common.ResultCode {
-    return when (this) {
-        0 -> Common.ResultCode.OK
-        -130 -> Common.ResultCode.NOT_ALLOWED
-        -160 -> Common.ResultCode.TIMEOUT
-        -170 -> Common.ResultCode.NOT_FOUND
-        -180 -> Common.ResultCode.ALREADY_EXIST
-        -210 -> Common.ResultCode.INVALID_STATE
-        -260 -> Common.ResultCode.NO_MEMORY
-        -270 -> Common.ResultCode.INVALID_PARAM
-        else -> throw IllegalArgumentException("Invalid value for ResultCode: $this")
-    }
-}
-
-
-class ProtocolTransceiverFactory(
-        private val securityManager: SecurityManager
-) {
-
-    @MainThread
-    suspend fun buildProtocolTransceiver(
-            deviceConnection: BluetoothConnection,
-            name: String,
-            jpakeLowEntropyPassword: String
-    ): ProtocolTransceiver? {
-
-        val packetMTUSplitter = PacketMTUSplitter({ packet ->
-            deviceConnection.packetSendChannel.offer(packet)
-        })
-        val frameWriter = OutboundFrameWriter { packetMTUSplitter.splitIntoPackets(it) }
-        val frameReader = InboundFrameReader()
-        launch {
-            for (packet in deviceConnection.packetReceiveChannel) {
-                QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
-            }
-        }
-
-        val cryptoDelegate = securityManager.createCryptoDelegate(
-                jpakeLowEntropyPassword,
-                frameWriter,
-                frameReader
-        ) ?: return null
-
-        frameReader.cryptoDelegate = cryptoDelegate
-        frameWriter.cryptoDelegate = cryptoDelegate
-
-        // now that we've passed the security handshake, set the correct number of bytes to assume
-        // for the message headers
-        frameReader.extraHeaderBytes = FULL_PROTOCOL_HEADER_SIZE + AES_CCM_MAC_SIZE
-
-        val requestWriter = RequestWriter { frameWriter.writeFrame(it) }
-        val requestSender = ProtocolTransceiver(requestWriter, deviceConnection, name)
-        val responseReader = ResponseReader { requestSender.receiveResponse(it) }
-        launch {
-            for (inboundFrame in frameReader.inboundFrameChannel) {
-                QATool.runSafely({ responseReader.receiveResponseFrame(inboundFrame) })
-            }
-        }
-
-        return requestSender
-    }
-
-}
 
 
 class ProtocolTransceiver internal constructor(
-        private val requestWriter: RequestWriter,
-        private val connection: BluetoothConnection,
-        private val connectionName: String
+    private val requestWriter: RequestWriter,
+    private val connection: BluetoothConnection,
+    private val connectionName: String
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -209,27 +119,27 @@ class ProtocolTransceiver internal constructor(
 
     suspend fun sendNetworkGetStatus(interfaceIndex: Int): Result<NetworkGetStatusReply, ResultCode> {
         val response = sendRequest(
-                NetworkGetStatusRequest.newBuilder()
-                        .setInterface(interfaceIndex)
-                        .build()
+            NetworkGetStatusRequest.newBuilder()
+                .setInterface(interfaceIndex)
+                .build()
         )
         return buildResult(response) { r -> NetworkGetStatusReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendNetworkGetConfig(interfaceIndex: Int): Result<NetworkGetConfigurationReply, ResultCode> {
         val response = sendRequest(
-                NetworkGetConfigurationRequest.newBuilder()
-                        .setInterface(interfaceIndex)
-                        .build()
+            NetworkGetConfigurationRequest.newBuilder()
+                .setInterface(interfaceIndex)
+                .build()
         )
         return buildResult(response) { r -> NetworkGetConfigurationReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendGetInterface(interfaceIndex: Int): Result<GetInterfaceReply, ResultCode> {
         val response = sendRequest(
-                GetInterfaceRequest.newBuilder()
-                        .setIndex(interfaceIndex)
-                        .build()
+            GetInterfaceRequest.newBuilder()
+                .setIndex(interfaceIndex)
+                .build()
         )
         return buildResult(response) { r -> GetInterfaceReply.parseFrom(r.payloadData) }
     }
@@ -251,9 +161,9 @@ class ProtocolTransceiver internal constructor(
 
     suspend fun sendSetDeviceSetupDone(done: Boolean): Result<SetDeviceSetupDoneReply, ResultCode> {
         val response = sendRequest(
-                SetDeviceSetupDoneRequest.newBuilder()
-                        .setDone(done)
-                        .build()
+            SetDeviceSetupDoneRequest.newBuilder()
+                .setDone(done)
+                .build()
         )
         return buildResult(response) { r -> SetDeviceSetupDoneReply.parseFrom(r.payloadData) }
     }
@@ -261,18 +171,18 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendStartFirmwareUpdate(firmwareSizeBytes: Int
     ): Result<StartFirmwareUpdateReply, Common.ResultCode> {
         val response = sendRequest(
-                StartFirmwareUpdateRequest.newBuilder()
-                        .setSize(firmwareSizeBytes)
-                        .build()
+            StartFirmwareUpdateRequest.newBuilder()
+                .setSize(firmwareSizeBytes)
+                .build()
         )
         return buildResult(response) { r -> StartFirmwareUpdateReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendFirmwareUpdateData(chunk: ByteArray): Result<FirmwareUpdateDataReply, Common.ResultCode> {
         val response = sendRequest(
-                FirmwareUpdateDataRequest.newBuilder()
-                        .setData(ByteString.copyFrom(chunk))
-                        .build()
+            FirmwareUpdateDataRequest.newBuilder()
+                .setData(ByteString.copyFrom(chunk))
+                .build()
         )
         return buildResult(response) { r -> FirmwareUpdateDataReply.parseFrom(r.payloadData) }
     }
@@ -280,41 +190,41 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendFinishFirmwareUpdate(validateOnly: Boolean
     ): Result<FinishFirmwareUpdateReply, Common.ResultCode> {
         val response = sendRequest(
-                FinishFirmwareUpdateRequest.newBuilder()
-                        .setValidateOnly(validateOnly)
-                        .build()
+            FinishFirmwareUpdateRequest.newBuilder()
+                .setValidateOnly(validateOnly)
+                .build()
         )
         return buildResult(response) { r -> FinishFirmwareUpdateReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendGetNetworkInfo(): Result<GetNetworkInfoReply, Common.ResultCode> {
         val response = sendRequest(
-                GetNetworkInfoRequest.newBuilder()
-                        .build()
+            GetNetworkInfoRequest.newBuilder()
+                .build()
         )
         return buildResult(response) { r -> GetNetworkInfoReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendCreateNetwork(
-            name: String,
-            password: String,
-            channel: Int = DEFAULT_NETWORK_CHANNEL
+        name: String,
+        password: String,
+        channel: Int = DEFAULT_NETWORK_CHANNEL
     ): Result<CreateNetworkReply, Common.ResultCode> {
         val response = sendRequest(
-                CreateNetworkRequest.newBuilder()
-                        .setName(name)
-                        .setPassword(password)
-                        .setChannel(channel)
-                        .build()
+            CreateNetworkRequest.newBuilder()
+                .setName(name)
+                .setPassword(password)
+                .setChannel(channel)
+                .build()
         )
         return buildResult(response) { r -> CreateNetworkReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendAuth(commissionerCredential: String): Result<AuthReply, Common.ResultCode> {
         val response = sendRequest(
-                AuthRequest.newBuilder()
-                        .setPassword(commissionerCredential)
-                        .build()
+            AuthRequest.newBuilder()
+                .setPassword(commissionerCredential)
+                .build()
         )
         return buildResult(response) { r -> AuthReply.parseFrom(r.payloadData) }
     }
@@ -326,9 +236,9 @@ class ProtocolTransceiver internal constructor(
 
     suspend fun sendPrepareJoiner(network: NetworkInfo): Result<PrepareJoinerReply, Common.ResultCode> {
         val response = sendRequest(
-                PrepareJoinerRequest.newBuilder()
-                        .setNetwork(network)
-                        .build()
+            PrepareJoinerRequest.newBuilder()
+                .setNetwork(network)
+                .build()
         )
         return buildResult(response) { r -> PrepareJoinerReply.parseFrom(r.payloadData) }
     }
@@ -337,10 +247,10 @@ class ProtocolTransceiver internal constructor(
                               joiningCredential: String
     ): Result<AddJoinerReply, Common.ResultCode> {
         val response = sendRequest(
-                AddJoinerRequest.newBuilder()
-                        .setEui64(eui64)
-                        .setPassword(joiningCredential)
-                        .build()
+            AddJoinerRequest.newBuilder()
+                .setEui64(eui64)
+                .setPassword(joiningCredential)
+                .build()
         )
         return buildResult(response) { r -> AddJoinerReply.parseFrom(r.payloadData) }
     }
@@ -349,7 +259,7 @@ class ProtocolTransceiver internal constructor(
     // a response sometimes.
     suspend fun sendJoinNetwork(): Result<JoinNetworkReply, Common.ResultCode> {
         val response = sendRequest(
-                JoinNetworkRequest.newBuilder().build()
+            JoinNetworkRequest.newBuilder().build()
         )
         return buildResult(response) { r -> JoinNetworkReply.parseFrom(r.payloadData) }
     }
@@ -372,9 +282,9 @@ class ProtocolTransceiver internal constructor(
 
     suspend fun sendSetClaimCode(claimCode: String): Result<SetClaimCodeReply, ResultCode> {
         val response = sendRequest(
-                SetClaimCodeRequest.newBuilder()
-                        .setCode(claimCode)
-                        .build()
+            SetClaimCodeRequest.newBuilder()
+                .setCode(claimCode)
+                .build()
         )
         return buildResult(response) { r -> SetClaimCodeReply.parseFrom(r.payloadData) }
     }
@@ -404,12 +314,12 @@ class ProtocolTransceiver internal constructor(
 
     //region PRIVATE
     private suspend fun sendRequest(
-            message: GeneratedMessageV3,
-            timeout: Int = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
+        message: GeneratedMessageV3,
+        timeout: Int = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
     ): DeviceResponse? {
         val requestFrame = message.asRequest()
         log.info { "Sending message ${message.javaClass} to '$connectionName': '$message' " +
-             "with ID: ${requestFrame.requestId}" }
+                "with ID: ${requestFrame.requestId}" }
 
 
         val response = withTimeoutOrNull(timeout) {
@@ -433,8 +343,8 @@ class ProtocolTransceiver internal constructor(
     }
 
     private fun doSendRequest(
-            request: DeviceRequest,
-            continuationCallback: (DeviceResponse?) -> Unit) {
+        request: DeviceRequest,
+        continuationCallback: (DeviceResponse?) -> Unit) {
         val requestCallback = { frame: DeviceResponse? -> continuationCallback(frame) }
         synchronized(requestCallbacks) {
             requestCallbacks.put(request.requestId.toInt(), requestCallback)
@@ -443,8 +353,8 @@ class ProtocolTransceiver internal constructor(
     }
 
     private fun <V : GeneratedMessageV3> buildResult(
-            response: DeviceResponse?,
-            successTransformer: (DeviceResponse) -> V
+        response: DeviceResponse?,
+        successTransformer: (DeviceResponse) -> V
     ): Result<V, Common.ResultCode> {
         if (response == null) {
             return Result.Absent()
@@ -461,4 +371,33 @@ class ProtocolTransceiver internal constructor(
         }
     }
     //endregion
+}
+
+
+private var requestIdGenerator = AtomicInteger()
+
+private fun AbstractMessage.asRequest(): DeviceRequest {
+    val requestId = requestIdGenerator.incrementAndGet().toShort()
+    return DeviceRequest(
+        requestId,
+        // get type ID from the proto message descriptor
+        this.descriptorForType.options.getExtension(Extensions.typeId).toShort(),
+        this.toByteArray()
+    )
+}
+
+
+// FIXME: rewrite using descriptors
+private fun Int.toResultCode(): Common.ResultCode {
+    return when (this) {
+        0 -> Common.ResultCode.OK
+        -130 -> Common.ResultCode.NOT_ALLOWED
+        -160 -> Common.ResultCode.TIMEOUT
+        -170 -> Common.ResultCode.NOT_FOUND
+        -180 -> Common.ResultCode.ALREADY_EXIST
+        -210 -> Common.ResultCode.INVALID_STATE
+        -260 -> Common.ResultCode.NO_MEMORY
+        -270 -> Common.ResultCode.INVALID_PARAM
+        else -> throw IllegalArgumentException("Invalid value for ResultCode: $this")
+    }
 }
