@@ -95,14 +95,14 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    releaseImplementation 'com.google.firebase:firebase-perf:16.1.0'
+    releaseImplementation 'com.google.firebase:firebase-perf:16.1.2'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
-    // for barcode scanning in Electron setup  // disabled for faster builds since we don't use this right now.
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
-    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:15.0.0'
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.0'
+    // for barcode scanning in Mesh setup
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
+    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:16.2.0'
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.2'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
