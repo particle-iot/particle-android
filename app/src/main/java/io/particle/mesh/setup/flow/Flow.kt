@@ -184,8 +184,3 @@ fun <V, E> Result<V, E>.throwOnErrorOrAbsent(): V {
         is Result.Present -> this.value
     }
 }
-
-
-class FlowException(msg: String = "") : Exception(msg) {
-    // FIXME: give this extra data
-}
