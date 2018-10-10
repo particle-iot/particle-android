@@ -1,9 +1,14 @@
 package io.particle.android.sdk.cloud;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import io.particle.android.sdk.cloud.Responses.CallFunctionResponse;
 import io.particle.android.sdk.cloud.Responses.ClaimCodeResponse;
+import io.particle.android.sdk.cloud.Responses.FirmwareUpdateInfoResponse;
 import io.particle.android.sdk.cloud.Responses.Models;
 import io.particle.android.sdk.cloud.Responses.ReadDoubleVariableResponse;
 import io.particle.android.sdk.cloud.Responses.ReadIntVariableResponse;
@@ -22,6 +27,7 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Part;
 import retrofit.http.Path;
+import retrofit.http.Query;
 import retrofit.mime.TypedOutput;
 
 
@@ -117,6 +123,14 @@ public class ApiDefs {
 
         @GET("/v1/networks")
         Response getNetworks();
+
+        @GET("/v1/binaries/upgrade")
+        FirmwareUpdateInfoResponse getFirmwareUpdateInfo(
+                @Query("platform_id") int platformId,
+                @NonNull @Query("current_system_firmware_version") String currentSystemFwVersion,
+                @Nullable @Query("current_ncp_firmware_version") String currentNcpFwVersion,
+                @Nullable @Query("current_ncp_firmware_module_version") String currentNcpFwModuleVersion
+        );
     }
 
     /**

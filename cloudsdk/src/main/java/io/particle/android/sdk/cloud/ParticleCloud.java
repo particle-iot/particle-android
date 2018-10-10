@@ -11,12 +11,14 @@ import androidx.collection.ArrayMap;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.squareup.okhttp.HttpUrl;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,6 +36,7 @@ import io.particle.android.sdk.cloud.ApiDefs.CloudApi;
 import io.particle.android.sdk.cloud.ParallelDeviceFetcher.DeviceFetchResult;
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType;
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType;
+import io.particle.android.sdk.cloud.Responses.FirmwareUpdateInfoResponse;
 import io.particle.android.sdk.cloud.Responses.Models;
 import io.particle.android.sdk.cloud.Responses.Models.CompleteDevice;
 import io.particle.android.sdk.cloud.Responses.Models.SimpleDevice;
@@ -555,6 +558,25 @@ public class ParticleCloud {
         try {
             log.w("Use product id instead of organization slug.");
             identityApi.requestPasswordResetForCustomer(email, organizationSlug);
+        } catch (RetrofitError error) {
+            throw new ParticleCloudException(error);
+        }
+    }
+
+    @WorkerThread
+    @Nullable
+    public HttpUrl getFirmwareUpdateInfo(
+            int platformId,
+            @NonNull String currentSystemFwVersion,
+            @Nullable String currentNcpFwVersion,
+            @Nullable String currentNcpFwModuleVersion
+    ) throws ParticleCloudException {
+        try {
+            FirmwareUpdateInfoResponse response = mainApi.getFirmwareUpdateInfo(platformId,
+                    currentSystemFwVersion,
+                    currentNcpFwVersion,
+                    currentNcpFwModuleVersion);
+            return HttpUrl.parse(response.nextFileUrl);
         } catch (RetrofitError error) {
             throw new ParticleCloudException(error);
         }

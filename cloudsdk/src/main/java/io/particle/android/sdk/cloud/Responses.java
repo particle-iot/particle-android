@@ -294,6 +294,17 @@ public class Responses {
     }
 
 
+    public static class FirmwareUpdateInfoResponse {
+
+        @SerializedName("binary_url")
+        public final String nextFileUrl;
+
+        public FirmwareUpdateInfoResponse(String nextFileUrl) {
+            this.nextFileUrl = nextFileUrl;
+        }
+    }
+
+
     public static class ReadIntVariableResponse extends ReadVariableResponse<Integer> {
 
         public ReadIntVariableResponse(String commandName, String variableName, CoreInfo coreInfo,
