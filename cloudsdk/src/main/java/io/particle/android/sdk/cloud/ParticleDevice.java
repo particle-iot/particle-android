@@ -72,6 +72,10 @@ public class ParticleDevice implements Parcelable {
                     return P1;
                 case 10:
                     return ELECTRON;
+                case 12:
+                    return ARGON;
+                case 13:
+                    return BORON;
                 case 14:
                     return XENON;
                 case 31:
