@@ -11,8 +11,12 @@ import io.particle.firmwareprotos.ctrl.Common
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdReply
 import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdRequest
+import io.particle.firmwareprotos.ctrl.Config.GetNcpFirmwareVersionReply
+import io.particle.firmwareprotos.ctrl.Config.GetNcpFirmwareVersionRequest
 import io.particle.firmwareprotos.ctrl.Config.GetSerialNumberReply
 import io.particle.firmwareprotos.ctrl.Config.GetSerialNumberRequest
+import io.particle.firmwareprotos.ctrl.Config.GetSystemVersionReply
+import io.particle.firmwareprotos.ctrl.Config.GetSystemVersionRequest
 import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeReply
 import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeRequest
 import io.particle.firmwareprotos.ctrl.Config.SetDeviceSetupDoneReply
@@ -186,6 +190,16 @@ class ProtocolTransceiver internal constructor(
 
     fun setConnectionPriority(priority: ConnectionPriority) {
         connection.setConnectionPriority(priority)
+    }
+
+    suspend fun sendGetNcpFirmwareVersion(): Result<GetNcpFirmwareVersionReply, ResultCode> {
+        val response = sendRequest(GetNcpFirmwareVersionRequest.newBuilder().build())
+        return buildResult(response) { r -> GetNcpFirmwareVersionReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendGetSystemFirmwareVersion(): Result<GetSystemVersionReply, ResultCode> {
+        val response = sendRequest(GetSystemVersionRequest.newBuilder().build())
+        return buildResult(response) { r -> GetSystemVersionReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendGetConnectionStatus(): Result<GetConnectionStatusReply, ResultCode> {
