@@ -1,32 +1,59 @@
 package io.particle.mesh.ota
 
-import android.content.Context
+import androidx.annotation.WorkerThread
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
+import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ProtocolTransceiver
-import io.particle.mesh.setup.utils.safeToast
 import mu.KotlinLogging
 import okio.Buffer
 import java.io.IOException
+import java.net.URL
 import kotlin.math.min
 
 
+typealias ProgressListener = (progressPercentage: Int) -> Unit
+
+
 class FirmwareUpdater(
-        private val protocolTransceiver: ProtocolTransceiver,
-        private val ctx: Context
+    private val protocolTransceiver: ProtocolTransceiver,
+    private val okHttpClient: OkHttpClient
 ) {
 
     private val log = KotlinLogging.logger {}
 
-    suspend fun updateFirmware(firmwareData: ByteArray) {
+    @WorkerThread
+    suspend fun updateFirmware(url: URL, listener: ProgressListener) {
+        val bytes = retrieveUpdate(url)
+        updateFirmware(bytes, listener)
+    }
+
+    @WorkerThread
+    private suspend fun updateFirmware(firmwareData: ByteArray, listener: ProgressListener) {
         try {
-            doUpdateFirmware(firmwareData)
+            doUpdateFirmware(firmwareData, listener)
         } finally {
             protocolTransceiver.setConnectionPriority(ConnectionPriority.BALANCED)
         }
     }
 
-    private suspend fun doUpdateFirmware(firmwareData: ByteArray) {
+    @WorkerThread
+    private fun retrieveUpdate(url: URL): ByteArray {
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .build()
+        val call = okHttpClient.newCall(request)
+        val response = call.execute()
+        return response.body().bytes()
+    }
+
+    private suspend fun doUpdateFirmware(
+        firmwareData: ByteArray,
+        listener: ProgressListener
+    ) {
         showFeedback("Starting firmware update")
 
         protocolTransceiver.setConnectionPriority(ConnectionPriority.HIGH)
@@ -55,24 +82,27 @@ class FirmwareUpdater(
                 is Result.Absent -> throw IOException("Bad reply from device: ${updateResult.error}")
                 is Result.Present -> {
                     bytesSent += bytesSent + toRead.toInt()
-                    if (bytesSent % (10 * 1024) == 0) {
+                    if (bytesSent % (2 * chunkSize) == 0) {
                         log.debug { "Sent ${bytesSent / 1024} KB" }
+                        listener(bytesSent / firmwareData.size)
                     }
                 }
             }
         }
 
         val firmwareUpdateReply = protocolTransceiver.sendFinishFirmwareUpdate(false)
-        val msg = when(firmwareUpdateReply) {
-            is Result.Present -> "Firmware update completed successfully"
+        when (firmwareUpdateReply) {
+            is Result.Present -> log.debug { "Firmware update completed successfully" }
             is Result.Error,
-            is Result.Absent -> "Firmware update failed. Error: '${firmwareUpdateReply.error}'"
+            is Result.Absent -> {
+                val errMsg = "Firmware update failed. Error: '${firmwareUpdateReply.error}'"
+                QATool.report(IOException(errMsg))
+            }
         }
-        showFeedback(msg)
     }
 
     private fun showFeedback(msg: String) {
-        ctx.safeToast(msg)
-        log.info { msg }
+//        ctx.safeToast(msg)
+        log.debug { msg }
     }
 }
