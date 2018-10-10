@@ -625,18 +625,133 @@ public final class StorageOuterClass {
     // @@protoc_insertion_point(enum_scope:particle.ctrl.SectionFlag)
   }
 
+  /**
+   * Protobuf enum {@code particle.ctrl.FileFormat}
+   */
+  public enum FileFormat
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>BIN = 0;</code>
+     */
+    BIN(0),
+    /**
+     * <code>MINIZ = 1;</code>
+     */
+    MINIZ(1),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>BIN = 0;</code>
+     */
+    public static final int BIN_VALUE = 0;
+    /**
+     * <code>MINIZ = 1;</code>
+     */
+    public static final int MINIZ_VALUE = 1;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static FileFormat valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static FileFormat forNumber(int value) {
+      switch (value) {
+        case 0: return BIN;
+        case 1: return MINIZ;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<FileFormat>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        FileFormat> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<FileFormat>() {
+            public FileFormat findValueByNumber(int number) {
+              return FileFormat.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.StorageOuterClass.getDescriptor().getEnumTypes().get(4);
+    }
+
+    private static final FileFormat[] VALUES = values();
+
+    public static FileFormat valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private FileFormat(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:particle.ctrl.FileFormat)
+  }
+
   public interface StartFirmwareUpdateRequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:particle.ctrl.StartFirmwareUpdateRequest)
       com.google.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
-     * Size of the firmware data
+     * Size of the firmware binary
      * </pre>
      *
      * <code>uint32 size = 1;</code>
      */
     int getSize();
+
+    /**
+     * <pre>
+     * Format of the firmware binary
+     * </pre>
+     *
+     * <code>.particle.ctrl.FileFormat format = 2;</code>
+     */
+    int getFormatValue();
+    /**
+     * <pre>
+     * Format of the firmware binary
+     * </pre>
+     *
+     * <code>.particle.ctrl.FileFormat format = 2;</code>
+     */
+    io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat getFormat();
   }
   /**
    * Protobuf type {@code particle.ctrl.StartFirmwareUpdateRequest}
@@ -652,6 +767,7 @@ public final class StorageOuterClass {
     }
     private StartFirmwareUpdateRequest() {
       size_ = 0;
+      format_ = 0;
     }
 
     @java.lang.Override
@@ -690,6 +806,12 @@ public final class StorageOuterClass {
               size_ = input.readUInt32();
               break;
             }
+            case 16: {
+              int rawValue = input.readEnum();
+
+              format_ = rawValue;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -718,13 +840,37 @@ public final class StorageOuterClass {
     private int size_;
     /**
      * <pre>
-     * Size of the firmware data
+     * Size of the firmware binary
      * </pre>
      *
      * <code>uint32 size = 1;</code>
      */
     public int getSize() {
       return size_;
+    }
+
+    public static final int FORMAT_FIELD_NUMBER = 2;
+    private int format_;
+    /**
+     * <pre>
+     * Format of the firmware binary
+     * </pre>
+     *
+     * <code>.particle.ctrl.FileFormat format = 2;</code>
+     */
+    public int getFormatValue() {
+      return format_;
+    }
+    /**
+     * <pre>
+     * Format of the firmware binary
+     * </pre>
+     *
+     * <code>.particle.ctrl.FileFormat format = 2;</code>
+     */
+    public io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat getFormat() {
+      io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat result = io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat.valueOf(format_);
+      return result == null ? io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat.UNRECOGNIZED : result;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -742,6 +888,9 @@ public final class StorageOuterClass {
       if (size_ != 0) {
         output.writeUInt32(1, size_);
       }
+      if (format_ != io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat.BIN.getNumber()) {
+        output.writeEnum(2, format_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -753,6 +902,10 @@ public final class StorageOuterClass {
       if (size_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(1, size_);
+      }
+      if (format_ != io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat.BIN.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, format_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -772,6 +925,7 @@ public final class StorageOuterClass {
       boolean result = true;
       result = result && (getSize()
           == other.getSize());
+      result = result && format_ == other.format_;
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -785,6 +939,8 @@ public final class StorageOuterClass {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + SIZE_FIELD_NUMBER;
       hash = (53 * hash) + getSize();
+      hash = (37 * hash) + FORMAT_FIELD_NUMBER;
+      hash = (53 * hash) + format_;
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -916,6 +1072,8 @@ public final class StorageOuterClass {
         super.clear();
         size_ = 0;
 
+        format_ = 0;
+
         return this;
       }
 
@@ -939,6 +1097,7 @@ public final class StorageOuterClass {
       public io.particle.firmwareprotos.ctrl.StorageOuterClass.StartFirmwareUpdateRequest buildPartial() {
         io.particle.firmwareprotos.ctrl.StorageOuterClass.StartFirmwareUpdateRequest result = new io.particle.firmwareprotos.ctrl.StorageOuterClass.StartFirmwareUpdateRequest(this);
         result.size_ = size_;
+        result.format_ = format_;
         onBuilt();
         return result;
       }
@@ -983,6 +1142,9 @@ public final class StorageOuterClass {
         if (other.getSize() != 0) {
           setSize(other.getSize());
         }
+        if (other.format_ != 0) {
+          setFormatValue(other.getFormatValue());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1013,7 +1175,7 @@ public final class StorageOuterClass {
       private int size_ ;
       /**
        * <pre>
-       * Size of the firmware data
+       * Size of the firmware binary
        * </pre>
        *
        * <code>uint32 size = 1;</code>
@@ -1023,7 +1185,7 @@ public final class StorageOuterClass {
       }
       /**
        * <pre>
-       * Size of the firmware data
+       * Size of the firmware binary
        * </pre>
        *
        * <code>uint32 size = 1;</code>
@@ -1036,7 +1198,7 @@ public final class StorageOuterClass {
       }
       /**
        * <pre>
-       * Size of the firmware data
+       * Size of the firmware binary
        * </pre>
        *
        * <code>uint32 size = 1;</code>
@@ -1044,6 +1206,70 @@ public final class StorageOuterClass {
       public Builder clearSize() {
         
         size_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int format_ = 0;
+      /**
+       * <pre>
+       * Format of the firmware binary
+       * </pre>
+       *
+       * <code>.particle.ctrl.FileFormat format = 2;</code>
+       */
+      public int getFormatValue() {
+        return format_;
+      }
+      /**
+       * <pre>
+       * Format of the firmware binary
+       * </pre>
+       *
+       * <code>.particle.ctrl.FileFormat format = 2;</code>
+       */
+      public Builder setFormatValue(int value) {
+        format_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Format of the firmware binary
+       * </pre>
+       *
+       * <code>.particle.ctrl.FileFormat format = 2;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat getFormat() {
+        io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat result = io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat.valueOf(format_);
+        return result == null ? io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat.UNRECOGNIZED : result;
+      }
+      /**
+       * <pre>
+       * Format of the firmware binary
+       * </pre>
+       *
+       * <code>.particle.ctrl.FileFormat format = 2;</code>
+       */
+      public Builder setFormat(io.particle.firmwareprotos.ctrl.StorageOuterClass.FileFormat value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        format_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Format of the firmware binary
+       * </pre>
+       *
+       * <code>.particle.ctrl.FileFormat format = 2;</code>
+       */
+      public Builder clearFormat() {
+        
+        format_ = 0;
         onChanged();
         return this;
       }
@@ -11688,50 +11914,52 @@ public final class StorageOuterClass {
   static {
     java.lang.String[] descriptorData = {
       "\n\rstorage.proto\022\rparticle.ctrl\032\020extensio" +
-      "ns.proto\032\014common.proto\"1\n\032StartFirmwareU" +
-      "pdateRequest\022\014\n\004size\030\001 \001(\r:\005\210\265\030\372\001\".\n\030Sta" +
-      "rtFirmwareUpdateReply\022\022\n\nchunk_size\030\001 \001(" +
-      "\r\";\n\033FinishFirmwareUpdateRequest\022\025\n\rvali" +
-      "date_only\030\001 \001(\010:\005\210\265\030\373\001\"\033\n\031FinishFirmware" +
-      "UpdateReply\"$\n\033CancelFirmwareUpdateReque" +
-      "st:\005\210\265\030\374\001\"\033\n\031CancelFirmwareUpdateReply\"0" +
-      "\n\031FirmwareUpdateDataRequest\022\014\n\004data\030\001 \001(" +
-      "\014:\005\210\265\030\375\001\"\031\n\027FirmwareUpdateDataReply\"\037\n\026D" +
-      "escribeStorageRequest:\005\210\265\030\204\002\"\322\003\n\024Describ" +
-      "eStorageReply\022<\n\007storage\030\001 \003(\0132+.particl" +
-      "e.ctrl.DescribeStorageReply.Storage\032\367\001\n\007" +
-      "Section\022(\n\004type\030\001 \001(\0162\032.particle.ctrl.Se" +
-      "ctionType\022\014\n\004size\030\002 \001(\r\022\r\n\005flags\030\003 \001(\r\022S" +
-      "\n\017firmware_module\030\004 \001(\0132:.particle.ctrl." +
-      "DescribeStorageReply.Section.FirmwareMod" +
-      "ule\032P\n\016FirmwareModule\022/\n\004type\030\001 \001(\0162!.pa" +
-      "rticle.ctrl.FirmwareModuleType\022\r\n\005index\030" +
-      "\002 \001(\r\032\201\001\n\007Storage\022(\n\004type\030\001 \001(\0162\032.partic" +
-      "le.ctrl.StorageType\022\r\n\005flags\030\002 \001(\r\022=\n\010se" +
-      "ctions\030\003 \003(\0132+.particle.ctrl.DescribeSto" +
-      "rageReply.Section\"_\n\026ReadSectionDataRequ" +
-      "est\022\017\n\007storage\030\001 \001(\r\022\017\n\007section\030\002 \001(\r\022\016\n" +
-      "\006offset\030\003 \001(\r\022\014\n\004size\030\004 \001(\r:\005\210\265\030\205\002\"$\n\024Re" +
-      "adSectionDataReply\022\014\n\004data\030\001 \001(\014\"`\n\027Writ" +
-      "eSectionDataRequest\022\017\n\007storage\030\001 \001(\r\022\017\n\007" +
-      "section\030\002 \001(\r\022\016\n\006offset\030\003 \001(\r\022\014\n\004data\030\004 " +
-      "\001(\014:\005\210\265\030\206\002\"\027\n\025WriteSectionDataReply\"B\n\027C" +
-      "learSectionDataRequest\022\017\n\007storage\030\001 \001(\r\022" +
-      "\017\n\007section\030\002 \001(\r:\005\210\265\030\207\002\"\027\n\025ClearSectionD" +
-      "ataReply\"D\n\031GetSectionDataSizeRequest\022\017\n" +
-      "\007storage\030\001 \001(\r\022\017\n\007section\030\002 \001(\r:\005\210\265\030\210\002\"\'" +
-      "\n\027GetSectionDataSizeReply\022\014\n\004size\030\001 \001(\r*" +
-      "0\n\013StorageType\022\023\n\017INVALID_STORAGE\020\000\022\014\n\010I" +
-      "NTERNAL\020\001*l\n\013SectionType\022\023\n\017INVALID_SECT" +
-      "ION\020\000\022\014\n\010FIRMWARE\020\001\022\016\n\nOTA_BACKUP\020\002\022\022\n\016F" +
-      "ACTORY_BACKUP\020\003\022\n\n\006CONFIG\020\004\022\n\n\006EEPROM\020\005*" +
-      "t\n\022FirmwareModuleType\022\033\n\027INVALID_FIRMWAR" +
-      "E_MODULE\020\000\022\016\n\nBOOTLOADER\020\001\022\017\n\013SYSTEM_PAR" +
-      "T\020\002\022\r\n\tUSER_PART\020\003\022\021\n\rMONO_FIRMWARE\020\004*q\n" +
-      "\013SectionFlag\022\024\n\020NO_SECTION_FLAGS\020\000\022\014\n\010CA" +
-      "N_READ\020\001\022\r\n\tCAN_WRITE\020\002\022\r\n\tCAN_CLEAR\020\004\022\020" +
-      "\n\014CAN_GET_SIZE\020\010\022\016\n\nNEED_CLEAR\020\020B!\n\037io.p" +
-      "article.firmwareprotos.ctrlb\006proto3"
+      "ns.proto\032\014common.proto\"\\\n\032StartFirmwareU" +
+      "pdateRequest\022\014\n\004size\030\001 \001(\r\022)\n\006format\030\002 \001" +
+      "(\0162\031.particle.ctrl.FileFormat:\005\210\265\030\372\001\".\n\030" +
+      "StartFirmwareUpdateReply\022\022\n\nchunk_size\030\001" +
+      " \001(\r\";\n\033FinishFirmwareUpdateRequest\022\025\n\rv" +
+      "alidate_only\030\001 \001(\010:\005\210\265\030\373\001\"\033\n\031FinishFirmw" +
+      "areUpdateReply\"$\n\033CancelFirmwareUpdateRe" +
+      "quest:\005\210\265\030\374\001\"\033\n\031CancelFirmwareUpdateRepl" +
+      "y\"0\n\031FirmwareUpdateDataRequest\022\014\n\004data\030\001" +
+      " \001(\014:\005\210\265\030\375\001\"\031\n\027FirmwareUpdateDataReply\"\037" +
+      "\n\026DescribeStorageRequest:\005\210\265\030\204\002\"\322\003\n\024Desc" +
+      "ribeStorageReply\022<\n\007storage\030\001 \003(\0132+.part" +
+      "icle.ctrl.DescribeStorageReply.Storage\032\367" +
+      "\001\n\007Section\022(\n\004type\030\001 \001(\0162\032.particle.ctrl" +
+      ".SectionType\022\014\n\004size\030\002 \001(\r\022\r\n\005flags\030\003 \001(" +
+      "\r\022S\n\017firmware_module\030\004 \001(\0132:.particle.ct" +
+      "rl.DescribeStorageReply.Section.Firmware" +
+      "Module\032P\n\016FirmwareModule\022/\n\004type\030\001 \001(\0162!" +
+      ".particle.ctrl.FirmwareModuleType\022\r\n\005ind" +
+      "ex\030\002 \001(\r\032\201\001\n\007Storage\022(\n\004type\030\001 \001(\0162\032.par" +
+      "ticle.ctrl.StorageType\022\r\n\005flags\030\002 \001(\r\022=\n" +
+      "\010sections\030\003 \003(\0132+.particle.ctrl.Describe" +
+      "StorageReply.Section\"_\n\026ReadSectionDataR" +
+      "equest\022\017\n\007storage\030\001 \001(\r\022\017\n\007section\030\002 \001(\r" +
+      "\022\016\n\006offset\030\003 \001(\r\022\014\n\004size\030\004 \001(\r:\005\210\265\030\205\002\"$\n" +
+      "\024ReadSectionDataReply\022\014\n\004data\030\001 \001(\014\"`\n\027W" +
+      "riteSectionDataRequest\022\017\n\007storage\030\001 \001(\r\022" +
+      "\017\n\007section\030\002 \001(\r\022\016\n\006offset\030\003 \001(\r\022\014\n\004data" +
+      "\030\004 \001(\014:\005\210\265\030\206\002\"\027\n\025WriteSectionDataReply\"B" +
+      "\n\027ClearSectionDataRequest\022\017\n\007storage\030\001 \001" +
+      "(\r\022\017\n\007section\030\002 \001(\r:\005\210\265\030\207\002\"\027\n\025ClearSecti" +
+      "onDataReply\"D\n\031GetSectionDataSizeRequest" +
+      "\022\017\n\007storage\030\001 \001(\r\022\017\n\007section\030\002 \001(\r:\005\210\265\030\210" +
+      "\002\"\'\n\027GetSectionDataSizeReply\022\014\n\004size\030\001 \001" +
+      "(\r*0\n\013StorageType\022\023\n\017INVALID_STORAGE\020\000\022\014" +
+      "\n\010INTERNAL\020\001*l\n\013SectionType\022\023\n\017INVALID_S" +
+      "ECTION\020\000\022\014\n\010FIRMWARE\020\001\022\016\n\nOTA_BACKUP\020\002\022\022" +
+      "\n\016FACTORY_BACKUP\020\003\022\n\n\006CONFIG\020\004\022\n\n\006EEPROM" +
+      "\020\005*t\n\022FirmwareModuleType\022\033\n\027INVALID_FIRM" +
+      "WARE_MODULE\020\000\022\016\n\nBOOTLOADER\020\001\022\017\n\013SYSTEM_" +
+      "PART\020\002\022\r\n\tUSER_PART\020\003\022\021\n\rMONO_FIRMWARE\020\004" +
+      "*q\n\013SectionFlag\022\024\n\020NO_SECTION_FLAGS\020\000\022\014\n" +
+      "\010CAN_READ\020\001\022\r\n\tCAN_WRITE\020\002\022\r\n\tCAN_CLEAR\020" +
+      "\004\022\020\n\014CAN_GET_SIZE\020\010\022\016\n\nNEED_CLEAR\020\020* \n\nF" +
+      "ileFormat\022\007\n\003BIN\020\000\022\t\n\005MINIZ\020\001B!\n\037io.part" +
+      "icle.firmwareprotos.ctrlb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -11752,7 +11980,7 @@ public final class StorageOuterClass {
     internal_static_particle_ctrl_StartFirmwareUpdateRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_StartFirmwareUpdateRequest_descriptor,
-        new java.lang.String[] { "Size", });
+        new java.lang.String[] { "Size", "Format", });
     internal_static_particle_ctrl_StartFirmwareUpdateReply_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_particle_ctrl_StartFirmwareUpdateReply_fieldAccessorTable = new

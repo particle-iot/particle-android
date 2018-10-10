@@ -71,6 +71,24 @@ public final class Mesh {
      * <code>uint32 channel = 4;</code>
      */
     int getChannel();
+
+    /**
+     * <pre>
+     * network ID
+     * </pre>
+     *
+     * <code>string network_id = 5;</code>
+     */
+    java.lang.String getNetworkId();
+    /**
+     * <pre>
+     * network ID
+     * </pre>
+     *
+     * <code>string network_id = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getNetworkIdBytes();
   }
   /**
    * <pre>
@@ -93,6 +111,7 @@ public final class Mesh {
       extPanId_ = "";
       panId_ = 0;
       channel_ = 0;
+      networkId_ = "";
     }
 
     @java.lang.Override
@@ -146,6 +165,12 @@ public final class Mesh {
             case 32: {
 
               channel_ = input.readUInt32();
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              networkId_ = s;
               break;
             }
           }
@@ -282,6 +307,48 @@ public final class Mesh {
       return channel_;
     }
 
+    public static final int NETWORK_ID_FIELD_NUMBER = 5;
+    private volatile java.lang.Object networkId_;
+    /**
+     * <pre>
+     * network ID
+     * </pre>
+     *
+     * <code>string network_id = 5;</code>
+     */
+    public java.lang.String getNetworkId() {
+      java.lang.Object ref = networkId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        networkId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * network ID
+     * </pre>
+     *
+     * <code>string network_id = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNetworkIdBytes() {
+      java.lang.Object ref = networkId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        networkId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -306,6 +373,9 @@ public final class Mesh {
       if (channel_ != 0) {
         output.writeUInt32(4, channel_);
       }
+      if (!getNetworkIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, networkId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -327,6 +397,9 @@ public final class Mesh {
       if (channel_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(4, channel_);
+      }
+      if (!getNetworkIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, networkId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -352,6 +425,8 @@ public final class Mesh {
           == other.getPanId());
       result = result && (getChannel()
           == other.getChannel());
+      result = result && getNetworkId()
+          .equals(other.getNetworkId());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -371,6 +446,8 @@ public final class Mesh {
       hash = (53 * hash) + getPanId();
       hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
       hash = (53 * hash) + getChannel();
+      hash = (37 * hash) + NETWORK_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getNetworkId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -512,6 +589,8 @@ public final class Mesh {
 
         channel_ = 0;
 
+        networkId_ = "";
+
         return this;
       }
 
@@ -538,6 +617,7 @@ public final class Mesh {
         result.extPanId_ = extPanId_;
         result.panId_ = panId_;
         result.channel_ = channel_;
+        result.networkId_ = networkId_;
         onBuilt();
         return result;
       }
@@ -592,6 +672,10 @@ public final class Mesh {
         }
         if (other.getChannel() != 0) {
           setChannel(other.getChannel());
+        }
+        if (!other.getNetworkId().isEmpty()) {
+          networkId_ = other.networkId_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -870,6 +954,95 @@ public final class Mesh {
       public Builder clearChannel() {
         
         channel_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object networkId_ = "";
+      /**
+       * <pre>
+       * network ID
+       * </pre>
+       *
+       * <code>string network_id = 5;</code>
+       */
+      public java.lang.String getNetworkId() {
+        java.lang.Object ref = networkId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          networkId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * network ID
+       * </pre>
+       *
+       * <code>string network_id = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNetworkIdBytes() {
+        java.lang.Object ref = networkId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          networkId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * network ID
+       * </pre>
+       *
+       * <code>string network_id = 5;</code>
+       */
+      public Builder setNetworkId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        networkId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * network ID
+       * </pre>
+       *
+       * <code>string network_id = 5;</code>
+       */
+      public Builder clearNetworkId() {
+        
+        networkId_ = getDefaultInstance().getNetworkId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * network ID
+       * </pre>
+       *
+       * <code>string network_id = 5;</code>
+       */
+      public Builder setNetworkIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        networkId_ = value;
         onChanged();
         return this;
       }
@@ -1938,6 +2111,24 @@ public final class Mesh {
      * <code>uint32 channel = 3;</code>
      */
     int getChannel();
+
+    /**
+     * <pre>
+     * Network ID
+     * </pre>
+     *
+     * <code>string network_id = 4;</code>
+     */
+    java.lang.String getNetworkId();
+    /**
+     * <pre>
+     * Network ID
+     * </pre>
+     *
+     * <code>string network_id = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getNetworkIdBytes();
   }
   /**
    * <pre>
@@ -1959,6 +2150,7 @@ public final class Mesh {
       name_ = "";
       password_ = "";
       channel_ = 0;
+      networkId_ = "";
     }
 
     @java.lang.Override
@@ -2007,6 +2199,12 @@ public final class Mesh {
             case 24: {
 
               channel_ = input.readUInt32();
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              networkId_ = s;
               break;
             }
           }
@@ -2130,6 +2328,48 @@ public final class Mesh {
       return channel_;
     }
 
+    public static final int NETWORK_ID_FIELD_NUMBER = 4;
+    private volatile java.lang.Object networkId_;
+    /**
+     * <pre>
+     * Network ID
+     * </pre>
+     *
+     * <code>string network_id = 4;</code>
+     */
+    public java.lang.String getNetworkId() {
+      java.lang.Object ref = networkId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        networkId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Network ID
+     * </pre>
+     *
+     * <code>string network_id = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNetworkIdBytes() {
+      java.lang.Object ref = networkId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        networkId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -2151,6 +2391,9 @@ public final class Mesh {
       if (channel_ != 0) {
         output.writeUInt32(3, channel_);
       }
+      if (!getNetworkIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, networkId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -2168,6 +2411,9 @@ public final class Mesh {
       if (channel_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(3, channel_);
+      }
+      if (!getNetworkIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, networkId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2191,6 +2437,8 @@ public final class Mesh {
           .equals(other.getPassword());
       result = result && (getChannel()
           == other.getChannel());
+      result = result && getNetworkId()
+          .equals(other.getNetworkId());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -2208,6 +2456,8 @@ public final class Mesh {
       hash = (53 * hash) + getPassword().hashCode();
       hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
       hash = (53 * hash) + getChannel();
+      hash = (37 * hash) + NETWORK_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getNetworkId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2347,6 +2597,8 @@ public final class Mesh {
 
         channel_ = 0;
 
+        networkId_ = "";
+
         return this;
       }
 
@@ -2372,6 +2624,7 @@ public final class Mesh {
         result.name_ = name_;
         result.password_ = password_;
         result.channel_ = channel_;
+        result.networkId_ = networkId_;
         onBuilt();
         return result;
       }
@@ -2423,6 +2676,10 @@ public final class Mesh {
         }
         if (other.getChannel() != 0) {
           setChannel(other.getChannel());
+        }
+        if (!other.getNetworkId().isEmpty()) {
+          networkId_ = other.networkId_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2663,6 +2920,95 @@ public final class Mesh {
       public Builder clearChannel() {
         
         channel_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object networkId_ = "";
+      /**
+       * <pre>
+       * Network ID
+       * </pre>
+       *
+       * <code>string network_id = 4;</code>
+       */
+      public java.lang.String getNetworkId() {
+        java.lang.Object ref = networkId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          networkId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Network ID
+       * </pre>
+       *
+       * <code>string network_id = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNetworkIdBytes() {
+        java.lang.Object ref = networkId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          networkId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Network ID
+       * </pre>
+       *
+       * <code>string network_id = 4;</code>
+       */
+      public Builder setNetworkId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        networkId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Network ID
+       * </pre>
+       *
+       * <code>string network_id = 4;</code>
+       */
+      public Builder clearNetworkId() {
+        
+        networkId_ = getDefaultInstance().getNetworkId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Network ID
+       * </pre>
+       *
+       * <code>string network_id = 4;</code>
+       */
+      public Builder setNetworkIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        networkId_ = value;
         onChanged();
         return this;
       }
@@ -3372,6 +3718,15 @@ public final class Mesh {
   public interface StartCommissionerRequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:particle.ctrl.mesh.StartCommissionerRequest)
       com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * Time is seconds after which the role is automatically stopped
+     * </pre>
+     *
+     * <code>uint32 timeout = 1;</code>
+     */
+    int getTimeout();
   }
   /**
    * <pre>
@@ -3390,6 +3745,7 @@ public final class Mesh {
       super(builder);
     }
     private StartCommissionerRequest() {
+      timeout_ = 0;
     }
 
     @java.lang.Override
@@ -3405,6 +3761,7 @@ public final class Mesh {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -3420,6 +3777,11 @@ public final class Mesh {
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
+              break;
+            }
+            case 8: {
+
+              timeout_ = input.readUInt32();
               break;
             }
           }
@@ -3446,6 +3808,19 @@ public final class Mesh {
               io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest.class, io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest.Builder.class);
     }
 
+    public static final int TIMEOUT_FIELD_NUMBER = 1;
+    private int timeout_;
+    /**
+     * <pre>
+     * Time is seconds after which the role is automatically stopped
+     * </pre>
+     *
+     * <code>uint32 timeout = 1;</code>
+     */
+    public int getTimeout() {
+      return timeout_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3458,6 +3833,9 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (timeout_ != 0) {
+        output.writeUInt32(1, timeout_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -3466,6 +3844,10 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      if (timeout_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(1, timeout_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -3482,6 +3864,8 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest) obj;
 
       boolean result = true;
+      result = result && (getTimeout()
+          == other.getTimeout());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -3493,6 +3877,8 @@ public final class Mesh {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TIMEOUT_FIELD_NUMBER;
+      hash = (53 * hash) + getTimeout();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3626,6 +4012,8 @@ public final class Mesh {
       }
       public Builder clear() {
         super.clear();
+        timeout_ = 0;
+
         return this;
       }
 
@@ -3648,6 +4036,7 @@ public final class Mesh {
 
       public io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest buildPartial() {
         io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest result = new io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest(this);
+        result.timeout_ = timeout_;
         onBuilt();
         return result;
       }
@@ -3689,6 +4078,9 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest.getDefaultInstance()) return this;
+        if (other.getTimeout() != 0) {
+          setTimeout(other.getTimeout());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -3713,6 +4105,44 @@ public final class Mesh {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+
+      private int timeout_ ;
+      /**
+       * <pre>
+       * Time is seconds after which the role is automatically stopped
+       * </pre>
+       *
+       * <code>uint32 timeout = 1;</code>
+       */
+      public int getTimeout() {
+        return timeout_;
+      }
+      /**
+       * <pre>
+       * Time is seconds after which the role is automatically stopped
+       * </pre>
+       *
+       * <code>uint32 timeout = 1;</code>
+       */
+      public Builder setTimeout(int value) {
+        
+        timeout_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Time is seconds after which the role is automatically stopped
+       * </pre>
+       *
+       * <code>uint32 timeout = 1;</code>
+       */
+      public Builder clearTimeout() {
+        
+        timeout_ = 0;
+        onChanged();
         return this;
       }
       public final Builder setUnknownFields(
@@ -6328,6 +6758,15 @@ public final class Mesh {
      */
     com.google.protobuf.ByteString
         getPasswordBytes();
+
+    /**
+     * <pre>
+     * Time is seconds after which the joiner is automatically removed from the commissioner dataset
+     * </pre>
+     *
+     * <code>uint32 timeout = 3;</code>
+     */
+    int getTimeout();
   }
   /**
    * <pre>
@@ -6348,6 +6787,7 @@ public final class Mesh {
     private AddJoinerRequest() {
       eui64_ = "";
       password_ = "";
+      timeout_ = 0;
     }
 
     @java.lang.Override
@@ -6391,6 +6831,11 @@ public final class Mesh {
               java.lang.String s = input.readStringRequireUtf8();
 
               password_ = s;
+              break;
+            }
+            case 24: {
+
+              timeout_ = input.readUInt32();
               break;
             }
           }
@@ -6501,6 +6946,19 @@ public final class Mesh {
       }
     }
 
+    public static final int TIMEOUT_FIELD_NUMBER = 3;
+    private int timeout_;
+    /**
+     * <pre>
+     * Time is seconds after which the joiner is automatically removed from the commissioner dataset
+     * </pre>
+     *
+     * <code>uint32 timeout = 3;</code>
+     */
+    public int getTimeout() {
+      return timeout_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -6519,6 +6977,9 @@ public final class Mesh {
       if (!getPasswordBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, password_);
       }
+      if (timeout_ != 0) {
+        output.writeUInt32(3, timeout_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -6532,6 +6993,10 @@ public final class Mesh {
       }
       if (!getPasswordBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, password_);
+      }
+      if (timeout_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(3, timeout_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -6553,6 +7018,8 @@ public final class Mesh {
           .equals(other.getEui64());
       result = result && getPassword()
           .equals(other.getPassword());
+      result = result && (getTimeout()
+          == other.getTimeout());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -6568,6 +7035,8 @@ public final class Mesh {
       hash = (53 * hash) + getEui64().hashCode();
       hash = (37 * hash) + PASSWORD_FIELD_NUMBER;
       hash = (53 * hash) + getPassword().hashCode();
+      hash = (37 * hash) + TIMEOUT_FIELD_NUMBER;
+      hash = (53 * hash) + getTimeout();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -6705,6 +7174,8 @@ public final class Mesh {
 
         password_ = "";
 
+        timeout_ = 0;
+
         return this;
       }
 
@@ -6729,6 +7200,7 @@ public final class Mesh {
         io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerRequest result = new io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerRequest(this);
         result.eui64_ = eui64_;
         result.password_ = password_;
+        result.timeout_ = timeout_;
         onBuilt();
         return result;
       }
@@ -6777,6 +7249,9 @@ public final class Mesh {
         if (!other.getPassword().isEmpty()) {
           password_ = other.password_;
           onChanged();
+        }
+        if (other.getTimeout() != 0) {
+          setTimeout(other.getTimeout());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -6979,6 +7454,44 @@ public final class Mesh {
   checkByteStringIsUtf8(value);
         
         password_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int timeout_ ;
+      /**
+       * <pre>
+       * Time is seconds after which the joiner is automatically removed from the commissioner dataset
+       * </pre>
+       *
+       * <code>uint32 timeout = 3;</code>
+       */
+      public int getTimeout() {
+        return timeout_;
+      }
+      /**
+       * <pre>
+       * Time is seconds after which the joiner is automatically removed from the commissioner dataset
+       * </pre>
+       *
+       * <code>uint32 timeout = 3;</code>
+       */
+      public Builder setTimeout(int value) {
+        
+        timeout_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Time is seconds after which the joiner is automatically removed from the commissioner dataset
+       * </pre>
+       *
+       * <code>uint32 timeout = 3;</code>
+       */
+      public Builder clearTimeout() {
+        
+        timeout_ = 0;
         onChanged();
         return this;
       }
@@ -8405,6 +8918,15 @@ public final class Mesh {
   public interface JoinNetworkRequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:particle.ctrl.mesh.JoinNetworkRequest)
       com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * Time in seconds after which the attempt to join is cancelled
+     * </pre>
+     *
+     * <code>uint32 timeout = 1;</code>
+     */
+    int getTimeout();
   }
   /**
    * <pre>
@@ -8423,6 +8945,7 @@ public final class Mesh {
       super(builder);
     }
     private JoinNetworkRequest() {
+      timeout_ = 0;
     }
 
     @java.lang.Override
@@ -8438,6 +8961,7 @@ public final class Mesh {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
+      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -8453,6 +8977,11 @@ public final class Mesh {
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
+              break;
+            }
+            case 8: {
+
+              timeout_ = input.readUInt32();
               break;
             }
           }
@@ -8479,6 +9008,19 @@ public final class Mesh {
               io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest.class, io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest.Builder.class);
     }
 
+    public static final int TIMEOUT_FIELD_NUMBER = 1;
+    private int timeout_;
+    /**
+     * <pre>
+     * Time in seconds after which the attempt to join is cancelled
+     * </pre>
+     *
+     * <code>uint32 timeout = 1;</code>
+     */
+    public int getTimeout() {
+      return timeout_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -8491,6 +9033,9 @@ public final class Mesh {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (timeout_ != 0) {
+        output.writeUInt32(1, timeout_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -8499,6 +9044,10 @@ public final class Mesh {
       if (size != -1) return size;
 
       size = 0;
+      if (timeout_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(1, timeout_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -8515,6 +9064,8 @@ public final class Mesh {
       io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest other = (io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest) obj;
 
       boolean result = true;
+      result = result && (getTimeout()
+          == other.getTimeout());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -8526,6 +9077,8 @@ public final class Mesh {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TIMEOUT_FIELD_NUMBER;
+      hash = (53 * hash) + getTimeout();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -8659,6 +9212,8 @@ public final class Mesh {
       }
       public Builder clear() {
         super.clear();
+        timeout_ = 0;
+
         return this;
       }
 
@@ -8681,6 +9236,7 @@ public final class Mesh {
 
       public io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest buildPartial() {
         io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest result = new io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest(this);
+        result.timeout_ = timeout_;
         onBuilt();
         return result;
       }
@@ -8722,6 +9278,9 @@ public final class Mesh {
 
       public Builder mergeFrom(io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest other) {
         if (other == io.particle.firmwareprotos.ctrl.mesh.Mesh.JoinNetworkRequest.getDefaultInstance()) return this;
+        if (other.getTimeout() != 0) {
+          setTimeout(other.getTimeout());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -8746,6 +9305,44 @@ public final class Mesh {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+
+      private int timeout_ ;
+      /**
+       * <pre>
+       * Time in seconds after which the attempt to join is cancelled
+       * </pre>
+       *
+       * <code>uint32 timeout = 1;</code>
+       */
+      public int getTimeout() {
+        return timeout_;
+      }
+      /**
+       * <pre>
+       * Time in seconds after which the attempt to join is cancelled
+       * </pre>
+       *
+       * <code>uint32 timeout = 1;</code>
+       */
+      public Builder setTimeout(int value) {
+        
+        timeout_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Time in seconds after which the attempt to join is cancelled
+       * </pre>
+       *
+       * <code>uint32 timeout = 1;</code>
+       */
+      public Builder clearTimeout() {
+        
+        timeout_ = 0;
+        onChanged();
         return this;
       }
       public final Builder setUnknownFields(
@@ -12316,33 +12913,35 @@ public final class Mesh {
   static {
     java.lang.String[] descriptorData = {
       "\n\nmesh.proto\022\022particle.ctrl.mesh\032\020extens" +
-      "ions.proto\"P\n\013NetworkInfo\022\014\n\004name\030\001 \001(\t\022" +
+      "ions.proto\"d\n\013NetworkInfo\022\014\n\004name\030\001 \001(\t\022" +
       "\022\n\next_pan_id\030\002 \001(\t\022\016\n\006pan_id\030\003 \001(\r\022\017\n\007c" +
-      "hannel\030\004 \001(\r\"&\n\013AuthRequest\022\020\n\010password\030" +
-      "\001 \001(\t:\005\210\265\030\351\007\"\013\n\tAuthReply\"N\n\024CreateNetwo" +
-      "rkRequest\022\014\n\004name\030\001 \001(\t\022\020\n\010password\030\002 \001(" +
-      "\t\022\017\n\007channel\030\003 \001(\r:\005\210\265\030\352\007\"F\n\022CreateNetwo" +
+      "hannel\030\004 \001(\r\022\022\n\nnetwork_id\030\005 \001(\t\"&\n\013Auth" +
+      "Request\022\020\n\010password\030\001 \001(\t:\005\210\265\030\351\007\"\013\n\tAuth" +
+      "Reply\"b\n\024CreateNetworkRequest\022\014\n\004name\030\001 " +
+      "\001(\t\022\020\n\010password\030\002 \001(\t\022\017\n\007channel\030\003 \001(\r\022\022" +
+      "\n\nnetwork_id\030\004 \001(\t:\005\210\265\030\352\007\"F\n\022CreateNetwo" +
       "rkReply\0220\n\007network\030\001 \001(\0132\037.particle.ctrl" +
-      ".mesh.NetworkInfo\"!\n\030StartCommissionerRe" +
-      "quest:\005\210\265\030\353\007\"\030\n\026StartCommissionerReply\" " +
-      "\n\027StopCommissionerRequest:\005\210\265\030\354\007\"\027\n\025Stop" +
-      "CommissionerReply\"O\n\024PrepareJoinerReques" +
-      "t\0220\n\007network\030\001 \001(\0132\037.particle.ctrl.mesh." +
-      "NetworkInfo:\005\210\265\030\355\007\"5\n\022PrepareJoinerReply" +
-      "\022\r\n\005eui64\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\":\n\020Add" +
-      "JoinerRequest\022\r\n\005eui64\030\001 \001(\t\022\020\n\010password" +
-      "\030\002 \001(\t:\005\210\265\030\356\007\"\020\n\016AddJoinerReply\"+\n\023Remov" +
-      "eJoinerRequest\022\r\n\005eui64\030\001 \001(\t:\005\210\265\030\357\007\"\023\n\021" +
-      "RemoveJoinerReply\"\033\n\022JoinNetworkRequest:" +
-      "\005\210\265\030\360\007\"\022\n\020JoinNetworkReply\"\034\n\023LeaveNetwo" +
-      "rkRequest:\005\210\265\030\361\007\"\023\n\021LeaveNetworkReply\"\036\n" +
-      "\025GetNetworkInfoRequest:\005\210\265\030\362\007\"G\n\023GetNetw" +
-      "orkInfoReply\0220\n\007network\030\001 \001(\0132\037.particle" +
-      ".ctrl.mesh.NetworkInfo\"\034\n\023ScanNetworksRe" +
-      "quest:\005\210\265\030\363\007\"F\n\021ScanNetworksReply\0221\n\010net" +
-      "works\030\001 \003(\0132\037.particle.ctrl.mesh.Network" +
-      "InfoB&\n$io.particle.firmwareprotos.ctrl." +
-      "meshb\006proto3"
+      ".mesh.NetworkInfo\"2\n\030StartCommissionerRe" +
+      "quest\022\017\n\007timeout\030\001 \001(\r:\005\210\265\030\353\007\"\030\n\026StartCo" +
+      "mmissionerReply\" \n\027StopCommissionerReque" +
+      "st:\005\210\265\030\354\007\"\027\n\025StopCommissionerReply\"O\n\024Pr" +
+      "epareJoinerRequest\0220\n\007network\030\001 \001(\0132\037.pa" +
+      "rticle.ctrl.mesh.NetworkInfo:\005\210\265\030\355\007\"5\n\022P" +
+      "repareJoinerReply\022\r\n\005eui64\030\001 \001(\t\022\020\n\010pass" +
+      "word\030\002 \001(\t\"K\n\020AddJoinerRequest\022\r\n\005eui64\030" +
+      "\001 \001(\t\022\020\n\010password\030\002 \001(\t\022\017\n\007timeout\030\003 \001(\r" +
+      ":\005\210\265\030\356\007\"\020\n\016AddJoinerReply\"+\n\023RemoveJoine" +
+      "rRequest\022\r\n\005eui64\030\001 \001(\t:\005\210\265\030\357\007\"\023\n\021Remove" +
+      "JoinerReply\",\n\022JoinNetworkRequest\022\017\n\007tim" +
+      "eout\030\001 \001(\r:\005\210\265\030\360\007\"\022\n\020JoinNetworkReply\"\034\n" +
+      "\023LeaveNetworkRequest:\005\210\265\030\361\007\"\023\n\021LeaveNetw" +
+      "orkReply\"\036\n\025GetNetworkInfoRequest:\005\210\265\030\362\007" +
+      "\"G\n\023GetNetworkInfoReply\0220\n\007network\030\001 \001(\013" +
+      "2\037.particle.ctrl.mesh.NetworkInfo\"\034\n\023Sca" +
+      "nNetworksRequest:\005\210\265\030\363\007\"F\n\021ScanNetworksR" +
+      "eply\0221\n\010networks\030\001 \003(\0132\037.particle.ctrl.m" +
+      "esh.NetworkInfoB&\n$io.particle.firmwarep" +
+      "rotos.ctrl.meshb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -12362,7 +12961,7 @@ public final class Mesh {
     internal_static_particle_ctrl_mesh_NetworkInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_mesh_NetworkInfo_descriptor,
-        new java.lang.String[] { "Name", "ExtPanId", "PanId", "Channel", });
+        new java.lang.String[] { "Name", "ExtPanId", "PanId", "Channel", "NetworkId", });
     internal_static_particle_ctrl_mesh_AuthRequest_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_particle_ctrl_mesh_AuthRequest_fieldAccessorTable = new
@@ -12380,7 +12979,7 @@ public final class Mesh {
     internal_static_particle_ctrl_mesh_CreateNetworkRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_mesh_CreateNetworkRequest_descriptor,
-        new java.lang.String[] { "Name", "Password", "Channel", });
+        new java.lang.String[] { "Name", "Password", "Channel", "NetworkId", });
     internal_static_particle_ctrl_mesh_CreateNetworkReply_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_particle_ctrl_mesh_CreateNetworkReply_fieldAccessorTable = new
@@ -12392,7 +12991,7 @@ public final class Mesh {
     internal_static_particle_ctrl_mesh_StartCommissionerRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_mesh_StartCommissionerRequest_descriptor,
-        new java.lang.String[] { });
+        new java.lang.String[] { "Timeout", });
     internal_static_particle_ctrl_mesh_StartCommissionerReply_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_particle_ctrl_mesh_StartCommissionerReply_fieldAccessorTable = new
@@ -12428,7 +13027,7 @@ public final class Mesh {
     internal_static_particle_ctrl_mesh_AddJoinerRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_mesh_AddJoinerRequest_descriptor,
-        new java.lang.String[] { "Eui64", "Password", });
+        new java.lang.String[] { "Eui64", "Password", "Timeout", });
     internal_static_particle_ctrl_mesh_AddJoinerReply_descriptor =
       getDescriptor().getMessageTypes().get(12);
     internal_static_particle_ctrl_mesh_AddJoinerReply_fieldAccessorTable = new
@@ -12452,7 +13051,7 @@ public final class Mesh {
     internal_static_particle_ctrl_mesh_JoinNetworkRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_mesh_JoinNetworkRequest_descriptor,
-        new java.lang.String[] { });
+        new java.lang.String[] { "Timeout", });
     internal_static_particle_ctrl_mesh_JoinNetworkReply_descriptor =
       getDescriptor().getMessageTypes().get(16);
     internal_static_particle_ctrl_mesh_JoinNetworkReply_fieldAccessorTable = new
