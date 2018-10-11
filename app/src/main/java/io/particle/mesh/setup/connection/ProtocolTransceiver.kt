@@ -376,7 +376,7 @@ class ProtocolTransceiver internal constructor(
 
 private var requestIdGenerator = AtomicInteger()
 
-private fun AbstractMessage.asRequest(): DeviceRequest {
+internal fun AbstractMessage.asRequest(): DeviceRequest {
     val requestId = requestIdGenerator.incrementAndGet().toShort()
     return DeviceRequest(
         requestId,

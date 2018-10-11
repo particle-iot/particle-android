@@ -112,13 +112,7 @@ class CloudConnectionModule(
         }
         throw FlowException("Error ensuring connection to cloud")
     }
-
-    // FIXME: where does this belong?
-    suspend fun ensureDeviceIsUsingEligibleFirmware() {
-        log.info { "ensureDeviceIsUsingEligibleFirmware()" }
-        // TODO: TO BE IMPLEMENTED
-    }
-
+    
     suspend fun ensureCheckedIsClaimed(targetDeviceId: String) {
         log.info { "ensureCheckedIsClaimed()" }
         if (checkedIsTargetClaimedByUser) {

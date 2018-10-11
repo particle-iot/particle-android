@@ -1,10 +1,13 @@
 package io.particle.mesh.setup.flow
 
+import io.particle.android.sdk.cloud.ParticleDevice
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
+import io.particle.mesh.setup.flow.modules.device.DeviceModule
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
@@ -13,12 +16,12 @@ import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
 
 
-
 class Flow(
-        private val flowManager: FlowManager,
-        private val bleConnModule: BLEConnectionModule,
-        private val meshSetupModule: MeshSetupModule,
-        private val cloudConnModule: CloudConnectionModule
+    private val flowManager: FlowManager,
+    private val bleConnModule: BLEConnectionModule,
+    private val meshSetupModule: MeshSetupModule,
+    private val cloudConnModule: CloudConnectionModule,
+    private val deviceModule: DeviceModule
 ) {
 
     private val targetXceiver
@@ -67,7 +70,7 @@ class Flow(
         meshSetupModule.ensureMeshNetworkSelected()
 
         val toJoin = meshSetupModule.targetDeviceMeshNetworkToJoinLD.value!!
-        when(toJoin) {
+        when (toJoin) {
             is SelectedNetwork -> doJoinerSubflow()
             is CreateNewNetwork -> doCreateNetworkFlow()
         }
@@ -81,7 +84,10 @@ class Flow(
         bleConnModule.ensureTargetDeviceConnected()
 
         // gather initial data, perform upfront checks
-        cloudConnModule.ensureDeviceIsUsingEligibleFirmware()
+        deviceModule.ensureDeviceIsUsingEligibleFirmware(
+            bleConnModule.targetDeviceTransceiverLD.value!!,
+            flowManager.targetDeviceType
+        )
         val targetDeviceId = bleConnModule.ensureTargetDeviceId()
 
         if (!meshSetupModule.targetJoinedSuccessfully) {
@@ -166,7 +172,8 @@ class Flow(
 
     private suspend fun ensureShowCreateNetworkFinished() {
         log.info { "ensureShowCreateNetworkFinished()" }
-        flowManager.navigate(R.id.action_global_newMeshNetworkFinishedFragment)    }
+        flowManager.navigate(R.id.action_global_newMeshNetworkFinishedFragment)
+    }
 }
 
 

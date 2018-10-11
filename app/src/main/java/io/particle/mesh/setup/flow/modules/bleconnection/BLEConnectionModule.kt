@@ -269,6 +269,7 @@ private const val BT_NAME_ID_LENGTH = 6
 
 private fun BarcodeData.toDeviceName(): String {
 
+    // FIXME: convert this to return ParticleDeviceType?
     fun getDeviceTypeName(serialNumber: String): String {
         val first4 = serialNumber.substring(0, 4)
         return when (first4) {
