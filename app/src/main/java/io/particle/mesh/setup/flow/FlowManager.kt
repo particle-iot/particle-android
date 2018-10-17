@@ -1,32 +1,32 @@
 package io.particle.mesh.setup.flow
 
-import android.app.Application
 import android.content.Context
-import android.widget.Toast
+import android.os.Bundle
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.annotation.IdRes
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataSuspender
-import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.common.asReference
+import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
+import io.particle.mesh.setup.flow.modules.cloudconnection.WifiNetworksScannerLD
+import io.particle.mesh.setup.flow.modules.device.DeviceModule
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksScanner
-import io.particle.mesh.setup.ui.BarcodeData
-import io.particle.mesh.setup.ui.DialogResult
-import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.ui.*
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
-import io.particle.mesh.setup.ui.ProgressHack
 import io.particle.mesh.setup.utils.runOnMainThread
-import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
@@ -36,19 +36,21 @@ import mu.KotlinLogging
 
 
 class FlowManager(
-        var targetDeviceType: ParticleDeviceType,
-        cloud: ParticleCloud,
-        private val navControllerRef: LiveData<NavController?>,
-        private val dialogRequestLD: LiveData<DialogSpec?>,
-        val dialogResultLD: LiveData<DialogResult?>,
-        btConnectionManager: BluetoothConnectionManager,
-        transceiverFactory: ProtocolTransceiverFactory,
-        private val progressHackLD: MutableLiveData<ProgressHack?>
+    cloud: ParticleCloud,
+    private val navControllerRef: LiveData<NavController?>,
+    private val dialogRequestLD: LiveData<DialogSpec?>,
+    val dialogResultLD: LiveData<DialogResult?>,
+    btConnectionManager: BluetoothConnectionManager,
+    transceiverFactory: ProtocolTransceiverFactory,
+    private val progressHackLD: MutableLiveData<ProgressHack?>,
+    private val everythingNeedsAContext: Context
 ) : Clearable, ProgressHack {
 
+    var targetDeviceType: MeshDeviceType = MeshDeviceType.XENON  // arbitrary default
     val bleConnectionModule = BLEConnectionModule(this, btConnectionManager, transceiverFactory)
     val meshSetupModule: MeshSetupModule
     val cloudConnectionModule: CloudConnectionModule
+    val deviceModule: DeviceModule
 
     private var flow: Flow
 
@@ -58,10 +60,21 @@ class FlowManager(
     private val log = KotlinLogging.logger {}
 
     init {
-        val scanner = TargetDeviceMeshNetworksScanner(bleConnectionModule.targetDeviceTransceiverLD)
-        meshSetupModule = MeshSetupModule(this, scanner)
-        cloudConnectionModule = CloudConnectionModule(this, cloud)
-        flow = Flow(this, bleConnectionModule, meshSetupModule, cloudConnectionModule)
+        meshSetupModule = MeshSetupModule(
+            this,
+            cloud,
+            TargetDeviceMeshNetworksScanner(bleConnectionModule.targetDeviceTransceiverLD)
+        )
+
+        cloudConnectionModule = CloudConnectionModule(
+            WifiNetworksScannerLD(bleConnectionModule.targetDeviceTransceiverLD),
+            this,
+            cloud
+        )
+
+        deviceModule = DeviceModule(this, FirmwareUpdateManager(cloud, OkHttpClient()))
+
+        flow = Flow(this, bleConnectionModule, meshSetupModule, cloudConnectionModule, deviceModule)
     }
 
     fun startNewFlow() {
@@ -79,8 +92,12 @@ class FlowManager(
             }
             if (error != null) {
                 withContext(UI) {
-                    newDialogRequest(StringDialogSpec("Setup has encountered an error and cannot " +
-                            "continue. Please exit setup and try again."))
+                    newDialogRequest(
+                        StringDialogSpec(
+                            "Setup has encountered an error and cannot " +
+                                    "continue. Please exit setup and try again."
+                        )
+                    )
                     clearDialogResult()
                 }
             }
@@ -105,8 +122,12 @@ class FlowManager(
             }
             if (error != null) {
                 withContext(UI) {
-                    newDialogRequest(StringDialogSpec("Setup has encountered an error and cannot " +
-                            "continue. Please exit setup and try again."))
+                    newDialogRequest(
+                        StringDialogSpec(
+                            "Setup has encountered an error and cannot " +
+                                    "continue. Please exit setup and try again."
+                        )
+                    )
                     clearDialogResult()
                 }
             }
@@ -144,7 +165,8 @@ class FlowManager(
             bleConnectionModule.targetDeviceTransceiverLD.castAndSetOnMainThread(null)
         }
 
-        var commissionerPwd = meshSetupModule.targetDeviceMeshNetworkToJoinCommissionerPassword.value
+        var commissionerPwd =
+            meshSetupModule.targetDeviceMeshNetworkToJoinCommissionerPassword.value
         if (commissionerPwd == null) {  // and if it's still null...
             commissionerPwd = meshSetupModule.newNetworkPasswordLD.value
         }
@@ -153,9 +175,15 @@ class FlowManager(
 
         launch(UI) {
             delay(100)
-            bleConnectionModule.commissionerBarcodeLD.castAndSetOnMainThread(commissionerBarcodeToUse)
-            bleConnectionModule.commissionerTransceiverLD.castAndSetOnMainThread(commissionerTransceiverToUse)
-            meshSetupModule.targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(commissionerPwd)
+            bleConnectionModule.commissionerBarcodeLD.castAndSetOnMainThread(
+                commissionerBarcodeToUse
+            )
+            bleConnectionModule.commissionerTransceiverLD.castAndSetOnMainThread(
+                commissionerTransceiverToUse
+            )
+            meshSetupModule.targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(
+                commissionerPwd
+            )
         }
     }
 
@@ -170,11 +198,26 @@ class FlowManager(
         progressHackLD.value?.showGlobalProgressSpinner(show)
     }
 
-    fun navigate(@IdRes idRes: Int) {
+    fun navigate(@IdRes idRes: Int, args: Bundle? = null) {
+        showGlobalProgressSpinner(false)
         runOnMainThread {
             navController?.popBackStack()
-            navController?.navigate(idRes)
+            if (args == null) {
+                navController?.navigate(idRes)
+            } else {
+                navController?.navigate(idRes, args)
+            }
         }
+    }
+
+    fun showCongratsScreen(message: String) {
+        navigate(
+            R.id.action_global_hashtagWinningFragment,
+            HashtagWinningFragmentArgs.Builder()
+                .setCongratsMessage(message)
+                .build()
+                .toBundle()
+        )
     }
 
     fun newDialogRequest(spec: DialogSpec) {
@@ -195,20 +238,20 @@ class FlowManager(
         (dialogRequestLD as MutableLiveData).postValue(null)
     }
 
-    fun getTypeName(context: Context): String {
+    fun getString(@StringRes stringRes: Int): String {
+        return everythingNeedsAContext.getString(stringRes)
+    }
+
+    fun getString(@StringRes stringRes: Int, vararg formatArgs: String): String {
+        return everythingNeedsAContext.getString(stringRes, formatArgs)
+    }
+
+    fun getTypeName(): String {
         val resource = when (targetDeviceType) {
-            ParticleDeviceType.CORE -> R.string.core
-            ParticleDeviceType.PHOTON -> R.string.photon
-            ParticleDeviceType.P1 -> R.string.p1
-            ParticleDeviceType.RASPBERRY_PI -> R.string.raspberry
-            ParticleDeviceType.RED_BEAR_DUO -> R.string.red_bear_duo
-            ParticleDeviceType.BLUZ -> R.string.bluz
-            ParticleDeviceType.DIGISTUMP_OAK -> R.string.oak
-            ParticleDeviceType.ELECTRON -> R.string.electron
-            ParticleDeviceType.ARGON -> R.string.product_name_argon
-            ParticleDeviceType.BORON -> R.string.product_name_boron
-            ParticleDeviceType.XENON -> R.string.product_name_xenon
+            MeshDeviceType.ARGON -> R.string.product_name_argon
+            MeshDeviceType.BORON -> R.string.product_name_boron
+            MeshDeviceType.XENON -> R.string.product_name_xenon
         }
-        return context.getString(resource)
+        return everythingNeedsAContext.getString(resource)
     }
 }

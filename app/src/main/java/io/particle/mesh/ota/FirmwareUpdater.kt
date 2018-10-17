@@ -81,11 +81,10 @@ class FirmwareUpdater(
                 is Result.Error,
                 is Result.Absent -> throw IOException("Bad reply from device: ${updateResult.error}")
                 is Result.Present -> {
-                    bytesSent += bytesSent + toRead.toInt()
-                    if (bytesSent % (2 * chunkSize) == 0) {
-                        log.debug { "Sent ${bytesSent / 1024} KB" }
-                        listener(bytesSent / firmwareData.size)
-                    }
+                    bytesSent += toRead.toInt()
+                    val progress = ((bytesSent.toFloat() / firmwareData.size.toFloat()) * 100).toInt()
+                    log.debug { "Sent ${bytesSent / 1024} KB, progress=$progress" }
+                    listener(progress)
                 }
             }
         }

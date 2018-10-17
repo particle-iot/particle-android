@@ -124,22 +124,22 @@ Enjoy!]]></string>
     <string name="p_action_set_admin_password">Set admin password</string>
 
     <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_title">Enjoy this new mesh network on us</string>
-    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text1"><![CDATA[All new networks begin as <i>micro networks</i>]]></string>
-    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text2"><![CDATA[Micro networks include <b>10 total devices</b> and <b>1 gateway</b>]]></string>
-    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text3"><![CDATA[Your first <b>10</b> <i>micro networks</i> using a Wi-Fi or Ethernet gateway are FREE]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text1">All new networks begin as <i>micro networks</i></string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text2">Micro networks include <b>10 total devices</b> and <b>1 gateway</b></string>
+    <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_text3">Your first <b>10</b> <i>micro networks</i> using a Wi-Fi or Ethernet gateway are FREE</string>
     <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_action">Create free network</string>
     <string name="p_pricinginfo_wifi_ethernet_within_free_allotment_fine_print">You have 10 free micro networks left</string>
 
     <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_title">To create this network, enroll in a Device Cloud Subscription</string>
-    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text1"><![CDATA[All new networks begin as <i>micro networks</i>]]></string>
-    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text2"><![CDATA[Micro networks include <b>10 total devices</b> and <b>1 gateway</b>]]></string>
-    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text3"><![CDATA[You will be billed $1.99 per mo. for this network.  Full pricing]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text1">All new networks begin as <i>micro networks</i></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text2">Micro networks include <b>10 total devices</b> and <b>1 gateway</b></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_text3">You will be billed $1.99 per mo. for this network.  Full pricing</string>
     <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_no_cc_action">Your card ending in 4242 will be used for recurring Device Cloud subscription costs</string>
 
     <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_title">To create this network, enroll in a Device Cloud Subscription</string>
-    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text1"><![CDATA[All new networks begin as <i>micro networks</i>]]></string>
-    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text2"><![CDATA[Micro networks include <b>10 total devices</b> and <b>1 gateway</b>]]></string>
-    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text3"><![CDATA[You will be billed $1.99 per mo. for this network.  Full pricing]]></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text1">All new networks begin as <i>micro networks</i></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text2">Micro networks include <b>10 total devices</b> and <b>1 gateway</b></string>
+    <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_text3">You will be billed $1.99 per mo. for this network.  Full pricing</string>
     <string name="p_pricinginfo_wifi_ethernet_surpassed_free_allotment_with_cc_action">Enroll &amp; create network</string>
 
     <string name="p_creatingyournetwork_header">Creating your network</string>
@@ -174,7 +174,7 @@ Enjoy!]]></string>
     <string name="p_scanfornetworks_gateway_flow_title">Your {product_type} + Ethernet Featherwing will act as a gateway in a mesh network</string>
     <string name="p_newmeshnetworkname_hintbox_content">Name your network something you will remember to help you easily identify it later</string>
     <string name="p_action_create_network">Create network</string>
-    <string name="p_joiningmeshnetwork_stage4"><![CDATA[Joined mesh network & connected to Particle Device Cloud successfully!]]></string>
+    <string name="p_joiningmeshnetwork_stage4">Joined mesh network &amp; connected to Particle Device Cloud successfully!</string>
     <string name="p_joinersetupfinished_done_header">Itching to get started?</string>
     <string name="p_joinersetupfinished_continue_to_mesh_header">Using {device_name} in a mesh network?</string>
     <string name="p_gatewaysetupfinished_done_header">Using as a standalone device?</string>
@@ -195,5 +195,53 @@ Enjoy!]]></string>
     <string name="p_bleota_hintbox_content">Please keep your phone awake with this app open during this Device OS update.</string>
     <string name="p_bleota_header">Updating Device OS</string>
     <string name="p_bleota_progress_format">File %1$d - %2$d%% done</string>
+    <string name="p_usestandaloneorinmesh_header">Do you want to use this Argon in a <i>mesh network?</i></string>
+    <string name="p_usestandaloneorinmesh_subheader">This Argon can act as a gateway to the Internet and create a local wireless mesh network that other devices can join</string>
+    <string name="p_action_use_in_mesh_network">Yes, use in mesh network</string>
+    <string name="p_action_do_not_use_in_mesh_network">No, don\'t use in mesh network</string>
+    <string name="p_createorjoinmesh_header">Got it — do you want to create a new mesh network, or join an existing one?</string>
+    <string name="p_createorjoinmesh_subheader">You will need to be in physical proximity to an existing mesh network to have the {product_type} join it</string>
+    <string name="p_action_join_exiting_mesh_network">Join existing mesh network</string>
+    <string name="p_action_create_new_mesh_network">Create new mesh network</string>
+    <string name="p_meshbilling_header_free">Woo-hoo! Enjoy this new mesh network on us.</string>
+    <string name="p_meshbilling_micro_network">Micro Network</string>
+    <string name="p_meshbilling_network_type_wifi_ethernet_gateway">Wi-Fi/Ethernet Gateway</string>
+    <string name="p_meshbilling_first_10_networks_free">First 10 networks FREE</string>
+    <string name="p_meshbilling_pricing">{price} per mo.</string>
+    <string name="p_meshbilling_mesh_network_includes">-- mesh network includes --</string>
+    <string name="p_meshbilling_device_cloud_features">Device Cloud Features +</string>
+    <string name="p_meshbilling_total_devices"><b>10</b> total devices</string>
+    <string name="p_meshbilling_gateway_limit">Up to <b>1</b> gateway</string>
+    <string name="p_meshbilling_support_type">Standard support</string>
+    <string name="p_meshbilling_enter_cc_on_next_screen">You will be asked to enter your credit card details on the next screen</string>
+    <string name="p_meshbilling_header_need_subscription">To create a new mesh network, please enroll in a Device Cloud subscription</string>
+
+    <string name="p_argonconnecttocloud_header_gateway">OK — Let\'s get this mesh gateway connected to the Device Cloud</string>
+    <string name="p_argonconnecttocloud_step1_gateway">Gateways require a <b>connection to the Device Cloud</b> to allow communication between the local mesh network and the Internet</string>
+    <string name="p_argonconnecttocloud_step2_gateway">To connect, you will send the Argon Wi-Fi network credentials</string>
+    <string name="p_argonconnecttocloud_step3_gateway">Once connected, you can <b>create or join a mesh network</b> using this Argon</string>
+
+    <string name="p_argonconnecttocloud_header_standalone">OK — Let\'s get this device connected to the Device Cloud</string>
+    <string name="p_argonconnecttocloud_step1_standalone">Standalone devices require a <b>connection to the Device Cloud</b> to securely talk to the Internet</string>
+    <string name="p_argonconnecttocloud_step2_standalone">To connect, you will send the <b>Argon Wi-Fi network credentials</b></string>
+
+    <string name="p_scanforwifi_header">Your Argon is scanning for Wi-Fi networks to join</string>
+    <string name="p_mesh_action_connect_to_device_cloud">Connect to Device Cloud</string>
+    <string name="p_enterwifipassword_header">Enter password for {wifi_ssid}</string>
+    <string name="p_enterwifipassword_password_entry_caption">Password</string>
+    <string name="p_argonconnectingstatus_header">Your Argon is connecting to the Particle Device Cloud</string>
+    <string name="p_argonconnectingstatus_step_1">Setting Wi-Fi credentials</string>
+    <string name="p_argonconnectingstatus_step_2">Connecting to the Internet via Wi-Fi</string>
+    <string name="p_argonconnectingstatus_step_3">Starting a secure session with the Particle Device Cloud</string>
+    <string name="p_argonconnectingstatus_step_4">Connected successfully!</string>
+    <string name="p_createnetworkwithgateway_header">Creating mesh network</string>
+    <string name="p_createnetworkwithgateway_step_1">Sending network credentials to {device_name}</string>
+    <string name="p_createnetworkwithgateway_step_2">{device_name} creating this mesh network locally</string>
+    <string name="p_createnetworkwithgateway_step_3">Registering mesh network with the Particle Device Cloud</string>
+    <string name="p_createnetworkwithgateway_step_4">Activating {device_name} as a gateway in the mesh network</string>
+    <string name="p_letsgetbuilding_tip_content">Did you already close your web browser? You can always head straight to:</string>
+    <string name="p_letsgetbuilding_header"><b>Let\'s get building!</b></string>
+    <string name="p_letsgetbuilding_subheader">To start building with your device, <b>look back at your web browser where you got started with setup.</b></string>
+
 
 </resources>

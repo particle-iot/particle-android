@@ -77,8 +77,8 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
 
     // using snapshot to unbreak Butterknife with AndroidX
-    api 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
+    api 'com.jakewharton:butterknife:9.0.0-rc1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
 
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'androidx.recyclerview:recyclerview:1.0.0'

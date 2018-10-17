@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.particle.mesh.setup.ui.BaseMeshSetupFragment
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.fragment_ble_ota_intro.*
 
 
 class BleOtaIntroFragment : BaseMeshSetupFragment() {
@@ -16,5 +17,12 @@ class BleOtaIntroFragment : BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_ble_ota_intro, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        action_next.setOnClickListener {
+            flowManagerVM.flowManager?.deviceModule?.updateUserConsentedToFirmwareUpdate(true)
+        }
+    }
 
 }

@@ -24,18 +24,6 @@ class NewMeshNetworkFinishedFragment : BaseMeshSetupFragment() {
         }
         root.action_start_building.setOnClickListener { endSetup() }
 
-        flowManagerVM.flowManager!!.cloudConnectionModule.currentDeviceName.observe(this, Observer {
-            if (it == null) {
-                QATool.report(NullPointerException("Device name is null."))
-            }
-            val deviceName = it ?: getString(R.string.default_device_name)
-
-            root.setup_header_text.text = Phrase.from(root, R.string.p_newmeshnetworkfinished_subheader_1)
-                    .put("device_name", deviceName)
-                    .format()
-        })
-
-
         return root
     }
 

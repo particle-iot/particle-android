@@ -19,7 +19,6 @@ class ConnectingToDeviceCloudFragment : BaseMeshSetupFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_connecting_to_device_cloud, container, false)
     }
 
@@ -34,7 +33,7 @@ class ConnectingToDeviceCloudFragment : BaseMeshSetupFragment() {
         fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_3)
 
         setup_header_text.text = Phrase.from(view, R.string.p_connectingtodevicecloud_title)
-                .put("product_type", fm.getTypeName(view.context))
+                .put("product_type", fm.getTypeName())
                 .format()
     }
 

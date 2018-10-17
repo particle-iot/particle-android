@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow.modules.meshsetup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
@@ -26,8 +27,8 @@ import mu.KotlinLogging
 
 class MeshSetupModule(
         private val flowManager: FlowManager,
+        private val cloud: ParticleCloud,
         val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
-
 ) : Clearable {
 
     val targetDeviceMeshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
@@ -122,6 +123,28 @@ class MeshSetupModule(
                 }
             }
         }
+
+
+
+
+
+        // FIXME: IMPLEMENT THIS
+//        val isInNetwork = true
+//        try {
+//            cloud.getNetworks()
+//        } catch (ex: Exception) {
+//            log.info(ex) {"error when getting networks"}
+//        }
+//        if (isInNetwork) {
+//            cloud.removeDeviceFromMeshNetwork(
+//                flowManager.bleConnectionModule.targetDeviceId!!
+//            )
+//        }
+
+
+
+
+
 
         targetXceiver!!.sendLeaveNetwork().throwOnErrorOrAbsent()
     }

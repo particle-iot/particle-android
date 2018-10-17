@@ -1,6 +1,5 @@
 package io.particle.mesh.setup.flow
 
-import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
@@ -8,12 +7,36 @@ import io.particle.mesh.common.Result
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.device.DeviceModule
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.STANDALONE
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
+
+
+// FIXME: put this elsewhere
+enum class MeshDeviceType(val particleDeviceType: ParticleDeviceType) {
+
+    ARGON(ParticleDeviceType.ARGON),
+    BORON(ParticleDeviceType.BORON),
+    XENON(ParticleDeviceType.XENON);
+
+    companion object {
+
+        fun fromParticleDeviceType(pdt: ParticleDeviceType): MeshDeviceType {
+            return when (pdt) {
+                ParticleDeviceType.ARGON -> MeshDeviceType.ARGON
+                ParticleDeviceType.BORON -> MeshDeviceType.BORON
+                ParticleDeviceType.XENON -> MeshDeviceType.XENON
+                else -> throw IllegalArgumentException("Not a mesh device: $pdt")
+            }
+        }
+
+    }
+}
 
 
 class Flow(
@@ -30,11 +53,14 @@ class Flow(
     private val log = KotlinLogging.logger {}
 
     suspend fun runFlow() {
-        try {
-            doRunFlow()
-        } catch (ex: Exception) {
-            // FIXME: or should error handling happen at the FlowManager level?
-            throw ex
+        log.debug { "runFlow()" }
+
+        doInitialCommonSubflow()
+
+        when (flowManager.targetDeviceType) {
+            MeshDeviceType.ARGON -> doArgonFlow()
+            MeshDeviceType.BORON -> TODO()
+            MeshDeviceType.XENON -> doXenonFlow()
         }
     }
 
@@ -50,11 +76,7 @@ class Flow(
         }
     }
 
-    private suspend fun doRunFlow() {
-        log.debug { "doRunFlow()" }
-
-        doInitialCommonSubflow()
-
+    private suspend fun doXenonFlow() {
         // check interfaces!
         val interfaceList = ensureGetInterfaceList()
         val hasEthernet = null != interfaceList.firstOrNull { it.type == InterfaceType.ETHERNET }
@@ -62,6 +84,30 @@ class Flow(
             doEthernetSubflow()
         } else {
             doJoinerSubflow()
+        }
+    }
+
+    private suspend fun doArgonFlow() {
+        deviceModule.ensureNetworkSetupTypeCaptured()
+
+        cloudConnModule.argonSteps.ensureShowConnectToDeviceCloudConfirmation()
+        cloudConnModule.argonSteps.ensureTargetWifiNetworkCaptured()
+        cloudConnModule.argonSteps.ensureTargetWifiNetworkPasswordCaptured()
+
+        cloudConnModule.argonSteps.ensureTargetWifiNetworkJoined()
+        ensureTargetDeviceSetSetupDone(true)
+        bleConnModule.ensureListeningStoppedForBothDevices()
+
+        cloudConnModule.argonSteps.ensureConnectingToCloudUiShown()
+        cloudConnModule.ensureConnectedToCloud()
+        cloudConnModule.ensureTargetDeviceClaimedByUser()
+        cloudConnModule.ensureConnectedToCloudSuccessUi()
+        cloudConnModule.ensureTargetDeviceIsNamed()
+
+        val setupType = deviceModule.networkSetupTypeLD.value!!
+        when (setupType) {
+            NetworkSetupType.AS_GATEWAY -> doCreateNetworkFlow()
+            NetworkSetupType.STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
         }
     }
 
@@ -95,12 +141,12 @@ class Flow(
             cloudConnModule.ensureSetClaimCode()
             meshSetupModule.ensureRemovedFromExistingNetwork()
         }
+
+        bleConnModule.ensureShowTargetPairingSuccessful()
     }
 
     private suspend fun doEthernetSubflow() {
         log.debug { "doEthernetSubflow()" }
-        bleConnModule.ensureShowTargetPairingSuccessful()
-
         cloudConnModule.ensureConnectingToDeviceCloudUiShown()
         ensureTargetDeviceSetSetupDone(true)
         bleConnModule.ensureListeningStoppedForBothDevices()
@@ -115,8 +161,6 @@ class Flow(
     private suspend fun doJoinerSubflow() {
         log.debug { "doJoinerSubflow()" }
         meshSetupModule.ensureJoinerVisibleMeshNetworksListPopulated()
-
-        bleConnModule.ensureShowTargetPairingSuccessful()
 
         meshSetupModule.ensureMeshNetworkSelected()
 

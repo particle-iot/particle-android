@@ -33,7 +33,7 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
         fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_3, 1000)
         fm.cloudConnectionModule.targetOwnedByUserLD.observeForProgress(R.id.status_stage_4, 2000)
 
-        val productName = fm.getTypeName(view.context)
+        val productName = fm.getTypeName()
 
         setup_header_text.text = Phrase.from(view, R.string.p_joiningmesh_header)
                 .put("product_type", productName)

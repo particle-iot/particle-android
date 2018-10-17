@@ -5,6 +5,7 @@ import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.AnyThread
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.lifecycle.*
@@ -12,17 +13,16 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleCloudSDK
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.ui.BaseActivity
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
-import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.FlowManager
+import io.particle.mesh.setup.flow.MeshDeviceType
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.activity_main.*
 import mu.KotlinLogging
@@ -143,6 +143,7 @@ class MeshSetupActivity : ProgressHack, BaseActivity() {
 
 //p_mesh_globalProgressSpinner
 interface ProgressHack {
+    @AnyThread
     fun showGlobalProgressSpinner(show: Boolean)
 }
 
@@ -196,19 +197,22 @@ class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(ap
 
     private val log = KotlinLogging.logger {}
 
-    fun startFlowForDevice(deviceType: ParticleDeviceType) {
+    fun startFlowForDevice(deviceType: MeshDeviceType) {
+        log.debug { "startFlowForDevice(): $deviceType" }
+
         if (flowManager == null) {
             flowManager = FlowManager(
-                    deviceType,
                     cloud,
                     navReference,
                     dialogRequestLD,
                     ClearValueOnInactiveLiveData<DialogResult>(),
                     btConnManager,
                     protocolFactory,
-                    progressHackReference
+                    progressHackReference,
+                    app
             )
         }
+        flowManager?.targetDeviceType = deviceType
         flowManager?.startNewFlow()
     }
 

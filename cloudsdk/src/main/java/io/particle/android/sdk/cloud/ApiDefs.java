@@ -124,6 +124,7 @@ public class ApiDefs {
         @GET("/v1/networks")
         Response getNetworks();
 
+        @Nullable
         @GET("/v1/system_firmware/upgrade")
         FirmwareUpdateInfoResponse getFirmwareUpdateInfo(
                 @Query("platform_id") int platformId,
@@ -131,6 +132,14 @@ public class ApiDefs {
                 @Nullable @Query("current_ncp_firmware_version") String currentNcpFwVersion,
                 @Nullable @Query("current_ncp_firmware_module_version") Integer currentNcpFwModuleVersion
         );
+
+        @FormUrlEncoded
+        @PUT("/v1/networks")
+        Response pushNetworkChangeForDevice(
+                @Path("action") String action,
+                @Field("deviceID") String deviceId
+        );
+
     }
 
     /**

@@ -7,49 +7,6 @@
     tools:context="io.particle.mesh.setup.ui.NewMeshNetworkFinishedFragment"
     tools:layout_editor_absoluteY="81dp">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:src="@drawable/ic_green_check"
-        app:layout_constraintBottom_toTopOf="@+id/p_congrats"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/p_congrats"
-        style="@style/p_setup_header_text"
-        fontPath="@string/bold_text_font_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:text="@string/p_pairingprogress_congrats"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/setup_header_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        tools:ignore="MissingPrefix" />
-
-    <TextView
-        android:id="@+id/setup_header_text"
-        style="@style/p_setup_header_text"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="72dp"
-        android:text="@string/p_newmeshnetworkfinished_subheader_1"
-        app:layout_constraintBottom_toTopOf="@+id/textView11"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/p_congrats" />
-
     <TextView
         android:id="@+id/textView11"
         style="@style/p_setup_header_text"
@@ -64,7 +21,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button

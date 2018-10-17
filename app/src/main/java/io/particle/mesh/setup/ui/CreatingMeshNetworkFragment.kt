@@ -20,7 +20,6 @@ class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_creating_mesh_network, container, false)
     }
 
@@ -43,7 +42,7 @@ class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
         )
 
         status_stage_1.text = Phrase.from(view, R.string.p_creatingyournetwork_step_1)
-                .put("product_type", fm.getTypeName(view.context))
+                .put("product_type", fm.getTypeName())
                 .format()
     }
 

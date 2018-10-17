@@ -25,6 +25,16 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_argonConnectToDeviceCloudIntroFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_argonConnectingStatusFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_assistingDevicePairingProgressFragment">
                     <value>
                       <LayoutPositions />
@@ -45,12 +55,22 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_createOrJoinMeshNetworkFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_creatingMeshNetworkFragment">
                     <value>
                       <LayoutPositions />
                     </value>
                   </entry>
                   <entry key="action_global_enterNetworkPasswordFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_enterWifiNetworkPasswordFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -65,7 +85,17 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_hashtagWinningFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_joiningMeshNetworkProgressFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_letsGetBuildingFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -105,6 +135,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_scanForWiFiNetworksFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_selectDeviceFragment">
                     <value>
                       <LayoutPositions />
@@ -115,13 +150,42 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="assistingDevicePairingProgressFragment">
+                  <entry key="action_global_useStandaloneOrInMeshFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="argonConnectToDeviceCloudIntroFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="12" />
-                            <option name="y" value="-940" />
+                            <option name="y" value="548" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="argonConnectingStatusFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="177" />
+                            <option name="y" value="548" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="assistingDevicePairingProgressFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="672" />
+                            <option name="y" value="280" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -132,8 +196,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-652" />
-                            <option name="y" value="-986" />
+                            <option name="x" value="1002" />
+                            <option name="y" value="280" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -144,8 +208,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="422" />
-                            <option name="y" value="-818" />
+                            <option name="x" value="837" />
+                            <option name="y" value="280" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -156,8 +220,20 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="177" />
-                            <option name="y" value="280" />
+                            <option name="x" value="1332" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="createOrJoinMeshNetworkFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="411" />
+                            <option name="y" value="574" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -168,7 +244,7 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="837" />
+                            <option name="x" value="342" />
                             <option name="y" value="280" />
                           </Point>
                         </option>
@@ -187,13 +263,25 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="enterWifiNetworkPasswordFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1497" />
+                            <option name="y" value="280" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="gatewaySetupFinishedFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="342" />
-                            <option name="y" value="280" />
+                            <option name="x" value="1497" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -204,7 +292,7 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
+                            <option name="x" value="672" />
                             <option name="y" value="548" />
                           </Point>
                         </option>
@@ -216,6 +304,18 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="hashtagWinningFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="483" />
+                            <option name="y" value="-458" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -232,12 +332,24 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="letsGetBuildingFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="958" />
+                            <option name="y" value="-421" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="manualCommissioningAddToNetworkFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="430" />
+                            <option name="x" value="1090" />
                             <option name="y" value="548" />
                           </Point>
                         </option>
@@ -270,8 +382,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="40" />
-                            <option name="y" value="-315" />
+                            <option name="x" value="507" />
+                            <option name="y" value="280" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -282,7 +394,7 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="507" />
+                            <option name="x" value="12" />
                             <option name="y" value="280" />
                           </Point>
                         </option>
@@ -294,7 +406,7 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="672" />
+                            <option name="x" value="177" />
                             <option name="y" value="280" />
                           </Point>
                         </option>
@@ -306,8 +418,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="273" />
-                            <option name="y" value="-374" />
+                            <option name="x" value="177" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -318,7 +430,7 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="683" />
+                            <option name="x" value="1343" />
                             <option name="y" value="548" />
                           </Point>
                         </option>
@@ -337,12 +449,24 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="scanForWiFiNetworksFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1332" />
+                            <option name="y" value="280" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="scanJoinerCodeIntroFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="265" />
+                            <option name="x" value="925" />
                             <option name="y" value="548" />
                           </Point>
                         </option>
@@ -354,8 +478,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="27" />
+                            <option name="y" value="-480" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -377,6 +501,18 @@
                           <Point>
                             <option name="x" value="1167" />
                             <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="useStandaloneOrInMeshFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1167" />
+                            <option name="y" value="280" />
                           </Point>
                         </option>
                       </LayoutPositions>

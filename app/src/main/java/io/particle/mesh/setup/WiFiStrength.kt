@@ -1,11 +1,11 @@
 package io.particle.mesh.setup
 
 
-enum class WiFiStrength {
+enum class WiFiStrength(val sortValue: Int) {
 
-    STRONG,
-    MEDIUM,
-    WEAK;
+    STRONG(3),
+    MEDIUM(2),
+    WEAK(1);
 
     companion object {
         fun fromInt(value: Int): WiFiStrength {

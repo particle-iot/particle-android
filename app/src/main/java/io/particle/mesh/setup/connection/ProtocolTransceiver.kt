@@ -60,6 +60,13 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerReply
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.StartCommissionerRequest
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerReply
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Credentials
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkReply
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkRequest
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.NO_SECURITY
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
@@ -84,22 +91,56 @@ class ProtocolTransceiver internal constructor(
 
     private val log = KotlinLogging.logger {}
     private val requestCallbacks = SparseArray<(DeviceResponse?) -> Unit>()
+    private var didDisconnect = false
 
     val isConnected: Boolean
-        get() = connection.isConnected
+        get() = if (didDisconnect) false else connection.isConnected
 
     val deviceName: String
         get() = connection.deviceName
 
     fun disconnect() {
+        didDisconnect = true
         launch {
-            sendStopCommissioner()
             launch(UI) { connection.disconnect() }
         }
     }
 
     fun setConnectionPriority(priority: ConnectionPriority) {
         connection.setConnectionPriority(priority)
+    }
+
+    suspend fun sendJoinNewNetwork(
+        network: WifiNew.ScanNetworksReply.Network,
+        password: String? = null
+    ): Result<JoinNewNetworkReply, ResultCode> {
+
+        val credentials = if (network.security == Security.NO_SECURITY) {
+            Credentials.newBuilder()
+                .setType(CredentialsType.NO_CREDENTIALS)
+                .build()
+        } else {
+            Credentials.newBuilder()
+                .setType(CredentialsType.PASSWORD)
+                .setPassword(password)
+                .build()
+        }
+
+        val response = sendRequest(
+            JoinNewNetworkRequest.newBuilder()
+                .setSsid(network.ssid)
+                .setBssid(network.bssid)
+                .setSecurity(network.security)
+                .setCredentials(credentials)
+                .build()
+        )
+
+        return buildResult(response) { r -> JoinNewNetworkReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendScanWifiNetworks(): Result<WifiNew.ScanNetworksReply, ResultCode> {
+        val response = sendRequest(WifiNew.ScanNetworksRequest.newBuilder().build())
+        return buildResult(response) { r -> WifiNew.ScanNetworksReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendGetNcpFirmwareVersion(): Result<GetNcpFirmwareVersionReply, ResultCode> {
@@ -168,7 +209,8 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> SetDeviceSetupDoneReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendStartFirmwareUpdate(firmwareSizeBytes: Int
+    suspend fun sendStartFirmwareUpdate(
+        firmwareSizeBytes: Int
     ): Result<StartFirmwareUpdateReply, Common.ResultCode> {
         val response = sendRequest(
             StartFirmwareUpdateRequest.newBuilder()
@@ -187,7 +229,8 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> FirmwareUpdateDataReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendFinishFirmwareUpdate(validateOnly: Boolean
+    suspend fun sendFinishFirmwareUpdate(
+        validateOnly: Boolean
     ): Result<FinishFirmwareUpdateReply, Common.ResultCode> {
         val response = sendRequest(
             FinishFirmwareUpdateRequest.newBuilder()
@@ -243,8 +286,9 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> PrepareJoinerReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendAddJoiner(eui64: String,
-                              joiningCredential: String
+    suspend fun sendAddJoiner(
+        eui64: String,
+        joiningCredential: String
     ): Result<AddJoinerReply, Common.ResultCode> {
         val response = sendRequest(
             AddJoinerRequest.newBuilder()
@@ -265,7 +309,8 @@ class ProtocolTransceiver internal constructor(
     }
 
     suspend fun sendStopCommissioner(): Result<StopCommissionerReply, Common.ResultCode> {
-        val response = sendRequest(StopCommissionerRequest.newBuilder().build()
+        val response = sendRequest(
+            StopCommissionerRequest.newBuilder().build()
         )
         return buildResult(response) { r -> StopCommissionerReply.parseFrom(r.payloadData) }
     }
@@ -318,16 +363,20 @@ class ProtocolTransceiver internal constructor(
         timeout: Int = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
     ): DeviceResponse? {
         val requestFrame = message.asRequest()
-        log.info { "Sending message ${message.javaClass} to '$connectionName': '$message' " +
-                "with ID: ${requestFrame.requestId}" }
+        log.info {
+            "Sending message ${message.javaClass} to '$connectionName': '$message' " +
+                    "with ID: ${requestFrame.requestId}"
+        }
 
+        if (!isConnected) {
+            return null
+        }
 
         val response = withTimeoutOrNull(timeout) {
             suspendCoroutine { continuation: Continuation<DeviceResponse?> ->
                 doSendRequest(requestFrame) { continuation.resume(it) }
             }
         }
-
 
 
         val id = requestFrame.requestId.toInt()
@@ -344,7 +393,8 @@ class ProtocolTransceiver internal constructor(
 
     private fun doSendRequest(
         request: DeviceRequest,
-        continuationCallback: (DeviceResponse?) -> Unit) {
+        continuationCallback: (DeviceResponse?) -> Unit
+    ) {
         val requestCallback = { frame: DeviceResponse? -> continuationCallback(frame) }
         synchronized(requestCallbacks) {
             requestCallbacks.put(request.requestId.toInt(), requestCallback)
@@ -391,6 +441,12 @@ internal fun AbstractMessage.asRequest(): DeviceRequest {
 private fun Int.toResultCode(): Common.ResultCode {
     return when (this) {
         0 -> Common.ResultCode.OK
+
+
+        // FIXME: this should be "NOT_SUPPORTED"
+        -120 -> Common.ResultCode.UNRECOGNIZED
+
+
         -130 -> Common.ResultCode.NOT_ALLOWED
         -160 -> Common.ResultCode.TIMEOUT
         -170 -> Common.ResultCode.NOT_FOUND

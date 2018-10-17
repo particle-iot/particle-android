@@ -44,7 +44,6 @@
     <TextView
         android:id="@+id/status_stage_2"
         style="@style/p_setup_step_text_inactive"
-        android:layout_height="22dp"
         android:text="@string/p_creatingyournetwork_step_2"
         app:layout_constraintBottom_toTopOf="@+id/status_stage_3"
         app:layout_constraintEnd_toEndOf="parent"

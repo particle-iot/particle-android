@@ -33,8 +33,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 103
-        versionName "2.3.1"
+        versionCode 104
+        versionName "2.3.2"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -122,8 +122,8 @@ dependencies {
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     // using snapshot to unbreak Butterknife with AndroidX
-    implementation 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
 
     implementation 'androidx.annotation:annotation:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.0'

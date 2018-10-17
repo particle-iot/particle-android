@@ -57,4 +57,6 @@
     <string name="p_getreadyforsetup_step4_ethernet">Confirm your Xenon is blinking blue</string>
 
     <string name="default_device_name">device</string>
+    
+    <string name="p_congrats_claimed">%1$s connected to the Device Cloud!</string>
 </resources>

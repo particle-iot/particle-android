@@ -37,6 +37,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -49,6 +50,7 @@ import butterknife.OnClick;
 import io.particle.android.sdk.DevicesLoader;
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType;
 import io.particle.android.sdk.cloud.ParticleEvent;
 import io.particle.android.sdk.cloud.ParticleEventHandler;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
@@ -64,7 +66,9 @@ import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.mesh.setup.ui.MeshSetupActivity;
 import io.particle.sdk.app.R;
 
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ;
+import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK;
 import static io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON;
@@ -408,8 +412,9 @@ public class DeviceListFragment extends Fragment
         private final FragmentActivity activity;
         private Drawable defaultBackground;
         private String textFilter = "";
-        private List<ParticleDevice.ParticleDeviceType> typeFilters = list(PHOTON, CORE, ELECTRON,
-                XENON, RASPBERRY_PI, P1, RED_BEAR_DUO, DIGISTUMP_OAK, BLUZ);
+        private List<ParticleDevice.ParticleDeviceType> typeFilters = Arrays.asList(
+                ParticleDeviceType.values()
+        );
 
         DeviceListAdapter(FragmentActivity activity) {
             this.activity = activity;
@@ -467,6 +472,16 @@ public class DeviceListFragment extends Fragment
                 case XENON:
                     holder.modelName.setText(R.string.product_name_xenon);
                     holder.productImage.setImageResource(R.drawable.xenon_vector);
+                    break;
+
+                case ARGON:
+                    holder.modelName.setText(R.string.product_name_argon);
+                    holder.productImage.setImageResource(R.drawable.argon_vector);
+                    break;
+
+                case BORON:
+                    holder.modelName.setText(R.string.product_name_boron);
+                    holder.productImage.setImageResource(R.drawable.boron_vector);
                     break;
 
                 default:

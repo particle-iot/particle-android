@@ -173,7 +173,10 @@
         android:id="@+id/assistingDevicePairingProgressFragment"
         android:name="io.particle.mesh.setup.ui.AssistingDevicePairingProgressFragment"
         android:label="fragment_assisting_device_pairing_progress"
-        tools:layout="@layout/fragment_assisting_device_pairing_progress" /><action android:id="@+id/action_global_assistingDevicePairingProgressFragment" app:destination="@id/assistingDevicePairingProgressFragment"/>
+        tools:layout="@layout/fragment_assisting_device_pairing_progress" />
+    <action
+        android:id="@+id/action_global_assistingDevicePairingProgressFragment"
+        app:destination="@id/assistingDevicePairingProgressFragment" />
     <fragment
         android:id="@+id/bleOtaIntroFragment"
         android:name="io.particle.mesh.setup.ui.ota.BleOtaIntroFragment"
@@ -183,6 +186,78 @@
         android:id="@+id/bleOtaFragment"
         android:name="io.particle.mesh.setup.ui.ota.BleOtaFragment"
         android:label="fragment_ble_ota"
-        tools:layout="@layout/fragment_ble_ota" /><action android:id="@+id/action_global_bleOtaFragment" app:destination="@id/bleOtaFragment"/><action android:id="@+id/action_global_bleOtaIntroFragment" app:destination="@id/bleOtaIntroFragment"/>
+        tools:layout="@layout/fragment_ble_ota" />
+    <action
+        android:id="@+id/action_global_bleOtaFragment"
+        app:destination="@id/bleOtaFragment" />
+    <action
+        android:id="@+id/action_global_bleOtaIntroFragment"
+        app:destination="@id/bleOtaIntroFragment" />
+    <fragment
+        android:id="@+id/useStandaloneOrInMeshFragment"
+        android:name="io.particle.mesh.setup.ui.UseStandaloneOrInMeshFragment"
+        android:label="fragment_use_standalone_or_in_mesh"
+        tools:layout="@layout/fragment_use_standalone_or_in_mesh" />
+    <fragment
+        android:id="@+id/scanForWiFiNetworksFragment"
+        android:name="io.particle.mesh.setup.ui.ScanForWiFiNetworksFragment"
+        android:label="fragment_scan_for_wi_fi_networks"
+        tools:layout="@layout/fragment_scan_for_wi_fi_networks" />
+    <fragment
+        android:id="@+id/enterWifiNetworkPasswordFragment"
+        android:name="io.particle.mesh.setup.ui.EnterWifiNetworkPasswordFragment"
+        android:label="fragment_enter_wifi_network_password"
+        tools:layout="@layout/fragment_enter_wifi_network_password" />
+    <fragment
+        android:id="@+id/argonConnectToDeviceCloudIntroFragment"
+        android:name="io.particle.mesh.setup.ui.ArgonConnectToDeviceCloudIntroFragment"
+        android:label="fragment_argon_connect_to_device_cloud_intro"
+        tools:layout="@layout/fragment_argon_connect_to_device_cloud_intro" />
+    <fragment
+        android:id="@+id/argonConnectingStatusFragment"
+        android:name="io.particle.mesh.setup.ui.ArgonConnectingStatusFragment"
+        android:label="fragment_argon_connecting_status"
+        tools:layout="@layout/fragment_argon_connecting_status" />
+    <fragment
+        android:id="@+id/createOrJoinMeshNetworkFragment"
+        android:name="io.particle.mesh.setup.ui.CreateOrJoinMeshNetworkFragment"
+        android:label="fragment_create_or_join_mesh_network"
+        tools:layout="@layout/fragment_create_or_join_mesh_network" />
+    <fragment
+        android:id="@+id/hashtagWinningFragment"
+        android:name="io.particle.mesh.setup.ui.HashtagWinningFragment"
+        android:label="fragment_hashtag_winning"
+        tools:layout="@layout/fragment_hashtag_winning">
+        <argument
+            android:name="congrats_message"
+            android:defaultValue="OK"
+            app:argType="string" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_argonConnectingStatusFragment"
+        app:destination="@id/argonConnectingStatusFragment" />
+    <action
+        android:id="@+id/action_global_enterWifiNetworkPasswordFragment"
+        app:destination="@id/enterWifiNetworkPasswordFragment" />
+    <action
+        android:id="@+id/action_global_argonConnectToDeviceCloudIntroFragment"
+        app:destination="@id/argonConnectToDeviceCloudIntroFragment" />
+    <action
+        android:id="@+id/action_global_createOrJoinMeshNetworkFragment"
+        app:destination="@id/createOrJoinMeshNetworkFragment" />
+    <action
+        android:id="@+id/action_global_useStandaloneOrInMeshFragment"
+        app:destination="@id/useStandaloneOrInMeshFragment" />
+    <action
+        android:id="@+id/action_global_scanForWiFiNetworksFragment"
+        app:destination="@id/scanForWiFiNetworksFragment" />
+    <action
+        android:id="@+id/action_global_hashtagWinningFragment"
+        app:destination="@id/hashtagWinningFragment" />
+    <fragment
+        android:id="@+id/letsGetBuildingFragment"
+        android:name="io.particle.mesh.setup.ui.LetsGetBuildingFragment"
+        android:label="fragment_lets_get_building"
+        tools:layout="@layout/fragment_lets_get_building" /><action android:id="@+id/action_global_letsGetBuildingFragment" app:destination="@id/letsGetBuildingFragment"/>
 
 </navigation>

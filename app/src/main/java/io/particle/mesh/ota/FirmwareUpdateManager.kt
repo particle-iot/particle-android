@@ -4,10 +4,12 @@ import androidx.annotation.WorkerThread
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
-import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_ALLOWED
+import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ProtocolTransceiver
+import io.particle.mesh.setup.flow.MeshDeviceType
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
+import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
 import java.net.URL
 
@@ -26,9 +28,18 @@ class FirmwareUpdateManager(
     private val log = KotlinLogging.logger {}
 
     @WorkerThread
+    suspend fun needsUpdate(
+        xceiver: ProtocolTransceiver,
+        deviceType: MeshDeviceType
+    ): Boolean {
+        return getUpdateUrl(xceiver, deviceType) != null
+    }
+
+    @WorkerThread
     suspend fun startUpdateIfNecessary(
         xceiver: ProtocolTransceiver,
-        deviceType: ParticleDeviceType
+        deviceType: MeshDeviceType,
+        listener: ProgressListener
     ): FirmwareUpdateResult {
 
         val firmwareUpdateUrl = getUpdateUrl(xceiver, deviceType)
@@ -37,8 +48,16 @@ class FirmwareUpdateManager(
         }
 
         val updater = FirmwareUpdater(xceiver, okHttpClient)
-        updater.updateFirmware(firmwareUpdateUrl) { log.debug { "Firmware progress: $it" } }
+        updater.updateFirmware(firmwareUpdateUrl) {
+            log.debug { "Firmware progress: $it" }
+            listener(it)
+        }
 
+        // pause a bit before disconnecting...
+        delay(250)
+        xceiver.disconnect()
+        // and pause a bit longer after disconnecting...
+        delay(500)
 
         return FirmwareUpdateResult.DEVICE_IS_UPDATING
     }
@@ -46,13 +65,13 @@ class FirmwareUpdateManager(
     @WorkerThread
     private suspend fun getUpdateUrl(
         xceiver: ProtocolTransceiver,
-        deviceType: ParticleDeviceType
+        deviceType: MeshDeviceType
     ): URL? {
         val systemFwVers = xceiver.sendGetSystemFirmwareVersion().throwOnErrorOrAbsent()
         val (ncpVersion, ncpModuleVersion) = getNcpVersions(xceiver)
 
         return cloud.getFirmwareUpdateInfo(
-            deviceType.platformId,
+            deviceType.particleDeviceType.platformId,
             systemFwVers.version,
             ncpVersion,
             ncpModuleVersion
@@ -64,7 +83,8 @@ class FirmwareUpdateManager(
         return when (ncpFwReply) {
             is Result.Present -> Pair(ncpFwReply.value.version, ncpFwReply.value.moduleVersion)
             is Result.Error -> {
-                if (ncpFwReply.error == NOT_ALLOWED) {
+                // FIXME: this error should be "NOT_SUPPORTED"
+                if (ncpFwReply.error == ResultCode.UNRECOGNIZED) {
                     Pair(null, null)
                 } else {
                     throw IllegalStateException("Error getting NCP FW version: ${ncpFwReply.error}")

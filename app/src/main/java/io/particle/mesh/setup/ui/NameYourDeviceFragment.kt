@@ -30,7 +30,7 @@ class NameYourDeviceFragment : BaseMeshSetupFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setup_header_text.text = Phrase.from(view, R.string.p_namedevice_header)
-                .put("product_type", flowManagerVM.flowManager!!.getTypeName(view.context))
+                .put("product_type", flowManagerVM.flowManager!!.getTypeName())
                 .format()
 
         // get the current name

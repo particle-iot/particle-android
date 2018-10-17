@@ -22,11 +22,14 @@ import mu.KotlinLogging
 
 
 class CloudConnectionModule(
-        private val flowManager: FlowManager,
-        private val cloud: ParticleCloud
+    val wifiNetworksScannerLD: WifiNetworksScannerLD,
+    private val flowManager: FlowManager,
+    private val cloud: ParticleCloud
 ) : Clearable {
 
     private val log = KotlinLogging.logger {}
+
+    val argonSteps = ArgonSteps(flowManager)
 
     val targetDeviceShouldBeClaimedLD: LiveData<Boolean?> = MutableLiveData()
     val targetOwnedByUserLD: LiveData<Boolean?> = MutableLiveData()
@@ -35,12 +38,14 @@ class CloudConnectionModule(
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
     val meshRegisteredWithCloud: LiveData<Boolean?> = MutableLiveData()
+    val shouldConnectToDeviceCloudConfirmed: LiveData<Boolean?> = MutableLiveData()
 
     var claimCode: String? = null
 
     private var checkedIsTargetClaimedByUser = false
     private var connectedToMeshNetworkAndOwnedUiShown = false
     private var checkEthernetGatewayUiShown = false
+    private var connectedToCloudCongratsUiShown = false
 
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
@@ -61,15 +66,17 @@ class CloudConnectionModule(
         checkedIsTargetClaimedByUser = false
         connectedToMeshNetworkAndOwnedUiShown = false
         checkEthernetGatewayUiShown = false
+        connectedToCloudCongratsUiShown = false
 
         val setToNulls = listOf(
-                targetDeviceShouldBeClaimedLD,
-                targetOwnedByUserLD,
-                targetDeviceNameToAssignLD,
-                isTargetDeviceNamedLD,
-                targetDeviceConnectedToCloud,
-                meshRegisteredWithCloud,
-                currentDeviceName
+            targetDeviceShouldBeClaimedLD,
+            targetOwnedByUserLD,
+            targetDeviceNameToAssignLD,
+            isTargetDeviceNamedLD,
+            targetDeviceConnectedToCloud,
+            meshRegisteredWithCloud,
+            currentDeviceName,
+            shouldConnectToDeviceCloudConfirmed
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -92,6 +99,11 @@ class CloudConnectionModule(
         targetDeviceNameToAssignLD.castAndPost(name)
     }
 
+    fun updateShouldConnectToDeviceCloudConfirmed(confirmed: Boolean) {
+        log.info { "updateShouldConnectToDeviceCloudConfirmed(): $confirmed" }
+        shouldConnectToDeviceCloudConfirmed.castAndPost(confirmed)
+    }
+
     suspend fun ensureClaimCodeFetched() {
         log.info { "ensureClaimCodeFetched(), claimCode=$claimCode" }
         if (claimCode == null) {
@@ -105,6 +117,7 @@ class CloudConnectionModule(
         for (i in 0..9) { // loop for 45 seconds
             delay(5000)
             val statusReply = targetXceiver!!.sendGetConnectionStatus().throwOnErrorOrAbsent()
+            log.info { "statusReply=$statusReply" }
             if (statusReply.status == ConnectionStatus.CONNECTED) {
                 targetDeviceConnectedToCloud.castAndPost(true)
                 return
@@ -112,7 +125,7 @@ class CloudConnectionModule(
         }
         throw FlowException("Error ensuring connection to cloud")
     }
-    
+
     suspend fun ensureCheckedIsClaimed(targetDeviceId: String) {
         log.info { "ensureCheckedIsClaimed()" }
         if (checkedIsTargetClaimedByUser) {
@@ -180,10 +193,12 @@ class CloudConnectionModule(
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
         val result = withContext(UI) {
-            flowManager.newDialogRequest(ResDialogSpec(
+            flowManager.newDialogRequest(
+                ResDialogSpec(
                     string.p_connecttocloud_xenon_gateway_needs_ethernet,
                     android.R.string.ok
-            ))
+                )
+            )
             ldSuspender.awaitResult()
         }
         log.info { "result from awaiting on 'ethernet must be plugged in dialog: $result" }
@@ -272,8 +287,20 @@ class CloudConnectionModule(
 
     suspend fun ensureNetworkIsRegisteredWithCloud() {
         // Implement when we have this API
-        delay(3000)
+        delay(1000)
         meshRegisteredWithCloud.castAndPost(true)
+    }
+
+    suspend fun ensureConnectedToCloudSuccessUi() {
+        if (connectedToCloudCongratsUiShown) {
+            return
+        }
+
+        connectedToCloudCongratsUiShown = true
+        val template = flowManager.getString(R.string.p_congrats_claimed)
+        val msg = template.format(flowManager.getTypeName())
+        flowManager.showCongratsScreen(msg)
+        delay(2000)
     }
 
 }

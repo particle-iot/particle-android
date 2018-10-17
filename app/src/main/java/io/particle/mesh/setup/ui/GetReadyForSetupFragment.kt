@@ -2,7 +2,6 @@ package io.particle.mesh.setup.ui
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,16 @@ import android.widget.TextView
 import android.widget.VideoView
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.Navigation
 import com.squareup.phrase.Phrase
 import io.particle.common.buildRawResourceUri
+import io.particle.mesh.setup.flow.MeshDeviceType
+import io.particle.mesh.setup.flow.MeshDeviceType.XENON
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
-import java.lang.Exception
 
 
 class GetReadyForSetupFragment : BaseMeshSetupFragment() {
@@ -33,6 +34,10 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
                 R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment
         ))
 
+        if (flowManagerVM.flowManager?.targetDeviceType != MeshDeviceType.XENON) {
+            p_getreadyforsetup_use_ethernet_box.isVisible = false
+        }
+
         p_getreadyforsetup_use_ethernet_switch.setOnCheckedChangeListener { _, isChecked ->
             val config = if (isChecked) HelpTextConfig.ETHERNET else HelpTextConfig.MESH_ONLY
             onEthernetSwitched(config)
@@ -44,7 +49,7 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
     }
 
     private fun onEthernetSwitched(config: HelpTextConfig) {
-        val productName = flowManagerVM.flowManager!!.getTypeName(requireContext())
+        val productName = flowManagerVM.flowManager!!.getTypeName()
 
         setup_header_text.setTextMaybeWithProductTypeFormat(productName, config.headerText)
         videoView.setVideoURI(requireActivity().buildRawResourceUri(config.videoUrlRes))

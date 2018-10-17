@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar2"
         app:layout_constraintVertical_weight="1"
-        tools:listitem="@layout/row_mesh_networks" />
+        tools:listitem="@layout/p_mesh_row_wifi_scan" />
 
     <Button
         android:id="@+id/action_create_new_network"

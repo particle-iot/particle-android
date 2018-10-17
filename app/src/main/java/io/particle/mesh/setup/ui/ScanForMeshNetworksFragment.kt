@@ -40,7 +40,7 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
         if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
             root.setup_header_text.text = Phrase.from(root, R.string.p_scanfornetworks_gateway_flow_title)
-                    .put("product_type", fm.getTypeName(root.context))
+                    .put("product_type", fm.getTypeName())
                     .format()
             root.progressBar2.visibility = View.INVISIBLE
             root.recyclerView.visibility = View.INVISIBLE
@@ -48,7 +48,7 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
         } else {
             root.setup_header_text.text = Phrase.from(root, R.string.p_meshnetworkscanning_header)
-                    .put("product_type", fm.getTypeName(root.context))
+                    .put("product_type", fm.getTypeName())
                     .format()
             root.action_create_new_network.visibility = View.GONE
         }

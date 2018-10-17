@@ -1,8 +1,8 @@
 package io.particle.mesh.setup.flow.modules.bleconnection
 
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -10,10 +10,7 @@ import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
-import io.particle.mesh.setup.flow.Clearable
-import io.particle.mesh.setup.flow.FlowException
-import io.particle.mesh.setup.flow.FlowManager
-import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
+import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.ui.BarcodeData
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
@@ -23,9 +20,9 @@ import mu.KotlinLogging
 
 
 class BLEConnectionModule(
-        private val flowManager: FlowManager,
-        private val btConnectionManager: BluetoothConnectionManager,
-        private val transceiverFactory: ProtocolTransceiverFactory
+    private val flowManager: FlowManager,
+    private val btConnectionManager: BluetoothConnectionManager,
+    private val transceiverFactory: ProtocolTransceiverFactory
 ) : Clearable {
 
     private val log = KotlinLogging.logger {}
@@ -35,11 +32,11 @@ class BLEConnectionModule(
     // FIXME: having 2 LDs, representing the transceiver & the uninitialized transceiver isn't great
     val targetDeviceConnectedLD: LiveData<Boolean?> = MutableLiveData()
 
+    var targetDeviceId: String? = null
     val commissionerBarcodeLD: LiveData<BarcodeData?> = MutableLiveData()
     val commissionerTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
     val commissionerDeviceConnectedLD: LiveData<Boolean?> = MutableLiveData()
 
-    private var targetDeviceId: String? = null
     private var connectingToTargetUiShown = false
     private var connectingToAssistingDeviceUiShown = false
     private var shownTargetInitialIsConnectedScreen = false
@@ -60,11 +57,11 @@ class BLEConnectionModule(
         commissionerTransceiverLD.value?.disconnect()
 
         val setToNulls = listOf(
-                targetDeviceBarcodeLD,
-                targetDeviceTransceiverLD,
-                targetDeviceConnectedLD,
-                commissionerBarcodeLD,
-                commissionerTransceiverLD
+            targetDeviceBarcodeLD,
+            targetDeviceTransceiverLD,
+            targetDeviceConnectedLD,
+            commissionerBarcodeLD,
+            commissionerTransceiverLD
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -97,6 +94,7 @@ class BLEConnectionModule(
             return
         }
 
+        val userSpecifiedDeviceType = flowManager.targetDeviceType
         val liveDataSuspender = liveDataSuspender({ targetDeviceBarcodeLD.nonNull() })
         val barcodeData = withContext(UI) {
             flowManager.navigate(R.id.action_global_getReadyForSetupFragment)
@@ -105,6 +103,14 @@ class BLEConnectionModule(
 
         if (barcodeData == null) {
             throw FlowException("Error getting barcode data for target device")
+        }
+
+        if (barcodeData.deviceType != userSpecifiedDeviceType) {
+            flowManager.targetDeviceType = barcodeData.deviceType
+            throw FlowException(
+                "User scanned a different device than they originally specified.  Restarting flow.",
+                ExceptionType.EXPECTED_FLOW
+            )
         }
     }
 
@@ -120,10 +126,7 @@ class BLEConnectionModule(
         }
 
 
-
-
         // FIXME: consider what states we should be resetting here
-
 
 
         val ldSuspender = liveDataSuspender({ targetDeviceTransceiverLD })
@@ -155,17 +158,31 @@ class BLEConnectionModule(
             return
         }
         shownTargetInitialIsConnectedScreen = true
-        updateTargetDeviceConnectionInitialized(true)
+
+        // FIXME: i18n this!
+        flowManager.showCongratsScreen(
+            "Successfully paired with " +
+                    targetDeviceTransceiverLD.value?.deviceName
+        )
+
         delay(2000)
     }
 
     suspend fun ensureShowAssistingDevicePairingSuccessful() {
+
+        // FIXME: look into why this isn't being used...
+
         log.info { "ensureShowAssistingDevicePairingSuccessful()" }
         if (shownAssistingDeviceInitialIsConnectedScreen) {
             return
         }
         shownAssistingDeviceInitialIsConnectedScreen = true
-        updateAssistingDeviceConnectionInitialized(true)
+
+        flowManager.showCongratsScreen(
+            "Successfully paired with " +
+                    commissionerTransceiverLD.value?.deviceName
+        )
+
         delay(2000)
     }
 
@@ -210,7 +227,11 @@ class BLEConnectionModule(
             xceiverSuspender.awaitResult()
         }
 
-        // FIXME: this is the wrong way to delay the progress UI
+        flowManager.showCongratsScreen(
+            "Successfully paired with " +
+                    commissionerTransceiverLD.value?.deviceName
+        )
+
         delay(2000)
 
         if (commissioner == null) {
@@ -263,7 +284,6 @@ class BLEConnectionModule(
 }
 
 
-
 private const val BT_NAME_ID_LENGTH = 6
 
 
@@ -286,3 +306,15 @@ private fun BarcodeData.toDeviceName(): String {
 
     return "$deviceType-$lastSix"
 }
+
+internal val BarcodeData.deviceType: MeshDeviceType
+    get() {
+        val first4 = this.serialNumber.substring(0, 4)
+        return when (first4) {
+            "ARGH" -> MeshDeviceType.ARGON
+            "XENH" -> MeshDeviceType.XENON
+            "R40K",
+            "R31K" -> MeshDeviceType.BORON
+            else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
+        }
+    }

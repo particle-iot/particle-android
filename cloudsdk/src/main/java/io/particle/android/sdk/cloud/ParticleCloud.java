@@ -392,7 +392,7 @@ public class ParticleCloud {
     public void getNetworks() throws ParticleCloudException {
         try {
             Response networks = mainApi.getNetworks();
-            log.i("/v1/networks response: " + networks.getBody());
+            log.i("/v1/networks response: " + networks);
         } catch (RetrofitError error) {
             throw new ParticleCloudException(error);
         }
@@ -578,6 +578,11 @@ public class ParticleCloud {
                     currentNcpFwVersion,
                     currentNcpFwModuleVersion);
 
+            // FIXME: see if this is correct...
+            if (response == null) {
+                return null;
+            }
+
             return new URL(response.nextFileUrl);
 
         } catch (RetrofitError error) {
@@ -585,6 +590,15 @@ public class ParticleCloud {
 
         } catch (MalformedURLException e) {
             throw new ParticleCloudException(e);
+        }
+    }
+
+    @WorkerThread
+    public Response removeDeviceFromMeshNetwork(String deviceId) throws ParticleCloudException {
+        try {
+            return mainApi.pushNetworkChangeForDevice("remove", deviceId);
+        } catch (RetrofitError error) {
+            throw new ParticleCloudException(error);
         }
     }
     //endregion
