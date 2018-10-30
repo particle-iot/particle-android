@@ -48,7 +48,7 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
                 .format()
     }
 
-    private fun LiveData<Boolean?>.observeForProgress(
+    internal fun LiveData<Boolean?>.observeForProgress(
             @IdRes progressStage: Int,
             delayMillis: Int = 0
     ) {

@@ -6,7 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
+import androidx.lifecycle.LiveData
 import com.squareup.phrase.Phrase
+import io.particle.mesh.common.android.livedata.map
+import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
@@ -18,38 +22,64 @@ import kotlinx.coroutines.experimental.launch
 
 class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_creating_mesh_network, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // this is an artificial distinction anyway, just mark it off.
-        markProgress(true, R.id.status_stage_1)
-
         val fm = flowManagerVM.flowManager!!
-        fm.meshSetupModule.createNetworkSent.observe(this, Observer { markProgress(it, R.id.status_stage_2) })
-        fm.cloudConnectionModule.meshRegisteredWithCloud.observe(
-                this,
-                Observer {
-                    markProgress(it, R.id.status_stage_3)
-                    if (it.truthy()) {
-                        launch(UI) { markFakeProgress() }
-                    }
-                }
-        )
+
+        // "Sending network credentials to your device"
+        markProgress(true, R.id.status_stage_1) // this has already happened, just mark it off.
+
+        // "Registering network with the cloud"
+        fm.meshSetupModule.newNetworkIdLD.nonNull()
+            .map { it.truthy() }
+            .observeForProgress(R.id.status_stage_2)
+
+        // "Device creating the mesh network locally"
+        fm.meshSetupModule.createNetworkSent.observeForProgress(R.id.status_stage_3) {
+            launch(UI) { markFakeProgress() }
+        }
 
         status_stage_1.text = Phrase.from(view, R.string.p_creatingyournetwork_step_1)
-                .put("product_type", fm.getTypeName())
-                .format()
+            .put("product_type", fm.getTypeName())
+            .format()
     }
 
     private suspend fun markFakeProgress() {
         delay(1500)
-        markProgress(true, R.id.status_stage_4)
+        if (isVisible) {
+            markProgress(true, R.id.status_stage_4)
+        }
         delay(1500)
-        markProgress(true, R.id.status_stage_5)
+        if (isVisible) {
+            markProgress(true, R.id.status_stage_5)
+        }
     }
+
+    internal fun LiveData<Boolean?>.observeForProgress(
+        @IdRes progressStage: Int,
+        delayMillis: Int = 0,
+        runAfter: (() -> Unit)? = null
+    ) {
+        this.observe(
+            this@CreatingMeshNetworkFragment,
+            Observer {
+                launch(UI) {
+                    if (delayMillis > 0) {
+                        delay(delayMillis)
+                    }
+                    markProgress(it, progressStage)
+                    runAfter?.invoke()
+                }
+            }
+        )
+    }
+
 }

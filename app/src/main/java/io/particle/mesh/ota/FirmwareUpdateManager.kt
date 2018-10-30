@@ -54,10 +54,10 @@ class FirmwareUpdateManager(
         }
 
         // pause a bit before disconnecting...
-        delay(250)
+        delay(2000)
         xceiver.disconnect()
-        // and pause a bit longer after disconnecting...
-        delay(500)
+        // and after disconnecting...
+        delay(8000)
 
         return FirmwareUpdateResult.DEVICE_IS_UPDATING
     }

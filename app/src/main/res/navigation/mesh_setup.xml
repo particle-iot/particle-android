@@ -117,9 +117,9 @@
         app:destination="@id/setupFinishedFragment" />
     <fragment
         android:id="@+id/connectingToDeviceCloudFragment"
-        android:name="io.particle.mesh.setup.ui.ConnectingToDeviceCloudFragment"
+        android:name="io.particle.mesh.setup.ui.EthernetConnectingToDeviceCloudFragment"
         android:label="fragment_connecting_to_device_cloud"
-        tools:layout="@layout/fragment_connecting_to_device_cloud" />
+        tools:layout="@layout/fragment_ethernet_connecting_to_device_cloud" />
     <action
         android:id="@+id/action_global_connectingToDeviceCloudFragment"
         app:destination="@id/connectingToDeviceCloudFragment" />
@@ -209,20 +209,15 @@
         android:label="fragment_enter_wifi_network_password"
         tools:layout="@layout/fragment_enter_wifi_network_password" />
     <fragment
-        android:id="@+id/argonConnectToDeviceCloudIntroFragment"
-        android:name="io.particle.mesh.setup.ui.ArgonConnectToDeviceCloudIntroFragment"
-        android:label="fragment_argon_connect_to_device_cloud_intro"
-        tools:layout="@layout/fragment_argon_connect_to_device_cloud_intro" />
+        android:id="@+id/connectToDeviceCloudIntroFragment"
+        android:name="io.particle.mesh.setup.ui.ConnectToDeviceCloudIntroFragment"
+        android:label="fragment_connect_to_device_cloud_intro"
+        tools:layout="@layout/fragment_connect_to_device_cloud_intro" />
     <fragment
         android:id="@+id/argonConnectingStatusFragment"
         android:name="io.particle.mesh.setup.ui.ArgonConnectingStatusFragment"
         android:label="fragment_argon_connecting_status"
         tools:layout="@layout/fragment_argon_connecting_status" />
-    <fragment
-        android:id="@+id/createOrJoinMeshNetworkFragment"
-        android:name="io.particle.mesh.setup.ui.CreateOrJoinMeshNetworkFragment"
-        android:label="fragment_create_or_join_mesh_network"
-        tools:layout="@layout/fragment_create_or_join_mesh_network" />
     <fragment
         android:id="@+id/hashtagWinningFragment"
         android:name="io.particle.mesh.setup.ui.HashtagWinningFragment"
@@ -241,10 +236,7 @@
         app:destination="@id/enterWifiNetworkPasswordFragment" />
     <action
         android:id="@+id/action_global_argonConnectToDeviceCloudIntroFragment"
-        app:destination="@id/argonConnectToDeviceCloudIntroFragment" />
-    <action
-        android:id="@+id/action_global_createOrJoinMeshNetworkFragment"
-        app:destination="@id/createOrJoinMeshNetworkFragment" />
+        app:destination="@id/connectToDeviceCloudIntroFragment" />
     <action
         android:id="@+id/action_global_useStandaloneOrInMeshFragment"
         app:destination="@id/useStandaloneOrInMeshFragment" />
@@ -259,5 +251,15 @@
         android:name="io.particle.mesh.setup.ui.LetsGetBuildingFragment"
         android:label="fragment_lets_get_building"
         tools:layout="@layout/fragment_lets_get_building" /><action android:id="@+id/action_global_letsGetBuildingFragment" app:destination="@id/letsGetBuildingFragment"/>
+    <fragment
+        android:id="@+id/boronConnectingStatusFragment"
+        android:name="io.particle.mesh.setup.ui.BoronConnectingStatusFragment"
+        android:label="fragment_boron_connecting_status"
+        tools:layout="@layout/fragment_boron_connecting_status" /><action android:id="@+id/action_global_boronConnectingStatusFragment" app:destination="@id/boronConnectingStatusFragment"/>
+    <fragment
+        android:id="@+id/pricingImpactFragment"
+        android:name="io.particle.mesh.setup.ui.PricingImpactFragment"
+        android:label="fragment_pricing_impact"
+        tools:layout="@layout/fragment_pricing_impact" /><action android:id="@+id/action_global_pricingImpactFragment" app:destination="@id/pricingImpactFragment"/>
 
 </navigation>

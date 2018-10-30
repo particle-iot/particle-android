@@ -32,8 +32,8 @@ public class CheckIfDeviceClaimedStep extends SetupStep {
 
         log.d("Got devices back from the cloud...");
         for (ParticleDevice device : devices) {
-            if (deviceBeingConfiguredId.equalsIgnoreCase(device.getID())) {
-                log.d("Success, device " + device.getID() + " claimed!");
+            if (deviceBeingConfiguredId.equalsIgnoreCase(device.getId())) {
+                log.d("Success, device " + device.getId() + " claimed!");
                 needToClaimDevice = false;
                 return;
             }

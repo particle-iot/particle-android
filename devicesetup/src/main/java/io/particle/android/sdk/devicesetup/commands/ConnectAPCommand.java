@@ -29,7 +29,7 @@ public class ConnectAPCommand extends Command {
     public static class Response {
 
         @SerializedName("r")
-        public final int responseCode;  // 0 == OK, non-zero == problem with index/data
+        public final int responseCode;  // 0 == READY_TO_ACTIVATE, non-zero == problem with index/data
 
         public Response(int responseCode) {
             this.responseCode = responseCode;

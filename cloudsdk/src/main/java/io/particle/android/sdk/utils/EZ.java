@@ -109,7 +109,7 @@ public class EZ {
         try {
             closeable.close();
         } catch (IOException e) {
-            log.d("Couldn't close closable, but that's apparently OK.  Error was: " + e.getMessage());
+            log.d("Couldn't close closable, but that's apparently READY_TO_ACTIVATE.  Error was: " + e.getMessage());
         }
     }
 

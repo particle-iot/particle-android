@@ -2,15 +2,25 @@ package io.particle.mesh.setup.flow.modules.cloudconnection
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.particle.firmwareprotos.ctrl.Common.ResultCode
+import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
+import io.particle.firmwareprotos.ctrl.Common.ResultCode.UNRECOGNIZED
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply
+import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.castAndPost
+import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
+import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
+import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
+import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.sdk.app.R
+import io.particle.sdk.app.R.string
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
@@ -24,17 +34,17 @@ class ArgonSteps(
 
     val targetWifiNetwork: LiveData<ScanNetworksReply.Network?> = MutableLiveData()
     val targetWifiNetworkPassword: LiveData<String?> = MutableLiveData()
+    val targetWifiNetworkJoinedLD: LiveData<Boolean?> = MutableLiveData()
 
     private var connectingToCloudUiShown = false
-    private var targetWifiNetworkJoined = false
 
     override fun clearState() {
         connectingToCloudUiShown = false
-        targetWifiNetworkJoined = false
 
         val setToNulls = listOf(
             targetWifiNetwork,
-            targetWifiNetworkPassword
+            targetWifiNetworkPassword,
+            targetWifiNetworkJoinedLD
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -49,21 +59,6 @@ class ArgonSteps(
     fun updateTargetWifiNetworkPassword(password: String) {
         log.info { "updateTargetWifiNetworkPassword()" }
         targetWifiNetworkPassword.castAndPost(password)
-    }
-
-    suspend fun ensureShowConnectToDeviceCloudConfirmation() {
-        log.info { "ensureShowConnectToDeviceCloudConfirmation()" }
-
-        val confirmationLD = flowManager.cloudConnectionModule.shouldConnectToDeviceCloudConfirmed
-        if (confirmationLD.value.truthy()) {
-            return
-        }
-
-        val suspender = liveDataSuspender({ confirmationLD.nonNull() })
-        withContext(UI) {
-            flowManager.navigate(R.id.action_global_argonConnectToDeviceCloudIntroFragment)
-            suspender.awaitResult()
-        }
     }
 
     suspend fun ensureTargetWifiNetworkCaptured() {
@@ -96,7 +91,7 @@ class ArgonSteps(
     }
 
     suspend fun ensureTargetWifiNetworkJoined() {
-        if (targetWifiNetworkJoined) {
+        if (targetWifiNetworkJoinedLD.value.truthy()) {
             return
         }
 
@@ -104,15 +99,43 @@ class ArgonSteps(
 
         try {
             flowManager.showGlobalProgressSpinner(true)
-            xceiver.sendJoinNewNetwork(
+
+            val joinNewNetworkResponse = xceiver.sendJoinNewNetwork(
                 targetWifiNetwork.value!!,
                 targetWifiNetworkPassword.value!!
-            ).throwOnErrorOrAbsent()
+            )
+            val genericError = FlowException("Could not join to Wi-Fi network due to an unknown error")
+            when (joinNewNetworkResponse) {
+                is Result.Present -> targetWifiNetworkJoinedLD.castAndPost(true)
+                is Result.Absent -> throw genericError
+                is Result.Error -> {
+                    if (joinNewNetworkResponse.error == ResultCode.NOT_FOUND) {
+
+                        flowManager.clearDialogResult()
+                        val suspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
+                        val result = withContext(UI) {
+                            flowManager.newDialogRequest(
+                                // FIXME: i18n!
+                                StringDialogSpec(
+                                    "Could not connect to Wi-Fi.  Please try entering your password again."
+                                )
+                            )
+                            suspender.awaitResult()
+                        }
+                        flowManager.clearDialogResult()
+                        targetWifiNetworkPassword.castAndPost(null)
+                        connectingToCloudUiShown = false
+                        throw FlowException("Error connecting to Wi-Fi (bad password?)")
+
+                    } else {
+                        throw genericError
+                    }
+                }
+            }
+
         } finally {
             flowManager.showGlobalProgressSpinner(false)
         }
-
-        targetWifiNetworkJoined = true
     }
 
     suspend fun ensureConnectingToCloudUiShown() {

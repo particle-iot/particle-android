@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.mesh.common.QATool
 import io.particle.sdk.app.R
@@ -28,7 +29,7 @@ class NewMeshNetworkFinishedFragment : BaseMeshSetupFragment() {
     }
 
     private fun endSetup() {
-        requireActivity().finish()
+        findNavController().navigate(R.id.action_global_letsGetBuildingFragment)
     }
 
 }

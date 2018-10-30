@@ -3,6 +3,7 @@ package io.particle.mesh.ota
 import androidx.annotation.WorkerThread
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
+import io.particle.firmwareprotos.ctrl.Config.DeviceMode
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
@@ -57,6 +58,8 @@ class FirmwareUpdater(
         showFeedback("Starting firmware update")
 
         protocolTransceiver.setConnectionPriority(ConnectionPriority.HIGH)
+
+        protocolTransceiver.sendStartupMode(DeviceMode.LISTENING_MODE)
 
         val startReplyResult = protocolTransceiver.sendStartFirmwareUpdate(firmwareData.size)
         val chunkSize = when (startReplyResult) {

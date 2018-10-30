@@ -151,7 +151,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
             return true;
 
         } else if (actionId == R.id.action_device_clear_tinker) {
-            prefs.clearTinker(device.getID());
+            prefs.clearTinker(device.getId());
             for (Pin pin : allPins) {
                 pin.setConfiguredAction(PinAction.NONE);
                 pin.reset();
@@ -248,7 +248,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
         for (Pin pin : allPins) {
             pinsByName.put(pin.name, pin);
-            PinAction pinFunction = prefs.getPinFunction(device.getID(), pin.name);
+            PinAction pinFunction = prefs.getPinFunction(device.getId(), pin.name);
             pin.setConfiguredAction(pinFunction);
         }
     }
@@ -523,7 +523,7 @@ public class TinkerFragment extends Fragment implements OnClickListener {
 
         selectedPin.reset();
         selectedPin.setConfiguredAction(action);
-        prefs.savePinFunction(device.getID(), selectedPin.name, action);
+        prefs.savePinFunction(device.getId(), selectedPin.name, action);
         // FIXME: should this actually be commented out?
 //		 hideTinkerSelect();
 //		 unmutePins();

@@ -9,64 +9,79 @@ import android.widget.TextView
 import android.widget.VideoView
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.common.buildRawResourceUri
 import io.particle.mesh.setup.flow.MeshDeviceType
-import io.particle.mesh.setup.flow.MeshDeviceType.XENON
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
 
 
 class GetReadyForSetupFragment : BaseMeshSetupFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_get_ready_for_setup, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        action_next.setOnClickListener(Navigation.createNavigateOnClickListener(
-                R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment
-        ))
 
-        if (flowManagerVM.flowManager?.targetDeviceType != MeshDeviceType.XENON) {
-            p_getreadyforsetup_use_ethernet_box.isVisible = false
+        action_next.setOnClickListener { onNext() }
+
+        p_getreadyforsetup_use_ethernet_switch.setOnCheckedChangeListener { _, _ ->
+            setContentFromDeviceModel()
         }
 
-        p_getreadyforsetup_use_ethernet_switch.setOnCheckedChangeListener { _, isChecked ->
-            val config = if (isChecked) HelpTextConfig.ETHERNET else HelpTextConfig.MESH_ONLY
-            onEthernetSwitched(config)
-        }
-
-        onEthernetSwitched(HelpTextConfig.MESH_ONLY)
+        setContentFromDeviceModel()
 
         setUpVideoView(videoView)
     }
 
-    private fun onEthernetSwitched(config: HelpTextConfig) {
+    private fun setContentFromDeviceModel() {
+        if (p_getreadyforsetup_use_ethernet_switch.isChecked) {
+            onConfigChanged(HelpTextConfig.FEATHERWING)
+            return
+        }
+
+        val config = when (flowManagerVM.flowManager!!.targetDeviceType) {
+            MeshDeviceType.ARGON -> HelpTextConfig.ARGON
+            MeshDeviceType.XENON -> HelpTextConfig.XENON
+            MeshDeviceType.BORON -> HelpTextConfig.BORON_3G
+        }
+        onConfigChanged(config)
+    }
+
+    private fun onNext() {
+        flowManagerVM.flowManager!!.deviceModule.updateShouldDetectEthernet(
+            p_getreadyforsetup_use_ethernet_switch.isChecked
+        )
+        findNavController().navigate(R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment)
+    }
+
+    private fun onConfigChanged(config: HelpTextConfig) {
         val productName = flowManagerVM.flowManager!!.getTypeName()
 
         setup_header_text.setTextMaybeWithProductTypeFormat(productName, config.headerText)
         videoView.setVideoURI(requireActivity().buildRawResourceUri(config.videoUrlRes))
-        val textViews = mapOf(
-                p_mesh_step1 to config.step1,
-                p_mesh_step2 to config.step2,
-                p_mesh_step3 to config.step3,
-                p_mesh_step4 to config.step4
-        )
-        for ((view, res) in textViews.entries) {
-            if (res == null) {
-                view.visibility = View.INVISIBLE
-            } else {
-                view.visibility = View.VISIBLE
-                view.setTextMaybeWithProductTypeFormat(productName, res)
-            }
-        }
+//        val textViews = mapOf(
+//                p_mesh_step1 to config.step1,
+//                p_mesh_step2 to config.step2,
+//                p_mesh_step3 to config.step3,
+//                p_mesh_step4 to config.step4
+//        )
+//        for ((view, res) in textViews.entries) {
+//            if (res == null) {
+//                view.visibility = View.INVISIBLE
+//            } else {
+//                view.visibility = View.VISIBLE
+//                view.setTextMaybeWithProductTypeFormat(productName, res)
+//            }
+//        }
     }
 
     private fun setUpVideoView(vidView: VideoView) {
@@ -85,13 +100,13 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
 }
 
 private fun TextView.setTextMaybeWithProductTypeFormat(
-        productName: String,
-        @StringRes strId: Int
+    productName: String,
+    @StringRes strId: Int
 ) {
     this.text = try {
         Phrase.from(this, strId)
-                .put("product_type", productName)
-                .format()
+            .put("product_type", productName)
+            .format()
     } catch (ex: Exception) {
         this.context.getString(strId)
     }
@@ -99,29 +114,33 @@ private fun TextView.setTextMaybeWithProductTypeFormat(
 
 
 internal enum class HelpTextConfig(
-        @StringRes val headerText: Int,
-        @StringRes val step1: Int,
-        @StringRes val step2: Int,
-        @StringRes val step3: Int?,
-        @StringRes val step4: Int?,
-        @RawRes val videoUrlRes: Int
+    @StringRes val headerText: Int,
+    @RawRes val videoUrlRes: Int
 ) {
 
-    MESH_ONLY(
-            R.string.p_getreadyforsetup_header_mesh_only,
-            R.string.p_getreadyforsetup_step1_mesh_only,
-            R.string.p_getreadyforsetup_step2_mesh_only,
-            null,
-            null,
-            R.raw.power_on_xenon_with_breadboard
+    XENON(
+        R.string.p_getreadyforsetup_header_text,
+        R.raw.power_on_xenon
     ),
 
-    ETHERNET(
-            R.string.p_getreadyforsetup_header_ethernet,
-            R.string.p_getreadyforsetup_step1_ethernet,
-            R.string.p_getreadyforsetup_step2_ethernet,
-            R.string.p_getreadyforsetup_step3_ethernet,
-            R.string.p_getreadyforsetup_step4_ethernet,
-            R.raw.featherwing_power
+    FEATHERWING(
+        R.string.p_getreadyforsetup_header_ethernet,
+        R.raw.power_on_featherwing
+    ),
+
+    ARGON(
+        R.string.p_getreadyforsetup_header_text,
+        R.raw.power_on_argon
+    ),
+
+    BORON_LTE(
+        R.string.p_getreadyforsetup_header_text,
+        R.raw.power_on_boron
+    ),
+
+    BORON_3G(
+        R.string.p_getreadyforsetup_header_text,
+        R.raw.power_on_boron_battery
     )
+
 }

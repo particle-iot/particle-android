@@ -78,10 +78,13 @@ data class BarcodeData(
                 return null
             }
 
-            // FIXME: REMOVE THIS
+            // FIXME: REMOVE THIS!
 
             if (rawBarcodeData.startsWith("ARGHAB838FBKGPW")) {
                 return BarcodeData("ARGHAB838FBKGPW", "RKEP8BAMT97LERH")
+
+            } else if (rawBarcodeData.startsWith("ARGHAB838PYVN9E")) {
+                return BarcodeData("ARGHAB838PYVN9E", "BUJ9CFGNMN7W2B2")
             }
 
             if (rawBarcodeData.length != 31) {

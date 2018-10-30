@@ -50,7 +50,7 @@ public class ConfigureApCommand extends Command {
     public static class Response {
 
         @SerializedName("r")
-        public final Integer responseCode;  // 0 == OK, non-zero == problem with index/data
+        public final Integer responseCode;  // 0 == READY_TO_ACTIVATE, non-zero == problem with index/data
 
         public Response(Integer responseCode) {
             this.responseCode = responseCode;

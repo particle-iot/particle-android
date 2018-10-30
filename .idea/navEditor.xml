@@ -50,12 +50,12 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="action_global_connectingToDeviceCloudFragment">
+                  <entry key="action_global_boronConnectingStatusFragment">
                     <value>
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="action_global_createOrJoinMeshNetworkFragment">
+                  <entry key="action_global_connectingToDeviceCloudFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -125,6 +125,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_pricingImpactFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_scanCodeFragment">
                     <value>
                       <LayoutPositions />
@@ -153,18 +158,6 @@
                   <entry key="action_global_useStandaloneOrInMeshFragment">
                     <value>
                       <LayoutPositions />
-                    </value>
-                  </entry>
-                  <entry key="argonConnectToDeviceCloudIntroFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="548" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
                     </value>
                   </entry>
                   <entry key="argonConnectingStatusFragment">
@@ -215,6 +208,30 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="boronConnectingStatusFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="8" />
+                            <option name="y" value="-908" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="connectToDeviceCloudIntroFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="548" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="connectingToDeviceCloudFragment">
                     <value>
                       <LayoutPositions>
@@ -222,18 +239,6 @@
                           <Point>
                             <option name="x" value="1332" />
                             <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="createOrJoinMeshNetworkFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="411" />
-                            <option name="y" value="574" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -408,6 +413,18 @@
                           <Point>
                             <option name="x" value="177" />
                             <option name="y" value="280" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="pricingImpactFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="495" />
+                            <option name="y" value="-985" />
                           </Point>
                         </option>
                       </LayoutPositions>

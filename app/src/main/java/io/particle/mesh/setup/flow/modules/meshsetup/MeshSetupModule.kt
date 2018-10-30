@@ -11,12 +11,10 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.flow.Clearable
-import io.particle.mesh.setup.flow.FlowException
-import io.particle.mesh.setup.flow.FlowManager
+import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
-import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
+import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
@@ -26,9 +24,9 @@ import mu.KotlinLogging
 
 
 class MeshSetupModule(
-        private val flowManager: FlowManager,
-        private val cloud: ParticleCloud,
-        val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
+    private val flowManager: FlowManager,
+    private val cloud: ParticleCloud,
+    val targetDeviceVisibleMeshNetworksLD: TargetDeviceMeshNetworksScanner
 ) : Clearable {
 
     val targetDeviceMeshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
@@ -37,12 +35,15 @@ class MeshSetupModule(
     val commissionerStartedLD: LiveData<Boolean?> = MutableLiveData()
     val newNetworkNameLD: LiveData<String?> = MutableLiveData()
     val newNetworkPasswordLD: LiveData<String?> = MutableLiveData()
+    val newNetworkIdLD: LiveData<String?> = MutableLiveData()
     val createNetworkSent: LiveData<Boolean?> = MutableLiveData()
 
     var showNewNetworkOptionInScanner: Boolean = false
+    var shownNetworkPasswordUi = false
 
     var targetJoinedSuccessfully = false
     private var newNetworkCreatedSuccessfully = false
+    private var checkedForExistingNetwork = false
 
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
@@ -51,13 +52,14 @@ class MeshSetupModule(
 
     override fun clearState() {
         val setToNulls = listOf(
-                targetDeviceMeshNetworkToJoinLD,
-                targetDeviceMeshNetworkToJoinCommissionerPassword,
-                targetJoinedMeshNetworkLD,
-                commissionerStartedLD,
-                newNetworkNameLD,
-                newNetworkPasswordLD,
-                createNetworkSent
+            targetDeviceMeshNetworkToJoinLD,
+            targetDeviceMeshNetworkToJoinCommissionerPassword,
+            targetJoinedMeshNetworkLD,
+            commissionerStartedLD,
+            newNetworkNameLD,
+            newNetworkPasswordLD,
+            newNetworkIdLD,
+            createNetworkSent
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -65,12 +67,14 @@ class MeshSetupModule(
 
         targetJoinedSuccessfully = false
         newNetworkCreatedSuccessfully = false
+        checkedForExistingNetwork = false
+        shownNetworkPasswordUi = false
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {
         log.info { "updateSelectedMeshNetworkToJoin(): $meshNetworkToJoin" }
         (targetDeviceMeshNetworkToJoinLD as MutableLiveData).postValue(
-                SelectedNetwork(meshNetworkToJoin)
+            SelectedNetwork(meshNetworkToJoin)
         )
     }
 
@@ -106,47 +110,51 @@ class MeshSetupModule(
 
     suspend fun ensureRemovedFromExistingNetwork() {
         log.info { "ensureRemovedFromExistingNetwork()" }
-        val reply: Result<GetNetworkInfoReply, ResultCode> = targetXceiver!!.sendGetNetworkInfo()
-        when(reply) {
-            is Result.Present -> {
 
-
-                // FIXME: PROMPT USER.  Bail early if user declines to leave network
-
-            }
-            is Result.Absent -> throw FlowException("No result received when getting existing network")
-            is Result.Error -> {
-                if (reply.error == NOT_FOUND) {
-                    return
-                } else {
-                    throw FlowException("Error when getting existing network")
-                }
-            }
+        if (checkedForExistingNetwork) {
+            return
         }
 
+        val reply: Result<GetNetworkInfoReply, ResultCode> = targetXceiver!!.sendGetNetworkInfo()
+        val removeLocally = when (reply) {
+            is Result.Absent -> throw FlowException("No result received when getting existing network")
+            is Result.Present -> true
+            is Result.Error ->  if (reply.error == NOT_FOUND) false else throw FlowException(
+                "Error when getting existing network"
+            )
+        }
 
+        if (removeLocally) {
+            val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
+            val dialogResult = withContext(UI) {
+                flowManager.newDialogRequest(
+                    ResDialogSpec(
+                        R.string.p_mesh_leavenetworkconfirmation_text,
+                        R.string.p_mesh_leavenetworkconfirmation_action_leave_network,
+                        R.string.p_mesh_action_exit_setup,
+                        R.string.p_mesh_leavenetworkconfirmation_header
+                    )
+                )
+                ldSuspender.awaitResult()
+            }
+            log.info { "Result for leave network confirmation dialog: $dialogResult" }
+            flowManager.clearDialogResult()
 
+            when (dialogResult) {
+                DialogResult.POSITIVE -> { /* no-op, continue flow */ }
+                DialogResult.NEGATIVE -> throw FlowException(
+                    "User does not want device to leave network; exiting setup",
+                    ExceptionType.ERROR_FATAL
+                )
+                null -> throw FlowException("Unknown error when confirming leave network from device")
+            }
 
+            targetXceiver!!.sendLeaveNetwork().throwOnErrorOrAbsent()
+        }
 
-        // FIXME: IMPLEMENT THIS
-//        val isInNetwork = true
-//        try {
-//            cloud.getNetworks()
-//        } catch (ex: Exception) {
-//            log.info(ex) {"error when getting networks"}
-//        }
-//        if (isInNetwork) {
-//            cloud.removeDeviceFromMeshNetwork(
-//                flowManager.bleConnectionModule.targetDeviceId!!
-//            )
-//        }
+        checkedForExistingNetwork = true
 
-
-
-
-
-
-        targetXceiver!!.sendLeaveNetwork().throwOnErrorOrAbsent()
+        cloud.removeDeviceFromAnyMeshNetwork(flowManager.bleConnectionModule.targetDeviceId!!)
     }
 
     suspend fun ensureCommissionerIsOnNetworkToBeJoined() {
@@ -158,6 +166,11 @@ class MeshSetupModule(
         val toJoin = (targetDeviceMeshNetworkToJoinLD.value!! as SelectedNetwork)
 
         if (commissionerNetwork?.extPanId == toJoin.networkToJoin.extPanId) {
+            targetDeviceMeshNetworkToJoinLD.nonNull().runOnUiThreadAndWaitForUpdate {
+                // update the network to one which has the network ID
+                targetDeviceMeshNetworkToJoinLD.castAndPost(SelectedNetwork(commissionerNetwork))
+            }
+            // update the network to be joined
             return  // it's a match; we're done.
         }
 
@@ -167,10 +180,12 @@ class MeshSetupModule(
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
         val result = withContext(UI) {
-            flowManager.newDialogRequest(ResDialogSpec(
+            flowManager.newDialogRequest(
+                ResDialogSpec(
                     R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
                     android.R.string.ok
-            ))
+                )
+            )
             ldSuspender.awaitResult()
         }
         log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
@@ -198,8 +213,6 @@ class MeshSetupModule(
         }
     }
 
-    var shownNetworkPasswordUi = false
-
     suspend fun ensureTargetMeshNetworkPasswordCollected() {
         log.info { "ensureTargetMeshNetworkPasswordCollected()" }
         if (targetDeviceMeshNetworkToJoinCommissionerPassword.value.truthy()) {
@@ -224,7 +237,7 @@ class MeshSetupModule(
             flowManager.showGlobalProgressSpinner(true)
             val commissioner = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
             val sendAuthResult = commissioner.sendAuth(password)
-            when(sendAuthResult) {
+            when (sendAuthResult) {
                 is Result.Present -> return
                 is Result.Error,
                 is Result.Absent -> {
@@ -232,10 +245,12 @@ class MeshSetupModule(
 
                     val ldSuspender2 = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
                     val result = withContext(UI) {
-                        flowManager.newDialogRequest(ResDialogSpec(
+                        flowManager.newDialogRequest(
+                            ResDialogSpec(
                                 R.string.p_mesh_network_password_is_incorrect,
                                 android.R.string.ok
-                        ))
+                            )
+                        )
                         ldSuspender2.awaitResult()
                     }
                     log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
@@ -264,17 +279,12 @@ class MeshSetupModule(
         val joiner = targetXceiver!!
         val commish = flowManager.bleConnectionModule.commissionerTransceiverLD.value!!
 
-        // FIXME: PUT BACK IN?
-//        // ensure the commissioner was stopped
-//        commish.sendStopCommissioner().throwOnErrorOrAbsent()
-//        delay(1000) // FIXME: verify that we need this
-
         // no need to send auth msg here; we already authenticated when the password was collected
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
         updateCommissionerStarted(true)
 
         val toJoinWrapper = targetDeviceMeshNetworkToJoinLD.value!!
-        val networkToJoin: NetworkInfo = when(toJoinWrapper) {
+        val networkToJoin: NetworkInfo = when (toJoinWrapper) {
             is MeshNetworkToJoin.SelectedNetwork -> toJoinWrapper.networkToJoin
             is MeshNetworkToJoin.CreateNewNetwork -> throw IllegalStateException()
         }
@@ -287,8 +297,12 @@ class MeshSetupModule(
         joiner.sendJoinNetwork().throwOnErrorOrAbsent()
         updateTargetJoinedMeshNetwork(true)
 
+        cloud.addDeviceToMeshNetwork(
+            flowManager.bleConnectionModule.targetDeviceId!!,
+            networkToJoin.networkId
+        )
+
         targetJoinedSuccessfully = true
-        
         // let the success UI show for a moment
         delay(2000)
     }
@@ -334,6 +348,23 @@ class MeshSetupModule(
         flowManager.navigate(R.id.action_global_creatingMeshNetworkFragment)
     }
 
+    suspend fun ensureNewNetworkCreatedOnCloud() {
+        log.info { "ensureNewNetworkCreatedOnCloud()" }
+        if (newNetworkIdLD.value.truthy()) {
+            return
+        }
+
+        val networkResponse = cloud.registerMeshNetwork(
+            flowManager.bleConnectionModule.targetDeviceId!!,
+            newNetworkNameLD.value!!
+        )
+
+        // set the network ID and wait for it to update
+        newNetworkIdLD.nonNull().runOnUiThreadAndWaitForUpdate {
+            newNetworkIdLD.castAndPost(networkResponse.id)
+        }
+    }
+
     suspend fun ensureCreateNewNetworkMessageSent() {
         log.info { "ensureCreateNewNetworkMessageSent()" }
         if (createNetworkSent.value.truthy()) {
@@ -342,8 +373,14 @@ class MeshSetupModule(
 
         val name = newNetworkNameLD.value!!
         val password = newNetworkPasswordLD.value!!
+        val networkId = newNetworkIdLD.value!!
 
-        targetXceiver!!.sendCreateNetwork(name, password).throwOnErrorOrAbsent()
+        val reply =
+            targetXceiver!!.sendCreateNetwork(name, password, networkId).throwOnErrorOrAbsent()
+
+        if (reply.network.networkId.toUpperCase() != networkId.toUpperCase()) {
+            throw FlowException("Network ID received from CreateNetwork does not match")
+        }
 
         (createNetworkSent as MutableLiveData).setOnMainThread(true)
     }

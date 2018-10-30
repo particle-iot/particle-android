@@ -14,11 +14,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="122" />
-                            <entry key="outputName" value="p_mesh_rosie" />
+                            <entry key="height" value="146" />
+                            <entry key="outputName" value="ic_argon_vector" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="$USER_HOME$/Inbox/p_mesh_rosie_icon.svg" />
-                            <entry key="width" value="108" />
+                            <entry key="sourceFile" value="$USER_HOME$/Inbox/argon_vector.svg" />
+                            <entry key="width" value="65" />
                           </map>
                         </option>
                       </PersistentState>

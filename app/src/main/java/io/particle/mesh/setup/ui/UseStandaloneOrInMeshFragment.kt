@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_use_standalone_or_in_mesh.*
@@ -21,14 +22,23 @@ class UseStandaloneOrInMeshFragment : BaseMeshSetupFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val deviceModule = flowManagerVM.flowManager?.deviceModule!!
+        val fm = flowManagerVM.flowManager!!
+
+        setup_header_text.text = Phrase.from(view, R.string.p_usestandaloneorinmesh_header)
+            .put("product_type", fm.getTypeName())
+            .format()
+
+        p_usestandaloneorinmesh_subheader.text =
+                Phrase.from(view, R.string.p_usestandaloneorinmesh_subheader)
+                    .put("product_type", fm.getTypeName())
+                    .format()
 
         p_action_use_in_mesh_network.setOnClickListener {
-            deviceModule.updateNetworkSetupType(NetworkSetupType.AS_GATEWAY)
+            fm.deviceModule.updateNetworkSetupType(NetworkSetupType.AS_GATEWAY)
         }
 
         p_action_do_not_use_in_mesh_network.setOnClickListener {
-            deviceModule.updateNetworkSetupType(NetworkSetupType.STANDALONE)
+            fm.deviceModule.updateNetworkSetupType(NetworkSetupType.STANDALONE)
         }
     }
 

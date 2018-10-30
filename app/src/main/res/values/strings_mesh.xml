@@ -8,7 +8,7 @@
     <string name="product_name_boron">Boron</string>
     <string name="product_description_boron">Mesh + Cellular</string>
 
-    <string name="p_getreadyforsetup_header_mesh_only">Get your {product_type} ready for setup</string>
+    <string name="p_getreadyforsetup_header_text">Get your {product_type} ready for setup</string>
     <string name="my_device_is_blinking_blue">My device is blinking blue</string>
     <string name="p_getreadyforsetup_step1_mesh_only">Plug your {product_type} into a power source</string>
     <string name="if_you_have_an_external_antenna_connect_it_to_your_device">If you have an external antenna, connect it to your device</string>
@@ -59,4 +59,52 @@
     <string name="default_device_name">device</string>
     
     <string name="p_congrats_claimed">%1$s connected to the Device Cloud!</string>
+
+    <string name="p_mesh_leavenetworkconfirmation_header">Leave current network?</string>
+    <string name="p_mesh_leavenetworkconfirmation_text">The device you are trying to set up is already part of a mesh network. Would you like to have the device leave its current mesh network to continue setup?</string>
+    <string name="p_mesh_leavenetworkconfirmation_action_leave_network">Leave Network</string>
+
+    <string name="p_mesh_action_exit_setup">Exit Setup</string>
+
+    <string name="p_mesh_billing_please_go_to_your_browser">Please add a credit card at <b>console.particle.io/billing</b> on your desktop</string>
+
+
+
+    <string name="p_pricingimpact_FreeNetworkTitle">Woo-hoo! Enjoy this new mesh network on us</string>
+    <string name="p_pricingimpact_PaidNetworkTitle">To create a new mesh network, please enroll in a Device Cloud subscription</string>
+
+    <string name="p_pricingimpact_FreeGatewayDeviceTitle">Woo-hoo! Enjoy Device Cloud access for this device on us</string>
+    <string name="p_pricingimpact_PaidGatewayDeviceTitle">To activate this device, please enroll in a Device Cloud subscription</string>
+
+    <string name="p_pricingimpact_DeviceCloudPlanTitle">DEVICE CLOUD</string>
+    <string name="p_pricingimpact_MicroNetworkPlanTitle">MICRO NETWORK</string>
+
+    <string name="p_pricingimpact_WifiDeviceText">Wi-Fi/Ethernet device</string>
+    <string name="p_pricingimpact_WifiGatewayText">Wi-Fi/Ethernet Gateway</string>
+
+    <string name="p_pricingimpact_CellularDeviceText">Cellular device</string>
+    <string name="p_pricingimpact_CellularGatewayText">Cellular Gateway</string>
+
+    <string name="p_pricingimpact_FreeDevicesText">First {free_devices} devices FREE</string>
+    <string name="p_pricingimpact_FreeNetworksText">First {free_networks} networks FREE</string>
+    <string name="p_pricingimpact_FreeMonthsText">FREE for {free_months} months</string>
+
+    <string name="p_pricingimpact_PriceText">${price}</string>
+    <string name="p_pricingimpact_PriceTextStrikethrough"><strike>${price}</strike></string>
+    <string name="p_pricingimpact_PriceNoteText">per mo.</string>
+
+    <string name="p_pricingimpact_DeviceCloudFeatures">DEVICE CLOUD INCLUDES</string>
+    <string name="p_pricingimpact_MeshNetworkFeatures">MESH NETWORK INCLUDES</string>
+
+    <string name="p_pricingimpact_FeaturesDeviceCloud">Device Cloud Features +</string>
+    <string name="p_pricingimpact_FeaturesMaxDevices">{total_devices} total devices</string>
+    <string name="p_pricingimpact_FeaturesMaxGateways">up to {total_gateways} gateway</string>
+    <string name="p_pricingimpact_FeaturesDataAllowence"> {emmbees}MB of cellular data/mo.\naddnl. MBs start at ${per_mb_price}</string>
+    <string name="p_pricingimpact_FeaturesStandardSupport">Standard support</string>
+
+    <string name="p_action_enroll_in_subscription">Enroll in subscription</string>
+
+
+
+
 </resources>

@@ -50,6 +50,7 @@ class ScanForWiFiNetworksFragment : BaseMeshSetupFragment() {
     private fun onNetworksUpdated(networks: List<ScanNetworksReply.Network>?) {
         adapter.submitList(networks?.asSequence()
             ?.filter { it.ssid.truthy() }
+            ?.distinctBy { it.ssid }
             ?.map { ScannedWifiNetwork(it.ssid, it) }
             ?.sortedBy { it.ssid }
             ?.sortedByDescending { it.wiFiStrength.sortValue }

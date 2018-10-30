@@ -62,6 +62,7 @@ public class InfoFragment extends Fragment {
         ImageView deviceImage = Ui.findView(rootView, R.id.device_image);
         TextView deviceType = Ui.findView(rootView, R.id.device_type_name);
 
+        // FIXME: this and several other spots are doing the same work.  Make it generic.
         switch (device.getDeviceType()) {
             case CORE:
                 deviceType.setText(R.string.core);
@@ -96,6 +97,21 @@ public class InfoFragment extends Fragment {
                 deviceType.setText(R.string.red_bear_duo);
                 deviceImage.setImageResource(R.drawable.red_bear_duo_vector);
                 break;
+
+            case ARGON:
+                deviceType.setText(R.string.product_name_argon);
+                deviceImage.setImageResource(R.drawable.argon_vector);
+                break;
+
+            case BORON:
+                deviceType.setText(R.string.product_name_boron);
+                deviceImage.setImageResource(R.drawable.boron_vector);
+                break;
+
+            case XENON:
+                deviceType.setText(R.string.product_name_xenon);
+                deviceImage.setImageResource(R.drawable.xenon_vector);
+                break;
             default:
                 deviceType.setText(R.string.unknown);
                 deviceImage.setImageResource(R.drawable.unknown_vector);
@@ -107,7 +123,7 @@ public class InfoFragment extends Fragment {
 
     private void populateInfoFields(View rootView) {
         TextView id = Ui.findView(rootView, R.id.device_id);
-        id.setText(device.getID());
+        id.setText(device.getId());
 
         TextView lastHeard = Ui.findView(rootView, R.id.device_last_heard);
         long now = System.currentTimeMillis();

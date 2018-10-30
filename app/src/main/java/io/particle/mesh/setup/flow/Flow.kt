@@ -1,6 +1,8 @@
 package io.particle.mesh.setup.flow
 
+import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.mesh.common.Result
@@ -8,13 +10,13 @@ import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.device.DeviceModule
 import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.STANDALONE
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
+import java.util.concurrent.TimeUnit
 
 
 // FIXME: put this elsewhere
@@ -44,7 +46,8 @@ class Flow(
     private val bleConnModule: BLEConnectionModule,
     private val meshSetupModule: MeshSetupModule,
     private val cloudConnModule: CloudConnectionModule,
-    private val deviceModule: DeviceModule
+    private val deviceModule: DeviceModule,
+    private val cloud: ParticleCloud
 ) {
 
     private val targetXceiver
@@ -57,11 +60,25 @@ class Flow(
 
         doInitialCommonSubflow()
 
-        when (flowManager.targetDeviceType) {
-            MeshDeviceType.ARGON -> doArgonFlow()
-            MeshDeviceType.BORON -> TODO()
-            MeshDeviceType.XENON -> doXenonFlow()
+        val interfaceList = ensureGetInterfaceList()
+        val hasEthernet = null != interfaceList.firstOrNull { it.type == InterfaceType.ETHERNET }
+
+        if (hasEthernet) {
+            doEthernetSubflow()
+        } else {
+            when (flowManager.targetDeviceType) {
+                MeshDeviceType.ARGON -> doArgonFlow()
+                MeshDeviceType.BORON -> doBoronFlow()
+                MeshDeviceType.XENON -> doJoinerSubflow()
+            }
         }
+
+        cloud.publishEvent(
+            "mesh-device-setup-complete",
+            bleConnModule.targetDeviceId!!,
+            ParticleEventVisibility.PRIVATE,
+            TimeUnit.HOURS.toSeconds(1).toInt()
+        )
     }
 
     suspend fun runMeshFlowForGatewayDevice() {
@@ -76,21 +93,42 @@ class Flow(
         }
     }
 
-    private suspend fun doXenonFlow() {
-        // check interfaces!
-        val interfaceList = ensureGetInterfaceList()
-        val hasEthernet = null != interfaceList.firstOrNull { it.type == InterfaceType.ETHERNET }
-        if (hasEthernet) {
-            doEthernetSubflow()
-        } else {
-            doJoinerSubflow()
+    private suspend fun doBoronFlow() {
+        deviceModule.ensureNetworkSetupTypeCaptured()
+
+        try {
+            flowManager.showGlobalProgressSpinner(true)
+            cloudConnModule.ensureCardOnFile()
+            cloudConnModule.boronSteps.ensureIccidRetrieved()
+            cloudConnModule.boronSteps.ensureSimActivationStatusUpdated()
+            cloudConnModule.ensurePricingImpactRetrieved()
+        } finally {
+            flowManager.showGlobalProgressSpinner(false)
+        }
+
+        cloudConnModule.ensureShowPricingImpactUI()
+        cloudConnModule.ensureShowConnectToDeviceCloudConfirmation()
+
+        cloudConnModule.boronSteps.ensureConnectingToCloudUiShown()
+        cloudConnModule.boronSteps.ensureSimActivated()
+        ensureTargetDeviceSetSetupDone(true)
+        bleConnModule.ensureListeningStoppedForBothDevices()
+        cloudConnModule.ensureConnectedToCloud()
+        cloudConnModule.ensureTargetDeviceClaimedByUser()
+        cloudConnModule.ensureConnectedToCloudSuccessUi()
+        cloudConnModule.ensureTargetDeviceIsNamed()
+
+        val setupType = deviceModule.networkSetupTypeLD.value!!
+        when (setupType) {
+            NetworkSetupType.AS_GATEWAY -> doCreateNetworkFlow()
+            NetworkSetupType.STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
         }
     }
 
     private suspend fun doArgonFlow() {
         deviceModule.ensureNetworkSetupTypeCaptured()
 
-        cloudConnModule.argonSteps.ensureShowConnectToDeviceCloudConfirmation()
+        cloudConnModule.ensureShowConnectToDeviceCloudConfirmation()
         cloudConnModule.argonSteps.ensureTargetWifiNetworkCaptured()
         cloudConnModule.argonSteps.ensureTargetWifiNetworkPasswordCaptured()
 
@@ -134,6 +172,9 @@ class Flow(
             bleConnModule.targetDeviceTransceiverLD.value!!,
             flowManager.targetDeviceType
         )
+
+        deviceModule.ensureEthernetDetectionSet()
+
         val targetDeviceId = bleConnModule.ensureTargetDeviceId()
 
         if (!meshSetupModule.targetJoinedSuccessfully) {
@@ -147,7 +188,7 @@ class Flow(
 
     private suspend fun doEthernetSubflow() {
         log.debug { "doEthernetSubflow()" }
-        cloudConnModule.ensureConnectingToDeviceCloudUiShown()
+        cloudConnModule.ensureEthernetConnectingToDeviceCloudUiShown()
         ensureTargetDeviceSetSetupDone(true)
         bleConnModule.ensureListeningStoppedForBothDevices()
         delay(3000)  // give it a moment to get an IP
@@ -186,9 +227,8 @@ class Flow(
         meshSetupModule.ensureNewNetworkPassword()
 
         meshSetupModule.ensureCreatingNewNetworkUiShown()
+        meshSetupModule.ensureNewNetworkCreatedOnCloud()
         meshSetupModule.ensureCreateNewNetworkMessageSent()
-        cloudConnModule.ensureConnectedToCloud()
-        cloudConnModule.ensureNetworkIsRegisteredWithCloud()
 
         ensureShowCreateNetworkFinished()
     }

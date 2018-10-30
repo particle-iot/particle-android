@@ -6,6 +6,8 @@ import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
 import io.particle.firmwareprotos.ctrl.Common
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
+import io.particle.firmwareprotos.ctrl.Config.DeviceMode
+import io.particle.firmwareprotos.ctrl.Config.Feature
 import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdReply
 import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdRequest
 import io.particle.firmwareprotos.ctrl.Config.GetNcpFirmwareVersionReply
@@ -18,10 +20,16 @@ import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeReply
 import io.particle.firmwareprotos.ctrl.Config.SetClaimCodeRequest
 import io.particle.firmwareprotos.ctrl.Config.SetDeviceSetupDoneReply
 import io.particle.firmwareprotos.ctrl.Config.SetDeviceSetupDoneRequest
+import io.particle.firmwareprotos.ctrl.Config.SetFeatureReply
+import io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest
+import io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply
+import io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest
 import io.particle.firmwareprotos.ctrl.Config.StartListeningModeReply
 import io.particle.firmwareprotos.ctrl.Config.StartListeningModeRequest
 import io.particle.firmwareprotos.ctrl.Config.StopListeningModeReply
 import io.particle.firmwareprotos.ctrl.Config.StopListeningModeRequest
+import io.particle.firmwareprotos.ctrl.Config.SystemResetReply
+import io.particle.firmwareprotos.ctrl.Config.SystemResetRequest
 import io.particle.firmwareprotos.ctrl.Extensions
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest
@@ -37,6 +45,8 @@ import io.particle.firmwareprotos.ctrl.StorageOuterClass.FirmwareUpdateDataReply
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.FirmwareUpdateDataRequest
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.StartFirmwareUpdateReply
 import io.particle.firmwareprotos.ctrl.StorageOuterClass.StartFirmwareUpdateRequest
+import io.particle.firmwareprotos.ctrl.cellular.Cellular.GetIccidReply
+import io.particle.firmwareprotos.ctrl.cellular.Cellular.GetIccidRequest
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.GetConnectionStatusReply
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.GetConnectionStatusRequest
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.AddJoinerReply
@@ -110,6 +120,35 @@ class ProtocolTransceiver internal constructor(
         connection.setConnectionPriority(priority)
     }
 
+    suspend fun sendGetIccId(): Result<GetIccidReply, ResultCode> {
+        val response = sendRequest(GetIccidRequest.newBuilder().build())
+        return buildResult(response) { r -> GetIccidReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendStartupMode(mode: DeviceMode): Result<SetStartupModeReply, ResultCode> {
+        val response = sendRequest(
+            SetStartupModeRequest.newBuilder()
+                .setMode(mode)
+                .build()
+        )
+        return buildResult(response) { r -> SetStartupModeReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendReset(): Result<SystemResetReply, ResultCode> {
+        val response = sendRequest(SystemResetRequest.newBuilder().build())
+        return buildResult(response) { r -> SystemResetReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendSetFeature(feature: Feature, enabled: Boolean): Result<SetFeatureReply, ResultCode> {
+        val response = sendRequest(
+            SetFeatureRequest.newBuilder()
+                .setFeature(feature)
+                .setEnabled(enabled)
+                .build()
+        )
+        return buildResult(response) { r -> SetFeatureReply.parseFrom(r.payloadData) }
+    }
+
     suspend fun sendJoinNewNetwork(
         network: WifiNew.ScanNetworksReply.Network,
         password: String? = null
@@ -129,7 +168,6 @@ class ProtocolTransceiver internal constructor(
         val response = sendRequest(
             JoinNewNetworkRequest.newBuilder()
                 .setSsid(network.ssid)
-                .setBssid(network.bssid)
                 .setSecurity(network.security)
                 .setCredentials(credentials)
                 .build()
@@ -251,6 +289,7 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendCreateNetwork(
         name: String,
         password: String,
+        networkId: String,
         channel: Int = DEFAULT_NETWORK_CHANNEL
     ): Result<CreateNetworkReply, Common.ResultCode> {
         val response = sendRequest(
@@ -258,6 +297,7 @@ class ProtocolTransceiver internal constructor(
                 .setName(name)
                 .setPassword(password)
                 .setChannel(channel)
+                .setNetworkId(networkId)
                 .build()
         )
         return buildResult(response) { r -> CreateNetworkReply.parseFrom(r.payloadData) }

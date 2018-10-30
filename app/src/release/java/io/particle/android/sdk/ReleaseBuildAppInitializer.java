@@ -3,9 +3,9 @@ package io.particle.android.sdk;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
-import com.segment.analytics.Analytics;
-import com.segment.analytics.android.integrations.firebase.FirebaseIntegration;
-import com.segment.analytics.android.integrations.intercom.IntercomIntegration;
+//import com.segment.analytics.Analytics;
+//import com.segment.analytics.android.integrations.firebase.FirebaseIntegration;
+//import com.segment.analytics.android.integrations.intercom.IntercomIntegration;
 
 import io.fabric.sdk.android.Fabric;
 

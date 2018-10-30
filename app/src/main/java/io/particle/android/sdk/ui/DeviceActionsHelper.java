@@ -54,7 +54,7 @@ public class DeviceActionsHelper {
                 ClipboardManager clipboardMgr;
                 clipboardMgr = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
                 clipboardMgr.setPrimaryClip(
-                        ClipData.newPlainText("simple text", device.getID()));
+                        ClipData.newPlainText("simple text", device.getId()));
                 // FIXME: use string rsrc
                 Toaster.s(activity, "Copied device ID to clipboard");
                 return true;

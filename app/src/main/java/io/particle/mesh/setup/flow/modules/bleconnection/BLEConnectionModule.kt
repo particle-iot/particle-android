@@ -8,6 +8,7 @@ import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.setup.*
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.*
@@ -293,10 +294,15 @@ private fun BarcodeData.toDeviceName(): String {
     fun getDeviceTypeName(serialNumber: String): String {
         val first4 = serialNumber.substring(0, 4)
         return when (first4) {
-            "ARGH" -> "Argon"
-            "XENH" -> "Xenon"
-            "R40K",
-            "R31K" -> "Boron"
+            ARGON_SERIAL_PREFIX1,
+            ARGON_SERIAL_PREFIX2,
+            ARGON_SERIAL_PREFIX3 -> "Argon"
+            XENON_SERIAL_PREFIX1,
+            XENON_SERIAL_PREFIX2 -> "Xenon"
+            BORON_LTE_SERIAL_PREFIX1,
+            BORON_LTE_SERIAL_PREFIX2,
+            BORON_3G_SERIAL_PREFIX1,
+            BORON_3G_SERIAL_PREFIX2 -> "Boron"
             else -> "UNKNOWN"
         }
     }
@@ -311,10 +317,15 @@ internal val BarcodeData.deviceType: MeshDeviceType
     get() {
         val first4 = this.serialNumber.substring(0, 4)
         return when (first4) {
-            "ARGH" -> MeshDeviceType.ARGON
-            "XENH" -> MeshDeviceType.XENON
-            "R40K",
-            "R31K" -> MeshDeviceType.BORON
+            ARGON_SERIAL_PREFIX1,
+            ARGON_SERIAL_PREFIX2,
+            ARGON_SERIAL_PREFIX3 -> MeshDeviceType.ARGON
+            XENON_SERIAL_PREFIX1,
+            XENON_SERIAL_PREFIX2 -> MeshDeviceType.XENON
+            BORON_LTE_SERIAL_PREFIX1,
+            BORON_LTE_SERIAL_PREFIX2,
+            BORON_3G_SERIAL_PREFIX1,
+            BORON_3G_SERIAL_PREFIX2 -> MeshDeviceType.BORON
             else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
         }
     }

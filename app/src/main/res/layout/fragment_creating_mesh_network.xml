@@ -44,7 +44,7 @@
     <TextView
         android:id="@+id/status_stage_2"
         style="@style/p_setup_step_text_inactive"
-        android:text="@string/p_creatingyournetwork_step_2"
+        android:text="@string/p_creatingyournetwork_step_3"
         app:layout_constraintBottom_toTopOf="@+id/status_stage_3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -54,7 +54,7 @@
     <TextView
         android:id="@+id/status_stage_3"
         style="@style/p_setup_step_text_inactive"
-        android:text="@string/p_creatingyournetwork_step_3"
+        android:text="@string/p_creatingyournetwork_step_2"
         app:layout_constraintBottom_toTopOf="@+id/status_stage_4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

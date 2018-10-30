@@ -31,7 +31,7 @@ import mu.KotlinLogging
 private const val REQUEST_ENABLE_BT = 42
 
 
-class MeshSetupActivity : ProgressHack, BaseActivity() {
+class MeshSetupActivity : ProgressHack, MeshFlowTerminator, BaseActivity() {
 
     private val log = KotlinLogging.logger {}
 
@@ -48,6 +48,7 @@ class MeshSetupActivity : ProgressHack, BaseActivity() {
         flowVM = FlowManagerAccessModel.getViewModel(this)
         flowVM.setNavController(navController)
         flowVM.setProgressHack(this)
+        flowVM.setTerminator(this)
         flowVM.dialogRequestLD.nonNull().observe(this, Observer { onDialogSpecReceived(it) })
 
         p_meshactivity_username.text = ParticleCloudSDK.getCloud().loggedInUsername
@@ -65,6 +66,7 @@ class MeshSetupActivity : ProgressHack, BaseActivity() {
     override fun onDestroy() {
         flowVM.setNavController(null)
         flowVM.setProgressHack(null)
+        flowVM.setTerminator(null)
         super.onDestroy()
     }
 
@@ -82,6 +84,10 @@ class MeshSetupActivity : ProgressHack, BaseActivity() {
             // FIXME: inform the user why we're exiting?
             finish()
         }
+    }
+
+    override fun terminateSetup() {
+        finish()
     }
 
     override fun showGlobalProgressSpinner(show: Boolean) {
@@ -148,6 +154,13 @@ interface ProgressHack {
 }
 
 
+// FIXME: gross.
+interface MeshFlowTerminator {
+    @AnyThread
+    fun terminateSetup()
+}
+
+
 enum class DialogResult {
     POSITIVE,
     NEGATIVE,
@@ -194,6 +207,7 @@ class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(ap
 
     private val navReference = MutableLiveData<NavController?>()
     private val progressHackReference = MutableLiveData<ProgressHack?>()
+    private val terminatorReference = MutableLiveData<MeshFlowTerminator?>()
 
     private val log = KotlinLogging.logger {}
 
@@ -209,6 +223,7 @@ class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(ap
                     btConnManager,
                     protocolFactory,
                     progressHackReference,
+                    terminatorReference,
                     app
             )
         }
@@ -224,11 +239,17 @@ class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(ap
         progressHackReference.setOnMainThread(progressHack)
     }
 
+    fun setTerminator(terminator: MeshFlowTerminator?) {
+        terminatorReference.setOnMainThread(terminator)
+    }
+
     override fun onCleared() {
         super.onCleared()
         log.info { "onCleared()" }
         resetState()
         setNavController(null)
+        setProgressHack(null)
+        setTerminator(null)
     }
 
     private fun resetState() {

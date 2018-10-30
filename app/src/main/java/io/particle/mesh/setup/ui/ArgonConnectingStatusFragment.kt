@@ -5,7 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 
 
 class ArgonConnectingStatusFragment : BaseMeshSetupFragment() {
@@ -17,4 +23,29 @@ class ArgonConnectingStatusFragment : BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_argon_connecting_status, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val cloudModule = flowManagerVM.flowManager!!.cloudConnectionModule
+
+        markProgress(true, R.id.status_stage_1) // setting Wi-Fi credentials
+
+        cloudModule.argonSteps.targetWifiNetworkJoinedLD.observe(this, Observer {
+            if (it.truthy()) {
+                markProgress(true, R.id.status_stage_2)
+            }
+        })
+
+        cloudModule.targetDeviceConnectedToCloud.observe(this, Observer {
+            if (it.truthy()) {
+                markProgress(true, R.id.status_stage_3)
+            }
+        })
+
+        cloudModule.targetOwnedByUserLD.observe(this, Observer {
+            if (it.truthy()) {
+                markProgress(true, R.id.status_stage_4)
+            }
+        })
+    }
 }

@@ -3,15 +3,18 @@ package io.particle.mesh.setup.flow.modules.cloudconnection
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticlePricingInfo
+import io.particle.android.sdk.cloud.PricingImpactAction
+import io.particle.android.sdk.cloud.PricingImpactNetworkType
 import io.particle.firmwareprotos.ctrl.Network
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.firmwareprotos.ctrl.cloud.Cloud.ConnectionStatus
 import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.flow.Clearable
-import io.particle.mesh.setup.flow.FlowException
-import io.particle.mesh.setup.flow.FlowManager
-import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
+import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
+import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin
+import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
 import io.particle.sdk.app.R.string
@@ -19,6 +22,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
+import java.util.*
 
 
 class CloudConnectionModule(
@@ -30,6 +34,7 @@ class CloudConnectionModule(
     private val log = KotlinLogging.logger {}
 
     val argonSteps = ArgonSteps(flowManager)
+    val boronSteps = BoronSteps(flowManager, cloud)
 
     val targetDeviceShouldBeClaimedLD: LiveData<Boolean?> = MutableLiveData()
     val targetOwnedByUserLD: LiveData<Boolean?> = MutableLiveData()
@@ -37,15 +42,17 @@ class CloudConnectionModule(
     val currentDeviceName: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
     val targetDeviceConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
-    val meshRegisteredWithCloud: LiveData<Boolean?> = MutableLiveData()
     val shouldConnectToDeviceCloudConfirmed: LiveData<Boolean?> = MutableLiveData()
+    val pricingImpactConfirmed: LiveData<Boolean?> = MutableLiveData()
 
     var claimCode: String? = null
+    var pricingImpact: ParticlePricingInfo? = null
 
     private var checkedIsTargetClaimedByUser = false
     private var connectedToMeshNetworkAndOwnedUiShown = false
     private var checkEthernetGatewayUiShown = false
     private var connectedToCloudCongratsUiShown = false
+    private var paymentCardOnFile = false
 
     private val targetXceiver
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
@@ -63,10 +70,15 @@ class CloudConnectionModule(
 
     override fun clearState() {
         claimCode = null
+        pricingImpact = null
         checkedIsTargetClaimedByUser = false
         connectedToMeshNetworkAndOwnedUiShown = false
         checkEthernetGatewayUiShown = false
         connectedToCloudCongratsUiShown = false
+        paymentCardOnFile = false
+
+        argonSteps.clearState()
+        boronSteps.clearState()
 
         val setToNulls = listOf(
             targetDeviceShouldBeClaimedLD,
@@ -74,9 +86,9 @@ class CloudConnectionModule(
             targetDeviceNameToAssignLD,
             isTargetDeviceNamedLD,
             targetDeviceConnectedToCloud,
-            meshRegisteredWithCloud,
             currentDeviceName,
-            shouldConnectToDeviceCloudConfirmed
+            shouldConnectToDeviceCloudConfirmed,
+            pricingImpactConfirmed
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -104,11 +116,21 @@ class CloudConnectionModule(
         shouldConnectToDeviceCloudConfirmed.castAndPost(confirmed)
     }
 
+    fun updatePricingImpactConfirmed(confirmed: Boolean) {
+        log.info { "updatePricingImpactConfirmed(): $confirmed" }
+        pricingImpactConfirmed.castAndPost(confirmed)
+    }
+
     suspend fun ensureClaimCodeFetched() {
         log.info { "ensureClaimCodeFetched(), claimCode=$claimCode" }
         if (claimCode == null) {
             log.info { "Fetching new claim code" }
-            claimCode = cloud.generateClaimCode().claimCode
+            try {
+                flowManager.showGlobalProgressSpinner(true)
+                claimCode = cloud.generateClaimCode().claimCode
+            } finally {
+                flowManager.showGlobalProgressSpinner(false)
+            }
         }
     }
 
@@ -128,6 +150,9 @@ class CloudConnectionModule(
 
     suspend fun ensureCheckedIsClaimed(targetDeviceId: String) {
         log.info { "ensureCheckedIsClaimed()" }
+
+        log.info { "Networks: ${Arrays.toString(cloud.getNetworks().toTypedArray())}" }
+
         if (checkedIsTargetClaimedByUser) {
             return
         }
@@ -207,7 +232,8 @@ class CloudConnectionModule(
         throw FlowException("Ethernet connection not plugged in; user prompted.")
     }
 
-    suspend fun ensureConnectingToDeviceCloudUiShown() {
+    suspend fun ensureEthernetConnectingToDeviceCloudUiShown() {
+        log.info { "ensureEthernetConnectingToDeviceCloudUiShown()" }
         flowManager.navigate(R.id.action_global_connectingToDeviceCloudFragment)
     }
 
@@ -276,7 +302,7 @@ class CloudConnectionModule(
 
             val targetDeviceId = flowManager.bleConnectionModule.ensureTargetDeviceId()
             val joiner = cloud.getDevice(targetDeviceId)
-            joiner.setName(nameToAssign)
+            joiner.name = nameToAssign
             updateIsTargetDeviceNamed(true)
         } catch (ex: Exception) {
             throw FlowException("Unable to rename device")
@@ -285,13 +311,8 @@ class CloudConnectionModule(
         }
     }
 
-    suspend fun ensureNetworkIsRegisteredWithCloud() {
-        // Implement when we have this API
-        delay(1000)
-        meshRegisteredWithCloud.castAndPost(true)
-    }
-
     suspend fun ensureConnectedToCloudSuccessUi() {
+        log.info { "ensureConnectedToCloudSuccessUi()" }
         if (connectedToCloudCongratsUiShown) {
             return
         }
@@ -301,6 +322,109 @@ class CloudConnectionModule(
         val msg = template.format(flowManager.getTypeName())
         flowManager.showCongratsScreen(msg)
         delay(2000)
+    }
+
+    suspend fun ensureCardOnFile() {
+        log.info { "ensureCardOnFile()" }
+        if (paymentCardOnFile) {
+            return
+        }
+
+        val cardResponse = cloud.getPaymentCard()
+        paymentCardOnFile = cardResponse.card?.last4 != null
+        if (paymentCardOnFile) {
+            return
+        }
+
+        val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
+        val dialogResult = withContext(UI) {
+            flowManager.newDialogRequest(
+                ResDialogSpec(
+                    R.string.p_mesh_billing_please_go_to_your_browser,
+                    android.R.string.ok,
+                    R.string.p_mesh_action_exit_setup
+                )
+            )
+            ldSuspender.awaitResult()
+        }
+        log.info { "Result for leave network confirmation dialog: $dialogResult" }
+        flowManager.clearDialogResult()
+
+        val err = when (dialogResult) {
+            DialogResult.POSITIVE -> FlowException(
+                "Restarting flow after user confirmed payment card",
+                ExceptionType.EXPECTED_FLOW
+            )
+            DialogResult.NEGATIVE -> FlowException(
+                "User choosing not to enter payment card; exiting setup",
+                ExceptionType.ERROR_FATAL
+            )
+            null -> FlowException("Unknown error when asking user to enter payment card")
+        }
+        throw err
+    }
+
+    suspend fun ensurePricingImpactRetrieved() {
+        log.info { "ensurePricingImpactRetrieved()" }
+
+        if (pricingImpact != null) {
+            return
+        }
+
+        val action = when (flowManager.deviceModule.networkSetupTypeLD.value) {
+            NetworkSetupType.AS_GATEWAY -> PricingImpactAction.CREATE_NETWORK
+            NetworkSetupType.STANDALONE -> PricingImpactAction.ADD_USER_DEVICE
+            null -> PricingImpactAction.ADD_NETWORK_DEVICE
+        }
+
+        val networkType = if (flowManager.targetDeviceType == MeshDeviceType.BORON) {
+            PricingImpactNetworkType.CELLULAR
+        } else {
+            PricingImpactNetworkType.WIFI
+        }
+
+        val selectedNetwork = flowManager.meshSetupModule.targetDeviceMeshNetworkToJoinLD.value
+        val networkId = when (selectedNetwork) {
+            is MeshNetworkToJoin.SelectedNetwork -> selectedNetwork.networkToJoin.networkId
+            is MeshNetworkToJoin.CreateNewNetwork,
+            null -> null
+        }
+
+        pricingImpact = cloud.getPricingImpact(
+            action = action,
+            deviceId = flowManager.bleConnectionModule.targetDeviceId,
+            networkId = networkId,
+            networkType = networkType,
+            iccid = flowManager.cloudConnectionModule.boronSteps.targetDeviceIccid.value
+        )
+    }
+
+    suspend fun ensureShowPricingImpactUI() {
+        log.info { "ensureShowPricingImpactUI()" }
+        if (pricingImpactConfirmed.value.truthy()) {
+            return
+        }
+
+        val suspender = liveDataSuspender({ pricingImpactConfirmed.nonNull() })
+        withContext(UI) {
+            flowManager.navigate(R.id.action_global_pricingImpactFragment)
+            suspender.awaitResult()
+        }
+    }
+
+    suspend fun ensureShowConnectToDeviceCloudConfirmation() {
+        log.info { "ensureShowConnectToDeviceCloudConfirmation()" }
+
+        val confirmationLD = flowManager.cloudConnectionModule.shouldConnectToDeviceCloudConfirmed
+        if (confirmationLD.value.truthy()) {
+            return
+        }
+
+        val suspender = liveDataSuspender({ confirmationLD.nonNull() })
+        withContext(UI) {
+            flowManager.navigate(R.id.action_global_argonConnectToDeviceCloudIntroFragment)
+            suspender.awaitResult()
+        }
     }
 
 }

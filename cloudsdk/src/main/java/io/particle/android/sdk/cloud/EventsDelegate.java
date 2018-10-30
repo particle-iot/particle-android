@@ -57,7 +57,7 @@ class EventsDelegate {
     }
 
     @WorkerThread
-    void publishEvent(String eventName, String event,
+    void publishEvent(String eventName, @Nullable String event,
                       @ParticleEventVisibility int eventVisibility, int timeToLive)
             throws ParticleCloudException {
 

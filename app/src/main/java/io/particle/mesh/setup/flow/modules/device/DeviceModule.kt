@@ -3,6 +3,8 @@ package io.particle.mesh.setup.flow.modules.device
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.firmwareprotos.ctrl.Config.DeviceMode
+import io.particle.firmwareprotos.ctrl.Config.Feature
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
@@ -10,11 +12,10 @@ import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.ota.FirmwareUpdateResult
 import io.particle.mesh.setup.connection.ProtocolTransceiver
-import io.particle.mesh.setup.flow.Clearable
-import io.particle.mesh.setup.flow.FlowManager
-import io.particle.mesh.setup.flow.MeshDeviceType
+import io.particle.mesh.setup.flow.*
 import io.particle.sdk.app.R
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.withContext
 import mu.KotlinLogging
 
@@ -40,18 +41,34 @@ class DeviceModule(
         private set
 
     private var hasLatestFirmware = false
+    private var shouldDetectEthernet = false
+    private var hasSetDetectEthernet = false
 
     override fun clearState() {
         hasLatestFirmware = false
+        shouldDetectEthernet = false
+        hasSetDetectEthernet = false
         firmwareUpdateCount = 1
-        userConsentedToFirmwareUpdateLD.castAndSetOnMainThread(null)
+
         bleUpdateProgress.castAndSetOnMainThread(0)
-        networkSetupTypeLD.castAndSetOnMainThread(null)
+
+        val setToNulls = listOf(
+            userConsentedToFirmwareUpdateLD,
+            networkSetupTypeLD
+        )
+        for (ld in setToNulls) {
+            ld.castAndPost(null)
+        }
     }
 
     fun updateUserConsentedToFirmwareUpdate(didConsent: Boolean) {
         log.info { "updateUserConsentedToFirmwareUpdate(): $didConsent" }
         userConsentedToFirmwareUpdateLD.castAndPost(didConsent)
+    }
+
+    fun updateShouldDetectEthernet(shouldDetect: Boolean) {
+        log.info { "updateShouldDetectEthernet(): $shouldDetect" }
+        shouldDetectEthernet = shouldDetect
     }
 
     internal fun updateNetworkSetupType(networkSetupType: NetworkSetupType) {
@@ -87,12 +104,6 @@ class DeviceModule(
         bleUpdateProgress.castAndSetOnMainThread(0)
         flowManager.navigate(R.id.action_global_bleOtaFragment)
 
-
-
-        // FIXME: RE-ENABLE!
-
-
-
         firmwareUpdateManager.startUpdateIfNecessary(xceiver, deviceType) {
             bleUpdateProgress.castAndPost(it)
         }
@@ -113,10 +124,31 @@ class DeviceModule(
         }
     }
 
+    suspend fun ensureEthernetDetectionSet() {
+        log.info { "ensureEthernetDetectionSet()" }
+        if (!shouldDetectEthernet || hasSetDetectEthernet) {
+            return
+        }
+
+        val target = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value!!
+        target.sendSetFeature(Feature.ETHERNET_DETECTION, true).throwOnErrorOrAbsent()
+        hasSetDetectEthernet = true
+        target.sendStartupMode(DeviceMode.LISTENING_MODE).throwOnErrorOrAbsent()
+        target.sendReset().throwOnErrorOrAbsent()
+
+        delay(1000)
+        target.disconnect()
+        delay(4000)
+
+        throw FlowException(
+            "Resetting device to enable ethernet detection!",
+            ExceptionType.EXPECTED_FLOW
+        )
+    }
+
     suspend fun ensureShowLetsGetBuildingUi() {
         log.info { "ensureShowLetsGetBuildingUi()" }
         flowManager.navigate(R.id.action_global_letsGetBuildingFragment)
     }
-
 
 }

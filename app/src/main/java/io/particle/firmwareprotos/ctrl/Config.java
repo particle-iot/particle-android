@@ -282,9 +282,9 @@ public final class Config {
   public enum DeviceMode
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>DEVICE_MODE_OTHER = 0;</code>
+     * <code>NORMAL_MODE = 0;</code>
      */
-    DEVICE_MODE_OTHER(0),
+    NORMAL_MODE(0),
     /**
      * <code>LISTENING_MODE = 1;</code>
      */
@@ -293,9 +293,9 @@ public final class Config {
     ;
 
     /**
-     * <code>DEVICE_MODE_OTHER = 0;</code>
+     * <code>NORMAL_MODE = 0;</code>
      */
-    public static final int DEVICE_MODE_OTHER_VALUE = 0;
+    public static final int NORMAL_MODE_VALUE = 0;
     /**
      * <code>LISTENING_MODE = 1;</code>
      */
@@ -320,7 +320,7 @@ public final class Config {
 
     public static DeviceMode forNumber(int value) {
       switch (value) {
-        case 0: return DEVICE_MODE_OTHER;
+        case 0: return NORMAL_MODE;
         case 1: return LISTENING_MODE;
         default: return null;
       }
@@ -474,6 +474,108 @@ public final class Config {
     }
 
     // @@protoc_insertion_point(enum_scope:particle.ctrl.SystemCapabilityFlag)
+  }
+
+  /**
+   * <pre>
+   * System features
+   * </pre>
+   *
+   * Protobuf enum {@code particle.ctrl.Feature}
+   */
+  public enum Feature
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>INVALID_FEATURE = 0;</code>
+     */
+    INVALID_FEATURE(0),
+    /**
+     * <code>ETHERNET_DETECTION = 1;</code>
+     */
+    ETHERNET_DETECTION(1),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>INVALID_FEATURE = 0;</code>
+     */
+    public static final int INVALID_FEATURE_VALUE = 0;
+    /**
+     * <code>ETHERNET_DETECTION = 1;</code>
+     */
+    public static final int ETHERNET_DETECTION_VALUE = 1;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static Feature valueOf(int value) {
+      return forNumber(value);
+    }
+
+    public static Feature forNumber(int value) {
+      switch (value) {
+        case 0: return INVALID_FEATURE;
+        case 1: return ETHERNET_DETECTION;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<Feature>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        Feature> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<Feature>() {
+            public Feature findValueByNumber(int number) {
+              return Feature.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.getDescriptor().getEnumTypes().get(4);
+    }
+
+    private static final Feature[] VALUES = values();
+
+    public static Feature valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private Feature(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:particle.ctrl.Feature)
   }
 
   public interface GetDeviceIdRequestOrBuilder extends
@@ -16094,7 +16196,7 @@ public final class Config {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (mode_ != io.particle.firmwareprotos.ctrl.Config.DeviceMode.DEVICE_MODE_OTHER.getNumber()) {
+      if (mode_ != io.particle.firmwareprotos.ctrl.Config.DeviceMode.NORMAL_MODE.getNumber()) {
         output.writeEnum(1, mode_);
       }
       unknownFields.writeTo(output);
@@ -16105,7 +16207,7 @@ public final class Config {
       if (size != -1) return size;
 
       size = 0;
-      if (mode_ != io.particle.firmwareprotos.ctrl.Config.DeviceMode.DEVICE_MODE_OTHER.getNumber()) {
+      if (mode_ != io.particle.firmwareprotos.ctrl.Config.DeviceMode.NORMAL_MODE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, mode_);
       }
@@ -18134,6 +18236,3510 @@ public final class Config {
 
   }
 
+  public interface SetStartupModeRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.SetStartupModeRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+     */
+    int getModeValue();
+    /**
+     * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+     */
+    io.particle.firmwareprotos.ctrl.Config.DeviceMode getMode();
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.SetStartupModeRequest}
+   */
+  public  static final class SetStartupModeRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.SetStartupModeRequest)
+      SetStartupModeRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SetStartupModeRequest.newBuilder() to construct.
+    private SetStartupModeRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SetStartupModeRequest() {
+      mode_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SetStartupModeRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+
+              mode_ = rawValue;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest.class, io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest.Builder.class);
+    }
+
+    public static final int MODE_FIELD_NUMBER = 1;
+    private int mode_;
+    /**
+     * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+     */
+    public int getModeValue() {
+      return mode_;
+    }
+    /**
+     * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+     */
+    public io.particle.firmwareprotos.ctrl.Config.DeviceMode getMode() {
+      io.particle.firmwareprotos.ctrl.Config.DeviceMode result = io.particle.firmwareprotos.ctrl.Config.DeviceMode.valueOf(mode_);
+      return result == null ? io.particle.firmwareprotos.ctrl.Config.DeviceMode.UNRECOGNIZED : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (mode_ != io.particle.firmwareprotos.ctrl.Config.DeviceMode.NORMAL_MODE.getNumber()) {
+        output.writeEnum(1, mode_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (mode_ != io.particle.firmwareprotos.ctrl.Config.DeviceMode.NORMAL_MODE.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, mode_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest other = (io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest) obj;
+
+      boolean result = true;
+      result = result && mode_ == other.mode_;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + MODE_FIELD_NUMBER;
+      hash = (53 * hash) + mode_;
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.SetStartupModeRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.SetStartupModeRequest)
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest.class, io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        mode_ = 0;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest build() {
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest result = new io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest(this);
+        result.mode_ = mode_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest.getDefaultInstance()) return this;
+        if (other.mode_ != 0) {
+          setModeValue(other.getModeValue());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int mode_ = 0;
+      /**
+       * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+       */
+      public int getModeValue() {
+        return mode_;
+      }
+      /**
+       * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+       */
+      public Builder setModeValue(int value) {
+        mode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.Config.DeviceMode getMode() {
+        io.particle.firmwareprotos.ctrl.Config.DeviceMode result = io.particle.firmwareprotos.ctrl.Config.DeviceMode.valueOf(mode_);
+        return result == null ? io.particle.firmwareprotos.ctrl.Config.DeviceMode.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+       */
+      public Builder setMode(io.particle.firmwareprotos.ctrl.Config.DeviceMode value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        mode_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.particle.ctrl.DeviceMode mode = 1;</code>
+       */
+      public Builder clearMode() {
+        
+        mode_ = 0;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.SetStartupModeRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.SetStartupModeRequest)
+    private static final io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SetStartupModeRequest>
+        PARSER = new com.google.protobuf.AbstractParser<SetStartupModeRequest>() {
+      public SetStartupModeRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SetStartupModeRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SetStartupModeRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SetStartupModeRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SetStartupModeReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.SetStartupModeReply)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.SetStartupModeReply}
+   */
+  public  static final class SetStartupModeReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.SetStartupModeReply)
+      SetStartupModeReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SetStartupModeReply.newBuilder() to construct.
+    private SetStartupModeReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SetStartupModeReply() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SetStartupModeReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply.class, io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply other = (io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.SetStartupModeReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.SetStartupModeReply)
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply.class, io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetStartupModeReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply build() {
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply result = new io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.SetStartupModeReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.SetStartupModeReply)
+    private static final io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SetStartupModeReply>
+        PARSER = new com.google.protobuf.AbstractParser<SetStartupModeReply>() {
+      public SetStartupModeReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SetStartupModeReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SetStartupModeReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SetStartupModeReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SystemResetRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.SystemResetRequest)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.SystemResetRequest}
+   */
+  public  static final class SystemResetRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.SystemResetRequest)
+      SystemResetRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SystemResetRequest.newBuilder() to construct.
+    private SystemResetRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SystemResetRequest() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SystemResetRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.SystemResetRequest.class, io.particle.firmwareprotos.ctrl.Config.SystemResetRequest.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.SystemResetRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.SystemResetRequest other = (io.particle.firmwareprotos.ctrl.Config.SystemResetRequest) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.SystemResetRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.SystemResetRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.SystemResetRequest)
+        io.particle.firmwareprotos.ctrl.Config.SystemResetRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.SystemResetRequest.class, io.particle.firmwareprotos.ctrl.Config.SystemResetRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.SystemResetRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SystemResetRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.SystemResetRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SystemResetRequest build() {
+        io.particle.firmwareprotos.ctrl.Config.SystemResetRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SystemResetRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.SystemResetRequest result = new io.particle.firmwareprotos.ctrl.Config.SystemResetRequest(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.SystemResetRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.SystemResetRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.SystemResetRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.SystemResetRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.SystemResetRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.SystemResetRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.SystemResetRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.SystemResetRequest)
+    private static final io.particle.firmwareprotos.ctrl.Config.SystemResetRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.SystemResetRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SystemResetRequest>
+        PARSER = new com.google.protobuf.AbstractParser<SystemResetRequest>() {
+      public SystemResetRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SystemResetRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SystemResetRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SystemResetRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.SystemResetRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SystemResetReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.SystemResetReply)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.SystemResetReply}
+   */
+  public  static final class SystemResetReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.SystemResetReply)
+      SystemResetReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SystemResetReply.newBuilder() to construct.
+    private SystemResetReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SystemResetReply() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SystemResetReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.SystemResetReply.class, io.particle.firmwareprotos.ctrl.Config.SystemResetReply.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.SystemResetReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.SystemResetReply other = (io.particle.firmwareprotos.ctrl.Config.SystemResetReply) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.SystemResetReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.SystemResetReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.SystemResetReply)
+        io.particle.firmwareprotos.ctrl.Config.SystemResetReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.SystemResetReply.class, io.particle.firmwareprotos.ctrl.Config.SystemResetReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.SystemResetReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SystemResetReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SystemResetReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.SystemResetReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SystemResetReply build() {
+        io.particle.firmwareprotos.ctrl.Config.SystemResetReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SystemResetReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.SystemResetReply result = new io.particle.firmwareprotos.ctrl.Config.SystemResetReply(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.SystemResetReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.SystemResetReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.SystemResetReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.SystemResetReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.SystemResetReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.SystemResetReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.SystemResetReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.SystemResetReply)
+    private static final io.particle.firmwareprotos.ctrl.Config.SystemResetReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.SystemResetReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SystemResetReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SystemResetReply>
+        PARSER = new com.google.protobuf.AbstractParser<SystemResetReply>() {
+      public SystemResetReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SystemResetReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SystemResetReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SystemResetReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.SystemResetReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SetFeatureRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.SetFeatureRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    int getFeatureValue();
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    io.particle.firmwareprotos.ctrl.Config.Feature getFeature();
+
+    /**
+     * <code>bool enabled = 2;</code>
+     */
+    boolean getEnabled();
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.SetFeatureRequest}
+   */
+  public  static final class SetFeatureRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.SetFeatureRequest)
+      SetFeatureRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SetFeatureRequest.newBuilder() to construct.
+    private SetFeatureRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SetFeatureRequest() {
+      feature_ = 0;
+      enabled_ = false;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SetFeatureRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+
+              feature_ = rawValue;
+              break;
+            }
+            case 16: {
+
+              enabled_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest.class, io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest.Builder.class);
+    }
+
+    public static final int FEATURE_FIELD_NUMBER = 1;
+    private int feature_;
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    public int getFeatureValue() {
+      return feature_;
+    }
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    public io.particle.firmwareprotos.ctrl.Config.Feature getFeature() {
+      io.particle.firmwareprotos.ctrl.Config.Feature result = io.particle.firmwareprotos.ctrl.Config.Feature.valueOf(feature_);
+      return result == null ? io.particle.firmwareprotos.ctrl.Config.Feature.UNRECOGNIZED : result;
+    }
+
+    public static final int ENABLED_FIELD_NUMBER = 2;
+    private boolean enabled_;
+    /**
+     * <code>bool enabled = 2;</code>
+     */
+    public boolean getEnabled() {
+      return enabled_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (feature_ != io.particle.firmwareprotos.ctrl.Config.Feature.INVALID_FEATURE.getNumber()) {
+        output.writeEnum(1, feature_);
+      }
+      if (enabled_ != false) {
+        output.writeBool(2, enabled_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (feature_ != io.particle.firmwareprotos.ctrl.Config.Feature.INVALID_FEATURE.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, feature_);
+      }
+      if (enabled_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, enabled_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest other = (io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest) obj;
+
+      boolean result = true;
+      result = result && feature_ == other.feature_;
+      result = result && (getEnabled()
+          == other.getEnabled());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + FEATURE_FIELD_NUMBER;
+      hash = (53 * hash) + feature_;
+      hash = (37 * hash) + ENABLED_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getEnabled());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.SetFeatureRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.SetFeatureRequest)
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest.class, io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        feature_ = 0;
+
+        enabled_ = false;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest build() {
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest result = new io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest(this);
+        result.feature_ = feature_;
+        result.enabled_ = enabled_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest.getDefaultInstance()) return this;
+        if (other.feature_ != 0) {
+          setFeatureValue(other.getFeatureValue());
+        }
+        if (other.getEnabled() != false) {
+          setEnabled(other.getEnabled());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int feature_ = 0;
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public int getFeatureValue() {
+        return feature_;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public Builder setFeatureValue(int value) {
+        feature_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.Config.Feature getFeature() {
+        io.particle.firmwareprotos.ctrl.Config.Feature result = io.particle.firmwareprotos.ctrl.Config.Feature.valueOf(feature_);
+        return result == null ? io.particle.firmwareprotos.ctrl.Config.Feature.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public Builder setFeature(io.particle.firmwareprotos.ctrl.Config.Feature value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        feature_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public Builder clearFeature() {
+        
+        feature_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean enabled_ ;
+      /**
+       * <code>bool enabled = 2;</code>
+       */
+      public boolean getEnabled() {
+        return enabled_;
+      }
+      /**
+       * <code>bool enabled = 2;</code>
+       */
+      public Builder setEnabled(boolean value) {
+        
+        enabled_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool enabled = 2;</code>
+       */
+      public Builder clearEnabled() {
+        
+        enabled_ = false;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.SetFeatureRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.SetFeatureRequest)
+    private static final io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SetFeatureRequest>
+        PARSER = new com.google.protobuf.AbstractParser<SetFeatureRequest>() {
+      public SetFeatureRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SetFeatureRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SetFeatureRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SetFeatureRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.SetFeatureRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SetFeatureReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.SetFeatureReply)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.SetFeatureReply}
+   */
+  public  static final class SetFeatureReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.SetFeatureReply)
+      SetFeatureReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SetFeatureReply.newBuilder() to construct.
+    private SetFeatureReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SetFeatureReply() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SetFeatureReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.SetFeatureReply.class, io.particle.firmwareprotos.ctrl.Config.SetFeatureReply.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.SetFeatureReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.SetFeatureReply other = (io.particle.firmwareprotos.ctrl.Config.SetFeatureReply) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.SetFeatureReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.SetFeatureReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.SetFeatureReply)
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.SetFeatureReply.class, io.particle.firmwareprotos.ctrl.Config.SetFeatureReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.SetFeatureReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_SetFeatureReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetFeatureReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.SetFeatureReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetFeatureReply build() {
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.SetFeatureReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureReply result = new io.particle.firmwareprotos.ctrl.Config.SetFeatureReply(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.SetFeatureReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.SetFeatureReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.SetFeatureReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.SetFeatureReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.SetFeatureReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.SetFeatureReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.SetFeatureReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.SetFeatureReply)
+    private static final io.particle.firmwareprotos.ctrl.Config.SetFeatureReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.SetFeatureReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.SetFeatureReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SetFeatureReply>
+        PARSER = new com.google.protobuf.AbstractParser<SetFeatureReply>() {
+      public SetFeatureReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SetFeatureReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SetFeatureReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SetFeatureReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.SetFeatureReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetFeatureRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.GetFeatureRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    int getFeatureValue();
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    io.particle.firmwareprotos.ctrl.Config.Feature getFeature();
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.GetFeatureRequest}
+   */
+  public  static final class GetFeatureRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.GetFeatureRequest)
+      GetFeatureRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetFeatureRequest.newBuilder() to construct.
+    private GetFeatureRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetFeatureRequest() {
+      feature_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetFeatureRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+
+              feature_ = rawValue;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest.class, io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest.Builder.class);
+    }
+
+    public static final int FEATURE_FIELD_NUMBER = 1;
+    private int feature_;
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    public int getFeatureValue() {
+      return feature_;
+    }
+    /**
+     * <code>.particle.ctrl.Feature feature = 1;</code>
+     */
+    public io.particle.firmwareprotos.ctrl.Config.Feature getFeature() {
+      io.particle.firmwareprotos.ctrl.Config.Feature result = io.particle.firmwareprotos.ctrl.Config.Feature.valueOf(feature_);
+      return result == null ? io.particle.firmwareprotos.ctrl.Config.Feature.UNRECOGNIZED : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (feature_ != io.particle.firmwareprotos.ctrl.Config.Feature.INVALID_FEATURE.getNumber()) {
+        output.writeEnum(1, feature_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (feature_ != io.particle.firmwareprotos.ctrl.Config.Feature.INVALID_FEATURE.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, feature_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest other = (io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest) obj;
+
+      boolean result = true;
+      result = result && feature_ == other.feature_;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + FEATURE_FIELD_NUMBER;
+      hash = (53 * hash) + feature_;
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.GetFeatureRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.GetFeatureRequest)
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest.class, io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        feature_ = 0;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest build() {
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest result = new io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest(this);
+        result.feature_ = feature_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest.getDefaultInstance()) return this;
+        if (other.feature_ != 0) {
+          setFeatureValue(other.getFeatureValue());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int feature_ = 0;
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public int getFeatureValue() {
+        return feature_;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public Builder setFeatureValue(int value) {
+        feature_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.Config.Feature getFeature() {
+        io.particle.firmwareprotos.ctrl.Config.Feature result = io.particle.firmwareprotos.ctrl.Config.Feature.valueOf(feature_);
+        return result == null ? io.particle.firmwareprotos.ctrl.Config.Feature.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public Builder setFeature(io.particle.firmwareprotos.ctrl.Config.Feature value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        feature_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.particle.ctrl.Feature feature = 1;</code>
+       */
+      public Builder clearFeature() {
+        
+        feature_ = 0;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.GetFeatureRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.GetFeatureRequest)
+    private static final io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetFeatureRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetFeatureRequest>() {
+      public GetFeatureRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetFeatureRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetFeatureRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetFeatureRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetFeatureReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.GetFeatureReply)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bool enabled = 1;</code>
+     */
+    boolean getEnabled();
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.GetFeatureReply}
+   */
+  public  static final class GetFeatureReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.GetFeatureReply)
+      GetFeatureReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetFeatureReply.newBuilder() to construct.
+    private GetFeatureReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetFeatureReply() {
+      enabled_ = false;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetFeatureReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+
+              enabled_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.Config.GetFeatureReply.class, io.particle.firmwareprotos.ctrl.Config.GetFeatureReply.Builder.class);
+    }
+
+    public static final int ENABLED_FIELD_NUMBER = 1;
+    private boolean enabled_;
+    /**
+     * <code>bool enabled = 1;</code>
+     */
+    public boolean getEnabled() {
+      return enabled_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (enabled_ != false) {
+        output.writeBool(1, enabled_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (enabled_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, enabled_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Config.GetFeatureReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.Config.GetFeatureReply other = (io.particle.firmwareprotos.ctrl.Config.GetFeatureReply) obj;
+
+      boolean result = true;
+      result = result && (getEnabled()
+          == other.getEnabled());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ENABLED_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getEnabled());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Config.GetFeatureReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.GetFeatureReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.GetFeatureReply)
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.Config.GetFeatureReply.class, io.particle.firmwareprotos.ctrl.Config.GetFeatureReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.Config.GetFeatureReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        enabled_ = false;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.Config.internal_static_particle_ctrl_GetFeatureReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetFeatureReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.Config.GetFeatureReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetFeatureReply build() {
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.Config.GetFeatureReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureReply result = new io.particle.firmwareprotos.ctrl.Config.GetFeatureReply(this);
+        result.enabled_ = enabled_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.Config.GetFeatureReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.Config.GetFeatureReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Config.GetFeatureReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.Config.GetFeatureReply.getDefaultInstance()) return this;
+        if (other.getEnabled() != false) {
+          setEnabled(other.getEnabled());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.Config.GetFeatureReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.Config.GetFeatureReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private boolean enabled_ ;
+      /**
+       * <code>bool enabled = 1;</code>
+       */
+      public boolean getEnabled() {
+        return enabled_;
+      }
+      /**
+       * <code>bool enabled = 1;</code>
+       */
+      public Builder setEnabled(boolean value) {
+        
+        enabled_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool enabled = 1;</code>
+       */
+      public Builder clearEnabled() {
+        
+        enabled_ = false;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.GetFeatureReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.GetFeatureReply)
+    private static final io.particle.firmwareprotos.ctrl.Config.GetFeatureReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Config.GetFeatureReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.Config.GetFeatureReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetFeatureReply>
+        PARSER = new com.google.protobuf.AbstractParser<GetFeatureReply>() {
+      public GetFeatureReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetFeatureReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetFeatureReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetFeatureReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.Config.GetFeatureReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_particle_ctrl_GetDeviceIdRequest_descriptor;
   private static final 
@@ -18324,6 +21930,46 @@ public final class Config {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_particle_ctrl_IsDeviceSetupDoneReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_SetStartupModeRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_SetStartupModeRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_SetStartupModeReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_SetStartupModeReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_SystemResetRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_SystemResetRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_SystemResetReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_SystemResetReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_SetFeatureRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_SetFeatureRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_SetFeatureReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_SetFeatureReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_GetFeatureRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_GetFeatureRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_GetFeatureReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_GetFeatureReply_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -18378,19 +22024,29 @@ public final class Config {
       "DeviceSetupDoneRequest\022\014\n\004done\030\001 \001(\010:\004\210\265" +
       "\030I\"\031\n\027SetDeviceSetupDoneReply\" \n\030IsDevic" +
       "eSetupDoneRequest:\004\210\265\030J\"&\n\026IsDeviceSetup" +
-      "DoneReply\022\014\n\004done\030\001 \001(\010*\317\001\n\017SecurityKeyT" +
-      "ype\022\030\n\024INVALID_SECURITY_KEY\020\000\022\032\n\026TCP_DEV" +
-      "ICE_PRIVATE_KEY\020\001\022\031\n\025TCP_DEVICE_PUBLIC_K" +
-      "EY\020\002\022\031\n\025TCP_SERVER_PUBLIC_KEY\020\003\022\032\n\026UDP_D" +
-      "EVICE_PRIVATE_KEY\020\004\022\031\n\025UDP_DEVICE_PUBLIC" +
-      "_KEY\020\005\022\031\n\025UDP_SERVER_PUBLIC_KEY\020\006*N\n\022Ser" +
-      "verProtocolType\022\024\n\020INVALID_PROTOCOL\020\000\022\020\n" +
-      "\014TCP_PROTOCOL\020\001\022\020\n\014UDP_PROTOCOL\020\002*7\n\nDev" +
-      "iceMode\022\025\n\021DEVICE_MODE_OTHER\020\000\022\022\n\016LISTEN" +
-      "ING_MODE\020\001*J\n\024SystemCapabilityFlag\022\036\n\032NO" +
-      "_SYSTEM_CAPABILITY_FLAGS\020\000\022\022\n\016COMPRESSED" +
-      "_OTA\020\001B!\n\037io.particle.firmwareprotos.ctr" +
-      "lb\006proto3"
+      "DoneReply\022\014\n\004done\030\001 \001(\010\"F\n\025SetStartupMod" +
+      "eRequest\022\'\n\004mode\030\001 \001(\0162\031.particle.ctrl.D" +
+      "eviceMode:\004\210\265\030K\"\025\n\023SetStartupModeReply\"\032" +
+      "\n\022SystemResetRequest:\004\210\265\030(\"\022\n\020SystemRese" +
+      "tReply\"S\n\021SetFeatureRequest\022\'\n\007feature\030\001" +
+      " \001(\0162\026.particle.ctrl.Feature\022\017\n\007enabled\030" +
+      "\002 \001(\010:\004\210\265\030!\"\021\n\017SetFeatureReply\"B\n\021GetFea" +
+      "tureRequest\022\'\n\007feature\030\001 \001(\0162\026.particle." +
+      "ctrl.Feature:\004\210\265\030\"\"\"\n\017GetFeatureReply\022\017\n" +
+      "\007enabled\030\001 \001(\010*\317\001\n\017SecurityKeyType\022\030\n\024IN" +
+      "VALID_SECURITY_KEY\020\000\022\032\n\026TCP_DEVICE_PRIVA" +
+      "TE_KEY\020\001\022\031\n\025TCP_DEVICE_PUBLIC_KEY\020\002\022\031\n\025T" +
+      "CP_SERVER_PUBLIC_KEY\020\003\022\032\n\026UDP_DEVICE_PRI" +
+      "VATE_KEY\020\004\022\031\n\025UDP_DEVICE_PUBLIC_KEY\020\005\022\031\n" +
+      "\025UDP_SERVER_PUBLIC_KEY\020\006*N\n\022ServerProtoc" +
+      "olType\022\024\n\020INVALID_PROTOCOL\020\000\022\020\n\014TCP_PROT" +
+      "OCOL\020\001\022\020\n\014UDP_PROTOCOL\020\002*1\n\nDeviceMode\022\017" +
+      "\n\013NORMAL_MODE\020\000\022\022\n\016LISTENING_MODE\020\001*J\n\024S" +
+      "ystemCapabilityFlag\022\036\n\032NO_SYSTEM_CAPABIL" +
+      "ITY_FLAGS\020\000\022\022\n\016COMPRESSED_OTA\020\001*6\n\007Featu" +
+      "re\022\023\n\017INVALID_FEATURE\020\000\022\026\n\022ETHERNET_DETE" +
+      "CTION\020\001B!\n\037io.particle.firmwareprotos.ct" +
+      "rlb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -18634,6 +22290,54 @@ public final class Config {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_IsDeviceSetupDoneReply_descriptor,
         new java.lang.String[] { "Done", });
+    internal_static_particle_ctrl_SetStartupModeRequest_descriptor =
+      getDescriptor().getMessageTypes().get(38);
+    internal_static_particle_ctrl_SetStartupModeRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_SetStartupModeRequest_descriptor,
+        new java.lang.String[] { "Mode", });
+    internal_static_particle_ctrl_SetStartupModeReply_descriptor =
+      getDescriptor().getMessageTypes().get(39);
+    internal_static_particle_ctrl_SetStartupModeReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_SetStartupModeReply_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_SystemResetRequest_descriptor =
+      getDescriptor().getMessageTypes().get(40);
+    internal_static_particle_ctrl_SystemResetRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_SystemResetRequest_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_SystemResetReply_descriptor =
+      getDescriptor().getMessageTypes().get(41);
+    internal_static_particle_ctrl_SystemResetReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_SystemResetReply_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_SetFeatureRequest_descriptor =
+      getDescriptor().getMessageTypes().get(42);
+    internal_static_particle_ctrl_SetFeatureRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_SetFeatureRequest_descriptor,
+        new java.lang.String[] { "Feature", "Enabled", });
+    internal_static_particle_ctrl_SetFeatureReply_descriptor =
+      getDescriptor().getMessageTypes().get(43);
+    internal_static_particle_ctrl_SetFeatureReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_SetFeatureReply_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_GetFeatureRequest_descriptor =
+      getDescriptor().getMessageTypes().get(44);
+    internal_static_particle_ctrl_GetFeatureRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_GetFeatureRequest_descriptor,
+        new java.lang.String[] { "Feature", });
+    internal_static_particle_ctrl_GetFeatureReply_descriptor =
+      getDescriptor().getMessageTypes().get(45);
+    internal_static_particle_ctrl_GetFeatureReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_GetFeatureReply_descriptor,
+        new java.lang.String[] { "Enabled", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(fi.kapsi.koti.jpa.nanopb.Nanopb.nanopb);

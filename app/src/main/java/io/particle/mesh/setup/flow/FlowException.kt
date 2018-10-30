@@ -10,7 +10,9 @@ enum class ExceptionType {
 
 class FlowException(
     msg: String = "",
-    val exceptionType: ExceptionType = ExceptionType.ERROR_RECOVERABLE
+    val exceptionType: ExceptionType = ExceptionType.ERROR_RECOVERABLE,
+    // FIXME: implement showing dialog...
+    val showErrorAsDialog: Boolean = false
 ) : Exception(msg) {
     // FIXME: give this an "error type" which describes the exact nature of the error
     // (e.g.: couldn't connect BT device

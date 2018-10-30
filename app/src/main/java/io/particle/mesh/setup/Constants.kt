@@ -1,0 +1,14 @@
+package io.particle.mesh.setup
+
+
+const val ARGON_SERIAL_PREFIX1 = "ARGH"
+const val ARGON_SERIAL_PREFIX2 = "ARNH"
+const val ARGON_SERIAL_PREFIX3 = "ARNK"
+
+const val XENON_SERIAL_PREFIX1 = "XENH"
+const val XENON_SERIAL_PREFIX2 = "XENK"
+
+const val BORON_LTE_SERIAL_PREFIX1 = "B40H"
+const val BORON_LTE_SERIAL_PREFIX2 = "B40K"
+const val BORON_3G_SERIAL_PREFIX1 = "B31H"
+const val BORON_3G_SERIAL_PREFIX2 = "B31K"

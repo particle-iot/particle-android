@@ -60,7 +60,7 @@ public class WaitForCloudConnectivityStep extends SetupStep {
 //            log.e("error checking availability: ", e);
 //            // FIXME:
 //            return false;
-//            // At this stage we're technically OK with other types of errors
+//            // At this stage we're technically READY_TO_ACTIVATE with other types of errors
 //            if (set(Kind.NETWORK, Kind.UNEXPECTED).contains(e.getKind())) {
 //                return false;
 //            }

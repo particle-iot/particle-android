@@ -29,7 +29,7 @@ public class ApiFactory {
     private static final int PER_DEVICE_FAST_TIMEOUT = 5;
 
 
-    // FIXME: this feels kind of lame... but maybe it's OK in practice. Need to think more about it.
+    // FIXME: this feels kind of lame... but maybe it's READY_TO_ACTIVATE in practice. Need to think more about it.
     public interface TokenGetterDelegate {
 
         String getTokenValue();

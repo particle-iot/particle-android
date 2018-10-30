@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_joiner_setup_finished.view.*
 
@@ -22,7 +23,7 @@ class JoinerSetupFinishedFragment : BaseMeshSetupFragment() {
     }
 
     private fun endSetup() {
-        requireActivity().finish()
+        findNavController().navigate(R.id.action_global_letsGetBuildingFragment)
     }
 
     private fun startNewFlow() {

@@ -119,9 +119,6 @@ private class MeshDeviceTypesAdapter(
             }
             MeshDeviceType.BORON -> {
                 holder.capability2.setImageResource(R.drawable.p_mesh_ic_capability_cellular)
-                holder.rowRoot.isEnabled = false
-                holder.rowLine1.isEnabled = false
-                holder.rowLine2.isEnabled = false
             }
             MeshDeviceType.XENON -> { /* no-op */ }
         }

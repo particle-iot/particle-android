@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'io.fabric.tools:gradle:1.26.1'
     }
 }
 
@@ -33,8 +33,8 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 104
-        versionName "2.3.2"
+        versionCode 116
+        versionName "2.3.3"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -100,9 +100,9 @@ dependencies {
 
     // for barcode scanning in Mesh setup
     implementation 'com.google.firebase:firebase-core:16.0.4'
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
-    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:16.2.0'
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.2'
+    implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
+    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:17.0.2'
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.3'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
@@ -110,12 +110,12 @@ dependencies {
     //noinspection GradleDynamicVersion -- (see above)
     releaseImplementation 'com.segment.analytics.android.integrations:firebase:+'
     //noinspection GradleDynamicVersion -- (see above)
-    releaseImplementation 'com.segment.analytics.android.integrations:intercom:+'
+//    releaseImplementation 'com.segment.analytics.android.integrations:intercom:+'
 
     //noinspection GradleDynamicVersion -- (see above)
-    releaseImplementation 'io.intercom.android:intercom-sdk-base:5.+'
+//    releaseImplementation 'io.intercom.android:intercom-sdk-base:5.+'
     //noinspection GradleDynamicVersion -- (see above)
-    releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
+//    releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.tolstykh.textviewrichdrawable:textview-rich-drawable:0.3.2'

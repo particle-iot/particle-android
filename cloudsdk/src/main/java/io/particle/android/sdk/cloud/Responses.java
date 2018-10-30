@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import io.particle.android.sdk.cloud.Responses.Models.CoreInfo;
+import io.particle.android.sdk.cloud.models.ParticleNetworkData;
 
 /**
  * All API responses, collected together in one outer class for simplicity's sake.
@@ -18,7 +20,7 @@ public class Responses {
      * used internally when dealing with the REST API, never returned
      * outside of the cloudapi package.
      */
-    static class Models {
+    public static class Models {
 
 
         public static class CoreInfo {
@@ -106,7 +108,7 @@ public class Responses {
          * Represents a single Particle device as returned from the
          * call to "GET /v1/devices/{device id}"
          */
-        class CompleteDevice {
+        public class CompleteDevice {
             @SerializedName("id")
             public final String deviceId;
 
@@ -339,5 +341,116 @@ public class Responses {
             super(commandName, variableName, coreInfo, result);
         }
     }
+
+
+    public abstract static class PagedDataResponse {
+
+        public static class PagedMetadata {
+            public final int totalRecords;
+            public final int totalPages;
+
+            public PagedMetadata(int totalRecords, int totalPages) {
+                this.totalRecords = totalRecords;
+                this.totalPages = totalPages;
+            }
+        }
+
+
+        @NonNull
+        public final PagedMetadata meta;
+
+        protected PagedDataResponse(@NonNull PagedMetadata meta) {
+            this.meta = meta;
+        }
+
+    }
+
+
+    public static class MeshNetworksResponse extends PagedDataResponse {
+
+        @NonNull
+        public final List<ParticleNetworkData> networks;
+
+        protected MeshNetworksResponse(
+                @NonNull PagedMetadata meta,
+                @NonNull List<ParticleNetworkData> networks) {
+            super(meta);
+            this.networks = networks;
+        }
+    }
+
+
+    public static class MeshNetworkMembershipsResponse extends PagedDataResponse {
+
+        public static class MeshMembership {
+
+            @NonNull
+            public final String id;
+            public final boolean gateway;
+
+            public MeshMembership(String id, boolean gateway) {
+                this.id = id;
+                this.gateway = gateway;
+            }
+        }
+
+
+        public static class MeshNetworkDeviceMemberships {
+            @NonNull
+            public final String id;
+            @NonNull
+            @SerializedName("network")
+            public final MeshMembership membership;
+
+            public MeshNetworkDeviceMemberships(String id, MeshMembership membership) {
+                this.id = id;
+                this.membership = membership;
+            }
+        }
+
+        @NonNull
+        @SerializedName("devices")
+        public final List<MeshNetworkDeviceMemberships> memberships;
+
+        public MeshNetworkMembershipsResponse(
+                @NonNull PagedMetadata meta,
+                @NonNull List<MeshNetworkDeviceMemberships> memberships
+        ) {
+            super(meta);
+            this.memberships = memberships;
+        }
+    }
+
+
+    public static class MeshNetworkRegistrationResponse {
+
+        public static class RegisteredNetwork {
+            @NonNull
+            public final String id;
+            @NonNull
+            public final String name;
+            @NonNull
+            public final ParticleNetworkState state;
+            @NonNull
+            public final ParticleNetworkType type;
+
+            public RegisteredNetwork(String id, String name, ParticleNetworkState state,
+                                     ParticleNetworkType type) {
+                this.id = id;
+                this.name = name;
+                this.state = state;
+                this.type = type;
+            }
+        }
+
+        @NonNull
+        public final RegisteredNetwork network;
+
+        public MeshNetworkRegistrationResponse(@NonNull RegisteredNetwork network) {
+            this.network = network;
+        }
+
+    }
+
 
 }

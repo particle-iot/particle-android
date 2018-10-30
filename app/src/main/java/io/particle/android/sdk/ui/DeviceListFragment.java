@@ -541,9 +541,12 @@ public class DeviceListFragment extends Fragment
 
         void filter(@Nullable String query, List<ParticleDevice.ParticleDeviceType> typeArrayList) {
             for (ParticleDevice device : devices) {
-                if ((containsFilter(device.getName(), query) || containsFilter(device.getDeviceType().name(), query)
-                        || containsFilter(device.getCurrentBuild(), query) || containsFilter(device.getIccid(), query)
-                        || containsFilter(device.getID(), query) || containsFilter(device.getImei(), query))
+                if ((containsFilter(device.getName(), query)
+                        || containsFilter(device.getDeviceType().name(), query)
+                        || containsFilter(device.getCurrentBuild(), query)
+                        || containsFilter(device.getIccid(), query)
+                        || containsFilter(device.getId(), query)
+                        || containsFilter(device.getImei(), query))
                         && typeArrayList.contains(device.getDeviceType())) {
                     filteredData.add(device);
                     notifyItemInserted(devices.indexOf(device));
@@ -645,7 +648,7 @@ public class DeviceListFragment extends Fragment
 
             partialContentBar.setVisibility(View.VISIBLE);
             ((DevicesLoader) loader).setUseLongTimeoutsOnNextLoad(true);
-            // FIXME: is it OK to call forceLoad() in loader callbacks?  Test and be certain.
+            // FIXME: is it READY_TO_ACTIVATE to call forceLoad() in loader callbacks?  Test and be certain.
             EZ.runOnMainThread(() -> {
                 if (isResumed()) {
                     loader.forceLoad();

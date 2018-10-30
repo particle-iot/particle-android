@@ -1,0 +1,62 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.mesh.setup.ui.BoronConnectingStatusFragment">
+
+    <TextView
+        android:id="@+id/setup_header_text"
+        style="@style/p_setup_header_text"
+        android:text="@string/p_boronconnectingstatus_header"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <ProgressBar
+        android:id="@+id/progressBar4"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/status_stage_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
+
+    <TextView
+        android:id="@+id/status_stage_1"
+        style="@style/p_setup_step_text_inactive"
+        android:text="@string/p_boronconnectingstatus_step_1"
+        app:layout_constraintBottom_toTopOf="@+id/status_stage_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar4" />
+
+    <TextView
+        android:id="@+id/status_stage_2"
+        style="@style/p_setup_step_text_inactive"
+        android:text="@string/p_boronconnectingstatus_step_2"
+        app:layout_constraintBottom_toTopOf="@+id/status_stage_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_stage_1" />
+
+    <TextView
+        android:id="@+id/status_stage_3"
+        style="@style/p_setup_step_text_inactive"
+        android:text="@string/p_boronconnectingstatus_step_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_stage_2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

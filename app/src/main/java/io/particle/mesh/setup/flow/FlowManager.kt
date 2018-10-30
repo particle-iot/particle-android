@@ -7,17 +7,15 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.asReference
 import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
+import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.WifiNetworksScannerLD
@@ -43,6 +41,7 @@ class FlowManager(
     btConnectionManager: BluetoothConnectionManager,
     transceiverFactory: ProtocolTransceiverFactory,
     private val progressHackLD: MutableLiveData<ProgressHack?>,
+    private val terminatorLD: MutableLiveData<MeshFlowTerminator?>,
     private val everythingNeedsAContext: Context
 ) : Clearable, ProgressHack {
 
@@ -74,7 +73,14 @@ class FlowManager(
 
         deviceModule = DeviceModule(this, FirmwareUpdateManager(cloud, OkHttpClient()))
 
-        flow = Flow(this, bleConnectionModule, meshSetupModule, cloudConnectionModule, deviceModule)
+        flow = Flow(
+            this,
+            bleConnectionModule,
+            meshSetupModule,
+            cloudConnectionModule,
+            deviceModule,
+            cloud
+        )
     }
 
     fun startNewFlow() {
@@ -86,6 +92,12 @@ class FlowManager(
                     flow.runFlow()
                     return@launch
                 } catch (ex: Exception) {
+                    if (ex is FlowException && ex.exceptionType == ERROR_FATAL) {
+                        log.info(ex) { "Hit fatal error, exiting setup: " }
+                        endSetup()
+                        return@launch
+                    }
+
                     delay(1000)
                     QATool.report(ex)
                 }
@@ -116,10 +128,17 @@ class FlowManager(
                     flow.runMeshFlowForGatewayDevice()
                     return@launch
                 } catch (ex: Exception) {
+                    if (ex is FlowException && ex.exceptionType == ERROR_FATAL) {
+                        log.info(ex) { "Hit fatal error, exiting setup: " }
+                        endSetup()
+                        return@launch
+                    }
+
                     delay(1000)
                     QATool.report(ex)
                 }
             }
+
             if (error != null) {
                 withContext(UI) {
                     newDialogRequest(
@@ -189,7 +208,12 @@ class FlowManager(
 
     override fun clearState() {
         log.info { "clearState()" }
-        for (clearable in listOf(bleConnectionModule, meshSetupModule, cloudConnectionModule)) {
+        for (clearable in listOf(
+            bleConnectionModule,
+            meshSetupModule,
+            cloudConnectionModule,
+            deviceModule
+        )) {
             clearable.clearState()
         }
     }
@@ -218,6 +242,10 @@ class FlowManager(
                 .build()
                 .toBundle()
         )
+    }
+
+    fun endSetup() {
+        terminatorLD.value?.terminateSetup()
     }
 
     fun newDialogRequest(spec: DialogSpec) {
