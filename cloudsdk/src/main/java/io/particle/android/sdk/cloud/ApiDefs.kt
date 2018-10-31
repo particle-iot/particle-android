@@ -135,6 +135,7 @@ class ApiDefs {
         @POST("/v1/networks")
         fun registerMeshNetwork(
             @Field("deviceID") gatewayDeviceId: String,
+            @Field("type") networkType: ParticleNetworkType,
             @Field("name") networkName: String
         ): MeshNetworkRegistrationResponse
 
@@ -142,6 +143,7 @@ class ApiDefs {
         @POST("/v1/networks")
         fun registerMeshNetwork(
             @Field("deviceID") gatewayDeviceId: String,
+            @Field("type") networkType: ParticleNetworkType,
             @Field("name") networkName: String,
             @Field("iccid") iccId: String
         ): MeshNetworkRegistrationResponse

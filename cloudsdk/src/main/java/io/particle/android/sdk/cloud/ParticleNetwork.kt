@@ -10,7 +10,15 @@ enum class ParticleNetworkState {
     @SerializedName("pending")
     PENDING,
     @SerializedName("confirmed")
-    CONFIRMED
+    CONFIRMED;
+
+    // thanks, GSON.
+    override fun toString(): String {
+        return when (this) {
+            ParticleNetworkState.PENDING -> "pending"
+            ParticleNetworkState.CONFIRMED -> "confirmed"
+        }
+    }
 }
 
 
@@ -25,7 +33,18 @@ enum class ParticleNetworkType {
     HIGH_AVAILABILITY,
 
     @SerializedName("large_site")
-    LARGE_SITE
+    LARGE_SITE;
+
+    // thanks, GSON.
+    override fun toString(): String {
+        return when (this) {
+            ParticleNetworkType.MICRO_WIFI -> "micro_wifi"
+            ParticleNetworkType.MICRO_CELLULAR -> "micro_cellular"
+            ParticleNetworkType.HIGH_AVAILABILITY -> "high_availability"
+            ParticleNetworkType.LARGE_SITE -> "large_site"
+        }
+    }
+
 }
 
 

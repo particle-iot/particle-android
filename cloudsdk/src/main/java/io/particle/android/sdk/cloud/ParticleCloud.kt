@@ -598,6 +598,7 @@ class ParticleCloud internal constructor(
     @JvmOverloads
     fun registerMeshNetwork(
         gatewayDeviceId: String,
+        networkType: ParticleNetworkType,
         networkName: String,
         iccId: String? = null
     ): RegisteredNetwork {
@@ -616,9 +617,9 @@ class ParticleCloud internal constructor(
 
         try {
             val response = if (iccId == null) {
-                mainApi.registerMeshNetwork(gatewayDeviceId, networkName)
+                mainApi.registerMeshNetwork(gatewayDeviceId, networkType, networkName)
             } else {
-                mainApi.registerMeshNetwork(gatewayDeviceId, networkName, iccId)
+                mainApi.registerMeshNetwork(gatewayDeviceId, networkType, networkName, iccId)
             }
 
             return response.network

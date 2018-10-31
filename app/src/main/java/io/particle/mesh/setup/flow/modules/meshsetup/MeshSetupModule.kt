@@ -3,6 +3,7 @@ package io.particle.mesh.setup.flow.modules.meshsetup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticleNetworkType
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
@@ -354,8 +355,15 @@ class MeshSetupModule(
             return
         }
 
+        val networkType = when (flowManager.targetDeviceType) {
+            MeshDeviceType.ARGON -> ParticleNetworkType.MICRO_WIFI
+            MeshDeviceType.BORON -> ParticleNetworkType.MICRO_CELLULAR
+            MeshDeviceType.XENON -> ParticleNetworkType.MICRO_WIFI
+        }
+
         val networkResponse = cloud.registerMeshNetwork(
             flowManager.bleConnectionModule.targetDeviceId!!,
+            networkType,
             newNetworkNameLD.value!!
         )
 
