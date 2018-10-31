@@ -1,6 +1,8 @@
 package io.particle.mesh.setup.ui
 
 
+import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +39,10 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
             setContentFromDeviceModel()
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // stop pausing the user's music when showing the video!
+            videoView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE)
+        }
         setContentFromDeviceModel()
 
         setUpVideoView(videoView)
