@@ -113,7 +113,7 @@ class PricingImpactFragment : BaseMeshSetupFragment() {
                 p_pricingimpact_feature4.setText(R.string.p_pricingimpact_FeaturesStandardSupport)
             }
 
-            else -> {  // add-device-to-user + wifi
+            null -> {  // add-device-to-user + wifi
                 p_pricingimpact_header.setText(R.string.p_pricingimpact_FreeGatewayDeviceTitle)
                 p_pricingimpact_subscription_type_header.setText(R.string.p_pricingimpact_DeviceCloudPlanTitle)
                 p_pricingimpact_subscription_type_subheader.setText(R.string.p_pricingimpact_WifiDeviceText)

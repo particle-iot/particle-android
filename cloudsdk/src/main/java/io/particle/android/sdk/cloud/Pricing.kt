@@ -55,7 +55,7 @@ data class ParticlePricingInfo(
     val ccLast4: String,
 
     @SerializedName("plan_slug")
-    val planSlug: String,
+    val planSlug: String?,
 
     val plan: ParticlePricingPlanInfo,
 

@@ -128,6 +128,15 @@ class Flow(
     private suspend fun doArgonFlow() {
         deviceModule.ensureNetworkSetupTypeCaptured()
 
+        try {
+            flowManager.showGlobalProgressSpinner(true)
+            cloudConnModule.ensureCardOnFile()
+            cloudConnModule.ensurePricingImpactRetrieved()
+        } finally {
+            flowManager.showGlobalProgressSpinner(false)
+        }
+
+        cloudConnModule.ensureShowPricingImpactUI()
         cloudConnModule.ensureShowConnectToDeviceCloudConfirmation()
         cloudConnModule.argonSteps.ensureTargetWifiNetworkCaptured()
         cloudConnModule.argonSteps.ensureTargetWifiNetworkPasswordCaptured()
@@ -188,6 +197,18 @@ class Flow(
 
     private suspend fun doEthernetSubflow() {
         log.debug { "doEthernetSubflow()" }
+        deviceModule.ensureNetworkSetupTypeCaptured()
+
+        try {
+            flowManager.showGlobalProgressSpinner(true)
+            cloudConnModule.ensureCardOnFile()
+            cloudConnModule.ensurePricingImpactRetrieved()
+        } finally {
+            flowManager.showGlobalProgressSpinner(false)
+        }
+
+        cloudConnModule.ensureShowPricingImpactUI()
+
         cloudConnModule.ensureEthernetConnectingToDeviceCloudUiShown()
         ensureTargetDeviceSetSetupDone(true)
         bleConnModule.ensureListeningStoppedForBothDevices()
@@ -195,8 +216,14 @@ class Flow(
         cloudConnModule.ensureEthernetHasIP()
         cloudConnModule.ensureConnectedToCloud()
         cloudConnModule.ensureTargetDeviceClaimedByUser()
+        cloudConnModule.ensureConnectedToCloudSuccessUi()
         cloudConnModule.ensureTargetDeviceIsNamed()
-        ensureShowGatewaySetupFinishedUi()
+
+        val setupType = deviceModule.networkSetupTypeLD.value!!
+        when (setupType) {
+            NetworkSetupType.AS_GATEWAY -> doCreateNetworkFlow()
+            NetworkSetupType.STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
+        }
     }
 
     private suspend fun doJoinerSubflow() {
