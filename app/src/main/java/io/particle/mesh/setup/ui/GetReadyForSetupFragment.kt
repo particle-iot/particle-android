@@ -127,7 +127,8 @@ internal enum class HelpTextConfig(
 
     BORON_LTE(
         R.string.p_getreadyforsetup_header_text,
-        R.raw.power_on_boron
+//        R.raw.power_on_boron
+        R.raw.power_on_boron_battery
     ),
 
     BORON_3G(
