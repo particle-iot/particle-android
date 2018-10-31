@@ -68,20 +68,6 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
 
         setup_header_text.setTextMaybeWithProductTypeFormat(productName, config.headerText)
         videoView.setVideoURI(requireActivity().buildRawResourceUri(config.videoUrlRes))
-//        val textViews = mapOf(
-//                p_mesh_step1 to config.step1,
-//                p_mesh_step2 to config.step2,
-//                p_mesh_step3 to config.step3,
-//                p_mesh_step4 to config.step4
-//        )
-//        for ((view, res) in textViews.entries) {
-//            if (res == null) {
-//                view.visibility = View.INVISIBLE
-//            } else {
-//                view.visibility = View.VISIBLE
-//                view.setTextMaybeWithProductTypeFormat(productName, res)
-//            }
-//        }
     }
 
     private fun setUpVideoView(vidView: VideoView) {
