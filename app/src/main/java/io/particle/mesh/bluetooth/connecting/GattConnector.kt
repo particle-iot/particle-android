@@ -51,7 +51,7 @@ class GattConnector(private val ctx: Context) {
             callbacks: BLELiveDataCallbacks
     ): BluetoothGatt {
         return suspendCoroutine { continuation: Continuation<BluetoothGatt> ->
-            doCreateGattConnection(device, ctx, callbacks, { continuation.resume(it) })
+            doCreateGattConnection(device, ctx, callbacks) { continuation.resume(it) }
         }
     }
 

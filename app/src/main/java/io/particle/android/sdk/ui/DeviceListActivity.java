@@ -28,6 +28,7 @@ import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType;
 import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.SoftAPConfigRemover;
 import io.particle.android.sdk.utils.WifiFacade;
@@ -66,6 +67,9 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
     @BindView(R.id.redBearFilter) protected CheckBox redBearFilter;
     @BindView(R.id.bluzFilter) protected CheckBox bluzFilter;
     @BindView(R.id.oakFilter) protected CheckBox oakFilter;
+    @BindView(R.id.xenonFilter) protected CheckBox xenonFilter;
+    @BindView(R.id.argonFilter) protected CheckBox argonFilter;
+    @BindView(R.id.boronFilter) protected CheckBox boronFilter;
     @BindView(R.id.appbar) protected AppBarLayout appBarLayout;
     private SearchView searchView;
 
@@ -78,7 +82,8 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
     };
 
     @OnCheckedChanged({R.id.photonFilter, R.id.electronFilter, R.id.coreFilter,
-            R.id.raspberryFilter, R.id.p1Filter, R.id.redBearFilter, R.id.bluzFilter, R.id.oakFilter})
+            R.id.raspberryFilter, R.id.p1Filter, R.id.redBearFilter, R.id.bluzFilter,
+            R.id.oakFilter, R.id.xenonFilter, R.id.argonFilter, R.id.boronFilter })
     protected void onDeviceType() {
         ArrayList<ParticleDevice.ParticleDeviceType> typeArrayList = new ArrayList<>();
         typeArrayList.add(photonFilter.isChecked() ? ParticleDevice.ParticleDeviceType.PHOTON : null);
@@ -89,6 +94,10 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         typeArrayList.add(redBearFilter.isChecked() ? ParticleDevice.ParticleDeviceType.RED_BEAR_DUO : null);
         typeArrayList.add(oakFilter.isChecked() ? ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK : null);
         typeArrayList.add(bluzFilter.isChecked() ? ParticleDevice.ParticleDeviceType.BLUZ : null);
+        typeArrayList.add(xenonFilter.isChecked() ? ParticleDeviceType.XENON : null);
+        typeArrayList.add(argonFilter.isChecked() ? ParticleDeviceType.ARGON : null);
+        typeArrayList.add(boronFilter.isChecked() ? ParticleDeviceType.BORON : null);
+
         deviceList.filter(typeArrayList);
     }
 

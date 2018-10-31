@@ -135,6 +135,50 @@
                         app:layout_constraintStart_toEndOf="@+id/bluzFilter"
                         app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
 
+                    <CheckBox
+                        android:id="@+id/xenonFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        android:checked="true"
+                        android:paddingStart="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:text="@string/product_name_xenon"
+                        app:layout_constraintStart_toEndOf="@+id/coreFilter"
+                        app:layout_constraintTop_toBottomOf="@+id/oakFilter" />
+
+                    <CheckBox
+                        android:id="@+id/argonFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:checked="true"
+                        android:text="@string/product_name_argon"
+                        app:layout_constraintStart_toEndOf="@+id/xenonFilter"
+                        app:layout_constraintTop_toBottomOf="@+id/p1Filter"/>
+
+                    <CheckBox
+                        android:id="@+id/boronFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:checked="true"
+                        android:paddingStart="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingRight="10dp"
+                        android:text="@string/product_name_boron"
+                        app:layout_constraintStart_toEndOf="@+id/oakFilter"
+                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel" />
+
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </HorizontalScrollView>
 
