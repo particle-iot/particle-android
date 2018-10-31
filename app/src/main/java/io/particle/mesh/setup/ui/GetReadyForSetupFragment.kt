@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.VideoView
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
@@ -39,6 +40,10 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
             setContentFromDeviceModel()
         }
 
+        p_getreadyforsetup_antenna_confirmation_speedbump.setOnCheckedChangeListener { _, isChecked ->
+            action_next.isEnabled = isChecked
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // stop pausing the user's music when showing the video!
             videoView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE)
@@ -49,16 +54,30 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
     }
 
     private fun setContentFromDeviceModel() {
-        if (p_getreadyforsetup_use_ethernet_switch.isChecked) {
-            onConfigChanged(HelpTextConfig.FEATHERWING)
-            return
+        val config = if (p_getreadyforsetup_use_ethernet_switch.isChecked) {
+            HelpTextConfig.FEATHERWING
+        } else {
+            when (flowManagerVM.flowManager!!.targetDeviceType) {
+                MeshDeviceType.ARGON -> HelpTextConfig.ARGON
+                MeshDeviceType.XENON -> HelpTextConfig.XENON
+                MeshDeviceType.BORON -> HelpTextConfig.BORON_3G
+            }
         }
 
-        val config = when (flowManagerVM.flowManager!!.targetDeviceType) {
-            MeshDeviceType.ARGON -> HelpTextConfig.ARGON
-            MeshDeviceType.XENON -> HelpTextConfig.XENON
-            MeshDeviceType.BORON -> HelpTextConfig.BORON_3G
+        p_getreadyforsetup_antenna_confirmation_speedbump.isVisible = when (config) {
+            HelpTextConfig.FEATHERWING,
+            HelpTextConfig.XENON -> {
+                action_next.isEnabled = true
+                false
+            }
+            HelpTextConfig.ARGON,
+            HelpTextConfig.BORON_LTE,
+            HelpTextConfig.BORON_3G -> {
+                action_next.isEnabled = p_getreadyforsetup_antenna_confirmation_speedbump.isChecked
+                true
+            }
         }
+
         onConfigChanged(config)
     }
 

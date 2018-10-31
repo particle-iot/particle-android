@@ -235,6 +235,7 @@ Enjoy!]]></string>
     <string name="p_letsgetbuilding_tip_content">Did you already close your web browser? You can always head straight to:</string>
     <string name="p_letsgetbuilding_header"><b>Let\'s get building!</b></string>
     <string name="p_letsgetbuilding_subheader">To start building with your device, <b>look back at your web browser where you got started with setup.</b></string>
+    <string name="p_getreadyforsetup_antenna_confirmation_speedbump">I have attached the antenna and see that the device is blinking blue</string>
 
 
 </resources>
