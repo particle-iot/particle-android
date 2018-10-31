@@ -178,14 +178,24 @@ public class InfoFragment extends Fragment {
                 @Override
                 public void onSuccess(@NonNull Float value) {
                     if (!isDetached()) {
-                        dataUsage.setText(getString(R.string.value_mbs, value));
+                        // apparently checking "isDetached()" doesn't work if you're on a Samsung 😭
+                        try {
+                            dataUsage.setText(getString(R.string.value_mbs, value));
+                        } catch (Exception ex) {
+                            // pass: we just don't want to crash.
+                        }
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull ParticleCloudException exception) {
                     if (!isDetached()) {
-                        dataUsage.setText(R.string.default_mbs);
+                        // apparently checking "isDetached()" doesn't work if you're on a Samsung 😭
+                        try {
+                            dataUsage.setText(R.string.default_mbs);
+                        } catch (Exception ex) {
+                            // pass: we just don't want to crash.
+                        }
                     }
                 }
             });
