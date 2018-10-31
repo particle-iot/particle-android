@@ -4,11 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.models.ParticleSimStatus
+import io.particle.firmwareprotos.ctrl.Common.ResultCode
+import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.flow.Clearable
+import io.particle.mesh.setup.flow.ExceptionType
+import io.particle.mesh.setup.flow.FlowException
+import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
+import kotlinx.coroutines.experimental.delay
 import mu.KotlinLogging
 
 
@@ -38,8 +44,28 @@ class BoronSteps(
         }
 
         val targetXceiver = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value!!
-        val iccidReply = targetXceiver.sendGetIccId().throwOnErrorOrAbsent()
-        targetDeviceIccid.castAndPost(iccidReply.iccid)
+
+        val iccidReply = targetXceiver.sendGetIccId()
+        when (iccidReply) {
+            is Result.Present -> {
+                targetDeviceIccid.castAndPost(iccidReply.value.iccid)
+            }
+
+            is Result.Error -> {
+                if (iccidReply.error == ResultCode.INVALID_STATE) {
+                    targetXceiver.sendReset()
+                    delay(2000)
+                    throw FlowException("INVALID_STATE received while getting ICCID; " +
+                            "sending reset command and restarting flow"
+                    )
+                }
+                throw FlowException("Error ${iccidReply.error} when retrieving ICCID")
+            }
+
+            is Result.Absent -> {
+                throw FlowException("Unknown error when retrieving ICCID")
+            }
+        }
     }
 
     suspend fun ensureSimActivationStatusUpdated() {
