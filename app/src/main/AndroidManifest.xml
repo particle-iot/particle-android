@@ -55,7 +55,18 @@
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
             android:label="@string/title_device_list"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars" />
+            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="meshsetup"
+                    android:scheme="particle" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
@@ -129,6 +140,7 @@
             android:label="Mesh Setup"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/p_MeshTheme" />
 
     </application>

@@ -2,6 +2,7 @@ package io.particle.android.sdk.ui;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -11,6 +12,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +36,8 @@ import io.particle.android.sdk.tinker.TinkerFragment;
 import io.particle.android.sdk.utils.SoftAPConfigRemover;
 import io.particle.android.sdk.utils.WifiFacade;
 import io.particle.android.sdk.utils.ui.Ui;
+import io.particle.mesh.setup.ui.MeshSetupActivity;
+import io.particle.sdk.app.MeshSetupDirections;
 import io.particle.sdk.app.R;
 
 /**
@@ -144,7 +149,29 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
             appBarLayout.setExpanded(false);
             lockAppBarClosed();
         }
+
+        onProcessIntent(getIntent());
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        onProcessIntent(intent);
+    }
+
+    private void onProcessIntent(Intent intent) {
+        Uri intentUri = intent.getData();
+        // we have to do all this nonsense because Branch sends us garbage URIs
+        // which have *two schemes* in them.
+        if (intentUri != null
+                && intentUri.getEncodedPath() != null
+                && (intentUri.getEncodedPath().contains("meshsetup")
+                || (intentUri.getHost() != null && intentUri.getHost().contains("meshsetup"))
+        )) {
+            startActivity(new Intent(this, MeshSetupActivity.class));
+        }
+    }
+
 
     @Override
     protected void onStart() {
