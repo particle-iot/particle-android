@@ -1,16 +1,15 @@
 package io.particle.mesh.bluetooth.connecting
 
-import androidx.lifecycle.LiveData
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
 import androidx.annotation.MainThread
-import io.particle.mesh.bluetooth.BTCharacteristicWriter
+import androidx.lifecycle.LiveData
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
+import io.particle.mesh.bluetooth.BTCharacteristicWriter
 import io.particle.mesh.bluetooth.btAdapter
-import io.particle.mesh.bluetooth.connecting.ConnectionPriority.BALANCED
 import io.particle.mesh.bluetooth.connecting.ConnectionState.DISCONNECTED
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.truthy

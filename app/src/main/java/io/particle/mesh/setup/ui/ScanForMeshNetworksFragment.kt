@@ -23,12 +23,14 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
     private lateinit var adapter: ScannedMeshNetworksAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val fm = flowManagerVM.flowManager!!
         fm.meshSetupModule.targetDeviceVisibleMeshNetworksLD.observe(
-                this,
-                Observer { onNetworksUpdated(it) }
+            this,
+            Observer { onNetworksUpdated(it) }
         )
         adapter = ScannedMeshNetworksAdapter { onMeshNetworkSelected(it.meshNetworkInfo) }
         val root = inflater.inflate(R.layout.fragment_scan_for_mesh_networks, container, false)

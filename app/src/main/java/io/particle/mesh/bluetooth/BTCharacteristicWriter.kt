@@ -72,7 +72,7 @@ class BTCharacteristicWriter(
         scheduleDeque()
     }
 
-    fun onCharacteristicWritten() {
+    private fun onCharacteristicWritten() {
         workerThreadHandler.post { this.deque() }
     }
 
