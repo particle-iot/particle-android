@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/listPreferredItemHeightLarge"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@id/row_line_1"
+        style="@style/row_two_line_1st_line"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical|start"
+        android:layout_gravity="center_vertical|start"
+        android:text="@string/product_name_xenon"
+        android:textSize="@dimen/p_setup_list_row_primary_text_size" />
+
+</FrameLayout>

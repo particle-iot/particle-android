@@ -10,13 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.phrase.Phrase
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
-import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
 import io.particle.mesh.setup.ui.utils.inflateRow
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_for_mesh_networks.view.*
-import kotlinx.android.synthetic.main.row_mesh_networks.view.*
-import java.lang.NullPointerException
+import kotlinx.android.synthetic.main.p_scanformeshnetwork_row_select_mesh_network.view.*
 
 
 class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
@@ -41,17 +39,18 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
         }
 
         if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
-            root.setup_header_text.text = Phrase.from(root, R.string.p_scanfornetworks_gateway_flow_title)
-                    .put("product_type", fm.getTypeName())
-                    .format()
+            root.setup_header_text.text =
+                    Phrase.from(root, R.string.p_scanfornetworks_gateway_flow_title)
+                        .put("product_type", fm.getTypeName())
+                        .format()
             root.progressBar2.visibility = View.INVISIBLE
             root.recyclerView.visibility = View.INVISIBLE
             root.action_create_new_network.visibility = View.VISIBLE
 
         } else {
             root.setup_header_text.text = Phrase.from(root, R.string.p_meshnetworkscanning_header)
-                    .put("product_type", fm.getTypeName())
-                    .format()
+                .put("product_type", fm.getTypeName())
+                .format()
             root.action_create_new_network.visibility = View.GONE
         }
         return root
@@ -59,10 +58,10 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
     private fun onNetworksUpdated(networks: List<NetworkInfo>?) {
         adapter.submitList(
-                networks?.asSequence()
-                        ?.map { ScannedMeshNetwork(it.name, it) }
-                        ?.sortedBy { it.name }
-                        ?.toList()
+            networks?.asSequence()
+                ?.map { ScannedMeshNetwork(it.name, it) }
+                ?.sortedBy { it.name }
+                ?.toList()
         )
     }
 
@@ -73,33 +72,34 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
 
 
 private data class ScannedMeshNetwork(
-        val name: String,
-        val meshNetworkInfo: NetworkInfo
+    val name: String,
+    val meshNetworkInfo: NetworkInfo
 )
 
 
 private class ScannedMeshNetworkHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
     val rowLine1 = rowRoot.row_line_1
-    val rowLine2 = rowRoot.row_line_2
 }
 
 
 private class ScannedMeshNetworksAdapter(
-        private val onItemClicked: (ScannedMeshNetwork) -> Unit
+    private val onItemClicked: (ScannedMeshNetwork) -> Unit
 ) : ListAdapter<ScannedMeshNetwork, ScannedMeshNetworkHolder>(
-        easyDiffUtilCallback { deviceData: ScannedMeshNetwork -> deviceData.meshNetworkInfo }
+    easyDiffUtilCallback { deviceData: ScannedMeshNetwork -> deviceData.meshNetworkInfo }
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScannedMeshNetworkHolder {
-        return ScannedMeshNetworkHolder(inflateRow(parent, R.layout.row_select_device))
+        return ScannedMeshNetworkHolder(
+            inflateRow(
+                parent,
+                R.layout.p_scanformeshnetwork_row_select_mesh_network
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ScannedMeshNetworkHolder, position: Int) {
         val item = getItem(position)
-
         holder.rowLine1.text = item.name
-        holder.rowLine2.text = ""
-
         holder.rowRoot.setOnClickListener { onItemClicked(item) }
     }
 }
