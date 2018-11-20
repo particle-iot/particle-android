@@ -95,11 +95,11 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    releaseImplementation 'com.google.firebase:firebase-perf:16.1.2'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+    releaseImplementation 'com.google.firebase:firebase-perf:16.2.0'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
 
     // for barcode scanning in Mesh setup
-    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:17.0.2'
     implementation 'com.google.firebase:firebase-ml-model-interpreter:16.2.3'
@@ -122,13 +122,13 @@ dependencies {
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     // using snapshot to unbreak Butterknife with AndroidX
-    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
 
     implementation 'androidx.annotation:annotation:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.core:core-ktx:1.0.0'
+    implementation 'androidx.core:core-ktx:1.0.1'
     implementation 'androidx.fragment:fragment:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
@@ -139,8 +139,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
 
-    def nav_version = "1.0.0-alpha06"
-    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    def nav_version = "1.0.0-alpha07"
+    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
     // FIXME: remove explicit dep here later
