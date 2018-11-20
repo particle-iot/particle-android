@@ -130,7 +130,7 @@ class Flow(
 
         try {
             flowManager.showGlobalProgressSpinner(true)
-            cloudConnModule.ensureCardOnFile()
+//            cloudConnModule.ensureCardOnFile()
             cloudConnModule.ensurePricingImpactRetrieved()
         } finally {
             flowManager.showGlobalProgressSpinner(false)
@@ -201,7 +201,7 @@ class Flow(
 
         try {
             flowManager.showGlobalProgressSpinner(true)
-            cloudConnModule.ensureCardOnFile()
+//            cloudConnModule.ensureCardOnFile()
             cloudConnModule.ensurePricingImpactRetrieved()
         } finally {
             flowManager.showGlobalProgressSpinner(false)
