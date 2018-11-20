@@ -7,6 +7,8 @@ import com.crashlytics.android.Crashlytics;
 //import com.segment.analytics.android.integrations.firebase.FirebaseIntegration;
 //import com.segment.analytics.android.integrations.intercom.IntercomIntegration;
 
+import com.google.firebase.analytics.FirebaseAnalytics
+
 import io.fabric.sdk.android.Fabric;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +27,8 @@ public class ReleaseBuildAppInitializer {
         boolean coveredByGDPR = GDPRKt.isUserCoveredByGDPR();
 
         if (!coveredByGDPR) {
-            //"MVP" level GDPR support: only enable crash reporting if the user is NOT in the EU.
+            //"MVP" level GDPR support: only enable crash reporting + Analytics if the user is NOT in the EU.
+            FirebaseAnalytics.getInstance(everythingNeedsAContext).setAnalyticsCollectionEnabled(true)
             Fabric.with(app, new Crashlytics());
         }
 
