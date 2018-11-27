@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import io.particle.android.sdk.utils.Funcy.Predicate;
@@ -29,6 +30,7 @@ public class WifiFacade {
     private static final TLog log = TLog.get(WifiFacade.class);
 
 
+    @NonNull
     public static Predicate<ScanResult> is24Ghz = scanResult -> {
         // this approach lifted from the ScanResult source
         return scanResult.frequency > 2300 && scanResult.frequency < 2500;
@@ -111,11 +113,16 @@ public class WifiFacade {
         // "I want the Network obj for the Wi-Fi network with SSID <foo>".
         // Instead, you have to infer it based on the fact that you can only
         // have one connected Wi-Fi connection at a time.
+        // (Update: one *regular* Wi-Fi connection, anyway.  See below.)
+
         return Funcy.findFirstMatch(
                 Arrays.asList(connectivityManager.getAllNetworks()),
                 network -> {
                     NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+                    // Don't try using the P2P Wi-Fi interfaces on recent Samsung devices
+                    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
+                        return false;
+                    }
                     return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
                 }
         );
