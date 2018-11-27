@@ -8,11 +8,11 @@ Get connected and start building your Internet of Things project right away with
 Download Particle to easily connect your Photon to a Wi-Fi network in a few simple steps. No coding required. The app will take you through the entire set-up process step by step until the LED on your board is breathing cyan - indicating it's connected and ready to be programmed!
 
 ### Additional resources
-* Read the getting started guide at http://particle.io/start
-* Join the most active and helpful IoT community out there at http://community.particle.io
-* Learn more about Particle syntax and hardware at http://docs.particle.io
-* Start building your own code at http://particle.io/build
-* Find answers to common questions at http://support.particle.io
+* Read the getting started guide at https://particle.io/start
+* Join the most active and helpful IoT community out there at https://community.particle.io
+* Learn more about Particle syntax and hardware at https://docs.particle.io
+* Start building your own code at https://particle.io/build
+* Find answers to common questions at https://support.particle.io
 
 ## Open source project
 
