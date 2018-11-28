@@ -9,10 +9,11 @@ import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.GATTStatusCode
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.common.android.SimpleLifecycleOwner
-import kotlinx.coroutines.experimental.withTimeoutOrNull
+import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.resume
 
 
 private val TIMEOUT = TimeUnit.SECONDS.toMillis(5)

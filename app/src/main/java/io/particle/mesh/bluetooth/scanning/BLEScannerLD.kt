@@ -12,8 +12,8 @@ import io.particle.mesh.common.Predicate
 import io.particle.mesh.common.android.livedata.AbsentLiveData
 import io.particle.mesh.common.android.livedata.switchMap
 import io.particle.mesh.common.truthy
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
 

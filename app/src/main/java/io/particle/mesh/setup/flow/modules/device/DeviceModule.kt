@@ -14,8 +14,8 @@ import io.particle.mesh.ota.FirmwareUpdateResult
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.*
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 

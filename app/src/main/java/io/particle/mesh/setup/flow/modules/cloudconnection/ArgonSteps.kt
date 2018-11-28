@@ -21,7 +21,7 @@ import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.sdk.app.R
 import io.particle.sdk.app.R.string
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 

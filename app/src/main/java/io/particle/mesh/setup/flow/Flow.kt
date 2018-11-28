@@ -14,7 +14,7 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNew
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
 

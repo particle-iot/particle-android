@@ -18,8 +18,8 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedN
 import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 

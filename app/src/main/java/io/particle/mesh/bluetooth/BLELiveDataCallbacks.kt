@@ -10,8 +10,8 @@ import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.toHex
 import io.particle.mesh.common.truthy
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.ReceiveChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import mu.KotlinLogging
 
 

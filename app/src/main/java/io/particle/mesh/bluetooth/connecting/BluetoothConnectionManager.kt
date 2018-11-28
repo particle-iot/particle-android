@@ -18,13 +18,13 @@ import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import io.particle.mesh.setup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
 import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameSuspender
 import io.particle.mesh.setup.utils.checkIsThisTheMainThread
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.ReceiveChannel
-import kotlinx.coroutines.experimental.channels.SendChannel
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withTimeoutOrNull
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 
 

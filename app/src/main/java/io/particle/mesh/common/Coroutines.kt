@@ -1,8 +1,8 @@
 package io.particle.mesh.common
 
-import kotlinx.coroutines.experimental.CancellationException
+import kotlinx.coroutines.CancellationException
 import java.lang.ref.WeakReference
-import kotlin.coroutines.experimental.intrinsics.suspendCoroutineOrReturn
+import kotlin.coroutines.intrinsics.suspendCoroutineOrReturn
 
 
 /**

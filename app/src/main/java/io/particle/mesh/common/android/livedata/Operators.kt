@@ -7,8 +7,8 @@ import androidx.lifecycle.Transformations
 import androidx.annotation.MainThread
 import io.particle.mesh.common.ActionDebouncer
 import io.particle.mesh.setup.utils.runOnMainThread
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
 
 

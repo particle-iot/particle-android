@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.annotation.CallSuper
 import io.particle.mesh.common.AsyncWorkSuspender
 import io.particle.mesh.common.android.SimpleLifecycleOwner
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 

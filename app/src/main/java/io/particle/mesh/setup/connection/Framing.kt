@@ -7,9 +7,9 @@ import io.particle.mesh.setup.utils.putUntilFull
 import io.particle.mesh.setup.utils.readByteArray
 import io.particle.mesh.setup.utils.readUint16LE
 import io.particle.mesh.setup.utils.writeUint16LE
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import okio.Buffer
 import java.nio.ByteBuffer

@@ -81,13 +81,14 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withTimeoutOrNull
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.coroutines.experimental.Continuation
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.resume
 
 
 private const val DEFAULT_NETWORK_CHANNEL = 11

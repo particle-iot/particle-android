@@ -8,9 +8,9 @@ import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiver
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
 class TargetDeviceMeshNetworksScanner(

@@ -9,8 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import io.particle.mesh.common.truthy
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 fun Context.quickDialog(text: String, optionalAction: (() -> Unit)? = null) {

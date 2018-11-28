@@ -6,8 +6,8 @@ import io.particle.mesh.bluetooth.PacketMTUSplitter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.connection.security.SecurityManager
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 private const val FULL_PROTOCOL_HEADER_SIZE = 6

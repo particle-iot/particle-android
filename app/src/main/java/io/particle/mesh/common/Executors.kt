@@ -1,7 +1,7 @@
 package io.particle.mesh.common
 
-import kotlinx.coroutines.experimental.asCoroutineDispatcher
-import kotlinx.coroutines.experimental.newFixedThreadPoolContext
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.newFixedThreadPoolContext
 
 
 private val ioExecutor = java.util.concurrent.Executors.newSingleThreadExecutor()

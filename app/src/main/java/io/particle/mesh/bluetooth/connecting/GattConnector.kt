@@ -9,11 +9,12 @@ import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import io.particle.mesh.common.android.livedata.first
-import kotlinx.coroutines.experimental.withTimeoutOrNull
+import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.experimental.Continuation
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.resume
 
 
 private val INITIAL_CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(10)

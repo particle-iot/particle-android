@@ -14,7 +14,7 @@ import io.particle.mesh.setup.flow.ExceptionType
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 

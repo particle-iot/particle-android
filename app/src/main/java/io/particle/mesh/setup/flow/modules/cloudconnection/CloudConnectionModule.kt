@@ -18,8 +18,8 @@ import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
 import io.particle.sdk.app.R.string
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import java.util.*
 

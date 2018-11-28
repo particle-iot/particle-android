@@ -9,7 +9,7 @@ import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.MeshDeviceType
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import java.net.URL
 

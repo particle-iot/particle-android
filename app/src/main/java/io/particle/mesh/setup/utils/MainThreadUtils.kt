@@ -1,8 +1,8 @@
 package io.particle.mesh.setup.utils
 
 import android.os.Looper
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 // save this value here as a micro-optimization

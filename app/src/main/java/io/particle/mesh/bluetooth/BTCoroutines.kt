@@ -1,6 +1,6 @@
 package io.particle.mesh.bluetooth
 
-import kotlinx.coroutines.experimental.newSingleThreadContext
+import kotlinx.coroutines.newSingleThreadContext
 
 
 /**

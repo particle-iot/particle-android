@@ -10,10 +10,11 @@ import io.particle.mesh.common.and
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.common.android.livedata.first
-import kotlinx.coroutines.experimental.withTimeoutOrNull
+import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
-import kotlin.coroutines.experimental.Continuation
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.resume
 
 
 enum class BondingResult {

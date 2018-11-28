@@ -3,7 +3,7 @@ package io.particle.mesh.common.android
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import io.particle.mesh.common.QATool
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 
 
 /**
