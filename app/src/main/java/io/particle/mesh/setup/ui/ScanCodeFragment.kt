@@ -30,7 +30,6 @@ import io.particle.mesh.setup.barcodescanning.barcode.BarcodeScanningProcessor
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_code.*
 import kotlinx.android.synthetic.main.fragment_scan_code.view.*
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging

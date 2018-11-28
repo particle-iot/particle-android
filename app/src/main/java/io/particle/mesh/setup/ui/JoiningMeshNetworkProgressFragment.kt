@@ -12,7 +12,7 @@ import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_joining_mesh_network_progress.*
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
@@ -55,12 +55,12 @@ class JoiningMeshNetworkProgressFragment : BaseMeshSetupFragment() {
         this.observe(
                 this@JoiningMeshNetworkProgressFragment,
                 Observer {
-                    launch(UI) {
+                    GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, {
                         if (delayMillis > 0) {
                             delay(delayMillis)
                         }
                         markProgress(it, progressStage)
-                    }
+                    })
                 }
         )
     }

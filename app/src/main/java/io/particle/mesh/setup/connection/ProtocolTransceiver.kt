@@ -81,7 +81,7 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withTimeoutOrNull
 import mu.KotlinLogging
@@ -111,9 +111,9 @@ class ProtocolTransceiver internal constructor(
 
     fun disconnect() {
         didDisconnect = true
-        launch {
+        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
             launch(UI) { connection.disconnect() }
-        }
+        })
     }
 
     fun setConnectionPriority(priority: ConnectionPriority) {

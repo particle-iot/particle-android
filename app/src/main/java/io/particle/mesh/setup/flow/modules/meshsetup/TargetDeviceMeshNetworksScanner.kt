@@ -8,6 +8,7 @@ import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiver
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
@@ -21,16 +22,16 @@ class TargetDeviceMeshNetworksScanner(
     override fun onActive() {
         super.onActive()
         log.debug { "onActive()" }
-        launch {
+        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
             scanWhileActive()
-        }
+        })
     }
 
     fun forceSingleScan() {
         log.debug { "forceSingleScan()" }
-        launch {
+        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
             doScan()
-        }
+        })
     }
 
     private suspend fun scanWhileActive() {

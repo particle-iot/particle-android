@@ -52,10 +52,10 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
                 if (ps != null && ps.size > 0) {
                     ps
                 } else {
-                    Array(0) { _ -> "" }
+                    Array(0) { "" }
                 }
             } catch (e: Exception) {
-                Array(0) { _ -> "" }
+                Array(0) { "" }
             }
 
         }

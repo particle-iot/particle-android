@@ -15,7 +15,7 @@ import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_creating_mesh_network.*
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
@@ -44,7 +44,7 @@ class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
 
         // "Device creating the mesh network locally"
         fm.meshSetupModule.createNetworkSent.observeForProgress(R.id.status_stage_3) {
-            launch(UI) { markFakeProgress() }
+            GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, { markFakeProgress() })
         }
 
         status_stage_1.text = Phrase.from(view, R.string.p_creatingyournetwork_step_1)
@@ -71,13 +71,13 @@ class CreatingMeshNetworkFragment : BaseMeshSetupFragment() {
         this.observe(
             this@CreatingMeshNetworkFragment,
             Observer {
-                launch(UI) {
+                GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, {
                     if (delayMillis > 0) {
                         delay(delayMillis)
                     }
                     markProgress(it, progressStage)
                     runAfter?.invoke()
-                }
+                })
             }
         )
     }

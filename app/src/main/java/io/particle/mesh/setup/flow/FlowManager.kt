@@ -26,7 +26,7 @@ import io.particle.mesh.setup.ui.*
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.utils.runOnMainThread
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
@@ -85,7 +85,7 @@ class FlowManager(
 
     fun startNewFlow() {
         // FIXME: call "clearState()" here?  Probably?
-        launch {
+        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
             val error: Exception? = null
             for (i in 0..10) {
                 try {
@@ -113,7 +113,7 @@ class FlowManager(
                     clearDialogResult()
                 }
             }
-        }
+        })
     }
 
     // FIXME: API/naming here is weak
@@ -121,7 +121,7 @@ class FlowManager(
 
         // FIXME: set/clear some states?  WHICH?
 
-        launch {
+        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
             val error: Exception? = null
             for (i in 0..10) {
                 try {
@@ -150,7 +150,7 @@ class FlowManager(
                     clearDialogResult()
                 }
             }
-        }
+        })
     }
 
     fun startNewFlowWithCommissioner() {
@@ -192,7 +192,7 @@ class FlowManager(
 
         clearState()
 
-        launch(UI) {
+        GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, {
             delay(100)
             bleConnectionModule.commissionerBarcodeLD.castAndSetOnMainThread(
                 commissionerBarcodeToUse
@@ -203,7 +203,7 @@ class FlowManager(
             meshSetupModule.targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(
                 commissionerPwd
             )
-        }
+        })
     }
 
     override fun clearState() {

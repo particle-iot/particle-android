@@ -18,7 +18,7 @@ import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import io.particle.mesh.setup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
 import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameSuspender
 import io.particle.mesh.setup.utils.checkIsThisTheMainThread
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.ReceiveChannel
 import kotlinx.coroutines.experimental.channels.SendChannel
@@ -76,10 +76,10 @@ class BluetoothConnection(
         }
         // calling .close() *immediately* after .disconnect() was sometimes causing
         // the disconnect to fail, thus the delay.  Hacky, but it works. :-/
-        launch(UI) {
+        GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, {
             delay(100)
             QATool.runSafely({ gatt.close() })
-        }
+        })
     }
 }
 
@@ -111,11 +111,11 @@ class BluetoothConnectionManager(private val ctx: Context) {
 
 
         val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
-        launch {
+        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
             for (packet in messageWriteChannel) {
                 QATool.runSafely({ bleWriteChannel.writeToCharacteristic(packet) })
             }
-        }
+        })
 
         val conn = BluetoothConnection(
                 callbacks.connectionStateChangedLD,

@@ -4,7 +4,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import io.particle.mesh.common.QATool
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.UI
 
 
 /**
@@ -49,9 +48,9 @@ fun <T> LifecycleOwner.load(
         cancelWhen: LifecycleCancellationPoint = LifecycleCancellationPoint.ON_DESTROY,
         loader: () -> T
 ): Deferred<T> {
-    val deferred = async(start = CoroutineStart.LAZY) {
+    val deferred = GlobalScope.async(Dispatchers.Default, start = CoroutineStart.LAZY, block = {
         loader()
-    }
+    })
 
     val listener = when (cancelWhen) {
         LifecycleCancellationPoint.ON_STOP -> CoroutineOnStopListener(deferred)
@@ -69,13 +68,13 @@ fun <T> LifecycleOwner.load(
  * will call <code>await()</code> and pass the returned value to <code>block()</code>.
  */
 infix fun <T> Deferred<T>.then(block: (T) -> Unit): Job {
-    return launch(context = UI) {
+    return GlobalScope.launch(context = UI, block = {
         try {
             block(this@then.await())
         } catch (ex: Exception) {
             QATool.report(ex)
             throw ex
         }
-    }
+    })
 }
 

@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import io.particle.mesh.common.truthy
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 
 
@@ -27,11 +27,11 @@ internal fun Fragment.markProgress(update: Boolean?, @IdRes progressStage: Int) 
         return
     }
 
-    launch(UI) {
+    GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, {
         val tv: TextView? = view?.findViewById(progressStage)
         val ctx = tv?.context ?: return@launch
         val color = ContextCompat.getColor(ctx, R.color.p_text_color_primary)
         tv.setTextColor(color)
         tv.setTypeface(null, Typeface.BOLD)
-    }
+    })
 }

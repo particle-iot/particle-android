@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.ui.utils.markProgress
 import io.particle.sdk.app.R
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
