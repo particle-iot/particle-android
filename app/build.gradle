@@ -152,10 +152,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
