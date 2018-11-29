@@ -14,6 +14,7 @@ import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.ui.BarcodeData
 import io.particle.sdk.app.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -96,7 +97,7 @@ class BLEConnectionModule(
 
         val userSpecifiedDeviceType = flowManager.targetDeviceType
         val liveDataSuspender = liveDataSuspender({ targetDeviceBarcodeLD.nonNull() })
-        val barcodeData = withContext(UI) {
+        val barcodeData = withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_getReadyForSetupFragment)
             liveDataSuspender.awaitResult()
         }
@@ -130,7 +131,7 @@ class BLEConnectionModule(
 
 
         val ldSuspender = liveDataSuspender({ targetDeviceTransceiverLD })
-        val transceiver = withContext(UI) {
+        val transceiver = withContext(Dispatchers.Main) {
             connectTargetDevice()
             ldSuspender.awaitResult()
         }
@@ -194,7 +195,7 @@ class BLEConnectionModule(
 
         log.debug { "No commissioner barcode found; showing UI" }
         val liveDataSuspender = liveDataSuspender({ commissionerBarcodeLD.nonNull() })
-        val barcodeData = withContext(UI) {
+        val barcodeData = withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_manualCommissioningAddToNetworkFragment)
             liveDataSuspender.awaitResult()
         }
@@ -222,7 +223,7 @@ class BLEConnectionModule(
 
 
         val xceiverSuspender = liveDataSuspender({ commissionerTransceiverLD })
-        commissioner = withContext(UI) {
+        commissioner = withContext(Dispatchers.Main) {
             connectCommissioner()
             xceiverSuspender.awaitResult()
         }

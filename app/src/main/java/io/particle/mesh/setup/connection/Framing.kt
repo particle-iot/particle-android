@@ -7,6 +7,7 @@ import io.particle.mesh.setup.utils.putUntilFull
 import io.particle.mesh.setup.utils.readByteArray
 import io.particle.mesh.setup.utils.readUint16LE
 import io.particle.mesh.setup.utils.writeUint16LE
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -114,9 +115,9 @@ class InboundFrameReader {
                 cryptoDelegate?.decrypt(frameData, additionalData) ?: frameData
         )
         inProgressFrame = null
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             inboundFrameChannel.send(completeFrame)
-        })
+        }
 
     }
 }

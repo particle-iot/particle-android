@@ -18,6 +18,7 @@ import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
 import io.particle.sdk.app.R.string
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -173,7 +174,7 @@ class CloudConnectionModule(
 
         // show dialog
 //        val ldSuspender = liveDataSuspender({ flowManager.targetDeviceShouldBeClaimedLD })
-//        val shouldClaim = withContext(UI) {
+//        val shouldClaim = withContext(Dispatchers.Main) {
 //            flowManager.navigate()
 //            ldSuspender.awaitResult()
 //        }
@@ -216,7 +217,7 @@ class CloudConnectionModule(
         }
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
-        val result = withContext(UI) {
+        val result = withContext(Dispatchers.Main) {
             flowManager.newDialogRequest(
                 ResDialogSpec(
                     string.p_connecttocloud_xenon_gateway_needs_ethernet,
@@ -287,7 +288,7 @@ class CloudConnectionModule(
         }
 
         val ldSuspender = liveDataSuspender({ targetDeviceNameToAssignLD.nonNull() })
-        val nameToAssign = withContext(UI) {
+        val nameToAssign = withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_nameYourDeviceFragment)
             ldSuspender.awaitResult()
         }
@@ -336,7 +337,7 @@ class CloudConnectionModule(
         }
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
-        val dialogResult = withContext(UI) {
+        val dialogResult = withContext(Dispatchers.Main) {
             flowManager.newDialogRequest(
                 ResDialogSpec(
                     R.string.p_mesh_billing_please_go_to_your_browser,
@@ -405,7 +406,7 @@ class CloudConnectionModule(
         }
 
         val suspender = liveDataSuspender({ pricingImpactConfirmed.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_pricingImpactFragment)
             suspender.awaitResult()
         }
@@ -420,7 +421,7 @@ class CloudConnectionModule(
         }
 
         val suspender = liveDataSuspender({ confirmationLD.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_argonConnectToDeviceCloudIntroFragment)
             suspender.awaitResult()
         }

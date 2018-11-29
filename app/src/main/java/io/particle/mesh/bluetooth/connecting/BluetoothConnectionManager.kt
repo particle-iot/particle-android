@@ -18,13 +18,10 @@ import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import io.particle.mesh.setup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
 import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameSuspender
 import io.particle.mesh.setup.utils.checkIsThisTheMainThread
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 
 
@@ -76,17 +73,17 @@ class BluetoothConnection(
         }
         // calling .close() *immediately* after .disconnect() was sometimes causing
         // the disconnect to fail, thus the delay.  Hacky, but it works. :-/
-        GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Main) {
             delay(100)
             QATool.runSafely({ gatt.close() })
-        })
+        }
     }
 }
 
 
 typealias BTDeviceAddress = String
 
-const val CONNECTION_TIMEOUT_MILLIS = 10000
+const val CONNECTION_TIMEOUT_MILLIS = 10000L
 
 
 class BluetoothConnectionManager(private val ctx: Context) {
@@ -97,7 +94,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
     @MainThread
     suspend fun connectToDevice(
             deviceName: String,
-            timeout: Int = CONNECTION_TIMEOUT_MILLIS
+            timeout: Long = CONNECTION_TIMEOUT_MILLIS
     ): BluetoothConnection? {
         checkIsThisTheMainThread()
 
@@ -111,11 +108,11 @@ class BluetoothConnectionManager(private val ctx: Context) {
 
 
         val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             for (packet in messageWriteChannel) {
                 QATool.runSafely({ bleWriteChannel.writeToCharacteristic(packet) })
             }
-        })
+        }
 
         val conn = BluetoothConnection(
                 callbacks.connectionStateChangedLD,
@@ -129,7 +126,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         return conn
     }
 
-    private suspend fun scanForDevice(deviceName: String, timeout: Int): BTDeviceAddress? {
+    private suspend fun scanForDevice(deviceName: String, timeout: Long): BTDeviceAddress? {
         val scannerSuspender = buildMatchingDeviceNameSuspender(ctx, deviceName)
         val scanResult = withTimeoutOrNull(timeout) {
             scannerSuspender.awaitResult()

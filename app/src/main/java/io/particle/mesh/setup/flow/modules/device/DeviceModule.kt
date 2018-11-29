@@ -14,6 +14,7 @@ import io.particle.mesh.ota.FirmwareUpdateResult
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.*
 import io.particle.sdk.app.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -95,7 +96,7 @@ class DeviceModule(
         }
 
         val suspender = liveDataSuspender({ userConsentedToFirmwareUpdateLD.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_bleOtaIntroFragment)
             suspender.awaitResult()
         }
@@ -117,7 +118,7 @@ class DeviceModule(
         }
 
         val suspender = liveDataSuspender({ networkSetupTypeLD.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_useStandaloneOrInMeshFragment)
             suspender.awaitResult()
         }

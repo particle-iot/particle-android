@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.annotation.CallSuper
 import io.particle.mesh.common.AsyncWorkSuspender
 import io.particle.mesh.common.android.SimpleLifecycleOwner
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
@@ -37,7 +38,7 @@ fun <T> liveDataSuspender(
 
 suspend fun <T> LiveData<T>.runOnUiThreadAndWaitForUpdate(toRun: () -> Unit) {
     val suspender = liveDataSuspender({ this })
-    withContext(UI) {
+    withContext(Dispatchers.Main) {
         toRun()
         suspender.awaitResult()
     }

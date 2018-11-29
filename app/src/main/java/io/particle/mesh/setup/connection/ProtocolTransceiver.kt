@@ -76,19 +76,19 @@ import io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkReply
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkRequest
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security
-import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.NO_SECURITY
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 private const val DEFAULT_NETWORK_CHANNEL = 11
@@ -112,9 +112,9 @@ class ProtocolTransceiver internal constructor(
 
     fun disconnect() {
         didDisconnect = true
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
-            launch(UI) { connection.disconnect() }
-        })
+        GlobalScope.launch(Dispatchers.Default) {
+            launch(Dispatchers.Main) { connection.disconnect() }
+        }
     }
 
     fun setConnectionPriority(priority: ConnectionPriority) {
@@ -401,7 +401,7 @@ class ProtocolTransceiver internal constructor(
     //region PRIVATE
     private suspend fun sendRequest(
         message: GeneratedMessageV3,
-        timeout: Int = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
+        timeout: Long = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
     ): DeviceResponse? {
         val requestFrame = message.asRequest()
         log.info {

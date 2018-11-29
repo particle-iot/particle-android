@@ -8,6 +8,7 @@ import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiver
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,16 +27,16 @@ class WifiNetworksScannerLD(
     override fun onActive() {
         super.onActive()
         log.debug { "onActive()" }
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             scanWhileActive()
-        })
+        }
     }
 
     fun forceSingleScan() {
         log.debug { "forceSingleScan()" }
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             doScan()
-        })
+        }
     }
 
     private suspend fun scanWhileActive() {

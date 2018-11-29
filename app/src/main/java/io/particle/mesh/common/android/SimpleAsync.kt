@@ -68,13 +68,13 @@ fun <T> LifecycleOwner.load(
  * will call <code>await()</code> and pass the returned value to <code>block()</code>.
  */
 infix fun <T> Deferred<T>.then(block: (T) -> Unit): Job {
-    return GlobalScope.launch(context = UI, block = {
+    return GlobalScope.launch(Dispatchers.Main) {
         try {
             block(this@then.await())
         } catch (ex: Exception) {
             QATool.report(ex)
             throw ex
         }
-    })
+    }
 }
 

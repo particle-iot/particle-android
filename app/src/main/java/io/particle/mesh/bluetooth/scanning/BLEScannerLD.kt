@@ -12,6 +12,7 @@ import io.particle.mesh.common.Predicate
 import io.particle.mesh.common.android.livedata.AbsentLiveData
 import io.particle.mesh.common.android.livedata.switchMap
 import io.particle.mesh.common.truthy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -83,11 +84,11 @@ class BLEScannerLD(
     }
 
     private fun newResultsReceived(newResults: List<ScanResult>) {
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             val filtered = newResults.filter(resultsFilter)
             if (hasActiveObservers()) {
                 postValue(filtered)
             }
-        })
+        }
     }
 }

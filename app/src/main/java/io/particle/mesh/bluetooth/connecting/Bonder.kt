@@ -52,7 +52,7 @@ data class BondingStateUpdate(
 }
 
 
-private const val BONDING_TIMEOUT_MILLIS = 15000
+private const val BONDING_TIMEOUT_MILLIS = 15000L
 
 
 class Bonder(ctx: Context) {

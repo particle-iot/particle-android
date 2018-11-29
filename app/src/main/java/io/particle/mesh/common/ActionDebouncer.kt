@@ -1,9 +1,6 @@
 package io.particle.mesh.common
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 
 
@@ -68,13 +65,13 @@ class ActionDebouncer(
     }
 
     private fun scheduleRunningDebouncedJob(delayMillis: Long) {
-        delayed = GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        delayed = GlobalScope.launch(Dispatchers.Default) {
             delay(delayMillis)
             synchronized(lockObj) {
                 runDebouncedAction()
                 delayed = null
             }
-        })
+        }
     }
 
 }

@@ -3,24 +3,18 @@ package io.particle.mesh.setup.flow.modules.cloudconnection
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.firmwareprotos.ctrl.Common.ResultCode
-import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
-import io.particle.firmwareprotos.ctrl.Common.ResultCode.UNRECOGNIZED
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.castAndPost
-import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
-import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
-import io.particle.mesh.setup.ui.DialogSpec
-import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.sdk.app.R
-import io.particle.sdk.app.R.string
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
@@ -67,7 +61,7 @@ class ArgonSteps(
         }
 
         val wifiNetworkSelectionSuspender = liveDataSuspender({ targetWifiNetwork.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_scanForWiFiNetworksFragment)
             wifiNetworkSelectionSuspender.awaitResult()
         }
@@ -82,7 +76,7 @@ class ArgonSteps(
         // FIXME: VALIDATE PASSWORD HERE BY CONNECTING; SHOW DIALOG IF PASSWORD IS BAD!
 
         val passwordSuspender = liveDataSuspender({ targetWifiNetworkPassword.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_enterWifiNetworkPasswordFragment)
             passwordSuspender.awaitResult()
         }
@@ -112,7 +106,7 @@ class ArgonSteps(
 
                         flowManager.clearDialogResult()
                         val suspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
-                        val result = withContext(UI) {
+                        val result = withContext(Dispatchers.Main) {
                             flowManager.newDialogRequest(
                                 // FIXME: i18n!
                                 StringDialogSpec(

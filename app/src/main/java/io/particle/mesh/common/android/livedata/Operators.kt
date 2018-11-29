@@ -7,6 +7,7 @@ import androidx.lifecycle.Transformations
 import androidx.annotation.MainThread
 import io.particle.mesh.common.ActionDebouncer
 import io.particle.mesh.setup.utils.runOnMainThread
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
@@ -23,10 +24,10 @@ fun <X, Y> LiveData<X?>.map(func: (X?) -> Y?): LiveData<Y?> = Transformations.ma
 fun <X, Y> LiveData<X?>.mapAsync(func: (X?) -> Y?): LiveData<Y?> {
     val result = MediatorLiveData<Y?>()
     result.addSource(this) { x ->
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             val transformed = func(x)
             result.postValue(transformed)
-        })
+        }
     }
     return result
 }
@@ -115,7 +116,7 @@ fun <T> LiveData<T?>.distinctAsync(): LiveData<T?> {
                 private var previousValue: T? = null
 
                 override fun onChanged(newValue: T?) {
-                    GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+                    GlobalScope.launch(Dispatchers.Default) {
                         synchronized(lock) {
                             if (!initialized) {
                                 initialized = true
@@ -127,7 +128,7 @@ fun <T> LiveData<T?>.distinctAsync(): LiveData<T?> {
                                 distinctLiveData.postValue(previousValue)
                             }
                         }
-                    })
+                    }
                 }
             })
 

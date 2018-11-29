@@ -26,10 +26,7 @@ import io.particle.mesh.setup.ui.*
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.utils.runOnMainThread
 import io.particle.sdk.app.R
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 
 
@@ -85,7 +82,7 @@ class FlowManager(
 
     fun startNewFlow() {
         // FIXME: call "clearState()" here?  Probably?
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             val error: Exception? = null
             for (i in 0..10) {
                 try {
@@ -103,7 +100,7 @@ class FlowManager(
                 }
             }
             if (error != null) {
-                withContext(UI) {
+                withContext(Dispatchers.Main) {
                     newDialogRequest(
                         StringDialogSpec(
                             "Setup has encountered an error and cannot " +
@@ -113,7 +110,7 @@ class FlowManager(
                     clearDialogResult()
                 }
             }
-        })
+        }
     }
 
     // FIXME: API/naming here is weak
@@ -121,7 +118,7 @@ class FlowManager(
 
         // FIXME: set/clear some states?  WHICH?
 
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             val error: Exception? = null
             for (i in 0..10) {
                 try {
@@ -140,7 +137,7 @@ class FlowManager(
             }
 
             if (error != null) {
-                withContext(UI) {
+                withContext(Dispatchers.Main) {
                     newDialogRequest(
                         StringDialogSpec(
                             "Setup has encountered an error and cannot " +
@@ -150,7 +147,7 @@ class FlowManager(
                     clearDialogResult()
                 }
             }
-        })
+        }
     }
 
     fun startNewFlowWithCommissioner() {
@@ -192,7 +189,7 @@ class FlowManager(
 
         clearState()
 
-        GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Main) {
             delay(100)
             bleConnectionModule.commissionerBarcodeLD.castAndSetOnMainThread(
                 commissionerBarcodeToUse
@@ -203,7 +200,7 @@ class FlowManager(
             meshSetupModule.targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(
                 commissionerPwd
             )
-        })
+        }
     }
 
     override fun clearState() {

@@ -18,6 +18,7 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedN
 import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
 import io.particle.sdk.app.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -126,7 +127,7 @@ class MeshSetupModule(
 
         if (removeLocally) {
             val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
-            val dialogResult = withContext(UI) {
+            val dialogResult = withContext(Dispatchers.Main) {
                 flowManager.newDialogRequest(
                     ResDialogSpec(
                         R.string.p_mesh_leavenetworkconfirmation_text,
@@ -179,7 +180,7 @@ class MeshSetupModule(
         flowManager.bleConnectionModule.updateCommissionerBarcode(null)
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
-        val result = withContext(UI) {
+        val result = withContext(Dispatchers.Main) {
             flowManager.newDialogRequest(
                 ResDialogSpec(
                     R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
@@ -208,7 +209,7 @@ class MeshSetupModule(
 
         flowManager.navigate(R.id.action_global_scanForMeshNetworksFragment)
         val ldSuspender = liveDataSuspender({ targetDeviceMeshNetworkToJoinLD.nonNull() })
-        val meshNetworkToJoin = withContext(UI) {
+        val meshNetworkToJoin = withContext(Dispatchers.Main) {
             ldSuspender.awaitResult()
         }
     }
@@ -221,7 +222,7 @@ class MeshSetupModule(
 
         val ld = targetDeviceMeshNetworkToJoinCommissionerPassword
         val ldSuspender = liveDataSuspender({ ld.nonNull() })
-        val password = withContext(UI) {
+        val password = withContext(Dispatchers.Main) {
             if (!shownNetworkPasswordUi) {
                 flowManager.navigate(R.id.action_global_enterNetworkPasswordFragment)
                 shownNetworkPasswordUi = true
@@ -244,7 +245,7 @@ class MeshSetupModule(
                     targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(null)
 
                     val ldSuspender2 = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
-                    val result = withContext(UI) {
+                    val result = withContext(Dispatchers.Main) {
                         flowManager.newDialogRequest(
                             ResDialogSpec(
                                 R.string.p_mesh_network_password_is_incorrect,
@@ -320,7 +321,7 @@ class MeshSetupModule(
         }
 
         val ldSuspender = liveDataSuspender({ newNetworkNameLD.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_newMeshNetworkNameFragment)
             ldSuspender.awaitResult()
         }
@@ -333,7 +334,7 @@ class MeshSetupModule(
         }
 
         val ldSuspender = liveDataSuspender({ newNetworkPasswordLD.nonNull() })
-        withContext(UI) {
+        withContext(Dispatchers.Main) {
             flowManager.navigate(R.id.action_global_newMeshNetworkPasswordFragment)
             ldSuspender.awaitResult()
         }

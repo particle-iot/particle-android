@@ -1,6 +1,7 @@
 package io.particle.mesh.setup.utils
 
 import android.os.Looper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,6 @@ fun runOnMainThread(runnable: () -> Unit) {
     if (isThisTheMainThread()) {
         runnable()
     } else {
-        GlobalScope.launch(UI, CoroutineStart.DEFAULT, null, { runnable() })
+        GlobalScope.launch(Dispatchers.Main) { runnable() }
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.sdk.app.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -20,14 +21,14 @@ class LetsGetBuildingFragment : BaseMeshSetupFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        GlobalScope.launch(Dispatchers.Default, CoroutineStart.DEFAULT, null, {
+        GlobalScope.launch(Dispatchers.Default) {
             ParticleCloudSDK.getCloud().publishEvent(
                 "mesh-setup-session-complete",
                 null,
                 ParticleEventVisibility.PRIVATE,
                 TimeUnit.HOURS.toSeconds(1).toInt()
             )
-        })
+        }
 
         return inflater.inflate(R.layout.fragment_lets_get_building, container, false)
     }
