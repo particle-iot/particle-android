@@ -21,11 +21,6 @@ apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
-ext {
-    cloudSdkVersion = '0.5.1'
-    setupVersion = '0.6.0'
-}
-
 android {
     compileSdkVersion 28
 
@@ -76,8 +71,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-//    implementation "io.particle:cloudsdk:$cloudSdkVersion"
-//    implementation("io.particle:devicesetup:$setupVersion") {
     implementation project(':cloudsdk')
     implementation project(':ecjpake4j')
     implementation project(':devicesetup')
