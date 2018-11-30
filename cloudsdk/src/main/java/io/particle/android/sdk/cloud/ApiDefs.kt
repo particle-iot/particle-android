@@ -12,6 +12,7 @@ import io.particle.android.sdk.cloud.Responses.ReadObjectVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadStringVariableResponse
 import io.particle.android.sdk.cloud.Responses.SimpleResponse
 import io.particle.android.sdk.cloud.models.MeshNetworkChange
+import io.particle.android.sdk.cloud.models.MobileSecretResponse
 import io.particle.android.sdk.cloud.models.ParticleNetworkData
 import io.particle.android.sdk.cloud.models.SignUpInfo
 import retrofit.client.Response
@@ -187,6 +188,12 @@ class ApiDefs {
             @Query("network_id") networkId: String? = null,
             @Query("iccid") iccid: String? = null
         ): ParticlePricingInfo
+
+        @GET("/v1/serial_numbers/{serial_number}")
+        fun getFullMobileSecret(
+            @Path("serial_number") serialNumber: String,
+            @Query("mobile_secret") partialMobileSecret: String
+        ): MobileSecretResponse
     }
 
 

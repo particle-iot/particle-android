@@ -671,6 +671,17 @@ class ParticleCloud internal constructor(
         }
 
     }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    internal fun getFullMobileSecret(serialNumber: String, partialMobileSecret: String): String {
+        try {
+            val response = mainApi.getFullMobileSecret(serialNumber, partialMobileSecret)
+            return response.fullMobileSecret
+        } catch (error: RetrofitError) {
+            throw ParticleCloudException(error)
+        }
+    }
     //endregion
 
 
