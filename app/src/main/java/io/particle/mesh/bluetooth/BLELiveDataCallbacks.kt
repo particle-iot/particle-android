@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import io.particle.mesh.bluetooth.connecting.ConnectionState
 import io.particle.mesh.common.QATool
+import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.toHex
 import io.particle.mesh.common.truthy
@@ -25,6 +26,7 @@ class BLELiveDataCallbacks : BluetoothGattCallback() {
     val onCharacteristicWriteCompleteLD: LiveData<GATTStatusCode> = MutableLiveData()
     val onCharacteristicReadFailureLD: LiveData<CharacteristicAndStatus> = MutableLiveData()
     val onCharacteristicChangedFailureLD: LiveData<BluetoothGattCharacteristic> = MutableLiveData()
+    val onMtuChangedLD: LiveData<Int?> = MutableLiveData()
 
     val readOrChangedReceiveChannel: ReceiveChannel<ByteArray>
         get() = mutableReceiveChannel
@@ -85,6 +87,11 @@ class BLELiveDataCallbacks : BluetoothGattCallback() {
         (onCharacteristicWriteCompleteLD as MutableLiveData).setOnMainThread(
                 GATTStatusCode.fromIntValue(statusCode)
         )
+    }
+
+    override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
+        log.info { "onMtuChanged() new MTU=$mtu" }
+        onMtuChangedLD.castAndPost(mtu)
     }
 
     private fun receivePacket(packet: ByteArray) {
