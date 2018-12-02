@@ -32,6 +32,7 @@ import retrofit.RetrofitError.Kind
 import retrofit.client.Response
 import retrofit.mime.TypedByteArray
 import java.io.IOException
+import java.lang.RuntimeException
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -674,10 +675,12 @@ class ParticleCloud internal constructor(
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
-    internal fun getFullMobileSecret(serialNumber: String, partialMobileSecret: String): String {
+    fun getFullMobileSecret(
+        serialNumber: String,
+        partialMobileSecret: String
+    ): MobileSecretResponse {
         try {
-            val response = mainApi.getFullMobileSecret(serialNumber, partialMobileSecret)
-            return response.fullMobileSecret
+            return mainApi.getFullMobileSecret(serialNumber, partialMobileSecret)
         } catch (error: RetrofitError) {
             throw ParticleCloudException(error)
         }
