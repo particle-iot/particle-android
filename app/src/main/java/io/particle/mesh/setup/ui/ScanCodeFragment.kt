@@ -3,10 +3,9 @@ package io.particle.mesh.setup.ui
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.graphics.Rect
-import android.graphics.RectF
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
@@ -30,9 +30,6 @@ import io.particle.mesh.setup.barcodescanning.barcode.BarcodeScanningProcessor
 import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.ui.BarcodeData.PartialBarcodeData
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_scan_code.*
-import kotlinx.android.synthetic.main.fragment_scan_code.view.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -129,6 +126,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
 
     private val barcodeObserver = Observer<List<FirebaseVisionBarcode>> { onBarcodesScanned(it) }
 
+    private var isFetchingCompleteBarcode = false
 
     private var cameraSource: CameraSource? = null
 
@@ -190,7 +188,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     }
 
     private fun onBarcodesScanned(foundBarcodes: List<FirebaseVisionBarcode>?) {
-        if (foundBarcodes == null) {
+        if (foundBarcodes == null || isFetchingCompleteBarcode) {
             return
         }
 
@@ -198,15 +196,57 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
             val barcode = BarcodeData.fromRawData(bcode.rawValue)
             if (barcode != null) {
                 onBarcodeFound(barcode)
-                findNavController().popBackStack()
                 return
             }
         }
     }
 
     private fun onBarcodeFound(barcodeData: BarcodeData) {
+        when (barcodeData) {
+            is CompleteBarcodeData -> onCompleteBarcode(barcodeData)
+            is PartialBarcodeData -> onPartialSecretBarcode(barcodeData)
+        }
+    }
+
+    private fun onCompleteBarcode(barcodeData: CompleteBarcodeData) {
         barcodeScanningProcessor.foundBarcodes.removeObserver(barcodeObserver)
         scanViewModel.updateBarcode(barcodeData)
+        findNavController().popBackStack()
+    }
+
+    private fun onPartialSecretBarcode(barcodeData: PartialBarcodeData) {
+        isFetchingCompleteBarcode = true
+
+        suspend fun onUnableToFetchFullBarcode() {
+            withContext(Dispatchers.Main) {
+                showBadBarcodeSupportDialog(barcodeData)
+                findNavController().popBackStack()
+            }
+        }
+
+        GlobalScope.launch {
+            try {
+                val secretResponse = cloud.getFullMobileSecret(
+                    barcodeData.serialNumber,
+                    barcodeData.partialMobileSecret
+                )
+
+                if (secretResponse.fullMobileSecret == null) {
+                    onUnableToFetchFullBarcode()
+
+                } else {
+
+                    val fullBarcode = CompleteBarcodeData(
+                        barcodeData.serialNumber,
+                        secretResponse.fullMobileSecret!!
+                    )
+                    withContext(Dispatchers.Main) { onCompleteBarcode(fullBarcode) }
+                }
+
+            } catch (ex: Exception) {
+                onUnableToFetchFullBarcode()
+            }
+        }
     }
 
     private fun createCameraSource() {
@@ -277,6 +317,46 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
         }
         log.info {"Permission is NOT granted: $permission" }
         return false
+    }
+
+    private fun showBadBarcodeSupportDialog(badBarcode: PartialBarcodeData) {
+        val flowManager = flowManagerVM.flowManager!!
+        val activity = requireActivity()
+
+        val emailContent = """
+
+
+-- BEFORE SENDING Please attach a picture of the device sticker! --
+
+
+Hi Particle! My sticker barcode has an issue.
+
+Serial number: ${badBarcode.serialNumber}
+Full scan results: ${badBarcode.serialNumber} ${badBarcode.partialMobileSecret}
+
+
+"""
+
+        fun sendSupportEmail() {
+            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("hello@particle.io"))
+                putExtra(Intent.EXTRA_SUBJECT, "3rd generation sticker problem")
+                putExtra(Intent.EXTRA_TEXT, emailContent)
+            }
+            activity.startActivity(emailIntent)
+        }
+
+
+        MaterialDialog.Builder(requireContext())
+            .content(R.string.p_sticker_error_dialog_content)
+            .positiveText(R.string.p_action_contact_support)
+            .onPositive { _, _ ->
+                sendSupportEmail()
+                flowManager.endSetup()
+            }
+            .build()
+            .show()
     }
 
 }

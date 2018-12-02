@@ -236,6 +236,8 @@ Enjoy!]]></string>
     <string name="p_letsgetbuilding_header"><b>Let\'s get building!</b></string>
     <string name="p_letsgetbuilding_subheader">To start building with your device, <b>look back at your web browser where you got started with setup.</b></string>
     <string name="p_getreadyforsetup_antenna_confirmation_speedbump">I have attached the antenna and see that the device is blinking blue</string>
+    <string name="p_sticker_error_dialog_content">There is a problem with the sticker on your device. Please contact support for a solution.</string>
+    <string name="p_action_contact_support">Contact Support</string>
 
 
 </resources>
