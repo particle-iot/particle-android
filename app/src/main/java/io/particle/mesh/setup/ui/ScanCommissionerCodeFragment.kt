@@ -3,6 +3,7 @@ package io.particle.mesh.setup.ui
 import android.os.Bundle
 import android.view.View
 import com.squareup.phrase.Phrase
+import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_commissioner_code.*
 import mu.KotlinLogging
@@ -32,7 +33,7 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
                 .format()
     }
 
-    override fun onBarcodeUpdated(barcodeData: BarcodeData?) {
+    override fun onBarcodeUpdated(barcodeData: CompleteBarcodeData?) {
         log.info { "onBarcodeUpdated(COMMISH): $barcodeData" }
         flowManagerVM.flowManager!!.bleConnectionModule.updateCommissionerBarcode(barcodeData!!)
     }

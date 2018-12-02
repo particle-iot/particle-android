@@ -13,6 +13,7 @@ import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.ui.BarcodeData
+import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import io.particle.sdk.app.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -28,13 +29,13 @@ class BLEConnectionModule(
 
     private val log = KotlinLogging.logger {}
 
-    val targetDeviceBarcodeLD: LiveData<BarcodeData?> = MutableLiveData()
+    val targetDeviceBarcodeLD: LiveData<CompleteBarcodeData?> = MutableLiveData()
     val targetDeviceTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
     // FIXME: having 2 LDs, representing the transceiver & the uninitialized transceiver isn't great
     val targetDeviceConnectedLD: LiveData<Boolean?> = MutableLiveData()
 
     var targetDeviceId: String? = null
-    val commissionerBarcodeLD: LiveData<BarcodeData?> = MutableLiveData()
+    val commissionerBarcodeLD: LiveData<CompleteBarcodeData?> = MutableLiveData()
     val commissionerTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
     val commissionerDeviceConnectedLD: LiveData<Boolean?> = MutableLiveData()
 
@@ -69,12 +70,12 @@ class BLEConnectionModule(
         }
     }
 
-    fun updateCommissionerBarcode(barcodeData: BarcodeData?) {
+    fun updateCommissionerBarcode(barcodeData: CompleteBarcodeData?) {
         log.info { "updateCommissionerBarcode()" }
         (commissionerBarcodeLD as MutableLiveData).postValue(barcodeData)
     }
 
-    fun updateTargetDeviceBarcode(barcodeData: BarcodeData?) {
+    fun updateTargetDeviceBarcode(barcodeData: CompleteBarcodeData?) {
         log.info { "updateTargetDeviceBarcode(): barcodeData=$barcodeData" }
         (targetDeviceBarcodeLD as MutableLiveData).postValue(barcodeData)
     }
@@ -276,7 +277,10 @@ class BLEConnectionModule(
     }
 
     @MainThread
-    private suspend fun connect(barcode: BarcodeData, connName: String): ProtocolTransceiver? {
+    private suspend fun connect(
+        barcode: CompleteBarcodeData,
+        connName: String
+    ): ProtocolTransceiver? {
         val device = btConnectionManager.connectToDevice(barcode.toDeviceName())
             ?: return null
         return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)

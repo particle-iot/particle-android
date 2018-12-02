@@ -1,17 +1,18 @@
 package io.particle.mesh.setup.ui
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import io.particle.sdk.app.R
 import mu.KotlinLogging
 
 abstract class ScanIntroBaseFragment : BaseMeshSetupFragment() {
 
-    abstract fun onBarcodeUpdated(barcodeData: BarcodeData?)
+    abstract fun onBarcodeUpdated(barcodeData: CompleteBarcodeData?)
 
     abstract val layoutId: Int
 
@@ -42,7 +43,7 @@ abstract class ScanIntroBaseFragment : BaseMeshSetupFragment() {
         stopObserving()
     }
 
-    private fun doOnBarcodeUpdated(barcodeData: BarcodeData?) {
+    private fun doOnBarcodeUpdated(barcodeData: CompleteBarcodeData?) {
         log.debug { "onBarcodeUpdated(): '$barcodeData'" }
 
         if (barcodeData == null) {

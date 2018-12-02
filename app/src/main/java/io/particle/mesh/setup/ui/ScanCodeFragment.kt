@@ -27,11 +27,16 @@ import io.particle.mesh.setup.barcodescanning.CameraSource
 import io.particle.mesh.setup.barcodescanning.CameraSourcePreview
 import io.particle.mesh.setup.barcodescanning.GraphicOverlay
 import io.particle.mesh.setup.barcodescanning.barcode.BarcodeScanningProcessor
+import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
+import io.particle.mesh.setup.ui.BarcodeData.PartialBarcodeData
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_code.*
 import kotlinx.android.synthetic.main.fragment_scan_code.view.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import java.io.IOException
 import java.util.*
@@ -48,12 +53,12 @@ class ScanViewModel : ViewModel() {
         }
     }
 
-    val latestScannedBarcode: LiveData<BarcodeData>
+    val latestScannedBarcode: LiveData<CompleteBarcodeData>
         get() = mutableLD
 
-    private val mutableLD = MutableLiveData<BarcodeData>()
+    private val mutableLD = MutableLiveData<CompleteBarcodeData>()
 
-    fun updateBarcode(newBarcode: BarcodeData) {
+    fun updateBarcode(newBarcode: CompleteBarcodeData) {
         mutableLD.postValue(newBarcode)
     }
 
@@ -63,12 +68,23 @@ class ScanViewModel : ViewModel() {
 
 }
 
-private val log = KotlinLogging.logger {}
 
-data class BarcodeData(
-        val serialNumber: String,
+sealed class BarcodeData {
+
+    abstract val serialNumber: String
+
+
+    data class CompleteBarcodeData(
+        override val serialNumber: String,
         val mobileSecret: String
-) {
+    ) : BarcodeData()
+
+
+    data class PartialBarcodeData(
+        override val serialNumber: String,
+        val partialMobileSecret: String
+    ) : BarcodeData()
+
 
     companion object {
 
@@ -77,25 +93,29 @@ data class BarcodeData(
                 return null
             }
 
-            // FIXME: REMOVE THIS!
-
-            if (rawBarcodeData.startsWith("ARGHAB838FBKGPW")) {
-                return BarcodeData("ARGHAB838FBKGPW", "RKEP8BAMT97LERH")
-
-            } else if (rawBarcodeData.startsWith("ARGHAB838PYVN9E")) {
-                return BarcodeData("ARGHAB838PYVN9E", "BUJ9CFGNMN7W2B2")
-            }
-
-            if (rawBarcodeData.length != 31) {
-                return null
-            }
             val split: List<String> = rawBarcodeData.split(" ")
-            if (split.size != 2 || split[0].length != 15 || split[1].length != 15) {
+
+            // we should have one and only one space char
+            if (split.size != 2) {
                 return null
             }
-            return BarcodeData(split[0], split[1])
+
+            val serial = split[0]
+            val mobileSecret = split[1]
+
+            if (serial.length != 15) {
+                return null  // serial number must be exactly 15 chars
+            }
+
+            return if (mobileSecret.length == 15) {
+                CompleteBarcodeData(serial, mobileSecret)
+            } else {
+                PartialBarcodeData(serial, mobileSecret)
+            }
         }
     }
+
+
 }
 
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.squareup.phrase.Phrase
 import io.particle.mesh.common.QATool
+import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_scan_code_intro.*
 
@@ -27,7 +28,7 @@ class ScanSetupTargetCodeIntroFragment : ScanIntroBaseFragment() {
                 .format()
     }
 
-    override fun onBarcodeUpdated(barcodeData: BarcodeData?) {
+    override fun onBarcodeUpdated(barcodeData: CompleteBarcodeData?) {
         if (barcodeData == null) {
             QATool.illegalState("Received null barcode?!")
             return
