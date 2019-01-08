@@ -44,7 +44,7 @@ public class WebSocketTransportHandler extends WebSocketHandlerAdapter {
     public HttpRequestHandler HTTP_REQUEST_HANDLER = null;
 
     public static boolean useBridge(URI uri) {
-        LOG.fine("Determine whether bridge needs to be used");
+//        LOG.fine("Determine whether bridge needs to be used");
 
         try {
             SecurityManager securityManager = System.getSecurityManager();
@@ -54,7 +54,7 @@ public class WebSocketTransportHandler extends WebSocketHandlerAdapter {
                 securityManager.checkConnect(host, port);
             }
 
-            LOG.fine("Bypassing the bridge: "+uri);
+//            LOG.fine("Bypassing the bridge: "+uri);
             return false;
         } catch (Exception e) {
             LOG.fine("Must use bridge: "+uri+": "+e.getMessage());

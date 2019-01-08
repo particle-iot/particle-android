@@ -48,7 +48,7 @@ public class HttpRequestEvent {
 
     public HttpRequestEvent(HttpRequest source, Kind kind, WrappedByteBuffer data) {
         this.source = source;
-        LOG.entering(CLASS_NAME, "<init>", new Object[] { source, kind, data });
+        //LOG.entering(CLASS_NAME, "<init>", new Object[] { source, kind, data });
         this.kind = kind;
         this.data = data;
     }

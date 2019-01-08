@@ -73,7 +73,7 @@ public class WebSocketNativeHandshakeHandler extends WebSocketHandlerAdapter {
 
     @Override
     public void processConnect(WebSocketChannel channel, WSURI uri, String[] protocols) {
-        LOG.entering(CLASS_NAME, "connect", new Object[]{uri, protocols});
+        //LOG.entering(CLASS_NAME, "connect", new Object[]{uri, protocols});
         // add kaazing protocol header
         String[] nextProtocols;
         if (protocols == null || protocols.length == 0) {
@@ -307,7 +307,7 @@ public class WebSocketNativeHandshakeHandler extends WebSocketHandlerAdapter {
         // Any changes to this method should result in the getEncodeRequestSize method below
         // to get accurate length of the buffer that needs to be allocated.
 
-        LOG.entering(CLASS_NAME, "encodeGetRequest", new Object[]{requestURI, names, values});
+        //LOG.entering(CLASS_NAME, "encodeGetRequest", new Object[]{requestURI, names, values});
         int requestSize = getEncodeRequestSize(requestURI, names, values);
         java.nio.ByteBuffer buf = java.nio.ByteBuffer.allocate(requestSize);
 

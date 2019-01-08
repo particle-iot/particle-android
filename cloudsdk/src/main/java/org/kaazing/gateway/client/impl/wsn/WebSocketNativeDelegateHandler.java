@@ -80,14 +80,14 @@ public class WebSocketNativeDelegateHandler implements WebSocketHandler {
                 
                 @Override
                 public void opened(OpenEvent event) {
-                    LOG.entering(CLASS_NAME, "opened");
+                    //LOG.entering(CLASS_NAME, "opened");
                     String protocol = event.getProtocol();
                     listener.connectionOpened(wsnChannel, protocol);
                 }
                 
                 @Override
                 public void closed(CloseEvent event) {
-                    LOG.entering(CLASS_NAME, "closed");
+                    //LOG.entering(CLASS_NAME, "closed");
                     wsnChannel.setDelegate(null);
                     
                     Exception ex = event.getException();
@@ -101,14 +101,14 @@ public class WebSocketNativeDelegateHandler implements WebSocketHandler {
 
                 @Override
                 public void redirected(RedirectEvent redirectEvent) {
-                    LOG.entering(CLASS_NAME, "redirected");
+                    //LOG.entering(CLASS_NAME, "redirected");
                     String redirectUrl = redirectEvent.getLocation();
                     listener.redirected(wsnChannel, redirectUrl);
                 }
                 
                 @Override
                 public void authenticationRequested(AuthenticateEvent authenticateEvent) {
-                    LOG.entering(CLASS_NAME, "authenticationRequested");
+                    //LOG.entering(CLASS_NAME, "authenticationRequested");
                     String location = wsnChannel.getLocation().toString();
                     String challenge = authenticateEvent.getChallenge();
                     listener.authenticationRequested(wsnChannel, location, challenge);
@@ -116,7 +116,7 @@ public class WebSocketNativeDelegateHandler implements WebSocketHandler {
                 
                 @Override
                 public void messageReceived(MessageEvent messageEvent) {
-                    LOG.entering(CLASS_NAME, "messageReceived");
+                    //LOG.entering(CLASS_NAME, "messageReceived");
                     WrappedByteBuffer messageBuffer = WrappedByteBuffer.wrap(messageEvent.getData());
                     String messageType = messageEvent.getMessageType();
                     

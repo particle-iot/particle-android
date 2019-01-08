@@ -39,7 +39,7 @@ public final class AuthenticationUtil {
     }
     
     public static ChallengeResponse getChallengeResponse(WebSocketChannel channel, ChallengeRequest challengeRequest, ChallengeResponse challengeResponse) {
-        LOG.entering(CLASS_NAME, "getChallengeResponse");
+        //LOG.entering(CLASS_NAME, "getChallengeResponse");
         
         ChallengeHandler challengeHandler = null;
 

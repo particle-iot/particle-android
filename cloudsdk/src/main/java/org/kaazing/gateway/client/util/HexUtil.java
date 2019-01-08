@@ -31,7 +31,7 @@ public class HexUtil {
     };
 
 //    public static final WrappedByteBuffer decode(WrappedByteBuffer encoded) {
-//        LOG.entering(CLASS_NAME, "decode", encoded);
+//        //LOG.entering(CLASS_NAME, "decode", encoded);
 //        if (encoded == null) {
 //            return null;
 //        }

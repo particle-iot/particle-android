@@ -1,13 +1,13 @@
 package io.particle.mesh.bluetooth
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Handler
 import android.os.HandlerThread
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import mu.KotlinLogging
@@ -21,6 +21,7 @@ private var HANDLER_THREAD_ID = 1
 // FIXME: think more carefully about these numbers.  What should they be?
 private const val DELAY_BETWEEN_SENDS_MILLIS = 50
 private const val WRITE_ATTEMPTS_BEFORE_CLOSING_CONNECTION = 10
+
 
 
 class BTCharacteristicWriter(

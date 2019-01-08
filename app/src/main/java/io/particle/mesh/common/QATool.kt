@@ -59,6 +59,6 @@ private class DefaultImpl : QAToolImpl {
     }
 
     override fun doReport(exception: Throwable) {
-        log.error(exception) { "Error reported: " }
+        log.error(exception) { "Not reporting error from default QATool impl: " }
     }
 }

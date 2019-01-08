@@ -32,7 +32,7 @@ public class LoadEvent extends Event {
 
     public LoadEvent(ByteBuffer responseBuffer) {
         super(Event.LOAD);
-        LOG.entering(CLASS_NAME, "<init>", new Object[]{responseBuffer});
+        //LOG.entering(CLASS_NAME, "<init>", new Object[]{responseBuffer});
         this.responseBuffer = responseBuffer;
     }
 

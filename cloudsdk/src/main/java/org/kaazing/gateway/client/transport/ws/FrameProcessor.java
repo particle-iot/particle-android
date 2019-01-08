@@ -64,7 +64,7 @@ public class FrameProcessor {
      * @param byteBuffer 
      */
     boolean process(InputStream inputStream) throws IOException {
-        LOG.entering(CLASS_NAME, "process");
+        //LOG.entering(CLASS_NAME, "process");
         int b;
         for (;;) {
             

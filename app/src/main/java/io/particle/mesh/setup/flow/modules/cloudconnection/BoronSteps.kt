@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.models.ParticleSimStatus
-import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.connection.ResultCode
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.ExceptionType
 import io.particle.mesh.setup.flow.FlowException

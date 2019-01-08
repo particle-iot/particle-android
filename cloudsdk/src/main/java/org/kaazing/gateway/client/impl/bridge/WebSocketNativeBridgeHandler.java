@@ -54,7 +54,7 @@ public class WebSocketNativeBridgeHandler implements WebSocketHandler, ProxyList
      * @throws Exception
      */
     public WebSocketNativeBridgeHandler() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     /**
@@ -62,7 +62,7 @@ public class WebSocketNativeBridgeHandler implements WebSocketHandler, ProxyList
      */
     @Override
     public synchronized void processConnect(WebSocketChannel channel, WSURI uri, String[] protocols) {
-        LOG.entering(CLASS_NAME, "processConnect", new Object[] { uri, protocols });
+        //LOG.entering(CLASS_NAME, "processConnect", new Object[] { uri, protocols });
 
         try {
             WebSocketNativeChannel nativeChannel = (WebSocketNativeChannel)channel;
@@ -100,7 +100,7 @@ public class WebSocketNativeBridgeHandler implements WebSocketHandler, ProxyList
      */
     @Override
     public void processAuthorize(WebSocketChannel channel, String authorizeToken) {
-        LOG.entering(CLASS_NAME, "processAuthorize");
+        //LOG.entering(CLASS_NAME, "processAuthorize");
 
         WebSocketNativeChannel nativeChannel = (WebSocketNativeChannel)channel;
         Proxy proxy = nativeChannel.getProxy();
@@ -128,7 +128,7 @@ public class WebSocketNativeBridgeHandler implements WebSocketHandler, ProxyList
 
     @Override
     public synchronized void processClose(WebSocketChannel channel, int code, String reason) {
-        LOG.entering(CLASS_NAME, "processDisconnect");
+        //LOG.entering(CLASS_NAME, "processDisconnect");
 
         WebSocketNativeChannel nativeChannel = (WebSocketNativeChannel)channel;
         Proxy proxy = nativeChannel.getProxy();
@@ -137,7 +137,7 @@ public class WebSocketNativeBridgeHandler implements WebSocketHandler, ProxyList
 
     @Override
     public final void eventReceived(Proxy proxy, XoaEventKind eventKind, Object[] params) {
-        LOG.entering(CLASS_NAME, "eventReceived", new Object[] { proxy.getHandlerId(), eventKind, params });
+        //LOG.entering(CLASS_NAME, "eventReceived", new Object[] { proxy.getHandlerId(), eventKind, params });
         if (LOG.isLoggable(Level.FINEST)) {
             LOG.log(Level.FINEST, "SOA <-- XOA:" + "id = " + proxy + " name: " + eventKind);
         }

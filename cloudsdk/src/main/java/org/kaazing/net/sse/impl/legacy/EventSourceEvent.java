@@ -54,7 +54,7 @@ public class EventSourceEvent extends EventObject {
 
     public EventSourceEvent(Object source, Type type, String message) {
         super(source);
-        LOG.entering(CLASS_NAME, "<init>", new Object[] { source, type, message });
+        //LOG.entering(CLASS_NAME, "<init>", new Object[] { source, type, message });
         this.type = type;
         this.data = message;
     }

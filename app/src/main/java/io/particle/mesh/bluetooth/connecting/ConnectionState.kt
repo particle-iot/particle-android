@@ -15,9 +15,7 @@ enum class ConnectionState(val intValue: Int)  {
 
     companion object {
 
-        private val intValueMap = buildIntValueMap(
-                values(), { state -> state.intValue }
-        )
+        private val intValueMap = buildIntValueMap(values()) { state -> state.intValue }
 
         fun fromIntValue(intValue: Int): ConnectionState {
             return intValueMap.get(intValue, UNKNOWN)

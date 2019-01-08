@@ -173,7 +173,10 @@ class ParticleDevice internal constructor(
         ELECTRON,
         ARGON,
         BORON,
-        XENON;
+        XENON,
+        A_SERIES,
+        B_SERIES,
+        X_SERIES;
 
 
         companion object {
@@ -186,6 +189,9 @@ class ParticleDevice internal constructor(
                     12 -> ARGON
                     13 -> BORON
                     14 -> XENON
+                    22 -> A_SERIES
+                    23 -> B_SERIES
+                    24 -> X_SERIES
                     31 -> RASPBERRY_PI
                     82 -> DIGISTUMP_OAK
                     88 -> RED_BEAR_DUO

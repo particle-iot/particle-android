@@ -2,13 +2,14 @@ package io.particle.mesh.setup.flow.modules.cloudconnection
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.NO_SECURITY
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.connection.ResultCode
 import io.particle.mesh.setup.flow.Clearable
 import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.FlowManager
@@ -68,7 +69,8 @@ class ArgonSteps(
     }
 
     suspend fun ensureTargetWifiNetworkPasswordCaptured() {
-        if (targetWifiNetworkPassword.value.truthy()) {
+        if (targetWifiNetworkPassword.value.truthy()
+            || targetWifiNetwork.value?.security == NO_SECURITY) {
             return
         }
 
@@ -95,7 +97,7 @@ class ArgonSteps(
 
             val joinNewNetworkResponse = xceiver.sendJoinNewNetwork(
                 targetWifiNetwork.value!!,
-                targetWifiNetworkPassword.value!!
+                targetWifiNetworkPassword.value
             )
             val genericError = FlowException("Could not join to Wi-Fi network due to an unknown error")
             when (joinNewNetworkResponse) {

@@ -52,7 +52,7 @@ public class EventSource {
      * EventSource provides a text-based stream abstraction for Java
      */
     public EventSource() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
     }
     
     /**
@@ -74,7 +74,7 @@ public class EventSource {
      *             on error
      */
     public void connect(String eventSourceUrl) throws IOException {
-        LOG.entering(CLASS_NAME, "connect", eventSourceUrl);
+        //LOG.entering(CLASS_NAME, "connect", eventSourceUrl);
         _getDelegate().connect(eventSourceUrl);
     }
 
@@ -82,7 +82,7 @@ public class EventSource {
      * Disconnects the stream.
      */
     public void disconnect() {
-        LOG.entering(CLASS_NAME, "disconnect");
+        //LOG.entering(CLASS_NAME, "disconnect");
         _getDelegate().disconnect();
     }
 
@@ -92,7 +92,7 @@ public class EventSource {
      * @param listener
      */
     public  void addEventSourceListener(EventSourceListener listener) {
-        LOG.entering(CLASS_NAME, "addEventSourceListener", listener);
+        //LOG.entering(CLASS_NAME, "addEventSourceListener", listener);
         _getDelegate().addEventSourceListener(listener);
     }
 
@@ -103,7 +103,7 @@ public class EventSource {
      *            EventSourceListener to be unregistered
      */
     public void removeEventSourceListener(EventSourceListener listener) {
-        LOG.entering(CLASS_NAME, "removeEventSourceListener", listener);
+        //LOG.entering(CLASS_NAME, "removeEventSourceListener", listener);
         _getDelegate().removeEventSourceListener(listener);
     }
     

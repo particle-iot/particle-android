@@ -52,7 +52,7 @@ public class SseURLConnectionImpl extends SseURLConnection {
 
     @Override
     public void connect() throws IOException {
-        _LOG.entering(_CLASS_NAME, "connect");
+        //LOG.entering(_CLASS_NAME, "connect");
         _eventSource.connect();
     }
 

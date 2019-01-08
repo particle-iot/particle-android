@@ -21,9 +21,7 @@ enum class GATTStatusCode(val intValue: Int) {
 
     companion object {
 
-        private val intValueMap = buildIntValueMap(
-                values(), { state -> state.intValue }
-        )
+        private val intValueMap = buildIntValueMap(values()) { state -> state.intValue }
 
         fun fromIntValue(intValue: Int): GATTStatusCode {
             return intValueMap.get(intValue, UNKNOWN)

@@ -93,8 +93,8 @@ public class DefaultBasicChallengeHandler extends BasicChallengeHandler implemen
     @Override
     public ChallengeResponse handle(ChallengeRequest challengeRequest) {
 
-        LOG.entering(CLASS_NAME, "handle", new String[]{challengeRequest.getLocation(),
-                                                        challengeRequest.getAuthenticationParameters()});
+//        LOG.entering(CLASS_NAME, "handle", new String[]{challengeRequest.getLocation(),
+//                                                        challengeRequest.getAuthenticationParameters()});
 
         if (challengeRequest.getLocation() != null) {
 

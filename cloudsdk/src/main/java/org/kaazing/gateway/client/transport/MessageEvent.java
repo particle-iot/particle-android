@@ -43,7 +43,7 @@ public class MessageEvent extends Event {
      */
     public MessageEvent(ByteBuffer data, String origin, String lastEventId, String messageType) {
         super(Event.MESSAGE);
-        LOG.entering(CLASS_NAME, "<init>", new Object[]{type, data, origin, lastEventId});
+        //LOG.entering(CLASS_NAME, "<init>", new Object[]{type, data, origin, lastEventId});
         this.data = data;
         this.origin = origin;
         this.lastEventId = lastEventId;

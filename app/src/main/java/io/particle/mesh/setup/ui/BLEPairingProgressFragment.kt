@@ -25,7 +25,7 @@ class BLEPairingProgressFragment : BaseMeshSetupFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         status_text.text = Phrase.from(view, R.string.pairing_with_your_device)
-                .put("product_type", flowManagerVM.flowManager!!.getTypeName())
+                .put("product_type", flowManagerVM.flowManager?.getTypeName())
                 .format()
     }
 

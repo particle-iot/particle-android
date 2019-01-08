@@ -164,7 +164,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
      * @throws Exception
      */
     public WebSocketDelegateImpl(URI url, URI origin, String[] protocols, long connectTimeout) {
-        LOG.entering(CLASS_NAME, "<init>", new Object[] {url, origin, protocols});
+        //LOG.entering(CLASS_NAME, "<init>", new Object[] {url, origin, protocols});
         if (origin == null) {
             throw new IllegalArgumentException("Please specify the origin for the WebSocket connection");
         }
@@ -251,7 +251,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
     //-------------------------------------------------------------------------------//
 
     public void processOpen() {
-        LOG.entering(CLASS_NAME, "processOpen");
+        //LOG.entering(CLASS_NAME, "processOpen");
         // pre-flight cookies request
         // Lookup the session cookie
         String scheme = this.url.getScheme();
@@ -339,7 +339,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
             }
 
             private void handleWrappedHTTPResponse(ByteBuffer responseBody) throws Exception {
-                LOG.entering(CLASS_NAME, "cookiesRequest.handleWrappedHTTPResponse");
+                //LOG.entering(CLASS_NAME, "cookiesRequest.handleWrappedHTTPResponse");
                 String[] lines = getLines(responseBody);
                 int statusCode = Integer.parseInt(lines[0].split(" ")[1]);
                 switch (statusCode) {
@@ -450,7 +450,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
     }
 
     protected void nativeConnect() {
-        LOG.entering(CLASS_NAME, "nativeConnect");
+        //LOG.entering(CLASS_NAME, "nativeConnect");
         String host = this.url.getHost();
         int port = this.url.getPort();
         String scheme = this.url.getScheme();
@@ -476,7 +476,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
     }
 
     private void negotiateWebSocketConnection(BridgeSocket socket) {
-        LOG.entering(CLASS_NAME, "negotiateWebSocketConnection", socket);
+        //LOG.entering(CLASS_NAME, "negotiateWebSocketConnection", socket);
         try {
             int headerCount = 9 + ((cookies == null) ? 0 : 1);
             String[] headerNames = new String[headerCount];
@@ -554,7 +554,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
         // Any changes to this method should result in the getEncodeRequestSize method below
         // to get accurate length of the buffer that needs to be allocated.
         
-        LOG.entering(CLASS_NAME, "encodeGetRequest", new Object[] {requestURI, names, values});
+        //LOG.entering(CLASS_NAME, "encodeGetRequest", new Object[] {requestURI, names, values});
         int requestSize = getEncodeRequestSize(requestURI, names, values);
         ByteBuffer buf = ByteBuffer.allocate(requestSize);
 
@@ -630,7 +630,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
     }
     
     public void processDisconnect(short code, String reason) throws IOException {
-        LOG.entering(CLASS_NAME, "disconnect");
+        //LOG.entering(CLASS_NAME, "disconnect");
         //stopReaderThread = true;  --- rfc 6455 donot stop SockectReader, wait for CloseFrame
 
         //send close frame if webSocket is open
@@ -697,14 +697,14 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
     }
 
     public void processAuthorize(String authorize) {
-        LOG.entering(CLASS_NAME, "processAuthorize", authorize);
+        //LOG.entering(CLASS_NAME, "processAuthorize", authorize);
         this.authorize = authorize;
         processOpen();
     }
 
     @Override
     public void processSend(ByteBuffer data) {
-        LOG.entering(CLASS_NAME, "processSend", data);
+        //LOG.entering(CLASS_NAME, "processSend", data);
 
         //move encoder code to core.java.client.internal, here just send data
         ByteBuffer frame = WsFrameEncodingSupport.rfc6455Encode(new WsMessage(data, Kind.BINARY), new Random().nextInt());
@@ -714,7 +714,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
     
     @Override
     public void processSend(String data) {
-        LOG.entering(CLASS_NAME, "processSend", data);
+        //LOG.entering(CLASS_NAME, "processSend", data);
         ByteBuffer buf = null;
         try {
             buf = ByteBuffer.wrap(data.getBytes("UTF-8"));
@@ -731,7 +731,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
     }
     
     private void send(ByteBuffer frame) {
-        LOG.entering(CLASS_NAME, "send", frame);
+        //LOG.entering(CLASS_NAME, "send", frame);
         if (socket == null) {
             handleError(new IllegalStateException("Socket is null"));
         }
@@ -849,12 +849,12 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
         InputStream inputStream = null;
 
         public SocketReader(InputStream inputStream) throws IOException {
-            LOG.entering(CLASS_NAME, "<init>");
+            //LOG.entering(CLASS_NAME, "<init>");
             this.inputStream = inputStream;
         }
 
         public void run() {
-            LOG.entering(CLASS_NAME, "run");
+            //LOG.entering(CLASS_NAME, "run");
             // TODO: to check for the first 85 bytes of the response instead.
             try {
                while (!stopReaderThread && !connectionUpgraded) {
@@ -996,7 +996,7 @@ public class WebSocketDelegateImpl implements WebSocketDelegate {
         }
 
         private void processLine(String line) throws Exception {
-            LOG.entering(CLASS_NAME, "processLine", line);
+            //LOG.entering(CLASS_NAME, "processLine", line);
             
             switch (state) {
             case START:

@@ -56,6 +56,7 @@ class GattConnector(private val ctx: Context) {
         }
     }
 
+
     private fun doCreateGattConnection(
             device: BluetoothDevice,
             ctx: Context,
@@ -65,10 +66,6 @@ class GattConnector(private val ctx: Context) {
         log.info { "About to connect to $device" }
         val gattRef = device.connectGatt(ctx.applicationContext, false, liveDataCallbacks)
         log.info { "Called connectGatt for $gattRef" }
-
-        liveDataCallbacks.connectionStateChangedLD.observe(lifecycleOwner, Observer {
-            log.debug { "Connection state UpDaTeD to $it" }
-        })
 
         liveDataCallbacks.connectionStateChangedLD
                 .first { it == ConnectionState.CONNECTED }

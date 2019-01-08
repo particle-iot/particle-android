@@ -42,7 +42,7 @@ public class WebSocketUtil {
      * from least to most significant. An integer serves as a temporary storage, which is then written out in reversed order.
      */
     public static void encodeLength(ByteArrayOutputStream out, int length) {
-        LOG.entering(CLASS_NAME, "encodeLength", new Object[] { out, length });
+        //LOG.entering(CLASS_NAME, "encodeLength", new Object[] { out, length });
         int byteCount = 0;
         long encodedLength = 0;
 
@@ -77,7 +77,7 @@ public class WebSocketUtil {
     }
 
     public static void encodeLength(WrappedByteBuffer buf, int length) {
-        LOG.entering(CLASS_NAME, "encodeLength", new Object[] { buf, length });
+        //LOG.entering(CLASS_NAME, "encodeLength", new Object[] { buf, length });
         int byteCount = 0;
         int encodedLength = 0;
 

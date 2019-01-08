@@ -35,6 +35,7 @@ enum class ConnectionPriority(val sdkVal: Int) {
 class BluetoothConnection(
         val connectionStateChangedLD: LiveData<ConnectionState?>,
         private val gatt: BluetoothGatt,
+        private val callbacks: BLELiveDataCallbacks,
         // this channel receives arbitrary-length arrays (not limited to BLE MTU)
         val packetSendChannel: SendChannel<ByteArray>,
         // this channel emits arbitrary-length arrays (not limited to BLE MTU)
@@ -66,8 +67,10 @@ class BluetoothConnection(
         QATool.runSafely(
                 { packetSendChannel.close() },
                 { closablePacketReceiveChannel.close() },
+                { callbacks.closeChannel() },
                 { gatt.disconnect() }
         )
+
         if (!closeGatt) {
             return
         }
@@ -117,6 +120,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         val conn = BluetoothConnection(
                 callbacks.connectionStateChangedLD,
                 gatt,
+                callbacks,
                 messageWriteChannel,
                 callbacks.readOrChangedReceiveChannel as Channel<ByteArray>
         )
@@ -127,6 +131,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
     }
 
     private suspend fun scanForDevice(deviceName: String, timeout: Long): BTDeviceAddress? {
+        log.info { "entering scanForDevice()" }
         val scannerSuspender = buildMatchingDeviceNameSuspender(ctx, deviceName)
         val scanResult = withTimeoutOrNull(timeout) {
             scannerSuspender.awaitResult()

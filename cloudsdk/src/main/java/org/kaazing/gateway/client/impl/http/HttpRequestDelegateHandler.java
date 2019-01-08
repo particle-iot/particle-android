@@ -152,7 +152,7 @@ public class HttpRequestDelegateHandler implements HttpRequestHandler {
 
     @Override
     public void processSend(HttpRequest request, WrappedByteBuffer content) {
-//        LOG.entering(CLASS_NAME, "processSend", content);
+//        //LOG.entering(CLASS_NAME, "processSend", content);
         
         if (request.getReadyState() != HttpRequest.ReadyState.READY) {
             throw new IllegalStateException("HttpRequest must be in READY state to send");

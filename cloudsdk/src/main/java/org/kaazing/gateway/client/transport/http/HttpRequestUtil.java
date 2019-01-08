@@ -28,7 +28,7 @@ public class HttpRequestUtil {
     private static final Logger LOG = Logger.getLogger(CLASS_NAME);
    
     public static void validateHeader(String header) {
-        LOG.entering(CLASS_NAME, "validateHeader", header);
+//        //LOG.entering(CLASS_NAME, "validateHeader", header);
         /*
          * From the XMLHttpRequest spec:
          * http://www.w3.org/TR/XMLHttpRequest/#setrequestheader

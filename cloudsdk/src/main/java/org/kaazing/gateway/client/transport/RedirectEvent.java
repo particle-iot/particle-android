@@ -36,7 +36,7 @@ public class RedirectEvent extends Event {
      */
     public RedirectEvent(String location) {
         super(Event.REDIRECT);
-        LOG.entering(CLASS_NAME, "<init>", new Object[]{type, location});
+        //LOG.entering(CLASS_NAME, "<init>", new Object[]{type, location});
         this.location = location;
     }
 

@@ -25,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType;
 import io.particle.android.sdk.cloud.ParticleEventVisibility;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.models.DeviceStateChange;
@@ -123,6 +124,14 @@ public class InspectorActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.inspector, menu);
+
+        ParticleDeviceType type = device.getDeviceType();
+        if (type == ParticleDeviceType.ARGON
+                || type == ParticleDeviceType.BORON
+                || type == ParticleDeviceType.XENON) {
+            menu.findItem(R.id.action_device_flash_tinker).setVisible(false);
+        }
+
         return true;
     }
 

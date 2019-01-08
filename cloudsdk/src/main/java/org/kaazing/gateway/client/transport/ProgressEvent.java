@@ -35,24 +35,24 @@ public class ProgressEvent extends Event {
 
     public ProgressEvent(ByteBuffer payload, int bytesLoaded, int bytesTotal) {
         super("progress");
-        LOG.entering(CLASS_NAME, "<init>", new Object[]{payload, bytesLoaded, bytesTotal});
+//        //LOG.entering(CLASS_NAME, "<init>", new Object[]{payload, bytesLoaded, bytesTotal});
         this.payload = payload;
         this.bytesLoaded = bytesLoaded;
         this.bytesTotal = bytesTotal;
     }
 
     public int getBytesTotal() {
-        LOG.exiting(CLASS_NAME, "getBytesTotal", bytesTotal);
+//        LOG.exiting(CLASS_NAME, "getBytesTotal", bytesTotal);
         return bytesTotal;
     }
 
     public int getBytesLoaded() {
-        LOG.exiting(CLASS_NAME, "getBytesLoaded", bytesLoaded);
+//        LOG.exiting(CLASS_NAME, "getBytesLoaded", bytesLoaded);
         return bytesLoaded;
     }
 
     public ByteBuffer getPayload() {
-        LOG.exiting(CLASS_NAME, "getPayload", payload);
+//        LOG.exiting(CLASS_NAME, "getPayload", payload);
         return payload;
     }
 

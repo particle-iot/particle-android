@@ -173,7 +173,11 @@ class EventsDelegate {
         void startListening() throws IOException {
             sseEventSource.connect();
             final SseEventReader sseEventReader = sseEventSource.getEventReader();
-            future = executor.submit(() -> startHandlingEvents(sseEventReader));
+            try {
+                future = executor.submit(() -> startHandlingEvents(sseEventReader));
+            } catch (Exception ex) {
+                // FIXME: fix this a better way instead of just the band-aid
+            }
         }
 
         void stopListening() throws IOException {

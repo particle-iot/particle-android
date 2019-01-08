@@ -67,7 +67,7 @@ class DownstreamHandlerImpl implements DownstreamHandler {
     private DownstreamHandlerListener listener;
 
     DownstreamHandlerImpl() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
 
         HttpRequestHandler transportHandler = HttpRequestTransportHandler.DEFAULT_FACTORY.createHandler();
         setNextHandler(transportHandler);
@@ -75,12 +75,12 @@ class DownstreamHandlerImpl implements DownstreamHandler {
 
     @Override
     public void processConnect(final DownstreamChannel channel, final HttpURI uri) {
-        LOG.entering(CLASS_NAME, "processConnect");
+        //LOG.entering(CLASS_NAME, "processConnect");
         makeRequest(channel, uri);
     }
 
     private void makeRequest(final DownstreamChannel channel, final HttpURI uri) {
-        LOG.entering(CLASS_NAME, "makeRequest");
+        //LOG.entering(CLASS_NAME, "makeRequest");
 
         try {
             // Cancel idle timer if running
@@ -137,7 +137,7 @@ class DownstreamHandlerImpl implements DownstreamHandler {
     }
 
     private void reconnectIfNecessary(DownstreamChannel channel) {
-        LOG.entering(CLASS_NAME, "reconnectIfNecessary");
+        //LOG.entering(CLASS_NAME, "reconnectIfNecessary");
 
         if (channel.closing.get()) {
             if (channel.outstandingRequests.size() == 0) {
@@ -206,7 +206,7 @@ class DownstreamHandlerImpl implements DownstreamHandler {
     //private WebSocketEmulatedDecoder<DownstreamChannel> decoder = new WebSocketEmulatedDecoderImpl<DownstreamChannel>();
 
     private synchronized void processProgressEvent(DownstreamChannel channel, WrappedByteBuffer buffer) {
-        LOG.entering(CLASS_NAME, "processProgressEvent", buffer);
+        //LOG.entering(CLASS_NAME, "processProgressEvent", buffer);
         try {
             
             // update timestamp that is used to record the timestamp of last received message
@@ -281,7 +281,7 @@ class DownstreamHandlerImpl implements DownstreamHandler {
     }
 
     void handleReAuthenticationRequested(DownstreamChannel channel, String location, String challenge) {
-        LOG.entering(CLASS_NAME, "handleAuthenticationRequested");
+        //LOG.entering(CLASS_NAME, "handleAuthenticationRequested");
 
         //handle revalidate event
         String url = channel.location.getScheme() + "://" + channel.location.getURI().getAuthority() + location;
@@ -303,7 +303,7 @@ class DownstreamHandlerImpl implements DownstreamHandler {
 
     @Override
     public void processClose(DownstreamChannel channel) {
-        LOG.entering(CLASS_NAME, "stop");
+        //LOG.entering(CLASS_NAME, "stop");
         for (HttpRequest request : channel.outstandingRequests) {
             nextHandler.processAbort(request);
         }
@@ -350,7 +350,7 @@ class DownstreamHandlerImpl implements DownstreamHandler {
 
             @Override
             public void requestLoaded(HttpRequest request, HttpResponse response) {
-                LOG.entering(CLASS_NAME, "requestLoaded", request);
+                //LOG.entering(CLASS_NAME, "requestLoaded", request);
                 DownstreamChannel channel = (DownstreamChannel) request.parent;
                 channel.outstandingRequests.remove(request);
                 reconnectIfNecessary(channel);
@@ -362,14 +362,14 @@ class DownstreamHandlerImpl implements DownstreamHandler {
 
             @Override
             public void errorOccurred(HttpRequest request, Exception exception) {
-                LOG.entering(CLASS_NAME, "errorOccurred", request);
+                //LOG.entering(CLASS_NAME, "errorOccurred", request);
                 DownstreamChannel channel = (DownstreamChannel) request.parent;
                 listener.downstreamFailed(channel, exception);
             }
 
             @Override
             public void requestAborted(HttpRequest request) {
-                LOG.entering(CLASS_NAME, "errorOccurred", request);
+                //LOG.entering(CLASS_NAME, "errorOccurred", request);
             }
         });
     }

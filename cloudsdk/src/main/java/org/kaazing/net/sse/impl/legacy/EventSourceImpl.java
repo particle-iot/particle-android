@@ -49,7 +49,7 @@ public class EventSourceImpl extends EventSource {
      * EventSource provides a text-based stream abstraction for Java
      */
     public EventSourceImpl() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     /**
@@ -86,7 +86,7 @@ public class EventSourceImpl extends EventSource {
      *             on error
      */
     public void connect(String eventSourceUrl) throws IOException {
-        LOG.entering(CLASS_NAME, "connect", eventSourceUrl);
+        //LOG.entering(CLASS_NAME, "connect", eventSourceUrl);
         if (stream != null) {
             LOG.warning("Reusing the same event source for a differnt URL, please create a new EventSource object");
             throw new IllegalArgumentException(
@@ -101,7 +101,7 @@ public class EventSourceImpl extends EventSource {
      * Disconnects the stream.
      */
     public void disconnect() {
-        LOG.entering(CLASS_NAME, "disconnect");
+        //LOG.entering(CLASS_NAME, "disconnect");
         stream.stop();
         stream = null;
     }
@@ -112,7 +112,7 @@ public class EventSourceImpl extends EventSource {
      * @param listener
      */
     public void addEventSourceListener(EventSourceListener listener) {
-        LOG.entering(CLASS_NAME, "addEventSourceListener", listener);
+        //LOG.entering(CLASS_NAME, "addEventSourceListener", listener);
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -126,7 +126,7 @@ public class EventSourceImpl extends EventSource {
      *            EventSourceListener to be unregistered
      */
     public void removeEventSourceListener(EventSourceListener listener) {
-        LOG.entering(CLASS_NAME, "removeEventSourceListener", listener);
+        //LOG.entering(CLASS_NAME, "removeEventSourceListener", listener);
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -137,7 +137,7 @@ public class EventSourceImpl extends EventSource {
         
         @Override
         public void streamOpened() {
-            LOG.entering(CLASS_NAME, "streamOpened");
+            //LOG.entering(CLASS_NAME, "streamOpened");
             
             EventSourceEvent event = new EventSourceEvent(this, EventSourceEvent.Type.OPEN);
             for (EventSourceListener listener : listeners) {
@@ -151,7 +151,7 @@ public class EventSourceImpl extends EventSource {
         
         @Override
         public void messageReceived(String eventName, String message) {
-            LOG.entering(CLASS_NAME, "fireMessageListeners", message);
+            //LOG.entering(CLASS_NAME, "fireMessageListeners", message);
             
             EventSourceEvent event = new EventSourceEvent(this, EventSourceEvent.Type.MESSAGE, message);
             for (EventSourceListener listener : listeners) {
@@ -165,7 +165,7 @@ public class EventSourceImpl extends EventSource {
         
         @Override
         public void streamErrored(Exception exception) {
-            LOG.entering(CLASS_NAME, "fireErrorListeners");
+            //LOG.entering(CLASS_NAME, "fireErrorListeners");
             
             EventSourceEvent event = new EventSourceEvent(this, EventSourceEvent.Type.ERROR);
             for (EventSourceListener listener : listeners) {

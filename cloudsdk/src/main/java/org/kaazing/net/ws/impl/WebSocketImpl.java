@@ -189,7 +189,7 @@ public class WebSocketImpl extends WebSocket {
     @Override
     public synchronized void close(int code, String reason) throws IOException {
         String args = String.format("code = '%d',  reason = '%s'", code, reason);
-        _LOG.entering(_CLASS_NAME, "close", args);
+        //_LOG.entering(_CLASS_NAME, "close", args);
 
         if (code != 0) {
             //verify code and reason agaist RFC 6455
@@ -264,7 +264,7 @@ public class WebSocketImpl extends WebSocket {
 
     @Override
     public void connect() throws IOException {
-        _LOG.entering(_CLASS_NAME, "connect");
+        //_LOG.entering(_CLASS_NAME, "connect");
 
         ResumableTimer connectTimer = null;
         String[] enabledProtocols = null;
@@ -682,7 +682,7 @@ public class WebSocketImpl extends WebSocket {
     }
 
     public synchronized void send(ByteBuffer buf) throws IOException {
-        _LOG.entering(_CLASS_NAME, "send", buf);
+        //_LOG.entering(_CLASS_NAME, "send", buf);
 
         if (_readyState != ReadyState.OPEN) {
             String s = "Messages can be sent only when the WebSocket is connected";
@@ -693,7 +693,7 @@ public class WebSocketImpl extends WebSocket {
     }
 
     public synchronized void send(String message) throws IOException {
-        _LOG.entering(_CLASS_NAME, "send", message);
+        //_LOG.entering(_CLASS_NAME, "send", message);
 
         if (_readyState != ReadyState.OPEN) {
             String s = "Messages can be sent only when the WebSocket is connected";
@@ -1041,7 +1041,7 @@ public class WebSocketImpl extends WebSocket {
 
         @Override
         public void connectionOpened(WebSocketChannel channel, String protocol) {
-            _LOG.entering(_CLASS_NAME, "connectionOpened");
+            //_LOG.entering(_CLASS_NAME, "connectionOpened");
 
             WebSocketCompositeChannel cc = (WebSocketCompositeChannel) channel;
             WebSocketImpl webSocket = (WebSocketImpl) cc.getWebSocket();
@@ -1062,7 +1062,7 @@ public class WebSocketImpl extends WebSocket {
 
         @Override
         public void binaryMessageReceived(WebSocketChannel channel, WrappedByteBuffer buf) {
-            _LOG.entering(_CLASS_NAME, "binaryMessageReceived");
+            //_LOG.entering(_CLASS_NAME, "binaryMessageReceived");
 
             WebSocketCompositeChannel cc = (WebSocketCompositeChannel) channel;
             WebSocketImpl webSocket = (WebSocketImpl) cc.getWebSocket();
@@ -1084,7 +1084,7 @@ public class WebSocketImpl extends WebSocket {
 
         @Override
         public void textMessageReceived(WebSocketChannel channel, String text) {
-            _LOG.entering(_CLASS_NAME, "textMessageReceived", text);
+            //_LOG.entering(_CLASS_NAME, "textMessageReceived", text);
 
             WebSocketCompositeChannel cc = (WebSocketCompositeChannel) channel;
             WebSocketImpl webSocket = (WebSocketImpl) cc.getWebSocket();
@@ -1108,7 +1108,7 @@ public class WebSocketImpl extends WebSocket {
                                      boolean wasClean,
                                      int code,
                                      String reason) {
-            _LOG.entering(_CLASS_NAME, "connectionClosed");
+            //_LOG.entering(_CLASS_NAME, "connectionClosed");
 
             WebSocketCompositeChannel cc = (WebSocketCompositeChannel) channel;
             WebSocketImpl webSocket = (WebSocketImpl) cc.getWebSocket();
@@ -1123,7 +1123,7 @@ public class WebSocketImpl extends WebSocket {
 
         @Override
         public void connectionClosed(WebSocketChannel channel, Exception ex) {
-            _LOG.entering(_CLASS_NAME, "onError");
+            //_LOG.entering(_CLASS_NAME, "onError");
 
             WebSocketCompositeChannel cc = (WebSocketCompositeChannel) channel;
             WebSocketImpl webSocket = (WebSocketImpl) cc.getWebSocket();
@@ -1135,7 +1135,7 @@ public class WebSocketImpl extends WebSocket {
 
         @Override
         public void connectionFailed(WebSocketChannel channel, Exception ex) {
-            _LOG.entering(_CLASS_NAME, "onError");
+            //_LOG.entering(_CLASS_NAME, "onError");
 
             WebSocketCompositeChannel cc = (WebSocketCompositeChannel) channel;
             WebSocketImpl webSocket = (WebSocketImpl) cc.getWebSocket();

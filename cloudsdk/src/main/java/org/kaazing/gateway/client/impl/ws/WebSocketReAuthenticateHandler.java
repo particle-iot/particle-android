@@ -56,7 +56,7 @@ public class WebSocketReAuthenticateHandler implements Handler {
     }
 
     public void processOpen(Channel channel, HttpURI location) {
-        LOG.entering(CLASS_NAME, "processOpen", location);
+        //LOG.entering(CLASS_NAME, "processOpen", location);
         
         HttpRequest request = HttpRequest.HTTP_REQUEST_FACTORY.createHttpRequest(Method.GET, location, false);
         /* 

@@ -54,7 +54,7 @@ public class WebSocketNativeHandler extends WebSocketHandlerAdapter {
      * @throws Exception
      */
     public WebSocketNativeHandler() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
 
         WebSocketNativeHandshakeHandler handshakeHandler = new WebSocketNativeHandshakeHandler();
         WebSocketNativeAuthenticationHandler authHandler = new WebSocketNativeAuthenticationHandler();
@@ -128,7 +128,7 @@ public class WebSocketNativeHandler extends WebSocketHandlerAdapter {
      */
     @Override
     public void processConnect(WebSocketChannel channel, WSURI location, String[] protocols) {
-        LOG.entering(CLASS_NAME, "connect", channel);
+        //LOG.entering(CLASS_NAME, "connect", channel);
 
         nextHandler.processConnect(channel, location, protocols);
     }

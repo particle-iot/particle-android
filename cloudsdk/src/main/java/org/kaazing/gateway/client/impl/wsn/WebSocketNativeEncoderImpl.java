@@ -40,7 +40,7 @@ public class WebSocketNativeEncoderImpl implements WebSocketNativeEncoder {
     
     @Override
     public void encodeTextMessage(WebSocketChannel channel, String message, EncoderOutput<WebSocketChannel> out) {
-        LOG.entering(CLASS_NAME, "processTextMessage", message);
+        //LOG.entering(CLASS_NAME, "processTextMessage", message);
 
         WrappedByteBuffer buf = new WrappedByteBuffer();
         buf.putString(message, UTF8);
@@ -53,7 +53,7 @@ public class WebSocketNativeEncoderImpl implements WebSocketNativeEncoder {
 
     @Override
     public void encodeBinaryMessage(WebSocketChannel channel, WrappedByteBuffer message, EncoderOutput<WebSocketChannel> out) {
-        LOG.entering(CLASS_NAME, "processBinaryMessage", message);
+        //LOG.entering(CLASS_NAME, "processBinaryMessage", message);
         
         WrappedByteBuffer buffer = encodeRFC6455(message, true);
 

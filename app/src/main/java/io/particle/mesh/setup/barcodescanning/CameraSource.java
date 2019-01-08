@@ -24,6 +24,8 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
+
+import android.hardware.Camera.Parameters;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -303,10 +305,11 @@ public class CameraSource {
     if (requestedAutoFocus) {
       if (parameters
           .getSupportedFocusModes()
-          .contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+          .contains(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+        parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        Log.i(TAG, "Autofocus enabled!");
       } else {
-        Log.i(TAG, "Camera auto focus is not supported on this device.");
+        Log.i(TAG, "Camera autofocus is not supported on this device.");
       }
     }
 

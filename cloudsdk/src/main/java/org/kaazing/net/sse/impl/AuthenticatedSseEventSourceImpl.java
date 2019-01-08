@@ -263,13 +263,13 @@ public class AuthenticatedSseEventSourceImpl extends SseEventSourceImpl {
 
         @Override
         public void messageReceived(String eventName, String message) {
-            _LOG.d("entering " + _CLASS_NAME + ".messageReceived: " + message);
+//            _LOG.d("entering " + _CLASS_NAME + ".messageReceived: " + message);
             messageArrived(eventName, message);
         }
 
         @Override
         public void streamErrored(Exception exception) {
-            _LOG.d("entering " + _CLASS_NAME + ".streamErrored");
+//            _LOG.d("entering " + _CLASS_NAME + ".streamErrored");
             connectionFailed(exception);
         }
     };

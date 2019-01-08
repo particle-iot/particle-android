@@ -36,18 +36,18 @@ public class HttpRequestTransportHandler extends HttpRequestHandlerAdapter {
     public static HttpRequestHandlerFactory DEFAULT_FACTORY = () -> {
         HttpRequestHandler requestHandler = new HttpRequestTransportHandler();
 
-        if (LOG.isLoggable(Level.FINE)) {
-            HttpRequestLoggingHandler loggingHandler = new HttpRequestLoggingHandler();
-            loggingHandler.setNextHandler(requestHandler);
-            requestHandler = loggingHandler;
-        }
+//        if (LOG.isLoggable(Level.FINE)) {
+//            HttpRequestLoggingHandler loggingHandler = new HttpRequestLoggingHandler();
+//            loggingHandler.setNextHandler(requestHandler);
+//            requestHandler = loggingHandler;
+//        }
 
         return requestHandler;
     };
 
     @Override
     public void processOpen(HttpRequest request) {
-        LOG.entering(CLASS_NAME, "processOpen: "+request);
+//        //LOG.entering(CLASS_NAME, "processOpen: "+request);
         
         HttpRequestHandler transportHandler;
         if (WebSocketTransportHandler.useBridge(request.getUri().getURI())) {
@@ -102,7 +102,7 @@ public class HttpRequestTransportHandler extends HttpRequestHandlerAdapter {
 
     @Override
     public void processSend(HttpRequest request, WrappedByteBuffer buffer) {
-        LOG.entering(CLASS_NAME, "processSend: "+request);
+//        //LOG.entering(CLASS_NAME, "processSend: "+request);
         
         HttpRequestHandler transportHandler = request.transportHandler;
         transportHandler.processSend(request, buffer);
@@ -110,7 +110,7 @@ public class HttpRequestTransportHandler extends HttpRequestHandlerAdapter {
 
     @Override
     public void processAbort(HttpRequest request) {
-        LOG.entering(CLASS_NAME, "processAbort: "+request);
+//        //LOG.entering(CLASS_NAME, "processAbort: "+request);
         
         HttpRequestHandler transportHandler = request.transportHandler;
         transportHandler.processAbort(request);

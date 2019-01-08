@@ -137,18 +137,18 @@ class UpstreamHandlerImpl implements UpstreamHandler {
 
     @Override
     public void processTextMessage(UpstreamChannel channel, String message) {
-        LOG.entering(CLASS_NAME, "processsTextMessage", message);
+        //LOG.entering(CLASS_NAME, "processsTextMessage", message);
         encoder.encodeTextMessage(channel, message, out);
     }
 
     @Override
     public void processBinaryMessage(UpstreamChannel channel, WrappedByteBuffer message) {
-        LOG.entering(CLASS_NAME, "processsBinaryMessage", message);
+        //LOG.entering(CLASS_NAME, "processsBinaryMessage", message);
         encoder.encodeBinaryMessage(channel, message, out);
     }
     
     private void processMessageWrite(UpstreamChannel channel, WrappedByteBuffer payload) {
-        LOG.entering(CLASS_NAME, "processMessageWrite", payload);
+        //LOG.entering(CLASS_NAME, "processMessageWrite", payload);
         // queue the post request, even if another thread is
         // in the middle of sending a request - in which case
         // this request will piggy back on it
@@ -158,7 +158,7 @@ class UpstreamHandlerImpl implements UpstreamHandler {
     }
 
     private void flushIfNecessary(final UpstreamChannel channel) {
-        LOG.entering(CLASS_NAME, "flushIfNecessary");
+        //LOG.entering(CLASS_NAME, "flushIfNecessary");
         if (channel.sendInFlight.compareAndSet(false, true)) {
             final HttpRequest request = HttpRequest.HTTP_REQUEST_FACTORY.createHttpRequest(Method.POST, channel.location, false);
             request.setHeader(WebSocketEmulatedHandler.HEADER_CONTENT_TYPE, "application/octet-stream");

@@ -46,11 +46,11 @@ public class Base64Util {
 
     @Deprecated
     private Base64Util() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     public static String encode(WrappedByteBuffer decoded) {
-        LOG.entering(CLASS_NAME, "encode", decoded);
+        //LOG.entering(CLASS_NAME, "encode", decoded);
 
         int decodedSize = decoded.remaining();
         int effectiveDecodedSize = ((decodedSize+2) / 3) * 3;
@@ -98,7 +98,7 @@ public class Base64Util {
     }
 
     public static WrappedByteBuffer decode(String encoded) {
-        LOG.entering(CLASS_NAME, "decode", encoded);
+        //LOG.entering(CLASS_NAME, "decode", encoded);
 
         if (encoded == null) {
             return null;

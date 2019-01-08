@@ -64,7 +64,7 @@ public class WebSocketNativeBalancingHandler extends WebSocketHandlerAdapter {
      */
     @Override
     public void processConnect(WebSocketChannel channel, WSURI uri, String[] protocols) {
-        LOG.entering(CLASS_NAME, "connect", new Object[]{uri, protocols});
+        //LOG.entering(CLASS_NAME, "connect", new Object[]{uri, protocols});
         WebSocketNativeChannel wsChannel = (WebSocketNativeChannel) channel;
         wsChannel.balanced.set(0);
         nextHandler.processConnect(channel, uri.addQueryParameter(".kl=Y"), protocols);
@@ -76,7 +76,7 @@ public class WebSocketNativeBalancingHandler extends WebSocketHandlerAdapter {
      * @throws Exception
      */
     private void reconnect(WebSocketChannel channel, WSURI uri, String protocol) {
-        LOG.entering(CLASS_NAME, "reconnect", new Object[]{uri, protocol});
+        //LOG.entering(CLASS_NAME, "reconnect", new Object[]{uri, protocol});
 
         WebSocketNativeChannel wsChannel = (WebSocketNativeChannel) channel;
         wsChannel.redirectUri = uri;
@@ -98,7 +98,7 @@ public class WebSocketNativeBalancingHandler extends WebSocketHandlerAdapter {
     }
 
     void handleBinaryMessageReceived(WebSocketChannel channel, WrappedByteBuffer message) {
-        LOG.entering(CLASS_NAME, "handleMessageReceived", message);
+        //LOG.entering(CLASS_NAME, "handleMessageReceived", message);
         WebSocketNativeChannel wsChannel = (WebSocketNativeChannel) channel;
         if (wsChannel.balanced.get() <= 1 && message.remaining() >= 4) {
             byte[] prefix = new byte[3];
@@ -149,7 +149,7 @@ public class WebSocketNativeBalancingHandler extends WebSocketHandlerAdapter {
     }
 
     void handleTextMessageReceived(WebSocketChannel channel, String message) {
-        LOG.entering(CLASS_NAME, "handleTextMessageReceived", message);
+        //LOG.entering(CLASS_NAME, "handleTextMessageReceived", message);
         WebSocketNativeChannel wsChannel = (WebSocketNativeChannel) channel;
         if (wsChannel.balanced.get() <= 1 &&
                 message.length() >= 2 &&

@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 
 public class SseEventReaderImpl extends SseEventReader {
     private static final String _CLASS_NAME = SseEventReaderImpl.class.getName();
-    private static final Logger _LOG = Logger.getLogger(_CLASS_NAME);
+//    private static final Logger _LOG = Logger.getLogger(_CLASS_NAME);
 
     private final BlockingQueueImpl<Object>    _sharedQueue;
     private final SseEventSourceImpl           _eventSource;
@@ -96,14 +96,14 @@ public class SseEventReaderImpl extends SseEventReader {
                 _payload = (SsePayload) _sharedQueue.take();
             } 
             catch (InterruptedException ex) {
-                _LOG.log(Level.FINE, ex.getMessage());
+//                _LOG.log(Level.FINE, ex.getMessage());
             }
 
             if (_payload == null) {
-                String s = "Reader has been interrupted maybe the connection " +
-                           "is closed";
+//                String s = "Reader has been interrupted maybe the connection " +
+//                           "is closed";
                 // throw new SseException(s);
-                _LOG.log(Level.FINE, _CLASS_NAME, s);
+//                _LOG.log(Level.FINE, _CLASS_NAME, s);
 
                 _eventType = SseEventType.EOS;
                 return _eventType;

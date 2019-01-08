@@ -128,7 +128,7 @@ class CreateHandlerImpl implements CreateHandler {
             
             @Override
             public void requestLoaded(HttpRequest request, HttpResponse response) {
-                WebSocketEmulatedHandler.LOG.entering(WebSocketEmulatedHandler.CLASS_NAME, "requestLoaded");
+//                WebSocketEmulatedHandler.LOG.entering(WebSocketEmulatedHandler.CLASS_NAME, "requestLoaded");
 
                 CreateChannel channel = (CreateChannel)request.parent;
                 try {

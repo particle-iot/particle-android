@@ -83,7 +83,7 @@ public class SseEventStream {
 
 
     public SseEventStream(String sseLoc) throws IOException {
-        LOG.entering(CLASS_NAME, "<init>", sseLoc);
+//        //LOG.entering(CLASS_NAME, "<init>", sseLoc);
 
         // Validate the URI.
         URI.create(sseLoc);
@@ -100,14 +100,14 @@ public class SseEventStream {
     }
 
     public void stop() {
-        LOG.entering(CLASS_NAME, "stop");
+//        //LOG.entering(CLASS_NAME, "stop");
         readyState = ReadyState.CLOSED;
         sseHandler.processAbort(sseSource);
         aborted = true;
     }
 
     public void connect() throws IOException {
-        LOG.entering(CLASS_NAME, "connect");
+//        //LOG.entering(CLASS_NAME, "connect");
         if (lastEventId != null && (lastEventId.length() > 0)) {
             sseLocation += (!sseLocation.contains("?") ? "?" : "&") + ".ka=" + lastEventId;
         }
@@ -161,7 +161,7 @@ public class SseEventStream {
     }
 
     private synchronized void reconnect() {
-        LOG.entering(CLASS_NAME, "reconnect");
+//        //LOG.entering(CLASS_NAME, "reconnect");
         if (readyState != ReadyState.CLOSED) {
             TimerTask task = new TimerTask() {
                 @Override
@@ -179,7 +179,7 @@ public class SseEventStream {
     }
 
     private synchronized void processProgressEvent(String message) {
-        LOG.entering(CLASS_NAME, "processProgressEvent", message);
+//        //LOG.entering(CLASS_NAME, "processProgressEvent", message);
         String line;
         try {
             messageBuffer = messageBuffer + message;
@@ -258,7 +258,7 @@ public class SseEventStream {
     }
 
     private String fetchLineFromBuffer() {
-        LOG.entering(CLASS_NAME, "fetchLineFromBuffer");
+//        //LOG.entering(CLASS_NAME, "fetchLineFromBuffer");
         int lf = this.messageBuffer.indexOf("\n");
         if (lf == -1) {
             lf = this.messageBuffer.indexOf("\r");
@@ -278,7 +278,7 @@ public class SseEventStream {
         boolean reconnectScheduled = false;
 
         EventStreamHttpRequestListener() {
-            LOG.entering(CLASS_NAME, "<init>");
+//            //LOG.entering(CLASS_NAME, "<init>");
         }
 
         @Override

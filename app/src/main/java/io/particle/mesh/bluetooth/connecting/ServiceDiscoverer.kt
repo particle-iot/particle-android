@@ -9,6 +9,8 @@ import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.GATTStatusCode
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.common.android.SimpleLifecycleOwner
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
@@ -16,7 +18,7 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.coroutines.resume
 
 
-private val TIMEOUT = TimeUnit.SECONDS.toMillis(5)
+private val TIMEOUT = TimeUnit.SECONDS.toMillis(10)
 
 
 class ServiceDiscoverer(

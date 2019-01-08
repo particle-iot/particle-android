@@ -14,6 +14,8 @@ import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.ui.BaseActivity
+import io.particle.android.sdk.utils.isLocationServicesAvailable
+import io.particle.android.sdk.utils.promptUserToEnableLocationServices
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
@@ -60,6 +62,9 @@ class MeshSetupActivity : ProgressHack, MeshFlowTerminator, BaseActivity() {
         if (!btAdapter.isEnabled) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        }
+        if (!isLocationServicesAvailable()) {
+            promptUserToEnableLocationServices { finish() }
         }
     }
 

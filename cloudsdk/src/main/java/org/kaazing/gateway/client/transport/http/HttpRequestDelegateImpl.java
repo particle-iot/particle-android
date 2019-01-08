@@ -67,16 +67,16 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
     private boolean async;
 
     public HttpRequestDelegateImpl() {
-        LOG.entering(CLASS_NAME, "<init>");
+//        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     public final State getReadyState() {
-        LOG.exiting(CLASS_NAME, "getReadyState", readyState);
+//        LOG.exiting(CLASS_NAME, "getReadyState", readyState);
         return readyState;
     }
 
     public ByteBuffer getResponseText() {
-        LOG.entering(CLASS_NAME, "getResponseText");
+//        //LOG.entering(CLASS_NAME, "getResponseText");
         switch (readyState) {
             case LOADING:
             case OPENED:
@@ -88,7 +88,7 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
     }
 
     public int getStatusCode() {
-        LOG.exiting(CLASS_NAME, "getStatusCode", httpResponseCode);
+//        LOG.exiting(CLASS_NAME, "getStatusCode", httpResponseCode);
         return httpResponseCode;
     }
 
@@ -96,7 +96,7 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
      * @see org.kaazing.gateway.client.transport.http.HttpRequestDelegate#abort()
      */
     public void processAbort() {
-        LOG.entering(CLASS_NAME, "abort");
+//        //LOG.entering(CLASS_NAME, "abort");
         if (reader != null) {
             reader.stop();
             reader = null;
@@ -104,26 +104,26 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
     }
 
     public String getAllResponseHeaders() {
-        LOG.entering(CLASS_NAME, "getAllResponseHeaders");
+//        //LOG.entering(CLASS_NAME, "getAllResponseHeaders");
         if (readyState == State.LOADING || readyState == State.DONE) {
             // return all headers from the HttpUrlConnection;
             String headerText = connection.getHeaderFields().toString();
-            LOG.exiting(CLASS_NAME, "getAllResponseHeaders", headerText);
+//            LOG.exiting(CLASS_NAME, "getAllResponseHeaders", headerText);
             return headerText;
         } else {
-            LOG.exiting(CLASS_NAME, "getAllResponseHeaders");
+//            LOG.exiting(CLASS_NAME, "getAllResponseHeaders");
             return null;
         }
     }
 
     public String getResponseHeader(String header) {
-        LOG.entering(CLASS_NAME, "getResponseHeader", header);
+//        //LOG.entering(CLASS_NAME, "getResponseHeader", header);
         if (readyState == State.LOADING || readyState == State.DONE || readyState == State.HEADERS_RECEIVED) {
             String headerText = connection.getHeaderField(header);
-            LOG.exiting(CLASS_NAME, "getResponseHeader", headerText);
+//            LOG.exiting(CLASS_NAME, "getResponseHeader", headerText);
             return headerText;
         } else {
-            LOG.exiting(CLASS_NAME, "getResponseHeader");
+//            LOG.exiting(CLASS_NAME, "getResponseHeader");
             return null;
         }
     }
@@ -132,7 +132,7 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
      * @see org.kaazing.gateway.client.transport.http.HttpRequestDelegate#open(java.lang.String, java.net.URL, java.lang.String, boolean)
      */
     public void processOpen(String method, URL url, String origin, boolean async, long connectTimeout) throws Exception {
-        LOG.entering(CLASS_NAME, "processOpen", new Object[]{method, url, origin, async});
+//        //LOG.entering(CLASS_NAME, "processOpen", new Object[]{method, url, origin, async});
 
         this.async = async;
         connection = (HttpURLConnection) url.openConnection();
@@ -156,7 +156,7 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
      * @see org.kaazing.gateway.client.transport.http.HttpRequestDelegate#send(java.nio.ByteBuffer)
      */
     public void processSend(ByteBuffer content) {
-        LOG.entering(CLASS_NAME, "processSend", content);
+//        //LOG.entering(CLASS_NAME, "processSend", content);
         if (readyState != State.OPENED && readyState != State.HEADERS_RECEIVED) {
             throw new IllegalStateException(readyState + " HttpRequest must be in an OPEN state before " + "invocation of the send() method");
         }
@@ -176,7 +176,7 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
             t.setDaemon(true);
             t.start();
         } catch (Exception e) {
-            LOG.log(Level.FINE, "While processing http request", e);
+//            LOG.log(Level.FINE, "While processing http request", e);
             // e.printStackTrace();
             listener.errorOccurred(new ErrorEvent(e));
         }
@@ -186,13 +186,13 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
      * @see org.kaazing.gateway.bridge.HttpRequestDelegate#setRequestHeader(java.lang.String, java.lang.String)
      */
     public void setRequestHeader(String header, String value) {
-        LOG.entering(CLASS_NAME, "setRequestHeader", new Object[]{header, value});
+//        //LOG.entering(CLASS_NAME, "setRequestHeader", new Object[]{header, value});
         HttpRequestUtil.validateHeader(header);
         connection.addRequestProperty(header, value);
     }
 
     protected void reset() {
-        LOG.entering(CLASS_NAME, "reset");
+//        //LOG.entering(CLASS_NAME, "reset");
         responseBuffer = null;
         completedResponseBuffer = null;
         setStatus(-1);
@@ -200,12 +200,12 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
     }
 
     private void setReadyState(State state) {
-        LOG.entering(CLASS_NAME, "setReadyState", state);
+//        //LOG.entering(CLASS_NAME, "setReadyState", state);
         this.readyState = state;
     }
 
     private void setStatus(int status) {
-        LOG.entering(CLASS_NAME, "setStatus", status);
+//        //LOG.entering(CLASS_NAME, "setStatus", status);
         this.httpResponseCode = status;
     }
 
@@ -224,7 +224,7 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
         }
 
         void run2() {
-            LOG.entering(CLASS_NAME, "run");
+//            //LOG.entering(CLASS_NAME, "run");
             InputStream in;
             try {
                 httpResponseCode = connection.getResponseCode();
@@ -338,7 +338,7 @@ public class HttpRequestDelegateImpl implements HttpRequestDelegate {
         }
 
         public void stop() {
-            LOG.entering(CLASS_NAME, "stop");
+//            //LOG.entering(CLASS_NAME, "stop");
             this.stopped.set(true);
         }
     }

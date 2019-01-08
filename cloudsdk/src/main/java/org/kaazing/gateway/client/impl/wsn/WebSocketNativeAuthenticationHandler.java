@@ -49,7 +49,7 @@ public class WebSocketNativeAuthenticationHandler extends WebSocketHandlerAdapte
     private static final Logger LOG = Logger.getLogger(CLASS_NAME);
         
     private void handleAuthenticationRequested(WebSocketChannel channel, String location, String challenge) {
-        LOG.entering(CLASS_NAME, "handleAuthenticationRequested");
+        //LOG.entering(CLASS_NAME, "handleAuthenticationRequested");
 
         channel.authenticationReceived = true;
 
@@ -102,7 +102,7 @@ public class WebSocketNativeAuthenticationHandler extends WebSocketHandlerAdapte
     }
 
     private void doError(WebSocketChannel channel, Exception exception) {
-        LOG.entering(CLASS_NAME, "handleConnectionClosed");
+        //LOG.entering(CLASS_NAME, "handleConnectionClosed");
         this.nextHandler.processClose(channel, 1000, null);
         listener.connectionClosed(channel, exception);
     }

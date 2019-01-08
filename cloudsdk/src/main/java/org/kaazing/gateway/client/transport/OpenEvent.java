@@ -31,13 +31,13 @@ public class OpenEvent extends Event {
 
     public OpenEvent() {
         super(Event.OPEN);
-        LOG.entering(CLASS_NAME, "<init>");
+//        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     public OpenEvent(String protocol) {
         super(Event.OPEN);
         this.protocol = protocol;
-        LOG.entering(CLASS_NAME, "<init>");
+//        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     public String toString() {

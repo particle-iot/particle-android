@@ -133,7 +133,7 @@ public class HttpRequestAuthenticationHandler extends HttpRequestHandlerAdapter 
     }
 
     private void onLoadWrappedHTTPResponse(HttpRequest request, HttpResponse response) throws Exception {
-        LOG.entering(CLASS_NAME, "onLoadWrappedHTTPResponse");
+        //LOG.entering(CLASS_NAME, "onLoadWrappedHTTPResponse");
 
         WrappedByteBuffer responseBody = response.getBody();
         String[] lines = getLines(responseBody);
@@ -166,7 +166,7 @@ public class HttpRequestAuthenticationHandler extends HttpRequestHandlerAdapter 
     }
 
     private void handle401(HttpRequest request, String challenge) throws Exception {
-        LOG.entering(CLASS_NAME, "handle401");
+        //LOG.entering(CLASS_NAME, "handle401");
 
         HttpURI uri = request.getUri();
         WebSocketEmulatedChannel channel = (WebSocketEmulatedChannel)getWebSocketChannel(request);

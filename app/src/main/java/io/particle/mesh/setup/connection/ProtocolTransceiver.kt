@@ -4,8 +4,6 @@ import android.util.SparseArray
 import com.google.protobuf.AbstractMessage
 import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
-import io.particle.firmwareprotos.ctrl.Common
-import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.firmwareprotos.ctrl.Config.DeviceMode
 import io.particle.firmwareprotos.ctrl.Config.Feature
 import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdReply
@@ -80,6 +78,9 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
+import io.particle.mesh.common.UnknownEnumIntValueException
+import io.particle.mesh.common.buildIntValueMap
+import io.particle.mesh.setup.connection.ResultCode.Companion.toResultCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -140,7 +141,10 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> SystemResetReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendSetFeature(feature: Feature, enabled: Boolean): Result<SetFeatureReply, ResultCode> {
+    suspend fun sendSetFeature(
+        feature: Feature,
+        enabled: Boolean
+    ): Result<SetFeatureReply, ResultCode> {
         val response = sendRequest(
             SetFeatureRequest.newBuilder()
                 .setFeature(feature)
@@ -250,7 +254,7 @@ class ProtocolTransceiver internal constructor(
 
     suspend fun sendStartFirmwareUpdate(
         firmwareSizeBytes: Int
-    ): Result<StartFirmwareUpdateReply, Common.ResultCode> {
+    ): Result<StartFirmwareUpdateReply, ResultCode> {
         val response = sendRequest(
             StartFirmwareUpdateRequest.newBuilder()
                 .setSize(firmwareSizeBytes)
@@ -259,7 +263,7 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> StartFirmwareUpdateReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendFirmwareUpdateData(chunk: ByteArray): Result<FirmwareUpdateDataReply, Common.ResultCode> {
+    suspend fun sendFirmwareUpdateData(chunk: ByteArray): Result<FirmwareUpdateDataReply, ResultCode> {
         val response = sendRequest(
             FirmwareUpdateDataRequest.newBuilder()
                 .setData(ByteString.copyFrom(chunk))
@@ -270,7 +274,7 @@ class ProtocolTransceiver internal constructor(
 
     suspend fun sendFinishFirmwareUpdate(
         validateOnly: Boolean
-    ): Result<FinishFirmwareUpdateReply, Common.ResultCode> {
+    ): Result<FinishFirmwareUpdateReply, ResultCode> {
         val response = sendRequest(
             FinishFirmwareUpdateRequest.newBuilder()
                 .setValidateOnly(validateOnly)
@@ -279,7 +283,7 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> FinishFirmwareUpdateReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendGetNetworkInfo(): Result<GetNetworkInfoReply, Common.ResultCode> {
+    suspend fun sendGetNetworkInfo(): Result<GetNetworkInfoReply, ResultCode> {
         val response = sendRequest(
             GetNetworkInfoRequest.newBuilder()
                 .build()
@@ -292,7 +296,7 @@ class ProtocolTransceiver internal constructor(
         password: String,
         networkId: String,
         channel: Int = DEFAULT_NETWORK_CHANNEL
-    ): Result<CreateNetworkReply, Common.ResultCode> {
+    ): Result<CreateNetworkReply, ResultCode> {
         val response = sendRequest(
             CreateNetworkRequest.newBuilder()
                 .setName(name)
@@ -304,7 +308,7 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> CreateNetworkReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendAuth(commissionerCredential: String): Result<AuthReply, Common.ResultCode> {
+    suspend fun sendAuth(commissionerCredential: String): Result<AuthReply, ResultCode> {
         val response = sendRequest(
             AuthRequest.newBuilder()
                 .setPassword(commissionerCredential)
@@ -313,12 +317,12 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> AuthReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendStartCommissioner(): Result<StartCommissionerReply, Common.ResultCode> {
+    suspend fun sendStartCommissioner(): Result<StartCommissionerReply, ResultCode> {
         val response = sendRequest(StartCommissionerRequest.newBuilder().build())
         return buildResult(response) { r -> StartCommissionerReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendPrepareJoiner(network: NetworkInfo): Result<PrepareJoinerReply, Common.ResultCode> {
+    suspend fun sendPrepareJoiner(network: NetworkInfo): Result<PrepareJoinerReply, ResultCode> {
         val response = sendRequest(
             PrepareJoinerRequest.newBuilder()
                 .setNetwork(network)
@@ -330,7 +334,7 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendAddJoiner(
         eui64: String,
         joiningCredential: String
-    ): Result<AddJoinerReply, Common.ResultCode> {
+    ): Result<AddJoinerReply, ResultCode> {
         val response = sendRequest(
             AddJoinerRequest.newBuilder()
                 .setEui64(eui64)
@@ -342,21 +346,21 @@ class ProtocolTransceiver internal constructor(
 
     // NOTE: yes, 60 seconds is a CRAZY timeout, but... this is how long it takes to receive
     // a response sometimes.
-    suspend fun sendJoinNetwork(): Result<JoinNetworkReply, Common.ResultCode> {
+    suspend fun sendJoinNetwork(): Result<JoinNetworkReply, ResultCode> {
         val response = sendRequest(
             JoinNetworkRequest.newBuilder().build()
         )
         return buildResult(response) { r -> JoinNetworkReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendStopCommissioner(): Result<StopCommissionerReply, Common.ResultCode> {
+    suspend fun sendStopCommissioner(): Result<StopCommissionerReply, ResultCode> {
         val response = sendRequest(
             StopCommissionerRequest.newBuilder().build()
         )
         return buildResult(response) { r -> StopCommissionerReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendLeaveNetwork(): Result<LeaveNetworkReply, Common.ResultCode> {
+    suspend fun sendLeaveNetwork(): Result<LeaveNetworkReply, ResultCode> {
         val response = sendRequest(LeaveNetworkRequest.newBuilder().build())
         return buildResult(response) { r -> LeaveNetworkReply.parseFrom(r.payloadData) }
     }
@@ -443,10 +447,10 @@ class ProtocolTransceiver internal constructor(
         requestWriter.writeRequest(request)
     }
 
-    private fun <V : GeneratedMessageV3> buildResult(
+    private inline fun <reified V : GeneratedMessageV3> buildResult(
         response: DeviceResponse?,
         successTransformer: (DeviceResponse) -> V
-    ): Result<V, Common.ResultCode> {
+    ): Result<V, ResultCode> {
         if (response == null) {
             return Result.Absent()
         }
@@ -457,12 +461,20 @@ class ProtocolTransceiver internal constructor(
             Result.Present(transformed)
         } else {
             val code = response.resultCode.toResultCode()
+            if (code == ResultCode.UNKNOWN) {
+                QATool.report(UnknownErrorCodeException(response.resultCode, V::class.java))
+            }
             log.error { "Error with request/response: error code $code" }
             Result.Error(code)
         }
     }
     //endregion
 }
+
+
+class UnknownErrorCodeException(intValue: Int, requestClazz: Class<*>) : Exception(
+    "Unknown enum value for $intValue from request: ${requestClazz.simpleName}"
+)
 
 
 private var requestIdGenerator = AtomicInteger()
@@ -478,23 +490,48 @@ internal fun AbstractMessage.asRequest(): DeviceRequest {
 }
 
 
-// FIXME: rewrite using descriptors
-private fun Int.toResultCode(): Common.ResultCode {
-    return when (this) {
-        0 -> Common.ResultCode.OK
+enum class ResultCode(val intValue: Int) {
 
+    OK(0),
+    UNKNOWN(-100),
+    BUSY(-110),
+    NOT_SUPPORTED(-120),
+    NOT_ALLOWED(-130),
+    CANCELLED(-140),
+    ABORTED(-150),
+    TIMEOUT(-160),
+    NOT_FOUND(-170),
+    ALREADY_EXIST(-180),
+    TOO_LARGE(-190),
+    NOT_ENOUGH_DATA(-191),
+    LIMIT_EXCEEDED(-200),
+    END_OF_STREAM(-201),
+    INVALID_STATE(-210),
+    IO(-220),
+    WOULD_BLOCK(-221),
+    FILE(-225),
+    NETWORK(-230),
+    PROTOCOL(-240),
+    INTERNAL(-250),
+    NO_MEMORY(-260),
+    INVALID_ARGUMENT(-270),
+    BAD_DATA(-280),
+    OUT_OF_RANGE(-290),
+    // the error code for when we are sent an invalid/unknown error code
+    INVALID_ERROR_CODE(-101010);
 
-        // FIXME: this should be "NOT_SUPPORTED"
-        -120 -> Common.ResultCode.UNRECOGNIZED
+    companion object {
 
+        private val intValueMap = buildIntValueMap(ResultCode.values()) { state -> state.intValue }
 
-        -130 -> Common.ResultCode.NOT_ALLOWED
-        -160 -> Common.ResultCode.TIMEOUT
-        -170 -> Common.ResultCode.NOT_FOUND
-        -180 -> Common.ResultCode.ALREADY_EXIST
-        -210 -> Common.ResultCode.INVALID_STATE
-        -260 -> Common.ResultCode.NO_MEMORY
-        -270 -> Common.ResultCode.INVALID_PARAM
-        else -> throw IllegalArgumentException("Invalid value for ResultCode: $this")
+        fun Int.toResultCode(): ResultCode {
+            val enumValue = intValueMap.get(this, ResultCode.UNKNOWN)
+            if (enumValue == ResultCode.UNKNOWN) {
+                QATool.report(UnknownEnumIntValueException(this))
+            }
+            return enumValue
+        }
+
     }
+
 }

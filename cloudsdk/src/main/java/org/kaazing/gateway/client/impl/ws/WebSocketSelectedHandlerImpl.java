@@ -57,7 +57,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
     protected WebSocketHandlerListener listener;
     
     public WebSocketSelectedHandlerImpl() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     /**
@@ -65,7 +65,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
      */
     @Override
     public void processConnect(WebSocketChannel channel, WSURI uri, String[] protocols) {
-        LOG.entering(CLASS_NAME, "connect", channel);
+        //LOG.entering(CLASS_NAME, "connect", channel);
         
         if (((WebSocketSelectedChannel)channel).readyState == ReadyState.CLOSED) {
             throw new IllegalStateException("WebSocket is already closed");
@@ -76,7 +76,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
     
     @Override
     public void processClose(WebSocketChannel channel, int code, String reason) {
-        LOG.entering(CLASS_NAME, "processDisconnect");
+        //LOG.entering(CLASS_NAME, "processDisconnect");
         WebSocketSelectedChannel ch = (WebSocketSelectedChannel)channel;
         if (ch.readyState == ReadyState.OPEN || ch.readyState == ReadyState.CONNECTING) {
             ch.readyState = ReadyState.CLOSING;
@@ -85,7 +85,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
     }
 
     public void handleConnectionOpened(WebSocketChannel channel, String protocol) {
-        LOG.entering(CLASS_NAME, "handleConnectionOpened");
+        //LOG.entering(CLASS_NAME, "handleConnectionOpened");
 
         WebSocketSelectedChannel selectedChannel = (WebSocketSelectedChannel)channel;
         if (selectedChannel.readyState == ReadyState.CONNECTING) {
@@ -96,7 +96,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
 
 
     public void handleBinaryMessageReceived(WebSocketChannel channel, WrappedByteBuffer message) {
-        LOG.entering(CLASS_NAME, "handleMessageReceived", message);
+        //LOG.entering(CLASS_NAME, "handleMessageReceived", message);
 
         if (((WebSocketSelectedChannel)channel).readyState != ReadyState.OPEN) {
             return;
@@ -110,7 +110,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
     }
 
     public void handleTextMessageReceived(WebSocketChannel channel, String message) {
-        LOG.entering(CLASS_NAME, "handleTextMessageReceived", message);
+        //LOG.entering(CLASS_NAME, "handleTextMessageReceived", message);
 
         if (((WebSocketSelectedChannel)channel).readyState != ReadyState.OPEN) {
             return;
@@ -124,7 +124,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
     }
 
     protected void handleConnectionClosed(WebSocketChannel channel, boolean wasClean, int code, String reason) {
-        LOG.entering(CLASS_NAME, "handleConnectionClosed");
+        //LOG.entering(CLASS_NAME, "handleConnectionClosed");
 
         WebSocketSelectedChannel selectedChannel = (WebSocketSelectedChannel)channel;
         if (selectedChannel.readyState != ReadyState.CLOSED) {
@@ -134,7 +134,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
     }
 
     protected void handleConnectionClosed(WebSocketChannel channel, Exception ex) {
-        LOG.entering(CLASS_NAME, "handleConnectionClosed");
+        //LOG.entering(CLASS_NAME, "handleConnectionClosed");
 
         WebSocketSelectedChannel selectedChannel = (WebSocketSelectedChannel)channel;
         if (selectedChannel.readyState != ReadyState.CLOSED) {
@@ -144,7 +144,7 @@ public class WebSocketSelectedHandlerImpl extends WebSocketHandlerAdapter implem
     }
     
     protected void handleConnectionFailed(WebSocketChannel channel, Exception ex) {
-        LOG.entering(CLASS_NAME, "connectionFailed");
+        //LOG.entering(CLASS_NAME, "connectionFailed");
         
         WebSocketSelectedChannel selectedChannel = (WebSocketSelectedChannel)channel;
         if (selectedChannel.readyState != ReadyState.CLOSED) {

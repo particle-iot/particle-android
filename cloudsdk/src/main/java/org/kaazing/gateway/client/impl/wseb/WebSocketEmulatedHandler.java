@@ -71,7 +71,7 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
     private final DownstreamHandler downstreamHandler =  downstreamHandlerFactory.createDownstreamHandler();
     
     public WebSocketEmulatedHandler() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
         initCreateHandler(createHandler);
         initUpstreamHandler(upstreamHandler);
         initDownstreamHandler(downstreamHandler);
@@ -83,7 +83,7 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
             
             @Override
             public void createCompleted(CreateChannel channel, HttpURI upstreamUri, HttpURI downstreamUri, String protocol) {
-                LOG.entering(CLASS_NAME, "createCompleted");
+                //LOG.entering(CLASS_NAME, "createCompleted");
                 
                 WebSocketEmulatedChannel parent = (WebSocketEmulatedChannel)channel.getParent();
                 parent.createChannel = null;
@@ -107,7 +107,7 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
             
             @Override
             public void createFailed(CreateChannel channel, Exception exception) {
-                LOG.entering(CLASS_NAME, "createFailed");
+                //LOG.entering(CLASS_NAME, "createFailed");
                 
                 WebSocketEmulatedChannel parent = (WebSocketEmulatedChannel)channel.getParent();
                 listener.connectionFailed(parent, exception);
@@ -205,7 +205,7 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
 
     @Override
     public synchronized void processConnect(WebSocketChannel channel, WSURI location, String[] protocols) {
-        LOG.entering(CLASS_NAME, "connect", channel);
+        //LOG.entering(CLASS_NAME, "connect", channel);
 
         String path = location.getPath();
         if (path.endsWith("/")) {
@@ -229,7 +229,7 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
 
     @Override
     public synchronized void processClose(WebSocketChannel channel, int code, String reason) {
-        LOG.entering(CLASS_NAME, "processDisconnect");
+        //LOG.entering(CLASS_NAME, "processDisconnect");
         WebSocketEmulatedChannel wsebChannel = (WebSocketEmulatedChannel)channel;
         
         // ### TODO: This is temporary till Gateway sends us the CLOSE frame
@@ -244,21 +244,21 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
 
     @Override
     public void processTextMessage(WebSocketChannel channel, String message) {
-        LOG.entering(CLASS_NAME, "processTextMessage", message);
+        //LOG.entering(CLASS_NAME, "processTextMessage", message);
         WebSocketEmulatedChannel wsebChannel = (WebSocketEmulatedChannel)channel;
         upstreamHandler.processTextMessage(wsebChannel.upstreamChannel, message);
     }
 
     @Override
     public void processBinaryMessage(WebSocketChannel channel, WrappedByteBuffer message) {
-        LOG.entering(CLASS_NAME, "processBinaryMessage", message);
+        //LOG.entering(CLASS_NAME, "processBinaryMessage", message);
         WebSocketEmulatedChannel wsebChannel = (WebSocketEmulatedChannel)channel;
         upstreamHandler.processBinaryMessage(wsebChannel.upstreamChannel, message);
     }
     
     private void doError(WebSocketEmulatedChannel channel, Exception exception)
     {
-        LOG.entering(CLASS_NAME, "Error handler. Tearing down WebSocket connection.");
+        //LOG.entering(CLASS_NAME, "Error handler. Tearing down WebSocket connection.");
         try
         {
             if (channel.createChannel != null)
@@ -273,23 +273,23 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
         }
         catch (Exception e)
         {
-            LOG.entering(CLASS_NAME, "Exception while tearing down the connection: " + e.getMessage());
+            //LOG.entering(CLASS_NAME, "Exception while tearing down the connection: " + e.getMessage());
         }
 
-        LOG.entering(CLASS_NAME, "Firing Close Event");
+        //LOG.entering(CLASS_NAME, "Firing Close Event");
         try
         {
             listener.connectionFailed(channel, exception);
         }
         catch (Exception e)
         {
-            LOG.entering(CLASS_NAME, "Unhandled exception in Close Event: " + e.getMessage());
+            //LOG.entering(CLASS_NAME, "Unhandled exception in Close Event: " + e.getMessage());
         }
     }
 
     private void doClose(WebSocketEmulatedChannel channel)
     {
-        LOG.entering(CLASS_NAME, "Close");
+        //LOG.entering(CLASS_NAME, "Close");
         // TODO: the 'SelectedHandler' was already setting the _readyState on the WebSocketEmulatedChannel to CLOSED
         // Commenting out the below IF statement, because it is NEVER true (since the channel state was already updated
 
@@ -317,10 +317,10 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
             }
             catch (Exception e)
             {
-                LOG.entering(CLASS_NAME, "While closing: " + e.getMessage());
+                //LOG.entering(CLASS_NAME, "While closing: " + e.getMessage());
             }
 
-            LOG.entering(CLASS_NAME, "Firing Close Event");
+            //LOG.entering(CLASS_NAME, "Firing Close Event");
 
             try
             {
@@ -335,7 +335,7 @@ public class WebSocketEmulatedHandler extends WebSocketHandlerAdapter {
             }
             catch (Exception e)
             {
-                LOG.entering(CLASS_NAME, "Unhandled exception in Close Event: " + e.getMessage());
+                //LOG.entering(CLASS_NAME, "Unhandled exception in Close Event: " + e.getMessage());
             }
         //}
     }

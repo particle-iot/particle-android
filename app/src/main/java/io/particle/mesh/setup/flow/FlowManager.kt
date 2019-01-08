@@ -12,6 +12,8 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
+import io.particle.mesh.common.android.livedata.liveDataSuspender
+import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
@@ -28,6 +30,9 @@ import io.particle.mesh.setup.utils.runOnMainThread
 import io.particle.sdk.app.R
 import kotlinx.coroutines.*
 import mu.KotlinLogging
+
+
+private const val FLOW_RETRIES = 10
 
 
 class FlowManager(
@@ -82,47 +87,20 @@ class FlowManager(
 
     fun startNewFlow() {
         // FIXME: call "clearState()" here?  Probably?
-        GlobalScope.launch(Dispatchers.Default) {
-            val error: Exception? = null
-            for (i in 0..10) {
-                try {
-                    flow.runFlow()
-                    return@launch
-                } catch (ex: Exception) {
-                    if (ex is FlowException && ex.exceptionType == ERROR_FATAL) {
-                        log.info(ex) { "Hit fatal error, exiting setup: " }
-                        endSetup()
-                        return@launch
-                    }
-
-                    delay(1000)
-                    QATool.report(ex)
-                }
-            }
-            if (error != null) {
-                withContext(Dispatchers.Main) {
-                    newDialogRequest(
-                        StringDialogSpec(
-                            "Setup has encountered an error and cannot " +
-                                    "continue. Please exit setup and try again."
-                        )
-                    )
-                    clearDialogResult()
-                }
-            }
-        }
+        executeFlow { flow.runFlow() }
     }
 
     // FIXME: API/naming here is weak
     fun startMeshFlowForGateway() {
+        executeFlow { flow.runMeshFlowForGatewayDevice() }
+    }
 
-        // FIXME: set/clear some states?  WHICH?
-
+    private fun executeFlow(flowFunction: suspend () -> Unit) {
         GlobalScope.launch(Dispatchers.Default) {
-            val error: Exception? = null
-            for (i in 0..10) {
+            var error: Exception? = null
+            for (i in 0..FLOW_RETRIES) {
                 try {
-                    flow.runMeshFlowForGatewayDevice()
+                    flowFunction()
                     return@launch
                 } catch (ex: Exception) {
                     if (ex is FlowException && ex.exceptionType == ERROR_FATAL) {
@@ -130,23 +108,28 @@ class FlowManager(
                         endSetup()
                         return@launch
                     }
-
                     delay(1000)
                     QATool.report(ex)
+                    error = ex
                 }
             }
+            quitSetupfromError()
+        }
+    }
 
-            if (error != null) {
-                withContext(Dispatchers.Main) {
-                    newDialogRequest(
-                        StringDialogSpec(
-                            "Setup has encountered an error and cannot " +
-                                    "continue. Please exit setup and try again."
-                        )
-                    )
-                    clearDialogResult()
-                }
+    private suspend fun quitSetupfromError() {
+        withContext(Dispatchers.Main) {
+            newDialogRequest(
+                StringDialogSpec(
+                    "Setup has encountered an error and cannot " +
+                            "continue. Please exit setup and try again."
+                )
+            )
+            clearDialogResult()
+            withContext(Dispatchers.Main) {
+                liveDataSuspender({ dialogResultLD.nonNull() }).awaitResult()
             }
+            endSetup()
         }
     }
 

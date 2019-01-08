@@ -77,7 +77,7 @@ public class SseEventSourceImpl extends SseEventSource {
 
     @Override
     public synchronized void close() throws IOException {
-        _LOG.entering(_CLASS_NAME, "close");
+        //_LOG.entering(_CLASS_NAME, "close");
 
         if ((_readyState == ReadyState.CLOSED) ||
             (_readyState == ReadyState.CLOSING)) {
@@ -98,7 +98,7 @@ public class SseEventSourceImpl extends SseEventSource {
 
     @Override
     public synchronized void connect() throws IOException {
-        _LOG.entering(_CLASS_NAME, "connect");
+        //_LOG.entering(_CLASS_NAME, "connect");
         
         if (_readyState != ReadyState.CLOSED) {
             String s = "Event source must be closed before connecting";
@@ -275,7 +275,7 @@ public class SseEventSourceImpl extends SseEventSource {
         
         @Override
         public void streamOpened() {
-            _LOG.entering(_CLASS_NAME, "streamOpened");
+            //_LOG.entering(_CLASS_NAME, "streamOpened");
             connectionOpened();
             
             /*
@@ -293,7 +293,7 @@ public class SseEventSourceImpl extends SseEventSource {
         
         @Override
         public void messageReceived(String eventName, String message) {
-            _LOG.entering(_CLASS_NAME, "messageReceived", message);
+            //_LOG.entering(_CLASS_NAME, "messageReceived", message);
             messageArrived(eventName, message);
             
             /*
@@ -310,7 +310,7 @@ public class SseEventSourceImpl extends SseEventSource {
         
         @Override
         public void streamErrored(Exception exception) {
-            _LOG.entering(_CLASS_NAME, "streamErrored");
+            //_LOG.entering(_CLASS_NAME, "streamErrored");
             connectionFailed(exception);
             
             /*

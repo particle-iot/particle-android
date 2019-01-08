@@ -4,14 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleNetworkType
-import io.particle.firmwareprotos.ctrl.Common.ResultCode
-import io.particle.firmwareprotos.ctrl.Common.ResultCode.NOT_FOUND
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.GetNetworkInfoReply
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.connection.ResultCode
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
@@ -120,9 +119,14 @@ class MeshSetupModule(
         val removeLocally = when (reply) {
             is Result.Absent -> throw FlowException("No result received when getting existing network")
             is Result.Present -> true
-            is Result.Error ->  if (reply.error == NOT_FOUND) false else throw FlowException(
-                "Error when getting existing network"
-            )
+            is Result.Error -> {
+                log.info { " Error when getting network info: ${reply.error}" }
+                if (reply.error == ResultCode.NOT_FOUND) {
+                    false
+                } else {
+                    throw FlowException("Error when getting existing network")
+                }
+            }
         }
 
         if (removeLocally) {

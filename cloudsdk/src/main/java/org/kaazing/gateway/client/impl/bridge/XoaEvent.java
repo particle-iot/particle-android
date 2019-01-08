@@ -36,7 +36,7 @@ public class XoaEvent implements Serializable {
     private Object[] params;
 
     public XoaEvent(Integer handlerId, XoaEventKind event, Object[] params) {
-        LOG.entering(CLASS_NAME, "<init>", new Object[] { handlerId, event, params });
+        //LOG.entering(CLASS_NAME, "<init>", new Object[] { handlerId, event, params });
         this.handlerId = handlerId;
         this.kind = event;
         this.params = params;

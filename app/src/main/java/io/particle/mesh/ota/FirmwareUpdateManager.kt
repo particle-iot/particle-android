@@ -4,9 +4,9 @@ import androidx.annotation.WorkerThread
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
-import io.particle.firmwareprotos.ctrl.Common.ResultCode
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ProtocolTransceiver
+import io.particle.mesh.setup.connection.ResultCode
 import io.particle.mesh.setup.flow.MeshDeviceType
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import kotlinx.coroutines.delay
@@ -57,7 +57,7 @@ class FirmwareUpdateManager(
         delay(2000)
         xceiver.disconnect()
         // and after disconnecting...
-        delay(8000)
+        delay(10000)
 
         return FirmwareUpdateResult.DEVICE_IS_UPDATING
     }
@@ -68,14 +68,19 @@ class FirmwareUpdateManager(
         deviceType: MeshDeviceType
     ): URL? {
         val systemFwVers = xceiver.sendGetSystemFirmwareVersion().throwOnErrorOrAbsent()
+        log.info { "Getting update URL for device currently on firmware version ${systemFwVers.version}" }
         val (ncpVersion, ncpModuleVersion) = getNcpVersions(xceiver)
 
-        return cloud.getFirmwareUpdateInfo(
+        val updateUrl = cloud.getFirmwareUpdateInfo(
             deviceType.particleDeviceType.platformId,
             systemFwVers.version,
             ncpVersion,
             ncpModuleVersion
         )
+
+        log.info { "Update URL for device $updateUrl" }
+
+        return updateUrl
     }
 
     private suspend fun getNcpVersions(xceiver: ProtocolTransceiver): Pair<String?, Int?> {
@@ -83,8 +88,7 @@ class FirmwareUpdateManager(
         return when (ncpFwReply) {
             is Result.Present -> Pair(ncpFwReply.value.version, ncpFwReply.value.moduleVersion)
             is Result.Error -> {
-                // FIXME: this error should be "NOT_SUPPORTED"
-                if (ncpFwReply.error == ResultCode.UNRECOGNIZED) {
+                if (ncpFwReply.error == ResultCode.NOT_SUPPORTED) {
                     Pair(null, null)
                 } else {
                     throw IllegalStateException("Error getting NCP FW version: ${ncpFwReply.error}")

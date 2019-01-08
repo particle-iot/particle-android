@@ -55,7 +55,7 @@ public class BridgeUtil {
     }
 
     static void processEvent(XoaEvent event) {
-        LOG.entering(CLASS_NAME, "dispatchEventToXoa", event);
+        //LOG.entering(CLASS_NAME, "dispatchEventToXoa", event);
         LOG.log(Level.FINEST, "SOA --> XOA: {1}", event);
 
         Integer handlerId = event.getHandlerId();
@@ -81,7 +81,7 @@ public class BridgeUtil {
     }
 
     public static void eventReceived(final Integer handlerId, final String eventType, final Object[] params) {
-        LOG.entering(CLASS_NAME, "eventReceived", new Object[] { handlerId, eventType, params });
+        //LOG.entering(CLASS_NAME, "eventReceived", new Object[] { handlerId, eventType, params });
         final Proxy obj = handlerIdToHtml5ObjectMap.get(handlerId);
         if (obj == null) {
             LOG.fine("Object by id: " + handlerId + " could not be located in the system");
@@ -122,7 +122,7 @@ public class BridgeUtil {
     }
        
     private static void initCrossOriginProxy(URI uri) throws Exception {
-        LOG.entering(CLASS_NAME, "initCrossOriginProxy", new Object[] { uri });
+        //LOG.entering(CLASS_NAME, "initCrossOriginProxy", new Object[] { uri });
         
         PropertyChangeSupport xop = getCrossOriginProxy(uri);
         if (xop == null) {
@@ -170,7 +170,7 @@ public class BridgeUtil {
     }
 
     static Proxy createProxy(URI uri, ProxyListener listener) throws Exception {
-        LOG.entering(CLASS_NAME, "registerProxy", new Object[] { });
+        //LOG.entering(CLASS_NAME, "registerProxy", new Object[] { });
         
         BridgeUtil.initCrossOriginProxy(uri);
         Integer handlerId = sHtml5ObjectIdCounter.getAndIncrement();

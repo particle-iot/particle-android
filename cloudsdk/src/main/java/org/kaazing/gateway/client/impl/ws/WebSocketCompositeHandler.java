@@ -103,7 +103,7 @@ public class WebSocketCompositeHandler implements WebSocketHandler {
      * @throws Exception
      */
     public WebSocketCompositeHandler() {
-        LOG.entering(CLASS_NAME, "<init>");
+        //LOG.entering(CLASS_NAME, "<init>");
         
         WebSocketSelectedHandler nativeHandler = WEBSOCKET_NATIVE_HANDLER_FACTORY.createSelectedHandler();
         WebSocketHandlerListener handlerListener = createListener();
@@ -134,7 +134,7 @@ public class WebSocketCompositeHandler implements WebSocketHandler {
      */
     @Override
     public void processConnect(WebSocketChannel channel, WSURI location, String[] protocols) {
-        LOG.entering(CLASS_NAME, "connect", channel);
+        //LOG.entering(CLASS_NAME, "connect", channel);
         WebSocketCompositeChannel compositeChannel = (WebSocketCompositeChannel)channel;
         
         if (compositeChannel.readyState != ReadyState.CLOSED) {
@@ -170,7 +170,7 @@ public class WebSocketCompositeHandler implements WebSocketHandler {
     }
     
     private void fallbackNext(WebSocketCompositeChannel channel, Exception exception) {
-        LOG.entering(CLASS_NAME, "fallbackNext");
+        //LOG.entering(CLASS_NAME, "fallbackNext");
         try {
             String strategyName = channel.getNextStrategy();
             if (strategyName == null) {
@@ -215,7 +215,7 @@ public class WebSocketCompositeHandler implements WebSocketHandler {
      */
     @Override
     public void processTextMessage(WebSocketChannel channel, String message) {
-        LOG.entering(CLASS_NAME, "send", message);
+        //LOG.entering(CLASS_NAME, "send", message);
 
         WebSocketCompositeChannel parent = (WebSocketCompositeChannel)channel;
         if (parent.readyState != ReadyState.OPEN) {
@@ -237,7 +237,7 @@ public class WebSocketCompositeHandler implements WebSocketHandler {
      */
     @Override
     public void processBinaryMessage(WebSocketChannel channel, WrappedByteBuffer message) {
-        LOG.entering(CLASS_NAME, "send", message);
+        //LOG.entering(CLASS_NAME, "send", message);
         
         WebSocketCompositeChannel parent = (WebSocketCompositeChannel)channel;
         if (parent.readyState != ReadyState.OPEN) {
@@ -267,7 +267,7 @@ public class WebSocketCompositeHandler implements WebSocketHandler {
      */
     @Override
     public void processClose(WebSocketChannel channel, int code, String reason) {
-        LOG.entering(CLASS_NAME, "close");
+        //LOG.entering(CLASS_NAME, "close");
 
         //2. check current readyState
         WebSocketCompositeChannel parent = (WebSocketCompositeChannel)channel;

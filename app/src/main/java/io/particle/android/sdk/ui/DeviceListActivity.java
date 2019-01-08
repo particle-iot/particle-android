@@ -5,15 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,8 +13,16 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.SearchView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
@@ -37,8 +36,11 @@ import io.particle.android.sdk.utils.SoftAPConfigRemover;
 import io.particle.android.sdk.utils.WifiFacade;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.mesh.setup.ui.MeshSetupActivity;
-import io.particle.sdk.app.MeshSetupDirections;
 import io.particle.sdk.app.R;
+import pl.brightinventions.slf4android.LogRecord;
+import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity;
+
+import static io.particle.android.sdk.utils.Py.list;
 
 /**
  * An activity representing a list of Devices. This activity
@@ -237,6 +239,18 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void sendLogs() {
+        LogRecord lr = new LogRecord(java.util.logging.Level.WARNING, "");
+
+        NotifyDeveloperDialogDisplayActivity.showDialogIn(this,
+                lr,
+                list(),
+                "Logs from the Particle Android app",
+                "",
+                list("pl.brightinventions.slf4android.ReadLogcatEntriesAsyncTask")
+        );
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -258,6 +272,9 @@ public class DeviceListActivity extends BaseActivity implements DeviceListFragme
             case R.id.action_filter:
                 unlockAppBarOpen();
                 appBarLayout.setExpanded(!isAppBarExpanded);
+                break;
+            case R.id.action_send_logs:
+                sendLogs();
                 break;
         }
         return super.onOptionsItemSelected(item);

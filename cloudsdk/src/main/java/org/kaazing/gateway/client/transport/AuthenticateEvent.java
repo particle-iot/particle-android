@@ -36,7 +36,7 @@ public class AuthenticateEvent extends Event {
      */
     public AuthenticateEvent(String challenge) {
         super(Event.AUTHENTICATE);
-        LOG.entering(CLASS_NAME, "<init>", new Object[] { type, challenge });
+        //LOG.entering(CLASS_NAME, "<init>", new Object[] { type, challenge });
         this.challenge = challenge;
     }
 

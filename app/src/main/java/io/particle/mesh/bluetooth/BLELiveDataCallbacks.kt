@@ -1,10 +1,10 @@
 package io.particle.mesh.bluetooth
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.particle.mesh.bluetooth.connecting.ConnectionState
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndPost
@@ -44,6 +44,7 @@ class BLELiveDataCallbacks : BluetoothGattCallback() {
     override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
         val state = ConnectionState.fromIntValue(newState)
         log.debug { "onConnectionStateChange() gatt: $gatt, state=$state" }
+
         (connectionStateChangedLD as MutableLiveData).setOnMainThread(state)
     }
 

@@ -87,7 +87,7 @@ public class AuthenticatedSseEventStream extends SseEventStream {
 
     public AuthenticatedSseEventStream(String sseLoc, ParticleCloud cloud) throws IOException {
         super(sseLoc);
-        LOG.entering(CLASS_NAME, "<init>", sseLoc);
+//        //LOG.entering(CLASS_NAME, "<init>", sseLoc);
 
         this.cloud = cloud;
 
@@ -106,14 +106,14 @@ public class AuthenticatedSseEventStream extends SseEventStream {
     }
 
     public void stop() {
-        LOG.entering(CLASS_NAME, "stop");
+//        //LOG.entering(CLASS_NAME, "stop");
         readyState = ReadyState.CLOSED;
         sseHandler.processAbort(sseSource);
         aborted = true;
     }
 
     public void connect() throws IOException {
-        LOG.entering(CLASS_NAME, "connect");
+//        //LOG.entering(CLASS_NAME, "connect");
         if (lastEventId != null && (lastEventId.length() > 0)) {
             sseLocation += (!sseLocation.contains("?") ? "?" : "&") + ".ka=" + lastEventId;
         }
@@ -168,7 +168,7 @@ public class AuthenticatedSseEventStream extends SseEventStream {
     }
 
     private synchronized void reconnect() {
-        LOG.entering(CLASS_NAME, "reconnect");
+//        //LOG.entering(CLASS_NAME, "reconnect");
         if (readyState != ReadyState.CLOSED) {
             TimerTask task = new TimerTask() {
                 @Override
@@ -186,7 +186,7 @@ public class AuthenticatedSseEventStream extends SseEventStream {
     }
 
     private synchronized void processProgressEvent(String message) {
-        LOG.entering(CLASS_NAME, "processProgressEvent", message);
+//        //LOG.entering(CLASS_NAME, "processProgressEvent", message);
         String line;
         try {
             messageBuffer = messageBuffer + message;
@@ -265,7 +265,7 @@ public class AuthenticatedSseEventStream extends SseEventStream {
     }
 
     private String fetchLineFromBuffer() {
-        LOG.entering(CLASS_NAME, "fetchLineFromBuffer");
+//        //LOG.entering(CLASS_NAME, "fetchLineFromBuffer");
         int lf = this.messageBuffer.indexOf("\n");
         if (lf == -1) {
             lf = this.messageBuffer.indexOf("\r");
@@ -285,7 +285,7 @@ public class AuthenticatedSseEventStream extends SseEventStream {
         boolean reconnectScheduled = false;
 
         EventStreamHttpRequestListener() {
-            LOG.entering(CLASS_NAME, "<init>");
+//            //LOG.entering(CLASS_NAME, "<init>");
         }
 
         @Override
@@ -347,7 +347,7 @@ public class AuthenticatedSseEventStream extends SseEventStream {
     private void doMessage(String eventName, String data) {
         // messages before OPEN and after CLOSE should not be delivered.
         if (getReadyState() != ReadyState.OPEN) {
-            LOG.log(Level.INFO, "event message discarded " + getReadyState().name());
+//            LOG.log(Level.INFO, "event message discarded " + getReadyState().name());
             return;
         }
 
@@ -356,7 +356,7 @@ public class AuthenticatedSseEventStream extends SseEventStream {
 
     private void doError(Exception exception) {
         if (getReadyState() == ReadyState.CLOSED) {
-            LOG.log(Level.INFO, "event error discarded " + getReadyState().name());
+//            LOG.log(Level.INFO, "event error discarded " + getReadyState().name());
             return;
         }
 

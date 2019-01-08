@@ -58,15 +58,15 @@ public class HttpRequestBridgeHandler implements HttpRequestHandler, ProxyListen
     private HttpRequestListener listener;
 
     public HttpRequestBridgeHandler() {
-        LOG.entering(CLASS_NAME, "<init>");
+//        //LOG.entering(CLASS_NAME, "<init>");
     }
 
     @Override
     public synchronized void processOpen(HttpRequest request) {
-        LOG.entering(CLASS_NAME, "open", request);
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("processOpen: "+request);
-        }
+//        //LOG.entering(CLASS_NAME, "open", request);
+//        if (LOG.isLoggable(Level.FINE)) {
+//            LOG.fine("processOpen: "+request);
+//        }
 
         HttpURI uri = request.getUri();
         Method method = request.getMethod();
@@ -90,10 +90,10 @@ public class HttpRequestBridgeHandler implements HttpRequestHandler, ProxyListen
     }
 
     private void handleRequestCreated(HttpRequest request) {
-        LOG.entering(CLASS_NAME, "handleRequestCreated");
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("handleRequestCreated: "+request);
-        }
+//        //LOG.entering(CLASS_NAME, "handleRequestCreated");
+//        if (LOG.isLoggable(Level.FINE)) {
+//            LOG.fine("handleRequestCreated: "+request);
+//        }
         
         request.setReadyState(HttpRequest.ReadyState.READY);
         try {
@@ -120,7 +120,7 @@ public class HttpRequestBridgeHandler implements HttpRequestHandler, ProxyListen
 
     @Override
     public void processSend(HttpRequest request, WrappedByteBuffer content) {
-        LOG.entering(CLASS_NAME, "processSend", content);
+//        //LOG.entering(CLASS_NAME, "processSend", content);
         
         if (request.getReadyState() != HttpRequest.ReadyState.READY) {
             throw new IllegalStateException("HttpRequest must be in READY state to send");
@@ -141,7 +141,7 @@ public class HttpRequestBridgeHandler implements HttpRequestHandler, ProxyListen
     }
 
     private void handleRequestProgressed(HttpRequest request, WrappedByteBuffer payload) {
-        LOG.entering(CLASS_NAME, "handleRequestProgressed", payload);
+//        //LOG.entering(CLASS_NAME, "handleRequestProgressed", payload);
 
         request.setReadyState(HttpRequest.ReadyState.LOADING);
         try {
@@ -153,7 +153,7 @@ public class HttpRequestBridgeHandler implements HttpRequestHandler, ProxyListen
     }
 
     private void handleRequestLoaded(HttpRequest request, WrappedByteBuffer responseBuffer) {
-        LOG.entering(CLASS_NAME, "handleRequestLoaded", responseBuffer);
+//        //LOG.entering(CLASS_NAME, "handleRequestLoaded", responseBuffer);
 
         request.setReadyState(HttpRequest.ReadyState.LOADED);
 
@@ -169,7 +169,7 @@ public class HttpRequestBridgeHandler implements HttpRequestHandler, ProxyListen
     }
 
     public static void parseResponseHeaders(HttpResponse response, String in) {
-        LOG.entering(CLASS_NAME, "setResponseHeaders", in);
+//        //LOG.entering(CLASS_NAME, "setResponseHeaders", in);
         String headers = in + "";
         int lf = headers.indexOf("\n");
         while (lf != -1) {
@@ -199,13 +199,13 @@ public class HttpRequestBridgeHandler implements HttpRequestHandler, ProxyListen
 
     @Override
     public void eventReceived(Proxy proxy, XoaEventKind eventKind, Object[] params) {
-        LOG.entering(CLASS_NAME, "eventReceived", new Object[] { proxy, this, eventKind, params });
+//        //LOG.entering(CLASS_NAME, "eventReceived", new Object[] { proxy, this, eventKind, params });
         
         HttpRequest request = (HttpRequest)proxy.getPeer();
 
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.log(Level.FINE, "SOA <-- XOA:" + "id = " + proxy.getHandlerId() + " name: " + eventKind + " " + request);
-        }
+//        if (LOG.isLoggable(Level.FINE)) {
+//            LOG.log(Level.FINE, "SOA <-- XOA:" + "id = " + proxy.getHandlerId() + " name: " + eventKind + " " + request);
+//        }
         
         switch (eventKind) {
         case OPEN:
