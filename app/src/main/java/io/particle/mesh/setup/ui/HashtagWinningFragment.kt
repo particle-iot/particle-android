@@ -20,7 +20,7 @@ class HashtagWinningFragment : BaseMeshSetupFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val args = HashtagWinningFragmentArgs.fromBundle(arguments)
+        val args = HashtagWinningFragmentArgs.fromBundle(this.arguments!!)
         p_hashtagwinning_message.text = args.congratsMessage
     }
 

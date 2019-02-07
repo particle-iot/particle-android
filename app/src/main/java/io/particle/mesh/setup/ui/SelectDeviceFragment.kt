@@ -29,25 +29,31 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
         // create and populate adapter
         val adapter = MeshDeviceTypesAdapter(this::onItemClicked)
         root.item_list.adapter = adapter
-        adapter.submitList(
-            listOf(
-                DeviceData(
-                    MeshDeviceType.XENON,
-                    R.string.product_description_xenon,
-                    R.drawable.xenon_vector
-                ),
-                DeviceData(
-                    MeshDeviceType.ARGON,
-                    R.string.product_description_argon,
-                    R.drawable.argon_vector
-                ),
-                DeviceData(
-                    MeshDeviceType.BORON,
-                    R.string.product_description_boron,
-                    R.drawable.boron_vector
-                )
-            )
-        )
+//        adapter.submitList(
+//            listOf(
+//                DeviceData(
+//                    MeshDeviceType.XENON,
+//                    R.string.product_description_xenon,
+//                    R.drawable.xenon_vector
+//                ),
+//                DeviceData(
+//                    MeshDeviceType.ARGON,
+//                    R.string.product_description_argon,
+//                    R.drawable.argon_vector
+//                ),
+//                DeviceData(
+//                    MeshDeviceType.BORON,
+//                    R.string.product_description_boron,
+//                    R.drawable.boron_vector
+//                )
+//            )
+//        )
+
+        if (requireActivity().localDeviceHasInternetConnection()) {
+            FlowManagerAccessModel.getViewModel(this).startFlow()
+        } else {
+            showNoInternetDialog()
+        }
 
         return root
     }
@@ -55,12 +61,12 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
     private fun onItemClicked(deviceData: DeviceData) {
         // FIXME: this should happen via FlowManager
         // check for internet access
-        if (!requireActivity().localDeviceHasInternetConnection()) {
-            showNoInternetDialog()
-            return
-        }
-
-        FlowManagerAccessModel.getViewModel(this).startFlowForDevice(deviceData.deviceType)
+//        if (!requireActivity().localDeviceHasInternetConnection()) {
+//            showNoInternetDialog()
+//            return
+//        }
+//
+//        FlowManagerAccessModel.getViewModel(this).startFlowForDevice(deviceData.deviceType)
     }
 
     private fun showNoInternetDialog() {

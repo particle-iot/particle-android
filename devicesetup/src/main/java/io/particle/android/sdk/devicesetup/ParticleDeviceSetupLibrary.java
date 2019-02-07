@@ -155,15 +155,7 @@ public class ParticleDeviceSetupLibrary {
      *            Activity here)
      */
     public static void init(Context ctx) {
-        if (instance == null) {
-            // ensure the cloud SDK is initialized
-            ParticleCloudSDK.init(ctx);
-            instance = new ParticleDeviceSetupLibrary();
-            instance.setComponent(DaggerApplicationComponent
-                    .builder()
-                    .applicationModule(new ApplicationModule((Application) ctx.getApplicationContext()))
-                    .build());
-        }
+        init(ctx, true);
     }
 
     /**
@@ -174,14 +166,26 @@ public class ParticleDeviceSetupLibrary {
      *            Activity here)
      */
     public static void initWithSetupOnly(Context ctx) {
-        BaseActivity.setupOnly = true;
-        init(ctx);
+        init(ctx, false);
     }
 
     public static ParticleDeviceSetupLibrary getInstance() {
         Preconditions.checkNotNull(instance,
                 "Library instance is null: did you call ParticleDeviceSetupLibrary.init()?");
         return instance;
+    }
+
+    private static void init(Context ctx, boolean setupOnly) {
+        BaseActivity.setupOnly = setupOnly;
+        if (instance == null) {
+            // ensure the cloud SDK is initialized
+            ParticleCloudSDK.init(ctx);
+            instance = new ParticleDeviceSetupLibrary();
+            instance.setComponent(DaggerApplicationComponent
+                    .builder()
+                    .applicationModule(new ApplicationModule((Application) ctx.getApplicationContext()))
+                    .build());
+        }
     }
 
     private static ParticleDeviceSetupLibrary instance;

@@ -216,8 +216,8 @@ class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(ap
 
     private val log = KotlinLogging.logger {}
 
-    fun startFlowForDevice(deviceType: MeshDeviceType) {
-        log.debug { "startFlowForDevice(): $deviceType" }
+    fun startFlow() {
+        log.debug { "startFlow()" }
 
         if (flowManager == null) {
             flowManager = FlowManager(
@@ -232,7 +232,6 @@ class FlowManagerAccessModel(private val app: Application) : AndroidViewModel(ap
                     app
             )
         }
-        flowManager?.targetDeviceType = deviceType
         flowManager?.startNewFlow()
     }
 

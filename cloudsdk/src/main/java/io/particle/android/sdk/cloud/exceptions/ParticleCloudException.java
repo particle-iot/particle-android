@@ -12,7 +12,7 @@ import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.particle.android.sdk.utils.EZ;
-import io.particle.android.sdk.utils.ParticleInternalStringUtils;
+import io.particle.android.sdk.utils.ParticleInternalStringUtilsKt;
 import io.particle.android.sdk.utils.TLog;
 import okio.BufferedSource;
 import okio.Okio;
@@ -183,7 +183,7 @@ public class ParticleCloudException extends Exception {
 
             } else if (jsonObject.has("errors")) {
                 List<String> errors = getErrors(jsonObject);
-                return errors.isEmpty() ? null : ParticleInternalStringUtils.join(errors, '\n');
+                return errors.isEmpty() ? null : ParticleInternalStringUtilsKt.join(errors, '\n');
 
             } else if (jsonObject.has("error")) {
                 return jsonObject.getString("error");

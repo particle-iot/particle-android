@@ -12,10 +12,10 @@ import io.particle.android.sdk.cloud.Responses.ReadStringVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadVariableResponse
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
-import io.particle.android.sdk.utils.ParticleInternalStringUtils
 import io.particle.android.sdk.utils.Preconditions
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.TLog
+import io.particle.android.sdk.utils.join
 import okio.Okio
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONException
@@ -357,9 +357,9 @@ class ParticleDevice internal constructor(
             argz = list()
         }
 
-        val argsString = ParticleInternalStringUtils.join(argz, ',')
+        val argsString = join(argz, ',')
         Preconditions.checkArgument(
-            argsString.length < MAX_PARTICLE_FUNCTION_ARG_LENGTH,
+            (argsString?.length ?: 0) < MAX_PARTICLE_FUNCTION_ARG_LENGTH,
             String.format(
                 "Arguments '%s' exceed max args length of %d",
                 argsString, MAX_PARTICLE_FUNCTION_ARG_LENGTH

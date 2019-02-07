@@ -18,6 +18,14 @@ import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.common.buildRawResourceUri
 import io.particle.mesh.setup.flow.MeshDeviceType
+import io.particle.mesh.setup.ui.HelpTextConfig.ARGON
+import io.particle.mesh.setup.ui.HelpTextConfig.A_SERIES
+import io.particle.mesh.setup.ui.HelpTextConfig.BORON_3G
+import io.particle.mesh.setup.ui.HelpTextConfig.BORON_LTE
+import io.particle.mesh.setup.ui.HelpTextConfig.B_SERIES
+import io.particle.mesh.setup.ui.HelpTextConfig.FEATHERWING
+import io.particle.mesh.setup.ui.HelpTextConfig.XENON
+import io.particle.mesh.setup.ui.HelpTextConfig.X_SERIES
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
 
@@ -57,22 +65,28 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         val config = if (p_getreadyforsetup_use_ethernet_switch.isChecked) {
             HelpTextConfig.FEATHERWING
         } else {
+            val barcodeLD = flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceBarcodeLD
+            val isSomSerial = barcodeLD.value?.serialNumber?.toLowerCase()?.startsWith("p00") ?: false
+
             when (flowManagerVM.flowManager!!.targetDeviceType) {
-                MeshDeviceType.ARGON -> HelpTextConfig.ARGON
-                MeshDeviceType.XENON -> HelpTextConfig.XENON
-                MeshDeviceType.BORON -> HelpTextConfig.BORON_3G
+                MeshDeviceType.ARGON -> { if (isSomSerial) HelpTextConfig.A_SERIES else HelpTextConfig.ARGON }
+                MeshDeviceType.XENON -> { if (isSomSerial) HelpTextConfig.X_SERIES else HelpTextConfig.XENON }
+                MeshDeviceType.BORON -> { if (isSomSerial) HelpTextConfig.B_SERIES else HelpTextConfig.BORON_3G }
             }
         }
 
         p_getreadyforsetup_antenna_confirmation_speedbump.isVisible = when (config) {
-            HelpTextConfig.FEATHERWING,
-            HelpTextConfig.XENON -> {
+            FEATHERWING,
+            XENON,
+            X_SERIES -> {
                 action_next.isEnabled = true
                 false
             }
-            HelpTextConfig.ARGON,
-            HelpTextConfig.BORON_LTE,
-            HelpTextConfig.BORON_3G -> {
+            ARGON,
+            BORON_LTE,
+            BORON_3G,
+            A_SERIES,
+            B_SERIES -> {
                 action_next.isEnabled = p_getreadyforsetup_antenna_confirmation_speedbump.isChecked
                 true
             }
@@ -85,7 +99,8 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         flowManagerVM.flowManager!!.deviceModule.updateShouldDetectEthernet(
             p_getreadyforsetup_use_ethernet_switch.isChecked
         )
-        findNavController().navigate(R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment)
+//        findNavController().navigate(R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment)
+        flowManagerVM.flowManager!!.bleConnectionModule.updateGetReadyNextButtonClicked(true)
     }
 
     private fun onConfigChanged(config: HelpTextConfig) {
@@ -153,6 +168,21 @@ internal enum class HelpTextConfig(
     BORON_3G(
         R.string.p_getreadyforsetup_header_text,
         R.raw.power_on_boron_battery
+    ),
+
+    A_SERIES(
+        R.string.p_getreadyforsetup_header_text,
+        R.raw.power_on_argon
+    ),
+
+    B_SERIES(
+        R.string.p_getreadyforsetup_header_text,
+        R.raw.power_on_boron_battery
+    ),
+
+    X_SERIES(
+        R.string.p_getreadyforsetup_header_text,
+        R.raw.power_on_xenon
     )
 
 }

@@ -473,6 +473,21 @@ public class DeviceListFragment extends Fragment
                     holder.productImage.setImageResource(R.drawable.boron_vector);
                     break;
 
+                case A_SERIES:
+                    holder.modelName.setText(R.string.product_name_argon);
+                    holder.productImage.setImageResource(R.drawable.argon_vector);
+                    break;
+
+                case B_SERIES:
+                    holder.modelName.setText(R.string.product_name_boron);
+                    holder.productImage.setImageResource(R.drawable.boron_vector);
+                    break;
+
+                case X_SERIES:
+                    holder.modelName.setText(R.string.product_name_xenon);
+                    holder.productImage.setImageResource(R.drawable.xenon_vector);
+                    break;
+
                 default:
                     holder.modelName.setText(R.string.unknown);
                     holder.productImage.setImageResource(R.drawable.unknown_vector);

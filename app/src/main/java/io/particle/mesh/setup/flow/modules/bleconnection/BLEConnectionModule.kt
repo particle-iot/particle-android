@@ -38,6 +38,7 @@ class BLEConnectionModule(
     val commissionerBarcodeLD: LiveData<CompleteBarcodeData?> = MutableLiveData()
     val commissionerTransceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData()
     val commissionerDeviceConnectedLD: LiveData<Boolean?> = MutableLiveData()
+    val getReadyNextButtonClickedLD: LiveData<Boolean?> = MutableLiveData()
 
     private var connectingToTargetUiShown = false
     private var connectingToAssistingDeviceUiShown = false
@@ -63,7 +64,8 @@ class BLEConnectionModule(
             targetDeviceTransceiverLD,
             targetDeviceConnectedLD,
             commissionerBarcodeLD,
-            commissionerTransceiverLD
+            commissionerTransceiverLD,
+            getReadyNextButtonClickedLD
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -90,16 +92,22 @@ class BLEConnectionModule(
         commissionerDeviceConnectedLD.castAndPost(initialized)
     }
 
+    fun updateGetReadyNextButtonClicked(clicked: Boolean) {
+        log.info { "updateGetReadyNextButtonClicked(): $clicked" }
+        getReadyNextButtonClickedLD.castAndPost(clicked)
+    }
+
+
     suspend fun ensureBarcodeDataForTargetDevice() {
         log.info { "ensureBarcodeDataForTargetDevice()" }
         if (targetDeviceBarcodeLD.value != null) {
             return
         }
 
-        val userSpecifiedDeviceType = flowManager.targetDeviceType
+//        val userSpecifiedDeviceType = flowManager.targetDeviceType
         val liveDataSuspender = liveDataSuspender({ targetDeviceBarcodeLD.nonNull() })
         val barcodeData = withContext(Dispatchers.Main) {
-            flowManager.navigate(R.id.action_global_getReadyForSetupFragment)
+            flowManager.navigate(R.id.action_global_scanJoinerCodeIntroFragment)
             liveDataSuspender.awaitResult()
         }
 
@@ -107,12 +115,14 @@ class BLEConnectionModule(
             throw FlowException("Error getting barcode data for target device")
         }
 
-        if (barcodeData.deviceType != userSpecifiedDeviceType) {
-            flowManager.targetDeviceType = barcodeData.deviceType
-            throw FlowException(
-                "User scanned a different device than they originally specified.  Restarting flow.",
-                ExceptionType.EXPECTED_FLOW
-            )
+        flowManager.targetDeviceType = barcodeData.deviceType
+
+        if (getReadyNextButtonClickedLD.value != true) {
+            val liveDataSuspender2 = liveDataSuspender({ getReadyNextButtonClickedLD.nonNull() })
+            withContext(Dispatchers.Main) {
+                flowManager.navigate(R.id.action_global_getReadyForSetupFragment)
+                liveDataSuspender2.awaitResult()
+            }
         }
     }
 
@@ -300,13 +310,17 @@ private fun BarcodeData.toDeviceName(): String {
         return when (first4) {
             ARGON_SERIAL_PREFIX1,
             ARGON_SERIAL_PREFIX2,
-            ARGON_SERIAL_PREFIX3 -> "Argon"
+            ARGON_SERIAL_PREFIX3,
+            A_SERIES_SERIAL_PREFIX -> "Argon"
             XENON_SERIAL_PREFIX1,
-            XENON_SERIAL_PREFIX2 -> "Xenon"
+            XENON_SERIAL_PREFIX2,
+            X_SERIES_SERIAL_PREFIX -> "Xenon"
             BORON_LTE_SERIAL_PREFIX1,
             BORON_LTE_SERIAL_PREFIX2,
             BORON_3G_SERIAL_PREFIX1,
-            BORON_3G_SERIAL_PREFIX2 -> "Boron"
+            BORON_3G_SERIAL_PREFIX2,
+            B_SERIES_LTE_SERIAL_PREFIX1,
+            B_SERIES_3G_SERIAL_PREFIX2 -> "Boron"
             else -> "UNKNOWN"
         }
     }
@@ -323,13 +337,17 @@ internal val BarcodeData.deviceType: MeshDeviceType
         return when (first4) {
             ARGON_SERIAL_PREFIX1,
             ARGON_SERIAL_PREFIX2,
-            ARGON_SERIAL_PREFIX3 -> MeshDeviceType.ARGON
+            ARGON_SERIAL_PREFIX3,
+            A_SERIES_SERIAL_PREFIX -> MeshDeviceType.ARGON
             XENON_SERIAL_PREFIX1,
-            XENON_SERIAL_PREFIX2 -> MeshDeviceType.XENON
+            XENON_SERIAL_PREFIX2,
+            X_SERIES_SERIAL_PREFIX -> MeshDeviceType.XENON
             BORON_LTE_SERIAL_PREFIX1,
             BORON_LTE_SERIAL_PREFIX2,
             BORON_3G_SERIAL_PREFIX1,
-            BORON_3G_SERIAL_PREFIX2 -> MeshDeviceType.BORON
+            BORON_3G_SERIAL_PREFIX2,
+            B_SERIES_LTE_SERIAL_PREFIX1,
+            B_SERIES_3G_SERIAL_PREFIX2 -> MeshDeviceType.BORON
             else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
         }
     }

@@ -99,19 +99,23 @@ public class InfoFragment extends Fragment {
                 break;
 
             case ARGON:
+            case A_SERIES:
                 deviceType.setText(R.string.product_name_argon);
                 deviceImage.setImageResource(R.drawable.argon_vector);
                 break;
 
             case BORON:
+            case B_SERIES:
                 deviceType.setText(R.string.product_name_boron);
                 deviceImage.setImageResource(R.drawable.boron_vector);
                 break;
 
             case XENON:
+            case X_SERIES:
                 deviceType.setText(R.string.product_name_xenon);
                 deviceImage.setImageResource(R.drawable.xenon_vector);
                 break;
+
             default:
                 deviceType.setText(R.string.unknown);
                 deviceImage.setImageResource(R.drawable.unknown_vector);
