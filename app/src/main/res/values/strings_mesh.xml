@@ -14,8 +14,8 @@
     <string name="if_you_have_an_external_antenna_connect_it_to_your_device">If you have an external antenna, connect it to your device</string>
     <string name="p_getreadyforsetup_step2_mesh_only">Confirm your {product_type} is blinking blue</string>
     <string name="p_action_scan_data_matrix">Scan sticker</string>
-    <string name="pair_xenon_with_your_phone">Pair {product_type} with your phone</string>
-    <string name="p_scancodeintro_text_1">Use your phone\'s camera to scan the sticker printed on the front of the {product_type}</string>
+    <string name="pair_xenon_with_your_phone">Pair device with your phone</string>
+    <string name="p_scancodeintro_text_1">Use your phone\'s camera to scan the sticker printed on the front of the device</string>
     <string name="type_serial_number"><u>type serial number</u></string>
     <string name="having_trouble_scanning">Having trouble scanning?</string>
     <string name="pair_with_device">Pair with device</string>

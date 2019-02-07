@@ -99,7 +99,7 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         flowManagerVM.flowManager!!.deviceModule.updateShouldDetectEthernet(
             p_getreadyforsetup_use_ethernet_switch.isChecked
         )
-//        findNavController().navigate(R.id.action_getReadyForSetupFragment_to_scanCodeIntroFragment)
+
         flowManagerVM.flowManager!!.bleConnectionModule.updateGetReadyNextButtonClicked(true)
     }
 
