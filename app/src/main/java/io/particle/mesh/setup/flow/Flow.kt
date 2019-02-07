@@ -170,11 +170,11 @@ class Flow(
     }
 
     private suspend fun doInitialCommonSubflow() {
-        cloudConnModule.ensureClaimCodeFetched()
-
         // connect to the device
         bleConnModule.ensureBarcodeDataForTargetDevice()
         bleConnModule.ensureTargetDeviceConnected()
+
+        cloudConnModule.ensureClaimCodeFetched()
 
         // gather initial data, perform upfront checks
         deviceModule.ensureDeviceIsUsingEligibleFirmware(
