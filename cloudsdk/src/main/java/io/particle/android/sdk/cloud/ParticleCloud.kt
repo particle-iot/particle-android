@@ -32,7 +32,6 @@ import retrofit.RetrofitError.Kind
 import retrofit.client.Response
 import retrofit.mime.TypedByteArray
 import java.io.IOException
-import java.lang.RuntimeException
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -116,7 +115,7 @@ class ParticleCloud internal constructor(
      * @param password Password
      */
     @WorkerThread
-    @Throws(ParticleCloudException::class)
+    @Throws(ParticleLoginException::class)
     fun logIn(user: String, password: String) {
         try {
             val response = identityApi.logIn("password", user, password)
@@ -136,7 +135,7 @@ class ParticleCloud internal constructor(
      * @param otp      One time password from authentication app.
      */
     @WorkerThread
-    @Throws(ParticleCloudException::class)
+    @Throws(ParticleLoginException::class)
     fun logIn(user: String, password: String, mfaToken: String, otp: String) {
         try {
             val response = identityApi.authenticate("urn:custom:mfa-otp", mfaToken, otp)
@@ -200,7 +199,7 @@ class ParticleCloud internal constructor(
      * @param productId Product id to use
      */
     @WorkerThread
-    @Throws(ParticleCloudException::class)
+    @Throws(ParticleLoginException::class)
     fun signUpAndLogInWithCustomer(email: String, password: String, productId: Int) {
         try {
             signUpAndLogInWithCustomer(SignUpInfo(email, password), productId)
@@ -217,7 +216,7 @@ class ParticleCloud internal constructor(
      * @param productId  Product id to use
      */
     @WorkerThread
-    @Throws(ParticleCloudException::class)
+    @Throws(ParticleLoginException::class)
     fun signUpAndLogInWithCustomer(signUpInfo: SignUpInfo, productId: Int) {
         if (!all(signUpInfo.username, signUpInfo.password, productId)) {
             throw IllegalArgumentException(
@@ -279,7 +278,6 @@ class ParticleCloud internal constructor(
         } catch (error: RetrofitError) {
             throw ParticleCloudException(error)
         }
-
     }
 
     /**
