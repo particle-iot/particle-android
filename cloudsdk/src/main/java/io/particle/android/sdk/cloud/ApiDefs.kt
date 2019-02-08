@@ -11,10 +11,7 @@ import io.particle.android.sdk.cloud.Responses.ReadIntVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadObjectVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadStringVariableResponse
 import io.particle.android.sdk.cloud.Responses.SimpleResponse
-import io.particle.android.sdk.cloud.models.MeshNetworkChange
-import io.particle.android.sdk.cloud.models.MobileSecretResponse
-import io.particle.android.sdk.cloud.models.ParticleNetworkData
-import io.particle.android.sdk.cloud.models.SignUpInfo
+import io.particle.android.sdk.cloud.models.*
 import retrofit.client.Response
 import retrofit.http.*
 import retrofit.mime.TypedOutput
@@ -194,6 +191,9 @@ class ApiDefs {
             @Path("serial_number") serialNumber: String,
             @Query("mobile_secret") partialMobileSecret: String
         ): MobileSecretResponse
+
+        @GET("/v1/serial_numbers/{serial_number}")
+        fun getDeviceIdentifiers(@Path("serial_number") serialNumber: String): DeviceIdentifiers
     }
 
 

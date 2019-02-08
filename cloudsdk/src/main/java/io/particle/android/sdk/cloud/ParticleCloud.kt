@@ -560,8 +560,23 @@ class ParticleCloud internal constructor(
         } catch (e: MalformedURLException) {
             throw ParticleCloudException(e)
         }
-
     }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun getPlatformId(serialNumber: String): ParticleDeviceType {
+        try {
+            val idsResponse = mainApi.getDeviceIdentifiers(serialNumber)
+            return ParticleDeviceType.fromInt(idsResponse.platformId)
+
+        } catch (error: RetrofitError) {
+            throw ParticleCloudException(error)
+
+        } catch (e: MalformedURLException) {
+            throw ParticleCloudException(e)
+        }
+    }
+
     //endregion
 
 
