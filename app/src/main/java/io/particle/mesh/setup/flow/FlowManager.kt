@@ -48,7 +48,8 @@ class FlowManager(
 ) : Clearable, ProgressHack {
 
     var targetDeviceType: MeshDeviceType = MeshDeviceType.XENON  // arbitrary default
-    val bleConnectionModule = BLEConnectionModule(this, btConnectionManager, transceiverFactory)
+    val bleConnectionModule =
+        BLEConnectionModule(this, btConnectionManager, transceiverFactory, cloud)
     val meshSetupModule: MeshSetupModule
     val cloudConnectionModule: CloudConnectionModule
     val deviceModule: DeviceModule

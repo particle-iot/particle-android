@@ -3,6 +3,7 @@ package io.particle.mesh.setup.flow.modules.bleconnection
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -24,7 +25,8 @@ import mu.KotlinLogging
 class BLEConnectionModule(
     private val flowManager: FlowManager,
     private val btConnectionManager: BluetoothConnectionManager,
-    private val transceiverFactory: ProtocolTransceiverFactory
+    private val transceiverFactory: ProtocolTransceiverFactory,
+    private val particleCloud: ParticleCloud
 ) : Clearable {
 
     private val log = KotlinLogging.logger {}
@@ -115,7 +117,7 @@ class BLEConnectionModule(
             throw FlowException("Error getting barcode data for target device")
         }
 
-        flowManager.targetDeviceType = barcodeData.deviceType
+        flowManager.targetDeviceType =  getMeshDeviceType(barcodeData)
 
         if (getReadyNextButtonClickedLD.value != true) {
             val liveDataSuspender2 = liveDataSuspender({ getReadyNextButtonClickedLD.nonNull() })
@@ -296,6 +298,34 @@ class BLEConnectionModule(
         return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)
     }
 
+    private fun getMeshDeviceType(barcodeData: BarcodeData): MeshDeviceType {
+
+        fun String.toDeviceType(): MeshDeviceType {
+            val first4 = this.substring(0, 4)
+            return when (first4) {
+                ARGON_SERIAL_PREFIX1,
+                ARGON_SERIAL_PREFIX2,
+                ARGON_SERIAL_PREFIX3,
+                A_SERIES_SERIAL_PREFIX -> MeshDeviceType.ARGON
+                XENON_SERIAL_PREFIX1,
+                XENON_SERIAL_PREFIX2,
+                X_SERIES_SERIAL_PREFIX -> MeshDeviceType.XENON
+                BORON_LTE_SERIAL_PREFIX1,
+                BORON_LTE_SERIAL_PREFIX2,
+                BORON_3G_SERIAL_PREFIX1,
+                BORON_3G_SERIAL_PREFIX2,
+                B_SERIES_LTE_SERIAL_PREFIX1,
+                B_SERIES_3G_SERIAL_PREFIX2 -> MeshDeviceType.BORON
+                else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
+            }
+        }
+
+        return try {
+            return barcodeData.serialNumber.toDeviceType()
+        } catch (badArg: IllegalArgumentException) {
+            particleCloud.getPlatformId(barcodeData.serialNumber).toMeshDeviceType()
+        }
+    }
 }
 
 
@@ -330,24 +360,3 @@ private fun BarcodeData.toDeviceName(): String {
 
     return "$deviceType-$lastSix"
 }
-
-internal val BarcodeData.deviceType: MeshDeviceType
-    get() {
-        val first4 = this.serialNumber.substring(0, 4)
-        return when (first4) {
-            ARGON_SERIAL_PREFIX1,
-            ARGON_SERIAL_PREFIX2,
-            ARGON_SERIAL_PREFIX3,
-            A_SERIES_SERIAL_PREFIX -> MeshDeviceType.ARGON
-            XENON_SERIAL_PREFIX1,
-            XENON_SERIAL_PREFIX2,
-            X_SERIES_SERIAL_PREFIX -> MeshDeviceType.XENON
-            BORON_LTE_SERIAL_PREFIX1,
-            BORON_LTE_SERIAL_PREFIX2,
-            BORON_3G_SERIAL_PREFIX1,
-            BORON_3G_SERIAL_PREFIX2,
-            B_SERIES_LTE_SERIAL_PREFIX1,
-            B_SERIES_3G_SERIAL_PREFIX2 -> MeshDeviceType.BORON
-            else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
-        }
-    }

@@ -26,17 +26,21 @@ enum class MeshDeviceType(val particleDeviceType: ParticleDeviceType) {
     BORON(ParticleDeviceType.BORON),
     XENON(ParticleDeviceType.XENON);
 
-    companion object {
+//    companion object {
+//
+//
+//    }
+}
 
-        fun fromParticleDeviceType(pdt: ParticleDeviceType): MeshDeviceType {
-            return when (pdt) {
-                ParticleDeviceType.ARGON -> MeshDeviceType.ARGON
-                ParticleDeviceType.BORON -> MeshDeviceType.BORON
-                ParticleDeviceType.XENON -> MeshDeviceType.XENON
-                else -> throw IllegalArgumentException("Not a mesh device: $pdt")
-            }
-        }
-
+fun ParticleDeviceType.toMeshDeviceType(): MeshDeviceType {
+    return when (this) {
+        ParticleDeviceType.ARGON,
+        ParticleDeviceType.A_SERIES -> MeshDeviceType.ARGON
+        ParticleDeviceType.BORON,
+        ParticleDeviceType.B_SERIES -> MeshDeviceType.BORON
+        ParticleDeviceType.XENON,
+        ParticleDeviceType.X_SERIES -> MeshDeviceType.XENON
+        else -> throw IllegalArgumentException("Not a mesh device: $this")
     }
 }
 
