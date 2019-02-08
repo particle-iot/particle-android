@@ -297,9 +297,8 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getDevices(): List<ParticleDevice> {
-        val simpleDevices: List<Models.SimpleDevice>
-        try {
-            simpleDevices = mainApi.getDevices()
+        return runHandlingCommonErrors {
+            val simpleDevices = mainApi.getDevices()
 
             appDataStorage.saveUserHasClaimedDevices(truthy(simpleDevices))
 
@@ -317,28 +316,21 @@ class ParticleCloud internal constructor(
 
             pruneDeviceMap(simpleDevices)
 
-            return result
-
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+            result
         }
-
     }
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun userOwnsDevice(deviceId: String): Boolean {
         val idLower = deviceId.toLowerCase()
-        try {
+        return runHandlingCommonErrors {
             val devices = mainApi.getDevices()
             val firstMatch = Funcy.findFirstMatch(
                 devices
             ) { testTarget -> idLower == testTarget.id.toLowerCase() }
-            return firstMatch != null
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+            firstMatch != null
         }
-
     }
 
     // FIXME: devise a less temporary way to expose this method
@@ -433,12 +425,9 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun claimDevice(deviceID: String) {
-        try {
+        return runHandlingCommonErrors {
             mainApi.claimDevice(deviceID)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
         }
-
     }
 
     /**
@@ -451,27 +440,21 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun generateClaimCode(): Responses.ClaimCodeResponse {
-        try {
+        return runHandlingCommonErrors {
             // Offer empty string to appease newer OkHttp versions which require a POST body,
             // even if it's empty or (as far as the endpoint cares) nonsense
-            return mainApi.generateClaimCode("okhttp_appeasement")
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+            mainApi.generateClaimCode("okhttp_appeasement")
         }
-
     }
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun generateClaimCode(productId: Int): Responses.ClaimCodeResponse {
-        try {
+        return runHandlingCommonErrors {
             // Offer empty string to appease newer OkHttp versions which require a POST body,
             // even if it's empty or (as far as the endpoint cares) nonsense
-            return mainApi.generateClaimCodeForOrg("okhttp_appeasement", productId)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+            mainApi.generateClaimCodeForOrg("okhttp_appeasement", productId)
         }
-
     }
 
     @WorkerThread
@@ -481,19 +464,16 @@ class ParticleCloud internal constructor(
         organizationSlug: String,
         productSlug: String
     ): Responses.ClaimCodeResponse {
-        try {
+        return runHandlingCommonErrors {
             log.w("Use product id instead of organization slug.")
             // Offer empty string to appease newer OkHttp versions which require a POST body,
             // even if it's empty or (as far as the endpoint cares) nonsense
-            return mainApi.generateClaimCodeForOrg(
+            mainApi.generateClaimCodeForOrg(
                 "okhttp_appeasement",
                 organizationSlug,
                 productSlug
             )
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
         }
-
     }
 
     // TODO: check if any javadoc has been added for this method in the iOS SDK
@@ -511,25 +491,19 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun requestPasswordResetForCustomer(email: String, productId: Int) {
-        try {
+        return runHandlingCommonErrors {
             identityApi.requestPasswordResetForCustomer(email, productId)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
         }
-
     }
 
     @WorkerThread
     @Deprecated("")
     @Throws(ParticleCloudException::class)
     fun requestPasswordResetForCustomer(email: String, organizationSlug: String) {
-        try {
+        return runHandlingCommonErrors {
             log.w("Use product id instead of organization slug.")
             identityApi.requestPasswordResetForCustomer(email, organizationSlug)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
         }
-
     }
 
     @WorkerThread
@@ -540,41 +514,28 @@ class ParticleCloud internal constructor(
         currentNcpFwVersion: String?,
         currentNcpFwModuleVersion: Int?
     ): URL? {
-        try {
+        return runHandlingCommonErrors {
             val response = mainApi.getFirmwareUpdateInfo(
                 platformId,
                 currentSystemFwVersion,
                 currentNcpFwVersion,
                 currentNcpFwModuleVersion
-            ) ?: return null
+            )
 
             // FIXME: see if this is correct...
 
-            return URL(response.nextFileUrl)
-
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
-
-        } catch (e: MalformedURLException) {
-            throw ParticleCloudException(e)
+            if (response == null) null else URL(response.nextFileUrl)
         }
     }
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getPlatformId(serialNumber: String): ParticleDeviceType {
-        try {
+        return runHandlingCommonErrors {
             val idsResponse = mainApi.getDeviceIdentifiers(serialNumber)
-            return ParticleDeviceType.fromInt(idsResponse.platformId)
-
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
-
-        } catch (e: MalformedURLException) {
-            throw ParticleCloudException(e)
+            ParticleDeviceType.fromInt(idsResponse.platformId)
         }
     }
-
     //endregion
 
 
@@ -582,27 +543,21 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getNetworks(): List<ParticleNetwork> {
-        try {
+        return runHandlingCommonErrors {
             // FIXME: implement paging!
             // FIXME: implement caching! (including for the networks map!)
             // Make page info a param here?  Where do we expose this?
             val networkDatas = mainApi.getNetworks()
-            return Funcy.transformList(networkDatas) { ParticleNetwork(it) }
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+            networkDatas.map { ParticleNetwork(it) }
         }
-
     }
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getNetwork(networkId: String): ParticleNetwork {
-        try {
+        return runHandlingCommonErrors {
             val networkData = mainApi.getNetwork(networkId)
-            return ParticleNetwork(networkData)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
-        }
+            ParticleNetwork(networkData)        }
 
     }
 
@@ -628,20 +583,15 @@ class ParticleCloud internal constructor(
         //            Error: `mesh networks above quota, payment needed`
         //        }
 
-
-        try {
+        return runHandlingCommonErrors {
             val response = if (iccId == null) {
                 mainApi.registerMeshNetwork(gatewayDeviceId, networkType, networkName)
             } else {
                 mainApi.registerMeshNetwork(gatewayDeviceId, networkType, networkName, iccId)
             }
 
-            return response.network
-
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+            response.network
         }
-
     }
 
     @WorkerThread
@@ -653,10 +603,8 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun removeDeviceFromAnyMeshNetwork(deviceId: String) {
-        try {
+        return runHandlingCommonErrors {
             mainApi.removeDeviceFromAnyNetwork(deviceId)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
         }
     }
 
@@ -675,15 +623,12 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     private fun modifyMeshNetwork(deviceId: String, action: String, networkId: String): Response {
-        try {
-            return mainApi.modifyMeshNetwork(
+        return runHandlingCommonErrors {
+            mainApi.modifyMeshNetwork(
                 networkId,
                 MeshNetworkChange(action, deviceId)
             )
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
         }
-
     }
 
     @WorkerThread
@@ -692,10 +637,8 @@ class ParticleCloud internal constructor(
         serialNumber: String,
         partialMobileSecret: String
     ): MobileSecretResponse {
-        try {
-            return mainApi.getFullMobileSecret(serialNumber, partialMobileSecret)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+        return runHandlingCommonErrors {
+            mainApi.getFullMobileSecret(serialNumber, partialMobileSecret)
         }
     }
     //endregion
@@ -705,10 +648,8 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getPaymentCard(): CardOnFileResponse {
-        try {
-            return mainApi.getPaymentCard()
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+        return runHandlingCommonErrors {
+            mainApi.getPaymentCard()
         }
     }
     //endregion
@@ -732,10 +673,8 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun activateSim(iccId: String): Response {
-        try {
-            return mainApi.takeActionOnSim(iccId, "activate")
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+        return runHandlingCommonErrors {
+            mainApi.takeActionOnSim(iccId, "activate")
         }
     }
 
@@ -748,16 +687,14 @@ class ParticleCloud internal constructor(
         networkId: String? = null,
         iccid: String? = null
     ): ParticlePricingInfo {
-        try {
-            return mainApi.getPricingImpact(
+        return runHandlingCommonErrors {
+            mainApi.getPricingImpact(
                 action.apiString,
                 networkType.apiString,
                 deviceId,
                 networkId,
                 iccid
             )
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
         }
     }
     //endregion
@@ -952,11 +889,8 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     private fun getDevice(deviceID: String, sendUpdate: Boolean): ParticleDevice {
-        val deviceCloudModel: CompleteDevice
-        try {
-            deviceCloudModel = mainApi.getDevice(deviceID)
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
+        val deviceCloudModel = runHandlingCommonErrors {
+            mainApi.getDevice(deviceID)
         }
 
         return getDevice(deviceCloudModel, sendUpdate)
@@ -1069,15 +1003,25 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     private fun refreshAccessToken(refreshToken: String) {
-        try {
+        return runHandlingCommonErrors {
             val response = identityApi.logIn("refresh_token", refreshToken)
             ParticleAccessToken.removeSession()
             this.token = ParticleAccessToken.fromNewSession(response)
             this.token!!.delegate = tokenDelegate
+        }
+    }
+
+    @Throws(ParticleCloudException::class)
+    private fun <T> runHandlingCommonErrors(toRun: () -> T): T {
+        try {
+            return toRun()
+
         } catch (error: RetrofitError) {
             throw ParticleCloudException(error)
-        }
 
+        } catch (e: MalformedURLException) {
+            throw ParticleCloudException(e)
+        }
     }
 
 
