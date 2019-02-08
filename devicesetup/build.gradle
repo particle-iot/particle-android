@@ -84,6 +84,13 @@ dependencies {
     api 'androidx.recyclerview:recyclerview:1.0.0'
 }
 
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += [
+            "-Adagger.gradle.incremental=enabled"
+    ]
+}
+
 apply from: '../pom_generator_v1.gradle'
 apply from: '../bintray_upload_v1.gradle'
 
