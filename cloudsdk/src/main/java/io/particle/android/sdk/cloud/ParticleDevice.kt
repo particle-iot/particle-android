@@ -162,6 +162,19 @@ class ParticleDevice internal constructor(
             return isConnected && lowercaseFunctions.containsAll(tinkerFunctions)
         }
 
+    // included for Java backwards compat: the method was named getID(),
+    // and the new Kotlin property generates a method named getId()
+    @Deprecated(
+        message = "Use #id property / #getId() instead",
+        replaceWith = ReplaceWith(
+            "getId()",
+            "io.particle.android.sdk.cloud.ParticleDevice"
+        )
+    )
+    fun getID(): String {
+        return id
+    }
+
     enum class ParticleDeviceType {
         CORE,
         PHOTON,
