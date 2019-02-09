@@ -181,6 +181,7 @@ class ParticleDevice internal constructor(
 
         companion object {
 
+            @JvmStatic
             fun fromInt(intValue: Int): ParticleDeviceType {
                 return when (intValue) {
                     0 -> CORE
