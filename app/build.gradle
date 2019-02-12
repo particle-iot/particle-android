@@ -89,7 +89,7 @@ dependencies {
     }
 
     releaseImplementation 'com.google.firebase:firebase-perf:16.2.3'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     // for barcode scanning in Mesh setup
     implementation 'com.google.firebase:firebase-core:16.0.7'
@@ -136,7 +136,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.0.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
 
-    def nav_version = "1.0.0-beta01"
+    def nav_version = "1.0.0-beta02"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
