@@ -73,6 +73,7 @@ dependencies {
     implementation project(':cloudsdk')
     implementation project(':ecjpake4j')
     implementation project(':devicesetup')
+    implementation project(':firmwareprotos')
     implementation(name:'slf4android', ext:'aar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -1594,7 +1594,7 @@ public final class Nanopb {
                 NanoPBOptions.class, Builder.class);
       }
 
-      // Construct using fi.kapsi.koti.jpa.nanopb.Nanopb.NanoPBOptions.newBuilder()
+      // Construct using Nanopb.NanoPBOptions.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1658,7 +1658,7 @@ public final class Nanopb {
       public NanoPBOptions build() {
         NanoPBOptions result = buildPartial();
         if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
+          throw Builder.newUninitializedMessageException(result);
         }
         return result;
       }
