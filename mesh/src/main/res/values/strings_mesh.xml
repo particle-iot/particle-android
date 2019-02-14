@@ -1,0 +1,248 @@
+<resources>
+    <string name="choose_the_device_you_re_setting_up">Choose the device you\'re setting up</string>
+
+    <string name="product_name_xenon">Xenon</string>
+    <string name="product_description_xenon">Mesh</string>
+    <string name="product_name_argon">Argon</string>
+    <string name="product_description_argon">Mesh + Wi-Fi</string>
+    <string name="product_name_boron">Boron</string>
+    <string name="product_description_boron">Mesh + Cellular</string>
+
+    <string name="p_getreadyforsetup_header_text">Get your {product_type} ready for setup</string>
+    <string name="my_device_is_blinking_blue">My device is blinking blue</string>
+    <string name="p_getreadyforsetup_step1_mesh_only">Plug your {product_type} into a power source</string>
+    <string name="if_you_have_an_external_antenna_connect_it_to_your_device">If you have an external antenna, connect it to your device</string>
+    <string name="p_getreadyforsetup_step2_mesh_only">Confirm your {product_type} is blinking blue</string>
+    <string name="p_action_scan_data_matrix">Scan sticker</string>
+    <string name="pair_xenon_with_your_phone">Pair device with your phone</string>
+    <string name="p_scancodeintro_text_1">Use your phone\'s camera to scan the sticker printed on the front of the device</string>
+    <string name="type_serial_number"><u>type serial number</u></string>
+    <string name="having_trouble_scanning">Having trouble scanning?</string>
+    <string name="pair_with_device">Pair with device</string>
+    <string name="find_the_serial_number_printed_on_the_back_of_the_box">Find the serial number printed on the back of the box your device was packaged in</string>
+    <string name="type_device_serial_number">Type device serial number</string>
+    <string name="serial_number">serial number</string>
+    <string name="pairing_with_your_device">Pairing with your {product_type}</string>
+    <string name="add_xenon_to_mesh_network">Add {product_type} to mesh network</string>
+    <string name="find_a_device_that_is_already_part_of_the_mesh_network">Find a device that is already part of the mesh network</string>
+    <string name="confirm_the_device_is_blinking_blue_and_your_phone_remains_close">Confirm the device is blinking blue</string>
+    <string name="select_device_on_the_network">Select device on the network</string>
+    <string name="this_device_will_act_as_the_commissioner">This device will act as the <i>commissioner</i>, to allow the {product_type} to join the mesh network.</string>
+    <string name="scanning_for_nearby_devices">Scanning for nearby devices</string>
+    <string name="enter_network_password">Enter network password</string>
+    <string name="this_is_the_password_you_set_when_this_mesh_network_was_first_created">This is the password you set when this mesh network was first created. This password is required to securely add new devices to a mesh network</string>
+    <string name="join_network">Join Network</string>
+    <string name="p_enterpassword_network_password">Network password</string>
+    <string name="joining_mesh_network">Joining mesh network</string>
+    <string name="requesting_permission_to_add_to_mesh_network">Requesting permission from assisting device to add {product_type}</string>
+    <string name="adding_the_xenon_to_the_mesh_network">Adding {product_type} to the mesh network</string>
+    <string name="connecting_xenon_to_device_cloud_via_gateway">Starting a secure session with the Particle Device Cloud via gateway</string>
+    <string name="p_namedevice_header">Give your {product_type} a name</string>
+    <string name="p_nameyourdevice_device_name_hint">device name</string>
+    <string name="done">Done</string>
+    <string name="add_next_mesh_device">Add next mesh device</string>
+    <string name="congrats_your_device_is_set_up_and_added_to_the_network">{device_name} is all set up!</string>
+    <string name="adding_more_devices_to_your_network">Adding more devices to this network?</string>
+    <string name="ready_to_build">Ready to build?</string>
+    <string name="start_building">Start Building</string>
+    <string name="point_camera_at_qr_code_on_the_device">Point the camera at the sticker</string>
+
+    <string name="p_newmeshnetworkname_invalid_name_dialog_text">Mesh network names must be fewer than 16 characters, and can only contain letters, numbers, and underscores.</string>
+    <string name="p_newmeshnetworkname_invalid_password_dialog_text">Passwords must be at least 6 characters long.</string>
+
+    <string name="p_getreadyforsetup_header_ethernet">Attach your Ethernet Featherwing</string>
+    <string name="p_getreadyforsetup_step1_ethernet">Line up Xenon pin headers and gently push the Xenon into the Featherwing until flush</string>
+    <string name="p_getreadyforsetup_step2_ethernet">Insert an ethernet cable into the port</string>
+    <string name="p_getreadyforsetup_step3_ethernet">Plug your Xenon into a power source</string>
+    <string name="p_getreadyforsetup_step4_ethernet">Confirm your Xenon is blinking blue</string>
+
+    <string name="default_device_name">device</string>
+    
+    <string name="p_congrats_claimed">%1$s connected to the Device Cloud!</string>
+
+    <string name="p_mesh_leavenetworkconfirmation_header">Leave current network?</string>
+    <string name="p_mesh_leavenetworkconfirmation_text">The device you are trying to set up is already part of a mesh network. Would you like to have the device leave its current mesh network to continue setup?</string>
+    <string name="p_mesh_leavenetworkconfirmation_action_leave_network">Leave Network</string>
+
+    <string name="p_mesh_action_exit_setup">Exit Setup</string>
+
+    <string name="p_mesh_billing_please_go_to_your_browser">Please add a credit card at <b>console.particle.io/billing</b> on your desktop</string>
+
+
+
+    <string name="p_pricingimpact_FreeNetworkTitle">Woo-hoo! Enjoy this new mesh network on us</string>
+    <string name="p_pricingimpact_PaidNetworkTitle">To create a new mesh network, please enroll in a Device Cloud subscription</string>
+
+    <string name="p_pricingimpact_FreeGatewayDeviceTitle">Woo-hoo! Enjoy Device Cloud access for this device on us</string>
+    <string name="p_pricingimpact_PaidGatewayDeviceTitle">To activate this device, please enroll in a Device Cloud subscription</string>
+
+    <string name="p_pricingimpact_DeviceCloudPlanTitle">DEVICE CLOUD</string>
+    <string name="p_pricingimpact_MicroNetworkPlanTitle">MICRO NETWORK</string>
+
+    <string name="p_pricingimpact_WifiDeviceText">Wi-Fi/Ethernet device</string>
+    <string name="p_pricingimpact_WifiGatewayText">Wi-Fi/Ethernet Gateway</string>
+
+    <string name="p_pricingimpact_CellularDeviceText">Cellular device</string>
+    <string name="p_pricingimpact_CellularGatewayText">Cellular Gateway</string>
+
+    <string name="p_pricingimpact_FreeDevicesText">First {free_devices} devices FREE</string>
+    <string name="p_pricingimpact_FreeNetworksText">First {free_networks} networks FREE</string>
+    <string name="p_pricingimpact_FreeMonthsText">FREE for {free_months} months</string>
+
+    <string name="p_pricingimpact_PriceText">${price}</string>
+    <string name="p_pricingimpact_PriceTextStrikethrough"><strike>${price}</strike></string>
+    <string name="p_pricingimpact_PriceNoteText">per mo.</string>
+
+    <string name="p_pricingimpact_DeviceCloudFeatures">DEVICE CLOUD INCLUDES</string>
+    <string name="p_pricingimpact_MeshNetworkFeatures">MESH NETWORK INCLUDES</string>
+
+    <string name="p_pricingimpact_FeaturesDeviceCloud">Device Cloud Features +</string>
+    <string name="p_pricingimpact_FeaturesMaxDevices">{total_devices} total devices</string>
+    <string name="p_pricingimpact_FeaturesMaxGateways">up to {total_gateways} gateway</string>
+    <string name="p_pricingimpact_FeaturesDataAllowence"> {emmbees}MB of cellular data/mo.\naddnl. MBs start at ${per_mb_price}</string>
+    <string name="p_pricingimpact_FeaturesStandardSupport">Standard support</string>
+
+    <string name="p_action_enroll_in_subscription">Enroll in subscription</string>
+
+
+    <string name="pair_assisting_device_with_your_phone">Pair assisting {product_type} with your phone</string>
+    <string name="p_pairassistingdevice_subheader_1">Use your phone\'s camera to scan the sticker printed on the front of the assisting {product_type}</string>
+    <string name="p_connecttocloud_xenon_gateway_needs_ethernet">You must connect an ethernet cable to a switch/router with an active internet connection to proceed.</string>
+    <string name="p_checkethernetgateway_title">Connect Xenon to Device Cloud</string>
+    <string name="p_checkethernetgateway_device_cloud_intro">The Device Cloud is (larger network at play here, introduce the concept)</string>
+    <string name="p_checkethernetgateway_ensure_featherwing_is_plugged_in">Make sure an Ethernet Featherwing is plugged into the Xenon, and an ethernet cable is plugged into the Featherwing.</string>
+    <string name="p_action_connect_to_device_cloud">Connect to device cloud</string>
+    <string name="p_connectingtodevicecloud_title">Your {product_type} is connecting to the Particle Device Cloud</string>
+    <string name="p_connectingtodevicecloud_step_1">Connecting to the internet via Ethernet</string>
+    <string name="p_connectingtodevicecloud_step_2">Starting a secure session with the Particle Device Cloud</string>
+    <string name="p_connectingtodevicecloud_step_3">Connected successfully!</string>
+    <string name="p_action_add_next_mesh_setup">Add next mesh setup</string>
+    <string name="p_gatewaysetupfinished_text_2">Adding more devices to your mesh network</string>
+    <string name="p_gatewaysetupfinished_using_as_standalone_device">Using as a standalone device?</string>
+    <string name="p_action_start_tinkering">Start tinkering</string>
+    <string name="p_newmeshnetworkname_header">Give your network a name</string>
+    <string name="p_newmeshnetworkname_subheader_1">Easily identify your network once its created</string>
+    <string name="p_action_next_set_password">Next: set password</string>
+    <string name="p_newmeshnetworkname_name_hint_text">Network name</string>
+    <string name="p_newmeshnetworkpassword_title">Set network admin password</string>
+    <string name="p_newmeshnetworkpassword_hint_content">You\'ll need this password each time you want to add a new device to this mesh network</string>
+    <string name="p_newmeshnetworkpassword_password_hint">Network password</string>
+    <string name="p_action_set_admin_password">Set admin password</string>
+
+    <string name="p_creatingyournetwork_header">Creating your network</string>
+    <string name="p_creatingyournetwork_step_1">Sending network credentials to your {product_type}</string>
+    <string name="p_creatingyournetwork_step_2">Device creating the mesh network locally</string>
+    <string name="p_creatingyournetwork_step_3">Registering the mesh network with the Particle Device Cloud</string>
+    <string name="p_creatingyournetwork_step_4">Activating device as a gateway in the mesh network</string>
+    <string name="p_creatingyournetwork_step_5">Created network successfully!</string>
+
+    <string name="p_newmeshnetworkfinished_header">Congrats!</string>
+    <string name="p_newmeshnetworkfinished_start_tinkering_header">Ready to build?</string>
+
+    <string name="p_action_add_next_mesh_device">Add next mesh device</string>
+
+    <string name="p_newmeshnetworkfinished_start_mesh_setup_header">Adding more devices to your network?</string>
+    <string name="p_newmeshnetworkfinished_subheader_1">Your network has been set up with {device_name} acting as a gateway</string>
+    <string name="p_action_create_new_network">Create new network…</string>
+    <string name="p_manualcommissioning_commissioner_candidate_not_on_target_network">This device is not part the network you are trying to join.</string>
+    <string name="p_exitsetupconfirmation_exit">Exit setup</string>
+    <string name="p_exitsetupconfirmation_content">Exit setup?</string>
+    <string name="p_scancode_title">Pair device with your phone</string>
+    <string name="p_pairingprogress_congrats">Congrats!</string>
+    <string name="p_action_next">next</string>
+    <string name="p_meshnetworkscanning_header">Your {product_type} is scanning for mesh networks to join</string>
+    <string name="p_mesh_tipbox_header_helpful_tip">Helpful tip!</string>
+    <string name="p_scancommissionercode_tip_content">This assisting device will be used to bring your new {product_type} onto the mesh network.</string>
+    <string name="p_joiningmesh_header">Your {product_type} is joining the mesh network</string>
+    <string name="p_namedevice_hint_content">Name your device something you will remember to help you easily identify it later.</string>
+    <string name="p_action_im_done">I\'m done</string>
+    <string name="p_action_set_up_next_device">Set up next device</string>
+
+    <string name="p_scanfornetworks_gateway_flow_title">Your {product_type} + Ethernet Featherwing will act as a gateway in a mesh network</string>
+    <string name="p_newmeshnetworkname_hintbox_content">Name your network something you will remember to help you easily identify it later</string>
+    <string name="p_action_create_network">Create network</string>
+    <string name="p_joiningmeshnetwork_stage4">Joined mesh network &amp; connected to Particle Device Cloud successfully!</string>
+    <string name="p_joinersetupfinished_done_header">Itching to get started?</string>
+    <string name="p_joinersetupfinished_continue_to_mesh_header">Using {device_name} in a mesh network?</string>
+    <string name="p_gatewaysetupfinished_done_header">Using as a standalone device?</string>
+    <string name="p_action_continue_onto_mesh_setup">Continue onto mesh setup</string>
+    <string name="p_newmeshnetworkpassword_confirm_password_hint">Confirm network password</string>
+    <string name="p_newmeshnetworkpassword_passwords_do_not_match_dialog_content">Passwords do not match!</string>
+    <string name="p_newmeshnetworkpassword_hintbox_header">Keep this password safe!</string>
+    <string name="p_connecttocommissionerintro_step2">Press and hold the MODE button for 3 seconds</string>
+    <string name="p_mesh_network_password_is_incorrect">Network password is incorrect</string>
+    <string name="p_getreadyforsetup_use_ethernet_hintbox_header">Use with ethernet?</string>
+    <string name="p_getreadyforsetup_use_ethernet_switch">Toggle Ethernet Featherwing setup</string>
+
+    <string name="p_bleotaintro_header">Let\'s get your device updated</string>
+    <string name="p_bleotaintro_subheader_1">Update your device to the latest-and-greatest version of <i>Device OS</i> to continue setup</string>
+    <string name="p_bleotaintro_tipbox_content">Your device may <b>receive multiple files</b> as part of this Device OS update. It will reboot in-between each file it receives from Device Cloud.</string>
+    <string name="p_action_begin_update">Begin update</string>
+    <string name="p_bleota_hintbox_header">Important!</string>
+    <string name="p_bleota_hintbox_content">Please keep your phone awake with this app open during this Device OS update.</string>
+    <string name="p_bleota_header">Updating Device OS</string>
+    <string name="p_bleota_progress_format">Sending part %1$d to device — %2$d%% done</string>
+    <string name="p_bleota_installing_format">Installing part %1$d on device</string>
+    <string name="p_usestandaloneorinmesh_header">Do you want to use this {product_type} in a <i>mesh network?</i></string>
+    <string name="p_usestandaloneorinmesh_subheader">This {product_type} can act as a gateway to the Internet and create a local wireless mesh network that other devices can join</string>
+    <string name="p_action_use_in_mesh_network">Yes, use in mesh network</string>
+    <string name="p_action_do_not_use_in_mesh_network">No, don\'t use in mesh network</string>
+    <string name="p_createorjoinmesh_header">Got it — do you want to create a new mesh network, or join an existing one?</string>
+    <string name="p_createorjoinmesh_subheader">You will need to be in physical proximity to an existing mesh network to have the {product_type} join it</string>
+    <string name="p_action_join_exiting_mesh_network">Join existing mesh network</string>
+    <string name="p_action_create_new_mesh_network">Create new mesh network</string>
+    <string name="p_meshbilling_header_free">Woo-hoo! Enjoy this new mesh network on us.</string>
+    <string name="p_pricingimpact_subscription_type_header_micro_network">Micro Network</string>
+    <string name="p_pricingimpact_subscription_type_subheader_wifi_ethernet_gateway">Wi-Fi/Ethernet Gateway</string>
+    <string name="p_pricingimpact_freebie_header_first_10_networks_free">First 10 networks FREE</string>
+    <string name="p_meshbilling_pricing">{price} per mo.</string>
+    <string name="p_pricingimpact_mesh_network_includes_divider">Mesh network includes</string>
+    <string name="p_meshbilling_device_cloud_features">Device Cloud Features +</string>
+    <string name="p_meshbilling_total_devices"><b>10</b> total devices</string>
+    <string name="p_meshbilling_gateway_limit">Up to <b>1</b> gateway</string>
+    <string name="p_meshbilling_support_type">Standard support</string>
+    <string name="p_meshbilling_enter_cc_on_next_screen">You will be asked to enter your credit card details on the next screen</string>
+    <string name="p_pricingimpact_header_need_subscription">To create a new mesh network, please enroll in a Device Cloud subscription</string>
+
+    <string name="p_argonconnecttocloud_header_gateway">OK — Let\'s get this mesh gateway connected to the Device Cloud</string>
+    <string name="p_argonconnecttocloud_step1_gateway">Gateways require a <b>connection to the Device Cloud</b> to allow communication between the local mesh network and the Internet</string>
+    <string name="p_argonconnecttocloud_step2_gateway">To connect, you will send the Argon <b>Wi-Fi network credentials</b></string>
+    <string name="p_argonconnecttocloud_step3_gateway">Once connected, you can <b>create or join a mesh network</b> using this {product_type}</string>
+
+    <string name="p_argonconnecttocloud_header_standalone">OK — Let\'s get this device connected to the Device Cloud</string>
+    <string name="p_argonconnecttocloud_step1_standalone">Standalone devices require a <b>connection to the Device Cloud</b> to securely talk to the Internet</string>
+    <string name="p_argonconnecttocloud_step2_standalone">To connect, you will send the <b>Argon Wi-Fi network credentials</b></string>
+
+    <string name="p_argonconnecttocloud_step2_boron_activated">To connect, the device will <b>use the Particle SIM</b> inside your Boron, which has already been activated</string>
+    <string name="p_argonconnecttocloud_step2_boron_not_activated">To connect, we\'ll <b>activate the Particle SIM</b> inside your Boron</string>
+    <string name="p_action_activate_sim_and_connect">Activate SIM &amp; connect</string>
+
+    <string name="p_scanforwifi_header">Your Argon is scanning for Wi-Fi networks to join</string>
+    <string name="p_mesh_action_connect_to_device_cloud">Connect to Device Cloud</string>
+    <string name="p_enterwifipassword_header">Enter password for {wifi_ssid}</string>
+    <string name="p_enterwifipassword_password_entry_caption">Password</string>
+
+    <string name="p_argonconnectingstatus_header">Your Argon is connecting to the Particle Device Cloud</string>
+    <string name="p_argonconnectingstatus_step_1">Setting Wi-Fi credentials</string>
+    <string name="p_argonconnectingstatus_step_2">Connecting to the Internet via Wi-Fi</string>
+    <string name="p_argonconnectingstatus_step_3">Starting a secure session with the Particle Device Cloud</string>
+    <string name="p_argonconnectingstatus_step_4">Connected successfully!</string>
+
+    <string name="p_boronconnectingstatus_header">Your Boron is connecting to the Particle Device Cloud</string>
+    <string name="p_boronconnectingstatus_step_1">Activating Particle SIM</string>
+    <string name="p_boronconnectingstatus_step_2">Connecting to the Internet via cellular</string>
+    <string name="p_boronconnectingstatus_step_3">Starting a secure session with the Particle Device Cloud</string>
+
+    <string name="p_createnetworkwithgateway_header">Creating mesh network</string>
+    <string name="p_createnetworkwithgateway_step_1">Sending network credentials to {device_name}</string>
+    <string name="p_createnetworkwithgateway_step_2">{device_name} creating this mesh network locally</string>
+    <string name="p_createnetworkwithgateway_step_3">Registering mesh network with the Particle Device Cloud</string>
+    <string name="p_createnetworkwithgateway_step_4">Activating {device_name} as a gateway in the mesh network</string>
+    <string name="p_letsgetbuilding_tip_content">Did you already close your web browser? You can always head straight to:</string>
+    <string name="p_letsgetbuilding_header"><b>Let\'s get building!</b></string>
+    <string name="p_letsgetbuilding_subheader">To start building with your device, <b>look back at your web browser where you got started with setup.</b></string>
+    <string name="p_getreadyforsetup_antenna_confirmation_speedbump">I have attached the antenna and see that the device is blinking blue</string>
+    <string name="p_sticker_error_dialog_content">There is a problem with the sticker on your device. Please contact support for a solution.</string>
+    <string name="p_action_contact_support">Contact Support</string>
+
+</resources>
