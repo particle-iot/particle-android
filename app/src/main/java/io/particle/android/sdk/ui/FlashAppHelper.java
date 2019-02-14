@@ -42,7 +42,7 @@ class FlashAppHelper {
         new AlertDialog.Builder(activity)
                 .setMessage("Flash Tinker?")
                 .setPositiveButton(R.string.flash, (dialog, which) -> flashFromStream(
-                        activity, device, inputStream, "Tinker"))
+                        activity, device, inputStream, "Tinkerrrrr"))
                 .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }

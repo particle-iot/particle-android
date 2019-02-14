@@ -1,4 +1,4 @@
-This module is a thin JNI wrapper around the EC-JPAKE interface of mbedtls.
+This module is a thin JNI wrapper around a portion of the EC-JPAKE interface of mbedtls.
 
 If you ever need to rebuild the version of mbedtls in the distribution folder, 
 just 'cd' to the ecjpake4j dir, and run build_mbedtls.sh

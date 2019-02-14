@@ -1,11 +1,20 @@
-# Particle Tinker app for Android
+# Particle Android libraries and apps
 
 ![Particle](http://oi60.tinypic.com/116jd51.jpg)
 
-[Install on your Android device from Google Play store](https://play.google.com/store/apps/details?id=io.particle.android.app)
+[Install the Tinker app on your Android device from the Google Play Store](https://play.google.com/store/apps/details?id=io.particle.android.app)
 
-Get connected and start building your Internet of Things project right away with Particle, the companion app to the Photon, a tiny but powerful Wi-Fi development board from the team at Particle. Your Photon and this app are all you need to get started with your project or prototype; the kit comes pre-loaded with our firmware libraries and is connected to the cloud out of the box.
-Download Particle to easily connect your Photon to a Wi-Fi network in a few simple steps. No coding required. The app will take you through the entire set-up process step by step until the LED on your board is breathing cyan - indicating it's connected and ready to be programmed!
+
+This repository is a convenient single location for all Android-related code released by Particle.  Currently, this includes:
+- the Particle [Cloud SDK](https://github.com/particle-iot/particle-android/tree/master/cloudsdk)
+- the Particle [Device Setup Library](https://github.com/particle-iot/particle-android/tree/master/devicesetup) (for Particle Gen 2 devices)
+- the [Tinker app](https://github.com/particle-iot/particle-android/tree/master/app)
+
+
+## Getting started with the libraries, getting help, and everything else
+
+Full documentation, including a getting started guide, lots of API examples, support & feedback links, and more are all available from our documentation page: https://docs.particle.io/reference/android/
+
 
 ### Additional resources
 * Read the getting started guide at https://particle.io/start
@@ -14,11 +23,12 @@ Download Particle to easily connect your Photon to a Wi-Fi network in a few simp
 * Start building your own code at https://particle.io/build
 * Find answers to common questions at https://support.particle.io
 
-## Open source project
 
-### Requirements
+## Open source projects
 
-1. Get [the latest stable version of Android Studio](https://developer.android.com/studio/)
+### Requirements for building
+
+1. Get [the latest stable version of Android Studio](https://d.android.com/studio/)
 2. Once you have Android Studio installed, launch it, and from the "Welcome to 
 Android Studio" screen, pick "Open an existing Android Studio project".  When it prompts 
 you for the project location, point it at the top-level 'build.gradle' file in the repo.
@@ -26,15 +36,12 @@ you for the project location, point it at the top-level 'build.gradle' file in t
 the toolbar to build and run the app on a device.
 
 
-### FAQ
+## Maintainers
 
-Q: I'm getting an error at build time, "The type java.nio.file.OpenOption cannot be resolved. It
-is indirectly referenced from required .class files"
+- Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
+- Julius Skripkauskas [Github](https://github.com/cityvibes) | [Twitter](https://www.twitter.com/azemar)
+- Ido Kleinman [Github](https://www.github.com/idokleinman) | [Twitter](https://www.twitter.com/idokleinman)
 
-A: You can ignore this error.  That class is never referred to, it's just the build system
-complaining.  See https://github.com/square/okhttp/issues/1052 ,
- _"OkHttp is careful to not exercise that code (and SPDY) where it is unsupported."_
+## License
 
-### License
-Apache 2.0
-
+All code in this repository is available under the Apache License 2.0.  See the `LICENSE` file for the complete text of the license.

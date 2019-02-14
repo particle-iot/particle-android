@@ -9,4 +9,6 @@
     <string name="title_activity_value">ValueActivity</string>
     <string name="title_activity_device_info">DeviceInfoActivity</string>
 
+    <string name="http_log_level">FULL</string>
+
 </resources>

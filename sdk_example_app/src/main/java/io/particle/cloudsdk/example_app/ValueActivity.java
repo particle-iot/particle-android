@@ -3,8 +3,6 @@ package io.particle.cloudsdk.example_app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +10,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;

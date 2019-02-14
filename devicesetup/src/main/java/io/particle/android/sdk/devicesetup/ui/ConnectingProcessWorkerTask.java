@@ -20,6 +20,7 @@ import io.particle.android.sdk.devicesetup.SetupProcessException;
 import io.particle.android.sdk.devicesetup.setupsteps.SetupStep;
 import io.particle.android.sdk.devicesetup.setupsteps.SetupStepsRunnerTask;
 import io.particle.android.sdk.devicesetup.setupsteps.StepProgress;
+import io.particle.android.sdk.ui.BaseActivity;
 import io.particle.android.sdk.utils.CoreNameGenerator;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.Funcy;
@@ -82,25 +83,27 @@ public class ConnectingProcessWorkerTask extends SetupStepsRunnerTask {
             // FIXME: handle "success, no ownership" case
             resultCode = SuccessActivity.RESULT_SUCCESS;
 
-            EZ.runAsync(() -> {
-                try {
-                    // collect a list of unique, non-null device names
-                    Set<String> names = set(Funcy.transformList(
-                            sparkCloud.getDevices(),
-                            Funcy.notNull(),
-                            ParticleDevice::getName,
-                            Py::truthy
-                    ));
-                    ParticleDevice device = sparkCloud.getDevice(deviceId);
-                    if (device != null && !truthy(device.getName())) {
-                        device.setName(CoreNameGenerator.generateUniqueName(names));
+            if (!BaseActivity.setupOnly) {
+                EZ.runAsync(() -> {
+                    try {
+                        // collect a list of unique, non-null device names
+                        Set<String> names = set(Funcy.transformList(
+                                sparkCloud.getDevices(),
+                                Funcy.notNull(),
+                                ParticleDevice::getName,
+                                Py::truthy
+                        ));
+                        ParticleDevice device = sparkCloud.getDevice(deviceId);
+                        if (device != null && !truthy(device.getName())) {
+                            device.setName(CoreNameGenerator.generateUniqueName(names));
+                        }
+                    } catch (Exception e) {
+                        // FIXME: do real error handling here, and only
+                        // handle ParticleCloudException instead of swallowing everything
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    // FIXME: do real error handling here, and only
-                    // handle ParticleCloudException instead of swallowing everything
-                    e.printStackTrace();
-                }
-            });
+                });
+            }
         }
 
         Activity activity = activityReference.get();

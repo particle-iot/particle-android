@@ -26,6 +26,7 @@ import io.particle.android.sdk.devicesetup.R;
 import io.particle.android.sdk.devicesetup.model.WifiNetwork;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
+import io.particle.android.sdk.utils.ui.Fragments;
 import io.particle.android.sdk.utils.ui.Ui;
 
 import static io.particle.android.sdk.utils.Py.set;
@@ -73,7 +74,7 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        client = EZ.getCallbacksOrThrow(this, Client.class);
+        client = Fragments.getCallbacksOrThrow(this, Client.class);
         if (aggroLoadingHandler == null) {
             aggroLoadingHandler = new Handler();
         }

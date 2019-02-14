@@ -1059,6 +1059,7 @@ class ParticleCloud internal constructor(
                     "      some time before the 1.0 release."
         )
         @Synchronized
+        @JvmStatic
         operator fun get(context: Context): ParticleCloud {
             log.w(
                 "ParticleCloud.get() is deprecated and will be removed before the 1.0 release. " +

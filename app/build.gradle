@@ -17,9 +17,8 @@ repositories {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'androidx.navigation.safeargs'
 
-apply plugin: 'io.fabric'  /* uncomment for release builds */
+//apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
 android {
@@ -32,7 +31,6 @@ android {
         versionCode 102031003
         versionName "2.3.10"
 
-        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
         ndk {
@@ -71,8 +69,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation project(':cloudsdk')
-    implementation project(':ecjpake4j')
     implementation project(':devicesetup')
+    implementation project(':mesh')
     implementation(name:'slf4android', ext:'aar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -89,13 +87,7 @@ dependencies {
     }
 
     releaseImplementation 'com.google.firebase:firebase-perf:16.2.3'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
-
-    // for barcode scanning in Mesh setup
-    implementation 'com.google.firebase:firebase-core:16.0.7'
-    implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
-    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:17.0.2'
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:17.0.3'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
@@ -111,7 +103,6 @@ dependencies {
 //    releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.tolstykh.textviewrichdrawable:textview-rich-drawable:0.3.2'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     // using snapshot to unbreak Butterknife with AndroidX
@@ -127,7 +118,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation "androidx.lifecycle:lifecycle-livedata-core:2.0.0"
     implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
-    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
 
@@ -136,7 +126,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.0.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
 
-    def nav_version = "1.0.0-beta01"
+    def nav_version = "1.0.0-beta02"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
@@ -148,4 +138,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
+//apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */

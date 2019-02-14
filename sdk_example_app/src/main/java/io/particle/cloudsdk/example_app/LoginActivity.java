@@ -4,17 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
-import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.Toaster;
 
@@ -31,29 +31,29 @@ public class LoginActivity extends AppCompatActivity {
                     final String email = ((EditText) findViewById(R.id.email)).getText().toString();
                     final String password = ((EditText) findViewById(R.id.password)).getText().toString();
 
-                    // Don't:
-                    @SuppressLint("StaticFieldLeak")
-                    AsyncTask task = new AsyncTask() {
-                        @Override
-                        protected Object doInBackground(Object[] params) {
-                            try {
-                                ParticleCloudSDK.getCloud().logIn(email, password);
-
-                            } catch (final ParticleCloudException e) {
-                                Runnable mainThread = () -> {
-                                    Toaster.l(LoginActivity.this, e.getBestMessage());
-                                    e.printStackTrace();
-                                    Log.d("info", e.getBestMessage());
-//                                            Log.d("info", e.getCause().toString());
-                                };
-                                runOnUiThread(mainThread);
-
-                            }
-
-                            return null;
-                        }
-
-                    };
+                    // Don't (This is safe, but more work!)
+//                    @SuppressLint("StaticFieldLeak")
+//                    AsyncTask task = new AsyncTask() {
+//                        @Override
+//                        protected Object doInBackground(Object[] params) {
+//                            try {
+//                                ParticleCloudSDK.getCloud().logIn(email, password);
+//
+//                            } catch (final ParticleCloudException e) {
+//                                Runnable mainThread = () -> {
+//                                    Toaster.l(LoginActivity.this, e.getBestMessage());
+//                                    e.printStackTrace();
+//                                    Log.d("info", e.getBestMessage());
+////                                            Log.d("info", e.getCause().toString());
+//                                };
+//                                runOnUiThread(mainThread);
+//
+//                            }
+//
+//                            return null;
+//                        }
+//
+//                    };
 //                        task.execute();
 
                     //-------
@@ -67,7 +67,12 @@ public class LoginActivity extends AppCompatActivity {
                         public Object callApi(@NonNull ParticleCloud sparkCloud) throws ParticleCloudException, IOException {
                             sparkCloud.logIn(email, password);
                             sparkCloud.getDevices();
-                            mDevice = sparkCloud.getDevice("1f0034000747343232361234");
+                            try {
+                                mDevice = sparkCloud.getDevices().get(0);
+                            } catch (IndexOutOfBoundsException iobEx) {
+                                throw new RuntimeException("Your account must have at least one device for this example app to work");
+                            }
+
                             Object obj;
 
                             try {

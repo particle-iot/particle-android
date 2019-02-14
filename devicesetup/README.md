@@ -1,7 +1,3 @@
-<p align="center" >
-    <img src="http://oi60.tinypic.com/116jd51.jpg" alt="Particle logo" title="Particle">
-</p>
-
 <!---
 (WIP Update link once we have CI in place)
 [![Build Status](https://travis-ci.org/AFNetworking/AFNetworking.svg)](https://travis-ci.org/Spark-SDK/Spark-SDK)
@@ -42,11 +38,10 @@ Full documentation, including a getting started guide, lots of API examples, sup
 
 ## Maintainers
 
+- Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
 - Julius Skripkauskas [Github](https://github.com/cityvibes) | [Twitter](https://www.twitter.com/azemar)
-- Jens Knutson [Github](https://github.com/jensck/) | [Google+](https://google.com/+JensKnutson)
 - Ido Kleinman [Github](https://www.github.com/idokleinman) | [Twitter](https://www.twitter.com/idokleinman)
 
 ## License
 
-The Particle Device Setup library is available under the Apache License 2.0.
-See the `LICENSE` file for the complete text of the license.
+All code in this repository is available under the Apache License 2.0.  See the `LICENSE` file for the complete text of the license.

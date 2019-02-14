@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+
 
 // This is the library version used when deploying the artifact
 version = '0.5.1'
@@ -58,22 +58,16 @@ android {
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0'
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api 'com.google.code.findbugs:jsr305:3.0.2'
     api 'com.google.code.gson:gson:2.8.5'
     api 'com.squareup.okhttp:okhttp:2.7.5'
-//    api 'com.squareup.okhttp3:okhttp:3.11.0'
     api 'com.squareup.okio:okio:1.16.0'
     api 'com.squareup.retrofit:retrofit:1.9.0'
-//    api 'com.squareup.retrofit2:retrofit:2.4.0'
-//    api 'com.squareup.retrofit2:converter-gson:2.4.0'
     api 'org.greenrobot:eventbus:3.0.0'
-    api 'androidx.fragment:fragment:1.0.0'
+    api 'androidx.core:core:1.0.1'
+    api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 }
 
 repositories {
@@ -85,10 +79,10 @@ repositories {
 apply from: '../pom_generator_v1.gradle'
 apply from: '../bintray_upload_v1.gradle'
 
-// disable insane, build-breaking doclint tool in Java 8
-if (JavaVersion.current().isJava8Compatible()) {
+// Disable javadoc generation.  See this bug for more info:
+// https://github.com/novoda/bintray-release/issues/71
+allprojects {
     tasks.withType(Javadoc) {
-        //noinspection SpellCheckingInspection
-        options.addStringOption('Xdoclint:none', '-quiet')
+        enabled = false
     }
 }

@@ -61,6 +61,7 @@ import io.particle.android.sdk.ui.Comparators.ComparatorChain;
 import io.particle.android.sdk.ui.Comparators.NullComparator;
 import io.particle.android.sdk.utils.EZ;
 import io.particle.android.sdk.utils.TLog;
+import io.particle.android.sdk.utils.ui.Fragments;
 import io.particle.android.sdk.utils.ui.Toaster;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.mesh.setup.ui.MeshSetupActivity;
@@ -126,7 +127,7 @@ public class DeviceListFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callbacks = EZ.getCallbacksOrThrow(this, Callbacks.class);
+        callbacks = Fragments.getCallbacksOrThrow(this, Callbacks.class);
     }
 
     @Override

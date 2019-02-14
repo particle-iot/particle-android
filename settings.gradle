@@ -1,8 +1,9 @@
-include ':app', 
-    ':cloudsdk',
-    ':devicesetup',
-    ':ecjpake4j',
-    ':sdk_example_app',
-    ':setup_testapp',
-    ':setup_exampleapp'
-
+include ':app',
+        ':mesh',
+        ':firmwareprotos',
+        ':cloudsdk',
+        ':devicesetup',
+        ':sdk_example_app',
+        ':setup_testapp',
+        ':setup_exampleapp',
+        ':ecjpake4j'

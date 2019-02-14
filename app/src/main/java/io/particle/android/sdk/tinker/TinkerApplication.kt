@@ -2,7 +2,6 @@ package io.particle.android.sdk.tinker
 
 import android.app.Application
 import android.util.Log
-import androidx.multidex.MultiDexApplication
 import io.particle.android.sdk.ReleaseBuildAppInitializer
 import io.particle.android.sdk.devicesetup.BuildConfig
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
@@ -12,7 +11,7 @@ import io.particle.mesh.common.QATool
 
 
 
-class TinkerApplication : MultiDexApplication() {
+class TinkerApplication : Application() {
 
     companion object {
         // NOTE: UGLY!  Only use this for testing!
