@@ -26,8 +26,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     // BY DEFAULT, BUILD APP AGAINST THE LOCAL SDK SOURCE
     // (i.e.: make modifications to the SDK source in the local repo show up in this app
     // just by rebuilding)
