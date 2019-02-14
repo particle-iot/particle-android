@@ -46,15 +46,16 @@ If you were releasing version `2.4.2`, you'd do the following:
 3. Get product management signoff on the Play Store release notes
 4. Update CHANGELOG with a more detailed, technical description of these changes
 5. Update the `versionCode` field in `app/build.gradle` to `102040201`[1], and update the `versionName` field to `2.4.2 (1)` (if this will only be released to alpha or beta channels) or just `2.4.2` (if it will be pushed to production)
-6. Create a signed release APK
-7. Publish the APK to the appropriate channel (internal, alpha, or beta)
-8. Announce the release internally (i.e.: via Slack) and ask for testers in the appropriate channels
-9. Commit and push the above changes to the changelog & version fields
-10. Tag the release: `git tag app-2.4.2`
-11. Push the tag: `git push origin app-2.4.2`
-12. Create a GitHub release with a title of "Tinker app 2.4.2"
-13. Once the beta (etc) release has been tested appropriately, promote the build to production
-14. Announce production build availability on Slack and if appropriate, in the community forum: https://goo.gl/nEsGgK
+6. Uncomment the release-only gradle plugins in `app/build.gradle` (fabric, google services) so they're active for the release build
+7. Build a signed release APK
+8. Publish the APK to the appropriate channel (internal, alpha, or beta)
+9. Announce the release internally (i.e.: via Slack) and ask for testers in the appropriate channels
+10. Commit and push the above changes to the changelog & version fields
+11. Tag the release: `git tag app-2.4.2`
+12. Push the tag: `git push origin app-2.4.2`
+13. Create a GitHub release with a title of "Tinker app 2.4.2"
+14. Once the beta (etc) release has been tested appropriately, promote the build to production
+15. Announce production build availability on Slack and if appropriate, in the community forum: https://goo.gl/nEsGgK
 
 
 
