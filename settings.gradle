@@ -3,8 +3,7 @@ include ':app',
         ':firmwareprotos',
         ':cloudsdk',
         ':devicesetup',
-        ':ecjpake4j',
         ':sdk_example_app',
         ':setup_testapp',
-        ':setup_exampleapp'
-
+        ':setup_exampleapp',
+        ':ecjpake4j'
