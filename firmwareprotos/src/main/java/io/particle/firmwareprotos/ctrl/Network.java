@@ -481,7 +481,7 @@ public final class Network {
      */
     THREAD(2),
     /**
-     * <code>FEATHERWING = 4;</code>
+     * <code>ETHERNET = 4;</code>
      */
     ETHERNET(4),
     /**
@@ -508,7 +508,7 @@ public final class Network {
      */
     public static final int THREAD_VALUE = 2;
     /**
-     * <code>FEATHERWING = 4;</code>
+     * <code>ETHERNET = 4;</code>
      */
     public static final int ETHERNET_VALUE = 4;
     /**

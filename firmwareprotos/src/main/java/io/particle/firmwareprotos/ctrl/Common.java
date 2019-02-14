@@ -27,7 +27,7 @@ public final class Common {
   public enum ResultCode
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>READY_TO_ACTIVATE = 0 [(.int_value) = 0];</code>
+     * <code>OK = 0 [(.int_value) = 0];</code>
      */
     OK(0),
     /**
@@ -62,7 +62,7 @@ public final class Common {
     ;
 
     /**
-     * <code>READY_TO_ACTIVATE = 0 [(.int_value) = 0];</code>
+     * <code>OK = 0 [(.int_value) = 0];</code>
      */
     public static final int OK_VALUE = 0;
     /**
