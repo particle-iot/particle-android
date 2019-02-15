@@ -155,7 +155,7 @@ public class ParticleDeviceSetupLibrary {
      *            Activity here)
      */
     public static void init(Context ctx) {
-        init(ctx, true);
+        init(ctx, false);
     }
 
     /**
@@ -166,7 +166,7 @@ public class ParticleDeviceSetupLibrary {
      *            Activity here)
      */
     public static void initWithSetupOnly(Context ctx) {
-        init(ctx, false);
+        init(ctx, true);
     }
 
     public static ParticleDeviceSetupLibrary getInstance() {
