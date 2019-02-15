@@ -1,3 +1,8 @@
+2.3.11
+======
+- Fix Photon claiming issue
+- Don't show unknown "product" devices as Photons, just show them as "other"/unknown 
+
 2.3.10
 ======
 - Automatic device type detection when starting setup
