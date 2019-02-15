@@ -176,6 +176,7 @@ class ParticleDevice internal constructor(
     }
 
     enum class ParticleDeviceType {
+        OTHER,
         CORE,
         PHOTON,
         P1,
@@ -211,7 +212,7 @@ class ParticleDevice internal constructor(
                     88 -> RED_BEAR_DUO
                     103 -> BLUZ
                     6 -> PHOTON
-                    else -> PHOTON
+                    else -> OTHER
                 }
             }
         }

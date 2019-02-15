@@ -28,8 +28,9 @@ android {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 102031003
-        versionName "2.3.10"
+        // scheme for these version numbers: EPOCH MAJOR MINOR PATCH BUILD
+        versionCode 1_02_03_11_01
+        versionName  "2.3.11"
 
         vectorDrawables.useSupportLibrary = true
 
