@@ -3,14 +3,9 @@ package io.particle.android.sdk.ui
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.graphics.PointF
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
@@ -20,36 +15,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-
-import com.f2prateek.bundler.FragmentBundlerCompat
-
-import org.json.JSONException
-import org.json.JSONObject
-
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Locale
-
-import butterknife.BindView
-import butterknife.ButterKnife
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.utils.Async
+import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.sdk.app.R
-
-import android.content.Context.CLIPBOARD_SERVICE
-import androidx.core.content.getSystemService
-import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentActivity
-import io.particle.android.sdk.utils.Py.list
+import kotlinx.android.synthetic.main.fragment_events.*
+import kotlinx.android.synthetic.main.fragment_events.view.*
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.Objects.requireNonNull
 
 /**
@@ -59,27 +49,20 @@ class EventsFragment : Fragment() {
 
     companion object {
 
+        const val ARG_DEVICE = "ARG_DEVICE"  // The device that this fragment represents
+
         @JvmStatic
         fun newInstance(device: ParticleDevice): EventsFragment {
             return EventsFragment().apply {
                 arguments = bundleOf(EventsFragment.ARG_DEVICE to device)
             }
         }
-
-        // The device that this fragment represents
-        val ARG_DEVICE = "ARG_DEVICE"
     }
 
 
     private var device: ParticleDevice? = null
     private var subscriptionId: Long? = null
     private var subscribed: Boolean = false
-
-    @BindView(R.id.events_list)
-    internal var eventsRecyclerView: RecyclerView? = null
-
-    @BindView(R.id.events_empty)
-    internal var emptyView: View? = null
 
     private var eventsLayoutManager: LinearLayoutManager? = null
 
@@ -88,17 +71,16 @@ class EventsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val top = inflater.inflate(R.layout.fragment_events, container, false)
-        ButterKnife.bind(this, top)
 
         device = requireNonNull<Bundle>(arguments).getParcelable(ARG_DEVICE)
-        emptyView!!.visibility = View.VISIBLE
+        top.events_empty.visibility = View.VISIBLE
 
-        eventsRecyclerView!!.setHasFixedSize(true)  // perf. optimization
+        top.events_list.setHasFixedSize(true)  // perf. optimization
         eventsLayoutManager = SpeedyLinearLayoutManager(inflater.context)
-        eventsRecyclerView!!.layoutManager = eventsLayoutManager
+        top.events_list.layoutManager = eventsLayoutManager
         val adapter = EventListAdapter()
-        eventsRecyclerView!!.adapter = adapter
-        eventsRecyclerView!!.addItemDecoration(
+        top.events_list.adapter = adapter
+        top.events_list.addItemDecoration(
             DividerItemDecoration(
                 requireNonNull<Context>(context),
                 LinearLayout.VERTICAL
@@ -114,7 +96,7 @@ class EventsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (!subscribed) {
-            startEventSubscription(eventsRecyclerView!!.adapter as EventListAdapter)
+            startEventSubscription(events_list.adapter as EventListAdapter)
         }
     }
 
@@ -129,7 +111,7 @@ class EventsFragment : Fragment() {
                 .setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
                 .setPositiveButton(R.string.ok) { dialog, which ->
-                    emptyView!!.visibility = View.VISIBLE
+                    events_empty.visibility = View.VISIBLE
                     adapter.clear()
                 }
                 .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
@@ -196,9 +178,9 @@ class EventsFragment : Fragment() {
                                 ) {
                                     adapter.add(Event(eventName, particleEvent))
                                     if (eventsLayoutManager!!.findFirstVisibleItemPosition() < 1) {
-                                        eventsRecyclerView!!.smoothScrollToPosition(0)
+                                        events_list.smoothScrollToPosition(0)
                                     }
-                                    emptyView!!.post { emptyView!!.visibility = View.GONE }
+                                    events_empty.post { events_empty.visibility = View.GONE }
                                 }
                             })
                     } catch (ex: NullPointerException) {

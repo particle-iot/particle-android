@@ -17,7 +17,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.util.Pair
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.loader.app.LoaderManager
@@ -25,11 +25,6 @@ import androidx.loader.content.Loader
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
-import com.getbase.floatingactionbutton.FloatingActionsMenu
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.Callback
 import io.particle.android.sdk.DevicesLoader
@@ -53,6 +48,8 @@ import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.mesh.setup.ui.MeshSetupActivity
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.fragment_device_list2.*
+import kotlinx.android.synthetic.main.row_device_list.view.*
 import java.io.IOException
 import java.util.*
 import java.util.Objects.requireNonNull
@@ -68,13 +65,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         override fun onDeviceSelected(device: ParticleDevice) { }
     }
 
-    @BindView(R.id.add_device_fab)
-    internal var fabMenu: FloatingActionsMenu? = null
-    @BindView(R.id.refresh_layout)
-    internal var refreshLayout: SwipeRefreshLayout? = null
-    @BindView(R.id.empty_message)
-    internal var emptyMessage: TextView? = null
-    private var adapter: DeviceListAdapter? = null
+    private lateinit var adapter: DeviceListAdapter
     // FIXME: naming, document better
     private var partialContentBar: ProgressBar? = null
     private var isLoadingSnackbarVisible: Boolean = false
@@ -87,34 +78,30 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     private var deviceSetupCompleteReceiver: DeviceSetupCompleteReceiver? = null
 
     val textFilter: String?
-        get() = if (adapter != null) adapter!!.textFilter else null
+        get() = adapter.textFilter
 
     internal interface Callbacks {
         fun onDeviceSelected(device: ParticleDevice)
     }
 
-    @OnClick(R.id.action_set_up_a_xenon)
     fun addXenon() {
         addXenonDevice()
-        fabMenu!!.collapse()
+        add_device_fab.collapse()
     }
 
-    @OnClick(R.id.action_set_up_a_photon)
     fun addPhoton() {
         addPhotonDevice()
-        fabMenu!!.collapse()
+        add_device_fab.collapse()
     }
 
-    @OnClick(R.id.action_set_up_a_core)
     fun addCore() {
         addSparkCoreDevice()
-        fabMenu!!.collapse()
+        add_device_fab.collapse()
     }
 
-    @OnClick(R.id.action_set_up_an_electron)
     fun addElectron() {
         addElectronDevice()
-        fabMenu!!.collapse()
+        add_device_fab.collapse()
     }
 
     override fun onAttach(context: Context?) {
@@ -147,16 +134,16 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         adapter = DeviceListAdapter(requireNonNull<FragmentActivity>(activity))
         rv.adapter = adapter
-        ItemClickSupport.addTo(rv)
-            .setOnItemClickListener { recyclerView, position, v -> onDeviceRowClicked(position) }
+        ItemClickSupport.addTo(rv).setOnItemClickListener { recyclerView, position, v ->
+            onDeviceRowClicked(position)
+        }
         return top
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ButterKnife.bind(this, view)
 
-        refreshLayout!!.setOnRefreshListener({ this.refreshDevices() })
+        refresh_layout.setOnRefreshListener { this.refreshDevices() }
 
         deviceSetupCompleteReceiver =
             object : ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver() {
@@ -171,24 +158,27 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         deviceSetupCompleteReceiver!!.register(activity)
 
         loaderManager.initLoader(R.id.device_list_devices_loader_id, null, this)
-        refreshLayout!!.isRefreshing = true
+        refresh_layout.isRefreshing = true
 
         if (savedInstanceState != null) {
-            adapter!!.filter(savedInstanceState.getString("txtFilterState"))
+            adapter.filter(savedInstanceState.getString("txtFilterState"))
         }
+
+        action_set_up_a_xenon.setOnClickListener { addXenon() }
+        action_set_up_a_photon.setOnClickListener { addPhoton() }
+        action_set_up_a_core.setOnClickListener { addCore() }
+        action_set_up_an_electron.setOnClickListener { addElectron() }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("txtFilterState", adapter!!.textFilter)
+        outState.putString("txtFilterState", adapter.textFilter)
     }
 
     override fun onResume() {
         super.onResume()
-        if (adapter != null) {
-            val devices = adapter!!.items
-            subscribeToSystemEvents(devices, false)
-        }
+        val devices = adapter.items
+        subscribeToSystemEvents(devices, false)
     }
 
     override fun onStart() {
@@ -197,17 +187,15 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     }
 
     override fun onPause() {
-        if (adapter != null) {
-            val devices = adapter!!.items
-            subscribeToSystemEvents(devices, true)
-        }
+        val devices = adapter.items
+        subscribeToSystemEvents(devices, true)
         super.onPause()
     }
 
     override fun onStop() {
         super.onStop()
-        refreshLayout!!.isRefreshing = false
-        fabMenu!!.collapse()
+        refresh_layout.isRefreshing = false
+        add_device_fab.collapse()
         reloadStateDelegate.reset()
     }
 
@@ -226,18 +214,18 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     }
 
     override fun onLoadFinished(loader: Loader<DevicesLoadResult>, result: DevicesLoadResult) {
-        refreshLayout!!.isRefreshing = false
+        refresh_layout.isRefreshing = false
 
         val devices = ArrayList(result.devices)
         Collections.sort(devices, comparator)
 
         reloadStateDelegate.onDeviceLoadFinished(loader, result)
 
-        adapter!!.clear()
-        adapter!!.addAll(devices)
-        adapter!!.notifyDataSetChanged()
+        adapter.clear()
+        adapter.addAll(devices)
+        adapter.notifyDataSetChanged()
 
-        emptyMessage!!.visibility = if (adapter!!.itemCount == 0) View.VISIBLE else View.GONE
+        empty_message.isVisible = (adapter.itemCount == 0)
         //subscribe to system updates
         subscribeToSystemEvents(devices, false)
     }
@@ -289,14 +277,14 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     private fun onDeviceRowClicked(position: Int) {
         log.i("Clicked on item at position: #$position")
-        if (position >= adapter!!.itemCount || position == -1) {
+        if (position >= adapter.itemCount || position == -1) {
             // we're at the header or footer view, do nothing.
             return
         }
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        val device = adapter!!.getItem(position)
+        val device = adapter.getItem(position)
 
         if (device.isFlashing) {
             Toaster.s(
@@ -313,8 +301,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     }
 
     fun onBackPressed(): Boolean {
-        if (fabMenu!!.isExpanded) {
-            fabMenu!!.collapse()
+        if (add_device_fab.isExpanded) {
+            add_device_fab.collapse()
             return true
         } else {
             return false
@@ -362,22 +350,20 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     }
 
     private fun refreshDevices() {
-        if (adapter != null) {
-            val devices = adapter!!.items
-            subscribeToSystemEvents(devices, true)
-        }
+        val devices = adapter.items
+        subscribeToSystemEvents(devices, true)
         val loader = loaderManager.getLoader<Any>(R.id.device_list_devices_loader_id)
         loader!!.forceLoad()
     }
 
-    fun filter(typeArrayList: ArrayList<ParticleDevice.ParticleDeviceType>) {
-        adapter!!.filter(typeArrayList)
-        emptyMessage!!.visibility = if (adapter!!.itemCount == 0) View.VISIBLE else View.GONE
+    fun filter(typeArrayList: List<ParticleDeviceType?>) {
+        adapter.filter(typeArrayList)
+        empty_message.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     fun filter(query: String) {
-        adapter!!.filter(query)
-        emptyMessage!!.visibility = if (adapter!!.itemCount == 0) View.VISIBLE else View.GONE
+        adapter.filter(query)
+        empty_message.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     internal class DeviceListAdapter(private val activity: FragmentActivity) :
@@ -388,7 +374,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         private var defaultBackground: Drawable? = null
         var textFilter: String? = ""
             private set
-        private var typeFilters: List<ParticleDevice.ParticleDeviceType> = Arrays.asList(
+        private var typeFilters: List<ParticleDeviceType?> = Arrays.asList(
             *ParticleDeviceType.values()
         )
 
@@ -396,20 +382,11 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             get() = devices
 
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
-            @BindView(R.id.product_model_name)
-            var modelName: TextView? = null
-            @BindView(R.id.product_image)
-            var productImage: AppCompatImageView? = null
-            @BindView(R.id.online_status_image)
-            var statusIcon: AppCompatImageView? = null
-            @BindView(R.id.product_name)
-            var deviceName: TextView? = null
-            @BindView(R.id.online_status)
-            var statusTextWithIcon: TextView? = null
-
-            init {
-                ButterKnife.bind(this, topLevel)
-            }
+            var modelName: TextView = topLevel.product_model_name
+            var productImage: AppCompatImageView = topLevel.product_image
+            var statusIcon: AppCompatImageView = topLevel.online_status_image
+            var deviceName: TextView = topLevel.product_name
+            var statusTextWithIcon: TextView = topLevel.online_status
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -428,81 +405,32 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
             holder.topLevel.setBackgroundResource(R.color.device_item_bg)
 
-            when (device.deviceType) {
-                ParticleDevice.ParticleDeviceType.CORE -> {
-                    holder.modelName!!.setText(R.string.core)
-                    holder.productImage!!.setImageResource(R.drawable.core_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.PHOTON -> {
-                    holder.modelName!!.setText(R.string.photon)
-                    holder.productImage!!.setImageResource(R.drawable.photon_vector_small)
-                }
-
-                ParticleDevice.ParticleDeviceType.ELECTRON -> {
-                    holder.modelName!!.setText(R.string.electron)
-                    holder.productImage!!.setImageResource(R.drawable.electron_vector_small)
-                }
-
-                ParticleDevice.ParticleDeviceType.RASPBERRY_PI -> {
-                    holder.modelName!!.setText(R.string.raspberry)
-                    holder.productImage!!.setImageResource(R.drawable.pi_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.P1 -> {
-                    holder.modelName!!.setText(R.string.p1)
-                    holder.productImage!!.setImageResource(R.drawable.p1_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.RED_BEAR_DUO -> {
-                    holder.modelName!!.setText(R.string.red_bear_duo)
-                    holder.productImage!!.setImageResource(R.drawable.red_bear_duo_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.XENON -> {
-                    holder.modelName!!.setText(R.string.product_name_xenon)
-                    holder.productImage!!.setImageResource(R.drawable.xenon_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.ARGON -> {
-                    holder.modelName!!.setText(R.string.product_name_argon)
-                    holder.productImage!!.setImageResource(R.drawable.argon_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.BORON -> {
-                    holder.modelName!!.setText(R.string.product_name_boron)
-                    holder.productImage!!.setImageResource(R.drawable.boron_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.A_SERIES -> {
-                    holder.modelName!!.setText(R.string.product_name_argon)
-                    holder.productImage!!.setImageResource(R.drawable.argon_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.B_SERIES -> {
-                    holder.modelName!!.setText(R.string.product_name_boron)
-                    holder.productImage!!.setImageResource(R.drawable.boron_vector)
-                }
-
-                ParticleDevice.ParticleDeviceType.X_SERIES -> {
-                    holder.modelName!!.setText(R.string.product_name_xenon)
-                    holder.productImage!!.setImageResource(R.drawable.xenon_vector)
-                }
-
-                else -> {
-                    holder.modelName!!.setText(R.string.unknown)
-                    holder.productImage!!.setImageResource(R.drawable.unknown_vector)
-                }
+            val (modelNameRes, productImageRes) = when (device.deviceType) {
+                ParticleDeviceType.CORE -> Pair(R.string.core, R.drawable.core_vector)
+                ParticleDeviceType.PHOTON -> Pair(R.string.photon, R.drawable.photon_vector_small)
+                ParticleDeviceType.ELECTRON -> Pair(R.string.electron, R.drawable.electron_vector_small)
+                ParticleDeviceType.RASPBERRY_PI -> Pair(R.string.raspberry, R.drawable.pi_vector)
+                ParticleDeviceType.P1 -> Pair(R.string.p1, R.drawable.p1_vector)
+                ParticleDeviceType.RED_BEAR_DUO -> Pair(R.string.red_bear_duo, R.drawable.red_bear_duo_vector)
+                ParticleDeviceType.ARGON,
+                ParticleDeviceType.A_SERIES -> Pair(R.string.product_name_argon, R.drawable.argon_vector)
+                ParticleDeviceType.BORON,
+                ParticleDeviceType.B_SERIES -> Pair(R.string.product_name_boron, R.drawable.boron_vector)
+                ParticleDeviceType.XENON,
+                ParticleDeviceType.X_SERIES -> Pair(R.string.product_name_xenon, R.drawable.xenon_vector)
+                else -> Pair(R.string.unknown, R.drawable.unknown_vector)
             }
+            holder.modelName.setText(modelNameRes)
+            holder.productImage.setImageResource(productImageRes)
 
-            val statusTextAndColoredDot = getStatusTextAndColoredDot(device)
-            holder.statusTextWithIcon!!.text = statusTextAndColoredDot.first
-            holder.statusIcon!!.setImageResource(statusTextAndColoredDot.second!!)
+            val (statusText, coloredDot) = getStatusTextAndColoredDot(device)
+            holder.statusTextWithIcon.text = statusText
+            holder.statusIcon.setImageResource(coloredDot)
 
             if (device.isConnected) {
                 val animFade = AnimationUtils.loadAnimation(activity, R.anim.fade_in_out)
                 animFade.startOffset = (position * 1000).toLong()
-                holder.statusIcon!!.startAnimation(animFade)
+                holder.statusIcon.startAnimation(animFade)
             }
 
             val ctx = holder.topLevel.context
@@ -510,7 +438,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
                 device.name
             else
                 ctx.getString(R.string.unnamed_device)
-            holder.deviceName!!.text = name
+            holder.deviceName.text = name
         }
 
         override fun getItemCount(): Int {
@@ -536,7 +464,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             filter(query, typeFilters)
         }
 
-        fun filter(typeArrayList: List<ParticleDevice.ParticleDeviceType>) {
+        fun filter(typeArrayList: List<ParticleDeviceType?>) {
             typeFilters = typeArrayList
             filteredData.clear()
             notifyDataSetChanged()
@@ -544,7 +472,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             filter(textFilter, typeArrayList)
         }
 
-        fun filter(query: String?, typeArrayList: List<ParticleDevice.ParticleDeviceType>) {
+        private fun filter(query: String?, typeArrayList: List<ParticleDeviceType?>) {
             for (device in devices) {
                 if ((containsFilter(device.name, query)
                             || containsFilter(device.deviceType!!.name, query)
@@ -587,7 +515,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
                 dot = R.drawable.offline_dot
                 msg = ""
             }
-            return Pair.create(msg, dot)
+            return Pair(msg, dot)
         }
     }
 

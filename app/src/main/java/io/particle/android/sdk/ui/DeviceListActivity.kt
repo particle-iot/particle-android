@@ -1,8 +1,6 @@
 package io.particle.android.sdk.ui
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
@@ -12,33 +10,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.SearchView
-
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
-
-import java.util.ArrayList
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnCheckedChanged
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import io.particle.android.sdk.accountsetup.LoginActivity
-import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.tinker.TinkerFragment
+import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.SoftAPConfigRemover
 import io.particle.android.sdk.utils.WifiFacade
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.mesh.setup.ui.MeshSetupActivity
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.activity_device_list.*
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
-
-import io.particle.android.sdk.utils.Py.list
+import java.util.*
 
 /**
  * An activity representing a list of Devices. This activity
@@ -66,74 +59,38 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
     private var softAPConfigRemover: SoftAPConfigRemover? = null
     private var deviceList: DeviceListFragment? = null
 
-    @BindView(R.id.photonFilter)
-    var photonFilter: CheckBox? = null
-    @BindView(R.id.electronFilter)
-    var electronFilter: CheckBox? = null
-    @BindView(R.id.coreFilter)
-    var coreFilter: CheckBox? = null
-    @BindView(R.id.raspberryFilter)
-    var raspberryFilter: CheckBox? = null
-    @BindView(R.id.p1Filter)
-    var p1Filter: CheckBox? = null
-    @BindView(R.id.redBearFilter)
-    var redBearFilter: CheckBox? = null
-    @BindView(R.id.bluzFilter)
-    var bluzFilter: CheckBox? = null
-    @BindView(R.id.oakFilter)
-    var oakFilter: CheckBox? = null
-    @BindView(R.id.xenonFilter)
-    var xenonFilter: CheckBox? = null
-    @BindView(R.id.argonFilter)
-    var argonFilter: CheckBox? = null
-    @BindView(R.id.boronFilter)
-    var boronFilter: CheckBox? = null
-    @BindView(R.id.appbar)
-    var appBarLayout: AppBarLayout? = null
     private var searchView: SearchView? = null
 
-    private val offsetChangedListener = { appBarLayout, verticalOffset ->
-        isAppBarExpanded = Math.abs(verticalOffset) != appBarLayout.getTotalScrollRange()
+    private val offsetChangedListener: OnOffsetChangedListener =
+        OnOffsetChangedListener { appBarLayout: AppBarLayout, verticalOffset: Int ->
+            isAppBarExpanded = Math.abs(verticalOffset) != appBarLayout.totalScrollRange
 
-        if (!isAppBarExpanded && appBarLayout.isActivated()) {
-            lockAppBarClosed()
+            if (!isAppBarExpanded && appBarLayout.isActivated) {
+                lockAppBarClosed()
+            }
         }
-    }
-
-    @OnCheckedChanged(
-        R.id.photonFilter,
-        R.id.electronFilter,
-        R.id.coreFilter,
-        R.id.raspberryFilter,
-        R.id.p1Filter,
-        R.id.redBearFilter,
-        R.id.bluzFilter,
-        R.id.oakFilter,
-        R.id.xenonFilter,
-        R.id.argonFilter,
-        R.id.boronFilter
-    )
-    fun onDeviceType() {
-        val typeArrayList = ArrayList<ParticleDevice.ParticleDeviceType>()
-        typeArrayList.add(if (photonFilter!!.isChecked) ParticleDevice.ParticleDeviceType.PHOTON else null)
-        typeArrayList.add(if (electronFilter!!.isChecked) ParticleDevice.ParticleDeviceType.ELECTRON else null)
-        typeArrayList.add(if (coreFilter!!.isChecked) ParticleDevice.ParticleDeviceType.CORE else null)
-        typeArrayList.add(if (raspberryFilter!!.isChecked) ParticleDevice.ParticleDeviceType.RASPBERRY_PI else null)
-        typeArrayList.add(if (p1Filter!!.isChecked) ParticleDevice.ParticleDeviceType.P1 else null)
-        typeArrayList.add(if (redBearFilter!!.isChecked) ParticleDevice.ParticleDeviceType.RED_BEAR_DUO else null)
-        typeArrayList.add(if (oakFilter!!.isChecked) ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK else null)
-        typeArrayList.add(if (bluzFilter!!.isChecked) ParticleDevice.ParticleDeviceType.BLUZ else null)
-        typeArrayList.add(if (xenonFilter!!.isChecked) ParticleDeviceType.XENON else null)
-        typeArrayList.add(if (argonFilter!!.isChecked) ParticleDeviceType.ARGON else null)
-        typeArrayList.add(if (boronFilter!!.isChecked) ParticleDeviceType.BORON else null)
-
-        deviceList!!.filter(typeArrayList)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_list)
-        ButterKnife.bind(this)
+
+        // set up filter listeners
+        val checkboxes = listOf(
+            photonFilter,
+            electronFilter,
+            coreFilter,
+            raspberryFilter,
+            p1Filter,
+            redBearFilter,
+            oakFilter,
+            bluzFilter,
+            xenonFilter,
+            argonFilter,
+            boronFilter
+        )
+        for (cb: CheckBox in checkboxes) {
+            cb.setOnCheckedChangeListener { _, _  ->  onDeviceTypeFilterChanged() }
+        }
 
         softAPConfigRemover = SoftAPConfigRemover(this, WifiFacade.get(this))
 
@@ -170,8 +127,8 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
                 collapsingToolbar.setBackgroundDrawable(background)
             }
 
-            appBarLayout!!.addOnOffsetChangedListener(offsetChangedListener)
-            appBarLayout!!.setExpanded(false)
+            appbar.addOnOffsetChangedListener(offsetChangedListener)
+            appbar.setExpanded(false)
             lockAppBarClosed()
         }
 
@@ -205,13 +162,13 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
     }
 
     override fun onDestroy() {
-        appBarLayout!!.removeOnOffsetChangedListener(offsetChangedListener)
+        appbar.removeOnOffsetChangedListener(offsetChangedListener)
         super.onDestroy()
     }
 
     override fun onBackPressed() {
         if (isAppBarExpanded) {
-            appBarLayout!!.setExpanded(false)
+            appbar.setExpanded(false)
         } else if (!searchView!!.isIconified) {
             searchView!!.isIconified = true
         } else if (deviceList == null || !deviceList!!.onBackPressed()) {
@@ -256,6 +213,23 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         return super.onCreateOptionsMenu(menu)
     }
 
+    private fun onDeviceTypeFilterChanged() {
+        val typeArrayList = ArrayList<ParticleDeviceType?>().apply {
+            add(if (photonFilter.isChecked) ParticleDeviceType.PHOTON else null)
+            add(if (electronFilter.isChecked) ParticleDeviceType.ELECTRON else null)
+            add(if (coreFilter.isChecked) ParticleDeviceType.CORE else null)
+            add(if (raspberryFilter.isChecked) ParticleDeviceType.RASPBERRY_PI else null)
+            add(if (p1Filter.isChecked) ParticleDeviceType.P1 else null)
+            add(if (redBearFilter.isChecked) ParticleDeviceType.RED_BEAR_DUO else null)
+            add(if (oakFilter.isChecked) ParticleDeviceType.DIGISTUMP_OAK else null)
+            add(if (bluzFilter.isChecked) ParticleDeviceType.BLUZ else null)
+            add(if (xenonFilter.isChecked) ParticleDeviceType.XENON else null)
+            add(if (argonFilter.isChecked) ParticleDeviceType.ARGON else null)
+            add(if (boronFilter.isChecked) ParticleDeviceType.BORON else null)
+        }
+        deviceList!!.filter(typeArrayList)
+    }
+
     private fun sendLogs() {
         val lr = LogRecord(java.util.logging.Level.WARNING, "")
 
@@ -286,7 +260,7 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
                 .show()
             R.id.action_filter -> {
                 unlockAppBarOpen()
-                appBarLayout!!.setExpanded(!isAppBarExpanded)
+                appbar.setExpanded(!isAppBarExpanded)
             }
             R.id.action_send_logs -> sendLogs()
         }
@@ -317,9 +291,9 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
     //endregion
 
     private fun lockAppBarClosed() {
-        appBarLayout!!.setExpanded(false, false)
-        appBarLayout!!.isActivated = false
-        val lp = appBarLayout!!.layoutParams as CoordinatorLayout.LayoutParams
+        appbar.setExpanded(false, false)
+        appbar.isActivated = false
+        val lp = appbar.layoutParams as CoordinatorLayout.LayoutParams
         val tv = TypedValue()
 
         if (theme.resolveAttribute(R.attr.actionBarSize, tv, true)) {
@@ -328,9 +302,9 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
     }
 
     private fun unlockAppBarOpen() {
-        appBarLayout!!.setExpanded(true, false)
-        appBarLayout!!.isActivated = true
-        appBarLayout!!.layoutParams = CoordinatorLayout.LayoutParams(
+        appbar.setExpanded(true, false)
+        appbar.isActivated = true
+        appbar.layoutParams = CoordinatorLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
