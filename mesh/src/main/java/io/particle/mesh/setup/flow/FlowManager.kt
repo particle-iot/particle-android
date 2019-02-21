@@ -106,6 +106,7 @@ class FlowManager(
                 } catch (ex: Exception) {
                     if (ex is FlowException && ex.exceptionType == ERROR_FATAL) {
                         log.info(ex) { "Hit fatal error, exiting setup: " }
+                        QATool.log(ex)
                         endSetup()
                         return@launch
                     }
