@@ -1,14 +1,11 @@
 package io.particle.android.sdk.tinker
 
 import android.app.Application
-import android.util.Log
 import io.particle.android.sdk.ReleaseBuildAppInitializer
 import io.particle.android.sdk.devicesetup.BuildConfig
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.ui.DeviceListActivity
-import io.particle.android.sdk.utils.isUserCoveredByGDPR
 import io.particle.mesh.common.QATool
-
 
 
 class TinkerApplication : Application() {
