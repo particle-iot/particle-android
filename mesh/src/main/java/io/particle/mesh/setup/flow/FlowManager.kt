@@ -218,10 +218,7 @@ class FlowManager(
     fun showCongratsScreen(message: String) {
         navigate(
             R.id.action_global_hashtagWinningFragment,
-            HashtagWinningFragmentArgs.Builder()
-                .setCongratsMessage(message)
-                .build()
-                .toBundle()
+            HashtagWinningFragmentArgs(message).toBundle()
         )
     }
 
