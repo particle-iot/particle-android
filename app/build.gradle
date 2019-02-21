@@ -135,4 +135,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-//apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
+apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
