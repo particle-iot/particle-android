@@ -218,7 +218,10 @@ public class ApConnector {
     }
 
     private void scheduleTimeoutCheck(long timeoutInMillis, final WifiConfiguration config) {
-        onTimeoutRunnable = () -> client.onApConnectionFailed(config);
+        onTimeoutRunnable = () -> {
+            log.e("AP connection attempt timed out");
+            client.onApConnectionFailed(config);
+        };
         mainThreadHandler.postDelayed(onTimeoutRunnable, timeoutInMillis);
     }
 
