@@ -153,8 +153,10 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val root = inflater.inflate(R.layout.fragment_scan_code, container, false)
 
         preview = root.findViewById(R.id.scanPreview)
@@ -310,8 +312,11 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        log.info {"Permission granted!" }
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        log.info { "Permission granted!" }
         if (allPermissionsGranted()) {
             createCameraSource()
         }
@@ -323,7 +328,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
             log.info { "Permission is granted: $permission" }
             return true
         }
-        log.info {"Permission is NOT granted: $permission" }
+        log.info { "Permission is NOT granted: $permission" }
         return false
     }
 
