@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.android.sdk.utils.appHasPermission
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.barcodescanning.CameraSource
 import io.particle.mesh.setup.barcodescanning.CameraSourcePreview
@@ -318,8 +319,8 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     }
 
     private fun isPermissionGranted(context: Context, permission: String): Boolean {
-        if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
-            log.info {"Permission is granted: $permission" }
+        if (context.appHasPermission(permission)) {
+            log.info { "Permission is granted: $permission" }
             return true
         }
         log.info {"Permission is NOT granted: $permission" }
