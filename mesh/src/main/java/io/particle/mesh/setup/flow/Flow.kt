@@ -14,6 +14,9 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNew
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.mesh.R
+import io.particle.mesh.common.NETWORK
+import io.particle.mesh.setup.flow.MeshDeviceType.XENON
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.JOINER
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
@@ -70,7 +73,11 @@ class Flow(
         if (hasEthernet) {
             doEthernetSubflow()
         } else {
-            when (flowManager.targetDeviceType) {
+            if (flowManager.targetDeviceType != MeshDeviceType.XENON) {
+                meshSetupModule.showNewNetworkOptionInScanner = true
+            }
+            val flowType = getFlowType()
+            when (flowType) {
                 MeshDeviceType.ARGON -> doArgonFlow()
                 MeshDeviceType.BORON -> doBoronFlow()
                 MeshDeviceType.XENON -> doJoinerSubflow()
@@ -83,6 +90,20 @@ class Flow(
             ParticleEventVisibility.PRIVATE,
             TimeUnit.HOURS.toSeconds(1).toInt()
         )
+    }
+
+    private suspend fun getFlowType(): MeshDeviceType {
+        if (flowManager.targetDeviceType == MeshDeviceType.XENON) {
+            return MeshDeviceType.XENON
+        }
+
+        deviceModule.ensureNetworkSetupTypeCaptured()
+        return if (deviceModule.networkSetupTypeLD.value!! == NetworkSetupType.JOINER) {
+            MeshDeviceType.XENON
+        } else {
+            meshSetupModule.showNewNetworkOptionInScanner = true
+            flowManager.targetDeviceType
+        }
     }
 
     suspend fun runMeshFlowForGatewayDevice() {

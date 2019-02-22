@@ -68,6 +68,7 @@ class MeshSetupModule(
         targetJoinedSuccessfully = false
         newNetworkCreatedSuccessfully = false
         checkedForExistingNetwork = false
+        showNewNetworkOptionInScanner = false
         shownNetworkPasswordUi = false
     }
 

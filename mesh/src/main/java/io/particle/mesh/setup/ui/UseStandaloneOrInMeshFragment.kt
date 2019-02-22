@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
 import io.particle.mesh.R
@@ -34,7 +35,7 @@ class UseStandaloneOrInMeshFragment : BaseMeshSetupFragment() {
                     .format()
 
         p_action_use_in_mesh_network.setOnClickListener {
-            fm.deviceModule.updateNetworkSetupType(NetworkSetupType.AS_GATEWAY)
+            findNavController().navigate(R.id.action_global_scanForMeshNetworksFragment)
         }
 
         p_action_do_not_use_in_mesh_network.setOnClickListener {

@@ -19,6 +19,7 @@ import io.particle.mesh.setup.ui.SetupType.BORON_GATEWAY_NOT_ACTIVE
 import io.particle.mesh.setup.ui.SetupType.BORON_STANDALONE_ACTIVE
 import io.particle.mesh.setup.ui.SetupType.BORON_STANDALONE_NOT_ACTIVE
 import io.particle.mesh.R
+import io.particle.mesh.setup.flow.FatalFlowException
 import kotlinx.android.synthetic.main.fragment_connect_to_device_cloud_intro.*
 
 
@@ -68,6 +69,11 @@ class ConnectToDeviceCloudIntroFragment : BaseMeshSetupFragment() {
                 }
                     NetworkSetupType.STANDALONE -> {
                         if (isSimActive) { BORON_STANDALONE_ACTIVE } else BORON_STANDALONE_NOT_ACTIVE
+                    }
+                    NetworkSetupType.JOINER -> {
+                        throw IllegalStateException(
+                            "Joiner flow does not apply here!"
+                        )
                     }
                 }
             }
