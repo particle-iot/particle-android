@@ -1,4 +1,4 @@
-package io.particle.mesh.common
+package io.particle.android.sdk.utils
 
 import android.util.SparseArray
 import androidx.core.util.containsKey
