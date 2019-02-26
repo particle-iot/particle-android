@@ -27,6 +27,7 @@ import io.particle.mesh.setup.ui.HelpTextConfig.XENON
 import io.particle.mesh.setup.ui.HelpTextConfig.X_SERIES
 import io.particle.mesh.R
 import io.particle.mesh.setup.flow.SerialNumber
+import io.particle.mesh.setup.isSomSerial
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
 
 
@@ -66,8 +67,7 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
             HelpTextConfig.FEATHERWING
         } else {
             val barcodeLD = flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceBarcodeLD
-            val serial = barcodeLD.value?.serialNumber?.value
-            val isSomSerial = serial?.toLowerCase()?.startsWith("p00") ?: false
+            val isSomSerial = barcodeLD.value?.serialNumber?.isSomSerial() ?: false
 
             when (flowManagerVM.flowManager!!.targetDeviceType) {
                 Gen3ConnectivityType.WIFI -> { if (isSomSerial) HelpTextConfig.A_SERIES else HelpTextConfig.ARGON }
