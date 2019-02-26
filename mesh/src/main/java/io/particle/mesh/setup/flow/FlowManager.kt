@@ -272,6 +272,7 @@ class FlowManager(
             A_SERIES -> R.string.product_name_a_series
             B_SERIES -> R.string.product_name_b_series
             X_SERIES -> R.string.product_name_x_series
+            else -> throw IllegalArgumentException("Not a mesh device: $targetPlatformDeviceType")
         }
         return everythingNeedsAContext.getString(resource)
     }
