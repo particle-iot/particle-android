@@ -19,9 +19,6 @@ import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
 
 
-inline class SerialNumber(val value: String)
-
-
 enum class Gen3ConnectivityType {
     WIFI,
     CELLULAR,

@@ -1,6 +1,8 @@
 package io.particle.mesh.setup
 
-import io.particle.mesh.setup.flow.SerialNumber
+
+
+inline class SerialNumber(val value: String)
 
 
 fun SerialNumber.isSomSerial(): Boolean {
