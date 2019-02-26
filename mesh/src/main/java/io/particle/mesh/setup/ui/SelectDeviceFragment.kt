@@ -9,11 +9,19 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
 import io.particle.mesh.setup.ui.utils.inflateRow
 import io.particle.mesh.setup.ui.utils.localDeviceHasInternetConnection
 import io.particle.mesh.R
+import io.particle.mesh.setup.flow.toMeshDeviceType
 import kotlinx.android.synthetic.main.fragment_select_device.view.*
 import kotlinx.android.synthetic.main.row_select_device.view.*
 
@@ -66,7 +74,7 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
 //            return
 //        }
 //
-//        FlowManagerAccessModel.getViewModel(this).startFlowForDevice(deviceData.deviceType)
+//        FlowManagerAccessModel.getViewModel(this).startFlowForDevice(deviceData.connectivityType)
     }
 
     private fun showNoInternetDialog() {
@@ -79,15 +87,15 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
 
 
 private data class DeviceData(
-    val deviceType: Gen3ConnectivityType,
+    val deviceType: ParticleDeviceType,
     @StringRes
     val deviceTypeDescription: Int,
     @DrawableRes
     val deviceTypeImage: Int
 ) {
+    val connectivityType: Gen3ConnectivityType = deviceType.toMeshDeviceType()  // RENAME THIS FUNC
     @StringRes
     val deviceTypeName: Int = deviceType.toDisplayName()
-
 }
 
 
@@ -102,7 +110,7 @@ private class DeviceDataHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowR
 private class MeshDeviceTypesAdapter(
     private val onItemClicked: (DeviceData) -> Unit
 ) : ListAdapter<DeviceData, DeviceDataHolder>(
-    easyDiffUtilCallback { deviceData: DeviceData -> deviceData.deviceType }
+    easyDiffUtilCallback { deviceData: DeviceData -> deviceData.connectivityType }
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceDataHolder {
@@ -117,7 +125,7 @@ private class MeshDeviceTypesAdapter(
         holder.rowLine1.setText(item.deviceTypeName)
         holder.rowLine2.setText(item.deviceTypeDescription)
 
-        when (item.deviceType) {
+        when (item.connectivityType) {
             Gen3ConnectivityType.WIFI -> {
                 holder.capability2.setImageResource(R.drawable.p_mesh_ic_capability_wifi)
             }
@@ -131,10 +139,14 @@ private class MeshDeviceTypesAdapter(
 
 
 @StringRes
-private fun Gen3ConnectivityType.toDisplayName(): Int {
+private fun ParticleDeviceType.toDisplayName(): Int {
     return when (this) {
-        Gen3ConnectivityType.WIFI -> R.string.product_name_argon
-        Gen3ConnectivityType.CELLULAR -> R.string.product_name_boron
-        Gen3ConnectivityType.MESH_ONLY -> R.string.product_name_xenon
+        ARGON -> R.string.product_name_argon
+        BORON -> R.string.product_name_boron
+        XENON -> R.string.product_name_xenon
+        A_SERIES -> R.string.product_name_a_series
+        B_SERIES -> R.string.product_name_b_series
+        X_SERIES -> R.string.product_name_x_series
+        else -> throw IllegalArgumentException("Not a mesh device: $this")
     }
 }
