@@ -10,6 +10,13 @@ import androidx.navigation.NavController
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.mesh.R
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -19,6 +26,8 @@ import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
+import io.particle.mesh.setup.flow.Gen3ConnectivityType.CELLULAR
+import io.particle.mesh.setup.flow.Gen3ConnectivityType.MESH_ONLY
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.WifiNetworksScannerLD
@@ -28,7 +37,6 @@ import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksSca
 import io.particle.mesh.setup.ui.*
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.utils.runOnMainThread
-import io.particle.mesh.R
 import kotlinx.coroutines.*
 import mu.KotlinLogging
 
@@ -50,7 +58,7 @@ class FlowManager(
 
     var targetDeviceType: Gen3ConnectivityType = Gen3ConnectivityType.MESH_ONLY  // arbitrary default
     var targetPlatformDeviceType: ParticleDeviceType = ParticleDeviceType.XENON  // arbitrary default
-    
+
     val bleConnectionModule =
         BLEConnectionModule(this, btConnectionManager, transceiverFactory, cloud)
     val meshSetupModule: MeshSetupModule
@@ -257,10 +265,13 @@ class FlowManager(
     }
 
     fun getTypeName(): String {
-        val resource = when (targetDeviceType) {
-            Gen3ConnectivityType.WIFI -> R.string.product_name_argon
-            Gen3ConnectivityType.CELLULAR -> R.string.product_name_boron
-            Gen3ConnectivityType.MESH_ONLY -> R.string.product_name_xenon
+        val resource = when (targetPlatformDeviceType) {
+            ARGON -> R.string.product_name_argon
+            BORON -> R.string.product_name_boron
+            XENON -> R.string.product_name_xenon
+            A_SERIES -> R.string.product_name_a_series
+            B_SERIES -> R.string.product_name_b_series
+            X_SERIES -> R.string.product_name_x_series
         }
         return everythingNeedsAContext.getString(resource)
     }
