@@ -78,8 +78,7 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
 
         p_getreadyforsetup_antenna_confirmation_speedbump.isVisible = when (config) {
             FEATHERWING,
-            XENON,
-            X_SERIES -> {
+            XENON -> {
                 action_next.isEnabled = true
                 false
             }
@@ -87,7 +86,8 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
             BORON_LTE,
             BORON_3G,
             A_SERIES,
-            B_SERIES -> {
+            B_SERIES,
+            X_SERIES -> {
                 action_next.isEnabled = p_getreadyforsetup_antenna_confirmation_speedbump.isChecked
                 true
             }
