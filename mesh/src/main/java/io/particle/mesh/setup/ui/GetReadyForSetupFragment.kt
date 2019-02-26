@@ -66,7 +66,8 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
             HelpTextConfig.FEATHERWING
         } else {
             val barcodeLD = flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceBarcodeLD
-            val isSomSerial = barcodeLD.value?.serialNumber?.toLowerCase()?.startsWith("p00") ?: false
+            val serial = barcodeLD.value?.serialNumber?.value
+            val isSomSerial = serial?.toLowerCase()?.startsWith("p00") ?: false
 
             when (flowManagerVM.flowManager!!.targetDeviceType) {
                 MeshDeviceType.ARGON -> { if (isSomSerial) HelpTextConfig.A_SERIES else HelpTextConfig.ARGON }

@@ -31,6 +31,7 @@ import io.particle.mesh.setup.barcodescanning.barcode.BarcodeScanningProcessor
 import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.ui.BarcodeData.PartialBarcodeData
 import io.particle.mesh.R
+import io.particle.mesh.setup.flow.SerialNumber
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -69,17 +70,17 @@ class ScanViewModel : ViewModel() {
 
 sealed class BarcodeData {
 
-    abstract val serialNumber: String
+    abstract val serialNumber: SerialNumber
 
 
     data class CompleteBarcodeData(
-        override val serialNumber: String,
+        override val serialNumber: SerialNumber,
         val mobileSecret: String
     ) : BarcodeData()
 
 
     data class PartialBarcodeData(
-        override val serialNumber: String,
+        override val serialNumber: SerialNumber,
         val partialMobileSecret: String
     ) : BarcodeData()
 
@@ -91,13 +92,6 @@ sealed class BarcodeData {
                 return null
             }
 
-            if (rawBarcodeData.startsWith("ARGHAB838FBKGPW")) {
-                return CompleteBarcodeData("ARGHAB838FBKGPW", "RKEP8BAMT97LERH")
-
-            } else if (rawBarcodeData.startsWith("ARGHAB838PYVN9E")) {
-                return CompleteBarcodeData("ARGHAB838PYVN9E", "BUJ9CFGNMN7W2B2")
-            }
-
             val split: List<String> = rawBarcodeData.split(" ")
 
             // we should have one and only one space char
@@ -105,13 +99,14 @@ sealed class BarcodeData {
                 return null
             }
 
-            val serial = split[0]
+            val serialValue = split[0]
             val mobileSecret = split[1]
 
-            if (serial.length != 15) {
+            if (serialValue.length != 15) {
                 return null  // serial number must be exactly 15 chars
             }
 
+            val serial = SerialNumber(serialValue)
             return if (mobileSecret.length == 15) {
                 CompleteBarcodeData(serial, mobileSecret)
             } else {
@@ -237,7 +232,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
         GlobalScope.launch {
             try {
                 val secretResponse = cloud.getFullMobileSecret(
-                    barcodeData.serialNumber,
+                    barcodeData.serialNumber.value,
                     barcodeData.partialMobileSecret
                 )
 

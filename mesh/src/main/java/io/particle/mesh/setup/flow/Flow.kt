@@ -22,6 +22,9 @@ import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
 
 
+inline class SerialNumber(val value: String)
+
+
 // FIXME: put this elsewhere
 enum class MeshDeviceType(val particleDeviceType: ParticleDeviceType) {
 

@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -300,8 +301,8 @@ class BLEConnectionModule(
 
     private fun getMeshDeviceType(barcodeData: BarcodeData): MeshDeviceType {
 
-        fun String.toDeviceType(): MeshDeviceType {
-            val first4 = this.substring(0, 4)
+        fun SerialNumber.toDeviceType(): MeshDeviceType {
+            val first4 = this.value.substring(0, 4)
             return when (first4) {
                 ARGON_SERIAL_PREFIX1,
                 ARGON_SERIAL_PREFIX2,
@@ -323,7 +324,9 @@ class BLEConnectionModule(
         return try {
             return barcodeData.serialNumber.toDeviceType()
         } catch (badArg: IllegalArgumentException) {
-            particleCloud.getPlatformId(barcodeData.serialNumber).toMeshDeviceType()
+            val platformId = particleCloud.getPlatformId(barcodeData.serialNumber.value)
+            val deviceType = ParticleDeviceType.fromInt(platformId)
+            deviceType.toMeshDeviceType()
         }
     }
 }
@@ -355,8 +358,9 @@ private fun BarcodeData.toDeviceName(): String {
         }
     }
 
-    val deviceType = getDeviceTypeName(this.serialNumber)
-    val lastSix = serialNumber.substring(serialNumber.length - BT_NAME_ID_LENGTH).toUpperCase()
+    val serial = this.serialNumber.value
+    val deviceType = getDeviceTypeName(serial)
+    val lastSix = serial.substring(serial.length - BT_NAME_ID_LENGTH).toUpperCase()
 
     return "$deviceType-$lastSix"
 }
