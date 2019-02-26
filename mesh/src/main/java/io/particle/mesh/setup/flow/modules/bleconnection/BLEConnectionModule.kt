@@ -117,7 +117,8 @@ class BLEConnectionModule(
             throw FlowException("Error getting barcode data for target device")
         }
 
-        flowManager.targetDeviceType =  getMeshDeviceType(barcodeData)
+        flowManager.targetPlatformDeviceType = barcodeData.serialNumber.toDeviceType(particleCloud)
+        flowManager.targetDeviceType =  flowManager.targetPlatformDeviceType.toMeshDeviceType()
 
         if (getReadyNextButtonClickedLD.value != true) {
             val liveDataSuspender2 = liveDataSuspender({ getReadyNextButtonClickedLD.nonNull() })
@@ -296,35 +297,6 @@ class BLEConnectionModule(
         val device = btConnectionManager.connectToDevice(barcode.toDeviceName())
             ?: return null
         return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)
-    }
-
-    private fun getMeshDeviceType(barcodeData: BarcodeData): Gen3ConnectivityType {
-
-        fun SerialNumber.toDeviceType(): Gen3ConnectivityType {
-            val first4 = this.value.substring(0, 4)
-            return when (first4) {
-                ARGON_SERIAL_PREFIX1,
-                ARGON_SERIAL_PREFIX2,
-                ARGON_SERIAL_PREFIX3,
-                A_SERIES_SERIAL_PREFIX -> Gen3ConnectivityType.WIFI
-                XENON_SERIAL_PREFIX1,
-                XENON_SERIAL_PREFIX2,
-                X_SERIES_SERIAL_PREFIX -> Gen3ConnectivityType.MESH_ONLY
-                BORON_LTE_SERIAL_PREFIX1,
-                BORON_LTE_SERIAL_PREFIX2,
-                BORON_3G_SERIAL_PREFIX1,
-                BORON_3G_SERIAL_PREFIX2,
-                B_SERIES_LTE_SERIAL_PREFIX1,
-                B_SERIES_3G_SERIAL_PREFIX2 -> Gen3ConnectivityType.CELLULAR
-                else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
-            }
-        }
-
-        return try {
-            return barcodeData.serialNumber.toDeviceType()
-        } catch (badArg: IllegalArgumentException) {
-            particleCloud.getPlatformId(barcodeData.serialNumber.value).toMeshDeviceType()
-        }
     }
 }
 

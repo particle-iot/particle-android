@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -48,6 +49,8 @@ class FlowManager(
 ) : Clearable, ProgressHack {
 
     var targetDeviceType: Gen3ConnectivityType = Gen3ConnectivityType.MESH_ONLY  // arbitrary default
+    var targetPlatformDeviceType: ParticleDeviceType = ParticleDeviceType.XENON  // arbitrary default
+    
     val bleConnectionModule =
         BLEConnectionModule(this, btConnectionManager, transceiverFactory, cloud)
     val meshSetupModule: MeshSetupModule
