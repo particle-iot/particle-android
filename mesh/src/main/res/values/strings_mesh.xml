@@ -2,11 +2,11 @@
     <string name="choose_the_device_you_re_setting_up">Choose the device you\'re setting up</string>
 
     <string name="product_name_xenon">Xenon</string>
-    <string name="product_description_xenon">Mesh</string>
     <string name="product_name_argon">Argon</string>
-    <string name="product_description_argon">Mesh + Wi-Fi</string>
     <string name="product_name_boron">Boron</string>
-    <string name="product_description_boron">Mesh + Cellular</string>
+    <string name="product_name_x_series">X-Series</string>
+    <string name="product_name_a_series">A-Series</string>
+    <string name="product_name_b_series">B-Series</string>
 
     <string name="p_getreadyforsetup_header_text">Get your {product_type} ready for setup</string>
     <string name="my_device_is_blinking_blue">My device is blinking blue</string>
