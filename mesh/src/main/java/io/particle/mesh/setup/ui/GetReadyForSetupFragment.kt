@@ -16,7 +16,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
+import io.particle.mesh.R
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
+import io.particle.mesh.setup.isSomSerial
 import io.particle.mesh.setup.ui.HelpTextConfig.ARGON
 import io.particle.mesh.setup.ui.HelpTextConfig.A_SERIES
 import io.particle.mesh.setup.ui.HelpTextConfig.BORON_3G
@@ -25,9 +27,6 @@ import io.particle.mesh.setup.ui.HelpTextConfig.B_SERIES
 import io.particle.mesh.setup.ui.HelpTextConfig.FEATHERWING
 import io.particle.mesh.setup.ui.HelpTextConfig.XENON
 import io.particle.mesh.setup.ui.HelpTextConfig.X_SERIES
-import io.particle.mesh.R
-import io.particle.mesh.setup.flow.SerialNumber
-import io.particle.mesh.setup.isSomSerial
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
 
 
