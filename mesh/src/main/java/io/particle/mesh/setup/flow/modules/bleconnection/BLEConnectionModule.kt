@@ -294,7 +294,7 @@ class BLEConnectionModule(
         barcode: CompleteBarcodeData,
         connName: String
     ): ProtocolTransceiver? {
-        val device = btConnectionManager.connectToDevice(barcode.toDeviceName())
+        val device = btConnectionManager.connectToDevice(barcode.toDeviceBroadcastName())
             ?: return null
         return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)
     }
@@ -304,7 +304,7 @@ class BLEConnectionModule(
 private const val BT_NAME_ID_LENGTH = 6
 
 
-private fun BarcodeData.toDeviceName(): String {
+private fun BarcodeData.toDeviceBroadcastName(): String {
 
     // FIXME: convert this to return ParticleDeviceType?
     fun getDeviceTypeName(serialNumber: String): String {
