@@ -54,7 +54,7 @@ class ConnectToDeviceCloudIntroFragment : BaseMeshSetupFragment() {
         val isSimActive = flowMan.cloudConnectionModule.boronSteps.isSimActivatedLD.value.truthy()
 
         return when (deviceType) {
-            Gen3ConnectivityType.MESH_ONLY -> TODO()
+            Gen3ConnectivityType.MESH_ONLY -> TODO() // doesn't apply
 
             Gen3ConnectivityType.WIFI -> {
                 if (networkSetupType == STANDALONE) ARGON_STANDALONE else ARGON_GATEWAY
@@ -63,15 +63,13 @@ class ConnectToDeviceCloudIntroFragment : BaseMeshSetupFragment() {
             Gen3ConnectivityType.CELLULAR -> {
                 when (networkSetupType) {
                     NetworkSetupType.AS_GATEWAY -> {
-                        if (isSimActive) { BORON_GATEWAY_ACTIVE } else BORON_GATEWAY_NOT_ACTIVE
-                }
+                        if (isSimActive) BORON_GATEWAY_ACTIVE else BORON_GATEWAY_NOT_ACTIVE
+                    }
                     NetworkSetupType.STANDALONE -> {
-                        if (isSimActive) { BORON_STANDALONE_ACTIVE } else BORON_STANDALONE_NOT_ACTIVE
+                        if (isSimActive) BORON_STANDALONE_ACTIVE else BORON_STANDALONE_NOT_ACTIVE
                     }
                     NetworkSetupType.JOINER -> {
-                        throw IllegalStateException(
-                            "Joiner flow does not apply here!"
-                        )
+                        throw IllegalStateException("Joiner flow does not apply here!")
                     }
                 }
             }
