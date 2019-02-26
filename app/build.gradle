@@ -29,8 +29,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         // scheme for these version numbers: EPOCH MAJOR MINOR PATCH BUILD
-        versionCode 1_02_03_12_01
-        versionName  "2.3.12"
+        versionCode 1_02_03_12_02
+        versionName  "2.3.12 (2)"
 
         vectorDrawables.useSupportLibrary = true
 
