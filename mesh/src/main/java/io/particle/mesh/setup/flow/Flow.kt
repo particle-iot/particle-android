@@ -14,9 +14,6 @@ import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNew
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.mesh.R
-import io.particle.mesh.common.NETWORK
-import io.particle.mesh.setup.flow.MeshDeviceType.XENON
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.JOINER
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
@@ -25,27 +22,20 @@ import java.util.concurrent.TimeUnit
 inline class SerialNumber(val value: String)
 
 
-// FIXME: put this elsewhere
-enum class MeshDeviceType(val particleDeviceType: ParticleDeviceType) {
-
-    ARGON(ParticleDeviceType.ARGON),
-    BORON(ParticleDeviceType.BORON),
-    XENON(ParticleDeviceType.XENON);
-
-//    companion object {
-//
-//
-//    }
+enum class Gen3ConnectivityType {
+    WIFI,
+    CELLULAR,
+    MESH_ONLY
 }
 
-fun ParticleDeviceType.toMeshDeviceType(): MeshDeviceType {
+fun ParticleDeviceType.toMeshDeviceType(): Gen3ConnectivityType {
     return when (this) {
         ParticleDeviceType.ARGON,
-        ParticleDeviceType.A_SERIES -> MeshDeviceType.ARGON
+        ParticleDeviceType.A_SERIES -> Gen3ConnectivityType.WIFI
         ParticleDeviceType.BORON,
-        ParticleDeviceType.B_SERIES -> MeshDeviceType.BORON
+        ParticleDeviceType.B_SERIES -> Gen3ConnectivityType.CELLULAR
         ParticleDeviceType.XENON,
-        ParticleDeviceType.X_SERIES -> MeshDeviceType.XENON
+        ParticleDeviceType.X_SERIES -> Gen3ConnectivityType.MESH_ONLY
         else -> throw IllegalArgumentException("Not a mesh device: $this")
     }
 }
@@ -76,14 +66,14 @@ class Flow(
         if (hasEthernet) {
             doEthernetSubflow()
         } else {
-            if (flowManager.targetDeviceType != MeshDeviceType.XENON) {
+            if (flowManager.targetDeviceType != Gen3ConnectivityType.MESH_ONLY) {
                 meshSetupModule.showNewNetworkOptionInScanner = true
             }
             val flowType = getFlowType()
             when (flowType) {
-                MeshDeviceType.ARGON -> doArgonFlow()
-                MeshDeviceType.BORON -> doBoronFlow()
-                MeshDeviceType.XENON -> doJoinerSubflow()
+                Gen3ConnectivityType.WIFI -> doArgonFlow()
+                Gen3ConnectivityType.CELLULAR -> doBoronFlow()
+                Gen3ConnectivityType.MESH_ONLY -> doJoinerSubflow()
             }
         }
 
@@ -95,14 +85,14 @@ class Flow(
         )
     }
 
-    private suspend fun getFlowType(): MeshDeviceType {
-        if (flowManager.targetDeviceType == MeshDeviceType.XENON) {
-            return MeshDeviceType.XENON
+    private suspend fun getFlowType(): Gen3ConnectivityType {
+        if (flowManager.targetDeviceType == Gen3ConnectivityType.MESH_ONLY) {
+            return Gen3ConnectivityType.MESH_ONLY
         }
 
         deviceModule.ensureNetworkSetupTypeCaptured()
         return if (deviceModule.networkSetupTypeLD.value!! == NetworkSetupType.JOINER) {
-            MeshDeviceType.XENON
+            Gen3ConnectivityType.MESH_ONLY
         } else {
             meshSetupModule.showNewNetworkOptionInScanner = true
             flowManager.targetDeviceType

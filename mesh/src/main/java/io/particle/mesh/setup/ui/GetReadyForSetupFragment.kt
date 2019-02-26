@@ -14,10 +14,9 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
-import io.particle.mesh.setup.flow.MeshDeviceType
+import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.ui.HelpTextConfig.ARGON
 import io.particle.mesh.setup.ui.HelpTextConfig.A_SERIES
 import io.particle.mesh.setup.ui.HelpTextConfig.BORON_3G
@@ -27,6 +26,7 @@ import io.particle.mesh.setup.ui.HelpTextConfig.FEATHERWING
 import io.particle.mesh.setup.ui.HelpTextConfig.XENON
 import io.particle.mesh.setup.ui.HelpTextConfig.X_SERIES
 import io.particle.mesh.R
+import io.particle.mesh.setup.flow.SerialNumber
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
 
 
@@ -70,9 +70,9 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
             val isSomSerial = serial?.toLowerCase()?.startsWith("p00") ?: false
 
             when (flowManagerVM.flowManager!!.targetDeviceType) {
-                MeshDeviceType.ARGON -> { if (isSomSerial) HelpTextConfig.A_SERIES else HelpTextConfig.ARGON }
-                MeshDeviceType.XENON -> { if (isSomSerial) HelpTextConfig.X_SERIES else HelpTextConfig.XENON }
-                MeshDeviceType.BORON -> { if (isSomSerial) HelpTextConfig.B_SERIES else HelpTextConfig.BORON_3G }
+                Gen3ConnectivityType.WIFI -> { if (isSomSerial) HelpTextConfig.A_SERIES else HelpTextConfig.ARGON }
+                Gen3ConnectivityType.MESH_ONLY -> { if (isSomSerial) HelpTextConfig.X_SERIES else HelpTextConfig.XENON }
+                Gen3ConnectivityType.CELLULAR -> { if (isSomSerial) HelpTextConfig.B_SERIES else HelpTextConfig.BORON_3G }
             }
         }
 

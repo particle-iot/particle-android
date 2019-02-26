@@ -380,7 +380,7 @@ class CloudConnectionModule(
             null -> PricingImpactAction.ADD_NETWORK_DEVICE
         }
 
-        val networkType = if (flowManager.targetDeviceType == MeshDeviceType.BORON) {
+        val networkType = if (flowManager.targetDeviceType == Gen3ConnectivityType.CELLULAR) {
             PricingImpactNetworkType.CELLULAR
         } else {
             PricingImpactNetworkType.WIFI

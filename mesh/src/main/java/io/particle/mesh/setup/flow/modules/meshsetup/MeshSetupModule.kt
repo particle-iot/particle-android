@@ -361,9 +361,9 @@ class MeshSetupModule(
         }
 
         val networkType = when (flowManager.targetDeviceType) {
-            MeshDeviceType.ARGON -> ParticleNetworkType.MICRO_WIFI
-            MeshDeviceType.BORON -> ParticleNetworkType.MICRO_CELLULAR
-            MeshDeviceType.XENON -> ParticleNetworkType.MICRO_WIFI
+            Gen3ConnectivityType.WIFI -> ParticleNetworkType.MICRO_WIFI
+            Gen3ConnectivityType.CELLULAR -> ParticleNetworkType.MICRO_CELLULAR
+            Gen3ConnectivityType.MESH_ONLY -> ParticleNetworkType.MICRO_WIFI
         }
 
         val networkResponse = cloud.registerMeshNetwork(

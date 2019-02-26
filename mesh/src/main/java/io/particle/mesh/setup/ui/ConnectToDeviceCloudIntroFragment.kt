@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import com.squareup.phrase.Phrase
 import io.particle.mesh.common.truthy
-import io.particle.mesh.setup.flow.MeshDeviceType
-import io.particle.mesh.setup.flow.MeshDeviceType.ARGON
+import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
 import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.STANDALONE
 import io.particle.mesh.setup.ui.SetupType.ARGON_GATEWAY
@@ -19,7 +18,6 @@ import io.particle.mesh.setup.ui.SetupType.BORON_GATEWAY_NOT_ACTIVE
 import io.particle.mesh.setup.ui.SetupType.BORON_STANDALONE_ACTIVE
 import io.particle.mesh.setup.ui.SetupType.BORON_STANDALONE_NOT_ACTIVE
 import io.particle.mesh.R
-import io.particle.mesh.setup.flow.FatalFlowException
 import kotlinx.android.synthetic.main.fragment_connect_to_device_cloud_intro.*
 
 
@@ -56,13 +54,13 @@ class ConnectToDeviceCloudIntroFragment : BaseMeshSetupFragment() {
         val isSimActive = flowMan.cloudConnectionModule.boronSteps.isSimActivatedLD.value.truthy()
 
         return when (deviceType) {
-            MeshDeviceType.XENON -> TODO()
+            Gen3ConnectivityType.MESH_ONLY -> TODO()
 
-            MeshDeviceType.ARGON -> {
+            Gen3ConnectivityType.WIFI -> {
                 if (networkSetupType == STANDALONE) ARGON_STANDALONE else ARGON_GATEWAY
             }
 
-            MeshDeviceType.BORON -> {
+            Gen3ConnectivityType.CELLULAR -> {
                 when (networkSetupType) {
                     NetworkSetupType.AS_GATEWAY -> {
                         if (isSimActive) { BORON_GATEWAY_ACTIVE } else BORON_GATEWAY_NOT_ACTIVE

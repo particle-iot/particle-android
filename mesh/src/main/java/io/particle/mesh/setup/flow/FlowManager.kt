@@ -47,7 +47,7 @@ class FlowManager(
     private val everythingNeedsAContext: Context
 ) : Clearable, ProgressHack {
 
-    var targetDeviceType: MeshDeviceType = MeshDeviceType.XENON  // arbitrary default
+    var targetDeviceType: Gen3ConnectivityType = Gen3ConnectivityType.MESH_ONLY  // arbitrary default
     val bleConnectionModule =
         BLEConnectionModule(this, btConnectionManager, transceiverFactory, cloud)
     val meshSetupModule: MeshSetupModule
@@ -255,9 +255,9 @@ class FlowManager(
 
     fun getTypeName(): String {
         val resource = when (targetDeviceType) {
-            MeshDeviceType.ARGON -> R.string.product_name_argon
-            MeshDeviceType.BORON -> R.string.product_name_boron
-            MeshDeviceType.XENON -> R.string.product_name_xenon
+            Gen3ConnectivityType.WIFI -> R.string.product_name_argon
+            Gen3ConnectivityType.CELLULAR -> R.string.product_name_boron
+            Gen3ConnectivityType.MESH_ONLY -> R.string.product_name_xenon
         }
         return everythingNeedsAContext.getString(resource)
     }

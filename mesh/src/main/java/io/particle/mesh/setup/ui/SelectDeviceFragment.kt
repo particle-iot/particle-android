@@ -9,7 +9,7 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
-import io.particle.mesh.setup.flow.MeshDeviceType
+import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
 import io.particle.mesh.setup.ui.utils.inflateRow
 import io.particle.mesh.setup.ui.utils.localDeviceHasInternetConnection
@@ -32,17 +32,17 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
 //        adapter.submitList(
 //            listOf(
 //                DeviceData(
-//                    MeshDeviceType.XENON,
+//                    Gen3ConnectivityType.MESH_ONLY,
 //                    R.string.product_description_xenon,
 //                    R.drawable.xenon_vector
 //                ),
 //                DeviceData(
-//                    MeshDeviceType.ARGON,
+//                    Gen3ConnectivityType.WIFI,
 //                    R.string.product_description_argon,
 //                    R.drawable.argon_vector
 //                ),
 //                DeviceData(
-//                    MeshDeviceType.BORON,
+//                    Gen3ConnectivityType.CELLULAR,
 //                    R.string.product_description_boron,
 //                    R.drawable.boron_vector
 //                )
@@ -79,7 +79,7 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
 
 
 private data class DeviceData(
-    val deviceType: MeshDeviceType,
+    val deviceType: Gen3ConnectivityType,
     @StringRes
     val deviceTypeDescription: Int,
     @DrawableRes
@@ -118,23 +118,23 @@ private class MeshDeviceTypesAdapter(
         holder.rowLine2.setText(item.deviceTypeDescription)
 
         when (item.deviceType) {
-            MeshDeviceType.ARGON -> {
+            Gen3ConnectivityType.WIFI -> {
                 holder.capability2.setImageResource(R.drawable.p_mesh_ic_capability_wifi)
             }
-            MeshDeviceType.BORON -> {
+            Gen3ConnectivityType.CELLULAR -> {
                 holder.capability2.setImageResource(R.drawable.p_mesh_ic_capability_cellular)
             }
-            MeshDeviceType.XENON -> { /* no-op */ }
+            Gen3ConnectivityType.MESH_ONLY -> { /* no-op */ }
         }
     }
 }
 
 
 @StringRes
-private fun MeshDeviceType.toDisplayName(): Int {
+private fun Gen3ConnectivityType.toDisplayName(): Int {
     return when (this) {
-        MeshDeviceType.ARGON -> R.string.product_name_argon
-        MeshDeviceType.BORON -> R.string.product_name_boron
-        MeshDeviceType.XENON -> R.string.product_name_xenon
+        Gen3ConnectivityType.WIFI -> R.string.product_name_argon
+        Gen3ConnectivityType.CELLULAR -> R.string.product_name_boron
+        Gen3ConnectivityType.MESH_ONLY -> R.string.product_name_xenon
     }
 }
