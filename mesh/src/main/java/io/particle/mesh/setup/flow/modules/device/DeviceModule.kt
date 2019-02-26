@@ -78,7 +78,7 @@ class DeviceModule(
 
     suspend fun ensureDeviceIsUsingEligibleFirmware(
         xceiver: ProtocolTransceiver,
-        deviceType: MeshDeviceType
+        deviceType: ParticleDeviceType
     ) {
         log.info { "ensureDeviceIsUsingEligibleFirmware()" }
 
