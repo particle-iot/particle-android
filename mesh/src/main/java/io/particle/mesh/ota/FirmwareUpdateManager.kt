@@ -71,7 +71,7 @@ class FirmwareUpdateManager(
         val (ncpVersion, ncpModuleVersion) = getNcpVersions(xceiver)
 
         val updateUrl = cloud.getFirmwareUpdateInfo(
-            deviceType.platformId,
+            deviceType.intValue,
             systemFwVers.version,
             ncpVersion,
             ncpModuleVersion
@@ -97,12 +97,3 @@ class FirmwareUpdateManager(
         }
     }
 }
-
-
-private val ParticleDeviceType.platformId: Int
-    get() = when (this) {
-        ParticleDeviceType.ARGON -> 12
-        ParticleDeviceType.BORON -> 13
-        ParticleDeviceType.XENON -> 14
-        else -> throw IllegalArgumentException("${this.name} is not a mesh device!")
-    }

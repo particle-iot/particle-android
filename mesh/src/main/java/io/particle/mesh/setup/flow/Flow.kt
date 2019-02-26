@@ -5,6 +5,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
+import io.particle.mesh.R
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
@@ -13,7 +14,6 @@ import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
-import io.particle.mesh.R
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
@@ -194,7 +194,7 @@ class Flow(
         // gather initial data, perform upfront checks
         deviceModule.ensureDeviceIsUsingEligibleFirmware(
             bleConnModule.targetDeviceTransceiverLD.value!!,
-            flowManager.targetDeviceType
+            flowManager.targetPlatformDeviceType
         )
 
         deviceModule.ensureEthernetDetectionSet()
