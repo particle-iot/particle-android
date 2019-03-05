@@ -73,7 +73,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.0.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
 
-    def nav_version = "1.0.0-rc01"
+    def nav_version = "1.0.0-rc02"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
