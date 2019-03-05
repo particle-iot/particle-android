@@ -124,6 +124,9 @@ class ParticleDevice internal constructor(
             return isConnected && lowercaseFunctions.containsAll(tinkerFunctions)
         }
 
+    val requiresUpdate: Boolean?
+        get() = deviceState.requiresUpdate
+
     // included for Java backwards compat: the method was named getID(),
     // and the new Kotlin property generates a method named getId()
     @Deprecated(
@@ -196,11 +199,7 @@ class ParticleDevice internal constructor(
     enum class KnownApp constructor(val appName: String) {
         TINKER("tinker")
     }
-
-    fun requiresUpdate(): Boolean {
-        return deviceState.requiresUpdate ?: false
-    }
-
+    
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getCurrentDataUsage(): Float {
