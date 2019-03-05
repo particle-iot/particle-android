@@ -125,34 +125,6 @@ class ParticleDevice internal constructor(
     val lastHeard: Date?
         get() = deviceState.lastHeard
 
-    val currentDataUsage: Float
-        @WorkerThread
-        @Throws(ParticleCloudException::class)
-        get() {
-            var maxUsage = 0f
-            try {
-                val response = mainApi.getCurrentDataUsage(deviceState.lastIccid!!)
-                val result = JSONObject(String((response.body as TypedByteArray).bytes))
-                val usages = result.getJSONArray("usage_by_day")
-
-                for (i in 0 until usages.length()) {
-                    val usageElement = usages.getJSONObject(i)
-                    if (usageElement.has("mbs_used_cumulative")) {
-                        val usage = usageElement.getDouble("mbs_used_cumulative")
-                        if (usage > maxUsage) {
-                            maxUsage = usage.toFloat()
-                        }
-                    }
-                }
-            } catch (e: JSONException) {
-                throw ParticleCloudException(e)
-            } catch (e: RetrofitError) {
-                throw ParticleCloudException(e)
-            }
-
-            return maxUsage
-        }
-
     val isRunningTinker: Boolean
         get() {
             val lowercaseFunctions = list<String>()
@@ -238,6 +210,33 @@ class ParticleDevice internal constructor(
 
     fun requiresUpdate(): Boolean {
         return deviceState.requiresUpdate ?: false
+    }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun getCurrentDataUsage(): Float {
+        var maxUsage = 0f
+        try {
+            val response = mainApi.getCurrentDataUsage(deviceState.lastIccid!!)
+            val result = JSONObject(String((response.body as TypedByteArray).bytes))
+            val usages = result.getJSONArray("usage_by_day")
+
+            for (i in 0 until usages.length()) {
+                val usageElement = usages.getJSONObject(i)
+                if (usageElement.has("mbs_used_cumulative")) {
+                    val usage = usageElement.getDouble("mbs_used_cumulative")
+                    if (usage > maxUsage) {
+                        maxUsage = usage.toFloat()
+                    }
+                }
+            }
+        } catch (e: JSONException) {
+            throw ParticleCloudException(e)
+        } catch (e: RetrofitError) {
+            throw ParticleCloudException(e)
+        }
+
+        return maxUsage
     }
 
     /**
