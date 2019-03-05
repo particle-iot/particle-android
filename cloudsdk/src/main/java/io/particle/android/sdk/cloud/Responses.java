@@ -4,10 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
-import io.particle.android.sdk.cloud.Responses.Models.CoreInfo;
 import io.particle.android.sdk.cloud.models.ParticleNetworkData;
 
 
@@ -15,156 +13,6 @@ import io.particle.android.sdk.cloud.models.ParticleNetworkData;
  * All API responses, collected together in one outer class for simplicity's sake.
  */
 public class Responses {
-
-    /**
-     * ...and to go with the responses, a series of model objects only
-     * used internally when dealing with the REST API, never returned
-     * outside of the cloudapi package.
-     */
-    public static class Models {
-
-
-        /**
-         * Represents a single Particle device in the list returned
-         * by a call to "GET /v1/devices"
-         */
-        public static class SimpleDevice {
-
-            public final String id;
-
-            public final String name;
-
-            public final boolean cellular;
-
-            public final String imei;
-
-            @SerializedName("last_iccid")
-            public final String lastIccid;
-
-            @SerializedName("current_build_target")
-            public final String currentBuild;
-
-            @SerializedName("default_build_target")
-            public final String defaultBuild;
-
-            @SerializedName("connected")
-            public final boolean isConnected;
-
-            @SerializedName("product_id")
-            public final int productId;
-
-            @SerializedName("platform_id")
-            public final int platformId;
-
-            @SerializedName("last_ip_address")
-            public final String ipAddress;
-
-            @SerializedName("status")
-            public final String status;
-
-            @SerializedName("last_heard")
-            public final Date lastHeard;
-
-            public SimpleDevice(String id, String name, boolean isConnected, boolean cellular,
-                                String imei, String lastIccid, String currentBuild, String defaultBuild, int platformId,
-                                int productId, String ipAddress, String status, Date lastHeard) {
-                this.id = id;
-                this.name = name;
-                this.isConnected = isConnected;
-                this.cellular = cellular;
-                this.imei = imei;
-                this.lastIccid = lastIccid;
-                this.currentBuild = currentBuild;
-                this.defaultBuild = defaultBuild;
-                this.platformId = platformId;
-                this.productId = productId;
-                this.ipAddress = ipAddress;
-                this.status = status;
-                this.lastHeard = lastHeard;
-            }
-        }
-
-        /**
-         * Represents a single Particle device as returned from the
-         * call to "GET /v1/devices/{device id}"
-         */
-        public class CompleteDevice {
-            @SerializedName("id")
-            public final String deviceId;
-
-            public final String name;
-
-            public final boolean cellular;
-
-            public final String imei;
-
-            @SerializedName("last_iccid")
-            public final String lastIccid;
-
-            @SerializedName("current_build_target")
-            public final String currentBuild;
-
-            @SerializedName("default_build_target")
-            public final String defaultBuild;
-
-            @SerializedName("connected")
-            public final boolean isConnected;
-
-            public final Map<String, String> variables;
-
-            public final List<String> functions;
-
-            @SerializedName("cc3000_patch_version")
-            public final String version;
-
-            @SerializedName("product_id")
-            public final int productId;
-
-            @SerializedName("platform_id")
-            public final int platformId;
-
-            @SerializedName("last_ip_address")
-            public final String ipAddress;
-
-            @SerializedName("last_app")
-            public final String lastAppName;
-
-            @SerializedName("status")
-            public final String status;
-
-            @SerializedName("device_needs_update")
-            public final boolean requiresUpdate;
-
-            @SerializedName("last_heard")
-            public final Date lastHeard;
-
-            CompleteDevice(String deviceId, String name, boolean isConnected, boolean cellular,
-                           String imei, String lastIccid, String currentBuild, String defaultBuild,
-                           Map<String, String> variables, List<String> functions, String version,
-                           int productId, int platformId, String ipAddress, String lastAppName,
-                           String status, boolean requiresUpdate, Date lastHeard) {
-                this.deviceId = deviceId;
-                this.name = name;
-                this.isConnected = isConnected;
-                this.cellular = cellular;
-                this.imei = imei;
-                this.lastIccid = lastIccid;
-                this.currentBuild = currentBuild;
-                this.defaultBuild = defaultBuild;
-                this.variables = variables;
-                this.functions = functions;
-                this.version = version;
-                this.productId = productId;
-                this.platformId = platformId;
-                this.ipAddress = ipAddress;
-                this.lastAppName = lastAppName;
-                this.status = status;
-                this.requiresUpdate = requiresUpdate;
-                this.lastHeard = lastHeard;
-            }
-        }
-
-    }
 
 
     public static class TokenResponse {
@@ -254,30 +102,31 @@ public class Responses {
         }
     }
 
-    
-    public static class CoreInfo {
-
-        @SerializedName("last_app")
-        public final String lastApp;
-
-        @SerializedName("last_heard")
-        public final Date lastHeard;
-
-        public final boolean connected;
-
-        public final String deviceId;
-
-        public CoreInfo(String lastApp, Date lastHeard, boolean connected, String deviceId) {
-            this.lastApp = lastApp;
-            this.lastHeard = lastHeard;
-            this.connected = connected;
-            this.deviceId = deviceId;
-        }
-    }
-
 
     public abstract static class ReadVariableResponse<T> {
+        
 
+        public static class CoreInfo {
+
+            @SerializedName("last_app")
+            public final String lastApp;
+
+            @SerializedName("last_heard")
+            public final Date lastHeard;
+
+            public final boolean connected;
+
+            public final String deviceId;
+
+            public CoreInfo(String lastApp, Date lastHeard, boolean connected, String deviceId) {
+                this.lastApp = lastApp;
+                this.lastHeard = lastHeard;
+                this.connected = connected;
+                this.deviceId = deviceId;
+            }
+        }
+        
+        
         @SerializedName("cmd")
         public final String commandName;
 
@@ -286,10 +135,10 @@ public class Responses {
 
         public final T result;
 
-        public final Models.CoreInfo coreInfo;
+        public final CoreInfo coreInfo;
 
         public ReadVariableResponse(String commandName, String variableName,
-                                    Models.CoreInfo coreInfo, T result) {
+                                    CoreInfo coreInfo, T result) {
             this.commandName = commandName;
             this.variableName = variableName;
             this.result = result;
