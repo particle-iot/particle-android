@@ -7,7 +7,6 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ResultCode
-import io.particle.mesh.setup.flow.MeshDeviceType
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
@@ -30,7 +29,7 @@ class FirmwareUpdateManager(
     @WorkerThread
     suspend fun needsUpdate(
         xceiver: ProtocolTransceiver,
-        deviceType: MeshDeviceType
+        deviceType: ParticleDeviceType
     ): Boolean {
         return getUpdateUrl(xceiver, deviceType) != null
     }
@@ -38,7 +37,7 @@ class FirmwareUpdateManager(
     @WorkerThread
     suspend fun startUpdateIfNecessary(
         xceiver: ProtocolTransceiver,
-        deviceType: MeshDeviceType,
+        deviceType: ParticleDeviceType,
         listener: ProgressListener
     ): FirmwareUpdateResult {
 
@@ -65,14 +64,14 @@ class FirmwareUpdateManager(
     @WorkerThread
     private suspend fun getUpdateUrl(
         xceiver: ProtocolTransceiver,
-        deviceType: MeshDeviceType
+        deviceType: ParticleDeviceType
     ): URL? {
         val systemFwVers = xceiver.sendGetSystemFirmwareVersion().throwOnErrorOrAbsent()
         log.info { "Getting update URL for device currently on firmware version ${systemFwVers.version}" }
         val (ncpVersion, ncpModuleVersion) = getNcpVersions(xceiver)
 
         val updateUrl = cloud.getFirmwareUpdateInfo(
-            deviceType.particleDeviceType.platformId,
+            deviceType.intValue,
             systemFwVers.version,
             ncpVersion,
             ncpModuleVersion
@@ -98,12 +97,3 @@ class FirmwareUpdateManager(
         }
     }
 }
-
-
-private val ParticleDeviceType.platformId: Int
-    get() = when (this) {
-        ParticleDeviceType.ARGON -> 12
-        ParticleDeviceType.BORON -> 13
-        ParticleDeviceType.XENON -> 14
-        else -> throw IllegalArgumentException("${this.name} is not a mesh device!")
-    }

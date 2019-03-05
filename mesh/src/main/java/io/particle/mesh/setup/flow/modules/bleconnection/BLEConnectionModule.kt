@@ -4,18 +4,25 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.mesh.R
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
-import io.particle.mesh.setup.*
+import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.*
-import io.particle.mesh.setup.ui.BarcodeData
+import io.particle.mesh.setup.toDeviceType
 import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
-import io.particle.mesh.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -117,7 +124,8 @@ class BLEConnectionModule(
             throw FlowException("Error getting barcode data for target device")
         }
 
-        flowManager.targetDeviceType =  getMeshDeviceType(barcodeData)
+        flowManager.targetPlatformDeviceType = barcodeData.serialNumber.toDeviceType(particleCloud)
+        flowManager.targetDeviceType =  flowManager.targetPlatformDeviceType.toMeshDeviceType()
 
         if (getReadyNextButtonClickedLD.value != true) {
             val liveDataSuspender2 = liveDataSuspender({ getReadyNextButtonClickedLD.nonNull() })
@@ -293,70 +301,31 @@ class BLEConnectionModule(
         barcode: CompleteBarcodeData,
         connName: String
     ): ProtocolTransceiver? {
-        val device = btConnectionManager.connectToDevice(barcode.toDeviceName())
+        val broadcastName = getDeviceBroadcastName(
+            barcode.serialNumber.toDeviceType(particleCloud),
+            barcode.serialNumber
+        )
+        val device = btConnectionManager.connectToDevice(broadcastName)
             ?: return null
         return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)
     }
 
-    private fun getMeshDeviceType(barcodeData: BarcodeData): MeshDeviceType {
-
-        fun String.toDeviceType(): MeshDeviceType {
-            val first4 = this.substring(0, 4)
-            return when (first4) {
-                ARGON_SERIAL_PREFIX1,
-                ARGON_SERIAL_PREFIX2,
-                ARGON_SERIAL_PREFIX3,
-                A_SERIES_SERIAL_PREFIX -> MeshDeviceType.ARGON
-                XENON_SERIAL_PREFIX1,
-                XENON_SERIAL_PREFIX2,
-                X_SERIES_SERIAL_PREFIX -> MeshDeviceType.XENON
-                BORON_LTE_SERIAL_PREFIX1,
-                BORON_LTE_SERIAL_PREFIX2,
-                BORON_3G_SERIAL_PREFIX1,
-                BORON_3G_SERIAL_PREFIX2,
-                B_SERIES_LTE_SERIAL_PREFIX1,
-                B_SERIES_3G_SERIAL_PREFIX2 -> MeshDeviceType.BORON
-                else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
-            }
+    private fun getDeviceBroadcastName(deviceType: ParticleDeviceType, serialNum: SerialNumber): String {
+        val deviceTypeName = when(deviceType) {
+            ARGON,
+            A_SERIES -> "Argon"
+            BORON,
+            B_SERIES -> "Boron"
+            XENON,
+            X_SERIES -> "Xenon"
+            else -> throw IllegalArgumentException("Not a mesh device: $this")
         }
+        val serial = serialNum.value
+        val lastSix = serial.substring(serial.length - BT_NAME_ID_LENGTH).toUpperCase()
 
-        return try {
-            return barcodeData.serialNumber.toDeviceType()
-        } catch (badArg: IllegalArgumentException) {
-            particleCloud.getPlatformId(barcodeData.serialNumber).toMeshDeviceType()
-        }
+        return "$deviceTypeName-$lastSix"
     }
-}
 
+}
 
 private const val BT_NAME_ID_LENGTH = 6
-
-
-private fun BarcodeData.toDeviceName(): String {
-
-    // FIXME: convert this to return ParticleDeviceType?
-    fun getDeviceTypeName(serialNumber: String): String {
-        val first4 = serialNumber.substring(0, 4)
-        return when (first4) {
-            ARGON_SERIAL_PREFIX1,
-            ARGON_SERIAL_PREFIX2,
-            ARGON_SERIAL_PREFIX3,
-            A_SERIES_SERIAL_PREFIX -> "Argon"
-            XENON_SERIAL_PREFIX1,
-            XENON_SERIAL_PREFIX2,
-            X_SERIES_SERIAL_PREFIX -> "Xenon"
-            BORON_LTE_SERIAL_PREFIX1,
-            BORON_LTE_SERIAL_PREFIX2,
-            BORON_3G_SERIAL_PREFIX1,
-            BORON_3G_SERIAL_PREFIX2,
-            B_SERIES_LTE_SERIAL_PREFIX1,
-            B_SERIES_3G_SERIAL_PREFIX2 -> "Boron"
-            else -> "UNKNOWN"
-        }
-    }
-
-    val deviceType = getDeviceTypeName(this.serialNumber)
-    val lastSix = serialNumber.substring(serialNumber.length - BT_NAME_ID_LENGTH).toUpperCase()
-
-    return "$deviceType-$lastSix"
-}

@@ -1,7 +1,7 @@
 package io.particle.mesh.bluetooth.connecting
 
 import android.bluetooth.BluetoothDevice
-import io.particle.mesh.common.buildIntValueMap
+import io.particle.android.sdk.utils.buildIntValueMap
 
 enum class BondingState(val intValue: Int) {
 

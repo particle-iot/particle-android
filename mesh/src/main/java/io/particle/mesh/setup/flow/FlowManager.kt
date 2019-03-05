@@ -9,6 +9,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.mesh.R
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -18,6 +26,8 @@ import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
+import io.particle.mesh.setup.flow.Gen3ConnectivityType.CELLULAR
+import io.particle.mesh.setup.flow.Gen3ConnectivityType.MESH_ONLY
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.WifiNetworksScannerLD
@@ -27,7 +37,6 @@ import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksSca
 import io.particle.mesh.setup.ui.*
 import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.utils.runOnMainThread
-import io.particle.mesh.R
 import kotlinx.coroutines.*
 import mu.KotlinLogging
 
@@ -47,7 +56,9 @@ class FlowManager(
     private val everythingNeedsAContext: Context
 ) : Clearable, ProgressHack {
 
-    var targetDeviceType: MeshDeviceType = MeshDeviceType.XENON  // arbitrary default
+    var targetDeviceType: Gen3ConnectivityType = Gen3ConnectivityType.MESH_ONLY  // arbitrary default
+    var targetPlatformDeviceType: ParticleDeviceType = ParticleDeviceType.XENON  // arbitrary default
+
     val bleConnectionModule =
         BLEConnectionModule(this, btConnectionManager, transceiverFactory, cloud)
     val meshSetupModule: MeshSetupModule
@@ -106,6 +117,7 @@ class FlowManager(
                 } catch (ex: Exception) {
                     if (ex is FlowException && ex.exceptionType == ERROR_FATAL) {
                         log.info(ex) { "Hit fatal error, exiting setup: " }
+                        QATool.log(ex.message ?: "")
                         endSetup()
                         return@launch
                     }
@@ -218,10 +230,7 @@ class FlowManager(
     fun showCongratsScreen(message: String) {
         navigate(
             R.id.action_global_hashtagWinningFragment,
-            HashtagWinningFragmentArgs.Builder()
-                .setCongratsMessage(message)
-                .build()
-                .toBundle()
+            HashtagWinningFragmentArgs(message).toBundle()
         )
     }
 
@@ -256,10 +265,14 @@ class FlowManager(
     }
 
     fun getTypeName(): String {
-        val resource = when (targetDeviceType) {
-            MeshDeviceType.ARGON -> R.string.product_name_argon
-            MeshDeviceType.BORON -> R.string.product_name_boron
-            MeshDeviceType.XENON -> R.string.product_name_xenon
+        val resource = when (targetPlatformDeviceType) {
+            ARGON -> R.string.product_name_argon
+            BORON -> R.string.product_name_boron
+            XENON -> R.string.product_name_xenon
+            A_SERIES -> R.string.product_name_a_series
+            B_SERIES -> R.string.product_name_b_series
+            X_SERIES -> R.string.product_name_x_series
+            else -> throw IllegalArgumentException("Not a mesh device: $targetPlatformDeviceType")
         }
         return everythingNeedsAContext.getString(resource)
     }

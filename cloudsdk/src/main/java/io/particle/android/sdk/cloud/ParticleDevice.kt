@@ -15,6 +15,7 @@ import io.particle.android.sdk.cloud.models.DeviceStateChange
 import io.particle.android.sdk.utils.Preconditions
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.TLog
+import io.particle.android.sdk.utils.buildIntValueMap
 import io.particle.android.sdk.utils.join
 import okio.Okio
 import org.greenrobot.eventbus.EventBus
@@ -175,45 +176,31 @@ class ParticleDevice internal constructor(
         return id
     }
 
-    enum class ParticleDeviceType {
-        OTHER,
-        CORE,
-        PHOTON,
-        P1,
-        RASPBERRY_PI,
-        RED_BEAR_DUO,
-        BLUZ,
-        DIGISTUMP_OAK,
-        ELECTRON,
-        ARGON,
-        BORON,
-        XENON,
-        A_SERIES,
-        B_SERIES,
-        X_SERIES;
+    enum class ParticleDeviceType(val intValue: Int) {
+        OTHER(Integer.MIN_VALUE),
+        CORE(0),
+        PHOTON(6),
+        P1(8),
+        RASPBERRY_PI(31),
+        RED_BEAR_DUO(88),
+        BLUZ(103),
+        DIGISTUMP_OAK(82),
+        ELECTRON(10),
+        ARGON(12),
+        BORON(13),
+        XENON(14),
+        A_SERIES(22),
+        B_SERIES(23),
+        X_SERIES(24);
 
 
         companion object {
 
+            private val intValueMap = buildIntValueMap(values()) { state -> state.intValue }
+
             @JvmStatic
             fun fromInt(intValue: Int): ParticleDeviceType {
-                return when (intValue) {
-                    0 -> CORE
-                    8 -> P1
-                    10 -> ELECTRON
-                    12 -> ARGON
-                    13 -> BORON
-                    14 -> XENON
-                    22 -> A_SERIES
-                    23 -> B_SERIES
-                    24 -> X_SERIES
-                    31 -> RASPBERRY_PI
-                    82 -> DIGISTUMP_OAK
-                    88 -> RED_BEAR_DUO
-                    103 -> BLUZ
-                    6 -> PHOTON
-                    else -> OTHER
-                }
+                return intValueMap.get(intValue, ParticleDeviceType.OTHER)
             }
         }
     }
@@ -245,7 +232,7 @@ class ParticleDevice internal constructor(
         Exception("Variable $variableName does not exist on this device")
 
 
-    enum class KnownApp private constructor(val appName: String) {
+    enum class KnownApp constructor(val appName: String) {
         TINKER("tinker")
     }
 

@@ -20,10 +20,10 @@ import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 
-// FIXME: where does this belong?
 internal enum class NetworkSetupType {
     AS_GATEWAY,
-    STANDALONE
+    STANDALONE,
+    JOINER
 }
 
 class DeviceModule(
@@ -78,7 +78,7 @@ class DeviceModule(
 
     suspend fun ensureDeviceIsUsingEligibleFirmware(
         xceiver: ProtocolTransceiver,
-        deviceType: MeshDeviceType
+        deviceType: ParticleDeviceType
     ) {
         log.info { "ensureDeviceIsUsingEligibleFirmware()" }
 

@@ -29,8 +29,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         // scheme for these version numbers: EPOCH MAJOR MINOR PATCH BUILD
-        versionCode 1_02_03_11_01
-        versionName  "2.3.11"
+        versionCode 1_02_03_12_02
+        versionName  "2.3.12 (2)"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -123,7 +123,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.0.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
 
-    def nav_version = "1.0.0-beta02"
+    def nav_version = "1.0.0-rc01"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
@@ -135,4 +135,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-//apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
+apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */

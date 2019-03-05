@@ -374,10 +374,13 @@ class CloudConnectionModule(
         val action = when (flowManager.deviceModule.networkSetupTypeLD.value) {
             NetworkSetupType.AS_GATEWAY -> PricingImpactAction.CREATE_NETWORK
             NetworkSetupType.STANDALONE -> PricingImpactAction.ADD_USER_DEVICE
+            NetworkSetupType.JOINER -> throw FatalFlowException(
+                "Should not be showing billing for joiners!"
+            )
             null -> PricingImpactAction.ADD_NETWORK_DEVICE
         }
 
-        val networkType = if (flowManager.targetDeviceType == MeshDeviceType.BORON) {
+        val networkType = if (flowManager.targetDeviceType == Gen3ConnectivityType.CELLULAR) {
             PricingImpactNetworkType.CELLULAR
         } else {
             PricingImpactNetworkType.WIFI

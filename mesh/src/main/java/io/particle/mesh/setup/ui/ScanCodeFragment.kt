@@ -4,14 +4,12 @@ package io.particle.mesh.setup.ui
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -22,14 +20,16 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.android.sdk.utils.appHasPermission
+import io.particle.mesh.R
 import io.particle.mesh.common.QATool
+import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.barcodescanning.CameraSource
 import io.particle.mesh.setup.barcodescanning.CameraSourcePreview
 import io.particle.mesh.setup.barcodescanning.GraphicOverlay
 import io.particle.mesh.setup.barcodescanning.barcode.BarcodeScanningProcessor
 import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.ui.BarcodeData.PartialBarcodeData
-import io.particle.mesh.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -68,17 +68,17 @@ class ScanViewModel : ViewModel() {
 
 sealed class BarcodeData {
 
-    abstract val serialNumber: String
+    abstract val serialNumber: SerialNumber
 
 
     data class CompleteBarcodeData(
-        override val serialNumber: String,
+        override val serialNumber: SerialNumber,
         val mobileSecret: String
     ) : BarcodeData()
 
 
     data class PartialBarcodeData(
-        override val serialNumber: String,
+        override val serialNumber: SerialNumber,
         val partialMobileSecret: String
     ) : BarcodeData()
 
@@ -90,13 +90,6 @@ sealed class BarcodeData {
                 return null
             }
 
-            if (rawBarcodeData.startsWith("ARGHAB838FBKGPW")) {
-                return CompleteBarcodeData("ARGHAB838FBKGPW", "RKEP8BAMT97LERH")
-
-            } else if (rawBarcodeData.startsWith("ARGHAB838PYVN9E")) {
-                return CompleteBarcodeData("ARGHAB838PYVN9E", "BUJ9CFGNMN7W2B2")
-            }
-
             val split: List<String> = rawBarcodeData.split(" ")
 
             // we should have one and only one space char
@@ -104,13 +97,14 @@ sealed class BarcodeData {
                 return null
             }
 
-            val serial = split[0]
+            val serialValue = split[0]
             val mobileSecret = split[1]
 
-            if (serial.length != 15) {
+            if (serialValue.length != 15) {
                 return null  // serial number must be exactly 15 chars
             }
 
+            val serial = SerialNumber(serialValue)
             return if (mobileSecret.length == 15) {
                 CompleteBarcodeData(serial, mobileSecret)
             } else {
@@ -152,8 +146,10 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val root = inflater.inflate(R.layout.fragment_scan_code, container, false)
 
         preview = root.findViewById(R.id.scanPreview)
@@ -234,7 +230,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
         GlobalScope.launch {
             try {
                 val secretResponse = cloud.getFullMobileSecret(
-                    barcodeData.serialNumber,
+                    barcodeData.serialNumber.value,
                     barcodeData.partialMobileSecret
                 )
 
@@ -309,8 +305,11 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        log.info {"Permission granted!" }
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        log.info { "Permission granted!" }
         if (allPermissionsGranted()) {
             createCameraSource()
         }
@@ -318,11 +317,11 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     }
 
     private fun isPermissionGranted(context: Context, permission: String): Boolean {
-        if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
-            log.info {"Permission is granted: $permission" }
+        if (context.appHasPermission(permission)) {
+            log.info { "Permission is granted: $permission" }
             return true
         }
-        log.info {"Permission is NOT granted: $permission" }
+        log.info { "Permission is NOT granted: $permission" }
         return false
     }
 

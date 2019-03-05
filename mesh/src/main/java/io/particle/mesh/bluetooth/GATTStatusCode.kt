@@ -1,7 +1,7 @@
 package io.particle.mesh.bluetooth
 
 import android.bluetooth.BluetoothGatt
-import io.particle.mesh.common.buildIntValueMap
+import io.particle.android.sdk.utils.buildIntValueMap
 
 
 enum class GATTStatusCode(val intValue: Int) {

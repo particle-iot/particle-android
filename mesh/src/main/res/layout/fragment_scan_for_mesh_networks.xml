@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/p_meshnetworkscanning_header" />
+        android:text="@string/p_meshnetworkscanning_header"/>
 
     <ProgressBar
         android:id="@+id/progressBar2"

@@ -1,18 +1,19 @@
 package io.particle.mesh.setup.ui
 
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.phrase.Phrase
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
+import io.particle.mesh.R
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
 import io.particle.mesh.setup.ui.utils.inflateRow
-import io.particle.mesh.R
 import kotlinx.android.synthetic.main.fragment_scan_for_mesh_networks.view.*
 import kotlinx.android.synthetic.main.p_scanformeshnetwork_row_select_mesh_network.view.*
 
@@ -35,24 +36,13 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
         root.recyclerView.adapter = adapter
 
         root.action_create_new_network.setOnClickListener {
+            root.progressBar2.visibility = View.INVISIBLE
+            fm.deviceModule.updateNetworkSetupType(NetworkSetupType.AS_GATEWAY)
             fm.meshSetupModule.onUserSelectedCreateNewNetwork()
         }
 
-        if (fm.meshSetupModule.showNewNetworkOptionInScanner) {
-            root.setup_header_text.text =
-                    Phrase.from(root, R.string.p_scanfornetworks_gateway_flow_title)
-                        .put("product_type", fm.getTypeName())
-                        .format()
-            root.progressBar2.visibility = View.INVISIBLE
-            root.recyclerView.visibility = View.INVISIBLE
-            root.action_create_new_network.visibility = View.VISIBLE
-
-        } else {
-            root.setup_header_text.text = Phrase.from(root, R.string.p_meshnetworkscanning_header)
-                .put("product_type", fm.getTypeName())
-                .format()
-            root.action_create_new_network.visibility = View.GONE
-        }
+        root.action_create_new_network.visibility =
+            if (fm.meshSetupModule.showNewNetworkOptionInScanner) View.VISIBLE else View.GONE
         return root
     }
 
@@ -66,6 +56,7 @@ class ScanForMeshNetworksFragment : BaseMeshSetupFragment() {
     }
 
     private fun onMeshNetworkSelected(networkInfo: NetworkInfo) {
+        flowManagerVM.flowManager!!.deviceModule.updateNetworkSetupType(NetworkSetupType.JOINER)
         flowManagerVM.flowManager!!.meshSetupModule.updateSelectedMeshNetworkToJoin(networkInfo)
     }
 }

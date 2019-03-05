@@ -78,8 +78,8 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
-import io.particle.mesh.common.UnknownEnumIntValueException
-import io.particle.mesh.common.buildIntValueMap
+import io.particle.android.sdk.utils.UnknownEnumIntValueException
+import io.particle.android.sdk.utils.buildIntValueMap
 import io.particle.mesh.setup.connection.ResultCode.Companion.toResultCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -522,7 +522,7 @@ enum class ResultCode(val intValue: Int) {
 
     companion object {
 
-        private val intValueMap = buildIntValueMap(ResultCode.values()) { state -> state.intValue }
+        private val intValueMap = buildIntValueMap(values()) { state -> state.intValue }
 
         fun Int.toResultCode(): ResultCode {
             val enumValue = intValueMap.get(this, ResultCode.UNKNOWN)

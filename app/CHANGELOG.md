@@ -1,3 +1,8 @@
+2.3.12
+======
+- Argon/A Series and Boron/B Series devices can now join mesh networks during setup instead of just create them
+- Fix firmware update loop bug with A/B/X Series devices 
+
 2.3.11
 ======
 - Fix Photon claiming issue
