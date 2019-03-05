@@ -37,7 +37,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 class ParticleDevice internal constructor(
     private val mainApi: ApiDefs.CloudApi,
     val cloud: ParticleCloud,
-    @field:Volatile internal var deviceState: DeviceState
+    @Volatile internal var deviceState: DeviceState
 ) : Parcelable {
 
     private val subscriptions = CopyOnWriteArrayList<Long>()
@@ -46,17 +46,14 @@ class ParticleDevice internal constructor(
     var isFlashing = false
         private set
 
-    /**
-     * Device ID string
-     */
+    /** Device ID string */
     val id: String
         get() = deviceState.deviceId
 
     /**
-     * Device name. Device can be renamed in the cloud via #setName(String)
-     */
-    /**
-     * Rename the device in the cloud. If renaming fails name will stay the same.
+     * Device name. Device can be renamed in the cloud by setting this property.
+     *
+     * If renaming fails name will stay the same.
      */
     var name: String
         get() = deviceState.name ?: ""
@@ -65,23 +62,15 @@ class ParticleDevice internal constructor(
             cloud.rename(this.deviceState.deviceId, newName)
         }
 
-    /**
-     * Is device connected to the cloud?
-     */
+    /** Is device connected to the cloud? */
     val isConnected: Boolean
         get() = deviceState.isConnected ?: false
 
-    /**
-     * Get an immutable set of all the function names exposed by device
-     */
-    // no need for a defensive copy, this is an immutable set
+    /** Get an immutable set of all the function names exposed by device */
     val functions: Set<String>
         get() = deviceState.functions
 
-    /**
-     * Get an immutable map of exposed variables on device with their respective types.
-     */
-    // no need for a defensive copy, this is an immutable set
+    /** Get an immutable map of exposed variables on device with their respective types. */
     val variables: Map<String, VariableType>
         get() = deviceState.variables
 
@@ -628,7 +617,7 @@ class ParticleDevice internal constructor(
         val deviceStateChange = when (data) {
             "online" -> DeviceStateChange(this, ParticleDeviceState.CAME_ONLINE)
             "offline" -> DeviceStateChange(this, ParticleDeviceState.WENT_OFFLINE)
-            else -> { throw IllegalArgumentException("Unrecognized status string: $data") }
+            else -> throw IllegalArgumentException("Unrecognized status string: $data")
         }
         sendSystemEventBroadcast(deviceStateChange, eventBus)
     }
@@ -637,7 +626,7 @@ class ParticleDevice internal constructor(
         val deviceStateChange = when (data) {
             "started" -> DeviceStateChange(this, ParticleDeviceState.FLASH_STARTED)
             "success" -> DeviceStateChange(this, ParticleDeviceState.FLASH_SUCCEEDED)
-            else -> { throw IllegalArgumentException("Unrecognized flash change string: $data") }
+            else -> throw IllegalArgumentException("Unrecognized flash change string: $data")
         }
         sendSystemEventBroadcast(deviceStateChange, eventBus)
     }
@@ -725,10 +714,12 @@ class ParticleDevice internal constructor(
 
         @Suppress("unused")  // used by the OS
         @JvmField
-        val CREATOR: Parcelable.Creator<ParticleDevice> = object : Parcelable.Creator<ParticleDevice> {
+        val CREATOR: Parcelable.Creator<ParticleDevice> =
+            object : Parcelable.Creator<ParticleDevice> {
                 override fun createFromParcel(`in`: Parcel): ParticleDevice {
                     val sdkProvider = ParticleCloudSDK.getSdkProvider()
-                    val deviceState = `in`.readParcelable<DeviceState>(DeviceState::class.java.classLoader)
+                    val deviceState =
+                        `in`.readParcelable<DeviceState>(DeviceState::class.java.classLoader)
                     return sdkProvider.particleCloud.getDeviceFromState(deviceState!!)
                 }
 
