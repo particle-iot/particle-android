@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import io.particle.android.sdk.cloud.Responses.Models.CoreInfo;
 import io.particle.android.sdk.cloud.models.ParticleNetworkData;
 
+
 /**
  * All API responses, collected together in one outer class for simplicity's sake.
  */
@@ -21,27 +22,6 @@ public class Responses {
      * outside of the cloudapi package.
      */
     public static class Models {
-
-
-        public static class CoreInfo {
-
-            @SerializedName("last_app")
-            public final String lastApp;
-
-            @SerializedName("last_heard")
-            public final Date lastHeard;
-
-            public final boolean connected;
-
-            public final String deviceId;
-
-            public CoreInfo(String lastApp, Date lastHeard, boolean connected, String deviceId) {
-                this.lastApp = lastApp;
-                this.lastHeard = lastHeard;
-                this.connected = connected;
-                this.deviceId = deviceId;
-            }
-        }
 
 
         /**
@@ -273,6 +253,28 @@ public class Responses {
             this.deviceIds = deviceIds;
         }
     }
+
+    
+    public static class CoreInfo {
+
+        @SerializedName("last_app")
+        public final String lastApp;
+
+        @SerializedName("last_heard")
+        public final Date lastHeard;
+
+        public final boolean connected;
+
+        public final String deviceId;
+
+        public CoreInfo(String lastApp, Date lastHeard, boolean connected, String deviceId) {
+            this.lastApp = lastApp;
+            this.lastHeard = lastHeard;
+            this.connected = connected;
+            this.deviceId = deviceId;
+        }
+    }
+
 
     public abstract static class ReadVariableResponse<T> {
 
