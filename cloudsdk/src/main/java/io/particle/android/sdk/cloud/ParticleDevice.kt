@@ -662,6 +662,11 @@ class ParticleDevice internal constructor(
     //endregion
 
 
+    /**
+     * Constructs a new typed byte array.  Sets mimeType to `application/unknown` if absent.
+     *
+     * @throws NullPointerException if bytes are null
+     */
     private class TypedFakeFile @JvmOverloads constructor(
         bytes: ByteArray,
         mimeType: String = "application/octet-stream",
@@ -672,12 +677,6 @@ class ParticleDevice internal constructor(
             return fileName
         }
     }
-
-    /**
-     * Constructs a new typed byte array.  Sets mimeType to `application/unknown` if absent.
-     *
-     * @throws NullPointerException if bytes are null
-     */
 
 
     private abstract class VariableRequester<T, R : ReadVariableResponse<T>> internal constructor(
@@ -725,6 +724,7 @@ class ParticleDevice internal constructor(
 
         private val log = TLog.get(ParticleDevice::class.java)
 
+        @Suppress("unused")  // used by the OS
         @JvmField
         val CREATOR: Parcelable.Creator<ParticleDevice> = object : Parcelable.Creator<ParticleDevice> {
                 override fun createFromParcel(`in`: Parcel): ParticleDevice {
