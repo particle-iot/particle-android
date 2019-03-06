@@ -9,7 +9,7 @@ import java.util.*
 
 
 internal class DeviceState(
-    val deviceId: String?,
+    val deviceId: String,
     val name: String?,
     val isConnected: Boolean?,
     val cellular: Boolean?,
@@ -98,7 +98,6 @@ internal class DeviceState(
             }
 
             return DeviceState(
-                deviceId = src.readString(),
                 name = src.readNullableValue(),
                 isConnected = src.readNullableValue(),
                 cellular = src.readNullableValue(),
