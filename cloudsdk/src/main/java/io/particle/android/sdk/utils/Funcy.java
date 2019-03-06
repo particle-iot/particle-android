@@ -1,6 +1,7 @@
 package io.particle.android.sdk.utils;
 
 import androidx.annotation.Nullable;
+import kotlin.Deprecated;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * Some functional-style utilities for processing collections
  */
 @ParametersAreNonnullByDefault
+@Deprecated(message = "Just use Kotlin instead!")
 public class Funcy {
 
 

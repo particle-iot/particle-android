@@ -17,7 +17,6 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
 import io.particle.android.sdk.cloud.models.*
 import io.particle.android.sdk.persistance.AppDataStorage
-import io.particle.android.sdk.utils.Funcy
 import io.particle.android.sdk.utils.Py.all
 import io.particle.android.sdk.utils.Py.set
 import io.particle.android.sdk.utils.Py.truthy
@@ -311,9 +310,9 @@ class ParticleCloud internal constructor(
         val idLower = deviceId.toLowerCase()
         return runHandlingCommonErrors {
             val devices = mainApi.getDevices()
-            val firstMatch = Funcy.findFirstMatch(
-                devices
-            ) { testTarget -> idLower == testTarget.id.toLowerCase() }
+            val firstMatch = devices.firstOrNull { testTarget ->
+                idLower == testTarget.id.toLowerCase()
+            }
             firstMatch != null
         }
     }
