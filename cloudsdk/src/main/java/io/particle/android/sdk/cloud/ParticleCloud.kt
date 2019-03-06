@@ -8,12 +8,11 @@ import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
+import io.particle.android.sdk.cloud.Models.CompleteDevice
+import io.particle.android.sdk.cloud.Models.SimpleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse.RegisteredNetwork
-import io.particle.android.sdk.cloud.Responses.Models
-import io.particle.android.sdk.cloud.Responses.Models.CompleteDevice
-import io.particle.android.sdk.cloud.Responses.Models.SimpleDevice
 import io.particle.android.sdk.cloud.exceptions.PartialDeviceListResultException
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
@@ -305,11 +304,10 @@ class ParticleCloud internal constructor(
             val result = list<ParticleDevice>()
 
             for (simpleDevice in simpleDevices) {
-                val device: ParticleDevice
-                if (simpleDevice.isConnected) {
-                    device = getDevice(simpleDevice.id, false)
+                val device = if (simpleDevice.isConnected == true) {
+                    getDevice(simpleDevice.id, false)
                 } else {
-                    device = getOfflineDevice(simpleDevice)
+                    getOfflineDevice(simpleDevice)
                 }
                 result.add(device)
             }
@@ -352,7 +350,7 @@ class ParticleCloud internal constructor(
             val onlineDevices = list<Models.SimpleDevice>()
 
             for (simpleDevice in simpleDevices) {
-                val targetList = if (simpleDevice.isConnected)
+                val targetList = if (simpleDevice.isConnected == true)
                     onlineDevices
                 else
                     offlineDevices
@@ -557,7 +555,8 @@ class ParticleCloud internal constructor(
     fun getNetwork(networkId: String): ParticleNetwork {
         return runHandlingCommonErrors {
             val networkData = mainApi.getNetwork(networkId)
-            ParticleNetwork(networkData)        }
+            ParticleNetwork(networkData)
+        }
 
     }
 
@@ -833,7 +832,7 @@ class ParticleCloud internal constructor(
         }
         val originalDeviceState = particleDevice.deviceState
 
-        val stateWithNewName = DeviceState.withNewName(originalDeviceState, newName)
+        val stateWithNewName = originalDeviceState.copy(name = newName)
         updateDeviceState(stateWithNewName, true)
         try {
             mainApi.nameDevice(originalDeviceState.deviceId, newName)
@@ -855,7 +854,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     internal fun onDeviceNotConnected(deviceState: DeviceState) {
         // Called when a cloud API call receives a result in which the "coreInfo.connected" is false
-        val newState = DeviceState.withNewConnectedState(deviceState, false)
+        val newState = deviceState.copy(isConnected = false)
         updateDeviceState(newState, true)
     }
 
@@ -929,57 +928,69 @@ class ParticleCloud internal constructor(
         this.user = ParticleUser.fromNewCredentials(user, password)
     }
 
-    private fun fromCompleteDevice(completeDevice: CompleteDevice): DeviceState {
-        // FIXME: we're sometimes getting back nulls in the list of functions...  WUT?
-        // Once analytics are in place, look into adding something here so we know where
-        // this is coming from.  In the meantime, filter out nulls from this list, since that's
-        // obviously doubleplusungood.
-        val functions = set(Funcy.filter(completeDevice.functions, Funcy.notNull()))
-        val variables = transformVariables(completeDevice)
+    private fun fromCompleteDevice(device: CompleteDevice): DeviceState {
+        // We're sometimes getting back nulls in the list of functions, which seems crazy,
+        // but we have to be able to handle that correctly
+        val functions = device.functions?.filterNotNull()?.toSet()
+        val variables = transformVariables(device)
 
-        return DeviceState.DeviceStateBuilder(completeDevice.deviceId, functions, variables)
-            .name(completeDevice.name)
-            .cellular(completeDevice.cellular)
-            .connected(completeDevice.isConnected)
-            .version(completeDevice.version)
-            .deviceType(ParticleDeviceType.fromInt(completeDevice.productId))
-            .platformId(completeDevice.platformId)
-            .productId(completeDevice.productId)
-            .imei(completeDevice.imei)
-            .iccid(completeDevice.lastIccid)
-            .currentBuild(completeDevice.currentBuild)
-            .defaultBuild(completeDevice.defaultBuild)
-            .ipAddress(completeDevice.ipAddress)
-            .lastAppName(completeDevice.lastAppName)
-            .status(completeDevice.status)
-            .requiresUpdate(completeDevice.requiresUpdate)
-            .lastHeard(completeDevice.lastHeard)
-            .build()
+        val deviceType = if (device.productId == null) {
+            null
+        } else {
+            ParticleDeviceType.fromInt(device.productId)
+        }
+
+        return DeviceState(
+            deviceId = device.deviceId,
+            name = device.name,
+            isConnected = device.isConnected,
+            cellular = device.cellular,
+            imei = device.imei,
+            lastIccid = device.lastIccid,
+            currentBuild = device.currentBuild,
+            defaultBuild = device.defaultBuild,
+            platformId = device.platformId,
+            productId = device.productId,
+            ipAddress = device.ipAddress,
+            status = device.status,
+            lastHeard = device.lastHeard,
+            variables = variables,
+            functions = functions,
+            version = device.version,
+            lastAppName = device.lastAppName,
+            requiresUpdate = device.requiresUpdate,
+            deviceType = deviceType
+        )
     }
 
     // for offline devices
-    private fun fromSimpleDeviceModel(offlineDevice: Models.SimpleDevice): DeviceState {
-        val functions = HashSet<String>()
-        val variables = ArrayMap<String, VariableType>()
-
-        return DeviceState.DeviceStateBuilder(offlineDevice.id, functions, variables)
-            .name(offlineDevice.name)
-            .cellular(offlineDevice.cellular)
-            .connected(offlineDevice.isConnected)
-            .version("")
-            .deviceType(ParticleDeviceType.fromInt(offlineDevice.productId))
-            .platformId(offlineDevice.platformId)
-            .productId(offlineDevice.productId)
-            .imei(offlineDevice.imei)
-            .iccid(offlineDevice.lastIccid)
-            .currentBuild(offlineDevice.currentBuild)
-            .defaultBuild(offlineDevice.defaultBuild)
-            .ipAddress(offlineDevice.ipAddress)
-            .lastAppName("")
-            .status(offlineDevice.status)
-            .requiresUpdate(false)
-            .lastHeard(offlineDevice.lastHeard)
-            .build()
+    private fun fromSimpleDeviceModel(device: Models.SimpleDevice): DeviceState {
+        val deviceType = if (device.productId != null) {
+            ParticleDeviceType.fromInt(device.productId)
+        } else {
+            null
+        }
+        return DeviceState(
+            deviceId = device.id,
+            name = device.name,
+            isConnected = device.isConnected,
+            cellular = device.cellular,
+            imei = device.imei,
+            lastIccid = device.lastIccid,
+            currentBuild = device.currentBuild,
+            defaultBuild = device.defaultBuild,
+            platformId = device.platformId,
+            productId = device.productId,
+            ipAddress = device.ipAddress,
+            status = device.status,
+            lastHeard = device.lastHeard,
+            deviceType = deviceType,
+            functions = null,
+            variables = null,
+            lastAppName = null,
+            requiresUpdate = null,
+            version = null
+        )
     }
 
 

@@ -67,11 +67,11 @@ class ParticleDevice internal constructor(
         get() = deviceState.isConnected ?: false
 
     /** Get an immutable set of all the function names exposed by device */
-    val functions: Set<String>
+    val functions: Set<String>?
         get() = deviceState.functions
 
     /** Get an immutable map of exposed variables on device with their respective types. */
-    val variables: Map<String, VariableType>
+    val variables: Map<String, VariableType>?
         get() = deviceState.variables
 
     /** Device firmware version string */
@@ -116,10 +116,9 @@ class ParticleDevice internal constructor(
 
     val isRunningTinker: Boolean
         get() {
-            val lowercaseFunctions = list<String>()
-            for (func in deviceState.functions) {
-                lowercaseFunctions.add(func.toLowerCase())
-            }
+            val lowercaseFunctions = deviceState.functions?.map {
+                it.toLowerCase()
+            }?.toList() ?: listOf()
             val tinkerFunctions = list("analogread", "analogwrite", "digitalread", "digitalwrite")
             return isConnected && lowercaseFunctions.containsAll(tinkerFunctions)
         }
@@ -199,7 +198,7 @@ class ParticleDevice internal constructor(
     enum class KnownApp constructor(val appName: String) {
         TINKER("tinker")
     }
-    
+
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getCurrentDataUsage(): Float {
@@ -337,7 +336,7 @@ class ParticleDevice internal constructor(
     fun callFunction(functionName: String, args: List<String>? = null): Int {
         var argz = args
         // TODO: check response of calling a non-existent function
-        if (!deviceState.functions.contains(functionName)) {
+        if (deviceState.functions?.contains(functionName) != true) {
             throw FunctionDoesNotExistException(functionName)
         }
 
@@ -349,10 +348,7 @@ class ParticleDevice internal constructor(
         val argsString = join(argz, ',')
         Preconditions.checkArgument(
             (argsString?.length ?: 0) < MAX_PARTICLE_FUNCTION_ARG_LENGTH,
-            String.format(
-                "Arguments '%s' exceed max args length of %d",
-                argsString, MAX_PARTICLE_FUNCTION_ARG_LENGTH
-            )
+            "Arguments '$argsString' exceed max args length of $MAX_PARTICLE_FUNCTION_ARG_LENGTH"
         )
 
         val response: Responses.CallFunctionResponse
@@ -682,7 +678,7 @@ class ParticleDevice internal constructor(
         )
         internal fun getVariable(variableName: String): T {
 
-            if (!device.deviceState.variables.containsKey(variableName)) {
+            if (device.deviceState.variables?.containsKey(variableName) != true) {
                 throw VariableDoesNotExistException(variableName)
             }
 
