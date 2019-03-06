@@ -1,8 +1,10 @@
+@file:RestrictTo(Scope.LIBRARY_GROUP)
 package io.particle.android.sdk.utils
-
 
 import android.os.Bundle
 import android.os.Parcel
+import androidx.annotation.RestrictTo
+import androidx.annotation.RestrictTo.Scope
 import androidx.collection.ArrayMap
 import java.io.Serializable
 import java.util.*
