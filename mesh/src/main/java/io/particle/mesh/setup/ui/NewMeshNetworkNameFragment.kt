@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
-import io.particle.android.sdk.utils.Funcy.Predicate
 import io.particle.mesh.R
 import kotlinx.android.synthetic.main.fragment_new_mesh_network_name.view.*
 

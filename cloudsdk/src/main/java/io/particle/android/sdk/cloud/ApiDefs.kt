@@ -5,7 +5,6 @@ import io.particle.android.sdk.cloud.Responses.ClaimCodeResponse
 import io.particle.android.sdk.cloud.Responses.FirmwareUpdateInfoResponse
 import io.particle.android.sdk.cloud.Responses.MeshNetworkMembershipsResponse
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse
-import io.particle.android.sdk.cloud.Responses.Models
 import io.particle.android.sdk.cloud.Responses.ReadDoubleVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadIntVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadObjectVariableResponse
@@ -15,7 +14,6 @@ import io.particle.android.sdk.cloud.models.*
 import retrofit.client.Response
 import retrofit.http.*
 import retrofit.mime.TypedOutput
-import retrofit.http.GET
 
 
 /** Particle cloud REST APIs, modelled for the Retrofit library */
