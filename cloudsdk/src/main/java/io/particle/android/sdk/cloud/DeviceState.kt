@@ -8,7 +8,7 @@ import io.particle.android.sdk.utils.*
 import java.util.*
 
 
-internal class DeviceState(
+internal data class DeviceState(
     val deviceId: String,
     val name: String?,
     val isConnected: Boolean?,
@@ -98,6 +98,7 @@ internal class DeviceState(
             }
 
             return DeviceState(
+                deviceId = src.readString()!!,
                 name = src.readNullableValue(),
                 isConnected = src.readNullableValue(),
                 cellular = src.readNullableValue(),
