@@ -4,19 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import androidx.annotation.WorkerThread;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
+import androidx.annotation.WorkerThread;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import io.particle.android.sdk.cloud.BroadcastContract;
-import io.particle.android.sdk.cloud.ParallelDeviceFetcherAccessHack;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
-import io.particle.android.sdk.cloud.exceptions.PartialDeviceListResultException;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.BetterAsyncTaskLoader;
 
@@ -93,18 +91,13 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         boolean isPartialList = false;
         boolean unableToLoadAnyDevices = false;
         try {
-            devices = ParallelDeviceFetcherAccessHack.getDevicesParallel(cloud, useLongTimeouts);
+            devices = cloud.getDevices();
         } catch (ParticleCloudException | CancellationException e) {
             // FIXME: think more about error handling here
             // getting a PCE here means we couldn't even get the device list, so just return
             // whatever we have.
             unableToLoadAnyDevices = true;
             devices = latestResult.devices;
-
-        } catch (PartialDeviceListResultException ex) {
-            ex.printStackTrace();
-            devices = ParallelDeviceFetcherAccessHack.getDeviceList(ex);
-            isPartialList = true;
         }
 
         DevicesLoadResult resultToReturn = new DevicesLoadResult(

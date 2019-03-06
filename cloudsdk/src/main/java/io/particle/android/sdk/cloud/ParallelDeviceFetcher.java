@@ -1,8 +1,5 @@
 package io.particle.android.sdk.cloud;
 
-import androidx.annotation.CheckResult;
-import androidx.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -13,10 +10,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import androidx.annotation.CheckResult;
+import androidx.annotation.Nullable;
 import io.particle.android.sdk.cloud.ApiDefs.CloudApi;
-import io.particle.android.sdk.cloud.Responses.Models;
-import io.particle.android.sdk.cloud.Responses.Models.CompleteDevice;
-import io.particle.android.sdk.cloud.Responses.Models.SimpleDevice;
+import io.particle.android.sdk.cloud.Models.CompleteDevice;
+import io.particle.android.sdk.cloud.Models.SimpleDevice;
 
 import static io.particle.android.sdk.utils.Py.list;
 
@@ -70,7 +68,7 @@ class ParallelDeviceFetcher {
         // Assemble the list of Callables
         List<Callable<DeviceFetchResult>> callables = list();
         for (final SimpleDevice device : simpleDevices) {
-            callables.add(() -> getDevice(cloudApi, device.id));
+            callables.add(() -> getDevice(cloudApi, device.getId()));
         }
 
 

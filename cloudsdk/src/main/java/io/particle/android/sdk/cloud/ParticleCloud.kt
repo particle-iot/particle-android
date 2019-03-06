@@ -13,14 +13,12 @@ import io.particle.android.sdk.cloud.Models.SimpleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse.RegisteredNetwork
-import io.particle.android.sdk.cloud.exceptions.PartialDeviceListResultException
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
 import io.particle.android.sdk.cloud.models.*
 import io.particle.android.sdk.persistance.AppDataStorage
 import io.particle.android.sdk.utils.Funcy
 import io.particle.android.sdk.utils.Py.all
-import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.set
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
@@ -301,19 +299,8 @@ class ParticleCloud internal constructor(
 
             appDataStorage.saveUserHasClaimedDevices(truthy(simpleDevices))
 
-            val result = list<ParticleDevice>()
-
-            for (simpleDevice in simpleDevices) {
-                val device = if (simpleDevice.isConnected == true) {
-                    getDevice(simpleDevice.id, false)
-                } else {
-                    getOfflineDevice(simpleDevice)
-                }
-                result.add(device)
-            }
-
+            val result = simpleDevices.map { getOfflineDevice(it) }
             pruneDeviceMap(simpleDevices)
-
             result
         }
     }
@@ -329,78 +316,6 @@ class ParticleCloud internal constructor(
             ) { testTarget -> idLower == testTarget.id.toLowerCase() }
             firstMatch != null
         }
-    }
-
-    // FIXME: devise a less temporary way to expose this method
-    // FIXME: stop the duplication that's happening here
-    // FIXME: ...think harder about this whole thing.  This is unique in that it's the only
-    // operation that could _partially_ succeed.
-    // FIXME: make this internal!
-    @WorkerThread
-    @Throws(PartialDeviceListResultException::class, ParticleCloudException::class)
-    fun getDevicesParallel(useShortTimeout: Boolean): List<ParticleDevice> {
-        val simpleDevices: List<Models.SimpleDevice>
-        try {
-            simpleDevices = mainApi.getDevices()
-            appDataStorage.saveUserHasClaimedDevices(truthy(simpleDevices))
-
-
-            // divide up into online and offline
-            val offlineDevices = list<Models.SimpleDevice>()
-            val onlineDevices = list<Models.SimpleDevice>()
-
-            for (simpleDevice in simpleDevices) {
-                val targetList = if (simpleDevice.isConnected == true)
-                    onlineDevices
-                else
-                    offlineDevices
-                targetList.add(simpleDevice)
-            }
-
-
-            val result = list<ParticleDevice>()
-
-            // handle the offline devices
-            for (offlineDevice in offlineDevices) {
-                result.add(getOfflineDevice(offlineDevice))
-            }
-
-
-            // handle the online devices
-            val apiToUse = if (useShortTimeout)
-                deviceFastTimeoutApi
-            else
-                mainApi
-            // FIXME: don't hardcode this here
-            val timeoutInSecs = if (useShortTimeout) 5 else 35
-            val results = parallelDeviceFetcher.fetchDevicesInParallel(
-                onlineDevices, apiToUse, timeoutInSecs
-            )
-
-            // FIXME: make this logic more elegant
-            var shouldThrowIncompleteException = false
-            for (fetchResult in results) {
-                // fetchResult shouldn't be null, but...
-                // FIXME: eliminate this ambiguity ^^^, it's either possible that it's null, or it isn't.
-                if (fetchResult?.fetchedDevice == null) {
-                    shouldThrowIncompleteException = true
-                } else {
-                    result.add(getDevice(fetchResult.fetchedDevice, false))
-                }
-            }
-
-            pruneDeviceMap(simpleDevices)
-
-            if (shouldThrowIncompleteException) {
-                throw PartialDeviceListResultException(result)
-            }
-
-            return result
-
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
-        }
-
     }
 
     /**
