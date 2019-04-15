@@ -58,16 +58,6 @@ class CloudConnectionModule(
         get() = flowManager.bleConnectionModule.targetDeviceTransceiverLD.value
 
 
-    suspend fun ensureUnclaimed() {
-        val id = flowManager.bleConnectionModule.ensureTargetDeviceId()
-        val device = cloud.getDevice(id)
-        if (device == null) {
-            throw FlowException("No device found with ID $id")
-        }
-        device.unclaim()
-        throw FlowException("Unclaimed successfully (I guess?)")
-    }
-
     override fun clearState() {
         claimCode = null
         pricingImpact = null
@@ -119,6 +109,13 @@ class CloudConnectionModule(
     fun updatePricingImpactConfirmed(confirmed: Boolean) {
         log.info { "updatePricingImpactConfirmed(): $confirmed" }
         pricingImpactConfirmed.castAndPost(confirmed)
+    }
+
+    suspend fun ensureUnclaimed() {
+        val id = flowManager.bleConnectionModule.ensureTargetDeviceId()
+        val device = cloud.getDevice(id)
+        device.unclaim()
+        throw FlowException("Unclaimed successfully (I guess?)")
     }
 
     suspend fun ensureClaimCodeFetched() {
@@ -203,7 +200,7 @@ class CloudConnectionModule(
         val ethernet = findEthernetInterface()
         requireNotNull(ethernet)
 
-        val reply = targetXceiver!!.sendGetInterface(ethernet!!.index).throwOnErrorOrAbsent()
+        val reply = targetXceiver!!.sendGetInterface(ethernet.index).throwOnErrorOrAbsent()
         val iface = reply.`interface`
         for (addyList in listOf(iface.ipv4Config.addressesList, iface.ipv6Config.addressesList)) {
 

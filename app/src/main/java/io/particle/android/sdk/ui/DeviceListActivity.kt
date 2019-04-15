@@ -185,14 +185,14 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
 
         searchView = searchItem.actionView as SearchView
         searchView!!.setQuery(deviceList!!.textFilter, false)
-        //on show of search view hide title and logout menu option
+        //on show of search view hide titleRes and logout menu option
         searchView!!.setOnSearchClickListener { v ->
             title.visibility = View.GONE
             logoutItem.isVisible = false
             filterItem.isVisible = false
             searchView!!.requestFocus()
         }
-        //on collapse of search bar show title and logout menu option
+        //on collapse of search bar show titleRes and logout menu option
         searchView!!.setOnCloseListener {
             title.visibility = View.VISIBLE
             logoutItem.isVisible = true
@@ -248,7 +248,7 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         when (id) {
             R.id.action_log_out -> AlertDialog.Builder(this)
                 .setMessage(R.string.logout_confirm_message)
-                .setPositiveButton(R.string.log_out) { dialog, which ->
+                .setPositiveButton(R.string.log_out) { dialog, _ ->
                     val cloud = ParticleCloudSDK.getCloud()
                     cloud.logOut()
                     startActivity(Intent(this@DeviceListActivity, LoginActivity::class.java))
@@ -256,7 +256,7 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
 
                     dialog.dismiss()
                 }
-                .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
+                .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
                 .show()
             R.id.action_filter -> {
                 unlockAppBarOpen()

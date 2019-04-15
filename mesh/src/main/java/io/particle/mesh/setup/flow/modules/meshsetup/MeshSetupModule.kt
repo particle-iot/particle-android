@@ -172,7 +172,7 @@ class MeshSetupModule(
         val toJoin = (targetDeviceMeshNetworkToJoinLD.value!! as SelectedNetwork)
 
         if (commissionerNetwork?.extPanId == toJoin.networkToJoin.extPanId) {
-            targetDeviceMeshNetworkToJoinLD.nonNull().runOnUiThreadAndWaitForUpdate {
+            targetDeviceMeshNetworkToJoinLD.nonNull().runBlockOnUiThreadAndAwaitUpdate {
                 // update the network to one which has the network ID
                 targetDeviceMeshNetworkToJoinLD.castAndPost(SelectedNetwork(commissionerNetwork))
             }
@@ -214,7 +214,7 @@ class MeshSetupModule(
 
         flowManager.navigate(R.id.action_global_scanForMeshNetworksFragment)
         val ldSuspender = liveDataSuspender({ targetDeviceMeshNetworkToJoinLD.nonNull() })
-        val meshNetworkToJoin = withContext(Dispatchers.Main) {
+        withContext(Dispatchers.Main) {
             ldSuspender.awaitResult()
         }
     }
@@ -373,7 +373,7 @@ class MeshSetupModule(
         )
 
         // set the network ID and wait for it to update
-        newNetworkIdLD.nonNull().runOnUiThreadAndWaitForUpdate {
+        newNetworkIdLD.nonNull().runBlockOnUiThreadAndAwaitUpdate {
             newNetworkIdLD.castAndPost(networkResponse.id)
         }
     }

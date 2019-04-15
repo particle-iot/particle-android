@@ -11,6 +11,9 @@ import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.device.DeviceModule
 import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.AS_GATEWAY
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.JOINER
+import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.STANDALONE
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
@@ -23,18 +26,6 @@ enum class Gen3ConnectivityType {
     WIFI,
     CELLULAR,
     MESH_ONLY
-}
-
-fun ParticleDeviceType.toMeshDeviceType(): Gen3ConnectivityType {
-    return when (this) {
-        ParticleDeviceType.ARGON,
-        ParticleDeviceType.A_SERIES -> Gen3ConnectivityType.WIFI
-        ParticleDeviceType.BORON,
-        ParticleDeviceType.B_SERIES -> Gen3ConnectivityType.CELLULAR
-        ParticleDeviceType.XENON,
-        ParticleDeviceType.X_SERIES -> Gen3ConnectivityType.MESH_ONLY
-        else -> throw IllegalArgumentException("Not a mesh device: $this")
-    }
 }
 
 
@@ -166,10 +157,10 @@ class Flow(
         cloudConnModule.ensureConnectedToCloudSuccessUi()
         cloudConnModule.ensureTargetDeviceIsNamed()
 
-        val setupType = deviceModule.networkSetupTypeLD.value!!
-        when (setupType) {
-            NetworkSetupType.AS_GATEWAY -> doCreateNetworkFlow()
-            NetworkSetupType.STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
+        when (deviceModule.networkSetupTypeLD.value!!) {
+            AS_GATEWAY -> doCreateNetworkFlow()
+            STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
+            JOINER -> throw IllegalStateException("Should not be in a JOINER flow here!")
         }
     }
 
@@ -203,8 +194,8 @@ class Flow(
 
         if (!meshSetupModule.targetJoinedSuccessfully) {
             cloudConnModule.ensureCheckedIsClaimed(targetDeviceId)
-            cloudConnModule.ensureSetClaimCode()
             meshSetupModule.ensureRemovedFromExistingNetwork()
+            cloudConnModule.ensureSetClaimCode()
         }
 
         bleConnModule.ensureShowTargetPairingSuccessful()

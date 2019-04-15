@@ -78,9 +78,9 @@ class Comparators {
         private final boolean nullsAreHigh;
         private final Comparator<? super E> nonNullComparator;
 
+        @SuppressWarnings("unchecked")
         NullComparator(boolean nullsAreHigh) {
             this.nullsAreHigh = nullsAreHigh;
-            //noinspection unchecked
             this.nonNullComparator = COMP_COMP_INSTANCE;
         }
 

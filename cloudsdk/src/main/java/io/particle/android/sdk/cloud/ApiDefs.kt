@@ -194,6 +194,14 @@ class ApiDefs {
 
         @GET("/v1/serial_numbers/{serial_number}")
         fun getDeviceIdentifiers(@Path("serial_number") serialNumber: String): DeviceIdentifiers
+
+        @FormUrlEncoded
+        @PUT("/v1/devices/{deviceID}")
+        fun shoutRainbows(
+            @Path("deviceID") deviceID: String,
+            @Field("signal") shouldSignal: Int  // "0" for no, "1" for yes
+        ): Response
+
     }
 
 

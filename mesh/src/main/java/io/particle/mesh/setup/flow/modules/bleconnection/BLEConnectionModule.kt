@@ -21,6 +21,7 @@ import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.toConnectivityType
 import io.particle.mesh.setup.toDeviceType
 import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import kotlinx.coroutines.Dispatchers
@@ -124,8 +125,8 @@ class BLEConnectionModule(
             throw FlowException("Error getting barcode data for target device")
         }
 
-        flowManager.targetPlatformDeviceType = barcodeData.serialNumber.toDeviceType(particleCloud)
-        flowManager.targetDeviceType =  flowManager.targetPlatformDeviceType.toMeshDeviceType()
+        flowManager.targetPlatformDeviceType = barcodeData.toDeviceType(particleCloud)
+        flowManager.targetDeviceType =  barcodeData.toConnectivityType(particleCloud)
 
         if (getReadyNextButtonClickedLD.value != true) {
             val liveDataSuspender2 = liveDataSuspender({ getReadyNextButtonClickedLD.nonNull() })
@@ -184,7 +185,7 @@ class BLEConnectionModule(
         // FIXME: i18n this!
         flowManager.showCongratsScreen(
             "Successfully paired with " +
-                    targetDeviceTransceiverLD.value?.deviceName
+                    targetDeviceTransceiverLD.value?.bleBroadcastName
         )
 
         delay(2000)
@@ -202,7 +203,7 @@ class BLEConnectionModule(
 
         flowManager.showCongratsScreen(
             "Successfully paired with " +
-                    commissionerTransceiverLD.value?.deviceName
+                    commissionerTransceiverLD.value?.bleBroadcastName
         )
 
         delay(2000)
@@ -251,7 +252,7 @@ class BLEConnectionModule(
 
         flowManager.showCongratsScreen(
             "Successfully paired with " +
-                    commissionerTransceiverLD.value?.deviceName
+                    commissionerTransceiverLD.value?.bleBroadcastName
         )
 
         delay(2000)
@@ -305,9 +306,9 @@ class BLEConnectionModule(
             barcode.serialNumber.toDeviceType(particleCloud),
             barcode.serialNumber
         )
-        val device = btConnectionManager.connectToDevice(broadcastName)
+        val device = btConnectionManager.connectToDevice(broadcastName, Scopes())
             ?: return null
-        return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)
+        return transceiverFactory.buildProtocolTransceiver(device, connName, Scopes(), barcode.mobileSecret)
     }
 
     private fun getDeviceBroadcastName(deviceType: ParticleDeviceType, serialNum: SerialNumber): String {

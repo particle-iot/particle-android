@@ -248,6 +248,7 @@ class ParticleCloud internal constructor(
     fun signUpAndLogInWithCustomer(email: String, password: String, orgSlug: String) {
         try {
             log.w("Use product id instead of organization slug.")
+            @Suppress("DEPRECATION")
             signUpAndLogInWithCustomer(SignUpInfo(email, password), orgSlug)
         } catch (error: RetrofitError) {
             throw ParticleCloudException(error)
@@ -273,6 +274,7 @@ class ParticleCloud internal constructor(
 
         signUpInfo.grantType = "client_credentials"
         try {
+            @Suppress("DEPRECATION")
             val response = identityApi.signUpAndLogInWithCustomer(signUpInfo, orgSlug)
             onLogIn(response, signUpInfo.username, signUpInfo.password)
         } catch (error: RetrofitError) {
@@ -306,11 +308,25 @@ class ParticleCloud internal constructor(
 
             for (simpleDevice in simpleDevices) {
                 val device: ParticleDevice
-                if (simpleDevice.isConnected) {
-                    device = getDevice(simpleDevice.id, false)
-                } else {
+
+
+
+
+
+                // FIXME: TEST ONLY, REMOVE ME
+
+
+//                if (simpleDevice.isConnected) {
+//                    device = getDevice(simpleDevice.id, false)
+//                } else {
                     device = getOfflineDevice(simpleDevice)
-                }
+//                }
+
+
+
+
+
+
                 result.add(device)
             }
 
@@ -414,6 +430,9 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getDevice(deviceID: String): ParticleDevice {
+
+        log.w("Called getDevice($deviceID)")
+
         return getDevice(deviceID, true)
     }
 
@@ -468,6 +487,7 @@ class ParticleCloud internal constructor(
             log.w("Use product id instead of organization slug.")
             // Offer empty string to appease newer OkHttp versions which require a POST body,
             // even if it's empty or (as far as the endpoint cares) nonsense
+            @Suppress("DEPRECATION")
             mainApi.generateClaimCodeForOrg(
                 "okhttp_appeasement",
                 organizationSlug,
@@ -502,6 +522,7 @@ class ParticleCloud internal constructor(
     fun requestPasswordResetForCustomer(email: String, organizationSlug: String) {
         return runHandlingCommonErrors {
             log.w("Use product id instead of organization slug.")
+            @Suppress("DEPRECATION")
             identityApi.requestPasswordResetForCustomer(email, organizationSlug)
         }
     }
@@ -889,6 +910,8 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     private fun getDevice(deviceID: String, sendUpdate: Boolean): ParticleDevice {
+        log.w("Called PRIVATE getDevice($deviceID)")
+
         val deviceCloudModel = runHandlingCommonErrors {
             mainApi.getDevice(deviceID)
         }
@@ -954,6 +977,8 @@ class ParticleCloud internal constructor(
             .status(completeDevice.status)
             .requiresUpdate(completeDevice.requiresUpdate)
             .lastHeard(completeDevice.lastHeard)
+            .serialNumber(completeDevice.serialNumber)
+            .mobileSecret(completeDevice.mobileSecret)
             .build()
     }
 

@@ -1,6 +1,7 @@
 package io.particle.mesh.setup.utils
 
 import android.os.Looper
+import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

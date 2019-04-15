@@ -38,7 +38,7 @@ public class DeviceActionsHelper {
                 return true;
 
             case R.id.action_device_inspector:
-                activity.startActivity(InspectorActivity.buildIntent(activity, device));
+                activity.startActivity(InspectorActivity.Companion.buildIntent(activity, device));
                 return true;
 
             case R.id.action_device_flash_tinker:

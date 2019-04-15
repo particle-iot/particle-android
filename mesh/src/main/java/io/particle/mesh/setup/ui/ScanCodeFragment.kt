@@ -65,19 +65,19 @@ class ScanViewModel : ViewModel() {
 
 }
 
-
+// FIXME: this should really live outside of UI classes
 sealed class BarcodeData {
 
     abstract val serialNumber: SerialNumber
 
 
-    data class CompleteBarcodeData(
+    data class CompleteBarcodeData (
         override val serialNumber: SerialNumber,
         val mobileSecret: String
     ) : BarcodeData()
 
 
-    data class PartialBarcodeData(
+    data class PartialBarcodeData (
         override val serialNumber: SerialNumber,
         val partialMobileSecret: String
     ) : BarcodeData()
@@ -112,8 +112,6 @@ sealed class BarcodeData {
             }
         }
     }
-
-
 }
 
 

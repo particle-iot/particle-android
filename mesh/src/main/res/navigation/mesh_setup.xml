@@ -243,19 +243,31 @@
     <action
         android:id="@+id/action_global_scanForWiFiNetworksFragment"
         app:destination="@id/scanForWiFiNetworksFragment" />
+
     <action
         android:id="@+id/action_global_hashtagWinningFragment"
         app:destination="@id/hashtagWinningFragment" />
+
     <fragment
         android:id="@+id/letsGetBuildingFragment"
         android:name="io.particle.mesh.setup.ui.LetsGetBuildingFragment"
         android:label="fragment_lets_get_building"
-        tools:layout="@layout/fragment_lets_get_building" /><action android:id="@+id/action_global_letsGetBuildingFragment" app:destination="@id/letsGetBuildingFragment"/>
+        tools:layout="@layout/fragment_lets_get_building" />
+
+    <action
+        android:id="@+id/action_global_letsGetBuildingFragment"
+        app:destination="@id/letsGetBuildingFragment" />
+
     <fragment
         android:id="@+id/boronConnectingStatusFragment"
         android:name="io.particle.mesh.setup.ui.BoronConnectingStatusFragment"
         android:label="fragment_boron_connecting_status"
-        tools:layout="@layout/fragment_boron_connecting_status" /><action android:id="@+id/action_global_boronConnectingStatusFragment" app:destination="@id/boronConnectingStatusFragment"/>
+        tools:layout="@layout/fragment_boron_connecting_status" />
+
+    <action
+        android:id="@+id/action_global_boronConnectingStatusFragment"
+        app:destination="@id/boronConnectingStatusFragment" />
+
     <fragment
         android:id="@+id/pricingImpactFragment"
         android:name="io.particle.mesh.setup.ui.PricingImpactFragment"

@@ -26,8 +26,6 @@ import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
-import io.particle.mesh.setup.flow.Gen3ConnectivityType.CELLULAR
-import io.particle.mesh.setup.flow.Gen3ConnectivityType.MESH_ONLY
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.WifiNetworksScannerLD
@@ -153,7 +151,6 @@ class FlowManager(
 
     private fun clearAndRetainCommissioner() {
         log.info { "clearAndRetainCommissioner()" }
-
 
         bleConnectionModule.commissionerBarcodeLD.observeForever {
             log.info { "New commissioner barcode value set: $it" }

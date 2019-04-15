@@ -134,7 +134,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         adapter = DeviceListAdapter(requireNonNull<FragmentActivity>(activity))
         rv.adapter = adapter
-        ItemClickSupport.addTo(rv).setOnItemClickListener { recyclerView, position, v ->
+        ItemClickSupport.addTo(rv).setOnItemClickListener { _, position, _ ->
             onDeviceRowClicked(position)
         }
         return top

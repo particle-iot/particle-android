@@ -48,6 +48,7 @@ import java.util.Map;
  */
 @SuppressLint("MissingPermission")
 public class CameraSource {
+  @SuppressWarnings("deprecation")
   @SuppressLint("InlinedApi")
   public static final int CAMERA_FACING_BACK = CameraInfo.CAMERA_FACING_BACK;
 

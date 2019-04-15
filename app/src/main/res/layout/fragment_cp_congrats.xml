@@ -1,0 +1,51 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.android.sdk.controlpanel.ControlPanelCongratsFragment">
+
+    <ImageView
+        android:id="@+id/p_hashtagwinning_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_green_check"
+        app:layout_constraintBottom_toTopOf="@+id/p_hashtagwinning_congrats_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/p_hashtagwinning_congrats_text"
+        style="@style/p_setup_header_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/p_pairingprogress_congrats"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/p_hashtagwinning_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_hashtagwinning_icon"
+        tools:ignore="MissingPrefix" />
+
+    <TextView
+        android:id="@+id/p_hashtagwinning_message"
+        style="@style/p_setup_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_hashtagwinning_congrats_text"
+        tools:text="(YOUR MESSAGE HERE)" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

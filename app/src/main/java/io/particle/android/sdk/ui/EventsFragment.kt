@@ -106,22 +106,22 @@ class EventsFragment : Fragment() {
     }
 
     private fun setupClearListener(rootView: View, adapter: EventListAdapter) {
-        rootView.findViewById<View>(R.id.events_clear).setOnClickListener { v ->
+        rootView.findViewById<View>(R.id.events_clear).setOnClickListener { _ ->
             AlertDialog.Builder(requireNonNull<FragmentActivity>(activity))
                 .setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
-                .setPositiveButton(R.string.ok) { dialog, which ->
+                .setPositiveButton(R.string.ok) { _, _ ->
                     events_empty.visibility = View.VISIBLE
                     adapter.clear()
                 }
-                .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
+                .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
                 .show()
         }
     }
 
     private fun initFiltering(top: View, adapter: EventListAdapter) {
         val filter = Ui.findView<EditText>(top, R.id.events_search)
-        filter.setOnEditorActionListener { v, actionId, event ->
+        filter.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 adapter.filter(v.text.toString())
                 val view = activity!!.currentFocus
@@ -147,7 +147,7 @@ class EventsFragment : Fragment() {
 
     private fun initEventSubscription(top: View, adapter: EventListAdapter) {
         val eventButton = top.findViewById<ImageView>(R.id.events_pause)
-        eventButton.setOnClickListener { v ->
+        eventButton.setOnClickListener { _ ->
             if (subscribed) {
                 eventButton.setImageResource(R.drawable.ic_play)
                 stopEventSubscription()
@@ -267,7 +267,7 @@ class EventsFragment : Fragment() {
             holder.eventTime.text = SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault())
                 .format(event.particleEvent.publishedAt)
 
-            holder.copyButton.setOnClickListener { v ->
+            holder.copyButton.setOnClickListener { _ ->
                 val context = holder.itemView.context
                 val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Event data", buildEventClipboardCopy(event))

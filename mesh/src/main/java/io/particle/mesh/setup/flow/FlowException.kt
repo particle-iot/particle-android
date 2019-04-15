@@ -5,13 +5,7 @@ import io.particle.mesh.setup.flow.ExceptionType.ERROR_RECOVERABLE
 import io.particle.mesh.setup.flow.ExceptionType.EXPECTED_FLOW
 
 
-enum class ExceptionType {
-    EXPECTED_FLOW,
-    ERROR_RECOVERABLE,
-    ERROR_FATAL
-}
-
-
+@Deprecated("Use the new one in Errors.kt")
 open class FlowException(
     msg: String = "",
     val exceptionType: ExceptionType = ExceptionType.ERROR_RECOVERABLE,
@@ -29,10 +23,10 @@ class RecoverableFlowErrorException(
 ) : FlowException(msg, ERROR_RECOVERABLE, showErrorAsDialog)
 
 
-class ExepectedFlowException(
-    msg: String,
-    showErrorAsDialog: Boolean = false
-) : FlowException(msg, EXPECTED_FLOW, showErrorAsDialog)
+//class ExepectedFlowException(
+//    msg: String,
+//    showErrorAsDialog: Boolean = false
+//) : FlowException(msg, EXPECTED_FLOW, showErrorAsDialog)
 
 
 class FatalFlowException(

@@ -1,10 +1,17 @@
 package io.particle.android.sdk.utils
 
 import android.content.res.Resources
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 
 
 fun isUserCoveredByGDPR(): Boolean {
-    val locale = Resources.getSystem().configuration.locale
+    val locale = if (VERSION.SDK_INT >= VERSION_CODES.N) {
+        Resources.getSystem().configuration.locales[0]
+    } else {
+        @Suppress("DEPRECATION")
+        Resources.getSystem().configuration.locale
+    }
     return gdprCountryCodes.contains(locale.country)
 }
 

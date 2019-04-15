@@ -158,11 +158,18 @@ public class Responses {
             @SerializedName("last_heard")
             public final Date lastHeard;
 
+            @SerializedName("serial_number")
+            public final String serialNumber;
+
+            @SerializedName("mobile_secret")
+            public final String mobileSecret;
+
             CompleteDevice(String deviceId, String name, boolean isConnected, boolean cellular,
                            String imei, String lastIccid, String currentBuild, String defaultBuild,
                            Map<String, String> variables, List<String> functions, String version,
                            int productId, int platformId, String ipAddress, String lastAppName,
-                           String status, boolean requiresUpdate, Date lastHeard) {
+                           String status, boolean requiresUpdate, Date lastHeard,
+                           String serialNumber, String mobileSecret) {
                 this.deviceId = deviceId;
                 this.name = name;
                 this.isConnected = isConnected;
@@ -181,6 +188,8 @@ public class Responses {
                 this.status = status;
                 this.requiresUpdate = requiresUpdate;
                 this.lastHeard = lastHeard;
+                this.serialNumber = serialNumber;
+                this.mobileSecret = mobileSecret;
             }
         }
 

@@ -16,12 +16,12 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.mesh.R
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
+import io.particle.mesh.setup.toConnectivityType
 import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
 import io.particle.mesh.setup.ui.utils.inflateRow
 import io.particle.mesh.setup.ui.utils.localDeviceHasInternetConnection
-import io.particle.mesh.R
-import io.particle.mesh.setup.flow.toMeshDeviceType
 import kotlinx.android.synthetic.main.fragment_select_device.view.*
 import kotlinx.android.synthetic.main.row_select_device.view.*
 
@@ -66,7 +66,7 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
         return root
     }
 
-    private fun onItemClicked(deviceData: DeviceData) {
+    private fun onItemClicked(@Suppress("UNUSED_PARAMETER") deviceData: DeviceData) {
         // FIXME: this should happen via FlowManager
         // check for internet access
 //        if (!requireActivity().localDeviceHasInternetConnection()) {
@@ -93,7 +93,7 @@ private data class DeviceData(
     @DrawableRes
     val deviceTypeImage: Int
 ) {
-    val connectivityType: Gen3ConnectivityType = deviceType.toMeshDeviceType()  // RENAME THIS FUNC
+    val connectivityType: Gen3ConnectivityType = deviceType.toConnectivityType()
     @StringRes
     val deviceTypeName: Int = deviceType.toDisplayName()
 }

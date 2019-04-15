@@ -6,6 +6,7 @@ import io.particle.mesh.bluetooth.PacketMTUSplitter
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.connection.security.SecurityManager
+import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ class ProtocolTransceiverFactory(
     suspend fun buildProtocolTransceiver(
             deviceConnection: BluetoothConnection,
             name: String,
+            scopes: Scopes,
             jpakeLowEntropyPassword: String
     ): ProtocolTransceiver? {
 
@@ -31,7 +33,8 @@ class ProtocolTransceiverFactory(
         })
         val frameWriter = OutboundFrameWriter { packetMTUSplitter.splitIntoPackets(it) }
         val frameReader = InboundFrameReader()
-        GlobalScope.launch(Dispatchers.Default) {
+
+        scopes.onWorker {
             for (packet in deviceConnection.packetReceiveChannel) {
                 QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
             }
@@ -51,9 +54,9 @@ class ProtocolTransceiverFactory(
         frameReader.extraHeaderBytes = FULL_PROTOCOL_HEADER_SIZE + AES_CCM_MAC_SIZE
 
         val requestWriter = RequestWriter { frameWriter.writeFrame(it) }
-        val requestSender = ProtocolTransceiver(requestWriter, deviceConnection, name)
+        val requestSender = ProtocolTransceiver(requestWriter, deviceConnection, scopes, name)
         val responseReader = ResponseReader { requestSender.receiveResponse(it) }
-        GlobalScope.launch(Dispatchers.Default) {
+        scopes.onWorker  {
             for (inboundFrame in frameReader.inboundFrameChannel) {
                 QATool.runSafely({ responseReader.receiveResponseFrame(inboundFrame) })
             }

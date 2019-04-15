@@ -20,6 +20,7 @@ fun Context.isLocationServicesAvailable(): Boolean {
     } else {
         var locationMode = 0
         try {
+            @Suppress("DEPRECATION")
             locationMode = Settings.Secure.getInt(
                 this.contentResolver,
                 Settings.Secure.LOCATION_MODE
