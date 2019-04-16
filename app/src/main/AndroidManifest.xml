@@ -17,7 +17,7 @@
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <activity
-            android:name="io.particle.android.sdk.controlpanel.ControlPanelActivity"
+            android:name="io.particle.mesh.ui.controlpanel.ControlPanelActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/p_MeshTheme"

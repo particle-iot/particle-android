@@ -98,10 +98,5 @@ Enjoy!]]></string>
     <string name="publish_positive_action">Publish event</string>
     <string name="cancel">Cancel</string>
     <string name="logout_confirm_message">Are you sure you want to log out?</string>
-    <string name="p_controlpanel_control_panel">Control Panel</string>
-    <string name="p_common_wifi">Wi-Fi</string>
-    <string name="single_space"> </string>
-    <string name="p_controlpanel_prepare_for_pairing">Prepare for Pairing</string>
-    <string name="p_cp_cellular">Cellular</string>
 
 </resources>

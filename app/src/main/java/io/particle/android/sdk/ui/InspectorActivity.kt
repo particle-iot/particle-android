@@ -23,7 +23,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
-import io.particle.android.sdk.controlpanel.ControlPanelActivity
+import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.sdk.app.R
