@@ -3,6 +3,8 @@ package io.particle.android.sdk.controlpanel
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import io.particle.mesh.setup.flow.MeshFlowRunner
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.modules.FlowRunnerUiResponseReceiver
 import io.particle.sdk.app.R
 
@@ -14,19 +16,14 @@ data class TitleBarOptions(
 )
 
 
-open class BaseControlPanelFragment : Fragment() {
-
-    lateinit var deviceId: String
-    lateinit var meshModel: MeshManagerAccessModel
+open class BaseControlPanelFragment : BaseFlowFragment() {
 
     open val titleBarOptions = TitleBarOptions()
 
-    val responseReceiver: FlowRunnerUiResponseReceiver?
-        get() = meshModel.flowRunner.responseReceiver
+    lateinit var deviceId: String
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        meshModel = MeshManagerAccessModel.getViewModel(this)
         deviceId = (requireActivity() as ControlPanelActivity).deviceId
     }
 

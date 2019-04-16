@@ -8,12 +8,9 @@ import androidx.navigation.fragment.findNavController
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_cp_congrats.*
 import kotlinx.coroutines.delay
-import mu.KotlinLogging
 
 
 class ControlPanelCongratsFragment : BaseControlPanelFragment() {
-
-    private val log = KotlinLogging.logger {}
 
     override val titleBarOptions = TitleBarOptions()
 
@@ -29,10 +26,10 @@ class ControlPanelCongratsFragment : BaseControlPanelFragment() {
         super.onActivityCreated(savedInstanceState)
         p_hashtagwinning_message.text = responseReceiver?.singleTaskCongratsMessage
 
-        if (!meshModel.scopes.job.isCancelled) {
-            meshModel.scopes.onMain {
+        if (!flowScopes.job.isCancelled) {
+            flowScopes.onMain {
                 delay(2000)
-                if (!isDetached && isAdded) {
+                if (!isDetached && isAdded && isVisible) {
                     findNavController().popBackStack()
                 }
             }

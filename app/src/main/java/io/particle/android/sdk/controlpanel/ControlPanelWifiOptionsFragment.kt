@@ -36,17 +36,17 @@ class ControlPanelWifiOptionsFragment : BaseControlPanelFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         p_controlpanel_wifi_join_new_network.setOnClickListener {
-            meshModel.scopes.onMain { joinNewWifiClicked() }
+            flowScopes.onMain { joinNewWifiClicked() }
         }
     }
 
     @MainThread
     private suspend fun joinNewWifiClicked() {
-        meshModel.showGlobalProgressSpinner(true)
-        val barcode = meshModel.scopes.withWorker { fetchBarcodeData(deviceId) }
-        meshModel.showGlobalProgressSpinner(false)
+        flowSystemInterface.showGlobalProgressSpinner(true)
+        val barcode = flowScopes.withWorker { fetchBarcodeData(deviceId) }
+        flowSystemInterface.showGlobalProgressSpinner(false)
 
-        meshModel.flowRunner.startControlPanelWifiConfigFlow(deviceId, barcode)
+        flowRunner.startControlPanelWifiConfigFlow(deviceId, barcode)
     }
 
     @WorkerThread

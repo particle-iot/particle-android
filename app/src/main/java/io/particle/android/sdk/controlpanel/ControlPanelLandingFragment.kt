@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IdRes
 import androidx.annotation.WorkerThread
-import androidx.navigation.fragment.findNavController
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.utils.safeToast
@@ -19,8 +17,6 @@ import java.lang.Exception
 
 
 class ControlPanelLandingFragment : BaseControlPanelFragment() {
-
-    private val log = KotlinLogging.logger {}
 
     override val titleBarOptions = TitleBarOptions(R.string.p_controlpanel_control_panel)
 
@@ -59,14 +55,14 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         }
 
         p_controlpanel_landing_unclaim_item.setOnClickListener {
-            meshModel.scopes.onWorker { unclaimDevice() }
+            flowScopes.onWorker { unclaimDevice() }
         }
 
     }
 
     @WorkerThread
     private fun unclaimDevice() {
-        meshModel.showGlobalProgressSpinner(true)
+        flowSystemInterface.showGlobalProgressSpinner(true)
 
         val error = try {
             val device = cloud.getDevice(deviceId)
@@ -77,12 +73,12 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
             ex
 
         } finally {
-            meshModel.scopes.onMain {
-                meshModel.showGlobalProgressSpinner(false)
+            flowScopes.onMain {
+                flowSystemInterface.showGlobalProgressSpinner(false)
             }
         }
 
-        meshModel.scopes.onMain {
+        flowScopes.onMain {
             if (!isAdded) {
                 return@onMain
             }

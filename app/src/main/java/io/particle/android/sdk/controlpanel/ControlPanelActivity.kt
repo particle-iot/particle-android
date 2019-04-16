@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.setup.flow.modules.FlowUiDelegate
 import io.particle.mesh.setup.ui.DialogResult
 import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.sdk.app.R
@@ -22,7 +23,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 private const val EXTRA_DEVICE_ID = "EXTRA_DEVICE_ID"
 
 
-class ControlPanelActivity : AppCompatActivity() {
+class ControlPanelActivity : BaseFlowActivity() {
 
     companion object {
         fun buildIntent(ctx: Context, deviceId: String): Intent {
@@ -31,7 +32,18 @@ class ControlPanelActivity : AppCompatActivity() {
         }
     }
 
-    private val log = KotlinLogging.logger {}
+
+    override val navHostFragmentId: Int = R.id.main_nav_host_fragment
+    override val contentViewIdRes: Int = R.layout.activity_control_panel
+
+    override fun buildFlowUiDelegate(systemInterface: FlowRunnerSystemInterface): FlowUiDelegate {
+        return ControlPanelFlowUiDelegate(
+            systemInterface.navControllerLD,
+            application,
+            systemInterface.dialogHack,
+            systemInterface
+        )
+    }
 
     var showCloseButton: Boolean = false
         set(value) {
@@ -51,14 +63,10 @@ class ControlPanelActivity : AppCompatActivity() {
             p_title.text = value
         }
 
-    private val navController: NavController
-        get() = findNavController(io.particle.mesh.R.id.main_nav_host_fragment)
-
-    // FIXME: put this value on an Activity-scoped ViewModel
+    // FIXME: put this value on an Activity-scoped ViewModel?
     internal val deviceId: String
         get() = intent.getStringExtra(EXTRA_DEVICE_ID)
 
-    internal lateinit var meshModel: MeshManagerAccessModel
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
@@ -67,93 +75,17 @@ class ControlPanelActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_control_panel)
-
-        fun initMeshModel() {
-            meshModel = MeshManagerAccessModel.getViewModel(this)
-            meshModel.setNavController(navController)
-
-            val flowUi = ControlPanelFlowUiDelegate(
-                meshModel.navControllerLD,
-                application,
-                meshModel.dialogHack,
-                meshModel
-            )
-
-            meshModel.initialize(flowUi)
-        }
-
-        initMeshModel()
-
         p_action_close.setOnClickListener { finish() }
         p_action_back.setOnClickListener {
             if (!navController.navigateUp()) {
                 finish()
             }
         }
-
-        // FIXME: subscribe to LiveDatas
-        meshModel.dialogRequestLD.nonNull().observe(this, Observer { onDialogSpecReceived(it) })
-        meshModel.shouldShowProgressSpinnerLD.nonNull()
-            .observe(this, Observer { showGlobalProgressSpinner(it!!) })
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // this is where we should be nulling out the
-        MeshManagerAccessModel.getViewModel(this).setNavController(null)
-    }
-
-    private fun showGlobalProgressSpinner(show: Boolean) {
-        log.info { "showGlobalProgressSpinner(): $show" }
-        runOnUiThread { p_controlpanel_globalProgressSpinner.isVisible = show }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp()
-    }
-
-    private fun onDialogSpecReceived(spec: DialogSpec?) {
-        log.debug { "onDialogSpecReceived(): $spec" }
-        if (spec == null) {
-            log.warn { "Got null dialog spec?!" }
-            return
-        }
-        meshModel.dialogHack.clearDialogRequest()
-
-
-        val builder = MaterialDialog.Builder(this)
-        when (spec) {
-            is DialogSpec.StringDialogSpec? -> {
-                builder.content(spec.text)
-                    .positiveText(android.R.string.ok)
-
-            }
-
-            is DialogSpec.ResDialogSpec? -> {
-                builder.content(spec.text)
-                    .positiveText(spec.positiveText)
-
-                spec.negativeText?.let {
-                    builder.negativeText(it)
-                    builder.onNegative { dialog, _ ->
-                        dialog.dismiss()
-                        meshModel.dialogHack.updateDialogResult(DialogResult.NEGATIVE)
-                    }
-                }
-
-                spec.title?.let { builder.title(it) }
-            }
-        }
-
-        builder.canceledOnTouchOutside(false)
-            .onPositive { dialog, _ ->
-                dialog.dismiss()
-                meshModel.dialogHack.updateDialogResult(DialogResult.POSITIVE)
-            }
-
-        log.info { "Showing dialog for: $spec" }
-        builder.show()
+        flowSystemInterface.setNavController(null)
     }
 
 }

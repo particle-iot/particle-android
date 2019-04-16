@@ -47,7 +47,7 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
 
     private fun onSignalSwitchChanged(isChecked: Boolean) {
         val deviceId = (activity as ControlPanelActivity).deviceId
-        meshModel.scopes.onWorker {
+        flowScopes.onWorker {
             val device = cloud.getDevice(deviceId)
             try {
                 device.startStopSignaling(isChecked)

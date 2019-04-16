@@ -44,7 +44,7 @@ fun buildFlowManager(
     flowUi: FlowUiDelegate,
     okHttpClient: OkHttpClient = OkHttpClient(),
     securityManager: SecurityManager = SecurityManager()
-): MeshSetupFlowRunner {
+): MeshFlowRunner {
     val btConMan = BluetoothConnectionManager(app)
     val transceiverFactory = ProtocolTransceiverFactory(securityManager)
     val deviceConnector = DeviceConnector(cloud, btConMan, transceiverFactory)
@@ -59,7 +59,7 @@ fun buildFlowManager(
         flowUi
     )
 
-    return MeshSetupFlowRunner(deps, app)
+    return MeshFlowRunner(deps, app)
 }
 
 
@@ -93,7 +93,7 @@ enum class FlowType {
 }
 
 
-class MeshSetupFlowRunner(
+class MeshFlowRunner(
     private val deps: StepDeps,
     private val everythingNeedsAContext: Application
 ) {
@@ -112,9 +112,8 @@ class MeshSetupFlowRunner(
 
         ctxs.ble.targetDevice.deviceId = deviceId
         ctxs.updatePricingImpactConfirmed(true)
-        // FIXME: should use device name here
-        ctxs.ble.targetDevice.currentDeviceName
-        ctxs.singleStepCongratsMessage = "Wi-Fi credentials were successfully added to your device"
+        val deviceName = ctxs.ble.targetDevice.transceiverLD.value?.bleBroadcastName
+        ctxs.singleStepCongratsMessage = "Wi-Fi credentials were successfully added to $deviceName"
 
         ctxs.scopes.onWorker {
             ctxs.ble.targetDevice.updateBarcode(barcode, deps.cloud)

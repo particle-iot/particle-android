@@ -13,7 +13,7 @@ import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.setup.flow.DialogTool
-import io.particle.mesh.setup.flow.MeshSetupFlowRunner
+import io.particle.mesh.setup.flow.MeshFlowRunner
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.buildFlowManager
 import io.particle.mesh.setup.flow.modules.FlowUiDelegate
@@ -21,25 +21,13 @@ import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.ui.ProgressHack
 import mu.KotlinLogging
 
-// FIXME: this shouldn't have much of anything here -- wrap all this logic/members into a helper class
-class MeshManagerAccessModel(private val app: Application) : ProgressHack, AndroidViewModel(app) {
 
-    companion object {
-
-        fun getViewModel(activity: FragmentActivity): MeshManagerAccessModel {
-            return ViewModelProviders.of(activity)
-                .get(MeshManagerAccessModel::class.java)
-        }
-
-        fun getViewModel(fragment: Fragment): MeshManagerAccessModel {
-            val activity = fragment.requireActivity()
-            return getViewModel(activity)
-        }
-    }
+class FlowRunnerSystemInterface : ProgressHack {
 
     private val log = KotlinLogging.logger {}
 
-    lateinit var flowRunner: MeshSetupFlowRunner
+
+    lateinit var flowRunner: MeshFlowRunner
 
     val scopes = Scopes()
     val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>()
@@ -49,13 +37,9 @@ class MeshManagerAccessModel(private val app: Application) : ProgressHack, Andro
 
     var navControllerLD: LiveData<NavController?> = MutableLiveData()
 
-    fun initialize(flowUiDelegate: FlowUiDelegate) {
-        flowRunner = buildFlowManager(
-            app,
-            ParticleCloudSDK.getCloud(),
-            dialogHack,
-            flowUiDelegate
-        )
+
+    fun initialize(flowRunner: MeshFlowRunner) {
+        this.flowRunner = flowRunner
     }
 
     fun terminateSetup() {
@@ -71,10 +55,48 @@ class MeshManagerAccessModel(private val app: Application) : ProgressHack, Andro
         shouldShowProgressSpinnerLD.castAndPost(show)
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    fun shutdown() {
         setNavController(null)
         scopes.cancelAll()
+    }
+}
+
+
+// FIXME: this shouldn't have much of anything here -- wrap all this logic/members into a helper class
+class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app) {
+
+    companion object {
+
+        fun getViewModel(activity: FragmentActivity): FlowRunnerAccessModel {
+            return ViewModelProviders.of(activity)
+                .get(FlowRunnerAccessModel::class.java)
+        }
+
+        fun getViewModel(fragment: Fragment): FlowRunnerAccessModel {
+            val activity = fragment.requireActivity()
+            return getViewModel(activity)
+        }
+    }
+
+
+    val systemInterface = FlowRunnerSystemInterface()
+    lateinit var flowRunner: MeshFlowRunner
+
+
+    fun initialize(flowUiDelegate: FlowUiDelegate) {
+        flowRunner = buildFlowManager(
+            app,
+            ParticleCloudSDK.getCloud(),
+            systemInterface.dialogHack,
+            flowUiDelegate
+        )
+
+        systemInterface.initialize(flowRunner)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        systemInterface.shutdown()
     }
 
 }
