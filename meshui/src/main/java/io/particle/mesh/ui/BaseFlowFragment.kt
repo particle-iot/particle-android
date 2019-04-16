@@ -6,7 +6,8 @@ import io.particle.mesh.setup.flow.FlowRunnerAccessModel
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.setup.flow.MeshFlowRunner
 import io.particle.mesh.setup.flow.Scopes
-import io.particle.mesh.setup.flow.modules.FlowRunnerUiResponseReceiver
+import io.particle.mesh.setup.flow.FlowRunnerUiResponseReceiver
+import io.particle.mesh.ui.utils.getViewModel
 
 
 abstract class BaseFlowFragment : Fragment() {
@@ -21,7 +22,7 @@ abstract class BaseFlowFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val flowModel = FlowRunnerAccessModel.getViewModel(this)
+        val flowModel: FlowRunnerAccessModel = this.getViewModel()
 
         flowRunner = flowModel.flowRunner
         flowSystemInterface = flowModel.systemInterface

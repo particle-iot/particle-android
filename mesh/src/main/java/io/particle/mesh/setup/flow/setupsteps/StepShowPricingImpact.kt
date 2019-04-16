@@ -4,7 +4,6 @@ import androidx.annotation.WorkerThread
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.PricingImpactAction
 import io.particle.android.sdk.cloud.PricingImpactNetworkType
-import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.flow.FatalFlowException
@@ -13,7 +12,7 @@ import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
+import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin
 
 

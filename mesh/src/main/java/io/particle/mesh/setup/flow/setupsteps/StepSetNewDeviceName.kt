@@ -3,12 +3,11 @@ package io.particle.mesh.setup.flow.setupsteps
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
-import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.MeshSetupFlowException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
+import io.particle.mesh.setup.flow.FlowUiDelegate
 
 
 class StepSetNewDeviceName(

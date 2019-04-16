@@ -10,11 +10,11 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.toDeviceType
-import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 
 
 class DeviceConnector(
@@ -29,10 +29,12 @@ class DeviceConnector(
         connName: String,
         scopes: Scopes
     ): ProtocolTransceiver? {
-        val broadcastName = getDeviceBroadcastName(
-            barcode.serialNumber.toDeviceType(cloud),
-            barcode.serialNumber
-        )
+
+        val deviceType = scopes.withWorker {
+            barcode.serialNumber.toDeviceType(cloud)
+        }
+
+        val broadcastName = getDeviceBroadcastName(deviceType, barcode.serialNumber)
         val device = btConnectionManager.connectToDevice(broadcastName, scopes)
             ?: return null
         return transceiverFactory.buildProtocolTransceiver(

@@ -1,21 +1,24 @@
 package io.particle.mesh.setup.flow
 
 import android.app.Application
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import android.os.Bundle
+import androidx.annotation.IdRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
-import io.particle.mesh.setup.ui.DialogSpec
 import io.particle.mesh.setup.ui.ProgressHack
 import mu.KotlinLogging
+
+
+interface NavigationTool {
+    fun navigate(@IdRes target: Int)
+    fun navigate(@IdRes target: Int, args: Bundle)
+    fun popBackStack()
+}
 
 
 class FlowRunnerSystemInterface : ProgressHack {
@@ -31,7 +34,7 @@ class FlowRunnerSystemInterface : ProgressHack {
     val shouldTerminateLD: LiveData<Boolean?> = ClearValueOnInactiveLiveData<Boolean>()
     val shouldShowProgressSpinnerLD: LiveData<Boolean?> = MutableLiveData()
 
-    var navControllerLD: LiveData<NavController?> = MutableLiveData()
+    var navControllerLD: LiveData<NavigationTool?> = MutableLiveData()
 
 
     fun initialize(flowRunner: MeshFlowRunner) {
@@ -43,7 +46,7 @@ class FlowRunnerSystemInterface : ProgressHack {
         shouldTerminateLD.castAndPost(true)
     }
 
-    fun setNavController(navController: NavController?) {
+    fun setNavController(navController: NavigationTool?) {
         navControllerLD.castAndSetOnMainThread(navController)
     }
 
@@ -60,20 +63,6 @@ class FlowRunnerSystemInterface : ProgressHack {
 
 // FIXME: this shouldn't have much of anything here -- wrap all this logic/members into a helper class
 class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app) {
-
-    companion object {
-
-        fun getViewModel(activity: FragmentActivity): FlowRunnerAccessModel {
-            return ViewModelProviders.of(activity)
-                .get(FlowRunnerAccessModel::class.java)
-        }
-
-        fun getViewModel(fragment: Fragment): FlowRunnerAccessModel {
-            val activity = fragment.requireActivity()
-            return getViewModel(activity)
-        }
-    }
-
 
     val systemInterface = FlowRunnerSystemInterface()
     lateinit var flowRunner: MeshFlowRunner

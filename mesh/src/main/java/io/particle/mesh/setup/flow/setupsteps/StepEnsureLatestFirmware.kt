@@ -6,7 +6,7 @@ import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
+import io.particle.mesh.setup.flow.FlowUiDelegate
 import mu.KotlinLogging
 
 

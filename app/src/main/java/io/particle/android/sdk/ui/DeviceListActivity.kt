@@ -26,7 +26,7 @@ import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.SoftAPConfigRemover
 import io.particle.android.sdk.utils.WifiFacade
 import io.particle.android.sdk.utils.ui.Ui
-import io.particle.mesh.setup.ui.MeshSetupActivity
+import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.activity_device_list.*
 import pl.brightinventions.slf4android.LogRecord

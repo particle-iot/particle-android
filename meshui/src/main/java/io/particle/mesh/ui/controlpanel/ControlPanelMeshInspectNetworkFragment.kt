@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
-import io.particle.sdk.app.R
+import io.particle.mesh.ui.R
 import kotlinx.android.synthetic.main.fragment_controlpanel_mesh_network_info.*
 
 

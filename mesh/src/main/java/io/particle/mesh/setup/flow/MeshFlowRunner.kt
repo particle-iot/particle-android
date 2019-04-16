@@ -1,6 +1,7 @@
 package io.particle.mesh.setup.flow
 
 import android.app.Application
+import androidx.annotation.AnyThread
 import androidx.annotation.StringRes
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
@@ -10,8 +11,10 @@ import io.particle.mesh.common.android.livedata.awaitUpdate
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.ota.FirmwareUpdateManager
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
+import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.ExceptionType.EXPECTED_FLOW
 import io.particle.mesh.setup.flow.FlowType.CELLULAR_FLOW
@@ -24,12 +27,7 @@ import io.particle.mesh.setup.flow.FlowType.SINGLE_TASK_POSTFLOW
 import io.particle.mesh.setup.flow.FlowType.STANDALONE_POSTFLOW
 import io.particle.mesh.setup.flow.FlowType.WIFI_FLOW
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.modules.FlowRunnerUiResponseReceiver
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
 import io.particle.mesh.setup.flow.setupsteps.*
-import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
-import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
-import io.particle.mesh.setup.ui.MeshFlowTerminator
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
@@ -64,6 +62,13 @@ fun buildFlowManager(
 
 
 
+interface MeshFlowTerminator {
+    @AnyThread
+    fun terminateSetup()
+}
+
+
+
 class StepDeps(
     val cloud: ParticleCloud,
     val deviceConnector: DeviceConnector,
@@ -78,6 +83,7 @@ enum class FlowIntent {
     FIRST_TIME_SETUP,
     SINGLE_TASK_FLOW
 }
+
 
 
 enum class FlowType {
@@ -148,7 +154,8 @@ class MeshFlowRunner(
     private fun initNewFlow(intent: FlowIntent): SetupContexts {
         val ctxs = SetupContexts()
         contexts = ctxs
-        responseReceiver = FlowRunnerUiResponseReceiver(ctxs, deps.cloud)
+        responseReceiver =
+            FlowRunnerUiResponseReceiver(ctxs, deps.cloud)
         ctxs.flowIntent = intent
         return ctxs
     }

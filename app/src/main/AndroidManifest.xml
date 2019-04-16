@@ -16,13 +16,6 @@
         android:theme="@style/ParticleSetupTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
-        <activity
-            android:name="io.particle.mesh.ui.controlpanel.ControlPanelActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/p_MeshTheme"
-            android:windowSoftInputMode="adjustResize" />
-
         <!-- Disable data collection by default for GDPR, re-enable at runtime -->
         <meta-data
             android:name="firebase_analytics_collection_enabled"

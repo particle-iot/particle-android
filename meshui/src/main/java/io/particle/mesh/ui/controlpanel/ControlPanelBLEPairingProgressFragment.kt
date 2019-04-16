@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.flow.toUserFacingName
-import io.particle.sdk.app.R
+import io.particle.mesh.ui.R
 import mu.KotlinLogging
 
 

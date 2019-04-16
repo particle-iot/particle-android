@@ -5,15 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
-import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.logged
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.toConnectivityType
 import io.particle.mesh.setup.toDeviceType
-import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import mu.KotlinLogging
 
 

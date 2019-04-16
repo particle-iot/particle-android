@@ -23,31 +23,31 @@
 
     <fragment
         android:id="@+id/scanJoinerCodeIntroFragment"
-        android:name="io.particle.mesh.setup.ui.ScanSetupTargetCodeIntroFragment"
+        android:name="io.particle.mesh.ui.setup.ScanSetupTargetCodeIntroFragment"
         android:label="fragment_scan_joiner_code_intro"
         tools:layout="@layout/fragment_scan_code_intro" />
 
     <fragment
         android:id="@+id/scanCodeFragment"
-        android:name="io.particle.mesh.setup.ui.ScanCodeFragment"
+        android:name="io.particle.mesh.ui.setup.ScanCodeFragment"
         android:label="fragment_scan_code"
         tools:layout="@layout/fragment_scan_code" />
 
     <fragment
         android:id="@+id/BLEPairingProgressFragment"
-        android:name="io.particle.mesh.setup.ui.BLEPairingProgressFragment"
+        android:name="io.particle.mesh.ui.setup.BLEPairingProgressFragment"
         android:label="fragment_ble_pairing_progress"
         tools:layout="@layout/fragment_ble_pairing_progress" />
 
     <fragment
         android:id="@+id/scanForMeshNetworksFragment"
-        android:name="io.particle.mesh.setup.ui.ScanForMeshNetworksFragment"
+        android:name="io.particle.mesh.ui.setup.ScanForMeshNetworksFragment"
         android:label="fragment_scan_for_mesh_networks"
         tools:layout="@layout/fragment_scan_for_mesh_networks" />
 
     <fragment
         android:id="@+id/manualCommissioningAddToNetworkFragment"
-        android:name="io.particle.mesh.setup.ui.ManualCommissioningAddToNetworkFragment"
+        android:name="io.particle.mesh.ui.setup.ManualCommissioningAddToNetworkFragment"
         android:label="fragment_manual_commissioning_add_to_network"
         tools:layout="@layout/fragment_manual_commissioning_add_to_network">
         <action
@@ -57,25 +57,25 @@
 
     <fragment
         android:id="@+id/enterNetworkPasswordFragment"
-        android:name="io.particle.mesh.setup.ui.EnterNetworkPasswordFragment"
+        android:name="io.particle.mesh.ui.setup.EnterNetworkPasswordFragment"
         android:label="fragment_enter_network_password"
         tools:layout="@layout/fragment_enter_network_password" />
 
     <fragment
         android:id="@+id/joiningMeshNetworkProgressFragment"
-        android:name="io.particle.mesh.setup.ui.JoiningMeshNetworkProgressFragment"
+        android:name="io.particle.mesh.ui.setup.JoiningMeshNetworkProgressFragment"
         android:label="fragment_joining_mesh_network_progress"
         tools:layout="@layout/fragment_joining_mesh_network_progress" />
 
     <fragment
         android:id="@+id/nameYourDeviceFragment"
-        android:name="io.particle.mesh.setup.ui.NameYourDeviceFragment"
+        android:name="io.particle.mesh.ui.setup.NameYourDeviceFragment"
         android:label="fragment_name_your_device"
         tools:layout="@layout/fragment_name_your_device" />
 
     <fragment
         android:id="@+id/setupFinishedFragment"
-        android:name="io.particle.mesh.setup.ui.JoinerSetupFinishedFragment"
+        android:name="io.particle.mesh.ui.setup.JoinerSetupFinishedFragment"
         android:label="fragment_setup_finished"
         tools:layout="@layout/fragment_joiner_setup_finished" />
     <action
@@ -83,7 +83,7 @@
         app:destination="@id/scanCodeFragment" />
     <fragment
         android:id="@+id/scanCommissionerCodeFragment"
-        android:name="io.particle.mesh.setup.ui.ScanCommissionerCodeFragment"
+        android:name="io.particle.mesh.ui.setup.ScanCommissionerCodeFragment"
         android:label="fragment_scan_commissioner_code"
         tools:layout="@layout/fragment_scan_commissioner_code" />
     <action
@@ -112,7 +112,7 @@
         app:destination="@id/setupFinishedFragment" />
     <fragment
         android:id="@+id/connectingToDeviceCloudFragment"
-        android:name="io.particle.mesh.setup.ui.EthernetConnectingToDeviceCloudFragment"
+        android:name="io.particle.mesh.ui.setup.EthernetConnectingToDeviceCloudFragment"
         android:label="fragment_connecting_to_device_cloud"
         tools:layout="@layout/fragment_ethernet_connecting_to_device_cloud" />
     <action
@@ -120,7 +120,7 @@
         app:destination="@id/connectingToDeviceCloudFragment" />
     <fragment
         android:id="@+id/gatewaySetupFinishedFragment"
-        android:name="io.particle.mesh.setup.ui.GatewaySetupFinishedFragment"
+        android:name="io.particle.mesh.ui.setup.GatewaySetupFinishedFragment"
         android:label="fragment_gateway_setup_finished"
         tools:layout="@layout/fragment_gateway_setup_finished" />
     <action
@@ -128,7 +128,7 @@
         app:destination="@id/gatewaySetupFinishedFragment" />
     <fragment
         android:id="@+id/newMeshNetworkNameFragment"
-        android:name="io.particle.mesh.setup.ui.NewMeshNetworkNameFragment"
+        android:name="io.particle.mesh.ui.setup.NewMeshNetworkNameFragment"
         android:label="fragment_new_mesh_network_name"
         tools:layout="@layout/fragment_new_mesh_network_name" />
     <action
@@ -136,7 +136,7 @@
         app:destination="@id/newMeshNetworkNameFragment" />
     <fragment
         android:id="@+id/newMeshNetworkPasswordFragment"
-        android:name="io.particle.mesh.setup.ui.NewMeshNetworkPasswordFragment"
+        android:name="io.particle.mesh.ui.setup.NewMeshNetworkPasswordFragment"
         android:label="fragment_new_mesh_network_password"
         tools:layout="@layout/fragment_new_mesh_network_password" />
     <action
@@ -144,7 +144,7 @@
         app:destination="@id/newMeshNetworkPasswordFragment" />
     <fragment
         android:id="@+id/creatingMeshNetworkFragment"
-        android:name="io.particle.mesh.setup.ui.CreatingMeshNetworkFragment"
+        android:name="io.particle.mesh.ui.setup.CreatingMeshNetworkFragment"
         android:label="fragment_creating_mesh_network"
         tools:layout="@layout/fragment_creating_mesh_network" />
     <action
@@ -152,7 +152,7 @@
         app:destination="@id/creatingMeshNetworkFragment" />
     <fragment
         android:id="@+id/newMeshNetworkFinishedFragment"
-        android:name="io.particle.mesh.setup.ui.NewMeshNetworkFinishedFragment"
+        android:name="io.particle.mesh.ui.setup.NewMeshNetworkFinishedFragment"
         android:label="fragment_new_mesh_network_finished"
         tools:layout="@layout/fragment_new_mesh_network_finished" />
     <action
@@ -166,7 +166,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/assistingDevicePairingProgressFragment"
-        android:name="io.particle.mesh.setup.ui.AssistingDevicePairingProgressFragment"
+        android:name="io.particle.mesh.ui.setup.AssistingDevicePairingProgressFragment"
         android:label="fragment_assisting_device_pairing_progress"
         tools:layout="@layout/fragment_assisting_device_pairing_progress" />
     <action
@@ -174,12 +174,12 @@
         app:destination="@id/assistingDevicePairingProgressFragment" />
     <fragment
         android:id="@+id/bleOtaIntroFragment"
-        android:name="io.particle.mesh.setup.ui.ota.BleOtaIntroFragment"
+        android:name="io.particle.mesh.ui.setup.ota.BleOtaIntroFragment"
         android:label="fragment_ble_ota_intro"
         tools:layout="@layout/fragment_ble_ota_intro" />
     <fragment
         android:id="@+id/bleOtaFragment"
-        android:name="io.particle.mesh.setup.ui.ota.BleOtaFragment"
+        android:name="io.particle.mesh.ui.setup.ota.BleOtaFragment"
         android:label="fragment_ble_ota"
         tools:layout="@layout/fragment_ble_ota" />
     <action
@@ -190,32 +190,32 @@
         app:destination="@id/bleOtaIntroFragment" />
     <fragment
         android:id="@+id/useStandaloneOrInMeshFragment"
-        android:name="io.particle.mesh.setup.ui.UseStandaloneOrInMeshFragment"
+        android:name="io.particle.mesh.ui.setup.UseStandaloneOrInMeshFragment"
         android:label="fragment_use_standalone_or_in_mesh"
         tools:layout="@layout/fragment_use_standalone_or_in_mesh" />
     <fragment
         android:id="@+id/scanForWiFiNetworksFragment"
-        android:name="io.particle.mesh.setup.ui.ScanForWiFiNetworksFragment"
+        android:name="io.particle.mesh.ui.setup.ScanForWiFiNetworksFragment"
         android:label="fragment_scan_for_wi_fi_networks"
         tools:layout="@layout/fragment_scan_for_wi_fi_networks" />
     <fragment
         android:id="@+id/enterWifiNetworkPasswordFragment"
-        android:name="io.particle.mesh.setup.ui.EnterWifiNetworkPasswordFragment"
+        android:name="io.particle.mesh.ui.setup.EnterWifiNetworkPasswordFragment"
         android:label="fragment_enter_wifi_network_password"
         tools:layout="@layout/fragment_enter_wifi_network_password" />
     <fragment
         android:id="@+id/connectToDeviceCloudIntroFragment"
-        android:name="io.particle.mesh.setup.ui.ConnectToDeviceCloudIntroFragment"
+        android:name="io.particle.mesh.ui.setup.ConnectToDeviceCloudIntroFragment"
         android:label="fragment_connect_to_device_cloud_intro"
         tools:layout="@layout/fragment_connect_to_device_cloud_intro" />
     <fragment
         android:id="@+id/argonConnectingStatusFragment"
-        android:name="io.particle.mesh.setup.ui.ArgonConnectingStatusFragment"
+        android:name="io.particle.mesh.ui.setup.ArgonConnectingStatusFragment"
         android:label="fragment_argon_connecting_status"
         tools:layout="@layout/fragment_argon_connecting_status" />
     <fragment
         android:id="@+id/hashtagWinningFragment"
-        android:name="io.particle.mesh.setup.ui.HashtagWinningFragment"
+        android:name="io.particle.mesh.ui.setup.HashtagWinningFragment"
         android:label="fragment_hashtag_winning"
         tools:layout="@layout/fragment_hashtag_winning">
         <argument
@@ -245,7 +245,7 @@
 
     <fragment
         android:id="@+id/letsGetBuildingFragment"
-        android:name="io.particle.mesh.setup.ui.LetsGetBuildingFragment"
+        android:name="io.particle.mesh.ui.setup.LetsGetBuildingFragment"
         android:label="fragment_lets_get_building"
         tools:layout="@layout/fragment_lets_get_building" />
 
@@ -255,7 +255,7 @@
 
     <fragment
         android:id="@+id/boronConnectingStatusFragment"
-        android:name="io.particle.mesh.setup.ui.BoronConnectingStatusFragment"
+        android:name="io.particle.mesh.ui.setup.BoronConnectingStatusFragment"
         android:label="fragment_boron_connecting_status"
         tools:layout="@layout/fragment_boron_connecting_status" />
 
@@ -265,7 +265,7 @@
 
     <fragment
         android:id="@+id/pricingImpactFragment"
-        android:name="io.particle.mesh.setup.ui.PricingImpactFragment"
+        android:name="io.particle.mesh.ui.setup.PricingImpactFragment"
         android:label="fragment_pricing_impact"
         tools:layout="@layout/fragment_pricing_impact" />
 

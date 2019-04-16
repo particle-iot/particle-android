@@ -10,17 +10,15 @@ import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.ota.FirmwareUpdateManager
-import io.particle.mesh.ota.FirmwareUpdateResult
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.*
-import io.particle.mesh.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 
-internal enum class NetworkSetupType {
+enum class NetworkSetupType {
     AS_GATEWAY,
     STANDALONE,
     JOINER
@@ -97,12 +95,12 @@ class DeviceModule(
 
         val suspender = liveDataSuspender({ userConsentedToFirmwareUpdateLD.nonNull() })
         withContext(Dispatchers.Main) {
-            flowManager.navigate(R.id.action_global_bleOtaIntroFragment)
+//            flowManager.navigate(R.id.action_global_bleOtaIntroFragment)
             suspender.awaitResult()
         }
 
         bleUpdateProgress.castAndSetOnMainThread(0)
-        flowManager.navigate(R.id.action_global_bleOtaFragment)
+//        flowManager.navigate(R.id.action_global_bleOtaFragment)
 
         firmwareUpdateManager.startUpdateIfNecessary(xceiver, deviceType) {
             bleUpdateProgress.castAndPost(it)
@@ -119,7 +117,7 @@ class DeviceModule(
 
         val suspender = liveDataSuspender({ networkSetupTypeLD.nonNull() })
         withContext(Dispatchers.Main) {
-            flowManager.navigate(R.id.action_global_useStandaloneOrInMeshFragment)
+//            flowManager.navigate(R.id.action_global_useStandaloneOrInMeshFragment)
             suspender.awaitResult()
         }
     }
@@ -148,7 +146,7 @@ class DeviceModule(
 
     suspend fun ensureShowLetsGetBuildingUi() {
         log.info { "ensureShowLetsGetBuildingUi()" }
-        flowManager.navigate(R.id.action_global_letsGetBuildingFragment)
+//        flowManager.navigate(R.id.action_global_letsGetBuildingFragment)
     }
 
 }

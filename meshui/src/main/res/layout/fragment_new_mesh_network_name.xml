@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.mesh.ui.setup.NewMeshNetworkNameFragment"
+    tools:layout_editor_absoluteY="25dp">
+
+    <TextView
+        android:id="@+id/setup_header_text"
+        style="@style/p_setup_header_text"
+        android:text="@string/p_newmeshnetworkname_header"
+        app:layout_constraintBottom_toTopOf="@+id/networkNameInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/networkNameInputLayout"
+        style="@style/p_mesh_edittextoutlined"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/p_newmeshnetworkname_name_hint_text"
+        app:layout_constraintBottom_toTopOf="@+id/p_mesh_helpfulTip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_header_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLength="16">
+
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/p_mesh_helpfulTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/p_mesh_hintbox_background"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/action_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/networkNameInputLayout">
+
+        <TextView
+            android:id="@+id/p_mesh_miniHeader"
+            style="@style/p_mesh_hintbox_header"
+            fontPath="@string/bold_text_font_name"
+            android:text="@string/p_mesh_tipbox_header_helpful_tip"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/setup_step_text"
+            android:layout_width="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:gravity="start"
+            android:text="@string/p_newmeshnetworkname_hintbox_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@id/action_next"
+        style="@style/p_mesh_button_style"
+        android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/p_action_next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

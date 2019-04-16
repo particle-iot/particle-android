@@ -14,10 +14,10 @@ import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.WiFiStrength
 import io.particle.mesh.setup.flow.modules.cloudconnection.WifiScanData
-import io.particle.mesh.setup.ui.utils.easyDiffUtilCallback
-import io.particle.mesh.setup.ui.utils.inflateRow
-import io.particle.sdk.app.R
-import io.particle.sdk.app.R.layout
+import io.particle.android.common.easyDiffUtilCallback
+import io.particle.android.common.inflateRow
+import io.particle.mesh.ui.R
+import io.particle.mesh.ui.R.layout
 import kotlinx.android.synthetic.main.fragment_cp_scan_for_wifi_networks.*
 import kotlinx.android.synthetic.main.p_controlpanel_row_wifi_scan.view.*
 import mu.KotlinLogging

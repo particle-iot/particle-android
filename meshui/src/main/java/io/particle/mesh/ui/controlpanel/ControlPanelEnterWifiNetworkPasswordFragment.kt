@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.phrase.Phrase
-import io.particle.sdk.app.R
+import io.particle.mesh.ui.R
 import kotlinx.android.synthetic.main.fragment_cp_enter_wifi_password.*
 
 

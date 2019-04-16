@@ -4,13 +4,12 @@ import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.connection.ResultCode
-import io.particle.mesh.setup.flow.FlowException
+import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.MeshSetupFlowException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
-import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
+import io.particle.mesh.setup.flow.FlowUiDelegate
 
 
 class StepEnsureSelectedWifiNetworkJoined(private val flowUi: FlowUiDelegate) : MeshSetupStep() {

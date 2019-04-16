@@ -1,11 +1,9 @@
 package io.particle.mesh.setup.flow
 
 import io.particle.android.sdk.cloud.ParticleCloud
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
-import io.particle.mesh.R
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
@@ -279,17 +277,17 @@ class Flow(
 
     private suspend fun ensureShowJoinerSetupFinishedUi() {
         log.info { "ensureShowJoinerSetupFinishedUi()" }
-        flowManager.navigate(R.id.action_global_setupFinishedFragment)
+//        flowManager.navigate(R.id.action_global_setupFinishedFragment)
     }
 
     private suspend fun ensureShowGatewaySetupFinishedUi() {
         log.info { "ensureShowGatewaySetupFinishedUi()" }
-        flowManager.navigate(R.id.action_global_gatewaySetupFinishedFragment)
+//        flowManager.navigate(R.id.action_global_gatewaySetupFinishedFragment)
     }
 
     private suspend fun ensureShowCreateNetworkFinished() {
         log.info { "ensureShowCreateNetworkFinished()" }
-        flowManager.navigate(R.id.action_global_newMeshNetworkFinishedFragment)
+//        flowManager.navigate(R.id.action_global_newMeshNetworkFinishedFragment)
     }
 }
 

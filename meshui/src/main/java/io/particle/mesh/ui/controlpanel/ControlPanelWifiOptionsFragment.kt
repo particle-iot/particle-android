@@ -8,9 +8,9 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.SerialNumber
-import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
-import io.particle.sdk.app.R
-import io.particle.sdk.app.R.string
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
+import io.particle.mesh.ui.R
+import io.particle.mesh.ui.R.string
 import kotlinx.android.synthetic.main.fragment_control_panel_wifi_options.*
 import mu.KotlinLogging
 

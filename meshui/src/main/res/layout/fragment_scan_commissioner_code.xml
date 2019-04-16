@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.mesh.ui.setup.ScanCommissionerCodeFragment">
+
+    <TextView
+        android:id="@+id/setup_header_text"
+        style="@style/p_setup_header_text"
+        android:text="@string/pair_assisting_device_with_your_phone"
+        app:layout_constraintBottom_toTopOf="@id/assistantText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/assistantText"
+        style="@style/setup_step_text"
+        android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/p_pairassistingdevice_subheader_1"
+        app:layout_constraintBottom_toTopOf="@id/p_mesh_helpfulTip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_header_text" />
+
+    <LinearLayout
+        android:id="@+id/p_mesh_helpfulTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/p_mesh_hintbox_background"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/mainImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/assistantText">
+
+        <TextView
+            android:id="@+id/p_mesh_miniHeader"
+            style="@style/p_mesh_hintbox_header"
+            fontPath="@string/bold_text_font_name"
+            android:text="@string/p_mesh_tipbox_header_helpful_tip"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/setup_step_text"
+            android:layout_width="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:gravity="start"
+            android:text="@string/p_scancommissionercode_tip_content" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/mainImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="24dp"
+        android:src="@drawable/scan_data_matrix_android"
+        app:layout_constraintBottom_toTopOf="@+id/action_next"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_mesh_helpfulTip" />
+
+    <com.tolstykh.textviewrichdrawable.ButtonRichDrawable
+        android:id="@id/action_next"
+        style="@style/p_mesh_button_style"
+        android:layout_width="match_parent"
+        android:layout_margin="16dp"
+        android:text="@string/p_action_scan_data_matrix"
+        app:drawableStartVector="@drawable/p_mesh_ic_camera_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

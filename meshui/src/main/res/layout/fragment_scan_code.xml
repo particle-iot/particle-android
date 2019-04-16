@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    tools:layout_editor_absoluteY="25dp">
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/p_setup_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/point_camera_at_qr_code_on_the_device"
+        app:layout_constraintBottom_toTopOf="@+id/scanPreview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <io.particle.mesh.ui.setup.barcodescanning.CameraSourcePreview
+        android:id="@+id/scanPreview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,4:3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView6">
+
+        <io.particle.mesh.ui.setup.barcodescanning.GraphicOverlay
+            android:id="@+id/scanPreviewOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true" />
+
+    </io.particle.mesh.ui.setup.barcodescanning.CameraSourcePreview>
+
+    <io.particle.mesh.ui.views.OverlayWithHoleView
+        android:id="@+id/p_mesh_holeView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/scanPreview"
+        app:layout_constraintEnd_toEndOf="@id/scanPreview"
+        app:layout_constraintStart_toStartOf="@id/scanPreview"
+        app:layout_constraintTop_toTopOf="@id/scanPreview" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

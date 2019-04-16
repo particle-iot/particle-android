@@ -7,9 +7,9 @@ import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.flow.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
-import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
+import io.particle.mesh.setup.flow.FlowUiDelegate
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
@@ -42,7 +42,9 @@ class StepEnsureEthernetHasIpAddress(private val flowUi: FlowUiDelegate) : MeshS
             }
         }
 
-        val result = flowUi.dialogTool.dialogResultLD.nonNull(scopes).runBlockOnUiThreadAndAwaitUpdate(scopes) {
+        val result = flowUi.dialogTool.dialogResultLD
+            .nonNull(scopes)
+            .runBlockOnUiThreadAndAwaitUpdate(scopes) {
             flowUi.dialogTool.newDialogRequest(
                 ResDialogSpec(
                     R.string.p_connecttocloud_xenon_gateway_needs_ethernet,

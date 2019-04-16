@@ -10,11 +10,10 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.mesh.common.android.livedata.nonNull
-import io.particle.mesh.setup.flow.FlowRunnerAccessModel
-import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
-import io.particle.mesh.setup.ui.DialogResult
-import io.particle.mesh.setup.ui.DialogSpec
+import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.flow.FlowUiDelegate
+import io.particle.mesh.ui.setup.NavigationToolImpl
+import io.particle.mesh.ui.utils.getViewModel
 import kotlinx.android.synthetic.main.activity_control_panel.*
 import mu.KotlinLogging
 
@@ -46,9 +45,9 @@ abstract class BaseFlowActivity : AppCompatActivity() {
 
         setContentView(contentViewIdRes)
 
-        flowModel = FlowRunnerAccessModel.getViewModel(this)
+        flowModel = this.getViewModel()
         flowSystemInterface = flowModel.systemInterface
-        flowSystemInterface.setNavController(navController)
+        flowSystemInterface.setNavController(NavigationToolImpl(navController))
 
         flowModel.initialize(buildFlowUiDelegate(flowSystemInterface))
 

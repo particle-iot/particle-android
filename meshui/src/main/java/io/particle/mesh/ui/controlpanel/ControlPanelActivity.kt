@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import io.particle.mesh.setup.flow.modules.FlowUiDelegate
+import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
-import io.particle.sdk.app.R
+import io.particle.mesh.ui.R
 import kotlinx.android.synthetic.main.activity_control_panel.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 

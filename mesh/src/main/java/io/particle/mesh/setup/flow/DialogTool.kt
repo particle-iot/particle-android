@@ -1,11 +1,32 @@
 package io.particle.mesh.setup.flow
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import io.particle.mesh.common.android.livedata.castAndPost
-import io.particle.mesh.setup.ui.DialogResult
-import io.particle.mesh.setup.ui.DialogSpec
 import mu.KotlinLogging
+
+
+enum class DialogResult {
+    POSITIVE,
+    NEGATIVE,
+}
+
+
+sealed class DialogSpec {
+
+    data class ResDialogSpec(
+        @StringRes val text: Int,
+        @StringRes val positiveText: Int,
+        @StringRes val negativeText: Int? = null,
+        @StringRes val title: Int? = null
+    ) : DialogSpec()
+
+    data class StringDialogSpec(
+        val text: String
+    ) : DialogSpec()
+
+}
+
 
 
 // TODO: is this a hack, or is it just ideal for simple use cases?  Consider renaming.

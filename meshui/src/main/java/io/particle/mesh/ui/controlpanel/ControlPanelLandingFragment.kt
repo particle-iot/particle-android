@@ -11,8 +11,8 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.navigateOnClick
-import io.particle.sdk.app.R
-import io.particle.sdk.app.R.string
+import io.particle.mesh.ui.R
+import io.particle.mesh.ui.R.string
 import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
 import java.lang.Exception
 
@@ -86,10 +86,10 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
             }
 
             if (error == null) {
-                safeToast("Device unclaimed!")
+                activity?.safeToast("Device unclaimed!")
                 activity?.finish()
             } else {
-                safeToast("Error unclaiming device")
+                activity?.safeToast("Error unclaiming device")
             }
         }
     }

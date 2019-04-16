@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.particle.sdk.app.R
-import io.particle.sdk.app.R.string
+import io.particle.mesh.ui.R
 
 
 class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
 
-    override val titleBarOptions =
-        TitleBarOptions(string.p_cp_cellular)
+    override val titleBarOptions = TitleBarOptions(R.string.p_cp_cellular)
 
     override fun onCreateView(
         inflater: LayoutInflater,

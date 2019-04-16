@@ -4,15 +4,16 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import io.particle.mesh.setup.flow.DialogTool
+import io.particle.mesh.setup.flow.NavigationTool
 import io.particle.mesh.setup.flow.Scopes
-import io.particle.mesh.setup.flow.modules.BaseFlowUiDelegate
 import io.particle.mesh.setup.ui.ProgressHack
-import io.particle.sdk.app.R
+import io.particle.mesh.ui.BaseFlowUiDelegate
+import io.particle.mesh.ui.R
 import mu.KotlinLogging
 
 
 class ControlPanelFlowUiDelegate(
-    navControllerLD: LiveData<NavController?>,
+    navControllerLD: LiveData<NavigationTool?>,
     app: Application,
     dialogTool: DialogTool,
     progressHack: ProgressHack,
