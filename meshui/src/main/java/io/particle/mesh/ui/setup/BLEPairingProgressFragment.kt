@@ -5,31 +5,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import com.squareup.phrase.Phrase
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import kotlinx.android.synthetic.main.fragment_ble_pairing_progress.*
-import mu.KotlinLogging
 
 
-class BLEPairingProgressFragment : BaseMeshSetupFragment() {
+class BLEPairingProgressFragment : BaseFlowFragment() {
 
-    private val log = KotlinLogging.logger {}
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_ble_pairing_progress, container, false)
     }
 
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        flowManagerVM.flowManager.let {
-            status_text.text = Phrase.from(view, R.string.pairing_with_your_device)
-                .put("product_type", flowManagerVM.flowManager?.getTypeName())
-                .format()
-        }
-
+        status_text.text = Phrase.from(view, R.string.pairing_with_your_device)
+            .put("product_type", getUserFacingTypeName())
+            .format()
     }
-
 }

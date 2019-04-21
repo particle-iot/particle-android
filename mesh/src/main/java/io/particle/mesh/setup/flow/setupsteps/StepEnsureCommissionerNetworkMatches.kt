@@ -25,8 +25,8 @@ class StepEnsureCommissionerNetworkMatches(
         val reply = commissioner.sendGetNetworkInfo().throwOnErrorOrAbsent()
 
         val commissionerNetwork = reply.network
-        val toJoinLD = ctxs.mesh.targetDeviceMeshNetworkToJoinLD
-        val toJoin = (ctxs.mesh.targetDeviceMeshNetworkToJoinLD.value!! as SelectedNetwork)
+        val toJoinLD = ctxs.mesh.meshNetworkToJoinLD
+        val toJoin = (ctxs.mesh.meshNetworkToJoinLD.value!! as SelectedNetwork)
 
         if (commissionerNetwork?.extPanId == toJoin.networkToJoin.extPanId) {
             toJoinLD.nonNull(scopes).runBlockOnUiThreadAndAwaitUpdate(scopes) {
@@ -38,8 +38,8 @@ class StepEnsureCommissionerNetworkMatches(
         }
 
         commissioner.disconnect()
-        ctxs.ble.commissioner.updateDeviceTransceiver(null)
-        ctxs.ble.commissioner.updateBarcode(null, cloud)
+        ctxs.commissioner.updateDeviceTransceiver(null)
+        ctxs.commissioner.updateBarcode(null, cloud)
 
         val result = flowUi.dialogTool.dialogResultLD
             .nonNull(scopes)

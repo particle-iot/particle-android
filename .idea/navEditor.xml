@@ -632,7 +632,7 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="action_global_controlPanelPrepareForParingFragment">
+                  <entry key="action_global_controlPanelPrepareForPairingFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -653,11 +653,6 @@
                     </value>
                   </entry>
                   <entry key="action_global_enterWifiNetworkPasswordFragment">
-                    <value>
-                      <LayoutPositions />
-                    </value>
-                  </entry>
-                  <entry key="action_global_gatewaySetupFinishedFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -991,18 +986,6 @@
                           <Point>
                             <option name="x" value="1416" />
                             <option name="y" value="280" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="gatewaySetupFinishedFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="1416" />
-                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>

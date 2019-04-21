@@ -17,7 +17,6 @@ class CloudConnectionContext : Clearable {
 
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
-    val targetDeviceConnectedToCloud: LiveData<Boolean?> = ClearValueOnInactiveLiveData()
     val shouldConnectToDeviceCloudConfirmed: LiveData<Boolean?> = MutableLiveData()
     val pricingImpactConfirmed: LiveData<Boolean?> = MutableLiveData()
 
@@ -41,7 +40,6 @@ class CloudConnectionContext : Clearable {
         val setToNulls = listOf(
             targetDeviceNameToAssignLD,
             isTargetDeviceNamedLD,
-            targetDeviceConnectedToCloud,
             shouldConnectToDeviceCloudConfirmed,
             pricingImpactConfirmed
         )
@@ -68,10 +66,5 @@ class CloudConnectionContext : Clearable {
     fun updatePricingImpactConfirmed(confirmed: Boolean) {
         log.info { "updatePricingImpactConfirmed(): $confirmed" }
         pricingImpactConfirmed.castAndPost(confirmed)
-    }
-
-    fun updateTargetDeviceConnectedToCloud(connected: Boolean) {
-        log.info { "updateTargetDeviceConnectedToCloud(): $connected" }
-        targetDeviceConnectedToCloud.castAndPost(connected)
     }
 }

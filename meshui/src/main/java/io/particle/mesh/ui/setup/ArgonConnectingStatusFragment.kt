@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.utils.markProgress
 import io.particle.mesh.ui.R
 
 
-class ArgonConnectingStatusFragment : BaseMeshSetupFragment() {
+class ArgonConnectingStatusFragment : BaseFlowFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,29 +23,28 @@ class ArgonConnectingStatusFragment : BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_argon_connecting_status, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
-        val cloudModule = flowManagerVM.flowManager!!.cloudConnectionModule
+        markProgress(true, R.id.status_stage_1) // setting Wi-Fi credentials, which is already done
 
-        markProgress(true, R.id.status_stage_1) // setting Wi-Fi credentials
-
-        cloudModule.argonSteps.targetWifiNetworkJoinedLD.observe(this, Observer {
+        flowUiListener.wifi.targetWifiNetworkJoinedLD.observe(this, Observer {
             if (it.truthy()) {
                 markProgress(true, R.id.status_stage_2)
             }
         })
 
-        cloudModule.targetDeviceConnectedToCloud.observe(this, Observer {
+        flowUiListener.targetDevice.isDeviceConnectedToCloudLD.observe(this, Observer {
             if (it.truthy()) {
                 markProgress(true, R.id.status_stage_3)
             }
         })
 
-        cloudModule.targetOwnedByUserLD.observe(this, Observer {
+        flowUiListener.targetDevice.isClaimedLD.observe(this, Observer {
             if (it.truthy()) {
                 markProgress(true, R.id.status_stage_4)
             }
         })
     }
+
 }

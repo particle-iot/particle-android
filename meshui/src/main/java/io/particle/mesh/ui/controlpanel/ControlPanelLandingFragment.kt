@@ -12,15 +12,14 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.navigateOnClick
 import io.particle.mesh.ui.R
-import io.particle.mesh.ui.R.string
+import io.particle.mesh.ui.TitleBarOptions
 import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
 import java.lang.Exception
 
 
 class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
-    override val titleBarOptions =
-        TitleBarOptions(string.p_controlpanel_control_panel)
+    override val titleBarOptions = TitleBarOptions(R.string.p_controlpanel_control_panel)
 
     private lateinit var cloud: ParticleCloud
 

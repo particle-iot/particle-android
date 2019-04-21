@@ -11,12 +11,12 @@ import io.particle.mesh.setup.flow.FlowUiDelegate
 class StepCollectMeshNetworkToJoinSelection(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        if (ctxs.mesh.targetDeviceMeshNetworkToJoinLD.value != null) {
+        if (ctxs.mesh.meshNetworkToJoinLD.value != null) {
             return
         }
 
         flowUi.getMeshNetworkToJoin()
-        ctxs.mesh.targetDeviceMeshNetworkToJoinLD
+        ctxs.mesh.meshNetworkToJoinLD
             .nonNull(scopes)
             .runBlockOnUiThreadAndAwaitUpdate(scopes) {
                 // no-op; we're just awaiting the update.

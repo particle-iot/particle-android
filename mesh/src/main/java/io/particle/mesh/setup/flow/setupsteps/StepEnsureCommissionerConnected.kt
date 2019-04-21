@@ -19,7 +19,7 @@ class StepEnsureCommissionerConnected(
 ) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        val commissioner = ctxs.ble.commissioner.transceiverLD.value
+        val commissioner = ctxs.commissioner.transceiverLD.value
         if (commissioner != null && commissioner.isConnected) {
             return
         }
@@ -33,7 +33,7 @@ class StepEnsureCommissionerConnected(
         val transceiver = scopes.withMain {
             try {
                 deviceConnector.connect(
-                    ctxs.ble.commissioner.barcode.value!!,
+                    ctxs.commissioner.barcode.value!!,
                     "commissioner",
                     scopes
                 )
@@ -46,10 +46,10 @@ class StepEnsureCommissionerConnected(
             throw FailedToConnectException()
         } else {
             // don't move any further until the value is set on the LiveData
-            ctxs.ble.commissioner.transceiverLD
+            ctxs.commissioner.transceiverLD
                 .nonNull(scopes)
                 .runBlockOnUiThreadAndAwaitUpdate(scopes) {
-                    ctxs.ble.commissioner.updateDeviceTransceiver(transceiver)
+                    ctxs.commissioner.updateDeviceTransceiver(transceiver)
                 }
             delay(5000)
         }

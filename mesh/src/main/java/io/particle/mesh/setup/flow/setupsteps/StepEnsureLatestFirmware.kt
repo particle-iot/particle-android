@@ -18,19 +18,19 @@ class StepEnsureLatestFirmware(
     private val log = KotlinLogging.logger {}
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        if (ctxs.ble.targetDevice.hasLatestFirmware) {
+        if (ctxs.targetDevice.hasLatestFirmware) {
             log.info { "Already checked device for latest firmware; skipping" }
             flowUi.showGlobalProgressSpinner(false)
             return
         }
 
-        val xceiver = ctxs.ble.targetDevice.transceiverLD.value!!
-        val deviceType = ctxs.ble.targetDevice.deviceType!!
+        val xceiver = ctxs.targetDevice.transceiverLD.value!!
+        val deviceType = ctxs.targetDevice.deviceType!!
 
         val needsUpdate = firmwareUpdateManager.needsUpdate(xceiver, deviceType)
         if (!needsUpdate) {
             log.debug { "No firmware update needed!" }
-            ctxs.ble.targetDevice.hasLatestFirmware = true
+            ctxs.targetDevice.hasLatestFirmware = true
             return
         }
 

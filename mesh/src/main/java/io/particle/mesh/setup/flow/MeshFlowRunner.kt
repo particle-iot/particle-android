@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow
 
 import android.app.Application
 import androidx.annotation.AnyThread
+import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
@@ -62,13 +63,6 @@ fun buildFlowManager(
 
 
 
-interface MeshFlowTerminator {
-    @AnyThread
-    fun terminateSetup()
-}
-
-
-
 class StepDeps(
     val cloud: ParticleCloud,
     val deviceConnector: DeviceConnector,
@@ -106,24 +100,45 @@ class MeshFlowRunner(
 
     private val log = KotlinLogging.logger {}
 
-    var responseReceiver: FlowRunnerUiResponseReceiver? = null
-    var terminator: MeshFlowTerminator? = null
+    var listener: FlowRunnerUiListener? = null
+
 
     private var contexts: SetupContexts? = null
 
+    @MainThread
+    fun startFlow() {
+        log.info { "startFlow()" }
+        initNewFlow(FlowIntent.FIRST_TIME_SETUP)
+
+        contexts?.currentFlow = listOf()
+
+        runCurrentFlow()
+    }
+
+    @MainThread
+    fun startNewFlowWithCommissioner() {
+        log.info { "startNewFlowWithCommissioner()" }
+
+        val oldContexts = contexts!!
+        initNewFlow(FlowIntent.FIRST_TIME_SETUP)
+        val newContexts = contexts!!
+    }
+
+    @MainThread
     fun startControlPanelWifiConfigFlow(deviceId: String, barcode: CompleteBarcodeData) {
-        val ctxs = initNewFlow(FlowIntent.SINGLE_TASK_FLOW)
+        initNewFlow(FlowIntent.SINGLE_TASK_FLOW)
+        val ctxs = contexts!!
 
         ctxs.updateGetReadyNextButtonClicked(true)
 
-        ctxs.ble.targetDevice.deviceId = deviceId
+        ctxs.targetDevice.deviceId = deviceId
         ctxs.updatePricingImpactConfirmed(true)
-        val deviceName = ctxs.ble.targetDevice.transceiverLD.value?.bleBroadcastName
+        val deviceName = ctxs.targetDevice.transceiverLD.value?.bleBroadcastName
         ctxs.singleStepCongratsMessage = "Wi-Fi credentials were successfully added to $deviceName"
 
         ctxs.scopes.onWorker {
-            ctxs.ble.targetDevice.updateBarcode(barcode, deps.cloud)
-            ctxs.ble.targetDevice.barcode
+            ctxs.targetDevice.updateBarcode(barcode, deps.cloud)
+            ctxs.targetDevice.barcode
                 .nonNull(ctxs.scopes)
                 .runBlockOnUiThreadAndAwaitUpdate(ctxs.scopes) {
                     // nothing to do but wait for the update
@@ -140,7 +155,7 @@ class MeshFlowRunner(
 
     fun endSetup() {
         log.info { "endSetup()" }
-        terminator?.terminateSetup()
+        TODO("terminator?.terminateSetup()")
     }
 
     fun getString(@StringRes stringRes: Int): String {
@@ -151,13 +166,11 @@ class MeshFlowRunner(
         return everythingNeedsAContext.getString(stringRes, formatArgs)
     }
 
-    private fun initNewFlow(intent: FlowIntent): SetupContexts {
+    private fun initNewFlow(intent: FlowIntent) {
         val ctxs = SetupContexts()
         contexts = ctxs
-        responseReceiver =
-            FlowRunnerUiResponseReceiver(ctxs, deps.cloud)
+        listener = FlowRunnerUiListener(ctxs)
         ctxs.flowIntent = intent
-        return ctxs
     }
 
     private fun runCurrentFlow() {

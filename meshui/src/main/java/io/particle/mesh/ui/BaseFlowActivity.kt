@@ -1,6 +1,7 @@
 package io.particle.mesh.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.FlowUiDelegate
-import io.particle.mesh.ui.setup.NavigationToolImpl
 import io.particle.mesh.ui.utils.getViewModel
 import kotlinx.android.synthetic.main.activity_control_panel.*
 import mu.KotlinLogging
@@ -27,6 +27,9 @@ abstract class BaseFlowActivity : AppCompatActivity() {
 
     @get:LayoutRes
     protected abstract val contentViewIdRes: Int
+
+    @get:IdRes
+    protected abstract val progressSpinnerViewId: Int
 
     protected abstract fun buildFlowUiDelegate(
         systemInterface: FlowRunnerSystemInterface
@@ -46,6 +49,12 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         setContentView(contentViewIdRes)
 
         flowModel = this.getViewModel()
+
+        if (savedInstanceState != null && !flowModel.isInitialized) {
+            log.warn { "Returning to mesh setup after process death is not supported; exiting!" }
+            return
+        }
+
         flowSystemInterface = flowModel.systemInterface
         flowSystemInterface.setNavController(NavigationToolImpl(navController))
 
@@ -54,19 +63,22 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         // FIXME: subscribe to other LiveDatas?
         flowSystemInterface.dialogRequestLD.nonNull()
             .observe(this, Observer { onDialogSpecReceived(it) })
+
         flowSystemInterface.shouldShowProgressSpinnerLD.nonNull()
             .observe(this, Observer { showGlobalProgressSpinner(it!!) })
+
+        flowSystemInterface.shouldTerminateLD.nonNull()
+            .observe(this, Observer { finish() })
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // this is where we should be nulling out the
         flowSystemInterface.setNavController(null)
     }
 
     private fun showGlobalProgressSpinner(show: Boolean) {
         log.info { "showGlobalProgressSpinner(): $show" }
-        runOnUiThread { p_controlpanel_globalProgressSpinner.isVisible = show }
+        runOnUiThread { findViewById<View>(progressSpinnerViewId).isVisible = show }
     }
 
     override fun onSupportNavigateUp(): Boolean {

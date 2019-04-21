@@ -27,7 +27,7 @@ class ControlPanelBLEPairingProgressFragment : BaseControlPanelFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val deviceType = responseReceiver?.targetDevice?.deviceType
+        val deviceType = flowUiListener?.targetDevice?.deviceType
         val typeNameRes = deviceType?.toUserFacingName()!!
         val typeName = getString(typeNameRes)
 

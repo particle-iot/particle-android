@@ -9,6 +9,8 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import io.particle.android.common.easyDiffUtilCallback
+import io.particle.android.common.inflateRow
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
@@ -16,17 +18,16 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
-import io.particle.mesh.ui.R
-import io.particle.mesh.ui.R.layout
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.toConnectivityType
-import io.particle.android.common.easyDiffUtilCallback
-import io.particle.android.common.inflateRow
 import io.particle.mesh.setup.ui.utils.localDeviceHasInternetConnection
+import io.particle.mesh.ui.BaseFlowFragment
+import io.particle.mesh.ui.R
+import kotlinx.android.synthetic.main.fragment_select_device.*
 import kotlinx.android.synthetic.main.row_select_device.view.*
 
 
-class SelectDeviceFragment : BaseMeshSetupFragment() {
+class SelectDeviceFragment : BaseFlowFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +37,7 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
 
         // create and populate adapter
         val adapter = MeshDeviceTypesAdapter(this::onItemClicked)
-        root.item_list.adapter = adapter
+        item_list.adapter = adapter
 //        adapter.submitList(
 //            listOf(
 //                DeviceData(
@@ -58,7 +59,7 @@ class SelectDeviceFragment : BaseMeshSetupFragment() {
 //        )
 
         if (requireActivity().localDeviceHasInternetConnection()) {
-            FlowManagerAccessModel.getViewModel(this).startFlow()
+            flowRunner.startFlow()
         } else {
             showNoInternetDialog()
         }
@@ -115,10 +116,7 @@ private class MeshDeviceTypesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceDataHolder {
         return DeviceDataHolder(
-            inflateRow(
-                parent,
-                layout.row_select_device
-            )
+            inflateRow(parent, R.layout.row_select_device)
         )
     }
 

@@ -11,6 +11,7 @@ import io.particle.android.common.buildRawResourceUri
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.TitleBarOptions
 import kotlinx.android.synthetic.main.fragment_cp_prepare_for_pairing.*
 import mu.KotlinLogging
 

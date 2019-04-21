@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import kotlinx.android.synthetic.main.fragment_ble_ota.*
 
@@ -16,7 +19,7 @@ data class BleOtaProgressModel(
 )
 
 
-class BleOtaFragment : io.particle.mesh.ui.setup.BaseMeshSetupFragment() {
+class BleOtaFragment : BaseFlowFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,23 +28,16 @@ class BleOtaFragment : io.particle.mesh.ui.setup.BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_ble_ota, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
-        val deviceModule = flowManagerVM.flowManager?.deviceModule
-        deviceModule?.bleUpdateProgress?.observe(
-            this,
-            Observer {
-                it?.apply {
-                    render(
-                        BleOtaProgressModel(
-                            deviceModule.firmwareUpdateCount,
-                            it
-                        )
-                    )
-                }
+        flowUiListener.deviceData.bleUpdateProgress.observe(this, Observer {
+            it?.apply {
+                render(
+                    BleOtaProgressModel(flowUiListener.deviceData.firmwareUpdateCount, it)
+                )
             }
-        )
+        })
     }
 
     private fun render(model: BleOtaProgressModel) {

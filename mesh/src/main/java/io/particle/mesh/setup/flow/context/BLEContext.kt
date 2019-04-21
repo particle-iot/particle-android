@@ -9,9 +9,6 @@ class BLEContext : Clearable {
 
     private val log = KotlinLogging.logger {}
 
-    var targetDevice = SetupDevice(DeviceRole.SETUP_TARGET)
-    var commissioner = SetupDevice(DeviceRole.COMMISSIONER)
-
     var connectingToTargetUiShown by log.logged(false)
 
     var connectingToAssistingDeviceUiShown by log.logged(false)
@@ -22,12 +19,6 @@ class BLEContext : Clearable {
         connectingToAssistingDeviceUiShown = false
         shownAssistingDeviceInitialIsConnectedScreen = false
         connectingToTargetUiShown = false
-
-        targetDevice.transceiverLD.value?.disconnect()
-        commissioner.transceiverLD.value?.disconnect()
-
-        targetDevice = SetupDevice(DeviceRole.SETUP_TARGET)
-        commissioner = SetupDevice(DeviceRole.COMMISSIONER)
     }
 
 }

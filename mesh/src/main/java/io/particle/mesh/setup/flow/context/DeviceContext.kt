@@ -25,7 +25,7 @@ class DeviceContext : Clearable {
 
     val userConsentedToFirmwareUpdateLD: LiveData<Boolean?> = MutableLiveData()
     val bleOtaProgress: LiveData<Int?> = MutableLiveData()
-    internal val networkSetupTypeLD: LiveData<NetworkSetupType?> = MutableLiveData()
+    val networkSetupTypeLD: LiveData<NetworkSetupType?> = MutableLiveData()
 
     var shouldDetectEthernet by log.logged(false)
     var isDetectEthernetSent by log.logged(false)

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.TitleBarOptions
 import kotlinx.android.synthetic.main.fragment_cp_congrats.*
 import kotlinx.coroutines.delay
 
@@ -24,7 +25,7 @@ class ControlPanelCongratsFragment : BaseControlPanelFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        p_hashtagwinning_message.text = responseReceiver?.singleTaskCongratsMessage
+        p_hashtagwinning_message.text = flowUiListener?.singleTaskCongratsMessage
 
         if (!flowScopes.job.isCancelled) {
             flowScopes.onMain {

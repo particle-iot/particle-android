@@ -6,9 +6,9 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import io.particle.mesh.common.logged
 import io.particle.mesh.setup.flow.DialogTool
+import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.NavigationTool
 import io.particle.mesh.setup.flow.Scopes
-import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.ui.ProgressHack
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -25,13 +25,88 @@ abstract class BaseFlowUiDelegate(
 
     protected var shownTargetInitialIsConnectedScreen by log.logged(false)
 
+    override fun getDeviceBarcode() {
+        navigate(R.id.action_global_scanJoinerCodeIntroFragment)
+    }
+
+    override fun getNetworkSetupType() {
+        navigate(R.id.action_global_useStandaloneOrInMeshFragment)
+    }
+
+    override fun showPricingImpactScreen() {
+        navigate(R.id.action_global_pricingImpactFragment)
+    }
+
+    override fun showConnectingToDeviceCloudUi() {
+        navigate(R.id.action_global_connectingToDeviceCloudFragment)
+    }
+
+    override fun showNameDeviceUi() {
+        navigate(R.id.action_global_nameYourDeviceFragment)
+    }
+
+    override fun showBleOtaIntroUi() {
+        navigate(R.id.action_global_bleOtaIntroFragment)
+    }
+
+    override fun showBleOtaUi() {
+        navigate(R.id.action_global_bleOtaFragment)
+    }
+
+    override fun getNewMeshNetworkName() {
+        navigate(R.id.action_global_newMeshNetworkNameFragment)
+    }
+
+    override fun getNewMeshNetworkPassword() {
+        navigate(R.id.action_global_newMeshNetworkPasswordFragment)
+    }
+
+    override fun showCreatingMeshNetworkUi() {
+        navigate(R.id.action_global_creatingMeshNetworkFragment)
+    }
+
+    override fun showInternetConnectedConnectToDeviceCloudIntroUi() {
+        navigate(R.id.action_global_argonConnectToDeviceCloudIntroFragment)
+    }
+
+    override fun showConnectingToDeviceCloudCellularUi() {
+        navigate(R.id.action_global_boronConnectingStatusFragment)
+    }
+
+    override fun getMeshNetworkToJoin() {
+        navigate(R.id.action_global_scanForMeshNetworksFragment)
+    }
+
+    override fun getCommissionerBarcode() {
+        navigate(R.id.action_global_manualCommissioningAddToNetworkFragment)
+    }
+
+    override fun showComissionerPairingProgressUi() {
+        navigate(R.id.action_global_assistingDevicePairingProgressFragment)
+    }
+
+    override fun collectPasswordForMeshToJoin() {
+        navigate(R.id.action_global_enterNetworkPasswordFragment)
+    }
+
+    override fun showJoiningMeshNetworkUi() {
+        navigate(R.id.action_global_joiningMeshNetworkProgressFragment)
+    }
+
+    override fun showJoinerSetupFinishedUi() {
+        navigate(R.id.action_global_setupFinishedFragment)
+    }
+
+    override fun showCreateNetworkFinishedUi() {
+        navigate(R.id.action_global_newMeshNetworkFinishedFragment)
+    }
+
     override fun onTargetPairingSuccessful(deviceName: String): Boolean {
         if (shownTargetInitialIsConnectedScreen) {
             return false // already shown, no need to show again
         }
         shownTargetInitialIsConnectedScreen = true
         showSingleTaskCongratsScreen("Successfully paired with $deviceName")
-//        showCongratsScreen("Successfully paired with $deviceName")
         return true
     }
 
@@ -42,14 +117,6 @@ abstract class BaseFlowUiDelegate(
 
     override fun getString(stringId: Int): String {
         return everythingNeedsAContext.getString(stringId)
-    }
-
-    private fun showCongratsScreen(message: String) {
-//        navigate(
-//            R.id.action_global_hashtagWinningFragment,
-//            HashtagWinningFragmentArgs(message).toBundle()
-//        )
-
     }
 
     protected fun navigate(@IdRes navTargetId: Int, args: Bundle? = null) {

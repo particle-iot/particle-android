@@ -17,7 +17,6 @@ import io.particle.mesh.setup.flow.modules.cloudconnection.WifiScanData
 import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.common.inflateRow
 import io.particle.mesh.ui.R
-import io.particle.mesh.ui.R.layout
 import kotlinx.android.synthetic.main.fragment_cp_scan_for_wifi_networks.*
 import kotlinx.android.synthetic.main.p_controlpanel_row_wifi_scan.view.*
 import mu.KotlinLogging
@@ -40,12 +39,11 @@ class ControlPanelScanForWiFiNetworksFragment : BaseControlPanelFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter =
-            ScannedWifiNetworksAdapter { onWifiNetworkSelected(it.network) }
+        adapter = ScannedWifiNetworksAdapter { onWifiNetworkSelected(it.network) }
 
         p_scanforwifi_list.adapter = adapter
 
-        wifiScannerLD = responseReceiver!!.getWifiScannerForTargetDevice()
+        wifiScannerLD = flowUiListener!!.wifi.getWifiScannerForTargetDevice()
         wifiScannerLD.observe(this, Observer { onNetworksUpdated(it) })
     }
 
@@ -61,7 +59,7 @@ class ControlPanelScanForWiFiNetworksFragment : BaseControlPanelFragment() {
     }
 
     private fun onWifiNetworkSelected(networkInfo: ScanNetworksReply.Network) {
-        responseReceiver?.setWifiNetworkToConfigure(networkInfo)
+        flowUiListener?.wifi?.setWifiNetworkToConfigure(networkInfo)
     }
 
 }
@@ -92,7 +90,7 @@ private class ScannedWifiNetworksAdapter(
         return ScannedWifiNetworkHolder(
             inflateRow(
                 parent,
-                layout.p_controlpanel_row_wifi_scan
+                R.layout.p_controlpanel_row_wifi_scan
             )
         )
     }

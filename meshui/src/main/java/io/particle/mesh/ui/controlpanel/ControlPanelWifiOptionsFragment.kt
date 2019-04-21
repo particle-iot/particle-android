@@ -10,7 +10,7 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.ui.R
-import io.particle.mesh.ui.R.string
+import io.particle.mesh.ui.TitleBarOptions
 import kotlinx.android.synthetic.main.fragment_control_panel_wifi_options.*
 import mu.KotlinLogging
 
@@ -20,7 +20,7 @@ class ControlPanelWifiOptionsFragment : BaseControlPanelFragment() {
     private val log = KotlinLogging.logger {}
 
     override val titleBarOptions = TitleBarOptions(
-        string.p_common_wifi,
+        R.string.p_common_wifi,
         showBackButton = true,
         showCloseButton = false
     )

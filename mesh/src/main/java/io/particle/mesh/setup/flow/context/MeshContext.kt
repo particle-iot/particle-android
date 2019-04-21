@@ -17,8 +17,8 @@ class MeshContext : Clearable {
 
     private val log = KotlinLogging.logger {}
 
-    val targetDeviceMeshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
-    val targetDeviceMeshNetworkToJoinCommissionerPassword: LiveData<String?> = MutableLiveData()
+    val meshNetworkToJoinLD: LiveData<MeshNetworkToJoin?> = MutableLiveData()
+    val meshNetworkToJoinCommissionerPassword: LiveData<String?> = MutableLiveData()
     val targetJoinedMeshNetworkLD: LiveData<Boolean?> = MutableLiveData()
     val commissionerStartedLD: LiveData<Boolean?> = MutableLiveData()
     val newNetworkNameLD: LiveData<String?> = MutableLiveData()
@@ -34,8 +34,8 @@ class MeshContext : Clearable {
 
     override fun clearState() {
         val setToNulls = listOf(
-            targetDeviceMeshNetworkToJoinLD,
-            targetDeviceMeshNetworkToJoinCommissionerPassword,
+            meshNetworkToJoinLD,
+            meshNetworkToJoinCommissionerPassword,
             targetJoinedMeshNetworkLD,
             commissionerStartedLD,
             newNetworkNameLD,
@@ -56,12 +56,12 @@ class MeshContext : Clearable {
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {
         log.info { "updateSelectedMeshNetworkToJoin(): $meshNetworkToJoin" }
-        targetDeviceMeshNetworkToJoinLD.castAndPost(SelectedNetwork(meshNetworkToJoin))
+        meshNetworkToJoinLD.castAndPost(SelectedNetwork(meshNetworkToJoin))
     }
 
     fun updateTargetDeviceMeshNetworkToJoinCommissionerPassword(password: String?) {
         log.info { "updateTargetDeviceMeshNetworkToJoinCommissionerPassword()" }
-        targetDeviceMeshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(password)
+        meshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(password)
     }
 
     fun updateCommissionerStarted(started: Boolean) {
@@ -76,7 +76,7 @@ class MeshContext : Clearable {
 
     fun onUserSelectedCreateNewNetwork() {
         log.info { "onUserSelectedCreateNewNetwork()" }
-        targetDeviceMeshNetworkToJoinLD.castAndPost(CreateNewNetwork())
+        meshNetworkToJoinLD.castAndPost(CreateNewNetwork())
     }
 
     fun updateNewNetworkName(newName: String) {

@@ -8,8 +8,8 @@ import io.particle.mesh.setup.flow.context.SetupContexts
 class StepEnsureListeningStoppedForBothDevices : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        ctxs.ble.targetDevice.transceiverLD.value?.sendStopListeningMode()
-        ctxs.ble.commissioner.transceiverLD.value?.sendStopListeningMode()
+        ctxs.targetDevice.transceiverLD.value?.sendStopListeningMode()
+        ctxs.commissioner.transceiverLD.value?.sendStopListeningMode()
     }
 
 }

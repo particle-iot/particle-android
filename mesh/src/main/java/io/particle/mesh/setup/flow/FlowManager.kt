@@ -51,7 +51,7 @@ class FlowManager(
     btConnectionManager: BluetoothConnectionManager,
     transceiverFactory: ProtocolTransceiverFactory,
     private val progressHackLD: MutableLiveData<ProgressHack?>,
-    private val terminatorLD: MutableLiveData<MeshFlowTerminator?>,
+    private val terminatorLD: MutableLiveData<Any?>,
     private val everythingNeedsAContext: Context
 ) : Clearable, ProgressHack {
 
@@ -75,7 +75,7 @@ class FlowManager(
         meshSetupModule = MeshSetupModule(
             this,
             cloud,
-            TargetDeviceMeshNetworksScanner(bleConnectionModule.targetDeviceTransceiverLD)
+            TargetDeviceMeshNetworksScanner(bleConnectionModule.targetDeviceTransceiverLD, Scopes())
         )
 
         cloudConnectionModule = CloudConnectionModule(
@@ -233,7 +233,7 @@ class FlowManager(
     }
 
     fun endSetup() {
-        terminatorLD.value?.terminateSetup()
+//        terminatorLD.value?.terminateSetup()
     }
 
     fun newDialogRequest(spec: DialogSpec) {

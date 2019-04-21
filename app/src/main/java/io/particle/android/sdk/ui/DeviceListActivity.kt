@@ -119,13 +119,8 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
             val background =
                 ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background)
 
-            val collapsingToolbar =
-                Ui.findView<CollapsingToolbarLayout>(this, R.id.collapsing_toolbar)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                collapsingToolbar.background = background
-            } else {
-                collapsingToolbar.setBackgroundDrawable(background)
-            }
+            val toolBar = Ui.findView<CollapsingToolbarLayout>(this, R.id.collapsing_toolbar)
+            toolBar.background = background
 
             appbar.addOnOffsetChangedListener(offsetChangedListener)
             appbar.setExpanded(false)
@@ -186,7 +181,7 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         searchView = searchItem.actionView as SearchView
         searchView!!.setQuery(deviceList!!.textFilter, false)
         //on show of search view hide titleRes and logout menu option
-        searchView!!.setOnSearchClickListener { v ->
+        searchView!!.setOnSearchClickListener {
             title.visibility = View.GONE
             logoutItem.isVisible = false
             filterItem.isVisible = false

@@ -2,7 +2,6 @@ package io.particle.mesh.setup.flow.setupsteps
 
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.setup.flow.DeviceConnectToCloudTimeoutException
-import io.particle.mesh.setup.flow.FlowException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
@@ -15,7 +14,7 @@ class StepCheckDeviceGotClaimed(private val cloud: ParticleCloud) : MeshSetupSte
     private val log = KotlinLogging.logger {}
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        if (ctxs.ble.targetDevice.isClaimedLD.value == true) {
+        if (ctxs.targetDevice.isClaimedLD.value == true) {
             return
         }
 
@@ -45,16 +44,16 @@ class StepCheckDeviceGotClaimed(private val cloud: ParticleCloud) : MeshSetupSte
             return false
         }
 
-        val isInList = pollDevicesForNewDevice(ctxs.ble.targetDevice.deviceId!!)
+        val isInList = pollDevicesForNewDevice(ctxs.targetDevice.deviceId!!)
         if (!isInList) {
             throw DeviceConnectToCloudTimeoutException()
         }
 
-        val device = cloud.getDevice(ctxs.ble.targetDevice.deviceId!!)
+        val device = cloud.getDevice(ctxs.targetDevice.deviceId!!)
 
-        ctxs.ble.targetDevice.currentDeviceName = device.name
+        ctxs.targetDevice.currentDeviceName = device.name
 
-        ctxs.ble.targetDevice.updateIsClaimed(true)
+        ctxs.targetDevice.updateIsClaimed(true)
     }
 
 }

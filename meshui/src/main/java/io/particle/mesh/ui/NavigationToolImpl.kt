@@ -1,4 +1,4 @@
-package io.particle.mesh.ui.setup
+package io.particle.mesh.ui
 
 import android.os.Bundle
 import androidx.annotation.IdRes

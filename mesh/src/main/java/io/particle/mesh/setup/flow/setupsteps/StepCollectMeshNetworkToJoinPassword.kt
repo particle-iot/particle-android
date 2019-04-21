@@ -19,11 +19,11 @@ class StepCollectMeshNetworkToJoinPassword(private val flowUi: FlowUiDelegate) :
     private val log = KotlinLogging.logger {}
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        if (ctxs.mesh.targetDeviceMeshNetworkToJoinCommissionerPassword.value.truthy()) {
+        if (ctxs.mesh.meshNetworkToJoinCommissionerPassword.value.truthy()) {
             return
         }
 
-        val passwordLd = ctxs.mesh.targetDeviceMeshNetworkToJoinCommissionerPassword
+        val passwordLd = ctxs.mesh.meshNetworkToJoinCommissionerPassword
         val password = passwordLd.nonNull(scopes).runBlockOnUiThreadAndAwaitUpdate(scopes) {
             if (!ctxs.mesh.shownNetworkPasswordUi) {
                 flowUi.collectPasswordForMeshToJoin()

@@ -5,13 +5,13 @@ import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.mesh.common.Result
+import io.particle.mesh.setup.flow.context.NetworkSetupType
+import io.particle.mesh.setup.flow.context.NetworkSetupType.AS_GATEWAY
+import io.particle.mesh.setup.flow.context.NetworkSetupType.NODE_JOINER
+import io.particle.mesh.setup.flow.context.NetworkSetupType.STANDALONE
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.device.DeviceModule
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.AS_GATEWAY
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.JOINER
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType.STANDALONE
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
@@ -77,7 +77,7 @@ class Flow(
         }
 
         deviceModule.ensureNetworkSetupTypeCaptured()
-        return if (deviceModule.networkSetupTypeLD.value!! == NetworkSetupType.JOINER) {
+        return if (deviceModule.networkSetupTypeLD.value!! == NetworkSetupType.NODE_JOINER) {
             Gen3ConnectivityType.MESH_ONLY
         } else {
             meshSetupModule.showNewNetworkOptionInScanner = true
@@ -158,7 +158,7 @@ class Flow(
         when (deviceModule.networkSetupTypeLD.value!!) {
             AS_GATEWAY -> doCreateNetworkFlow()
             STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
-            JOINER -> throw IllegalStateException("Should not be in a JOINER flow here!")
+            NODE_JOINER -> throw IllegalStateException("Should not be in a JOINER flow here!")
         }
     }
 
@@ -278,11 +278,6 @@ class Flow(
     private suspend fun ensureShowJoinerSetupFinishedUi() {
         log.info { "ensureShowJoinerSetupFinishedUi()" }
 //        flowManager.navigate(R.id.action_global_setupFinishedFragment)
-    }
-
-    private suspend fun ensureShowGatewaySetupFinishedUi() {
-        log.info { "ensureShowGatewaySetupFinishedUi()" }
-//        flowManager.navigate(R.id.action_global_gatewaySetupFinishedFragment)
     }
 
     private suspend fun ensureShowCreateNetworkFinished() {

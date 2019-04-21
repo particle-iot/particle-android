@@ -29,6 +29,7 @@ fun Context.isLocationServicesAvailable(): Boolean {
             QATool.report(e)
         }
 
+        @Suppress("DEPRECATION")
         locationMode != Settings.Secure.LOCATION_MODE_OFF
     }
 

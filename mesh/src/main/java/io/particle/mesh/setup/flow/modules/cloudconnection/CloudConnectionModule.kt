@@ -13,7 +13,7 @@ import io.particle.mesh.R
 import io.particle.mesh.common.android.livedata.*
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.*
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
+import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -368,10 +368,11 @@ class CloudConnectionModule(
         val action = when (flowManager.deviceModule.networkSetupTypeLD.value) {
             NetworkSetupType.AS_GATEWAY -> PricingImpactAction.CREATE_NETWORK
             NetworkSetupType.STANDALONE -> PricingImpactAction.ADD_USER_DEVICE
-            NetworkSetupType.JOINER -> throw FatalFlowException(
+            NetworkSetupType.NODE_JOINER -> throw FatalFlowException(
                 "Should not be showing billing for joiners!"
             )
             null -> PricingImpactAction.ADD_NETWORK_DEVICE
+            else -> TODO()  // huh?
         }
 
         val networkType = if (flowManager.targetDeviceType == Gen3ConnectivityType.CELLULAR) {

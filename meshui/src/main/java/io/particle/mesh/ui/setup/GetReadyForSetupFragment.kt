@@ -12,12 +12,16 @@ import android.widget.VideoView
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
+import io.particle.mesh.setup.isSomSerial
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.setup.HelpTextConfig.ARGON
 import io.particle.mesh.ui.setup.HelpTextConfig.A_SERIES
 import io.particle.mesh.ui.setup.HelpTextConfig.BORON_3G
@@ -29,7 +33,7 @@ import io.particle.mesh.ui.setup.HelpTextConfig.X_SERIES
 import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
 
 
-class GetReadyForSetupFragment : BaseMeshSetupFragment() {
+class GetReadyForSetupFragment : BaseFlowFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +42,8 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_get_ready_for_setup, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
         action_next.setOnClickListener { onNext() }
 
@@ -58,19 +62,22 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
         setContentFromDeviceModel()
 
         setUpVideoView(videoView)
+
     }
 
     private fun setContentFromDeviceModel() {
+        val ful = flowUiListener!!
+
         val config = if (p_getreadyforsetup_use_ethernet_switch.isChecked) {
-            HelpTextConfig.FEATHERWING
+            FEATHERWING
         } else {
-            val barcodeLD = flowManagerVM.flowManager!!.bleConnectionModule.targetDeviceBarcodeLD
+            val barcodeLD = ful.targetDevice.barcode
             val isSomSerial = barcodeLD.value?.serialNumber?.isSomSerial() ?: false
 
-            when (flowManagerVM.flowManager!!.targetDeviceType) {
-                Gen3ConnectivityType.WIFI -> { if (isSomSerial) HelpTextConfig.A_SERIES else HelpTextConfig.ARGON }
-                Gen3ConnectivityType.MESH_ONLY -> { if (isSomSerial) HelpTextConfig.X_SERIES else HelpTextConfig.XENON }
-                Gen3ConnectivityType.CELLULAR -> { if (isSomSerial) HelpTextConfig.B_SERIES else HelpTextConfig.BORON_3G }
+            when (ful.targetDevice.connectivityType!!) {
+                Gen3ConnectivityType.WIFI -> { if (isSomSerial) A_SERIES else ARGON }
+                Gen3ConnectivityType.MESH_ONLY -> { if (isSomSerial) X_SERIES else XENON }
+                Gen3ConnectivityType.CELLULAR -> { if (isSomSerial) B_SERIES else BORON_3G }
             }
         }
 
@@ -95,15 +102,13 @@ class GetReadyForSetupFragment : BaseMeshSetupFragment() {
     }
 
     private fun onNext() {
-        flowManagerVM.flowManager!!.deviceModule.updateShouldDetectEthernet(
-            p_getreadyforsetup_use_ethernet_switch.isChecked
-        )
-
-        flowManagerVM.flowManager!!.bleConnectionModule.updateGetReadyNextButtonClicked(true)
+        val shouldDetect = p_getreadyforsetup_use_ethernet_switch.isChecked
+        flowUiListener?.deviceData?.shouldDetectEthernet = shouldDetect
+        flowUiListener?.onGetReadyNextButtonClicked()
     }
 
     private fun onConfigChanged(config: HelpTextConfig) {
-        val productName = flowManagerVM.flowManager!!.getTypeName()
+        val productName = getUserFacingTypeName()
 
         setup_header_text.setTextMaybeWithProductTypeFormat(productName, config.headerText)
         videoView.setVideoURI(requireActivity().buildRawResourceUri(config.videoUrlRes))

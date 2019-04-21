@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,14 +16,15 @@ import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.WiFiStrength
 import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.common.inflateRow
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import io.particle.mesh.ui.R.layout
 import kotlinx.android.synthetic.main.fragment_scan_for_wi_fi_networks.*
 import kotlinx.android.synthetic.main.p_mesh_row_wifi_scan.view.*
 import mu.KotlinLogging
 
 
-class ScanForWiFiNetworksFragment : BaseMeshSetupFragment() {
+class ScanForWiFiNetworksFragment : BaseFlowFragment() {
 
     private lateinit var adapter: ScannedWifiNetworksAdapter
 
@@ -35,15 +37,12 @@ class ScanForWiFiNetworksFragment : BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_scan_for_wi_fi_networks, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter =
-            ScannedWifiNetworksAdapter { onWifiNetworkSelected(it.network) }
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
+        adapter = ScannedWifiNetworksAdapter { onWifiNetworkSelected(it.network) }
         p_scanforwifi_list.adapter = adapter
-
-        val fm = flowManagerVM.flowManager!!
-        fm.cloudConnectionModule.wifiNetworksScannerLD.observe(
+        flowUiListener.wifi.getWifiScannerForTargetDevice().observe(
             this,
             Observer { onNetworksUpdated(it) }
         )
@@ -61,9 +60,7 @@ class ScanForWiFiNetworksFragment : BaseMeshSetupFragment() {
     }
 
     private fun onWifiNetworkSelected(networkInfo: ScanNetworksReply.Network) {
-        flowManagerVM.flowManager!!.cloudConnectionModule.argonSteps.updateTargetWifiNetwork(
-            networkInfo
-        )
+        flowUiListener?.wifi?.setWifiNetworkToConfigure(networkInfo)
     }
 
 }
@@ -94,7 +91,7 @@ private class ScannedWifiNetworksAdapter(
         return ScannedWifiNetworkHolder(
             inflateRow(
                 parent,
-                layout.p_mesh_row_wifi_scan
+                R.layout.p_mesh_row_wifi_scan
             )
         )
     }

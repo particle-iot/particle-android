@@ -12,17 +12,18 @@ import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.flow.context.NetworkSetupType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 
-enum class NetworkSetupType {
-    AS_GATEWAY,
-    STANDALONE,
-    JOINER
-}
+//enum class NetworkSetupType {
+//    AS_GATEWAY,
+//    STANDALONE,
+//    JOINER
+//}
 
 class DeviceModule(
     private val flowManager: FlowManager,

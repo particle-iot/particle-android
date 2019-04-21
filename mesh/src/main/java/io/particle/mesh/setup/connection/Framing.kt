@@ -3,6 +3,7 @@ package io.particle.mesh.setup.connection
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.toHex
 import io.particle.mesh.setup.connection.security.AesCcmDelegate
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.utils.putUntilFull
 import io.particle.mesh.setup.utils.readByteArray
 import io.particle.mesh.setup.utils.readUint16LE
@@ -67,7 +68,7 @@ class OutboundFrameWriter(
 }
 
 
-class InboundFrameReader {
+class InboundFrameReader(private val scopes: Scopes) {
 
     val inboundFrameChannel = Channel<InboundFrame>(256)
     // Externally mutable state is less than awesome.  Patches welcome.
@@ -115,7 +116,7 @@ class InboundFrameReader {
                 cryptoDelegate?.decrypt(frameData, additionalData) ?: frameData
         )
         inProgressFrame = null
-        GlobalScope.launch(Dispatchers.Default) {
+        scopes.onWorker {
             inboundFrameChannel.send(completeFrame)
         }
 

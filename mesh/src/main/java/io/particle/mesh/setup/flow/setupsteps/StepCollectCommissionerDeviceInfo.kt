@@ -12,7 +12,7 @@ import io.particle.mesh.setup.flow.FlowUiDelegate
 class StepCollectCommissionerDeviceInfo(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        val barcodeLD = ctxs.ble.commissioner.barcode
+        val barcodeLD = ctxs.commissioner.barcode
         if (barcodeLD.value != null) {
             return
         }

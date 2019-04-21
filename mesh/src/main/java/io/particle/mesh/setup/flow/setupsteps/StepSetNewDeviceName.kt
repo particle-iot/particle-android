@@ -33,7 +33,7 @@ class StepSetNewDeviceName(
         try {
             flowUi.showGlobalProgressSpinner(true)
 
-            val targetDeviceId = ctxs.ble.targetDevice.deviceId!!
+            val targetDeviceId = ctxs.targetDevice.deviceId!!
             val joiner = cloud.getDevice(targetDeviceId)
             joiner.name = nameToAssign
             ctxs.cloud.updateIsTargetDeviceNamed(true)

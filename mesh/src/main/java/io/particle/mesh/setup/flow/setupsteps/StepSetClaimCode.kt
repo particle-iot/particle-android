@@ -10,11 +10,11 @@ class StepSetClaimCode : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
         // if claim code is null, we don't intend to claim
-        if (ctxs.ble.targetDevice.isClaimedLD.value == true || ctxs.cloud.shouldBeClaimed == false) {
+        if (ctxs.targetDevice.isClaimedLD.value == true || ctxs.cloud.shouldBeClaimed == false) {
             return
         }
 
-        val targetXceiver = ctxs.ble.targetDevice.transceiverLD.value!!
+        val targetXceiver = ctxs.targetDevice.transceiverLD.value!!
         targetXceiver.sendSetClaimCode(ctxs.cloud.claimCode!!).throwOnErrorOrAbsent()
     }
 

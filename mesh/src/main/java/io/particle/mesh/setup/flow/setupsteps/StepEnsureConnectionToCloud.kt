@@ -24,7 +24,7 @@ class StepEnsureConnectionToCloud : MeshSetupStep() {
             val reply = ctxs.requireTargetXceiver().sendGetConnectionStatus().throwOnErrorOrAbsent()
             log.info { "reply=$reply" }
             if (reply.status == ConnectionStatus.CONNECTED) {
-                ctxs.cloud.updateTargetDeviceConnectedToCloud(true)
+                ctxs.targetDevice.updateDeviceConnectedToCloudLD(true)
                 return
             }
         }

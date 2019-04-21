@@ -24,17 +24,17 @@ enum class DeviceRole {
 
 
 class SetupDevice(
-    val deviceRole: DeviceRole,
+    deviceRole: DeviceRole,
     val barcode: LiveData<CompleteBarcodeData?> = MutableLiveData(),
     val transceiverLD: LiveData<ProtocolTransceiver?> = MutableLiveData(),
-    // FIXME: having 2 LDs, representing the transceiver & the uninitialized transceiver isn't great
-    val deviceConnectedLD: LiveData<Boolean?> = MutableLiveData(),
-    val isClaimedLD: LiveData<Boolean?> = MutableLiveData()
-
+    val isDeviceConnectedToCloudLD: LiveData<Boolean?> = MutableLiveData(),
+    val isClaimedLD: LiveData<Boolean?> = MutableLiveData(),
+    val isSimActivatedLD: LiveData<Boolean?> = MutableLiveData()
 ) {
 
     private val log = KotlinLogging.logger {}
 
+    var deviceRole: DeviceRole by log.logged(deviceRole)
     var deviceId: String? by log.logged()
     var connectivityType: Gen3ConnectivityType? by log.logged()
     var deviceType: ParticleDeviceType? by log.logged()
@@ -45,7 +45,7 @@ class SetupDevice(
 
     @WorkerThread
     fun updateBarcode(barcodeData: CompleteBarcodeData?, cloud: ParticleCloud) {
-        log.info { "updateBarcode(): $barcodeData" }
+        log.info { "updateBarcode() for $deviceRole: $barcodeData" }
         barcode.castAndPost(barcodeData)
         barcodeData?.let {
             deviceType = it.toDeviceType(cloud)
@@ -54,18 +54,23 @@ class SetupDevice(
     }
 
     fun updateDeviceTransceiver(transceiver: ProtocolTransceiver?) {
-        log.info { "updateDeviceTransceiver(): $transceiver" }
+        log.info { "updateDeviceTransceiver() for $deviceRole: $transceiver" }
         transceiverLD.castAndSetOnMainThread(transceiver)
     }
 
-    fun updateDeviceConnectionInitialized(initialized: Boolean) {
-        log.info { "updateDeviceConnectionInitialized(): $initialized" }
-        deviceConnectedLD.castAndPost(initialized)
+    fun updateIsClaimed(isClaimed: Boolean) {
+        log.info { "updateIsClaimed() for $deviceRole: $isClaimed" }
+        isClaimedLD.castAndPost(isClaimed)
     }
 
-    fun updateIsClaimed(isClaimed: Boolean) {
-        log.info { "updateIsClaimed(): $isClaimed" }
-        isClaimedLD.castAndPost(isClaimed)
+    fun updateDeviceConnectedToCloudLD(isConnected: Boolean) {
+        log.info { "updateDeviceConnectedToCloudLD() for $deviceRole: $isConnected" }
+        isDeviceConnectedToCloudLD.castAndPost(isConnected)
+    }
+
+    fun updateIsSimActivated(isActivated: Boolean) {
+        log.info { "updateIsSimActivated() for $deviceRole: $isActivated" }
+        isSimActivatedLD.castAndPost(isActivated)
     }
 
 }

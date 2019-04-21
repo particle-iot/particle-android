@@ -50,14 +50,14 @@ class StepShowPricingImpact(
             null -> PricingImpactAction.ADD_NETWORK_DEVICE
         }
 
-        val connType = ctxs.ble.targetDevice.connectivityType
+        val connType = ctxs.targetDevice.connectivityType
         val networkType = if (connType == Gen3ConnectivityType.CELLULAR) {
             PricingImpactNetworkType.CELLULAR
         } else {
             PricingImpactNetworkType.WIFI
         }
 
-        val selectedNetwork = ctxs.mesh.targetDeviceMeshNetworkToJoinLD.value
+        val selectedNetwork = ctxs.mesh.meshNetworkToJoinLD.value
         val networkId = when (selectedNetwork) {
             is MeshNetworkToJoin.SelectedNetwork -> selectedNetwork.networkToJoin.networkId
             is MeshNetworkToJoin.CreateNewNetwork,
@@ -66,10 +66,10 @@ class StepShowPricingImpact(
 
         ctxs.cloud.pricingImpact = cloud.getPricingImpact(
             action = action,
-            deviceId = ctxs.ble.targetDevice.deviceId,
+            deviceId = ctxs.targetDevice.deviceId,
             networkId = networkId,
             networkType = networkType,
-            iccid = ctxs.ble.targetDevice.iccid
+            iccid = ctxs.targetDevice.iccid
         )
     }
 }

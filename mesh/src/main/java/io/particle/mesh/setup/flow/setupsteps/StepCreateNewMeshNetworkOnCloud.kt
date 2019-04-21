@@ -18,14 +18,14 @@ class StepCreateNewMeshNetworkOnCloud(private val cloud: ParticleCloud) : MeshSe
             return
         }
 
-        val networkType = when (ctxs.ble.targetDevice.connectivityType!!) {
+        val networkType = when (ctxs.targetDevice.connectivityType!!) {
             Gen3ConnectivityType.WIFI -> ParticleNetworkType.MICRO_WIFI
             Gen3ConnectivityType.CELLULAR -> ParticleNetworkType.MICRO_CELLULAR
             Gen3ConnectivityType.MESH_ONLY -> ParticleNetworkType.MICRO_WIFI
         }
 
         val networkResponse = cloud.registerMeshNetwork(
-            ctxs.ble.targetDevice.deviceId!!,
+            ctxs.targetDevice.deviceId!!,
             networkType,
             ctxs.mesh.newNetworkNameLD.value!!
         )

@@ -5,22 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_new_mesh_network_name.view.*
+import kotlinx.android.synthetic.main.fragment_new_mesh_network_name.*
 
 
-class NewMeshNetworkNameFragment : BaseMeshSetupFragment() {
+class NewMeshNetworkNameFragment : BaseFlowFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_new_mesh_network_name, container, false)
-        root.action_next.setOnClickListener { onNetworkNameEntered() }
-        return root
+        return inflater.inflate(R.layout.fragment_new_mesh_network_name, container, false)
+    }
+
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
+
+        action_next.setOnClickListener { onNetworkNameEntered() }
     }
 
     private fun onNetworkNameEntered() {
-        val name = view!!.networkNameInputLayout.editText!!.text.toString()
+        val name = networkNameInputLayout.editText!!.text.toString()
         val isValid = validateNetworkName(name)
         if (!isValid) {
             MaterialDialog.Builder(requireActivity())
@@ -29,7 +36,7 @@ class NewMeshNetworkNameFragment : BaseMeshSetupFragment() {
                     .show()
             return
         }
-        flowManagerVM.flowManager!!.meshSetupModule.updateNewNetworkName(name)
+        flowUiListener?.mesh?.updateNewNetworkName(name)
     }
 
     private fun validateNetworkName(name: String): Boolean {

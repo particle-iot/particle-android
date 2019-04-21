@@ -10,11 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
@@ -23,13 +23,15 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.utils.appHasPermission
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.BarcodeData
-import io.particle.mesh.ui.setup.barcodescanning.CameraSource
-import io.particle.mesh.ui.setup.barcodescanning.CameraSourcePreview
-import io.particle.mesh.ui.setup.barcodescanning.GraphicOverlay
-import io.particle.mesh.ui.setup.barcodescanning.barcode.BarcodeScanningProcessor
-import io.particle.mesh.ui.R
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.BarcodeData.PartialBarcodeData
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
+import io.particle.mesh.ui.R
+import io.particle.mesh.ui.setup.barcodescanning.CameraSource
+import io.particle.mesh.ui.setup.barcodescanning.barcode.BarcodeScanningProcessor
+import io.particle.mesh.ui.utils.getViewModel
+import kotlinx.android.synthetic.main.fragment_scan_code.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,12 +45,6 @@ private const val PERMISSION_REQUESTS = 1
 
 
 class ScanViewModel : ViewModel() {
-
-    companion object {
-        fun getViewModel(activity: androidx.fragment.app.FragmentActivity): ScanViewModel {
-            return ViewModelProviders.of(activity).get(ScanViewModel::class.java)
-        }
-    }
 
     val latestScannedBarcode: LiveData<CompleteBarcodeData>
         get() = mutableLD
@@ -66,11 +62,9 @@ class ScanViewModel : ViewModel() {
 }
 
 
-class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCallback {
+class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback {
 
     private lateinit var cloud: ParticleCloud
-    private lateinit var preview: CameraSourcePreview
-    private lateinit var graphicOverlay: GraphicOverlay
     private lateinit var barcodeScanningProcessor: BarcodeScanningProcessor
     private lateinit var scanViewModel: ScanViewModel
 
@@ -86,8 +80,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cloud = ParticleCloudSDK.getCloud()
-        scanViewModel =
-            ScanViewModel.getViewModel(requireActivity())
+        scanViewModel = this.getViewModel()
 
         barcodeScanningProcessor = BarcodeScanningProcessor()
         barcodeScanningProcessor.foundBarcodes.observe(this, barcodeObserver)
@@ -100,16 +93,11 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_scan_code, container, false)
-
-        preview = root.findViewById(R.id.scanPreview)
-        graphicOverlay = root.findViewById(R.id.scanPreviewOverlay)
-
-        return root
+        return inflater.inflate(R.layout.fragment_scan_code, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
         if (allPermissionsGranted()) {
             createCameraSource()
@@ -130,7 +118,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
      */
     override fun onPause() {
         super.onPause()
-        preview.stop()
+        scanPreview.stop()
     }
 
     override fun onDestroy() {
@@ -206,7 +194,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     private fun createCameraSource() {
         // If there's no existing cameraSource, create one.
         if (cameraSource == null) {
-            cameraSource = CameraSource(requireActivity(), graphicOverlay)
+            cameraSource = CameraSource(requireActivity(), scanPreviewOverlay)
         }
         cameraSource!!.setFacing(CameraSource.CAMERA_FACING_BACK)
         cameraSource!!.setMachineLearningFrameProcessor(barcodeScanningProcessor)
@@ -220,7 +208,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     private fun startCameraSource() {
         if (cameraSource != null) {
             try {
-                preview.start(cameraSource, graphicOverlay)
+                scanPreview.start(cameraSource, scanPreviewOverlay)
             } catch (e: IOException) {
                 QATool.report(e)
                 cameraSource!!.release()
@@ -250,7 +238,7 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
             }
         }
 
-        if (!allNeededPermissions.isEmpty()) {
+        if (allNeededPermissions.isNotEmpty()) {
             requestPermissions(allNeededPermissions.toTypedArray(),
                 PERMISSION_REQUESTS
             )
@@ -279,7 +267,6 @@ class ScanCodeFragment : BaseMeshSetupFragment(), OnRequestPermissionsResultCall
     }
 
     private fun showBadBarcodeSupportDialog(badBarcode: PartialBarcodeData) {
-        val flowManager = flowManagerVM.flowManager!!
         val activity = requireActivity()
 
         val emailContent = """
@@ -312,7 +299,7 @@ Full scan results: ${badBarcode.serialNumber} ${badBarcode.partialMobileSecret}
             .positiveText(R.string.p_action_contact_support)
             .onPositive { _, _ ->
                 sendSupportEmail()
-                flowManager.endSetup()
+                flowRunner.endSetup()
             }
             .build()
             .show()

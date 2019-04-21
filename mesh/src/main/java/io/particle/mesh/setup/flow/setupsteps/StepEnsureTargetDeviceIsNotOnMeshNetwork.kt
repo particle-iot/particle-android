@@ -74,7 +74,7 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
 
         ctxs.mesh.checkedForExistingNetwork = true
 
-        cloud.removeDeviceFromAnyMeshNetwork(ctxs.ble.targetDevice.deviceId!!)
+        cloud.removeDeviceFromAnyMeshNetwork(ctxs.targetDevice.deviceId!!)
     }
 
 }

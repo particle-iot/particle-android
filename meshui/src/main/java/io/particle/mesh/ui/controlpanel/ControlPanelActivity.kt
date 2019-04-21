@@ -8,6 +8,8 @@ import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.TitleBarOptionsListener
 import kotlinx.android.synthetic.main.activity_control_panel.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
@@ -15,7 +17,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 private const val EXTRA_DEVICE_ID = "EXTRA_DEVICE_ID"
 
 
-class ControlPanelActivity : BaseFlowActivity() {
+class ControlPanelActivity : DeviceIdProvider, TitleBarOptionsListener, BaseFlowActivity() {
 
     companion object {
         fun buildIntent(ctx: Context, deviceId: String): Intent {
@@ -24,39 +26,12 @@ class ControlPanelActivity : BaseFlowActivity() {
         }
     }
 
+    override val progressSpinnerViewId: Int = R.id.p_controlpanel_globalProgressSpinner
 
     override val navHostFragmentId: Int = R.id.main_nav_host_fragment
     override val contentViewIdRes: Int = R.layout.activity_control_panel
 
-    override fun buildFlowUiDelegate(systemInterface: FlowRunnerSystemInterface): FlowUiDelegate {
-        return ControlPanelFlowUiDelegate(
-            systemInterface.navControllerLD,
-            application,
-            systemInterface.dialogHack,
-            systemInterface
-        )
-    }
-
-    var showCloseButton: Boolean = false
-        set(value) {
-            field = value
-            p_action_close.visibility = if (value) View.VISIBLE else View.INVISIBLE
-        }
-
-    var showBackButton: Boolean = true
-        set(value) {
-            field = value
-            p_action_back.visibility = if (value) View.VISIBLE else View.INVISIBLE
-        }
-
-    var titleText: String = ""
-        set(value) {
-            field = value
-            p_title.text = value
-        }
-
-    // FIXME: put this value on an Activity-scoped ViewModel?
-    internal val deviceId: String
+    override val deviceId: String
         get() = intent.getStringExtra(EXTRA_DEVICE_ID)
 
 
@@ -75,11 +50,20 @@ class ControlPanelActivity : BaseFlowActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        flowSystemInterface.setNavController(null)
+    override fun buildFlowUiDelegate(systemInterface: FlowRunnerSystemInterface): FlowUiDelegate {
+        return ControlPanelFlowUiDelegate(
+            systemInterface.navControllerLD,
+            application,
+            systemInterface.dialogHack,
+            systemInterface
+        )
+    }
+
+    override fun setTitleBarOptions(options: TitleBarOptions) {
+        val title = options.titleRes ?: R.string.single_space
+        p_title.text = getString(title)
+        p_action_back.visibility = if (options.showBackButton) View.VISIBLE else View.INVISIBLE
+        p_action_close.visibility = if (options.showCloseButton) View.VISIBLE else View.INVISIBLE
     }
 
 }
-
-

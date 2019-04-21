@@ -5,22 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_new_mesh_network_password.view.*
+import kotlinx.android.synthetic.main.fragment_new_mesh_network_password.*
 
 
-class NewMeshNetworkPasswordFragment : BaseMeshSetupFragment() {
+class NewMeshNetworkPasswordFragment : BaseFlowFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_new_mesh_network_password, container, false)
-        root.action_next.setOnClickListener { onNetworkPasswordEntered() }
-        return root
+        return inflater.inflate(R.layout.fragment_new_mesh_network_password, container, false)
+    }
+
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
+
+        action_next.setOnClickListener { onNetworkPasswordEntered() }
     }
 
     private fun onNetworkPasswordEntered() {
-        val password = view!!.networkPasswordInputLayout.editText!!.text.toString()
+        val password = networkPasswordInputLayout.editText!!.text.toString()
         val isValid = validateNetworkPassword(password)
         if (!isValid) {
             MaterialDialog.Builder(requireActivity())
@@ -30,7 +37,7 @@ class NewMeshNetworkPasswordFragment : BaseMeshSetupFragment() {
             return
         }
 
-        val confirmation = view!!.networkPasswordConfirmInputLayout.editText!!.text.toString()
+        val confirmation = networkPasswordConfirmInputLayout.editText!!.text.toString()
         if (password != confirmation) {
             MaterialDialog.Builder(requireActivity())
                     .content(R.string.p_newmeshnetworkpassword_passwords_do_not_match_dialog_content)
@@ -39,7 +46,7 @@ class NewMeshNetworkPasswordFragment : BaseMeshSetupFragment() {
             return
         }
 
-        flowManagerVM.flowManager!!.meshSetupModule.updateNewNetworkPassword(password)
+        flowUiListener?.mesh?.updateNewNetworkPassword(password)
     }
 
     // FIXME: move this to the backend

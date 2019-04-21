@@ -22,6 +22,7 @@ fun checkIsThisTheMainThread() {
  * Executes the runnable immediately if called from the main thread,
  * otherwise, it will be posted to the main thread.
  */
+@Deprecated(message = "Use [Scopes.onMain] instead", replaceWith = ReplaceWith("Scopes.onMain"))
 fun runOnMainThread(runnable: () -> Unit) {
     if (isThisTheMainThread()) {
         runnable()

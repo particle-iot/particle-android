@@ -14,7 +14,7 @@ class StepEnsureCorrectEthernetFeatureStatus : MeshSetupStep() {
             return
         }
 
-        val target = ctxs.ble.targetDevice.transceiverLD.value!!
+        val target = ctxs.targetDevice.transceiverLD.value!!
         target.sendSetFeature(Feature.ETHERNET_DETECTION, true).throwOnErrorOrAbsent()
         ctxs.device.isDetectEthernetSent = true
         target.sendStartupMode(DeviceMode.LISTENING_MODE).throwOnErrorOrAbsent()

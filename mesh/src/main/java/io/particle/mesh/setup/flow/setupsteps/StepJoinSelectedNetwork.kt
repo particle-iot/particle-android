@@ -24,7 +24,7 @@ class StepJoinSelectedNetwork(private val cloud: ParticleCloud) : MeshSetupStep(
         commish.sendStartCommissioner().throwOnErrorOrAbsent()
         ctxs.mesh.updateCommissionerStarted(true)
 
-        val toJoinWrapper =  ctxs.mesh.targetDeviceMeshNetworkToJoinLD.value!!
+        val toJoinWrapper =  ctxs.mesh.meshNetworkToJoinLD.value!!
         val networkToJoin: NetworkInfo = when (toJoinWrapper) {
             is MeshNetworkToJoin.SelectedNetwork -> toJoinWrapper.networkToJoin
             is MeshNetworkToJoin.CreateNewNetwork -> throw IllegalStateException()
@@ -39,7 +39,7 @@ class StepJoinSelectedNetwork(private val cloud: ParticleCloud) : MeshSetupStep(
         ctxs.mesh.updateTargetJoinedMeshNetwork(true)
 
         cloud.addDeviceToMeshNetwork(
-            ctxs.ble.targetDevice.deviceId!!,
+            ctxs.targetDevice.deviceId!!,
             networkToJoin.networkId
         )
 

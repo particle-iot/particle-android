@@ -31,8 +31,8 @@ class FlowRunnerSystemInterface : ProgressHack {
     val scopes = Scopes()
     val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>()
     val dialogHack = DialogTool(dialogRequestLD, MutableLiveData())
-    val shouldTerminateLD: LiveData<Boolean?> = ClearValueOnInactiveLiveData<Boolean>()
     val shouldShowProgressSpinnerLD: LiveData<Boolean?> = MutableLiveData()
+    val shouldTerminateLD: LiveData<Boolean?> = ClearValueOnInactiveLiveData<Boolean>()
 
     var navControllerLD: LiveData<NavigationTool?> = MutableLiveData()
 
@@ -67,6 +67,8 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
     val systemInterface = FlowRunnerSystemInterface()
     lateinit var flowRunner: MeshFlowRunner
 
+    var isInitialized = false
+        private set
 
     fun initialize(flowUiDelegate: FlowUiDelegate) {
         flowRunner = buildFlowManager(
@@ -77,6 +79,8 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
         )
 
         systemInterface.initialize(flowRunner)
+
+        isInitialized = true
     }
 
     override fun onCleared() {

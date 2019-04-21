@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import com.squareup.phrase.Phrase
 import io.particle.android.sdk.cloud.ParticlePricingInfo
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import kotlinx.android.synthetic.main.fragment_pricing_impact.*
 
 
-class PricingImpactFragment : BaseMeshSetupFragment() {
+class PricingImpactFragment : BaseFlowFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,16 +24,14 @@ class PricingImpactFragment : BaseMeshSetupFragment() {
         return inflater.inflate(R.layout.fragment_pricing_impact, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val fm = flowManagerVM.flowManager!!
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
         p_action_next.setOnClickListener {
-            fm.cloudConnectionModule.updatePricingImpactConfirmed(true)
+            this@PricingImpactFragment.flowUiListener?.cloud?.updatePricingImpactConfirmed(true)
         }
 
-        formatBasedOnPricingImpact(fm.cloudConnectionModule.pricingImpact!!)
+        formatBasedOnPricingImpact(flowUiListener.cloud.pricingImpact!!)
     }
 
     private fun formatBasedOnPricingImpact(pricingInfo: ParticlePricingInfo) {

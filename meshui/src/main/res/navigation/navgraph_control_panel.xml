@@ -119,14 +119,6 @@
         android:id="@+id/action_global_connectingToDeviceCloudFragment"
         app:destination="@id/connectingToDeviceCloudFragment" />
     <fragment
-        android:id="@+id/gatewaySetupFinishedFragment"
-        android:name="io.particle.mesh.ui.setup.GatewaySetupFinishedFragment"
-        android:label="fragment_gateway_setup_finished"
-        tools:layout="@layout/fragment_gateway_setup_finished" />
-    <action
-        android:id="@+id/action_global_gatewaySetupFinishedFragment"
-        app:destination="@id/gatewaySetupFinishedFragment" />
-    <fragment
         android:id="@+id/newMeshNetworkNameFragment"
         android:name="io.particle.mesh.ui.setup.NewMeshNetworkNameFragment"
         android:label="fragment_new_mesh_network_name"
@@ -290,7 +282,7 @@
         android:name="io.particle.mesh.ui.controlpanel.PrepareForPairingFragment"
         android:label="PrepareForPairingFragment" />
     <action
-        android:id="@+id/action_global_controlPanelPrepareForParingFragment"
+        android:id="@+id/action_global_controlPanelPrepareForPairingFragment"
         app:destination="@id/controlPanelPrepareForPairingFragment" />
 
     <fragment
@@ -340,7 +332,5 @@
     <action
         android:id="@+id/action_global_controlPanelCellularOptionsFragment"
         app:destination="@id/controlPanelCellularOptionsFragment" />
-
-
 
 </navigation>

@@ -6,14 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
 import com.squareup.phrase.Phrase
+import io.particle.mesh.common.QATool
 import io.particle.mesh.common.truthy
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
+import io.particle.mesh.setup.flow.context.NetworkSetupType
+import io.particle.mesh.setup.flow.context.NetworkSetupType.STANDALONE
+import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.setup.SetupType.ARGON_GATEWAY
+import io.particle.mesh.ui.setup.SetupType.ARGON_STANDALONE
+import io.particle.mesh.ui.setup.SetupType.BORON_GATEWAY_ACTIVE
+import io.particle.mesh.ui.setup.SetupType.BORON_GATEWAY_NOT_ACTIVE
+import io.particle.mesh.ui.setup.SetupType.BORON_STANDALONE_ACTIVE
+import io.particle.mesh.ui.setup.SetupType.BORON_STANDALONE_NOT_ACTIVE
 import kotlinx.android.synthetic.main.fragment_connect_to_device_cloud_intro.*
 
 
-class ConnectToDeviceCloudIntroFragment : BaseMeshSetupFragment() {
+class ConnectToDeviceCloudIntroFragment : BaseFlowFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,26 +39,26 @@ class ConnectToDeviceCloudIntroFragment : BaseMeshSetupFragment() {
         )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
-        showSetupType(getSetupType())
+        getSetupType()?.let { showSetupType(it) }
 
-        val flowMan = flowManagerVM.flowManager!!
         p_action_next.setOnClickListener {
-            flowMan.cloudConnectionModule.updateShouldConnectToDeviceCloudConfirmed(true)
+            val ful = this@ConnectToDeviceCloudIntroFragment.flowUiListener
+            ful?.updateShouldConnectToDeviceCloudConfirmed(true)
         }
     }
 
-    private fun getSetupType(): SetupType {
-        val flowMan = flowManagerVM.flowManager
+    private fun getSetupType(): SetupType? {
+        val target = flowUiListener?.targetDevice ?: return null
+        val ful = flowUiListener ?: return null
 
-        val networkSetupType = flowMan?.deviceModule?.networkSetupTypeLD?.value!!
-        val deviceType = flowMan.targetDeviceType
-        val isSimActive = flowMan.cloudConnectionModule.boronSteps.isSimActivatedLD.value.truthy()
+        val networkSetupType = ful.deviceData.networkSetupTypeLD.value!!
+        val isSimActive = target.isSimActivatedLD.value.truthy()
 
-        return when (deviceType) {
-            Gen3ConnectivityType.MESH_ONLY -> TODO() // doesn't apply
+        return when (target.connectivityType!!) {
+            Gen3ConnectivityType.MESH_ONLY -> throw IllegalStateException("Mesh-only is N/A here!")
 
             Gen3ConnectivityType.WIFI -> {
                 if (networkSetupType == STANDALONE) ARGON_STANDALONE else ARGON_GATEWAY
@@ -78,7 +90,7 @@ class ConnectToDeviceCloudIntroFragment : BaseMeshSetupFragment() {
 
     private fun Int.templated(): CharSequence {
         return Phrase.from(resources, this)
-            .putOptional("product_type", flowManagerVM.flowManager?.getTypeName())
+            .putOptional("product_type", getUserFacingTypeName())
             .format()
     }
 }
