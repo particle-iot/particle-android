@@ -1,21 +1,21 @@
 package io.particle.mesh.setup.flow.modules.meshsetup
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.annotation.WorkerThread
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiver
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
+
 class TargetDeviceMeshNetworksScanner(
-        private val targetXceiverLD: LiveData<ProtocolTransceiver?>
+    private val targetXceiverLD: LiveData<ProtocolTransceiver?>,
+    private val scopes: Scopes
 ) : MutableLiveData<List<Mesh.NetworkInfo>?>() {
 
     private val log = KotlinLogging.logger {}
@@ -23,14 +23,14 @@ class TargetDeviceMeshNetworksScanner(
     override fun onActive() {
         super.onActive()
         log.debug { "onActive()" }
-        GlobalScope.launch(Dispatchers.Default) {
+        scopes.onWorker {
             scanWhileActive()
         }
     }
 
     fun forceSingleScan() {
         log.debug { "forceSingleScan()" }
-        GlobalScope.launch(Dispatchers.Default) {
+        scopes.onWorker {
             doScan()
         }
     }
@@ -48,7 +48,7 @@ class TargetDeviceMeshNetworksScanner(
         log.debug { "doScan()" }
         val xceiver = targetXceiverLD.value!!
         val networksReply = xceiver.sendScanNetworks()
-        val networks = when(networksReply) {
+        val networks = when (networksReply) {
             is Result.Present -> networksReply.value.networksList
             is Result.Error,
             is Result.Absent -> {
@@ -60,9 +60,9 @@ class TargetDeviceMeshNetworksScanner(
         }
 
         val sortedUniqueNetworks = networks.map { it.extPanId to it }
-                .toMap()
-                .values
-                .sortedBy { it.name }
+            .toMap()
+            .values
+            .sortedBy { it.name }
 
         setOnMainThread(sortedUniqueNetworks)
     }

@@ -1,0 +1,93 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.mesh.ui.setup.LetsGetBuildingFragment"
+    tools:layout_editor_absoluteY="81dp">
+
+    <ImageView
+        android:id="@+id/p_mesh_mainImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/p_mesh_rosie"
+        app:layout_constraintBottom_toTopOf="@+id/p_mesh_header"
+        app:layout_constraintDimensionRatio="108:122"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintWidth_max="200dp" />
+
+    <TextView
+        android:id="@+id/p_mesh_header"
+        style="@style/p_setup_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/p_letsgetbuilding_header"
+        app:layout_constraintBottom_toTopOf="@+id/p_letsgetbuilding_subheader"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_mesh_mainImage" />
+
+    <TextView
+        android:id="@+id/p_letsgetbuilding_subheader"
+        style="@style/setup_step_text"
+        android:text="@string/p_letsgetbuilding_subheader"
+        app:layout_constraintBottom_toTopOf="@+id/p_mesh_helpfulTip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_mesh_header" />
+
+    <LinearLayout
+        android:id="@+id/p_mesh_helpfulTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/p_mesh_hintbox_background"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_letsgetbuilding_subheader">
+
+        <TextView
+            android:id="@+id/p_mesh_miniHeader"
+            style="@style/p_mesh_hintbox_header"
+            fontPath="@string/bold_text_font_name"
+            android:text="@string/p_mesh_tipbox_header_helpful_tip"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/setup_step_text"
+            android:layout_width="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="start"
+            android:text="@string/p_letsgetbuilding_tip_content" />
+
+        <TextView
+            style="@style/setup_step_text"
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="setup.particle.io?start-building"
+            android:textAllCaps="false"
+            tools:ignore="MissingPrefix,HardcodedText" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

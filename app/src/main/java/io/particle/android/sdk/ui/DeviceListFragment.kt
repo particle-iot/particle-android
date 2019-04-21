@@ -46,7 +46,7 @@ import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Fragments
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
-import io.particle.mesh.setup.ui.MeshSetupActivity
+import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
@@ -134,7 +134,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         adapter = DeviceListAdapter(requireNonNull<FragmentActivity>(activity))
         rv.adapter = adapter
-        ItemClickSupport.addTo(rv).setOnItemClickListener { recyclerView, position, v ->
+        ItemClickSupport.addTo(rv).setOnItemClickListener { _, position, _ ->
             onDeviceRowClicked(position)
         }
         return top

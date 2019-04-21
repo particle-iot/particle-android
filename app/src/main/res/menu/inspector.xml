@@ -15,6 +15,10 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/action_launchcontrol_panel"
+        android:title="@string/p_controlpanel_control_panel"/>
+
+    <item
         android:id="@id/action_device_copy_id_to_clipboard"
         android:title="@string/copy_device_id_to_clipboard"/>
 

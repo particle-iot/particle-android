@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.mesh.ui.controlpanel.ControlPanelActivity">
+
+    <LinearLayout
+        android:id="@+id/p_controlpanel_not_an_actionbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/p_action_back"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/p_ic_arrow_back_cyan_24dp" />
+
+        <TextView
+            android:id="@+id/p_title"
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/p_controlpanel_control_panel"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            tools:ignore="MissingPrefix,HardcodedText" />
+
+        <ImageButton
+            android:id="@+id/p_action_close"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/p_ic_close_cyan_24dp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/p_controlpanel_globalProgressSpinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#AFFF"
+        android:elevation="0dp"
+        android:foregroundGravity="center"
+        android:translationZ="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_not_an_actionbar">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/p_spinner"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+    </FrameLayout>
+
+
+    <fragment
+        android:id="@+id/main_nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p_controlpanel_not_an_actionbar"
+        app:navGraph="@navigation/navgraph_control_panel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

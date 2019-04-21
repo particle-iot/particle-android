@@ -16,6 +16,7 @@ import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
 import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import io.particle.mesh.setup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameSuspender
 import io.particle.mesh.setup.utils.checkIsThisTheMainThread
 import kotlinx.coroutines.*
@@ -33,7 +34,7 @@ enum class ConnectionPriority(val sdkVal: Int) {
 
 
 class BluetoothConnection(
-        val connectionStateChangedLD: LiveData<ConnectionState?>,
+        private val connectionStateChangedLD: LiveData<ConnectionState?>,
         private val gatt: BluetoothGatt,
         private val callbacks: BLELiveDataCallbacks,
         // this channel receives arbitrary-length arrays (not limited to BLE MTU)
@@ -96,8 +97,9 @@ class BluetoothConnectionManager(private val ctx: Context) {
 
     @MainThread
     suspend fun connectToDevice(
-            deviceName: String,
-            timeout: Long = CONNECTION_TIMEOUT_MILLIS
+        deviceName: String,
+        scopes: Scopes,
+        timeout: Long = CONNECTION_TIMEOUT_MILLIS
     ): BluetoothConnection? {
         checkIsThisTheMainThread()
 
@@ -111,7 +113,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
 
 
         val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
-        GlobalScope.launch(Dispatchers.Default) {
+        scopes.backgroundScope.launch {
             for (packet in messageWriteChannel) {
                 QATool.runSafely({ bleWriteChannel.writeToCharacteristic(packet) })
             }

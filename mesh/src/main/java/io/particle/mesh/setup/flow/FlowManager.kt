@@ -6,7 +6,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.NavController
+//import androidx.navigation.NavController
 import com.squareup.okhttp.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
@@ -23,11 +23,11 @@ import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.ota.FirmwareUpdateManager
+import io.particle.mesh.setup.BarcodeData
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
+import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
-import io.particle.mesh.setup.flow.Gen3ConnectivityType.CELLULAR
-import io.particle.mesh.setup.flow.Gen3ConnectivityType.MESH_ONLY
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.WifiNetworksScannerLD
@@ -35,7 +35,6 @@ import io.particle.mesh.setup.flow.modules.device.DeviceModule
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
 import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksScanner
 import io.particle.mesh.setup.ui.*
-import io.particle.mesh.setup.ui.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.utils.runOnMainThread
 import kotlinx.coroutines.*
 import mu.KotlinLogging
@@ -46,13 +45,13 @@ private const val FLOW_RETRIES = 10
 
 class FlowManager(
     cloud: ParticleCloud,
-    private val navControllerRef: LiveData<NavController?>,
+    private val navControllerRef: LiveData<NavigationTool?>,
     private val dialogRequestLD: LiveData<DialogSpec?>,
     val dialogResultLD: LiveData<DialogResult?>,
     btConnectionManager: BluetoothConnectionManager,
     transceiverFactory: ProtocolTransceiverFactory,
     private val progressHackLD: MutableLiveData<ProgressHack?>,
-    private val terminatorLD: MutableLiveData<MeshFlowTerminator?>,
+    private val terminatorLD: MutableLiveData<Any?>,
     private val everythingNeedsAContext: Context
 ) : Clearable, ProgressHack {
 
@@ -67,8 +66,8 @@ class FlowManager(
 
     private var flow: Flow
 
-    private val navController: NavController?
-        get() = navControllerRef.value
+//    private val navController: NavController?
+//        get() = navControllerRef.value
 
     private val log = KotlinLogging.logger {}
 
@@ -76,7 +75,7 @@ class FlowManager(
         meshSetupModule = MeshSetupModule(
             this,
             cloud,
-            TargetDeviceMeshNetworksScanner(bleConnectionModule.targetDeviceTransceiverLD)
+            TargetDeviceMeshNetworksScanner(bleConnectionModule.targetDeviceTransceiverLD, Scopes())
         )
 
         cloudConnectionModule = CloudConnectionModule(
@@ -148,12 +147,11 @@ class FlowManager(
 
     fun startNewFlowWithCommissioner() {
         clearAndRetainCommissioner()
-        navController?.navigate(R.id.action_global_selectDeviceFragment)
+//        navController?.navigate(R.id.action_global_selectDeviceFragment)
     }
 
     private fun clearAndRetainCommissioner() {
         log.info { "clearAndRetainCommissioner()" }
-
 
         bleConnectionModule.commissionerBarcodeLD.observeForever {
             log.info { "New commissioner barcode value set: $it" }
@@ -218,24 +216,24 @@ class FlowManager(
     fun navigate(@IdRes idRes: Int, args: Bundle? = null) {
         showGlobalProgressSpinner(false)
         runOnMainThread {
-            navController?.popBackStack()
-            if (args == null) {
-                navController?.navigate(idRes)
-            } else {
-                navController?.navigate(idRes, args)
-            }
+//            navController?.popBackStack()
+//            if (args == null) {
+//                navController?.navigate(idRes)
+//            } else {
+//                navController?.navigate(idRes, args)
+//            }
         }
     }
 
     fun showCongratsScreen(message: String) {
-        navigate(
-            R.id.action_global_hashtagWinningFragment,
-            HashtagWinningFragmentArgs(message).toBundle()
-        )
+//        navigate(
+//            R.id.action_global_hashtagWinningFragment,
+//            HashtagWinningFragmentArgs(message).toBundle()
+//        )
     }
 
     fun endSetup() {
-        terminatorLD.value?.terminateSetup()
+//        terminatorLD.value?.terminateSetup()
     }
 
     fun newDialogRequest(spec: DialogSpec) {

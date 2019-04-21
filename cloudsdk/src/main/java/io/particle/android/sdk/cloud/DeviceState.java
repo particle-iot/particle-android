@@ -43,6 +43,8 @@ class DeviceState implements Parcelable {
     @Nullable final ParticleDevice.ParticleDeviceType deviceType;
     @Nullable final Boolean requiresUpdate;
     @Nullable final Date lastHeard;
+    @Nullable final String serialNumber;
+    @Nullable final String mobileSecret;
 
     DeviceState(DeviceStateBuilder deviceStateBuilder) {
         this.deviceId = deviceStateBuilder.deviceId;
@@ -64,6 +66,8 @@ class DeviceState implements Parcelable {
         this.status = deviceStateBuilder.status;
         this.requiresUpdate = deviceStateBuilder.requiresUpdate;
         this.lastHeard = deviceStateBuilder.lastHeard;
+        this.serialNumber = deviceStateBuilder.serialNumber;
+        this.mobileSecret = deviceStateBuilder.mobileSecret;
     }
 
     //region ImmutabilityPhun
@@ -88,6 +92,8 @@ class DeviceState implements Parcelable {
                 .status(other.status)
                 .requiresUpdate(other.requiresUpdate)
                 .lastHeard(other.lastHeard)
+                .serialNumber(other.serialNumber)
+                .mobileSecret(other.mobileSecret)
                 .build();
     }
 
@@ -110,6 +116,8 @@ class DeviceState implements Parcelable {
                 .status(other.status)
                 .requiresUpdate(other.requiresUpdate)
                 .lastHeard(other.lastHeard)
+                .serialNumber(other.serialNumber)
+                .mobileSecret(other.mobileSecret)
                 .build();
     }
     //endregion
@@ -135,6 +143,8 @@ class DeviceState implements Parcelable {
         status = (String) in.readValue(String.class.getClassLoader());
         requiresUpdate = (Boolean) in.readValue(Boolean.class.getClassLoader());
         lastHeard = new Date((Long) in.readValue(Long.class.getClassLoader()));
+        serialNumber = (String) in.readValue(String.class.getClassLoader());
+        mobileSecret = (String) in.readValue(String.class.getClassLoader());
     }
 
     @Override
@@ -158,6 +168,8 @@ class DeviceState implements Parcelable {
         dest.writeValue(status);
         dest.writeValue(requiresUpdate);
         dest.writeValue(lastHeard != null ? lastHeard.getTime() : 0);
+        dest.writeValue(serialNumber);
+        dest.writeValue(mobileSecret);
     }
 
     public static final Creator<DeviceState> CREATOR = new Creator<DeviceState>() {
@@ -198,7 +210,8 @@ class DeviceState implements Parcelable {
         @Nullable ParticleDevice.ParticleDeviceType deviceType;
         @Nullable Boolean requiresUpdate;
         @Nullable Date lastHeard;
-
+        @Nullable String serialNumber;
+        @Nullable String mobileSecret;
 
         DeviceStateBuilder(String deviceId, Set<String> functions, Map<String, ParticleDevice.VariableType> variables) {
             this.deviceId = deviceId;
@@ -284,6 +297,16 @@ class DeviceState implements Parcelable {
 
         public DeviceStateBuilder lastHeard(@Nullable Date lastHeard) {
             this.lastHeard = lastHeard;
+            return this;
+        }
+
+        public DeviceStateBuilder serialNumber(@Nullable String serialNumber) {
+            this.serialNumber = serialNumber;
+            return this;
+        }
+
+        public DeviceStateBuilder mobileSecret(@Nullable String mobileSecret) {
+            this.mobileSecret = mobileSecret;
             return this;
         }
 

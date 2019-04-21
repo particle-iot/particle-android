@@ -80,7 +80,10 @@ import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.android.sdk.utils.UnknownEnumIntValueException
 import io.particle.android.sdk.utils.buildIntValueMap
+import io.particle.firmwareprotos.ctrl.Config.GetFeatureReply
+import io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest
 import io.particle.mesh.setup.connection.ResultCode.Companion.toResultCode
+import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -98,6 +101,7 @@ private const val DEFAULT_NETWORK_CHANNEL = 11
 class ProtocolTransceiver internal constructor(
     private val requestWriter: RequestWriter,
     private val connection: BluetoothConnection,
+    private val scopes: Scopes,
     private val connectionName: String
 ) {
 
@@ -108,7 +112,7 @@ class ProtocolTransceiver internal constructor(
     val isConnected: Boolean
         get() = if (didDisconnect) false else connection.isConnected
 
-    val deviceName: String
+    val bleBroadcastName: String
         get() = connection.deviceName
 
     fun disconnect() {
@@ -139,6 +143,15 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendReset(): Result<SystemResetReply, ResultCode> {
         val response = sendRequest(SystemResetRequest.newBuilder().build())
         return buildResult(response) { r -> SystemResetReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendGetFeature(feature: Feature): Result<GetFeatureReply, ResultCode> {
+        val response = sendRequest(
+            GetFeatureRequest.newBuilder()
+                .setFeature(feature)
+                .build()
+        )
+        return buildResult(response) { r -> GetFeatureReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendSetFeature(
@@ -501,7 +514,7 @@ enum class ResultCode(val intValue: Int) {
     ABORTED(-150),
     TIMEOUT(-160),
     NOT_FOUND(-170),
-    ALREADY_EXIST(-180),
+    ALREADY_EXISTS(-180),
     TOO_LARGE(-190),
     NOT_ENOUGH_DATA(-191),
     LIMIT_EXCEEDED(-200),

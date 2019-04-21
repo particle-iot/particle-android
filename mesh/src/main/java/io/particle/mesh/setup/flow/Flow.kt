@@ -1,16 +1,17 @@
 package io.particle.mesh.setup.flow
 
 import io.particle.android.sdk.cloud.ParticleCloud
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
-import io.particle.mesh.R
 import io.particle.mesh.common.Result
+import io.particle.mesh.setup.flow.context.NetworkSetupType
+import io.particle.mesh.setup.flow.context.NetworkSetupType.AS_GATEWAY
+import io.particle.mesh.setup.flow.context.NetworkSetupType.NODE_JOINER
+import io.particle.mesh.setup.flow.context.NetworkSetupType.STANDALONE
 import io.particle.mesh.setup.flow.modules.bleconnection.BLEConnectionModule
 import io.particle.mesh.setup.flow.modules.cloudconnection.CloudConnectionModule
 import io.particle.mesh.setup.flow.modules.device.DeviceModule
-import io.particle.mesh.setup.flow.modules.device.NetworkSetupType
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshSetupModule
@@ -23,18 +24,6 @@ enum class Gen3ConnectivityType {
     WIFI,
     CELLULAR,
     MESH_ONLY
-}
-
-fun ParticleDeviceType.toMeshDeviceType(): Gen3ConnectivityType {
-    return when (this) {
-        ParticleDeviceType.ARGON,
-        ParticleDeviceType.A_SERIES -> Gen3ConnectivityType.WIFI
-        ParticleDeviceType.BORON,
-        ParticleDeviceType.B_SERIES -> Gen3ConnectivityType.CELLULAR
-        ParticleDeviceType.XENON,
-        ParticleDeviceType.X_SERIES -> Gen3ConnectivityType.MESH_ONLY
-        else -> throw IllegalArgumentException("Not a mesh device: $this")
-    }
 }
 
 
@@ -88,7 +77,7 @@ class Flow(
         }
 
         deviceModule.ensureNetworkSetupTypeCaptured()
-        return if (deviceModule.networkSetupTypeLD.value!! == NetworkSetupType.JOINER) {
+        return if (deviceModule.networkSetupTypeLD.value!! == NetworkSetupType.NODE_JOINER) {
             Gen3ConnectivityType.MESH_ONLY
         } else {
             meshSetupModule.showNewNetworkOptionInScanner = true
@@ -166,10 +155,10 @@ class Flow(
         cloudConnModule.ensureConnectedToCloudSuccessUi()
         cloudConnModule.ensureTargetDeviceIsNamed()
 
-        val setupType = deviceModule.networkSetupTypeLD.value!!
-        when (setupType) {
-            NetworkSetupType.AS_GATEWAY -> doCreateNetworkFlow()
-            NetworkSetupType.STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
+        when (deviceModule.networkSetupTypeLD.value!!) {
+            AS_GATEWAY -> doCreateNetworkFlow()
+            STANDALONE -> deviceModule.ensureShowLetsGetBuildingUi()
+            NODE_JOINER -> throw IllegalStateException("Should not be in a JOINER flow here!")
         }
     }
 
@@ -203,8 +192,8 @@ class Flow(
 
         if (!meshSetupModule.targetJoinedSuccessfully) {
             cloudConnModule.ensureCheckedIsClaimed(targetDeviceId)
-            cloudConnModule.ensureSetClaimCode()
             meshSetupModule.ensureRemovedFromExistingNetwork()
+            cloudConnModule.ensureSetClaimCode()
         }
 
         bleConnModule.ensureShowTargetPairingSuccessful()
@@ -288,17 +277,12 @@ class Flow(
 
     private suspend fun ensureShowJoinerSetupFinishedUi() {
         log.info { "ensureShowJoinerSetupFinishedUi()" }
-        flowManager.navigate(R.id.action_global_setupFinishedFragment)
-    }
-
-    private suspend fun ensureShowGatewaySetupFinishedUi() {
-        log.info { "ensureShowGatewaySetupFinishedUi()" }
-        flowManager.navigate(R.id.action_global_gatewaySetupFinishedFragment)
+//        flowManager.navigate(R.id.action_global_setupFinishedFragment)
     }
 
     private suspend fun ensureShowCreateNetworkFinished() {
         log.info { "ensureShowCreateNetworkFinished()" }
-        flowManager.navigate(R.id.action_global_newMeshNetworkFinishedFragment)
+//        flowManager.navigate(R.id.action_global_newMeshNetworkFinishedFragment)
     }
 }
 

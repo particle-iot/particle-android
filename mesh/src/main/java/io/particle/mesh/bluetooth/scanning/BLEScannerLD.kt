@@ -33,7 +33,7 @@ fun buildReactiveBluetoothScanner(
         scannerLD: BLEScannerLD
 ): LiveData<List<ScanResult>?> {
     return toggleLD
-            .switchMap { if (it.truthy()) adapterStateLD else AbsentLiveData() }
+            .switchMap { if (it == true) adapterStateLD else AbsentLiveData() }
             .switchMap { if (it == BluetoothAdapterState.ENABLED) scannerLD else AbsentLiveData<List<ScanResult>?>() }
 }
 

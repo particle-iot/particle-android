@@ -17,12 +17,13 @@ import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.toConnectivityType
 import io.particle.mesh.setup.toDeviceType
-import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -116,7 +117,7 @@ class BLEConnectionModule(
 //        val userSpecifiedDeviceType = flowManager.targetDeviceType
         val liveDataSuspender = liveDataSuspender({ targetDeviceBarcodeLD.nonNull() })
         val barcodeData = withContext(Dispatchers.Main) {
-            flowManager.navigate(R.id.action_global_scanJoinerCodeIntroFragment)
+//            flowManager.navigate(R.id.action_global_scanJoinerCodeIntroFragment)
             liveDataSuspender.awaitResult()
         }
 
@@ -124,13 +125,13 @@ class BLEConnectionModule(
             throw FlowException("Error getting barcode data for target device")
         }
 
-        flowManager.targetPlatformDeviceType = barcodeData.serialNumber.toDeviceType(particleCloud)
-        flowManager.targetDeviceType =  flowManager.targetPlatformDeviceType.toMeshDeviceType()
+        flowManager.targetPlatformDeviceType = barcodeData.toDeviceType(particleCloud)
+        flowManager.targetDeviceType =  barcodeData.toConnectivityType(particleCloud)
 
         if (getReadyNextButtonClickedLD.value != true) {
             val liveDataSuspender2 = liveDataSuspender({ getReadyNextButtonClickedLD.nonNull() })
             withContext(Dispatchers.Main) {
-                flowManager.navigate(R.id.action_global_getReadyForSetupFragment)
+//                flowManager.navigate(R.id.action_global_getReadyForSetupFragment)
                 liveDataSuspender2.awaitResult()
             }
         }
@@ -143,7 +144,7 @@ class BLEConnectionModule(
         }
 
         if (!connectingToTargetUiShown) {
-            flowManager.navigate(R.id.action_global_BLEPairingProgressFragment)
+//            flowManager.navigate(R.id.action_global_BLEPairingProgressFragment)
             connectingToTargetUiShown = true
         }
 
@@ -184,7 +185,7 @@ class BLEConnectionModule(
         // FIXME: i18n this!
         flowManager.showCongratsScreen(
             "Successfully paired with " +
-                    targetDeviceTransceiverLD.value?.deviceName
+                    targetDeviceTransceiverLD.value?.bleBroadcastName
         )
 
         delay(2000)
@@ -202,7 +203,7 @@ class BLEConnectionModule(
 
         flowManager.showCongratsScreen(
             "Successfully paired with " +
-                    commissionerTransceiverLD.value?.deviceName
+                    commissionerTransceiverLD.value?.bleBroadcastName
         )
 
         delay(2000)
@@ -217,7 +218,7 @@ class BLEConnectionModule(
         log.debug { "No commissioner barcode found; showing UI" }
         val liveDataSuspender = liveDataSuspender({ commissionerBarcodeLD.nonNull() })
         val barcodeData = withContext(Dispatchers.Main) {
-            flowManager.navigate(R.id.action_global_manualCommissioningAddToNetworkFragment)
+//            flowManager.navigate(R.id.action_global_manualCommissioningAddToNetworkFragment)
             liveDataSuspender.awaitResult()
         }
 
@@ -235,7 +236,7 @@ class BLEConnectionModule(
 
 
         if (!connectingToAssistingDeviceUiShown) {
-            flowManager.navigate(R.id.action_global_assistingDevicePairingProgressFragment)
+//            flowManager.navigate(R.id.action_global_assistingDevicePairingProgressFragment)
             connectingToAssistingDeviceUiShown = true
         }
 
@@ -251,7 +252,7 @@ class BLEConnectionModule(
 
         flowManager.showCongratsScreen(
             "Successfully paired with " +
-                    commissionerTransceiverLD.value?.deviceName
+                    commissionerTransceiverLD.value?.bleBroadcastName
         )
 
         delay(2000)
@@ -305,9 +306,9 @@ class BLEConnectionModule(
             barcode.serialNumber.toDeviceType(particleCloud),
             barcode.serialNumber
         )
-        val device = btConnectionManager.connectToDevice(broadcastName)
+        val device = btConnectionManager.connectToDevice(broadcastName, Scopes())
             ?: return null
-        return transceiverFactory.buildProtocolTransceiver(device, connName, barcode.mobileSecret)
+        return transceiverFactory.buildProtocolTransceiver(device, connName, Scopes(), barcode.mobileSecret)
     }
 
     private fun getDeviceBroadcastName(deviceType: ParticleDeviceType, serialNum: SerialNumber): String {

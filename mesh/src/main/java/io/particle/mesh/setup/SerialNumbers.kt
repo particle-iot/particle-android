@@ -1,5 +1,6 @@
 package io.particle.mesh.setup
 
+import androidx.annotation.WorkerThread
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 
@@ -12,6 +13,7 @@ fun SerialNumber.isSomSerial(): Boolean {
 }
 
 
+@WorkerThread
 fun SerialNumber.toDeviceType(cloud: ParticleCloud): ParticleDeviceType {
 
     fun SerialNumber.toDeviceType(): ParticleDeviceType {

@@ -125,6 +125,12 @@ class ParticleDevice internal constructor(
     val lastHeard: Date?
         get() = deviceState.lastHeard
 
+    val serialNumber: String?
+        get() = deviceState.serialNumber
+
+    val mobileSecret: String?
+        get() = deviceState.mobileSecret
+
     val currentDataUsage: Float
         @WorkerThread
         @Throws(ParticleCloudException::class)
@@ -423,7 +429,6 @@ class ParticleDevice internal constructor(
         } catch (e: RetrofitError) {
             throw ParticleCloudException(e)
         }
-
     }
 
     @WorkerThread
@@ -571,7 +576,17 @@ class ParticleDevice internal constructor(
             log.d("Failed to auto-subscribe to system events")
             throw ParticleCloudException(e)
         }
+    }
 
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun startStopSignaling(shouldSignal: Boolean) {
+        val signalInt = if (shouldSignal) 1 else 0
+        try {
+            mainApi.shoutRainbows(deviceState.deviceId, signalInt)
+        } catch (e: RetrofitError) {
+            throw ParticleCloudException(e)
+        }
     }
 
     private fun sendSystemEventBroadcast(deviceStateChange: DeviceStateChange, eventBus: EventBus) {

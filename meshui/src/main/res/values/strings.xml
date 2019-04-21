@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="p_controlpanel_control_panel">Control Panel</string>
+    <string name="p_common_wifi">Wi-Fi</string>
+    <string name="single_space"> </string>
+    <string name="p_controlpanel_prepare_for_pairing">Prepare for Pairing</string>
+    <string name="p_cp_cellular">Cellular</string>
+
+</resources>

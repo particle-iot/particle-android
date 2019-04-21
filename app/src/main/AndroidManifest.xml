@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.particle.sdk.app">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- required by Segment  -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- required by Segment -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -18,10 +16,16 @@
         android:theme="@style/ParticleSetupTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
-        <!-- Disable data collection by default for GDPR, re-enable at runtime  -->
-        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
-        <meta-data android:name="firebase_crash_collection_enabled" android:value="false" />
-        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
+        <!-- Disable data collection by default for GDPR, re-enable at runtime -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_crash_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
 
         <activity
             android:name="io.particle.android.sdk.ui.SplashActivity"
@@ -34,13 +38,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="io.particle.android.sdk.ui.IntroActivity"
             android:label="@string/title_activity_intro"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars" />
-
         <activity
             android:name="io.particle.android.sdk.ui.DeviceListActivity"
             android:label="@string/title_device_list"
@@ -57,7 +59,6 @@
                     android:scheme="particle" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="io.particle.android.sdk.ui.TinkerActivity"
             android:label="@string/title_device_detail"
@@ -68,13 +69,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="io.particle.android.sdk.ui.DeviceListActivity" />
         </activity>
-
         <activity
             android:name="io.particle.android.sdk.ui.InspectorActivity"
             android:label="@string/title_inspector_detail"
             android:screenOrientation="portrait"
             android:theme="@style/TinkerSetup" />
-
         <!--
         All of the following are from the device setup lib, and must be present in your app's
         manifest or you will not go to space today.
@@ -111,20 +110,17 @@
             </intent-filter>
             -->
         </activity>
-
         <activity
             android:name="io.particle.android.sdk.utils.ui.WebViewActivity"
             android:label="@string/title_activity_web_view"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar" />
-
         <activity
             android:name="io.particle.android.sdk.accountsetup.TwoFactorActivity"
             android:label="@string/title_activity_two_factor"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
-
+            android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>
 
 </manifest>

@@ -14,9 +14,6 @@ import io.particle.mesh.setup.connection.ResultCode
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
 import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
-import io.particle.mesh.setup.ui.DialogResult
-import io.particle.mesh.setup.ui.DialogSpec.ResDialogSpec
-import io.particle.mesh.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -133,27 +130,27 @@ class MeshSetupModule(
         if (removeLocally) {
             val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
             val dialogResult = withContext(Dispatchers.Main) {
-                flowManager.newDialogRequest(
-                    ResDialogSpec(
-                        R.string.p_mesh_leavenetworkconfirmation_text,
-                        R.string.p_mesh_leavenetworkconfirmation_action_leave_network,
-                        R.string.p_mesh_action_exit_setup,
-                        R.string.p_mesh_leavenetworkconfirmation_header
-                    )
-                )
+//                flowManager.newDialogRequest(
+//                    ResDialogSpec(
+//                        R.string.p_mesh_leavenetworkconfirmation_text,
+//                        R.string.p_mesh_leavenetworkconfirmation_action_leave_network,
+//                        R.string.p_mesh_action_exit_setup,
+//                        R.string.p_mesh_leavenetworkconfirmation_header
+//                    )
+//                )
                 ldSuspender.awaitResult()
             }
             log.info { "Result for leave network confirmation dialog: $dialogResult" }
             flowManager.clearDialogResult()
 
-            when (dialogResult) {
-                DialogResult.POSITIVE -> { /* no-op, continue flow */ }
-                DialogResult.NEGATIVE -> throw FlowException(
-                    "User does not want device to leave network; exiting setup",
-                    ExceptionType.ERROR_FATAL
-                )
-                null -> throw FlowException("Unknown error when confirming leave network from device")
-            }
+//            when (dialogResult) {
+//                io.particle.mesh.ui.setup.DialogResult.POSITIVE -> { /* no-op, continue flow */ }
+//                io.particle.mesh.ui.setup.DialogResult.NEGATIVE -> throw FlowException(
+//                    "User does not want device to leave network; exiting setup",
+//                    ExceptionType.ERROR_FATAL
+//                )
+//                null -> throw FlowException("Unknown error when confirming leave network from device")
+//            }
 
             targetXceiver!!.sendLeaveNetwork().throwOnErrorOrAbsent()
         }
@@ -172,7 +169,7 @@ class MeshSetupModule(
         val toJoin = (targetDeviceMeshNetworkToJoinLD.value!! as SelectedNetwork)
 
         if (commissionerNetwork?.extPanId == toJoin.networkToJoin.extPanId) {
-            targetDeviceMeshNetworkToJoinLD.nonNull().runOnUiThreadAndWaitForUpdate {
+            targetDeviceMeshNetworkToJoinLD.nonNull().runBlockOnUiThreadAndAwaitUpdate {
                 // update the network to one which has the network ID
                 targetDeviceMeshNetworkToJoinLD.castAndPost(SelectedNetwork(commissionerNetwork))
             }
@@ -186,12 +183,12 @@ class MeshSetupModule(
 
         val ldSuspender = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
         val result = withContext(Dispatchers.Main) {
-            flowManager.newDialogRequest(
-                ResDialogSpec(
-                    R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
-                    android.R.string.ok
-                )
-            )
+//            flowManager.newDialogRequest(
+//                ResDialogSpec(
+//                    R.string.p_manualcommissioning_commissioner_candidate_not_on_target_network,
+//                    android.R.string.ok
+//                )
+//            )
             ldSuspender.awaitResult()
         }
         log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
@@ -212,9 +209,9 @@ class MeshSetupModule(
             return
         }
 
-        flowManager.navigate(R.id.action_global_scanForMeshNetworksFragment)
+//        flowManager.navigate(R.id.action_global_scanForMeshNetworksFragment)
         val ldSuspender = liveDataSuspender({ targetDeviceMeshNetworkToJoinLD.nonNull() })
-        val meshNetworkToJoin = withContext(Dispatchers.Main) {
+        withContext(Dispatchers.Main) {
             ldSuspender.awaitResult()
         }
     }
@@ -229,7 +226,7 @@ class MeshSetupModule(
         val ldSuspender = liveDataSuspender({ ld.nonNull() })
         val password = withContext(Dispatchers.Main) {
             if (!shownNetworkPasswordUi) {
-                flowManager.navigate(R.id.action_global_enterNetworkPasswordFragment)
+//                flowManager.navigate(R.id.action_global_enterNetworkPasswordFragment)
                 shownNetworkPasswordUi = true
             }
             ldSuspender.awaitResult()
@@ -251,12 +248,12 @@ class MeshSetupModule(
 
                     val ldSuspender2 = liveDataSuspender({ flowManager.dialogResultLD.nonNull() })
                     val result = withContext(Dispatchers.Main) {
-                        flowManager.newDialogRequest(
-                            ResDialogSpec(
-                                R.string.p_mesh_network_password_is_incorrect,
-                                android.R.string.ok
-                            )
-                        )
+//                        flowManager.newDialogRequest(
+//                            ResDialogSpec(
+//                                R.string.p_mesh_network_password_is_incorrect,
+//                                android.R.string.ok
+//                            )
+//                        )
                         ldSuspender2.awaitResult()
                     }
                     log.info { "result from awaiting on 'commissioner not on network to be joined' dialog: $result" }
@@ -272,7 +269,7 @@ class MeshSetupModule(
 
     suspend fun ensureMeshNetworkJoinedUiShown() {
         log.info { "ensureMeshNetworkJoinedUiShown()" }
-        flowManager.navigate(R.id.action_global_joiningMeshNetworkProgressFragment)
+//        flowManager.navigate(R.id.action_global_joiningMeshNetworkProgressFragment)
     }
 
     suspend fun ensureMeshNetworkJoined() {
@@ -327,7 +324,7 @@ class MeshSetupModule(
 
         val ldSuspender = liveDataSuspender({ newNetworkNameLD.nonNull() })
         withContext(Dispatchers.Main) {
-            flowManager.navigate(R.id.action_global_newMeshNetworkNameFragment)
+//            flowManager.navigate(R.id.action_global_newMeshNetworkNameFragment)
             ldSuspender.awaitResult()
         }
     }
@@ -340,7 +337,7 @@ class MeshSetupModule(
 
         val ldSuspender = liveDataSuspender({ newNetworkPasswordLD.nonNull() })
         withContext(Dispatchers.Main) {
-            flowManager.navigate(R.id.action_global_newMeshNetworkPasswordFragment)
+//            flowManager.navigate(R.id.action_global_newMeshNetworkPasswordFragment)
             ldSuspender.awaitResult()
         }
     }
@@ -351,7 +348,7 @@ class MeshSetupModule(
             return
         }
 
-        flowManager.navigate(R.id.action_global_creatingMeshNetworkFragment)
+//        flowManager.navigate(R.id.action_global_creatingMeshNetworkFragment)
     }
 
     suspend fun ensureNewNetworkCreatedOnCloud() {
@@ -373,7 +370,7 @@ class MeshSetupModule(
         )
 
         // set the network ID and wait for it to update
-        newNetworkIdLD.nonNull().runOnUiThreadAndWaitForUpdate {
+        newNetworkIdLD.nonNull().runBlockOnUiThreadAndAwaitUpdate {
             newNetworkIdLD.castAndPost(networkResponse.id)
         }
     }

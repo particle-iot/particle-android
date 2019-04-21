@@ -11,6 +11,7 @@ import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.toHex
 import io.particle.mesh.common.truthy
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import mu.KotlinLogging

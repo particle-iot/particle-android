@@ -1,27 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.particle.mesh">
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-
-        <meta-data
-            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="barcode" />
-
-        <activity
-            android:name="io.particle.mesh.setup.ui.MeshSetupActivity"
-            android:label="Mesh Setup"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            android:theme="@style/p_MeshTheme" />
 
     </application>
 

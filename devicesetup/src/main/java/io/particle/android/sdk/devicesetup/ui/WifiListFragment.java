@@ -71,6 +71,7 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

@@ -136,7 +136,7 @@ class BoronSteps(
             return
         }
         connectingToCloudUiShown = true
-        flowManager.navigate(R.id.action_global_boronConnectingStatusFragment)
+//        flowManager.navigate(R.id.action_global_boronConnectingStatusFragment)
     }
 
     private fun doActivateSim(): Int {

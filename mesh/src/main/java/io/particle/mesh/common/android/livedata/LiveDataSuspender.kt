@@ -1,20 +1,24 @@
 package io.particle.mesh.common.android.livedata
 
+import androidx.annotation.AnyThread
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.annotation.CallSuper
+import androidx.annotation.WorkerThread
 import io.particle.mesh.common.AsyncWorkSuspender
 import io.particle.mesh.common.android.SimpleLifecycleOwner
+import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 
 
+@AnyThread
 fun <T> liveDataSuspender(
-        buildLiveDataFunc: () -> LiveData<T>,
-        beforeAwaitFunc: (() -> Unit)? = null,
-        cleanUpFunc: (() -> Unit)? = null
+    @AnyThread buildLiveDataFunc: () -> LiveData<T>,
+    @AnyThread beforeAwaitFunc: (() -> Unit)? = null,
+    @AnyThread cleanUpFunc: (() -> Unit)? = null
 ): LiveDataSuspender<T> {
     return object : LiveDataSuspender<T>() {
 
@@ -36,12 +40,39 @@ fun <T> liveDataSuspender(
 }
 
 
-suspend fun <T> LiveData<T>.runOnUiThreadAndWaitForUpdate(toRun: () -> Unit) {
+suspend fun <T> LiveData<T>.runBlockOnUiThreadAndAwaitUpdate(toRun: () -> Unit) {
     val suspender = liveDataSuspender({ this })
     withContext(Dispatchers.Main) {
         toRun()
         suspender.awaitResult()
     }
+}
+
+
+suspend fun <T> LiveData<T>.runBlockOnUiThreadAndAwaitUpdate(
+    scopes: Scopes,
+    block: () -> Unit
+): T? {
+    val suspender = liveDataSuspender({ this })
+    return scopes.withMain {
+        block()
+        suspender.awaitResult()
+    }
+}
+
+
+suspend fun <T> LiveData<T>.awaitUpdate(scopes: Scopes): T? {
+    val suspender = liveDataSuspender({ this })
+    return scopes.withMain {
+        suspender.awaitResult()
+    }
+}
+
+
+
+@WorkerThread
+suspend fun <T> LiveData<T?>.nonNull(s: Scopes): LiveData<T?> {
+    return s.withMain { this@nonNull.nonNull() }
 }
 
 

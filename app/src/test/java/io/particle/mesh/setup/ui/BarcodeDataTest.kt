@@ -1,10 +1,10 @@
 package io.particle.mesh.setup.ui
 
-import io.particle.mesh.setup.ui.BarcodeData.CompleteBarcodeData
-import io.particle.mesh.setup.ui.BarcodeData.PartialBarcodeData
+import io.particle.mesh.setup.BarcodeData
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
+import io.particle.mesh.setup.BarcodeData.PartialBarcodeData
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
