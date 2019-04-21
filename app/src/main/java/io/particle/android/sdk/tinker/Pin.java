@@ -9,6 +9,8 @@ import android.animation.FloatEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +43,7 @@ public class Pin {
     private final Set<PinAction> functions;
     private final int maxAnalogWriteValue;
 
+    @NonNull
     private PinAction configuredAction;
     private ObjectAnimator pinBackgroundAnim;
     private Animator endAnimation;
@@ -154,11 +157,12 @@ public class Pin {
         }
     }
 
+    @NonNull
     PinAction getConfiguredAction() {
         return configuredAction;
     }
 
-    void setConfiguredAction(PinAction action) {
+    void setConfiguredAction(@NonNull PinAction action) {
         this.configuredAction = action;
         // Clear out any views
         updatePinColor();
