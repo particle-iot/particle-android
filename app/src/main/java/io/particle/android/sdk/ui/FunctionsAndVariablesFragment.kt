@@ -21,9 +21,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
-import io.particle.android.sdk.ui.FunctionsFragment.DisplayMode
-import io.particle.android.sdk.ui.FunctionsFragment.DisplayMode.FUNCTIONS
-import io.particle.android.sdk.ui.FunctionsFragment.DisplayMode.VARIABLES
+import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode
+import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode.FUNCTIONS
+import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode.VARIABLES
 import io.particle.android.sdk.utils.AnimationUtil
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Py.list
@@ -40,7 +40,7 @@ private data class Variable(val name: String, val variableType: VariableType)
 private data class Function(val name: String)
 
 
-class FunctionsFragment : Fragment() {
+class FunctionsAndVariablesFragment : Fragment() {
 
     enum class DisplayMode {
         VARIABLES,
@@ -53,8 +53,8 @@ class FunctionsFragment : Fragment() {
         private const val ARG_DEVICE = "ARG_DEVICE"
         private const val ARG_DISPLAY_MODE = "ARG_DISPLAY_MODE"
 
-        fun newInstance(device: ParticleDevice, displayMode: DisplayMode): FunctionsFragment {
-            return FunctionsFragment().apply {
+        fun newInstance(device: ParticleDevice, displayMode: DisplayMode): FunctionsAndVariablesFragment {
+            return FunctionsAndVariablesFragment().apply {
                 arguments = bundleOf(
                     ARG_DEVICE to device,
                     ARG_DISPLAY_MODE to displayMode
