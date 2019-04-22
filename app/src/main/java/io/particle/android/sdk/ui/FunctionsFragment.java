@@ -44,11 +44,11 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static io.particle.android.sdk.utils.Py.list;
 import static java.util.Objects.requireNonNull;
 
-public class DataFragment extends Fragment {
+public class FunctionsFragment extends Fragment {
 
-    public static DataFragment newInstance(ParticleDevice device) {
-        return FragmentBundlerCompat.create(new DataFragment())
-                .put(DataFragment.ARG_DEVICE, device)
+    public static FunctionsFragment newInstance(ParticleDevice device) {
+        return FragmentBundlerCompat.create(new FunctionsFragment())
+                .put(FunctionsFragment.ARG_DEVICE, device)
                 .build();
     }
 
