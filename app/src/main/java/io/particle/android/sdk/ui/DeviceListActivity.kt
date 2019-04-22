@@ -77,20 +77,20 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
 
         softAPConfigRemover = SoftAPConfigRemover(this, WifiFacade.get(this))
 
-        if (Ui.findView<View>(this, R.id.device_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-large and
-            // res/values-sw600dp). If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true
-
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-            // FIXME: need to impl in RecyclerView if we want two-pane mode
-            //            ((DeviceListFragment) getSupportFragmentManager()
-            //                    .findFragmentById(R.id.device_list))
-            //                    .setActivateOnItemClick(true);
-        }
+//        if (Ui.findView<View>(this, R.id.device_detail_container) != null) {
+//            // The detail container view will be present only in the
+//            // large-screen layouts (res/values-large and
+//            // res/values-sw600dp). If this view is present, then the
+//            // activity should be in two-pane mode.
+//            mTwoPane = true
+//
+//            // In two-pane mode, list items should be given the
+//            // 'activated' state when touched.
+//            // FIXME: need to impl in RecyclerView if we want two-pane mode
+//            //            ((DeviceListFragment) getSupportFragmentManager()
+//            //                    .findFragmentById(R.id.device_list))
+//            //                    .setActivateOnItemClick(true);
+//        }
 
         deviceList = Ui.findFrag(this, R.id.fragment_device_list)
         // TODO: If exposing deep links into your app, handle intents here.
