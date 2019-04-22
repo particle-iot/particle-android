@@ -21,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
+import io.particle.android.sdk.ui.FunctionsFragment.DisplayMode
+import io.particle.android.sdk.ui.FunctionsFragment.DisplayMode.FUNCTIONS
+import io.particle.android.sdk.ui.FunctionsFragment.DisplayMode.VARIABLES
 import io.particle.android.sdk.utils.AnimationUtil
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Py.list
-import io.particle.android.sdk.utils.ui.Ui
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.data_header_list.view.*
 import kotlinx.android.synthetic.main.fragment_data.*
@@ -38,20 +40,28 @@ private data class Variable(val name: String, val variableType: VariableType)
 private data class Function(val name: String)
 
 
-private const val ARG_DEVICE = "ARG_DEVICE"
-
-
 class FunctionsFragment : Fragment() {
+
+    enum class DisplayMode {
+        VARIABLES,
+        FUNCTIONS
+    }
+
 
     companion object {
 
-        fun newInstance(device: ParticleDevice): FunctionsFragment {
+        private const val ARG_DEVICE = "ARG_DEVICE"
+        private const val ARG_DISPLAY_MODE = "ARG_DISPLAY_MODE"
+
+        fun newInstance(device: ParticleDevice, displayMode: DisplayMode): FunctionsFragment {
             return FunctionsFragment().apply {
-                arguments = bundleOf(ARG_DEVICE to device)
+                arguments = bundleOf(
+                    ARG_DEVICE to device,
+                    ARG_DISPLAY_MODE to displayMode
+                )
             }
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,10 +70,11 @@ class FunctionsFragment : Fragment() {
     ): View? {
         val top = inflater.inflate(R.layout.fragment_data, container, false)
         val device: ParticleDevice = arguments!!.getParcelable(ARG_DEVICE)!!
+        val displayMode = arguments!!.getSerializable(ARG_DISPLAY_MODE) as DisplayMode
 
         data_list.setHasFixedSize(true)  // perf. optimization
         data_list.layoutManager = LinearLayoutManager(inflater.context)
-        data_list.adapter = DataListAdapter(device)
+        data_list.adapter = DataListAdapter(device, displayMode)
         data_list.addItemDecoration(
             DividerItemDecoration(
                 context,
@@ -76,7 +87,8 @@ class FunctionsFragment : Fragment() {
 
 
 private class DataListAdapter(
-    private val device: ParticleDevice
+    private val device: ParticleDevice,
+    private val mode: DisplayMode
 ) : RecyclerView.Adapter<DataListAdapter.BaseViewHolder>() {
 
     internal open class BaseViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel)
@@ -106,13 +118,19 @@ private class DataListAdapter(
     private var defaultBackground: Drawable? = null
 
     init {
-        data.add("Particle.function()")
-        for (function in device.functions) {
-            data.add(Function(function))
-        }
-        data.add("Particle.variable()")
-        for ((key, value) in device.variables) {
-            data.add(Variable(key, value))
+        when (mode) {
+            VARIABLES -> {
+                data.add("Particle.variable()")
+                for ((key, value) in device.variables) {
+                    data.add(Variable(key, value))
+                }
+            }
+            FUNCTIONS -> {
+                data.add("Particle.function()")
+                for (function in device.functions) {
+                    data.add(Function(function))
+                }
+            }
         }
     }
 
