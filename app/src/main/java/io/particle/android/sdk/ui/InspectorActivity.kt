@@ -8,9 +8,7 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -65,17 +63,9 @@ class InspectorActivity : BaseActivity() {
         device = intent.getParcelableExtra(EXTRA_DEVICE)
         
         // Show the Up button in the action bar.
-        val supportActionBar = supportActionBar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.device_inspector)
-
-        val deviceNameView = Ui.findView<TextView>(this, R.id.deviceName)
-        deviceNameView.text = device.name
-
-        val deviceStatus = Ui.findView<ImageView>(this, R.id.deviceStatus)
-        val animFade = AnimationUtils.loadAnimation(this, R.anim.fade_in_out)
-        deviceStatus.startAnimation(animFade)
-        deviceStatus.setImageResource(getStatusColoredDot(device))
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        title = device.name
 
         setupInspectorPages()
         handler.postDelayed(syncStatus, 1000 * 60L)
@@ -146,30 +136,13 @@ class InspectorActivity : BaseActivity() {
         //update device and UI
         //TODO update more fields
         this.device = device
-        val deviceNameView = Ui.findView<TextView>(this, R.id.deviceName)
-        deviceNameView.post { deviceNameView.text = device.name }
+        runOnUiThread { title = device.name }
     }
 
     @Subscribe
     fun onEvent(deviceStateChange: DeviceStateChange) {
         //reload menu to display online/offline
         invalidateOptionsMenu()
-    }
-
-    private fun getStatusColoredDot(device: ParticleDevice): Int {
-        return if (device.isFlashing) {
-            R.drawable.device_flashing_dot
-        } else if (device.isConnected) {
-            if (device.isRunningTinker) {
-                R.drawable.online_dot
-
-            } else {
-                R.drawable.online_non_tinker_dot
-            }
-
-        } else {
-            R.drawable.offline_dot
-        }
     }
 
     private fun setupInspectorPages() {
