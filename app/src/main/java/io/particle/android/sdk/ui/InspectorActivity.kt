@@ -13,6 +13,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
@@ -40,6 +41,7 @@ import io.particle.android.sdk.utils.ui.Ui
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.view_device_info.*
 import mu.KotlinLogging
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -86,6 +88,18 @@ class InspectorActivity : BaseActivity() {
 
         setupInspectorPages()
         handler.postDelayed(syncStatus, 1000 * 60L)
+
+        device_info_bottom_sheet.setOnClickListener { v ->
+            val behavior = BottomSheetBehavior.from(v)
+            when (behavior.state) {
+                BottomSheetBehavior.STATE_EXPANDED -> {
+                    behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+        }
     }
 
     public override fun onResume() {
@@ -152,6 +166,15 @@ class InspectorActivity : BaseActivity() {
         menuInflater.inflate(menuRes, menu)
 
         return true
+    }
+
+    override fun onBackPressed() {
+        val behavior = BottomSheetBehavior.from(device_info_bottom_sheet)
+        if (behavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            super.onBackPressed()
+        }
     }
 
     @Subscribe
