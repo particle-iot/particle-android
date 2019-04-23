@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,11 +23,14 @@ import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode
-import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode.FUNCTIONS
-import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode.VARIABLES
+import io.particle.android.sdk.ui.RowItem.FunctionRow
+import io.particle.android.sdk.ui.RowItem.HeaderRow
+import io.particle.android.sdk.ui.RowItem.VariableRow
 import io.particle.android.sdk.utils.AnimationUtil
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Py.list
+import io.particle.android.sdk.utils.inflate
+import io.particle.android.sdk.utils.inflateRow
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.data_header_list.view.*
 import kotlinx.android.synthetic.main.fragment_data.*
@@ -36,8 +40,23 @@ import java.io.IOException
 import java.util.*
 
 
-private data class Variable(val name: String, val variableType: VariableType)
-private data class Function(val name: String)
+sealed class RowItem {
+
+    data class HeaderRow(val title: String) : RowItem()
+
+    data class VariableRow(val name: String, val variableType: VariableType) : RowItem()
+
+    data class FunctionRow(val name: String) : RowItem()
+
+
+    companion object {
+
+        const val HEADER_ROW = R.layout.data_header_list
+        const val VARIABLE_ROW = R.layout.row_variable_list
+        const val FUNCTION_ROW = R.layout.row_function_list
+    }
+}
+
 
 
 class FunctionsAndVariablesFragment : Fragment() {
@@ -53,7 +72,10 @@ class FunctionsAndVariablesFragment : Fragment() {
         private const val ARG_DEVICE = "ARG_DEVICE"
         private const val ARG_DISPLAY_MODE = "ARG_DISPLAY_MODE"
 
-        fun newInstance(device: ParticleDevice, displayMode: DisplayMode): FunctionsAndVariablesFragment {
+        fun newInstance(
+            device: ParticleDevice,
+            displayMode: DisplayMode
+        ): FunctionsAndVariablesFragment {
             return FunctionsAndVariablesFragment().apply {
                 arguments = bundleOf(
                     ARG_DEVICE to device,
@@ -68,12 +90,17 @@ class FunctionsAndVariablesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val top = inflater.inflate(R.layout.fragment_data, container, false)
+        return container?.inflate(R.layout.fragment_data, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val device: ParticleDevice = arguments!!.getParcelable(ARG_DEVICE)!!
         val displayMode = arguments!!.getSerializable(ARG_DISPLAY_MODE) as DisplayMode
 
         data_list.setHasFixedSize(true)  // perf. optimization
-        data_list.layoutManager = LinearLayoutManager(inflater.context)
+        data_list.layoutManager = LinearLayoutManager(context)
         data_list.adapter = DataListAdapter(device, displayMode)
         data_list.addItemDecoration(
             DividerItemDecoration(
@@ -81,14 +108,13 @@ class FunctionsAndVariablesFragment : Fragment() {
                 LinearLayout.VERTICAL
             )
         )
-        return top
     }
 }
 
 
 private class DataListAdapter(
     private val device: ParticleDevice,
-    private val mode: DisplayMode
+    mode: DisplayMode
 ) : RecyclerView.Adapter<DataListAdapter.BaseViewHolder>() {
 
     internal open class BaseViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel)
@@ -114,90 +140,76 @@ private class DataListAdapter(
         val progressBar: ProgressBar = itemView.variable_progress
     }
 
-    private val data = list<Any>()
+    private val data = list<RowItem>()
     private var defaultBackground: Drawable? = null
 
     init {
         when (mode) {
-            VARIABLES -> {
-                data.add("Particle.variable()")
+            DisplayMode.VARIABLES -> {
+                data.add(HeaderRow("Particle.variable()"))
                 for ((key, value) in device.variables) {
-                    data.add(Variable(key, value))
+                    data.add(VariableRow(key, value))
                 }
             }
-            FUNCTIONS -> {
-                data.add("Particle.function()")
+            DisplayMode.FUNCTIONS -> {
+                data.add(HeaderRow("Particle.function()"))
                 for (function in device.functions) {
-                    data.add(Function(function))
+                    data.add(FunctionRow(function))
                 }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        when (viewType) {
-            FUNCTION -> {
-                val v = LayoutInflater.from(parent.context).inflate(
-                    R.layout.row_function_list, parent, false
-                )
-                return FunctionViewHolder(v)
-            }
-            VARIABLE -> {
-                val v = LayoutInflater.from(parent.context).inflate(
-                    R.layout.row_variable_list, parent, false
-                )
-                return VariableViewHolder(v)
-            }
-            else -> {
-                val v = LayoutInflater.from(parent.context).inflate(
-                    R.layout.data_header_list, parent, false
-                )
-                return HeaderViewHolder(v)
-            }
+        // the view type here is a layout res ID
+        val v = parent.inflateRow(viewType)
+
+        return when (viewType) {
+            RowItem.FUNCTION_ROW -> FunctionViewHolder(v)
+            RowItem.VARIABLE_ROW -> VariableViewHolder(v)
+            else -> HeaderViewHolder(v)
         }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(baseHolder: BaseViewHolder, position: Int) {
         if (defaultBackground == null) {
-            defaultBackground = holder.topLevel.background
+            defaultBackground = baseHolder.topLevel.background
         }
 
-        holder.topLevel.background = defaultBackground
+        baseHolder.topLevel.background = defaultBackground
 
-        when (getItemViewType(position)) {
-            HEADER -> {
-                val header = data[position] as String
-                val headerViewHolder = holder as HeaderViewHolder
-                headerViewHolder.headerText.text = header
-                //check if there's any data
+        when (val item = data[position]) {
+            is HeaderRow -> {
+                val holder = baseHolder as HeaderViewHolder
+                holder.headerText.text = item.title
+
+                // check if there's any data
                 if (device.variables.isEmpty() && position != 0) {
-                    headerViewHolder.emptyText.setText(R.string.no_exposed_variable_msg)
-                    headerViewHolder.emptyText.visibility = View.VISIBLE
+                    holder.emptyText.setText(R.string.no_exposed_variable_msg)
+                    holder.emptyText.isVisible = true
+
                 } else if (device.functions.isEmpty() && position == 0) {
-                    headerViewHolder.emptyText.setText(R.string.no_exposed_function_msg)
-                    headerViewHolder.emptyText.visibility = View.VISIBLE
+                    holder.emptyText.setText(R.string.no_exposed_function_msg)
+                    holder.emptyText.isVisible = true
+
                 } else {
-                    headerViewHolder.emptyText.visibility = View.GONE
+                    holder.emptyText.isVisible = false
                 }
             }
-
-            VARIABLE -> {
-                val variable = data[position] as Variable
-                val varHolder = holder as VariableViewHolder
-                varHolder.name.text = variable.name
-                varHolder.topLevel.setBackgroundResource(R.color.device_item_bg)
-                setupVariableType(varHolder, variable)
-                setupVariableValue(varHolder, variable)
-                varHolder.name.setOnClickListener { setupVariableValue(varHolder, variable) }
-                varHolder.type.setOnClickListener { setupVariableValue(varHolder, variable) }
+            is VariableRow -> {
+                val holder = baseHolder as VariableViewHolder
+                holder.name.text = item.name
+                holder.topLevel.setBackgroundResource(R.color.device_item_bg)
+                setupVariableType(holder, item)
+                setupVariableValue(holder, item)
+                holder.name.setOnClickListener { setupVariableValue(holder, item) }
+                holder.type.setOnClickListener { setupVariableValue(holder, item) }
             }
-
-            FUNCTION -> {
-                val function = data[position] as Function
-                val funcHolder = holder as FunctionViewHolder
-                funcHolder.name.text = function.name
+            is FunctionRow -> {
+                val funcHolder = baseHolder as FunctionViewHolder
+                funcHolder.name.text = item.name
                 funcHolder.topLevel.setBackgroundResource(R.color.device_item_bg)
-                setupArgumentSend(funcHolder, function)
+                setupArgumentSend(funcHolder, item)
                 setupArgumentExpandAndCollapse(funcHolder)
             }
         }
@@ -235,7 +247,7 @@ private class DataListAdapter(
         }
     }
 
-    private fun setupArgumentSend(holder: FunctionViewHolder, function: Function) {
+    private fun setupArgumentSend(holder: FunctionViewHolder, function: FunctionRow) {
         val context = holder.itemView.context
         holder.argument.setOnEditorActionListener { _, actionId, _ ->
 
@@ -298,7 +310,7 @@ private class DataListAdapter(
         }
     }
 
-    private fun setupVariableValue(holder: VariableViewHolder, variable: Variable) {
+    private fun setupVariableValue(holder: VariableViewHolder, variable: VariableRow) {
         holder.progressBar.visibility = View.VISIBLE
         holder.value.visibility = View.GONE
         try {
@@ -349,7 +361,7 @@ private class DataListAdapter(
 
     }
 
-    private fun setupVariableType(holder: VariableViewHolder, variable: Variable) {
+    private fun setupVariableType(holder: VariableViewHolder, variable: VariableRow) {
         val type = when (variable.variableType) {
             VariableType.INT -> "(Integer)"
             VariableType.DOUBLE -> "(Double)"
@@ -363,16 +375,10 @@ private class DataListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (data[position]) {
-            is Variable -> VARIABLE
-            is Function -> FUNCTION
-            else -> HEADER
+        return when(data[position]) {
+            is HeaderRow -> RowItem.HEADER_ROW
+            is VariableRow -> RowItem.VARIABLE_ROW
+            is FunctionRow -> RowItem.FUNCTION_ROW
         }
-    }
-
-    companion object {
-        internal val HEADER = 0
-        internal val FUNCTION = 1
-        internal val VARIABLE = 2
     }
 }
