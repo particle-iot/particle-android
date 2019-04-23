@@ -23,6 +23,8 @@ import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode
+import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode.FUNCTIONS
+import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode.VARIABLES
 import io.particle.android.sdk.ui.RowItem.FunctionRow
 import io.particle.android.sdk.ui.RowItem.HeaderRow
 import io.particle.android.sdk.ui.RowItem.VariableRow
@@ -56,7 +58,6 @@ sealed class RowItem {
         const val FUNCTION_ROW = R.layout.row_function_list
     }
 }
-
 
 
 class FunctionsAndVariablesFragment : Fragment() {
@@ -114,7 +115,7 @@ class FunctionsAndVariablesFragment : Fragment() {
 
 private class DataListAdapter(
     private val device: ParticleDevice,
-    mode: DisplayMode
+    private val mode: DisplayMode
 ) : RecyclerView.Adapter<DataListAdapter.BaseViewHolder>() {
 
     internal open class BaseViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel)
@@ -183,17 +184,23 @@ private class DataListAdapter(
                 val holder = baseHolder as HeaderViewHolder
                 holder.headerText.text = item.title
 
-                // check if there's any data
-                if (device.variables.isEmpty() && position != 0) {
-                    holder.emptyText.setText(R.string.no_exposed_variable_msg)
-                    holder.emptyText.isVisible = true
-
-                } else if (device.functions.isEmpty() && position == 0) {
-                    holder.emptyText.setText(R.string.no_exposed_function_msg)
-                    holder.emptyText.isVisible = true
-
-                } else {
-                    holder.emptyText.isVisible = false
+                when (mode) {
+                    VARIABLES -> {
+                        if (device.variables.isEmpty()) {
+                            holder.emptyText.setText(R.string.no_exposed_variable_msg)
+                            holder.emptyText.isVisible = true
+                        } else {
+                            holder.emptyText.isVisible = false
+                        }
+                    }
+                    FUNCTIONS -> {
+                        if (device.functions.isEmpty()) {
+                            holder.emptyText.setText(R.string.no_exposed_function_msg)
+                            holder.emptyText.isVisible = true
+                        } else {
+                            holder.emptyText.isVisible = false
+                        }
+                    }
                 }
             }
             is VariableRow -> {
@@ -375,7 +382,7 @@ private class DataListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(data[position]) {
+        return when (data[position]) {
             is HeaderRow -> RowItem.HEADER_ROW
             is VariableRow -> RowItem.VARIABLE_ROW
             is FunctionRow -> RowItem.FUNCTION_ROW
