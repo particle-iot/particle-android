@@ -1,12 +1,15 @@
 package io.particle.android.sdk.ui
 
+import androidx.collection.SparseArrayCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.tinker.TinkerFragment
-import io.particle.mesh.common.QATool
+import io.particle.android.sdk.ui.FunctionsAndVariablesFragment.DisplayMode
+
+
+private data class FragmentData(val title: String, val fragment: Fragment)
 
 
 internal class InspectorPager(
@@ -14,36 +17,34 @@ internal class InspectorPager(
     device: ParticleDevice
 ) : FragmentStatePagerAdapter(fm) {
 
-    private val infoFragment: InfoFragment = InfoFragment.newInstance(device)
-    private val dataFragment: DataFragment = DataFragment.newInstance(device)
-    private val eventsFragment: EventsFragment = EventsFragment.newInstance(device)
-    private val tinkerFragment: TinkerFragment = TinkerFragment.newInstance(device)
+    // NOTE: the keys in this map are the positions of the fragments.
+    private val fragmentsData = SparseArrayCompat<FragmentData>().apply {
+        addAllInThisOrder(
+            "Events" to EventsFragment.newInstance(device),
+            "Functions" to FunctionsAndVariablesFragment.newInstance(device, DisplayMode.FUNCTIONS),
+            "Variables" to FunctionsAndVariablesFragment.newInstance(device, DisplayMode.VARIABLES),
+            "Tinker" to TinkerFragment.newInstance(device)
+        )
+    }
+
     private val isRunningTinker = device.isRunningTinker
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return when (position) {
-            0 -> "Info"
-            1 -> "Data"
-            2 -> "Events"
-            3 -> "Tinker"
-            else -> null
-        }
+        return fragmentsData[position]?.title
     }
 
     override fun getItem(position: Int): Fragment? {
-        return when (position) {
-            0 -> infoFragment
-            1 -> dataFragment
-            2 -> eventsFragment
-            3 -> tinkerFragment
-            else -> {
-                QATool.report(IllegalArgumentException("Invalid position=$position"))
-                null
-            }
-        }
+        return fragmentsData[position]?.fragment
     }
 
     override fun getCount(): Int {
         return if (isRunningTinker) 4 else 3
+    }
+}
+
+
+private fun SparseArrayCompat<FragmentData>.addAllInThisOrder(vararg pairs: Pair<String, Fragment>) {
+    pairs.forEachIndexed { index, element ->
+        this.put(index, FragmentData(element.first, element.second))
     }
 }
