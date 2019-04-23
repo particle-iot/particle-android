@@ -397,23 +397,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
             holder.topLevel.setBackgroundResource(R.color.device_item_bg)
 
-            val (modelNameRes, productImageRes) = when (device.deviceType) {
-                ParticleDeviceType.CORE -> Pair(R.string.core, R.drawable.core_vector)
-                ParticleDeviceType.PHOTON -> Pair(R.string.photon, R.drawable.photon_vector_small)
-                ParticleDeviceType.ELECTRON -> Pair(R.string.electron, R.drawable.electron_vector_small)
-                ParticleDeviceType.RASPBERRY_PI -> Pair(R.string.raspberry, R.drawable.pi_vector)
-                ParticleDeviceType.P1 -> Pair(R.string.p1, R.drawable.p1_vector)
-                ParticleDeviceType.RED_BEAR_DUO -> Pair(R.string.red_bear_duo, R.drawable.red_bear_duo_vector)
-                ParticleDeviceType.ARGON,
-                ParticleDeviceType.A_SERIES -> Pair(R.string.product_name_argon, R.drawable.argon_vector)
-                ParticleDeviceType.BORON,
-                ParticleDeviceType.B_SERIES -> Pair(R.string.product_name_boron, R.drawable.boron_vector)
-                ParticleDeviceType.XENON,
-                ParticleDeviceType.X_SERIES -> Pair(R.string.product_name_xenon, R.drawable.xenon_vector)
-                else -> Pair(R.string.unknown, R.drawable.unknown_vector)
-            }
-            holder.modelName.setText(modelNameRes)
-            holder.productImage.setImageResource(productImageRes)
+            holder.modelName.setText(device.deviceType!!.productName)
+            holder.productImage.setImageResource(device.deviceType!!.productImage)
 
             val ctx = holder.topLevel.context
             val name = if (truthy(device.name))
