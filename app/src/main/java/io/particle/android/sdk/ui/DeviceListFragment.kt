@@ -57,7 +57,6 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
-//@ParametersAreNonnullByDefault
 class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoadResult> {
 
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
@@ -291,12 +290,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
                 activity,
                 "Device is being flashed, please wait for the flashing process to end first"
             )
-        } else if (!device.isConnected || !device.isRunningTinker) {
-            val activity = activity
-
-            activity?.startActivity(InspectorActivity.buildIntent(activity, device))
         } else {
-            callbacks.onDeviceSelected(device)
+            activity?.let { startActivity(InspectorActivity.buildIntent(it, device)) }
         }
     }
 

@@ -8,9 +8,7 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -23,16 +21,30 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
-import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
+import mu.KotlinLogging
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 
+private const val EXTRA_DEVICE = "EXTRA_DEVICE"
+
+
 /** An activity representing the Inspector screen for a Device */
 class InspectorActivity : BaseActivity() {
+
+    companion object {
+
+        fun buildIntent(ctx: Context, device: ParticleDevice): Intent {
+            return Intent(ctx, InspectorActivity::class.java)
+                .putExtra(EXTRA_DEVICE, device)
+        }
+    }
+
+    private val log = KotlinLogging.logger {}
 
     private val syncStatus = object : Runnable {
         override fun run() {
@@ -41,26 +53,19 @@ class InspectorActivity : BaseActivity() {
         }
     }
 
-    private var device: ParticleDevice? = null
+    private lateinit var device: ParticleDevice
     private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inspector)
 
-        // Show the Up button in the action bar.
-        val supportActionBar = supportActionBar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.device_inspector)
-
         device = intent.getParcelableExtra(EXTRA_DEVICE)
-        val deviceNameView = Ui.findView<TextView>(this, R.id.deviceName)
-        deviceNameView.text = device!!.name
-
-        val deviceStatus = Ui.findView<ImageView>(this, R.id.deviceStatus)
-        val animFade = AnimationUtils.loadAnimation(this, R.anim.fade_in_out)
-        deviceStatus.startAnimation(animFade)
-        deviceStatus.setImageResource(getStatusColoredDot(device!!))
+        
+        // Show the Up button in the action bar.
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        title = device.name
 
         setupInspectorPages()
         handler.postDelayed(syncStatus, 1000 * 60L)
@@ -70,7 +75,7 @@ class InspectorActivity : BaseActivity() {
         super.onResume()
         EventBus.getDefault().register(this)
         try {
-            device!!.subscribeToSystemEvents()
+            device.subscribeToSystemEvents()
         } catch (ignore: ParticleCloudException) {
             //minor issue if we don't update online/offline states
         }
@@ -80,7 +85,7 @@ class InspectorActivity : BaseActivity() {
     public override fun onPause() {
         EventBus.getDefault().unregister(this)
         try {
-            device!!.unsubscribeFromSystemEvents()
+            device.unsubscribeFromSystemEvents()
         } catch (ignore: ParticleCloudException) {
         }
 
@@ -92,8 +97,8 @@ class InspectorActivity : BaseActivity() {
         when (id) {
             android.R.id.home -> finish()
             R.id.action_event_publish -> presentPublishDialog()
-            R.id.action_launchcontrol_panel -> device?.let {
-                startActivity(ControlPanelActivity.buildIntent(this, it.id))
+            R.id.action_launchcontrol_panel -> {
+                startActivity(ControlPanelActivity.buildIntent(this, device.id))
             }
             else -> {
                 val actionId = item.itemId
@@ -111,7 +116,7 @@ class InspectorActivity : BaseActivity() {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.inspector, menu)
 
-        val type = device!!.deviceType
+        val type = device.deviceType
         if (type === ParticleDeviceType.ARGON
             || type === ParticleDeviceType.BORON
             || type === ParticleDeviceType.XENON
@@ -131,30 +136,13 @@ class InspectorActivity : BaseActivity() {
         //update device and UI
         //TODO update more fields
         this.device = device
-        val deviceNameView = Ui.findView<TextView>(this, R.id.deviceName)
-        deviceNameView.post { deviceNameView.text = device.name }
+        runOnUiThread { title = device.name }
     }
 
     @Subscribe
     fun onEvent(deviceStateChange: DeviceStateChange) {
         //reload menu to display online/offline
         invalidateOptionsMenu()
-    }
-
-    private fun getStatusColoredDot(device: ParticleDevice): Int {
-        return if (device.isFlashing) {
-            R.drawable.device_flashing_dot
-        } else if (device.isConnected) {
-            if (device.isRunningTinker) {
-                R.drawable.online_dot
-
-            } else {
-                R.drawable.online_non_tinker_dot
-            }
-
-        } else {
-            R.drawable.offline_dot
-        }
     }
 
     private fun setupInspectorPages() {
@@ -216,7 +204,7 @@ class InspectorActivity : BaseActivity() {
 
     private fun publishEvent(name: String, value: String, eventVisibility: Int) {
         try {
-            Async.executeAsync(device!!, object : Async.ApiProcedure<ParticleDevice>() {
+            Async.executeAsync(device, object : Async.ApiProcedure<ParticleDevice>() {
                 @Throws(ParticleCloudException::class)
                 override fun callApi(particleDevice: ParticleDevice): Void? {
                     particleDevice.cloud.publishEvent(name, value, eventVisibility, 600)
@@ -239,12 +227,4 @@ class InspectorActivity : BaseActivity() {
 
     }
 
-    companion object {
-        val EXTRA_DEVICE = "EXTRA_DEVICE"
-
-        fun buildIntent(ctx: Context, device: ParticleDevice): Intent {
-            return Intent(ctx, InspectorActivity::class.java)
-                .putExtra(EXTRA_DEVICE, device)
-        }
-    }
 }
