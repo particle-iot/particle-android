@@ -94,6 +94,7 @@ public class DevicesLoader extends BetterAsyncTaskLoader<DevicesLoader.DevicesLo
         boolean unableToLoadAnyDevices = false;
         try {
             devices = ParallelDeviceFetcherAccessHack.getDevicesParallel(cloud, useLongTimeouts);
+//            devices = cloud.getDevices();
         } catch (ParticleCloudException | CancellationException e) {
             // FIXME: think more about error handling here
             // getting a PCE here means we couldn't even get the device list, so just return

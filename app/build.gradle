@@ -19,7 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
-//apply plugin: 'io.fabric'  /* uncomment for release builds */
+apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
 android {

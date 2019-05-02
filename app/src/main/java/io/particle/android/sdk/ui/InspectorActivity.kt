@@ -15,30 +15,15 @@ import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
-import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.ui.Ui
-import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.view_device_info.*
@@ -73,6 +58,8 @@ class InspectorActivity : BaseActivity() {
     private lateinit var device: ParticleDevice
     private val cloud = ParticleCloudSDK.getCloud()
     private val handler = Handler()
+    private val lastHeardDateFormat = SimpleDateFormat("MMM d, yyyy, h:mm a")
+
     private val scopes = Scopes()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,8 +76,42 @@ class InspectorActivity : BaseActivity() {
         setupInspectorPages()
         handler.postDelayed(syncStatus, 1000 * 60L)
 
-        device_info_bottom_sheet.setOnClickListener { v ->
-            val behavior = BottomSheetBehavior.from(v)
+        initBottomSheet()
+    }
+
+    private fun initBottomSheet() {
+        device_info_bottom_sheet.action_device_rename.setOnClickListener {
+            RenameHelper.renameDevice(this, device)
+        }
+
+        val behavior = BottomSheetBehavior.from(device_info_bottom_sheet)
+
+        behavior.setBottomSheetCallback(object : BottomSheetCallback() {
+            override fun onSlide(p0: View, p1: Float) { /* no-op */ }
+
+            override fun onStateChanged(p0: View, p1: Int) {
+                // FIXME! Make stuff animate and appear/disappear!
+            }
+        })
+
+        fun onSignalSwitchChanged(isChecked: Boolean) {
+            val deviceId = device.id
+            scopes.onWorker {
+                val cloud = ParticleCloudSDK.getCloud()
+                val device = cloud.getDevice(deviceId)
+                try {
+                    device.startStopSignaling(isChecked)
+                } catch (ex: Exception) {
+                    log.error(ex) { "Error turning rainbow-shouting ${if (isChecked) "ON" else "OFF"}" }
+                }
+            }
+        }
+        action_signal_device.setOnCheckedChangeListener { _, isChecked ->
+            onSignalSwitchChanged(isChecked)
+        }
+
+
+        val toggleOnTapListener = OnClickListener {
             when (behavior.state) {
                 BottomSheetBehavior.STATE_EXPANDED -> {
                     behavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -100,6 +121,7 @@ class InspectorActivity : BaseActivity() {
                 }
             }
         }
+        device_info_bottom_sheet.expanded_handle.setOnClickListener(toggleOnTapListener)
     }
 
     public override fun onResume() {
@@ -110,6 +132,9 @@ class InspectorActivity : BaseActivity() {
         } catch (ignore: ParticleCloudException) {
             //minor issue if we don't update online/offline states
         }
+        updateDeviceDetails()
+
+        setUpStatusDotAnimation()
 
         scopes.onWorker {
             val owned = cloud.userOwnsDevice(device.id)
@@ -125,6 +150,8 @@ class InspectorActivity : BaseActivity() {
             device.unsubscribeFromSystemEvents()
         } catch (ignore: ParticleCloudException) {
         }
+
+        action_signal_device.isChecked = false
 
         super.onPause()
     }
@@ -230,8 +257,8 @@ class InspectorActivity : BaseActivity() {
             .setPositiveButton(R.string.publish_positive_action) { _, _ ->
                 val nameView = Ui.findView<TextView>(publishDialogView, R.id.eventName)
                 val valueView = Ui.findView<TextView>(publishDialogView, R.id.eventValue)
-                val privateEventRadio =
-                    Ui.findView<RadioButton>(publishDialogView, R.id.privateEvent)
+                val privateEventRadio: RadioButton =
+                    Ui.findView(publishDialogView, R.id.privateEvent)
 
                 val name = nameView.text.toString()
                 val value = valueView.text.toString()
@@ -270,7 +297,43 @@ class InspectorActivity : BaseActivity() {
                         "' event", Toast.LENGTH_SHORT
             ).show()
         }
+    }
 
+    private fun setUpStatusDotAnimation() {
+        val animFade = AnimationUtils.loadAnimation(this, R.anim.fade_in_out)
+        val statusDot = device_info_bottom_sheet.online_status_dot
+        statusDot.startAnimation(animFade)
+        statusDot.setImageResource(getStatusColoredDot(device))
+    }
+
+    private fun getStatusColoredDot(device: ParticleDevice): Int {
+        return if (device.isFlashing) {
+            R.drawable.device_flashing_dot
+
+        } else if (device.isConnected) {
+            if (device.isRunningTinker) {
+                R.drawable.online_dot
+            } else {
+                R.drawable.online_non_tinker_dot
+            }
+
+        } else {
+            R.drawable.offline_dot
+        }
+    }
+
+    private fun updateDeviceDetails() {
+        val root = device_info_bottom_sheet
+        root.product_image.setImageResource(device.deviceType!!.productImage)
+        root.device_name.text = device.name
+        root.online_status_text.text = if (device.isConnected) "Online" else "Offline"
+        root.device_type.text = root.context.getString(device.deviceType!!.productName)
+        root.device_id.text = device.id.toUpperCase()
+        root.serial.text = device.serialNumber
+        root.os_version.text = device.version ?: "(Unknown)"
+        root.last_handshake.text = lastHeardDateFormat.format(device.lastHeard)
+        // FIXME: add notes field and functionality
+//        root.notes.text = device.notes
     }
 
 }

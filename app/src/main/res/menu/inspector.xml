@@ -6,7 +6,7 @@
         android:id="@id/action_device_rename"
         android:icon="@drawable/ic_mode_edit_white_24dp"
         android:title="@string/rename_menu_title"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_event_publish"
