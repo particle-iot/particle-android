@@ -1,5 +1,6 @@
 package io.particle.mesh.ui.controlpanel
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,12 +8,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
 import io.particle.mesh.setup.utils.safeToast
-import io.particle.mesh.ui.navigateOnClick
-import io.particle.mesh.ui.R
-import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.*
 import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
 import java.lang.Exception
 
@@ -30,67 +48,78 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_control_panel_landing, container, false)
+        return container?.inflateFragment(R.layout.fragment_control_panel_landing)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val deviceType = device.deviceType!!
+
+        p_controlpanel_landing_wifi_item_frame.isVisible = deviceType in listOf(ARGON, A_SERIES)
+        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SERIES)
+        p_controlpanel_landing_ethernet_item_frame.isVisible = false // this is just off for now
+
         p_controlpanel_landing_wifi_item.navigateOnClick(
             R.id.action_controlPanelLandingFragment_to_controlPanelWifiOptionsFragment
         )
 
-        p_controlpanel_landing_cellular_item.navigateOnClick(
-            R.id.action_global_controlPanelCellularOptionsFragment
-        )
+        p_controlpanel_landing_cellular_item.setOnClickListener {
+            flowRunner.startShowControlPanelCellularOptionsFlow(device)
+        }
 
         p_controlpanel_landing_mesh_item.navigateOnClick(
             R.id.action_global_controlPanelMeshOptionsFragment
         )
 
         p_controlpanel_landing_docs_item.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://html5zombo.com")))
+            showDocumentation(activity!!, device.deviceType!!)
         }
 
         p_controlpanel_landing_unclaim_item.setOnClickListener {
-            flowScopes.onWorker { unclaimDevice() }
+            navigateToUnclaim()
         }
 
     }
 
-    @WorkerThread
-    private fun unclaimDevice() {
+    override fun onResume() {
+        super.onResume()
+        flowRunner.endCurrentFlow()  // end any current flows
+    }
+
+    private fun navigateToUnclaim() {
         flowSystemInterface.showGlobalProgressSpinner(true)
+        findNavController().navigate(
+            R.id.action_global_controlPanelUnclaimDeviceFragment,
+            ControlPanelUnclaimDeviceFragmentArgs(device.name).toBundle()
+        )
+        flowSystemInterface.showGlobalProgressSpinner(false)
+    }
+}
 
-        val error = try {
-            val device = cloud.getDevice(deviceId)
-            device.unclaim()
-            null
 
-        } catch (ex: Exception) {
-            ex
-
-        } finally {
-            flowScopes.onMain {
-                flowSystemInterface.showGlobalProgressSpinner(false)
-            }
-        }
-
-        flowScopes.onMain {
-            if (!isAdded) {
-                return@onMain
-            }
-
-            if (error == null) {
-                activity?.safeToast("Device unclaimed!")
-                activity?.finish()
-            } else {
-                activity?.safeToast("Error unclaiming device")
-            }
-        }
+private fun showDocumentation(context: Context, deviceType: ParticleDeviceType) {
+    val finalPathSegment = when (deviceType) {
+        CORE -> "core"
+        PHOTON -> "photon"
+        P1 -> "datasheets/wi-fi/p1-datasheet"
+        ELECTRON -> "electron"
+        ARGON, A_SERIES -> "argon"
+        BORON, B_SERIES -> "boron"
+        XENON, X_SERIES -> "xenon"
+        RASPBERRY_PI,
+        RED_BEAR_DUO,
+        BLUZ,
+        DIGISTUMP_OAK,
+        OTHER -> null
     }
 
+    finalPathSegment?.let {
+        val uri = Uri.parse("https://docs.particle.io/$finalPathSegment")
+        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+    }
 }

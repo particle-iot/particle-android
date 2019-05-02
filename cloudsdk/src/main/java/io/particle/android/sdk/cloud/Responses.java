@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import io.particle.android.sdk.cloud.Responses.Models.CoreInfo;
 import io.particle.android.sdk.cloud.models.ParticleNetworkData;
 
@@ -58,6 +60,8 @@ public class Responses {
 
             public final String imei;
 
+            public final String iccid;
+
             @SerializedName("last_iccid")
             public final String lastIccid;
 
@@ -85,14 +89,31 @@ public class Responses {
             @SerializedName("last_heard")
             public final Date lastHeard;
 
+            @SerializedName("system_firmware_version")
+            public final String systemFirmwareVersion;
+
+            @SerializedName("serial_number")
+            public final String serialNumber;
+
+            @SerializedName("last_app")
+            public final String lastAppName;
+
+            @Nullable
+            public final String notes;
+
+
             public SimpleDevice(String id, String name, boolean isConnected, boolean cellular,
-                                String imei, String lastIccid, String currentBuild, String defaultBuild, int platformId,
-                                int productId, String ipAddress, String status, Date lastHeard) {
+                                String imei, String iccid, String lastIccid, String currentBuild,
+                                String defaultBuild, int platformId, int productId,
+                                String ipAddress, String status, Date lastHeard,
+                                String systemFirmwareVersion, String serialNumber, String lastApp,
+                                @Nullable String notes) {
                 this.id = id;
                 this.name = name;
                 this.isConnected = isConnected;
                 this.cellular = cellular;
                 this.imei = imei;
+                this.iccid = iccid;
                 this.lastIccid = lastIccid;
                 this.currentBuild = currentBuild;
                 this.defaultBuild = defaultBuild;
@@ -101,6 +122,10 @@ public class Responses {
                 this.ipAddress = ipAddress;
                 this.status = status;
                 this.lastHeard = lastHeard;
+                this.systemFirmwareVersion = systemFirmwareVersion;
+                this.serialNumber = serialNumber;
+                this.lastAppName = lastApp;
+                this.notes = notes;
             }
         }
 
@@ -118,6 +143,8 @@ public class Responses {
 
             public final String imei;
 
+            public final String iccid;
+
             @SerializedName("last_iccid")
             public final String lastIccid;
 
@@ -134,9 +161,6 @@ public class Responses {
 
             public final List<String> functions;
 
-            @SerializedName("cc3000_patch_version")
-            public final String version;
-
             @SerializedName("product_id")
             public final int productId;
 
@@ -152,9 +176,6 @@ public class Responses {
             @SerializedName("status")
             public final String status;
 
-            @SerializedName("device_needs_update")
-            public final boolean requiresUpdate;
-
             @SerializedName("last_heard")
             public final Date lastHeard;
 
@@ -164,32 +185,41 @@ public class Responses {
             @SerializedName("mobile_secret")
             public final String mobileSecret;
 
+            @SerializedName("system_firmware_version")
+            public final String systemFirmwareVersion;
+
+            @Nullable
+            public final String notes;
+
+
             CompleteDevice(String deviceId, String name, boolean isConnected, boolean cellular,
-                           String imei, String lastIccid, String currentBuild, String defaultBuild,
-                           Map<String, String> variables, List<String> functions, String version,
-                           int productId, int platformId, String ipAddress, String lastAppName,
-                           String status, boolean requiresUpdate, Date lastHeard,
-                           String serialNumber, String mobileSecret) {
+                           String imei, String iccid, String lastIccid, String currentBuild,
+                           String defaultBuild,
+                           Map<String, String> variables, List<String> functions, int productId,
+                           int platformId, String ipAddress, String lastAppName, String status,
+                           Date lastHeard, String serialNumber, String mobileSecret,
+                           String systemFirmwareVersion, @Nullable String notes) {
                 this.deviceId = deviceId;
                 this.name = name;
                 this.isConnected = isConnected;
                 this.cellular = cellular;
                 this.imei = imei;
+                this.iccid = iccid;
                 this.lastIccid = lastIccid;
                 this.currentBuild = currentBuild;
                 this.defaultBuild = defaultBuild;
                 this.variables = variables;
                 this.functions = functions;
-                this.version = version;
                 this.productId = productId;
                 this.platformId = platformId;
                 this.ipAddress = ipAddress;
                 this.lastAppName = lastAppName;
                 this.status = status;
-                this.requiresUpdate = requiresUpdate;
                 this.lastHeard = lastHeard;
                 this.serialNumber = serialNumber;
                 this.mobileSecret = mobileSecret;
+                this.systemFirmwareVersion = systemFirmwareVersion;
+                this.notes = notes;
             }
         }
 

@@ -7,9 +7,9 @@ import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.logged
 import io.particle.mesh.setup.flow.Clearable
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin.CreateNewNetwork
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import mu.KotlinLogging
 
 

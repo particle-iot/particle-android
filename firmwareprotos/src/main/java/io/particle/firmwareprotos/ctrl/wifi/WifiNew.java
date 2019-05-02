@@ -3076,6 +3076,3907 @@ public final class WifiNew {
 
   }
 
+  public interface GetKnownNetworksRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.GetKnownNetworksRequest)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * <pre>
+   **
+   * Get the list of known networks.
+   * </pre>
+   *
+   * Protobuf type {@code particle.ctrl.wifi.GetKnownNetworksRequest}
+   */
+  public  static final class GetKnownNetworksRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.wifi.GetKnownNetworksRequest)
+      GetKnownNetworksRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetKnownNetworksRequest.newBuilder() to construct.
+    private GetKnownNetworksRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetKnownNetworksRequest() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetKnownNetworksRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest other = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     **
+     * Get the list of known networks.
+     * </pre>
+     *
+     * Protobuf type {@code particle.ctrl.wifi.GetKnownNetworksRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.wifi.GetKnownNetworksRequest)
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest build() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest result = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.wifi.GetKnownNetworksRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.wifi.GetKnownNetworksRequest)
+    private static final io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetKnownNetworksRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetKnownNetworksRequest>() {
+      public GetKnownNetworksRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetKnownNetworksRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetKnownNetworksRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetKnownNetworksRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetKnownNetworksReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.GetKnownNetworksReply)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    java.util.List<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network> 
+        getNetworksList();
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network getNetworks(int index);
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    int getNetworksCount();
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    java.util.List<? extends io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder> 
+        getNetworksOrBuilderList();
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder getNetworksOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.wifi.GetKnownNetworksReply}
+   */
+  public  static final class GetKnownNetworksReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.wifi.GetKnownNetworksReply)
+      GetKnownNetworksReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetKnownNetworksReply.newBuilder() to construct.
+    private GetKnownNetworksReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetKnownNetworksReply() {
+      networks_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetKnownNetworksReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                networks_ = new java.util.ArrayList<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              networks_.add(
+                  input.readMessage(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.parser(), extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          networks_ = java.util.Collections.unmodifiableList(networks_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Builder.class);
+    }
+
+    public interface NetworkOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.GetKnownNetworksReply.Network)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      java.lang.String getSsid();
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getSsidBytes();
+
+      /**
+       * <code>.particle.ctrl.wifi.Security security = 2;</code>
+       */
+      int getSecurityValue();
+      /**
+       * <code>.particle.ctrl.wifi.Security security = 2;</code>
+       */
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security getSecurity();
+
+      /**
+       * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+       */
+      int getCredentialsTypeValue();
+      /**
+       * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+       */
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType getCredentialsType();
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.wifi.GetKnownNetworksReply.Network}
+     */
+    public  static final class Network extends
+        com.google.protobuf.GeneratedMessageV3 implements
+        // @@protoc_insertion_point(message_implements:particle.ctrl.wifi.GetKnownNetworksReply.Network)
+        NetworkOrBuilder {
+    private static final long serialVersionUID = 0L;
+      // Use Network.newBuilder() to construct.
+      private Network(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+      private Network() {
+        ssid_ = "";
+        security_ = 0;
+        credentialsType_ = 0;
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+      getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Network(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        this();
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownFieldProto3(
+                    input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                java.lang.String s = input.readStringRequireUtf8();
+
+                ssid_ = s;
+                break;
+              }
+              case 16: {
+                int rawValue = input.readEnum();
+
+                security_ = rawValue;
+                break;
+              }
+              case 24: {
+                int rawValue = input.readEnum();
+
+                credentialsType_ = rawValue;
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder.class);
+      }
+
+      public static final int SSID_FIELD_NUMBER = 1;
+      private volatile java.lang.Object ssid_;
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public java.lang.String getSsid() {
+        java.lang.Object ref = ssid_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          ssid_ = s;
+          return s;
+        }
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSsidBytes() {
+        java.lang.Object ref = ssid_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ssid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      public static final int SECURITY_FIELD_NUMBER = 2;
+      private int security_;
+      /**
+       * <code>.particle.ctrl.wifi.Security security = 2;</code>
+       */
+      public int getSecurityValue() {
+        return security_;
+      }
+      /**
+       * <code>.particle.ctrl.wifi.Security security = 2;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security getSecurity() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security result = io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.valueOf(security_);
+        return result == null ? io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.UNRECOGNIZED : result;
+      }
+
+      public static final int CREDENTIALS_TYPE_FIELD_NUMBER = 3;
+      private int credentialsType_;
+      /**
+       * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+       */
+      public int getCredentialsTypeValue() {
+        return credentialsType_;
+      }
+      /**
+       * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType getCredentialsType() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType result = io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType.valueOf(credentialsType_);
+        return result == null ? io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType.UNRECOGNIZED : result;
+      }
+
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        if (!getSsidBytes().isEmpty()) {
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 1, ssid_);
+        }
+        if (security_ != io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.NO_SECURITY.getNumber()) {
+          output.writeEnum(2, security_);
+        }
+        if (credentialsType_ != io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType.NO_CREDENTIALS.getNumber()) {
+          output.writeEnum(3, credentialsType_);
+        }
+        unknownFields.writeTo(output);
+      }
+
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (!getSsidBytes().isEmpty()) {
+          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, ssid_);
+        }
+        if (security_ != io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.NO_SECURITY.getNumber()) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(2, security_);
+        }
+        if (credentialsType_ != io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType.NO_CREDENTIALS.getNumber()) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(3, credentialsType_);
+        }
+        size += unknownFields.getSerializedSize();
+        memoizedSize = size;
+        return size;
+      }
+
+      @java.lang.Override
+      public boolean equals(final java.lang.Object obj) {
+        if (obj == this) {
+         return true;
+        }
+        if (!(obj instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network)) {
+          return super.equals(obj);
+        }
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network other = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network) obj;
+
+        boolean result = true;
+        result = result && getSsid()
+            .equals(other.getSsid());
+        result = result && security_ == other.security_;
+        result = result && credentialsType_ == other.credentialsType_;
+        result = result && unknownFields.equals(other.unknownFields);
+        return result;
+      }
+
+      @java.lang.Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + SSID_FIELD_NUMBER;
+        hash = (53 * hash) + getSsid().hashCode();
+        hash = (37 * hash) + SECURITY_FIELD_NUMBER;
+        hash = (53 * hash) + security_;
+        hash = (37 * hash) + CREDENTIALS_TYPE_FIELD_NUMBER;
+        hash = (53 * hash) + credentialsType_;
+        hash = (29 * hash) + unknownFields.hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          java.nio.ByteBuffer data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          java.nio.ByteBuffer data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+      }
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+      }
+
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+      public static Builder newBuilder(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code particle.ctrl.wifi.GetKnownNetworksReply.Network}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:particle.ctrl.wifi.GetKnownNetworksReply.Network)
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder.class);
+        }
+
+        // Construct using io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessageV3
+                  .alwaysUseFieldBuilders) {
+          }
+        }
+        public Builder clear() {
+          super.clear();
+          ssid_ = "";
+
+          security_ = 0;
+
+          credentialsType_ = 0;
+
+          return this;
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_descriptor;
+        }
+
+        public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network getDefaultInstanceForType() {
+          return io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.getDefaultInstance();
+        }
+
+        public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network build() {
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network buildPartial() {
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network result = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network(this);
+          result.ssid_ = ssid_;
+          result.security_ = security_;
+          result.credentialsType_ = credentialsType_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder clone() {
+          return (Builder) super.clone();
+        }
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return (Builder) super.setField(field, value);
+        }
+        public Builder clearField(
+            com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return (Builder) super.clearField(field);
+        }
+        public Builder clearOneof(
+            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return (Builder) super.clearOneof(oneof);
+        }
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index, java.lang.Object value) {
+          return (Builder) super.setRepeatedField(field, index, value);
+        }
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            java.lang.Object value) {
+          return (Builder) super.addRepeatedField(field, value);
+        }
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network) {
+            return mergeFrom((io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network other) {
+          if (other == io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.getDefaultInstance()) return this;
+          if (!other.getSsid().isEmpty()) {
+            ssid_ = other.ssid_;
+            onChanged();
+          }
+          if (other.security_ != 0) {
+            setSecurityValue(other.getSecurityValue());
+          }
+          if (other.credentialsType_ != 0) {
+            setCredentialsTypeValue(other.getCredentialsTypeValue());
+          }
+          this.mergeUnknownFields(other.unknownFields);
+          onChanged();
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network) e.getUnfinishedMessage();
+            throw e.unwrapIOException();
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+
+        private java.lang.Object ssid_ = "";
+        /**
+         * <code>string ssid = 1;</code>
+         */
+        public java.lang.String getSsid() {
+          java.lang.Object ref = ssid_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            ssid_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>string ssid = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getSsidBytes() {
+          java.lang.Object ref = ssid_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            ssid_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>string ssid = 1;</code>
+         */
+        public Builder setSsid(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  
+          ssid_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string ssid = 1;</code>
+         */
+        public Builder clearSsid() {
+          
+          ssid_ = getDefaultInstance().getSsid();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>string ssid = 1;</code>
+         */
+        public Builder setSsidBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+          
+          ssid_ = value;
+          onChanged();
+          return this;
+        }
+
+        private int security_ = 0;
+        /**
+         * <code>.particle.ctrl.wifi.Security security = 2;</code>
+         */
+        public int getSecurityValue() {
+          return security_;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.Security security = 2;</code>
+         */
+        public Builder setSecurityValue(int value) {
+          security_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.Security security = 2;</code>
+         */
+        public io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security getSecurity() {
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security result = io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.valueOf(security_);
+          return result == null ? io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.UNRECOGNIZED : result;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.Security security = 2;</code>
+         */
+        public Builder setSecurity(io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          
+          security_ = value.getNumber();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.Security security = 2;</code>
+         */
+        public Builder clearSecurity() {
+          
+          security_ = 0;
+          onChanged();
+          return this;
+        }
+
+        private int credentialsType_ = 0;
+        /**
+         * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+         */
+        public int getCredentialsTypeValue() {
+          return credentialsType_;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+         */
+        public Builder setCredentialsTypeValue(int value) {
+          credentialsType_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+         */
+        public io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType getCredentialsType() {
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType result = io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType.valueOf(credentialsType_);
+          return result == null ? io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType.UNRECOGNIZED : result;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+         */
+        public Builder setCredentialsType(io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          
+          credentialsType_ = value.getNumber();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>.particle.ctrl.wifi.CredentialsType credentials_type = 3;</code>
+         */
+        public Builder clearCredentialsType() {
+          
+          credentialsType_ = 0;
+          onChanged();
+          return this;
+        }
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.setUnknownFieldsProto3(unknownFields);
+        }
+
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.mergeUnknownFields(unknownFields);
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:particle.ctrl.wifi.GetKnownNetworksReply.Network)
+      }
+
+      // @@protoc_insertion_point(class_scope:particle.ctrl.wifi.GetKnownNetworksReply.Network)
+      private static final io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network DEFAULT_INSTANCE;
+      static {
+        DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network();
+      }
+
+      public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<Network>
+          PARSER = new com.google.protobuf.AbstractParser<Network>() {
+        public Network parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Network(input, extensionRegistry);
+        }
+      };
+
+      public static com.google.protobuf.Parser<Network> parser() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Network> getParserForType() {
+        return PARSER;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+
+    }
+
+    public static final int NETWORKS_FIELD_NUMBER = 1;
+    private java.util.List<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network> networks_;
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    public java.util.List<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network> getNetworksList() {
+      return networks_;
+    }
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    public java.util.List<? extends io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder> 
+        getNetworksOrBuilderList() {
+      return networks_;
+    }
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    public int getNetworksCount() {
+      return networks_.size();
+    }
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network getNetworks(int index) {
+      return networks_.get(index);
+    }
+    /**
+     * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+     */
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder getNetworksOrBuilder(
+        int index) {
+      return networks_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      for (int i = 0; i < networks_.size(); i++) {
+        output.writeMessage(1, networks_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < networks_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, networks_.get(i));
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply other = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply) obj;
+
+      boolean result = true;
+      result = result && getNetworksList()
+          .equals(other.getNetworksList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getNetworksCount() > 0) {
+        hash = (37 * hash) + NETWORKS_FIELD_NUMBER;
+        hash = (53 * hash) + getNetworksList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.wifi.GetKnownNetworksReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.wifi.GetKnownNetworksReply)
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getNetworksFieldBuilder();
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (networksBuilder_ == null) {
+          networks_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          networksBuilder_.clear();
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetKnownNetworksReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply build() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply result = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply(this);
+        int from_bitField0_ = bitField0_;
+        if (networksBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            networks_ = java.util.Collections.unmodifiableList(networks_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.networks_ = networks_;
+        } else {
+          result.networks_ = networksBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.getDefaultInstance()) return this;
+        if (networksBuilder_ == null) {
+          if (!other.networks_.isEmpty()) {
+            if (networks_.isEmpty()) {
+              networks_ = other.networks_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureNetworksIsMutable();
+              networks_.addAll(other.networks_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.networks_.isEmpty()) {
+            if (networksBuilder_.isEmpty()) {
+              networksBuilder_.dispose();
+              networksBuilder_ = null;
+              networks_ = other.networks_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              networksBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getNetworksFieldBuilder() : null;
+            } else {
+              networksBuilder_.addAllMessages(other.networks_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network> networks_ =
+        java.util.Collections.emptyList();
+      private void ensureNetworksIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          networks_ = new java.util.ArrayList<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network>(networks_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder> networksBuilder_;
+
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public java.util.List<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network> getNetworksList() {
+        if (networksBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(networks_);
+        } else {
+          return networksBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public int getNetworksCount() {
+        if (networksBuilder_ == null) {
+          return networks_.size();
+        } else {
+          return networksBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network getNetworks(int index) {
+        if (networksBuilder_ == null) {
+          return networks_.get(index);
+        } else {
+          return networksBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder setNetworks(
+          int index, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network value) {
+        if (networksBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNetworksIsMutable();
+          networks_.set(index, value);
+          onChanged();
+        } else {
+          networksBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder setNetworks(
+          int index, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder builderForValue) {
+        if (networksBuilder_ == null) {
+          ensureNetworksIsMutable();
+          networks_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          networksBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder addNetworks(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network value) {
+        if (networksBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNetworksIsMutable();
+          networks_.add(value);
+          onChanged();
+        } else {
+          networksBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder addNetworks(
+          int index, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network value) {
+        if (networksBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNetworksIsMutable();
+          networks_.add(index, value);
+          onChanged();
+        } else {
+          networksBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder addNetworks(
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder builderForValue) {
+        if (networksBuilder_ == null) {
+          ensureNetworksIsMutable();
+          networks_.add(builderForValue.build());
+          onChanged();
+        } else {
+          networksBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder addNetworks(
+          int index, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder builderForValue) {
+        if (networksBuilder_ == null) {
+          ensureNetworksIsMutable();
+          networks_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          networksBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder addAllNetworks(
+          java.lang.Iterable<? extends io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network> values) {
+        if (networksBuilder_ == null) {
+          ensureNetworksIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, networks_);
+          onChanged();
+        } else {
+          networksBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder clearNetworks() {
+        if (networksBuilder_ == null) {
+          networks_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          networksBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public Builder removeNetworks(int index) {
+        if (networksBuilder_ == null) {
+          ensureNetworksIsMutable();
+          networks_.remove(index);
+          onChanged();
+        } else {
+          networksBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder getNetworksBuilder(
+          int index) {
+        return getNetworksFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder getNetworksOrBuilder(
+          int index) {
+        if (networksBuilder_ == null) {
+          return networks_.get(index);  } else {
+          return networksBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public java.util.List<? extends io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder> 
+           getNetworksOrBuilderList() {
+        if (networksBuilder_ != null) {
+          return networksBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(networks_);
+        }
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder addNetworksBuilder() {
+        return getNetworksFieldBuilder().addBuilder(
+            io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder addNetworksBuilder(
+          int index) {
+        return getNetworksFieldBuilder().addBuilder(
+            index, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .particle.ctrl.wifi.GetKnownNetworksReply.Network networks = 1;</code>
+       */
+      public java.util.List<io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder> 
+           getNetworksBuilderList() {
+        return getNetworksFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder> 
+          getNetworksFieldBuilder() {
+        if (networksBuilder_ == null) {
+          networksBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.Network.Builder, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply.NetworkOrBuilder>(
+                  networks_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          networks_ = null;
+        }
+        return networksBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.wifi.GetKnownNetworksReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.wifi.GetKnownNetworksReply)
+    private static final io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetKnownNetworksReply>
+        PARSER = new com.google.protobuf.AbstractParser<GetKnownNetworksReply>() {
+      public GetKnownNetworksReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetKnownNetworksReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetKnownNetworksReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetKnownNetworksReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface RemoveKnownNetworkRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.RemoveKnownNetworkRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    java.lang.String getSsid();
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getSsidBytes();
+  }
+  /**
+   * <pre>
+   **
+   * Remove the network from the list of known networks.
+   * </pre>
+   *
+   * Protobuf type {@code particle.ctrl.wifi.RemoveKnownNetworkRequest}
+   */
+  public  static final class RemoveKnownNetworkRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.wifi.RemoveKnownNetworkRequest)
+      RemoveKnownNetworkRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use RemoveKnownNetworkRequest.newBuilder() to construct.
+    private RemoveKnownNetworkRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RemoveKnownNetworkRequest() {
+      ssid_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RemoveKnownNetworkRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              ssid_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest.Builder.class);
+    }
+
+    public static final int SSID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object ssid_;
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    public java.lang.String getSsid() {
+      java.lang.Object ref = ssid_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        ssid_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSsidBytes() {
+      java.lang.Object ref = ssid_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ssid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getSsidBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, ssid_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getSsidBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, ssid_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest other = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest) obj;
+
+      boolean result = true;
+      result = result && getSsid()
+          .equals(other.getSsid());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SSID_FIELD_NUMBER;
+      hash = (53 * hash) + getSsid().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     **
+     * Remove the network from the list of known networks.
+     * </pre>
+     *
+     * Protobuf type {@code particle.ctrl.wifi.RemoveKnownNetworkRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.wifi.RemoveKnownNetworkRequest)
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        ssid_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest build() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest result = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest(this);
+        result.ssid_ = ssid_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest.getDefaultInstance()) return this;
+        if (!other.getSsid().isEmpty()) {
+          ssid_ = other.ssid_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object ssid_ = "";
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public java.lang.String getSsid() {
+        java.lang.Object ref = ssid_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          ssid_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSsidBytes() {
+        java.lang.Object ref = ssid_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ssid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public Builder setSsid(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ssid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public Builder clearSsid() {
+        
+        ssid_ = getDefaultInstance().getSsid();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public Builder setSsidBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        ssid_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.wifi.RemoveKnownNetworkRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.wifi.RemoveKnownNetworkRequest)
+    private static final io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RemoveKnownNetworkRequest>
+        PARSER = new com.google.protobuf.AbstractParser<RemoveKnownNetworkRequest>() {
+      public RemoveKnownNetworkRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RemoveKnownNetworkRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RemoveKnownNetworkRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RemoveKnownNetworkRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface RemoveKnownNetworkReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.RemoveKnownNetworkReply)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.wifi.RemoveKnownNetworkReply}
+   */
+  public  static final class RemoveKnownNetworkReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.wifi.RemoveKnownNetworkReply)
+      RemoveKnownNetworkReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use RemoveKnownNetworkReply.newBuilder() to construct.
+    private RemoveKnownNetworkReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RemoveKnownNetworkReply() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RemoveKnownNetworkReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply other = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.wifi.RemoveKnownNetworkReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.wifi.RemoveKnownNetworkReply)
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply build() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply result = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.wifi.RemoveKnownNetworkReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.wifi.RemoveKnownNetworkReply)
+    private static final io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RemoveKnownNetworkReply>
+        PARSER = new com.google.protobuf.AbstractParser<RemoveKnownNetworkReply>() {
+      public RemoveKnownNetworkReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RemoveKnownNetworkReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RemoveKnownNetworkReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RemoveKnownNetworkReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetCurrentNetworkRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.GetCurrentNetworkRequest)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * <pre>
+   **
+   * Get the current network.
+   * This request gets the network which the device is currently connected to.
+   * </pre>
+   *
+   * Protobuf type {@code particle.ctrl.wifi.GetCurrentNetworkRequest}
+   */
+  public  static final class GetCurrentNetworkRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.wifi.GetCurrentNetworkRequest)
+      GetCurrentNetworkRequestOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetCurrentNetworkRequest.newBuilder() to construct.
+    private GetCurrentNetworkRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetCurrentNetworkRequest() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetCurrentNetworkRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest other = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest) obj;
+
+      boolean result = true;
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     **
+     * Get the current network.
+     * This request gets the network which the device is currently connected to.
+     * </pre>
+     *
+     * Protobuf type {@code particle.ctrl.wifi.GetCurrentNetworkRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.wifi.GetCurrentNetworkRequest)
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest build() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest buildPartial() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest result = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest other) {
+        if (other == io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.wifi.GetCurrentNetworkRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.wifi.GetCurrentNetworkRequest)
+    private static final io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetCurrentNetworkRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetCurrentNetworkRequest>() {
+      public GetCurrentNetworkRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetCurrentNetworkRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetCurrentNetworkRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetCurrentNetworkRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetCurrentNetworkReplyOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.GetCurrentNetworkReply)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    java.lang.String getSsid();
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getSsidBytes();
+
+    /**
+     * <code>bytes bssid = 2 [(.nanopb) = { ... }</code>
+     */
+    com.google.protobuf.ByteString getBssid();
+
+    /**
+     * <code>int32 channel = 3;</code>
+     */
+    int getChannel();
+
+    /**
+     * <code>int32 rssi = 4;</code>
+     */
+    int getRssi();
+  }
+  /**
+   * Protobuf type {@code particle.ctrl.wifi.GetCurrentNetworkReply}
+   */
+  public  static final class GetCurrentNetworkReply extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:particle.ctrl.wifi.GetCurrentNetworkReply)
+      GetCurrentNetworkReplyOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GetCurrentNetworkReply.newBuilder() to construct.
+    private GetCurrentNetworkReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetCurrentNetworkReply() {
+      ssid_ = "";
+      bssid_ = com.google.protobuf.ByteString.EMPTY;
+      channel_ = 0;
+      rssi_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetCurrentNetworkReply(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              ssid_ = s;
+              break;
+            }
+            case 18: {
+
+              bssid_ = input.readBytes();
+              break;
+            }
+            case 24: {
+
+              channel_ = input.readInt32();
+              break;
+            }
+            case 32: {
+
+              rssi_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply.Builder.class);
+    }
+
+    public static final int SSID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object ssid_;
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    public java.lang.String getSsid() {
+      java.lang.Object ref = ssid_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        ssid_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string ssid = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSsidBytes() {
+      java.lang.Object ref = ssid_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ssid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int BSSID_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString bssid_;
+    /**
+     * <code>bytes bssid = 2 [(.nanopb) = { ... }</code>
+     */
+    public com.google.protobuf.ByteString getBssid() {
+      return bssid_;
+    }
+
+    public static final int CHANNEL_FIELD_NUMBER = 3;
+    private int channel_;
+    /**
+     * <code>int32 channel = 3;</code>
+     */
+    public int getChannel() {
+      return channel_;
+    }
+
+    public static final int RSSI_FIELD_NUMBER = 4;
+    private int rssi_;
+    /**
+     * <code>int32 rssi = 4;</code>
+     */
+    public int getRssi() {
+      return rssi_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getSsidBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, ssid_);
+      }
+      if (!bssid_.isEmpty()) {
+        output.writeBytes(2, bssid_);
+      }
+      if (channel_ != 0) {
+        output.writeInt32(3, channel_);
+      }
+      if (rssi_ != 0) {
+        output.writeInt32(4, rssi_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getSsidBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, ssid_);
+      }
+      if (!bssid_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, bssid_);
+      }
+      if (channel_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, channel_);
+      }
+      if (rssi_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, rssi_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply)) {
+        return super.equals(obj);
+      }
+      io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply other = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply) obj;
+
+      boolean result = true;
+      result = result && getSsid()
+          .equals(other.getSsid());
+      result = result && getBssid()
+          .equals(other.getBssid());
+      result = result && (getChannel()
+          == other.getChannel());
+      result = result && (getRssi()
+          == other.getRssi());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SSID_FIELD_NUMBER;
+      hash = (53 * hash) + getSsid().hashCode();
+      hash = (37 * hash) + BSSID_FIELD_NUMBER;
+      hash = (53 * hash) + getBssid().hashCode();
+      hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
+      hash = (53 * hash) + getChannel();
+      hash = (37 * hash) + RSSI_FIELD_NUMBER;
+      hash = (53 * hash) + getRssi();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code particle.ctrl.wifi.GetCurrentNetworkReply}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:particle.ctrl.wifi.GetCurrentNetworkReply)
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReplyOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply.class, io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply.Builder.class);
+      }
+
+      // Construct using io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        ssid_ = "";
+
+        bssid_ = com.google.protobuf.ByteString.EMPTY;
+
+        channel_ = 0;
+
+        rssi_ = 0;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_descriptor;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply getDefaultInstanceForType() {
+        return io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply.getDefaultInstance();
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply build() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply buildPartial() {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply result = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply(this);
+        result.ssid_ = ssid_;
+        result.bssid_ = bssid_;
+        result.channel_ = channel_;
+        result.rssi_ = rssi_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply) {
+          return mergeFrom((io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply other) {
+        if (other == io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply.getDefaultInstance()) return this;
+        if (!other.getSsid().isEmpty()) {
+          ssid_ = other.ssid_;
+          onChanged();
+        }
+        if (other.getBssid() != com.google.protobuf.ByteString.EMPTY) {
+          setBssid(other.getBssid());
+        }
+        if (other.getChannel() != 0) {
+          setChannel(other.getChannel());
+        }
+        if (other.getRssi() != 0) {
+          setRssi(other.getRssi());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object ssid_ = "";
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public java.lang.String getSsid() {
+        java.lang.Object ref = ssid_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          ssid_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSsidBytes() {
+        java.lang.Object ref = ssid_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ssid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public Builder setSsid(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ssid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public Builder clearSsid() {
+        
+        ssid_ = getDefaultInstance().getSsid();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string ssid = 1;</code>
+       */
+      public Builder setSsidBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        ssid_ = value;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.ByteString bssid_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>bytes bssid = 2 [(.nanopb) = { ... }</code>
+       */
+      public com.google.protobuf.ByteString getBssid() {
+        return bssid_;
+      }
+      /**
+       * <code>bytes bssid = 2 [(.nanopb) = { ... }</code>
+       */
+      public Builder setBssid(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        bssid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bytes bssid = 2 [(.nanopb) = { ... }</code>
+       */
+      public Builder clearBssid() {
+        
+        bssid_ = getDefaultInstance().getBssid();
+        onChanged();
+        return this;
+      }
+
+      private int channel_ ;
+      /**
+       * <code>int32 channel = 3;</code>
+       */
+      public int getChannel() {
+        return channel_;
+      }
+      /**
+       * <code>int32 channel = 3;</code>
+       */
+      public Builder setChannel(int value) {
+        
+        channel_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 channel = 3;</code>
+       */
+      public Builder clearChannel() {
+        
+        channel_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int rssi_ ;
+      /**
+       * <code>int32 rssi = 4;</code>
+       */
+      public int getRssi() {
+        return rssi_;
+      }
+      /**
+       * <code>int32 rssi = 4;</code>
+       */
+      public Builder setRssi(int value) {
+        
+        rssi_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 rssi = 4;</code>
+       */
+      public Builder clearRssi() {
+        
+        rssi_ = 0;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:particle.ctrl.wifi.GetCurrentNetworkReply)
+    }
+
+    // @@protoc_insertion_point(class_scope:particle.ctrl.wifi.GetCurrentNetworkReply)
+    private static final io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply();
+    }
+
+    public static io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetCurrentNetworkReply>
+        PARSER = new com.google.protobuf.AbstractParser<GetCurrentNetworkReply>() {
+      public GetCurrentNetworkReply parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GetCurrentNetworkReply(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetCurrentNetworkReply> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetCurrentNetworkReply> getParserForType() {
+      return PARSER;
+    }
+
+    public io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface ScanNetworksRequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:particle.ctrl.wifi.ScanNetworksRequest)
       com.google.protobuf.MessageOrBuilder {
@@ -5065,6 +8966,41 @@ public final class WifiNew {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_particle_ctrl_wifi_JoinKnownNetworkReply_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_wifi_GetKnownNetworksReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_wifi_GetKnownNetworksReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_particle_ctrl_wifi_ScanNetworksRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -5098,18 +9034,29 @@ public final class WifiNew {
       "\001(\0132\037.particle.ctrl.wifi.Credentials:\005\210\265" +
       "\030\364\003\"\025\n\023JoinNewNetworkReply\".\n\027JoinKnownN" +
       "etworkRequest\022\014\n\004ssid\030\001 \001(\t:\005\210\265\030\365\003\"\027\n\025Jo" +
-      "inKnownNetworkReply\"\034\n\023ScanNetworksReque" +
-      "st:\005\210\265\030\372\003\"\322\001\n\021ScanNetworksReply\022?\n\010netwo" +
-      "rks\030\001 \003(\0132-.particle.ctrl.wifi.ScanNetwo" +
-      "rksReply.Network\032|\n\007Network\022\014\n\004ssid\030\001 \001(" +
-      "\t\022\024\n\005bssid\030\002 \001(\014B\005\222?\002\010\006\022.\n\010security\030\003 \001(" +
-      "\0162\034.particle.ctrl.wifi.Security\022\017\n\007chann" +
-      "el\030\004 \001(\005\022\014\n\004rssi\030\005 \001(\005*Q\n\010Security\022\017\n\013NO" +
-      "_SECURITY\020\000\022\007\n\003WEP\020\001\022\013\n\007WPA_PSK\020\002\022\014\n\010WPA" +
-      "2_PSK\020\003\022\020\n\014WPA_WPA2_PSK\020\004*3\n\017Credentials" +
-      "Type\022\022\n\016NO_CREDENTIALS\020\000\022\014\n\010PASSWORD\020\001B&" +
-      "\n$io.particle.firmwareprotos.ctrl.wifib\006" +
-      "proto3"
+      "inKnownNetworkReply\" \n\027GetKnownNetworksR" +
+      "equest:\005\210\265\030\366\003\"\345\001\n\025GetKnownNetworksReply\022" +
+      "C\n\010networks\030\001 \003(\01321.particle.ctrl.wifi.G" +
+      "etKnownNetworksReply.Network\032\206\001\n\007Network" +
+      "\022\014\n\004ssid\030\001 \001(\t\022.\n\010security\030\002 \001(\0162\034.parti" +
+      "cle.ctrl.wifi.Security\022=\n\020credentials_ty" +
+      "pe\030\003 \001(\0162#.particle.ctrl.wifi.Credential" +
+      "sType\"0\n\031RemoveKnownNetworkRequest\022\014\n\004ss" +
+      "id\030\001 \001(\t:\005\210\265\030\367\003\"\031\n\027RemoveKnownNetworkRep" +
+      "ly\"!\n\030GetCurrentNetworkRequest:\005\210\265\030\371\003\"[\n" +
+      "\026GetCurrentNetworkReply\022\014\n\004ssid\030\001 \001(\t\022\024\n" +
+      "\005bssid\030\002 \001(\014B\005\222?\002\010\006\022\017\n\007channel\030\003 \001(\005\022\014\n\004" +
+      "rssi\030\004 \001(\005\"\034\n\023ScanNetworksRequest:\005\210\265\030\372\003" +
+      "\"\322\001\n\021ScanNetworksReply\022?\n\010networks\030\001 \003(\013" +
+      "2-.particle.ctrl.wifi.ScanNetworksReply." +
+      "Network\032|\n\007Network\022\014\n\004ssid\030\001 \001(\t\022\024\n\005bssi" +
+      "d\030\002 \001(\014B\005\222?\002\010\006\022.\n\010security\030\003 \001(\0162\034.parti" +
+      "cle.ctrl.wifi.Security\022\017\n\007channel\030\004 \001(\005\022" +
+      "\014\n\004rssi\030\005 \001(\005*Q\n\010Security\022\017\n\013NO_SECURITY" +
+      "\020\000\022\007\n\003WEP\020\001\022\013\n\007WPA_PSK\020\002\022\014\n\010WPA2_PSK\020\003\022\020" +
+      "\n\014WPA_WPA2_PSK\020\004*3\n\017CredentialsType\022\022\n\016N" +
+      "O_CREDENTIALS\020\000\022\014\n\010PASSWORD\020\001B&\n$io.part" +
+      "icle.firmwareprotos.ctrl.wifib\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -5155,14 +9102,56 @@ public final class WifiNew {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_wifi_JoinKnownNetworkReply_descriptor,
         new java.lang.String[] { });
-    internal_static_particle_ctrl_wifi_ScanNetworksRequest_descriptor =
+    internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_descriptor =
       getDescriptor().getMessageTypes().get(5);
+    internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_wifi_GetKnownNetworksRequest_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_wifi_GetKnownNetworksReply_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_particle_ctrl_wifi_GetKnownNetworksReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_wifi_GetKnownNetworksReply_descriptor,
+        new java.lang.String[] { "Networks", });
+    internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_descriptor =
+      internal_static_particle_ctrl_wifi_GetKnownNetworksReply_descriptor.getNestedTypes().get(0);
+    internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_wifi_GetKnownNetworksReply_Network_descriptor,
+        new java.lang.String[] { "Ssid", "Security", "CredentialsType", });
+    internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_wifi_RemoveKnownNetworkRequest_descriptor,
+        new java.lang.String[] { "Ssid", });
+    internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_wifi_RemoveKnownNetworkReply_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_wifi_GetCurrentNetworkRequest_descriptor,
+        new java.lang.String[] { });
+    internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_particle_ctrl_wifi_GetCurrentNetworkReply_descriptor,
+        new java.lang.String[] { "Ssid", "Bssid", "Channel", "Rssi", });
+    internal_static_particle_ctrl_wifi_ScanNetworksRequest_descriptor =
+      getDescriptor().getMessageTypes().get(11);
     internal_static_particle_ctrl_wifi_ScanNetworksRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_wifi_ScanNetworksRequest_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_wifi_ScanNetworksReply_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_particle_ctrl_wifi_ScanNetworksReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_wifi_ScanNetworksReply_descriptor,

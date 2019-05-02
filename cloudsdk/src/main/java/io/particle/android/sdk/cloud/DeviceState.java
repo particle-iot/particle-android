@@ -39,12 +39,13 @@ class DeviceState implements Parcelable {
     @Nullable final String defaultBuild;
     final Set<String> functions;
     final Map<String, VariableType> variables;
-    @Nullable final String version;
     @Nullable final ParticleDevice.ParticleDeviceType deviceType;
-    @Nullable final Boolean requiresUpdate;
     @Nullable final Date lastHeard;
     @Nullable final String serialNumber;
     @Nullable final String mobileSecret;
+    @Nullable final String iccid;
+    @Nullable final String systemFirmwareVersion;
+    @Nullable final String notes;
 
     DeviceState(DeviceStateBuilder deviceStateBuilder) {
         this.deviceId = deviceStateBuilder.deviceId;
@@ -57,17 +58,18 @@ class DeviceState implements Parcelable {
         this.defaultBuild = deviceStateBuilder.defaultBuild;
         this.functions = deviceStateBuilder.functions;
         this.variables = deviceStateBuilder.variables;
-        this.version = deviceStateBuilder.version == null ? "" : deviceStateBuilder.version;
         this.deviceType = deviceStateBuilder.deviceType;
         this.platformId = deviceStateBuilder.platformId;
         this.productId = deviceStateBuilder.productId;
         this.ipAddress = deviceStateBuilder.ipAddress;
         this.lastAppName = deviceStateBuilder.lastAppName;
         this.status = deviceStateBuilder.status;
-        this.requiresUpdate = deviceStateBuilder.requiresUpdate;
         this.lastHeard = deviceStateBuilder.lastHeard;
         this.serialNumber = deviceStateBuilder.serialNumber;
         this.mobileSecret = deviceStateBuilder.mobileSecret;
+        this.iccid = deviceStateBuilder.iccid;
+        this.systemFirmwareVersion = deviceStateBuilder.systemFirmwareVersion;
+        this.notes = deviceStateBuilder.notes;
     }
 
     //region ImmutabilityPhun
@@ -79,21 +81,22 @@ class DeviceState implements Parcelable {
                 .name(newName)
                 .cellular(other.cellular)
                 .connected(other.isConnected)
-                .version(other.version)
                 .deviceType(other.deviceType)
                 .platformId(other.platformId)
                 .productId(other.productId)
                 .imei(other.imei)
-                .iccid(other.lastIccid)
+                .lastIccid(other.lastIccid)
                 .currentBuild(other.currentBuild)
                 .defaultBuild(other.defaultBuild)
                 .ipAddress(other.ipAddress)
                 .lastAppName(other.lastAppName)
                 .status(other.status)
-                .requiresUpdate(other.requiresUpdate)
                 .lastHeard(other.lastHeard)
                 .serialNumber(other.serialNumber)
                 .mobileSecret(other.mobileSecret)
+                .iccid(other.iccid)
+                .systemFirmwareVersion(other.systemFirmwareVersion)
+                .notes(other.notes)
                 .build();
     }
 
@@ -103,21 +106,22 @@ class DeviceState implements Parcelable {
                 .name(other.name)
                 .cellular(other.cellular)
                 .connected(newConnectedState)
-                .version(other.version)
                 .deviceType(other.deviceType)
                 .platformId(other.platformId)
                 .productId(other.productId)
                 .imei(other.imei)
-                .iccid(other.lastIccid)
+                .lastIccid(other.lastIccid)
                 .currentBuild(other.currentBuild)
                 .defaultBuild(other.defaultBuild)
                 .ipAddress(other.ipAddress)
                 .lastAppName(other.lastAppName)
                 .status(other.status)
-                .requiresUpdate(other.requiresUpdate)
                 .lastHeard(other.lastHeard)
                 .serialNumber(other.serialNumber)
                 .mobileSecret(other.mobileSecret)
+                .iccid(other.iccid)
+                .systemFirmwareVersion(other.systemFirmwareVersion)
+                .notes(other.notes)
                 .build();
     }
     //endregion
@@ -129,7 +133,6 @@ class DeviceState implements Parcelable {
         isConnected = (Boolean) in.readValue(Boolean.class.getClassLoader());
         functions = new HashSet<>(Parcelables.readStringList(in));
         variables = Parcelables.readSerializableMap(in);
-        version = (String) in.readValue(String.class.getClassLoader());
         deviceType = ParticleDevice.ParticleDeviceType.valueOf((String) in.readValue(String.class.getClassLoader()));
         platformId = (Integer) in.readValue(Integer.class.getClassLoader());
         productId = (Integer) in.readValue(Integer.class.getClassLoader());
@@ -141,10 +144,12 @@ class DeviceState implements Parcelable {
         ipAddress = (String) in.readValue(String.class.getClassLoader());
         lastAppName = (String) in.readValue(String.class.getClassLoader());
         status = (String) in.readValue(String.class.getClassLoader());
-        requiresUpdate = (Boolean) in.readValue(Boolean.class.getClassLoader());
         lastHeard = new Date((Long) in.readValue(Long.class.getClassLoader()));
         serialNumber = (String) in.readValue(String.class.getClassLoader());
         mobileSecret = (String) in.readValue(String.class.getClassLoader());
+        iccid = (String) in.readValue(String.class.getClassLoader());
+        systemFirmwareVersion = (String) in.readValue(String.class.getClassLoader());
+        notes = (String) in.readValue(String.class.getClassLoader());
     }
 
     @Override
@@ -154,7 +159,6 @@ class DeviceState implements Parcelable {
         dest.writeValue(isConnected);
         dest.writeStringList(new ArrayList<>(functions));
         Parcelables.writeSerializableMap(dest, variables);
-        dest.writeValue(version);
         dest.writeValue(deviceType != null ? deviceType.name() : null);
         dest.writeValue(platformId);
         dest.writeValue(productId);
@@ -166,10 +170,12 @@ class DeviceState implements Parcelable {
         dest.writeValue(ipAddress);
         dest.writeValue(lastAppName);
         dest.writeValue(status);
-        dest.writeValue(requiresUpdate);
         dest.writeValue(lastHeard != null ? lastHeard.getTime() : 0);
         dest.writeValue(serialNumber);
         dest.writeValue(mobileSecret);
+        dest.writeValue(iccid);
+        dest.writeValue(systemFirmwareVersion);
+        dest.writeValue(notes);
     }
 
     public static final Creator<DeviceState> CREATOR = new Creator<DeviceState>() {
@@ -206,18 +212,19 @@ class DeviceState implements Parcelable {
         @Nullable private String defaultBuild;
         private final Set<String> functions;
         private final Map<String, ParticleDevice.VariableType> variables;
-        @Nullable String version;
         @Nullable ParticleDevice.ParticleDeviceType deviceType;
-        @Nullable Boolean requiresUpdate;
         @Nullable Date lastHeard;
         @Nullable String serialNumber;
         @Nullable String mobileSecret;
+        @Nullable String iccid;
+        @Nullable String systemFirmwareVersion;
+        @Nullable String notes;
 
-        DeviceStateBuilder(String deviceId, Set<String> functions, Map<String, ParticleDevice.VariableType> variables) {
+        DeviceStateBuilder(String deviceId, Set<String> functions,
+                           Map<String, ParticleDevice.VariableType> variables) {
             this.deviceId = deviceId;
             this.functions = functions;
             this.variables = variables;
-            this.version = version == null ? "" : version;
         }
 
         public DeviceStateBuilder platformId(@Nullable Integer platformId) {
@@ -265,8 +272,8 @@ class DeviceState implements Parcelable {
             return this;
         }
 
-        public DeviceStateBuilder iccid(@Nullable String iccid) {
-            this.lastIccid = iccid;
+        public DeviceStateBuilder lastIccid(@Nullable String lastIccid) {
+            this.lastIccid = lastIccid;
             return this;
         }
 
@@ -280,18 +287,8 @@ class DeviceState implements Parcelable {
             return this;
         }
 
-        public DeviceStateBuilder version(@Nullable String version) {
-            this.version = version;
-            return this;
-        }
-
         public DeviceStateBuilder deviceType(@Nullable ParticleDevice.ParticleDeviceType deviceType) {
             this.deviceType = deviceType;
-            return this;
-        }
-
-        public DeviceStateBuilder requiresUpdate(@Nullable Boolean requiresUpdate) {
-            this.requiresUpdate = requiresUpdate;
             return this;
         }
 
@@ -307,6 +304,21 @@ class DeviceState implements Parcelable {
 
         public DeviceStateBuilder mobileSecret(@Nullable String mobileSecret) {
             this.mobileSecret = mobileSecret;
+            return this;
+        }
+
+        public DeviceStateBuilder iccid(@Nullable String iccid) {
+            this.iccid = iccid;
+            return this;
+        }
+
+        public DeviceStateBuilder systemFirmwareVersion(@Nullable String systemFirmwareVersion) {
+            this.systemFirmwareVersion = systemFirmwareVersion;
+            return this;
+        }
+
+        public DeviceStateBuilder notes(@Nullable String notes) {
+            this.notes = notes;
             return this;
         }
 

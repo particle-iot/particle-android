@@ -1,14 +1,11 @@
 package io.particle.android.sdk.ui
 
 import android.content.Context
-import android.provider.Settings.Global
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.R.attr
 import io.particle.mesh.common.android.livedata.liveDataSuspender
 import io.particle.mesh.common.android.livedata.nonNull
 import kotlinx.coroutines.*
 import mu.KotlinLogging
-
 
 
 private val log = KotlinLogging.logger {}
@@ -59,7 +56,9 @@ class CoroutinePlayground {
 
     suspend fun doRunTest() {
         val ld = MutableLiveData<Boolean>()
-        val ldSuspender = liveDataSuspender({ ld.nonNull() })
+        val ldSuspender = liveDataSuspender({
+            ld //.nonNull()
+        })
 
         mainThreadScope.launch {
             log.info { "Beginning 'post to LiveData' delay" }

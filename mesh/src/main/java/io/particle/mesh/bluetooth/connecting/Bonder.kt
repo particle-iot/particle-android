@@ -1,20 +1,21 @@
 package io.particle.mesh.bluetooth.connecting
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import com.snakydesign.livedataextensions.filter
+import com.snakydesign.livedataextensions.first
 import io.particle.mesh.common.Predicate
 import io.particle.mesh.common.and
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
-import io.particle.mesh.common.android.livedata.first
 import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 enum class BondingResult {
@@ -26,9 +27,9 @@ enum class BondingResult {
 
 
 data class BondingStateUpdate(
-        val device: BluetoothDevice,
-        val newState: BondingState,
-        val previousState: BondingState
+    val device: BluetoothDevice,
+    val newState: BondingState,
+    val previousState: BondingState
 ) {
 
     companion object {
@@ -39,9 +40,9 @@ data class BondingStateUpdate(
             val newStateInt = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1)
             val prevStateInt = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, -1)
             val update = BondingStateUpdate(
-                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE),
-                    BondingState.fromIntValue(newStateInt),
-                    BondingState.fromIntValue(prevStateInt)
+                intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE),
+                BondingState.fromIntValue(newStateInt),
+                BondingState.fromIntValue(prevStateInt)
             )
             log.debug { "New bonding state intent received: $update" }
             return update
@@ -91,18 +92,19 @@ class Bonder(ctx: Context) {
         val nameMatches: Predicate<BondingStateUpdate?> = { device.address == it?.device?.address }
         val isBonded: Predicate<BondingStateUpdate?> = { it?.newState == BondingState.BOND_BONDED }
         broadcastReceiverLD
-                .first(nameMatches and isBonded)
-                .observe(lifecycleOwner, Observer {
-                    log.debug { "Bonding state updated: $it" }
-                    if (it?.newState != BondingState.BOND_BONDED) {
-                        // FIXME: remove this later, this was just copypasta
-                        // that seems like it should be unnecessary
-                        log.warn { "New bonding state not BOND_BONDED?! newState=${it?.newState}" }
-                    } else {
-                        log.info { "Bonded!" }
-                        callback(BondingResult.BONDED)
-                    }
-                })
+            .filter(nameMatches and isBonded)
+            .first()
+            .observe(lifecycleOwner, Observer {
+                log.debug { "Bonding state updated: $it" }
+                if (it?.newState != BondingState.BOND_BONDED) {
+                    // FIXME: remove this later, this was just copypasta
+                    // that seems like it should be unnecessary
+                    log.warn { "New bonding state not BOND_BONDED?! newState=${it?.newState}" }
+                } else {
+                    log.info { "Bonded!" }
+                    callback(BondingResult.BONDED)
+                }
+            })
 
         val willStartBonding = device.createBond()
 
@@ -117,9 +119,9 @@ class Bonder(ctx: Context) {
 
 private fun buildBondingStateLD(ctx: Context): BroadcastReceiverLD<BondingStateUpdate> {
     return BroadcastReceiverLD(
-            ctx,
-            BluetoothDevice.ACTION_BOND_STATE_CHANGED,
-            { BondingStateUpdate.fromIntentBroadcast(it) }
+        ctx,
+        BluetoothDevice.ACTION_BOND_STATE_CHANGED,
+        { BondingStateUpdate.fromIntentBroadcast(it) }
     )
 }
 

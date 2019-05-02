@@ -92,7 +92,8 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
             systemInterface.navControllerLD,
             application,
             systemInterface.dialogHack,
-            systemInterface
+            systemInterface,
+            systemInterface.meshFlowTerminator
         )
     }
 

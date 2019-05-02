@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
@@ -14,15 +15,15 @@ import kotlinx.android.synthetic.main.activity_control_panel.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
-private const val EXTRA_DEVICE_ID = "EXTRA_DEVICE_ID"
+private const val EXTRA_DEVICE = "EXTRA_DEVICE"
 
 
-class ControlPanelActivity : DeviceIdProvider, TitleBarOptionsListener, BaseFlowActivity() {
+class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowActivity() {
 
     companion object {
-        fun buildIntent(ctx: Context, deviceId: String): Intent {
+        fun buildIntent(ctx: Context, device: ParticleDevice): Intent {
             return Intent(ctx, ControlPanelActivity::class.java)
-                .putExtra(EXTRA_DEVICE_ID, deviceId)
+                .putExtra(EXTRA_DEVICE, device)
         }
     }
 
@@ -31,9 +32,9 @@ class ControlPanelActivity : DeviceIdProvider, TitleBarOptionsListener, BaseFlow
     override val navHostFragmentId: Int = R.id.main_nav_host_fragment
     override val contentViewIdRes: Int = R.layout.activity_control_panel
 
-    override val deviceId: String
-        get() = intent.getStringExtra(EXTRA_DEVICE_ID)
-
+    override val device: ParticleDevice by lazy {
+        intent.getParcelableExtra(EXTRA_DEVICE) as ParticleDevice
+    }
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
@@ -55,7 +56,8 @@ class ControlPanelActivity : DeviceIdProvider, TitleBarOptionsListener, BaseFlow
             systemInterface.navControllerLD,
             application,
             systemInterface.dialogHack,
-            systemInterface
+            systemInterface,
+            systemInterface.meshFlowTerminator
         )
     }
 

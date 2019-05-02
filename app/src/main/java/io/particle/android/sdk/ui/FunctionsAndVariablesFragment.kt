@@ -31,8 +31,8 @@ import io.particle.android.sdk.ui.RowItem.VariableRow
 import io.particle.android.sdk.utils.AnimationUtil
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Py.list
-import io.particle.android.sdk.utils.inflate
-import io.particle.android.sdk.utils.inflateRow
+import io.particle.mesh.ui.inflateFragment
+import io.particle.mesh.ui.inflateRow
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.data_header_list.view.*
 import kotlinx.android.synthetic.main.fragment_data.*
@@ -91,7 +91,7 @@ class FunctionsAndVariablesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflate(R.layout.fragment_data, false)
+        return container?.inflateFragment(R.layout.fragment_data)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

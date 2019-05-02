@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.common.easyDiffUtilCallback
-import io.particle.android.common.inflateRow
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
@@ -18,12 +18,14 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.toConnectivityType
 import io.particle.mesh.setup.ui.utils.localDeviceHasInternetConnection
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_select_device.*
+import io.particle.mesh.ui.inflateRow
+import kotlinx.android.synthetic.main.fragment_select_device.view.*
 import kotlinx.android.synthetic.main.row_select_device.view.*
 
 
@@ -37,7 +39,7 @@ class SelectDeviceFragment : BaseFlowFragment() {
 
         // create and populate adapter
         val adapter = MeshDeviceTypesAdapter(this::onItemClicked)
-        item_list.adapter = adapter
+        root.item_list.adapter = adapter
 //        adapter.submitList(
 //            listOf(
 //                DeviceData(
@@ -58,13 +60,17 @@ class SelectDeviceFragment : BaseFlowFragment() {
 //            )
 //        )
 
+        return root
+    }
+
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
+
         if (requireActivity().localDeviceHasInternetConnection()) {
             flowRunner.startFlow()
         } else {
             showNoInternetDialog()
         }
-
-        return root
     }
 
     private fun onItemClicked(@Suppress("UNUSED_PARAMETER") deviceData: DeviceData) {
@@ -115,9 +121,7 @@ private class MeshDeviceTypesAdapter(
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceDataHolder {
-        return DeviceDataHolder(
-            inflateRow(parent, R.layout.row_select_device)
-        )
+        return DeviceDataHolder(parent.inflateRow(R.layout.row_select_device))
     }
 
     override fun onBindViewHolder(holder: DeviceDataHolder, position: Int) {

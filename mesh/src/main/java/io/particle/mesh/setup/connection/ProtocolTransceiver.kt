@@ -82,6 +82,10 @@ import io.particle.android.sdk.utils.UnknownEnumIntValueException
 import io.particle.android.sdk.utils.buildIntValueMap
 import io.particle.firmwareprotos.ctrl.Config.GetFeatureReply
 import io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest
 import io.particle.mesh.setup.connection.ResultCode.Companion.toResultCode
 import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.Dispatchers
@@ -400,6 +404,11 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendGetSerialNumber(): Result<GetSerialNumberReply, ResultCode> {
         val response = sendRequest(GetSerialNumberRequest.newBuilder().build())
         return buildResult(response) { r -> GetSerialNumberReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendGetCurrentWifiNetworkRequest(): Result<GetCurrentNetworkReply, ResultCode> {
+        val response = sendRequest(GetCurrentNetworkRequest.newBuilder().build())
+        return buildResult(response) { r -> GetCurrentNetworkReply.parseFrom(r.payloadData) }
     }
 
     fun receiveResponse(responseFrame: DeviceResponse) {

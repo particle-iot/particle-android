@@ -1,4 +1,4 @@
-package io.particle.mesh.setup.flow.modules.meshsetup
+package io.particle.mesh.setup.flow.meshsetup
 
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 

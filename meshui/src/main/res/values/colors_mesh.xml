@@ -11,4 +11,7 @@
 
     <color name="p_mesh_black_sorta_transparent">#92000000</color>
 
+    <color name="p_action_button_blue">#09ACEE</color>
+    <color name="p_action_button_red">#EC2028</color>
+
 </resources>

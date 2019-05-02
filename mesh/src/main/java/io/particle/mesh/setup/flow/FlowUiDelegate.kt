@@ -1,6 +1,14 @@
 package io.particle.mesh.setup.flow
 
 import androidx.annotation.StringRes
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew
+
+
+enum class PostCongratsAction {
+    NOTHING,
+    EXIT,
+    RESET_TO_START
+}
 
 
 interface FlowUiDelegate {
@@ -9,7 +17,10 @@ interface FlowUiDelegate {
 
     fun getString(@StringRes stringId: Int): String
 
-    fun showSingleTaskCongratsScreen(singleTaskCongratsMessage: String)
+    fun showCongratsScreen(
+        congratsMessage: String,
+        postCongratsAction: PostCongratsAction = PostCongratsAction.NOTHING
+    )
 
     fun showGlobalProgressSpinner(shouldShow: Boolean)
 
@@ -53,7 +64,7 @@ interface FlowUiDelegate {
 
     fun getCommissionerBarcode()
 
-    fun showComissionerPairingProgressUi()
+    fun showCommissionerPairingProgressUi()
 
     fun collectPasswordForMeshToJoin()
 
@@ -63,6 +74,18 @@ interface FlowUiDelegate {
 
     fun showCreateNetworkFinishedUi()
 
+    fun showInspectCurrentWifiNetworkUi(currentNetwork: WifiNew.GetCurrentNetworkReply)
+
+    fun showControlPanelCellularOptionsUi()
+
+    fun showControlPanelUnpauseUi()
+
+    fun showControlPanelDeactivateUi()
+
+    fun showControlPanelReactivateUi()
+
+    fun showSetCellularDataLimitUi()
+    fun popBackStack(): Boolean
 }
 
 

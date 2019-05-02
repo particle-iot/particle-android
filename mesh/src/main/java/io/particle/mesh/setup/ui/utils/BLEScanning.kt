@@ -1,17 +1,21 @@
 package io.particle.mesh.setup.ui.utils
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.bluetooth.le.ScanFilter.Builder
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.os.ParcelUuid
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.snakydesign.livedataextensions.distinctUntilChanged
+import com.snakydesign.livedataextensions.filter
+import com.snakydesign.livedataextensions.map
+import com.snakydesign.livedataextensions.nonNull
 import io.particle.mesh.bluetooth.BluetoothAdapterStateLD
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.scanning.BLEScannerLD
 import io.particle.mesh.bluetooth.scanning.buildReactiveBluetoothScanner
 import io.particle.mesh.common.AsyncWorkSuspender
-import io.particle.mesh.common.android.livedata.*
+import io.particle.mesh.common.android.livedata.LiveDataSuspender
 import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import mu.KotlinLogging
 
@@ -39,7 +43,7 @@ fun buildMatchingDeviceNameScanner(
             )
     )
 
-    return scannerLD.distinct()
+    return scannerLD.distinctUntilChanged()
 }
 
 

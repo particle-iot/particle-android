@@ -40,11 +40,11 @@ class ArgonConnectingStatusFragment : BaseFlowFragment() {
             }
         })
 
-        flowUiListener.targetDevice.isClaimedLD.observe(this, Observer {
-            if (it.truthy()) {
-                markProgress(true, R.id.status_stage_4)
-            }
-        })
+//        flowUiListener.targetDevice.isClaimedLD.observe(this, Observer {
+//            if (it.truthy()) {
+//                markProgress(true, R.id.status_stage_4)
+//            }
+//        })
     }
 
 }

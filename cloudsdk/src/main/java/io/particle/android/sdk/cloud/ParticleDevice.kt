@@ -87,7 +87,7 @@ class ParticleDevice internal constructor(
 
     /** Device firmware version string */
     val version: String?
-        get() = deviceState.version
+        get() = deviceState.systemFirmwareVersion
 
     val deviceType: ParticleDeviceType?
         get() = deviceState.deviceType
@@ -104,8 +104,11 @@ class ParticleDevice internal constructor(
     val imei: String?
         get() = deviceState.imei
 
-    val iccid: String?
+    val lastIccid: String?
         get() = deviceState.lastIccid
+
+    val iccid: String?
+        get() = deviceState.iccid
 
     val currentBuild: String?
         get() = deviceState.currentBuild
@@ -130,6 +133,9 @@ class ParticleDevice internal constructor(
 
     val mobileSecret: String?
         get() = deviceState.mobileSecret
+
+    val notes: String?
+        get() = deviceState.notes
 
     val isRunningTinker: Boolean
         get() {
@@ -214,8 +220,10 @@ class ParticleDevice internal constructor(
         TINKER("tinker")
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Deprecated: field no longer available from the Particle devices API")
     fun requiresUpdate(): Boolean {
-        return deviceState.requiresUpdate ?: false
+        return false
     }
 
     @WorkerThread

@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -156,7 +155,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
         deviceSetupCompleteReceiver!!.register(activity)
 
-        loaderManager.initLoader(R.id.device_list_devices_loader_id, null, this)
+        LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
 
         if (savedInstanceState != null) {
@@ -379,9 +378,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
             var modelName: TextView = topLevel.product_model_name
             var productImage: AppCompatImageView = topLevel.product_image
-            var statusIcon: AppCompatImageView = topLevel.online_status_image
             var deviceName: TextView = topLevel.product_name
-            var statusTextWithIcon: TextView = topLevel.online_status
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -417,16 +414,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
             holder.modelName.setText(modelNameRes)
             holder.productImage.setImageResource(productImageRes)
-
-            val (statusText, coloredDot) = getStatusTextAndColoredDot(device)
-            holder.statusTextWithIcon.text = statusText
-            holder.statusIcon.setImageResource(coloredDot)
-
-            if (device.isConnected) {
-                val animFade = AnimationUtils.loadAnimation(activity, R.anim.fade_in_out)
-                animFade.startOffset = (position * 1000).toLong()
-                holder.statusIcon.startAnimation(animFade)
-            }
 
             val ctx = holder.topLevel.context
             val name = if (truthy(device.name))
@@ -487,30 +474,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         fun getItem(position: Int): ParticleDevice {
             return devices[position]
-        }
-
-        private fun getStatusTextAndColoredDot(device: ParticleDevice): Pair<String, Int> {
-            val dot: Int
-            val msg: String
-            if (device.isFlashing) {
-                dot = R.drawable.device_flashing_dot
-                msg = ""
-
-            } else if (device.isConnected) {
-                if (device.isRunningTinker) {
-                    dot = R.drawable.online_dot
-                    msg = "Tinker"
-
-                } else {
-                    dot = R.drawable.online_non_tinker_dot
-                    msg = ""
-                }
-
-            } else {
-                dot = R.drawable.offline_dot
-                msg = ""
-            }
-            return Pair(msg, dot)
         }
     }
 

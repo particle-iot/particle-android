@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.snakydesign.livedataextensions.liveDataOf
+import com.snakydesign.livedataextensions.switchMap
 import io.particle.mesh.common.android.livedata.AbsentLiveData
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataWithInitialValue
-import io.particle.mesh.common.android.livedata.switchMap
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.ui.utils.getResOrEmptyString
 import io.particle.mesh.ui.utils.getViewModel
@@ -40,8 +40,8 @@ abstract class BaseFlowFragment : Fragment() {
     lateinit var flowRunner: MeshFlowRunner
     lateinit var flowSystemInterface: FlowRunnerSystemInterface
 
-    private val onActivityCreatedCalled: LiveData<Boolean?> = liveDataWithInitialValue(false)
-    private val onViewCreatedCalled: LiveData<Boolean?> = liveDataWithInitialValue(false)
+    private val onActivityCreatedCalled: LiveData<Boolean?> = liveDataOf(false)
+    private val onViewCreatedCalled: LiveData<Boolean?> = liveDataOf(false)
     private var onFragmentReadyCalled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

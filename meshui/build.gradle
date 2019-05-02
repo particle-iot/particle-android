@@ -67,7 +67,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-model-interpreter:18.0.0'
 
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.squareup.phrase:phrase:1.0.3'
+    implementation 'com.snakydesign.livedataextensions:lives:1.3.0'
+    implementation 'com.squareup.phrase:phrase:1.1.0'
     api 'com.tolstykh.textviewrichdrawable:textview-rich-drawable:0.3.2'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 

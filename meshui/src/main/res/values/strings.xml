@@ -3,8 +3,31 @@
 
     <string name="p_controlpanel_control_panel">Control Panel</string>
     <string name="p_common_wifi">Wi-Fi</string>
+    <string name="p_common_mesh">Mesh</string>
     <string name="single_space"> </string>
     <string name="p_controlpanel_prepare_for_pairing">Prepare for Pairing</string>
     <string name="p_cp_cellular">Cellular</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="p_controlpanel_deactivate_sim_header">Deactivate SIM Card</string>
+    <string name="p_controlpanel_sim_deactivate_body_text">Are you sure that you want to deactivate data service of the SIM with an ICCID ending in <b>…{sim_last_four_digits}</b>?\n\nThis will immediately stop any Boron using this SIM from sending or receiving data via a cellular network, and will disrupt expected device behavior until an active SIM is used.</string>
+    <string name="p_action_deactivate_sim">Deactivate SIM</string>
+    <string name="p_controlpanel_sim_deactivation_fine_print">Deactivation may take up to a few minutes.  Please be patient.</string>
+    <string name="p_controlpanel_sim_reactivate_header">Reactivate SIM Card</string>
+    <string name="p_controlpanel_sim_reactivate_body_text">We\'re so glad you\'d like to reactivate your Particle SIM with an ICCID ending in <b>…{sim_last_four_digits}</b>. This will resume cellular data transfer and immediately allow devices using this SIM to connect to the Internet.\n\nAs a reminder, here are the cellular data usage pricing details for devices using this SIM:</string>
+    <string name="p_controlpanel_sim_reactivate_fine_print">Reactivation may take up to a few minutes.  Please be patient.</string>
+    <string name="p_action_reactivate_sim">Reactivate SIM</string>
+    <string name="p_controlpanel_unpause_sim_header">Unpause SIM Card</string>
+    <string name="p_controlpanel_sim_unpause_body_text">Unpausing your SIM with ICCID ending in <b>…{sim_last_four_digits}</b> will immediately resume cellular data transfer. You do have the option of waiting until the start of your next billing period when Particle will automatically unpause your SIM.\n\nPlease adjust your data limit below. Note that the new data limit will carry over to future billing periods.</string>
+    <string name="p_controlpanel_sim_unpause_fine_print">Unpausing may take up to a few minutes. Please be patient.</string>
+    <string name="p_action_unpause_sim">Unpause SIM</string>
+    <string name="p_controlpanel_simstatuschange_title">SIM Status</string>
+    <string name="p_controlpanel_datalimit_title">Monthly Data Limit</string>
+    <string name="controlpanel_network_id_title">Network ID</string>
+    <string name="p_controlpanel_wifi_inspect_title">Current Network</string>
+    <string name="unclaim_title">Unclaim Device</string>
+    <string name="unclaim_body_text">Are you sure you would like to unclaim the device <b>{device_name}</b>?\n\nThe current owner will lose the ability to view or interact with the device via the Particle Cloud. The device will be returned to an unclaimed state.</string>
 
 </resources>

@@ -1,20 +1,21 @@
 package io.particle.mesh.bluetooth.connecting
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.content.Context
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import com.snakydesign.livedataextensions.filter
+import com.snakydesign.livedataextensions.first
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.common.android.SimpleLifecycleOwner
-import io.particle.mesh.common.android.livedata.first
 import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 private val INITIAL_CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(10)
@@ -68,15 +69,16 @@ class GattConnector(private val ctx: Context) {
         log.info { "Called connectGatt for $gattRef" }
 
         liveDataCallbacks.connectionStateChangedLD
-                .first { it == ConnectionState.CONNECTED }
-                .observe(lifecycleOwner, Observer {
-                    log.debug { "Connection state updated to $it" }
-                    if (it == ConnectionState.CONNECTED) {
-                        callback(gattRef)
-                    } else {
-                        log.error { "Connection status not CONNECTED?! it=$it" }
-                    }
-                })
+            .filter { it == ConnectionState.CONNECTED }
+            .first()
+            .observe(lifecycleOwner, Observer {
+                log.debug { "Connection state updated to $it" }
+                if (it == ConnectionState.CONNECTED) {
+                    callback(gattRef)
+                } else {
+                    log.error { "Connection status not CONNECTED?! it=$it" }
+                }
+            })
     }
 
 }

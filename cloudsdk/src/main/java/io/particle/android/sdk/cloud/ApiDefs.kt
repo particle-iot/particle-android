@@ -174,8 +174,16 @@ class ApiDefs {
         fun takeActionOnSim(
             @Path("iccid") iccid: String,
             @Field("action") action: String,
+            @Field("mb_limit") limitInMBsForUnpause: Int? = null,
             @Field("country") isoAlpha2CountryCode: String? = "US"
         ): Response
+
+        @FormUrlEncoded
+        @PUT("/v1/sims/{iccid}")
+        fun setDataLimit(@Path("iccid") iccid: String, @Field("mb_limit") limitInMBs: Int): Response
+
+        @GET("/v1/sims/{iccid}")
+        fun getSim(@Path("iccid") iccid: String): ParticleSim
 
         @GET("/v1/pricing-impact")
         fun getPricingImpact(

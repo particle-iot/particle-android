@@ -7,28 +7,41 @@
     android:background="#EEEFF3"
     tools:context="io.particle.mesh.ui.controlpanel.ControlPanelCellularOptionsFragment">
 
+    <TextView
+        android:id="@+id/p_controlpanel_cellular_data_subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:text="CELLULAR DATA"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/p_controlpanel_cellular_options_change_data_limit"
         android:layout_width="0dp"
         android:layout_height="?attr/listPreferredItemHeightSmall"
-        android:layout_marginTop="32dp"
         android:background="@color/white"
         android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
         android:orientation="horizontal"
         android:paddingStart="?attr/listPreferredItemPaddingLeft"
         android:paddingEnd="?attr/listPreferredItemPaddingRight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_cellular_data_subheader"
+        tools:layout_height="48dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|start"
-            android:background="?attr/selectableItemBackground"
             android:drawablePadding="8dp"
             android:gravity="center_vertical|start"
-            android:text="Change data limit"
+            android:text="Monthly Data Limit"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_size_medium" />
 
@@ -39,48 +52,80 @@
             android:layout_gravity="center_vertical|end"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textColor="@color/half_black"
+            android:textColor="#9c9c9c"
             android:textSize="@dimen/text_size_medium"
             tools:text="5 MB" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/p_controlpanel_cellular_options_change_sim_status"
+        android:id="@+id/p_controlpanel_cellular_options_change_sim_status_frame"
         android:layout_width="0dp"
         android:layout_height="?attr/listPreferredItemHeightSmall"
         android:background="@color/white"
         android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="start|center_vertical"
+        android:minHeight="48dp"
         android:orientation="horizontal"
         android:paddingStart="?attr/listPreferredItemPaddingLeft"
         android:paddingEnd="?attr/listPreferredItemPaddingRight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_cellular_options_change_data_limit">
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_cellular_options_change_data_limit"
+        tools:layout_height="48dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical|start"
-            android:text="Change SIM status"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium" />
+            android:layout_gravity="start|top"
+            android:gravity="start|top"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/p_controlpanel_cellular_options_change_sim_status_value"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:gravity="start|top"
+                android:text="SIM status"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_medium" />
+
+            <TextView
+                android:id="@+id/p_controlpanel_cellular_options_current_sim_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:gravity="start|top"
+                android:text="Active"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/p_controlpanel_cellular_options_change_sim_status"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:layout_gravity="center_vertical|end"
             android:layout_weight="1"
-            android:gravity="center_vertical|end"
-            android:textColor="@color/half_black"
-            android:textSize="@dimen/text_size_medium"
-            tools:text="Active" />
+            android:checked="true"
+            android:gravity="center_vertical|end" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/p_controlpanel_cellular_options_fine_print"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight"
+        android:text="This Particle SIM card is active.  The device using this SIM should be able to connect to the Internet via cellular."
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/p_controlpanel_cellular_options_change_sim_status_frame"
+        app:layout_constraintTop_toBottomOf="@+id/p_controlpanel_cellular_options_change_sim_status_frame"
+        tools:text="This Particle SIM card is active.  The device using this SIM should be able to connect to the Internet via cellular." />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

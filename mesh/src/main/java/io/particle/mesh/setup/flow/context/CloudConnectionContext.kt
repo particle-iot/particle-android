@@ -18,7 +18,7 @@ class CloudConnectionContext : Clearable {
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
     val shouldConnectToDeviceCloudConfirmed: LiveData<Boolean?> = MutableLiveData()
-    val pricingImpactConfirmed: LiveData<Boolean?> = MutableLiveData()
+    val pricingImpactConfirmedLD: LiveData<Boolean?> = MutableLiveData()
 
     var apiNetworks: List<ParticleNetwork>? by log.logged()
     var claimCode: String? by log.logged()
@@ -41,7 +41,7 @@ class CloudConnectionContext : Clearable {
             targetDeviceNameToAssignLD,
             isTargetDeviceNamedLD,
             shouldConnectToDeviceCloudConfirmed,
-            pricingImpactConfirmed
+            pricingImpactConfirmedLD
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -63,8 +63,9 @@ class CloudConnectionContext : Clearable {
         shouldConnectToDeviceCloudConfirmed.castAndPost(confirmed)
     }
 
-    fun updatePricingImpactConfirmed(confirmed: Boolean) {
-        log.info { "updatePricingImpactConfirmed(): $confirmed" }
-        pricingImpactConfirmed.castAndPost(confirmed)
+    fun updatePricingImpactConfirmed(clicked: Boolean) {
+        log.info { "updatePricingImpactConfirmed(): $clicked" }
+        pricingImpactConfirmedLD.castAndPost(clicked)
     }
+
 }

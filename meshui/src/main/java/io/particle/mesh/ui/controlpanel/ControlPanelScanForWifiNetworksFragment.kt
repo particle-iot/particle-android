@@ -9,14 +9,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.particle.android.common.easyDiffUtilCallback
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.WiFiStrength
-import io.particle.mesh.setup.flow.modules.cloudconnection.WifiScanData
-import io.particle.android.common.easyDiffUtilCallback
-import io.particle.android.common.inflateRow
+import io.particle.mesh.setup.flow.WifiScanData
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.inflateRow
 import kotlinx.android.synthetic.main.fragment_cp_scan_for_wifi_networks.*
 import kotlinx.android.synthetic.main.p_controlpanel_row_wifi_scan.view.*
 import mu.KotlinLogging
@@ -87,12 +87,7 @@ private class ScannedWifiNetworksAdapter(
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScannedWifiNetworkHolder {
-        return ScannedWifiNetworkHolder(
-            inflateRow(
-                parent,
-                R.layout.p_controlpanel_row_wifi_scan
-            )
-        )
+        return ScannedWifiNetworkHolder(parent.inflateRow(R.layout.p_controlpanel_row_wifi_scan))
     }
 
     override fun onBindViewHolder(holder: ScannedWifiNetworkHolder, position: Int) {

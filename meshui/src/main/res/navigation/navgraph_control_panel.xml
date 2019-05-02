@@ -304,7 +304,11 @@
     <fragment
         android:id="@+id/controlPanelCongratsFragment"
         android:name="io.particle.mesh.ui.controlpanel.ControlPanelCongratsFragment"
-        android:label="ControlPanelCongratsFragment" />
+        android:label="ControlPanelCongratsFragment" >
+        <argument
+            android:name="congratsMessage"
+            app:argType="string" />
+    </fragment>
     <action
         android:id="@+id/action_global_controlPanelCongratsFragment"
         app:destination="@id/controlPanelCongratsFragment" />
@@ -332,5 +336,61 @@
     <action
         android:id="@+id/action_global_controlPanelCellularOptionsFragment"
         app:destination="@id/controlPanelCellularOptionsFragment" />
+
+    <fragment
+        android:id="@+id/controlPanelWifiInspectNetworkFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelWifiInspectNetworkFragment"
+        android:label="ControlPanelWifiInspectNetworkFragment" >
+        <argument
+            android:name="currentNetwork"
+            app:argType="io.particle.firmwareprotos.ctrl.wifi.WifiNew$GetCurrentNetworkReply" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_controlPanelWifiInspectNetworkFragment"
+        app:destination="@id/controlPanelWifiInspectNetworkFragment" />
+
+    <fragment
+        android:id="@+id/controlPanelUnclaimDeviceFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelUnclaimDeviceFragment"
+        android:label="ControlPanelUnclaimDeviceFragment" >
+        <argument
+            android:name="deviceName"
+            app:argType="string" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_controlPanelUnclaimDeviceFragment"
+        app:destination="@id/controlPanelUnclaimDeviceFragment" />
+
+    <fragment
+        android:id="@+id/controlPanelSimStatusChangeFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelSimStatusChangeFragment"
+        android:label="ControlPanelSimStatusChangeFragment" >
+        <argument
+            android:name="simStatusChangeMode"
+            app:argType="io.particle.mesh.ui.controlpanel.SimStatusMode" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_controlPanelSimStatusChangeFragment"
+        app:destination="@id/controlPanelSimStatusChangeFragment" />
+
+    <fragment
+        android:id="@+id/controlPanelNetworkIdFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelNetworkIdFragment"
+        android:label="ControlPanelNetworkIdFragment" >
+        <argument
+            android:name="networkId"
+            app:argType="string" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_controlPanelNetworkIdFragment"
+        app:destination="@id/controlPanelNetworkIdFragment" />
+
+    <fragment
+        android:id="@+id/controlPanelCellularDataLimitFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelCellularDataLimitFragment"
+        android:label="ControlPanelCellularDataLimitFragment" />
+    <action
+        android:id="@+id/action_global_controlPanelCellularDataLimitFragment"
+        app:destination="@id/controlPanelCellularDataLimitFragment" />
 
 </navigation>

@@ -1,4 +1,4 @@
-package io.particle.mesh.setup.flow.modules.cloudconnection
+package io.particle.mesh.setup.flow
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
@@ -8,7 +8,6 @@ import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiver
-import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 

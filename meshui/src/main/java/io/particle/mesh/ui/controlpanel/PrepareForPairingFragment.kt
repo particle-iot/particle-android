@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.VideoView
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
-import io.particle.android.sdk.cloud.ParticleCloud
-import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.inflateFragment
 import kotlinx.android.synthetic.main.fragment_cp_prepare_for_pairing.*
 import mu.KotlinLogging
 
@@ -22,14 +24,12 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
 
     override var titleBarOptions = TitleBarOptions(R.string.p_controlpanel_prepare_for_pairing)
 
-    private val cloud: ParticleCloud = ParticleCloudSDK.getCloud()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_cp_prepare_for_pairing, container, false)
+        return container?.inflateFragment(R.layout.fragment_cp_prepare_for_pairing)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,15 +41,20 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
         }
     }
 
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
+        bodyText.text = Phrase.from(bodyText.text)
+            .put("device_name", device.name)
+            .format()
+    }
+
     override fun onStop() {
         super.onStop()
         onSignalSwitchChanged(false)
     }
 
     private fun onSignalSwitchChanged(isChecked: Boolean) {
-        val deviceId = (activity as ControlPanelActivity).deviceId
         flowScopes.onWorker {
-            val device = cloud.getDevice(deviceId)
             try {
                 device.startStopSignaling(isChecked)
             } catch (ex: Exception) {
