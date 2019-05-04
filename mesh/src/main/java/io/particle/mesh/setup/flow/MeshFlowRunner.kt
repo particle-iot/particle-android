@@ -22,13 +22,13 @@ import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.ExceptionType.EXPECTED_FLOW
 import io.particle.mesh.setup.flow.FlowType.CELLULAR_FLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_DEACTIVATE
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_REACTIVATE
+import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE
+import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_REACTIVATE
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_UNPAUSE
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_INSPECT_WIFI_NETWORK_FLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_PRESENT_CELLULAR_OPTIONS_FLOW
+import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_UNPAUSE
+import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW
+import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW
 import io.particle.mesh.setup.flow.FlowType.ETHERNET_FLOW
 import io.particle.mesh.setup.flow.FlowType.INTERNET_CONNECTED_PREFLOW
 import io.particle.mesh.setup.flow.FlowType.JOINER_FLOW
@@ -107,13 +107,13 @@ enum class FlowType {
     CELLULAR_FLOW,
     NETWORK_CREATOR_POSTFLOW,
     STANDALONE_POSTFLOW,
-    CONTROL_PANEL_INSPECT_WIFI_NETWORK_FLOW,
-    CONTROL_PANEL_PRESENT_CELLULAR_OPTIONS_FLOW,
-    CONTROL_PANEL_CELLULAR_DEACTIVATE,
-    CONTROL_PANEL_CELLULAR_REACTIVATE,
-    CONTROL_PANEL_CELLULAR_UNPAUSE,
+    CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW,
     CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT,
+    CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE,
+    CONTROL_PANEL_CELLULAR_SIM_REACTIVATE,
+    CONTROL_PANEL_CELLULAR_SIM_UNPAUSE,
     CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW,
+    CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW,
     SINGLE_TASK_POSTFLOW
 }
 
@@ -193,7 +193,7 @@ class MeshFlowRunner(
 
             ctxs.currentFlow = listOf(
                 FlowType.PREFLOW,
-                FlowType.CONTROL_PANEL_INSPECT_WIFI_NETWORK_FLOW
+                FlowType.CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW
             )
             runCurrentFlow()
         }
@@ -211,7 +211,7 @@ class MeshFlowRunner(
 
         ctxs.scopes.onWorker {
             ctxs.currentFlow = listOf(
-                FlowType.CONTROL_PANEL_PRESENT_CELLULAR_OPTIONS_FLOW
+                FlowType.CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW
             )
             runCurrentFlow()
         }
@@ -457,32 +457,32 @@ class MeshFlowRunner(
             )
 
 
-            CONTROL_PANEL_INSPECT_WIFI_NETWORK_FLOW -> listOf(
+            CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW -> listOf(
                 StepEnsureListeningStoppedForBothDevices(),
                 StepInspectCurrentWifiNetwork(deps.flowUi)
             )
 
 
-            CONTROL_PANEL_PRESENT_CELLULAR_OPTIONS_FLOW -> listOf(
+            CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW -> listOf(
                 StepFetchIccidFromCloud(deps.cloud, deps.flowUi),
                 StepFetchFullSimData(deps.cloud, deps.flowUi),
                 StepShowCellularOptionsUi(deps.flowUi)
             )
 
 
-            CONTROL_PANEL_CELLULAR_DEACTIVATE -> listOf(
+            CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE -> listOf(
                 StepShowSimDeactivateUi(deps.flowUi),
                 StepDeactivateSim(deps.cloud)
             )
 
 
-            CONTROL_PANEL_CELLULAR_REACTIVATE -> listOf(
+            CONTROL_PANEL_CELLULAR_SIM_REACTIVATE -> listOf(
                 StepShowSimReactivateUi(deps.flowUi),
                 StepReactivateSim(deps.cloud)
             )
 
 
-            CONTROL_PANEL_CELLULAR_UNPAUSE -> listOf(
+            CONTROL_PANEL_CELLULAR_SIM_UNPAUSE -> listOf(
                 StepShowSimUnpauseUi(deps.flowUi),
                 StepUnpauseSim(deps.cloud)
             )
