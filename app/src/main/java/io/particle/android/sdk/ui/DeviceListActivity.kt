@@ -1,7 +1,6 @@
 package io.particle.android.sdk.ui
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.SearchView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.AppBarLayout
@@ -21,7 +19,6 @@ import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
-import io.particle.android.sdk.tinker.TinkerFragment
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.SoftAPConfigRemover
 import io.particle.android.sdk.utils.WifiFacade
@@ -36,8 +33,6 @@ import java.util.*
 
 class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
 
-    // Whether or not the activity is in two-pane mode, i.e. running on a tablet
-    private var mTwoPane: Boolean = false
     private var isAppBarExpanded = false
     private var softAPConfigRemover: SoftAPConfigRemover? = null
     private var deviceList: DeviceListFragment? = null
@@ -77,26 +72,11 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
 
         softAPConfigRemover = SoftAPConfigRemover(this, WifiFacade.get(this))
 
-//        if (Ui.findView<View>(this, R.id.device_detail_container) != null) {
-//            // The detail container view will be present only in the
-//            // large-screen layouts (res/values-large and
-//            // res/values-sw600dp). If this view is present, then the
-//            // activity should be in two-pane mode.
-//            mTwoPane = true
-//
-//            // In two-pane mode, list items should be given the
-//            // 'activated' state when touched.
-//            // FIXME: need to impl in RecyclerView if we want two-pane mode
-//            //            ((DeviceListFragment) getSupportFragmentManager()
-//            //                    .findFragmentById(R.id.device_list))
-//            //                    .setActivateOnItemClick(true);
-//        }
-
         deviceList = Ui.findFrag(this, R.id.fragment_device_list)
         // TODO: If exposing deep links into your app, handle intents here.
 
         // Show the Up button in the action bar.
-        setSupportActionBar(Ui.findView<Toolbar>(this, R.id.toolbar))
+        setSupportActionBar(Ui.findView(this, R.id.toolbar))
         val supportActionBar = supportActionBar
         if (supportActionBar != null) {
             val background =
