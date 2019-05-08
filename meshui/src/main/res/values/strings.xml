@@ -27,6 +27,7 @@
     <string name="p_controlpanel_datalimit_title">Monthly Data Limit</string>
     <string name="controlpanel_network_id_title">Network ID</string>
     <string name="p_controlpanel_wifi_inspect_title">Current Network</string>
+    <string name="p_controlpanel_mesh_inspect_title">Current Network</string>
     <string name="unclaim_title">Unclaim Device</string>
     <string name="unclaim_body_text">Are you sure you would like to unclaim the device <b>{device_name}</b>?\n\nThe current owner will lose the ability to view or interact with the device via the Particle Cloud. The device will be returned to an unclaimed state.</string>
 

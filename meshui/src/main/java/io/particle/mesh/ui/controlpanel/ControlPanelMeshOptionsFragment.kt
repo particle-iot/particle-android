@@ -37,7 +37,9 @@ class ControlPanelMeshOptionsFragment : BaseControlPanelFragment() {
     }
 
     private fun inspectNetworkClicked() {
-        flowScopes.onMain { startFlowWithBarcode(flowRunner::startControlPanelWifiConfigFlow) }
+        flowScopes.onMain {
+            startFlowWithBarcode(flowRunner::startControlPanelMeshInspectCurrentNetworkFlow)
+        }
     }
 
 }

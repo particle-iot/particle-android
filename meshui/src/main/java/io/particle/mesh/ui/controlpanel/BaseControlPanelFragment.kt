@@ -28,13 +28,13 @@ open class BaseControlPanelFragment : BaseFlowFragment() {
 
     @MainThread
     suspend fun startFlowWithBarcode(
-        flowStarter: (deviceId: String, barcode: CompleteBarcodeData) -> Unit
+        flowStarter: (device: ParticleDevice, barcode: CompleteBarcodeData) -> Unit
     ) {
         flowSystemInterface.showGlobalProgressSpinner(true)
         val barcode = flowScopes.withWorker { fetchBarcodeData(device.id) }
         flowSystemInterface.showGlobalProgressSpinner(false)
 
-        flowStarter(device.id, barcode)
+        flowStarter(device, barcode)
     }
 
     @WorkerThread

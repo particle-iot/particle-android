@@ -54,7 +54,11 @@ class MeshData(private val ctxs: SetupContexts) {
     val networkCreatedOnLocalDeviceLD: LiveData<Boolean?> = ctxs.mesh.networkCreatedOnLocalDeviceLD
     val commissionerStartedLD: LiveData<Boolean?> = ctxs.mesh.commissionerStartedLD
     val targetJoinedMeshNetworkLD: LiveData<Boolean?> = ctxs.mesh.targetJoinedMeshNetworkLD
-    val showNewNetworkOptionInScanner = ctxs.mesh.showNewNetworkOptionInScanner
+    val showNewNetworkOptionInScanner
+        get() = ctxs.mesh.showNewNetworkOptionInScanner
+
+    val currentlyJoinedNetwork: Mesh.NetworkInfo?
+        get() = ctxs.mesh.currentlyJoinedNetwork
 
     fun getTargetDeviceVisibleMeshNetworksLD(): LiveData<List<Mesh.NetworkInfo>?> {
         return TargetDeviceMeshNetworksScanner(ctxs.targetDevice.transceiverLD, ctxs.scopes)
@@ -91,8 +95,12 @@ class DeviceData(private val ctxs: SetupContexts) {
 
     val networkSetupTypeLD: LiveData<NetworkSetupType?> = ctxs.device.networkSetupTypeLD
     val bleUpdateProgress: LiveData<Int?> = ctxs.device.bleOtaProgress
-    var shouldDetectEthernet = ctxs.device.shouldDetectEthernet
-    var firmwareUpdateCount = ctxs.device.firmwareUpdateCount
+    var shouldDetectEthernet: Boolean
+        get() = ctxs.device.shouldDetectEthernet
+        set(value) {
+            ctxs.device.shouldDetectEthernet = value
+        }
+    val firmwareUpdateCount get() = ctxs.device.firmwareUpdateCount
 
     fun updateUserConsentedToFirmwareUpdate(consented: Boolean) {
         ctxs.device.updateUserConsentedToFirmwareUpdate(consented)

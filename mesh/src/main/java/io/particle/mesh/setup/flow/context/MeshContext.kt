@@ -31,6 +31,7 @@ class MeshContext : Clearable {
     var targetJoinedSuccessfully by log.logged(false)
     var newNetworkCreatedSuccessfully by log.logged(false)
     var checkedForExistingNetwork by log.logged(false)
+    var currentlyJoinedNetwork: Mesh.NetworkInfo? by log.logged()
 
     override fun clearState() {
         val setToNulls = listOf(
@@ -52,6 +53,7 @@ class MeshContext : Clearable {
         checkedForExistingNetwork = false
         showNewNetworkOptionInScanner = false
         shownNetworkPasswordUi = false
+        currentlyJoinedNetwork = null
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {

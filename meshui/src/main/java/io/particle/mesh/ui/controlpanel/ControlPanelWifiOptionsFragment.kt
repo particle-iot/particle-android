@@ -39,6 +39,8 @@ class ControlPanelWifiOptionsFragment : BaseControlPanelFragment() {
     }
 
     private fun inspectCurrentNetworkClicked() {
-        flowScopes.onMain { startFlowWithBarcode(flowRunner::startControlPanelInspectCurrentWifiNetworkFlow) }
+        flowScopes.onMain {
+            startFlowWithBarcode(flowRunner::startControlPanelInspectCurrentWifiNetworkFlow)
+        }
     }
 }

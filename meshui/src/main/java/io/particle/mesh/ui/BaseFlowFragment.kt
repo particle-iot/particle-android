@@ -15,6 +15,7 @@ import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.ui.utils.getResOrEmptyString
 import io.particle.mesh.ui.utils.getViewModel
+import mu.KotlinLogging
 
 
 data class TitleBarOptions(
@@ -30,6 +31,9 @@ interface TitleBarOptionsListener {
 
 
 abstract class BaseFlowFragment : Fragment() {
+
+    private val log = KotlinLogging.logger {}
+
 
     open val titleBarOptions = TitleBarOptions()
 
@@ -81,6 +85,7 @@ abstract class BaseFlowFragment : Fragment() {
         super.onResume()
         val listener = (activity as TitleBarOptionsListener)
         listener.setTitleBarOptions(titleBarOptions)
+        log.info { "Resumed fragment: ${this::class.java.simpleName}" }
     }
 
     open fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {

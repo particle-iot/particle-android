@@ -138,7 +138,7 @@ class MeshFlowRunner(
         log.info { "startFlow()" }
         initNewFlow(FlowIntent.FIRST_TIME_SETUP)
 
-        contexts?.currentFlow = listOf()
+        contexts?.currentFlow = listOf(FlowType.PREFLOW)
 
         runCurrentFlow()
     }
@@ -153,13 +153,13 @@ class MeshFlowRunner(
     }
 
     @MainThread
-    fun startControlPanelWifiConfigFlow(deviceId: String, barcode: CompleteBarcodeData) {
+    fun startControlPanelWifiConfigFlow(device: ParticleDevice, barcode: CompleteBarcodeData) {
         initNewFlow(FlowIntent.SINGLE_TASK_FLOW)
         val ctxs = contexts!!
 
         ctxs.updateGetReadyNextButtonClicked(true)
 
-        ctxs.targetDevice.deviceId = deviceId
+        ctxs.targetDevice.deviceId = device.id
         ctxs.cloud.updatePricingImpactConfirmed(true)
         ctxs.cloud.updateShouldConnectToDeviceCloudConfirmed(true)
         val deviceName = ctxs.targetDevice.transceiverLD.value?.bleBroadcastName
@@ -179,7 +179,7 @@ class MeshFlowRunner(
 
     @MainThread
     fun startControlPanelInspectCurrentWifiNetworkFlow(
-        deviceId: String,
+        device: ParticleDevice,
         barcode: CompleteBarcodeData
     ) {
         initNewFlow(FlowIntent.SINGLE_TASK_FLOW)
@@ -187,7 +187,7 @@ class MeshFlowRunner(
 
         ctxs.updateGetReadyNextButtonClicked(true)
 
-        ctxs.targetDevice.deviceId = deviceId
+        ctxs.targetDevice.deviceId = device.id
 
         ctxs.scopes.onWorker {
             ctxs.targetDevice.updateBarcode(barcode, deps.cloud)
@@ -232,6 +232,7 @@ class MeshFlowRunner(
         ctxs.targetDevice.deviceId = device.id
 
         ctxs.scopes.onWorker {
+
             ctxs.targetDevice.updateBarcode(barcode, deps.cloud)
             ctxs.targetDevice.barcode.nonNull(ctxs.scopes).awaitUpdate(ctxs.scopes)
 
@@ -252,7 +253,6 @@ class MeshFlowRunner(
     fun startSimReactivateFlow(device: ParticleDevice) {
 //        CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
     }
-
 
     @MainThread
     fun startSimUnpauseFlow(device: ParticleDevice) {
@@ -343,6 +343,11 @@ class MeshFlowRunner(
                 } catch (ex: Exception) {
                     deps.flowUi.showGlobalProgressSpinner(false)
 
+                    if (ex is MeshSetupFlowException && ex.severity == EXPECTED_FLOW) {
+                        log.info { "Received EXPECTED_FLOW exception; retrying." }
+                        continue  // avoid incrementing the counter, since this was expected flow
+                    }
+
                     if (ex is MeshSetupFlowException && ex.severity == ERROR_FATAL) {
                         log.info(ex) { "Hit fatal error, exiting setup: " }
                         QATool.log(ex.message ?: "(no message)")
@@ -353,10 +358,6 @@ class MeshFlowRunner(
                     delay(1000)
                     QATool.report(ex)
                     error = ex
-
-                    if (ex is MeshSetupFlowException && ex.severity == EXPECTED_FLOW) {
-                        continue  // avoid incrementing the counter, since this was expected flow
-                    }
 
                     i++
                 }
@@ -528,6 +529,7 @@ class MeshFlowRunner(
 
 
             CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW -> listOf(
+                StepFetchCurrentMeshNetwork(deps.flowUi),
                 StepShowMeshInspectNetworkUi(deps.flowUi)
             )
 
