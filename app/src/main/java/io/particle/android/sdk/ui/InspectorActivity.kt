@@ -100,12 +100,13 @@ class InspectorActivity : BaseActivity() {
         } catch (ignore: ParticleCloudException) {
             //minor issue if we don't update online/offline states
         }
-        deviceInfoController.updateDeviceDetails()
 
         scopes.onWorker {
             val owned = cloud.userOwnsDevice(device.id)
             if (!owned) {
                 scopes.onMain { finish() }
+            } else {
+                device.refresh()
             }
         }
     }

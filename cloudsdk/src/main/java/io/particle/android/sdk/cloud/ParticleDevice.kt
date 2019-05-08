@@ -61,6 +61,7 @@ class ParticleDevice internal constructor(
      */
     var name: String
         get() = deviceState.name ?: ""
+        @WorkerThread
         @Throws(ParticleCloudException::class)
         set(newName) {
             cloud.rename(this.deviceState.deviceId, newName)
@@ -135,8 +136,17 @@ class ParticleDevice internal constructor(
     val mobileSecret: String?
         get() = deviceState.mobileSecret
 
-    val notes: String?
+    var notes: String?
         get() = deviceState.notes
+        @WorkerThread
+        @Throws(ParticleCloudException::class)
+        set(newNote) {
+            try {
+                mainApi.setDeviceNote(id, newNote ?: "")
+            } catch (e: RetrofitError) {
+                throw ParticleCloudException(e)
+            }
+        }
 
     val isRunningTinker: Boolean
         get() {
@@ -606,7 +616,7 @@ class ParticleDevice internal constructor(
     @Throws(ParticleCloudException::class)
     fun pingDevice(): Boolean {
         try {
-            val response = mainApi.pingDevice(deviceState.deviceId)
+            val response = mainApi.pingDevice(deviceState.deviceId, "requisite_put_body")
 
             // FIXME: update device state here after switching to Kotlin
 

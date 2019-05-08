@@ -1,12 +1,14 @@
 package io.particle.android.sdk.ui
 
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnNextLayout
-import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import io.particle.android.sdk.cloud.ParticleCloudSDK
@@ -24,11 +26,11 @@ import java.text.SimpleDateFormat
 
 
 class DeviceInfoBottomSheetController(
-    private val activity: FragmentActivity,
+    private val activity: AppCompatActivity,
     private val scopes: Scopes,
     private val root: ConstraintLayout,
     private val device: ParticleDevice,
-    // FIXME:
+    // FIXME: use a simpler interface here
     private val systemInterface: FlowRunnerSystemInterface?
 ) {
 
@@ -38,6 +40,17 @@ class DeviceInfoBottomSheetController(
     private val log = KotlinLogging.logger {}
 
     fun initializeBottomSheet() {
+        activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
+
+            override fun onResume(owner: LifecycleOwner) {
+                updateDeviceDetails()
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                updateNotesIfNeeded()
+            }
+        })
+
         root.action_signal_device.setOnCheckedChangeListener(::onSignalSwitchChanged)
         root.action_device_rename.setOnClickListener {
             RenameHelper.renameDevice(activity, device)
@@ -65,7 +78,6 @@ class DeviceInfoBottomSheetController(
         root.collapsed_device_type.text = productName
         root.product_image.setImageResource(device.deviceType!!.productImage)
         root.device_name.text = device.name
-        root.online_status_text.text = if (device.isConnected) "Online" else "Offline"
         root.device_id.text = device.id.toUpperCase()
         root.serial.text = device.serialNumber
         root.os_version.text = device.version ?: "(Unknown)"
@@ -73,7 +85,23 @@ class DeviceInfoBottomSheetController(
         // FIXME: add notes editing functionality
         root.notes.setText(device.notes)
 
-        setUpStatusDot(device.isConnected)
+        setUpStatusDotAndText(device.isConnected)
+    }
+
+    private fun updateNotesIfNeeded() {
+        val notesInUi = root.notes.text.toString()
+        if (notesInUi == device.notes) {
+            return
+        }
+
+        scopes.onWorker {
+            try {
+                device.notes = notesInUi
+            } catch (ex: Exception) {
+                // FIXME: provide user feedback re: failure to update notes?
+                log.error(ex) { "Error while trying to update device notes" }
+            }
+        }
     }
 
     private fun initAnimations() {
@@ -101,7 +129,7 @@ class DeviceInfoBottomSheetController(
                 root.action_signal_device
             ).map { Mutator(it, listOf(FADE, RESIZE_HEIGHT)) }
         )
-        
+
         mutators.add(
             Mutator(root.product_image, listOf(RESIZE_WIDTH))
         )
@@ -124,11 +152,15 @@ class DeviceInfoBottomSheetController(
         behavior.setBottomSheetCallback(cb)
     }
 
-    private fun setUpStatusDot(isOnline: Boolean) {
+    private fun setUpStatusDotAndText(isOnline: Boolean) {
+        root.online_status_text.text = if (isOnline) "Online" else "Offline"
+
         val statusDot = root.online_status_dot
         statusDot.setImageResource(getStatusColoredDot(device, isOnline))
-        val animFade = AnimationUtils.loadAnimation(root.context, R.anim.fade_in_out)
+
+        statusDot.animation?.cancel()
         if (isOnline) {
+            val animFade = AnimationUtils.loadAnimation(root.context, R.anim.fade_in_out)
             statusDot.startAnimation(animFade)
         }
     }
@@ -161,7 +193,7 @@ class DeviceInfoBottomSheetController(
                 systemInterface?.showGlobalProgressSpinner(false)
             }
 
-            scopes.onMain { online?.let { setUpStatusDot(it) } }
+            scopes.onMain { online?.let { setUpStatusDotAndText(it) } }
         }
     }
 
@@ -242,5 +274,5 @@ private class Mutator(
 
 }
 
-private val fadeInterpolator = AccelerateDecelerateInterpolator()
+private val fadeInterpolator = AccelerateInterpolator() //AccelerateDecelerateInterpolator()
 //AccelerateInterpolator

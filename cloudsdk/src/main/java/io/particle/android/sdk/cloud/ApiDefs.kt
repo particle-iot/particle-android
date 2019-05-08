@@ -213,7 +213,17 @@ class ApiDefs {
 
         @FormUrlEncoded
         @PUT("/v1/devices/{deviceID}/ping")
-        fun pingDevice(@Path("deviceID") deviceID: String): PingResponse
+        fun pingDevice(
+            @Path("deviceID") deviceID: String,
+            @Field("blank") blankBody: String
+        ): PingResponse
+
+        @FormUrlEncoded
+        @PUT("/v1/devices/{deviceID}")
+        fun setDeviceNote(
+            @Path("deviceID") deviceID: String,
+            @Field("notes") note: String
+        ): Response
 
     }
 
