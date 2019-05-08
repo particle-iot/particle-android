@@ -18,6 +18,7 @@ import io.particle.mesh.ui.controlpanel.SimStatusMode
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
+
 abstract class BaseFlowUiDelegate(
     private val navControllerLD: LiveData<NavigationTool?>,
     private val everythingNeedsAContext: Application,
@@ -138,7 +139,8 @@ abstract class BaseFlowUiDelegate(
                     }
                 }
             }
-            NOTHING -> { /* no-op */ }
+            NOTHING -> { /* no-op */
+            }
         }
     }
 
@@ -180,6 +182,13 @@ abstract class BaseFlowUiDelegate(
     override fun showSetCellularDataLimitUi() {
         navigate(
             R.id.action_global_controlPanelCellularDataLimitFragment,
+            shouldPopBackstack = false
+        )
+    }
+
+    override fun showMeshInspectNetworkUi() {
+        navigate(
+            R.id.action_global_controlPanelMeshInspectNetworkFragment,
             shouldPopBackstack = false
         )
     }

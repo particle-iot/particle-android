@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.WorkerThread
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import io.particle.android.sdk.cloud.ParticleCloud
@@ -29,10 +27,11 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
-import io.particle.mesh.setup.utils.safeToast
-import io.particle.mesh.ui.*
+import io.particle.mesh.ui.R
+import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.inflateFragment
+import io.particle.mesh.ui.navigateOnClick
 import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
-import java.lang.Exception
 
 
 class ControlPanelLandingFragment : BaseControlPanelFragment() {

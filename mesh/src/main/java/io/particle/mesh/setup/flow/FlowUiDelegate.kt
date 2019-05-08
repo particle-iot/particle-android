@@ -85,6 +85,9 @@ interface FlowUiDelegate {
     fun showControlPanelReactivateUi()
 
     fun showSetCellularDataLimitUi()
+
+    fun showMeshInspectNetworkUi()
+
     fun popBackStack(): Boolean
 }
 

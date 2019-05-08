@@ -29,6 +29,7 @@ import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_ACTION_PO
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_UNPAUSE
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW
+import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW
 import io.particle.mesh.setup.flow.FlowType.ETHERNET_FLOW
 import io.particle.mesh.setup.flow.FlowType.INTERNET_CONNECTED_PREFLOW
 import io.particle.mesh.setup.flow.FlowType.JOINER_FLOW
@@ -113,6 +114,7 @@ enum class FlowType {
     CONTROL_PANEL_CELLULAR_SIM_REACTIVATE,
     CONTROL_PANEL_CELLULAR_SIM_UNPAUSE,
     CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW,
+    CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW,
     CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW,
     SINGLE_TASK_POSTFLOW
 }
@@ -212,6 +214,30 @@ class MeshFlowRunner(
         ctxs.scopes.onWorker {
             ctxs.currentFlow = listOf(
                 FlowType.CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW
+            )
+            runCurrentFlow()
+        }
+    }
+
+    @MainThread
+    fun startControlPanelMeshInspectCurrentNetworkFlow(
+        device: ParticleDevice,
+        barcode: CompleteBarcodeData
+    ) {
+        initNewFlow(FlowIntent.SINGLE_TASK_FLOW)
+        val ctxs = contexts!!
+
+        ctxs.updateGetReadyNextButtonClicked(true)
+
+        ctxs.targetDevice.deviceId = device.id
+
+        ctxs.scopes.onWorker {
+            ctxs.targetDevice.updateBarcode(barcode, deps.cloud)
+            ctxs.targetDevice.barcode.nonNull(ctxs.scopes).awaitUpdate(ctxs.scopes)
+
+            ctxs.currentFlow = listOf(
+                FlowType.PREFLOW,
+                FlowType.CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW
             )
             runCurrentFlow()
         }
@@ -500,6 +526,10 @@ class MeshFlowRunner(
                 StepPopBackStack(deps.flowUi)
             )
 
+
+            CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW -> listOf(
+                StepShowMeshInspectNetworkUi(deps.flowUi)
+            )
 
             STANDALONE_POSTFLOW -> listOf(
                 StepSetNewDeviceName(deps.flowUi, deps.cloud)

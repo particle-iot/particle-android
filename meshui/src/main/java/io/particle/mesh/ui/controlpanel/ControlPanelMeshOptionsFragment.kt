@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.navigateOnClick
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
@@ -26,12 +28,16 @@ class ControlPanelMeshOptionsFragment : BaseControlPanelFragment() {
         return container?.inflateFragment(R.layout.fragment_controlpanel_mesh_network_options)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
-        p_controlpanel_mesh_inspect_current_network.navigateOnClick(
-            R.id.action_global_controlPanelMeshInspectNetworkFragment
-        )
+        p_controlpanel_mesh_inspect_current_network_frame.setOnClickListener {
+            inspectNetworkClicked()
+        }
+    }
+
+    private fun inspectNetworkClicked() {
+        flowScopes.onMain { startFlowWithBarcode(flowRunner::startControlPanelWifiConfigFlow) }
     }
 
 }

@@ -596,6 +596,26 @@ class ParticleDevice internal constructor(
         }
     }
 
+    /**
+     * Ping the device, updating its online/offline state
+     *
+     * @return true if online, else false
+     */
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun pingDevice(): Boolean {
+        try {
+            val response = mainApi.pingDevice(deviceState.deviceId)
+
+            // FIXME: update device state here after switching to Kotlin
+
+            return response.online
+        } catch (e: RetrofitError) {
+            throw ParticleCloudException(e)
+        }
+    }
+
+
     private fun sendSystemEventBroadcast(deviceStateChange: DeviceStateChange, eventBus: EventBus) {
         cloud.sendSystemEventBroadcast(deviceStateChange)
         eventBus.post(deviceStateChange)

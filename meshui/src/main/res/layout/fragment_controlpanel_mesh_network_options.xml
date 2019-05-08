@@ -8,11 +8,13 @@
     tools:context="io.particle.mesh.ui.controlpanel.ControlPanelMeshOptionsFragment">
 
     <FrameLayout
+        android:id="@+id/p_controlpanel_mesh_inspect_current_network_frame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@color/white"
         android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

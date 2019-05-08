@@ -50,7 +50,8 @@ class ParticleCloud internal constructor(
     private val deviceFastTimeoutApi: ApiDefs.CloudApi,
     private val appDataStorage: AppDataStorage,
     private val broadcastManager: LocalBroadcastManager,
-    gson: Gson, executor: ExecutorService
+    gson: Gson,
+    executor: ExecutorService
 ) {
     private val tokenDelegate = TokenDelegate()
     private val eventsDelegate: EventsDelegate
@@ -308,25 +309,11 @@ class ParticleCloud internal constructor(
 
             for (simpleDevice in simpleDevices) {
                 val device: ParticleDevice
-
-
-
-
-
-                // FIXME: TEST ONLY, REMOVE ME
-
-
-//                if (simpleDevice.isConnected) {
-//                    device = getDevice(simpleDevice.id, false)
-//                } else {
+                if (simpleDevice.isConnected) {
+                    device = getDevice(simpleDevice.id, false)
+                } else {
                     device = getOfflineDevice(simpleDevice)
-//                }
-
-
-
-
-
-
+                }
                 result.add(device)
             }
 
@@ -701,6 +688,46 @@ class ParticleCloud internal constructor(
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
+    fun deactivateSim(iccId: String): Response {
+        return runHandlingCommonErrors {
+            mainApi.takeActionOnSim(iccId, "deactivate")
+        }
+    }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun reactivateSim(iccId: String): Response {
+        return runHandlingCommonErrors {
+            mainApi.takeActionOnSim(iccId, "reactivate")
+        }
+    }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun unpauseSim(iccId: String, limitInMBsForUnpause: Int): Response {
+        return runHandlingCommonErrors {
+            mainApi.takeActionOnSim(iccId, "reactivate", limitInMBsForUnpause)
+        }
+    }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun setDataLimit(iccId: String, limitInMBs: Int): Response {
+        return runHandlingCommonErrors {
+            mainApi.setDataLimit(iccId, limitInMBs)
+        }
+    }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun getSim(iccId: String): ParticleSim {
+        return runHandlingCommonErrors {
+            mainApi.getSim(iccId)
+        }
+    }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
     fun getPricingImpact(
         action: PricingImpactAction,
         networkType: PricingImpactNetworkType,
@@ -964,21 +991,22 @@ class ParticleCloud internal constructor(
             .name(completeDevice.name)
             .cellular(completeDevice.cellular)
             .connected(completeDevice.isConnected)
-            .version(completeDevice.version)
             .deviceType(ParticleDeviceType.fromInt(completeDevice.productId))
             .platformId(completeDevice.platformId)
             .productId(completeDevice.productId)
             .imei(completeDevice.imei)
-            .iccid(completeDevice.lastIccid)
+            .lastIccid(completeDevice.lastIccid)
             .currentBuild(completeDevice.currentBuild)
             .defaultBuild(completeDevice.defaultBuild)
             .ipAddress(completeDevice.ipAddress)
             .lastAppName(completeDevice.lastAppName)
             .status(completeDevice.status)
-            .requiresUpdate(completeDevice.requiresUpdate)
             .lastHeard(completeDevice.lastHeard)
             .serialNumber(completeDevice.serialNumber)
             .mobileSecret(completeDevice.mobileSecret)
+            .iccid(completeDevice.iccid)
+            .systemFirmwareVersion(completeDevice.systemFirmwareVersion)
+            .notes(completeDevice.notes)
             .build()
     }
 
@@ -991,19 +1019,21 @@ class ParticleCloud internal constructor(
             .name(offlineDevice.name)
             .cellular(offlineDevice.cellular)
             .connected(offlineDevice.isConnected)
-            .version("")
             .deviceType(ParticleDeviceType.fromInt(offlineDevice.productId))
             .platformId(offlineDevice.platformId)
             .productId(offlineDevice.productId)
             .imei(offlineDevice.imei)
-            .iccid(offlineDevice.lastIccid)
+            .lastIccid(offlineDevice.lastIccid)
             .currentBuild(offlineDevice.currentBuild)
             .defaultBuild(offlineDevice.defaultBuild)
             .ipAddress(offlineDevice.ipAddress)
-            .lastAppName("")
+            .lastAppName(offlineDevice.lastAppName)
             .status(offlineDevice.status)
-            .requiresUpdate(false)
             .lastHeard(offlineDevice.lastHeard)
+            .serialNumber(offlineDevice.serialNumber)
+            .iccid(offlineDevice.iccid)
+            .systemFirmwareVersion(offlineDevice.systemFirmwareVersion)
+            .notes(offlineDevice.notes)
             .build()
     }
 

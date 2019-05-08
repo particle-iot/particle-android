@@ -3,6 +3,7 @@ package io.particle.mesh.ui.controlpanel
 import android.app.Application
 import androidx.lifecycle.LiveData
 import io.particle.mesh.setup.flow.DialogTool
+import io.particle.mesh.setup.flow.MeshFlowTerminator
 import io.particle.mesh.setup.flow.NavigationTool
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.ui.ProgressHack
@@ -16,8 +17,9 @@ class ControlPanelFlowUiDelegate(
     app: Application,
     dialogTool: DialogTool,
     progressHack: ProgressHack,
+    terminator: MeshFlowTerminator,
     scopes: Scopes = Scopes()
-) : BaseFlowUiDelegate(navControllerLD, app, dialogTool,  progressHack, scopes) {
+) : BaseFlowUiDelegate(navControllerLD, app, dialogTool,  progressHack, scopes, terminator) {
 
     override fun showGetReadyForSetupScreen() {
         navigate(R.id.action_global_controlPanelPrepareForPairingFragment)
