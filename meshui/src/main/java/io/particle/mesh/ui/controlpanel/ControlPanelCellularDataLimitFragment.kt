@@ -67,7 +67,6 @@ class ControlPanelCellularDataLimitFragment : BaseControlPanelFragment() {
 
     private fun onChangeLimitClicked() {
         flowUiListener?.cellular?.updateNewSelectedDataLimit(selectedLimit!!)
-        findNavController().popBackStack()
     }
 
     override fun onDestroy() {

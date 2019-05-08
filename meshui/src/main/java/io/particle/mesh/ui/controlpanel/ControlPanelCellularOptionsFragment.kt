@@ -9,10 +9,12 @@ import androidx.navigation.fragment.findNavController
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.inflateFragment
 import kotlinx.android.synthetic.main.fragment_controlpanel_cellular_options.*
+import mu.KotlinLogging
 
 
 class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
@@ -22,7 +24,6 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
         showBackButton = true
     )
 
-    private val cloud = ParticleCloudSDK.getCloud()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,19 +50,9 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
 
     override fun onResume() {
         super.onResume()
-        flowSystemInterface.showGlobalProgressSpinner(true)
-        flowScopes.onWorker {
-            val sim = try {
-                cloud.getSim(device.iccid!!)
-            } catch (ex: Exception) {
-                return@onWorker
-            }
-            flowScopes.onMain {
-                val limit = sim.monthlyDataRateLimitInMBs
-                p_controlpanel_cellular_options_change_data_limit_value.text = "${limit}MB"
-            }
-            flowSystemInterface.showGlobalProgressSpinner(false)
-        }
+        val sim = flowUiListener?.targetDevice?.sim
+        val limit = sim?.monthlyDataRateLimitInMBs
+        p_controlpanel_cellular_options_change_data_limit_value.text = "${limit}MB"
     }
 
 }

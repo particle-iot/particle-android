@@ -516,9 +516,10 @@ class MeshFlowRunner(
 
             CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT -> listOf(
                 StepShowSetDataLimitUi(deps.flowUi),
-                StepSetDataLimit(deps.cloud),
+                StepSetDataLimit(deps.flowUi, deps.cloud),
                 StepUnsetFullSimData(),
-                StepFetchFullSimData(deps.cloud, deps.flowUi)
+                StepFetchFullSimData(deps.cloud, deps.flowUi),
+                StepPopBackStack(deps.flowUi)
             )
 
             CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW -> listOf(
