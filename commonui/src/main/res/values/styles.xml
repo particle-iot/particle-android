@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="p_MeshTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textAppearance">@style/p_ParticleText</item>
+        <!-- FIXME: why don't these work? -->
+        <item name="buttonStyle">@style/p_mesh_button_style</item>
+        <item name="android:buttonStyle">@style/p_mesh_button_style</item>
+    </style>
+
+    <style name="p_ParticleText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/p_text_color_primary</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/p_setup_step_text_inactive</item>
+    </style>
+
+    <style name="p_mesh_button_style" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/bold_text_font_name</item>
+    </style>
+
+    <style name="p_mesh_button_style_outline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontPath">@string/bold_text_font_name</item>
+    </style>
+
+    <style name="p_setup_header_text">
+        <item name="android:textSize">@dimen/p_setup_header_text_size</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxWidth">300dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:layout_marginTop">@dimen/p_setup_header_margin_top</item>
+    </style>
+
+    <style name="row_two_line_1st_line">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/p_setup_list_row_primary_text_size</item>
+    </style>
+
+    <style name="row_two_line_2nd_line">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/p_setup_list_row_secondary_text_size</item>
+    </style>
+
+    <style name="setup_step_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxWidth">280dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:textSize">@dimen/p_setup_step_text_size</item>
+    </style>
+
+    <style name="p_setup_step_text_inactive" parent="setup_step_text">
+        <item name="android:textColor">@color/p_setup_step_text_inactive</item>
+    </style>
+
+    <style name="setup_fine_print">
+        <item name="android:gravity">center</item>
+        <item name="android:maxWidth">280dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+    </style>
+
+    <style name="fine_print">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+    </style>
+
+    <style name="fine_print_linkified" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="p_mesh_linkbutton" parent="Widget.MaterialComponents.Button.TextButton">
+
+    </style>
+
+    <style name="wide_button" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:minWidth">250dp</item>
+    </style>
+
+    <style name="p_mesh_hintbox_header_grey" parent="TextAppearance.Design.Hint">
+        <item name="android:textColor">@color/p_mesh_element_border</item>
+    </style>
+
+    <style name="p_spinner" parent="Widget.MaterialProgressBar.ProgressBar">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateDrawable">@drawable/p_mesh_progress_spinner</item>
+        <item name="android:indeterminateDuration">2000</item>
+    </style>
+
+</resources>

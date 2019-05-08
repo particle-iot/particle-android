@@ -8,7 +8,6 @@
     <color name="teal">#00BAEC</color>
 
     <color name="device_item_bg">#11555555</color>
-    <color name="default_light_background">#EEEEEE</color>
 
     <array name="core_colors">
         <item>#1ABC9C</item>

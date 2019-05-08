@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">CommonUI</string>
+
+    <string name="product_name_core">Core</string>
+    <string name="product_name_electron">Electron</string>
+    <string name="product_name_photon">Photon</string>
+    <string name="product_name_unknown">Unknown</string>
+    <string name="product_name_raspberry">Raspberry Pi</string>
+    <string name="product_name_red_bear_duo">Red Bear Duo</string>
+    <string name="product_name_p1">P1</string>
+
+    <string name="p_deviceinfo_notes_hint_text"><font size="14">Tap to add some notes for this device.</font></string>
+
+</resources>

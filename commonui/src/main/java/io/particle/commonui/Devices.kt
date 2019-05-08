@@ -1,4 +1,4 @@
-package io.particle.android.sdk.ui
+package io.particle.commonui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -18,7 +18,6 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
-import io.particle.sdk.app.R
 
 
 val ParticleDeviceType.productImage: Int
@@ -34,31 +33,31 @@ private data class ProductImageAndName(@StringRes val name: Int, @DrawableRes va
 private val ParticleDeviceType.productImageAndName: ProductImageAndName
     get() {
         return when (this) {
-            CORE -> pin(R.string.core, R.drawable.core_vector)
+            CORE -> pin(R.string.product_name_core, R.drawable.product_image_core)
 
-            PHOTON -> pin(R.string.photon, R.drawable.photon_vector_small)
+            PHOTON -> pin(R.string.product_name_photon, R.drawable.product_image_photon)
 
-            ELECTRON -> pin(R.string.electron, R.drawable.electron_vector_small)
+            ELECTRON -> pin(R.string.product_name_electron, R.drawable.product_image_electron)
 
-            RASPBERRY_PI -> pin(R.string.raspberry, R.drawable.pi_vector)
+            RASPBERRY_PI -> pin(R.string.product_name_raspberry, R.drawable.product_image_pi)
 
-            P1 -> pin(R.string.p1, R.drawable.p1_vector)
+            P1 -> pin(R.string.product_name_p1, R.drawable.product_image_p1)
 
-            RED_BEAR_DUO -> pin(R.string.red_bear_duo, R.drawable.red_bear_duo_vector)
+            RED_BEAR_DUO -> pin(R.string.product_name_red_bear_duo, R.drawable.product_image_red_bear_duo)
 
             ARGON,
-            A_SERIES -> pin(R.string.product_name_argon, R.drawable.argon_vector)
+            A_SERIES -> pin(R.string.product_name_argon, R.drawable.product_image_argon)
 
             BORON,
-            B_SERIES -> pin(R.string.product_name_boron, R.drawable.boron_vector)
+            B_SERIES -> pin(R.string.product_name_boron, R.drawable.product_image_boron)
 
             XENON,
-            X_SERIES -> pin(R.string.product_name_xenon, R.drawable.xenon_vector)
+            X_SERIES -> pin(R.string.product_name_xenon, R.drawable.product_image_xenon)
 
             // ALL OTHERS
             BLUZ,
             DIGISTUMP_OAK,
-            OTHER -> pin(R.string.unknown, R.drawable.unknown_vector)
+            OTHER -> pin(R.string.product_name_unknown, R.drawable.product_image_unknown)
         }
     }
 

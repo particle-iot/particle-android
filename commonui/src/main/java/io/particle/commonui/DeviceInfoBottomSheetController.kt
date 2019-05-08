@@ -1,4 +1,4 @@
-package io.particle.android.sdk.ui
+package io.particle.commonui
 
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -13,13 +13,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.ui.MutatorOp.FADE
-import io.particle.android.sdk.ui.MutatorOp.RESIZE_HEIGHT
-import io.particle.android.sdk.ui.MutatorOp.RESIZE_WIDTH
-import io.particle.android.sdk.ui.ShownWhen.EXPANDED
+import io.particle.commonui.MutatorOp.FADE
+import io.particle.commonui.MutatorOp.RESIZE_HEIGHT
+import io.particle.commonui.MutatorOp.RESIZE_WIDTH
+import io.particle.commonui.ShownWhen.EXPANDED
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.setup.flow.Scopes
-import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.view_device_info.view.*
 import mu.KotlinLogging
 import java.text.SimpleDateFormat
@@ -33,6 +32,12 @@ class DeviceInfoBottomSheetController(
     // FIXME: use a simpler interface here
     private val systemInterface: FlowRunnerSystemInterface?
 ) {
+
+    var sheetBehaviorState: Int
+        get() = behavior.state
+        set(value) {
+            behavior.state = value
+        }
 
     private val behavior = BottomSheetBehavior.from(root)
     private val lastHeardDateFormat = SimpleDateFormat("MMM d, yyyy, h:mm a")
@@ -167,17 +172,17 @@ class DeviceInfoBottomSheetController(
 
     private fun getStatusColoredDot(device: ParticleDevice, isOnline: Boolean): Int {
         return if (device.isFlashing) {
-            R.drawable.device_flashing_dot
+            R.drawable.device_status_dot_flashing
 
         } else if (isOnline) {
             if (device.isRunningTinker) {
-                R.drawable.online_dot
+                R.drawable.device_status_dot_online_tinker
             } else {
-                R.drawable.online_non_tinker_dot
+                R.drawable.device_status_dot_online_non_tinker
             }
 
         } else {
-            R.drawable.offline_dot
+            R.drawable.device_status_dot_offline
         }
     }
 

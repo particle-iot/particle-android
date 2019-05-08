@@ -74,6 +74,6 @@
         android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
         android:visibility="invisible"
-        app:srcCompat="@drawable/online_dot" />
+        app:srcCompat="@drawable/device_status_dot_online_tinker" />
 
 </RelativeLayout>

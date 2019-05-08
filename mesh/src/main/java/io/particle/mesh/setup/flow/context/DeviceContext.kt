@@ -13,9 +13,6 @@ enum class NetworkSetupType {
     AS_GATEWAY,
     STANDALONE,
     NODE_JOINER,
-//    GATEWAY_JOINER,
-//    INTERNET_CONNECTED_JOINER,
-//    CONTINUED_JOINER
 }
 
 

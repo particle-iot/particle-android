@@ -51,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:checked="true"
-                        android:text="@string/photon"
+                        android:text="@string/product_name_photon"
                         app:layout_constraintEnd_toStartOf="@+id/electronFilter"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:checked="true"
-                        android:text="@string/electron"
+                        android:text="@string/product_name_electron"
                         app:layout_constraintEnd_toStartOf="@+id/p1Filter"
                         app:layout_constraintStart_toEndOf="@+id/photonFilter"
                         app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:checked="true"
-                        android:text="@string/p1"
+                        android:text="@string/product_name_p1"
                         app:layout_constraintEnd_toStartOf="@+id/bluzFilter"
                         app:layout_constraintStart_toEndOf="@+id/electronFilter"
                         app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:checked="true"
-                        android:text="@string/raspberry"
+                        android:text="@string/product_name_raspberry"
                         app:layout_constraintEnd_toStartOf="@+id/redBearFilter"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/photonFilter"/>
@@ -95,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:checked="true"
-                        android:text="@string/red_bear_duo"
+                        android:text="@string/product_name_red_bear_duo"
                         app:layout_constraintEnd_toStartOf="@+id/coreFilter"
                         app:layout_constraintStart_toEndOf="@+id/raspberryFilter"
                         app:layout_constraintTop_toBottomOf="@+id/electronFilter"/>
@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:checked="true"
-                        android:text="@string/core"
+                        android:text="@string/product_name_core"
                         app:layout_constraintStart_toEndOf="@+id/redBearFilter"
                         app:layout_constraintTop_toBottomOf="@+id/p1Filter"/>
 

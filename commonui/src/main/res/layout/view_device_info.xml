@@ -50,7 +50,7 @@
         app:layout_constraintDimensionRatio="1:2"
         app:layout_constraintStart_toStartOf="@+id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/expanded_handle"
-        app:srcCompat="@drawable/argon_vector" />
+        app:srcCompat="@drawable/product_image_argon" />
 
     <TextView
         android:id="@+id/device_name"
@@ -106,7 +106,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/device_name"
         app:layout_constraintTop_toBottomOf="@+id/collapsed_device_type"
-        app:srcCompat="@drawable/online_dot" />
+        app:srcCompat="@drawable/device_status_dot_online_tinker" />
 
     <TextView
         android:id="@+id/online_status_text"

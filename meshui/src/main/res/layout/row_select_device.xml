@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/xenon_vector" />
+        app:srcCompat="@drawable/product_image_xenon" />
 
     <TextView
         android:id="@id/row_line_1"
