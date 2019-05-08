@@ -492,4 +492,15 @@ public class Responses {
     }
 
 
+    public static class PingResponse {
+
+        public final boolean online;
+
+
+        public PingResponse(boolean online) {
+            this.online = online;
+        }
+    }
+
+
 }

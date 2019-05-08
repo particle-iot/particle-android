@@ -8,8 +8,9 @@
     android:background="@color/default_light_background"
     android:elevation="8dp"
     android:orientation="vertical"
+    android:theme="@style/p_MeshTheme"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="120dp"
+    app:behavior_peekHeight="90dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     tools:ignore="MissingPrefix">
 
@@ -29,10 +30,12 @@
 
     <ImageView
         android:id="@+id/expanded_handle"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_arrow_down_black_24dp"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:minHeight="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_arrow_down_gray_24dp"
         app:layout_constraintDimensionRatio="2:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,9 +43,11 @@
 
     <ImageView
         android:id="@+id/product_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:minWidth="32dp"
+        app:layout_constraintDimensionRatio="1:2"
         app:layout_constraintStart_toStartOf="@+id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/expanded_handle"
         app:srcCompat="@drawable/argon_vector" />
@@ -55,6 +60,7 @@
         android:layout_marginStart="16dp"
         android:text="fancy-hoosier"
         android:textColor="@android:color/black"
+        android:textIsSelectable="true"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/product_image"
@@ -71,13 +77,35 @@
         app:layout_constraintTop_toTopOf="@+id/device_name"
         app:srcCompat="@drawable/ic_edit_light_gray_24dp" />
 
+
+    <TextView
+        android:id="@+id/collapsed_device_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Argon"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="@+id/device_name"
+        app:layout_constraintTop_toBottomOf="@+id/device_name" />
+
+
+    <ImageView
+        android:id="@+id/collapsed_expander"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/collapsed_device_type"
+        app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+        app:layout_constraintTop_toTopOf="@+id/collapsed_device_type"
+        app:srcCompat="@drawable/ic_expand_less_black_24dp" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/online_status_dot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/device_name"
-        app:layout_constraintTop_toBottomOf="@+id/device_name"
+        app:layout_constraintTop_toBottomOf="@+id/collapsed_device_type"
         app:srcCompat="@drawable/online_dot" />
 
     <TextView
@@ -149,6 +177,7 @@
             fontPath="@string/bold_text_font_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="Type"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
@@ -158,6 +187,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:enabled="false"
             android:gravity="end|center_vertical"
             android:textColor="@android:color/black"
             tools:text="Argon" />
@@ -178,6 +208,7 @@
             fontPath="@string/bold_text_font_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="ID"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
@@ -188,7 +219,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end|center_vertical"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -206,6 +238,7 @@
             fontPath="@string/bold_text_font_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="Serial"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
@@ -216,7 +249,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end|center_vertical"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -234,6 +268,7 @@
             fontPath="@string/bold_text_font_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="Device OS"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
@@ -243,6 +278,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:enabled="false"
             android:gravity="end|center_vertical"
             android:textColor="@android:color/black" />
     </LinearLayout>
@@ -261,6 +297,7 @@
             fontPath="@string/bold_text_font_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="Last Handshake"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
@@ -308,11 +345,10 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="top|start"
-            android:hint="Tap to add some notes for this device."
+            android:hint="@string/p_deviceinfo_notes_hint_text"
             android:textColor="@android:color/black"
             android:textColorHint="@color/p_faded_gray" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

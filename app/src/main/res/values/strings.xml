@@ -98,5 +98,6 @@ Enjoy!]]></string>
     <string name="publish_positive_action">Publish event</string>
     <string name="cancel">Cancel</string>
     <string name="logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="p_deviceinfo_notes_hint_text"><font size="14">Tap to add some notes for this device.</font></string>
 
 </resources>
