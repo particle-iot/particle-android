@@ -91,21 +91,17 @@ class DeviceInfoBottomSheetController(
             )
         )
 
-        mutators.add(
-            Mutator(root.expanded_handle, listOf(FADE, RESIZE_HEIGHT))
-        )
-
         mutators.addAll(
             listOf(
+                root.expanded_handle,
                 root.action_device_rename,
                 root.online_status_text,
                 root.online_status_dot,
                 root.action_ping_device,
                 root.action_signal_device
-            ).map { Mutator(it, listOf(FADE)) }
+            ).map { Mutator(it, listOf(FADE, RESIZE_HEIGHT)) }
         )
-
-
+        
         mutators.add(
             Mutator(root.product_image, listOf(RESIZE_WIDTH))
         )
