@@ -73,12 +73,12 @@ dependencies {
     api 'com.segment.analytics.android:analytics:4.3.1'
     api 'com.madgag.spongycastle:core:1.58.0.0'
 
-    api 'com.google.dagger:dagger:2.21'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+    api 'com.google.dagger:dagger:2.22.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.22.1'
 
     // using snapshot to unbreak Butterknife with AndroidX
-    api 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    api 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     api 'androidx.appcompat:appcompat:1.0.2'
     api 'androidx.recyclerview:recyclerview:1.0.0'

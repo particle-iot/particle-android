@@ -76,7 +76,7 @@ class FirmwareUpdater(
 
         var bytesSent = 0
         while (!buffer.exhausted()) {
-            val toRead = min(buffer.size(), chunkSize.toLong())
+            val toRead = min(buffer.size, chunkSize.toLong())
             val toSend = buffer.readByteArray(toRead)
             val updateResult = protocolTransceiver.sendFirmwareUpdateData(toSend)
 

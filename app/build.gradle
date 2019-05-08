@@ -93,8 +93,8 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    releaseImplementation 'com.google.firebase:firebase-perf:16.2.5'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    releaseImplementation 'com.google.firebase:firebase-perf:17.0.0'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
@@ -123,7 +123,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
 
-    implementation 'androidx.core:core-ktx:1.0.1'
+    implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.collection:collection-ktx:1.0.0'
     implementation "androidx.fragment:fragment-ktx:1.0.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
@@ -135,7 +135,7 @@ dependencies {
     // FIXME: remove explicit dep here later
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.protobuf:protobuf-java:3.5.1'
-    implementation 'com.squareup.okio:okio:1.16.0'
+    implementation 'com.squareup.okio:okio:2.2.2'
 
     testImplementation 'junit:junit:4.12'
 }

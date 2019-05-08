@@ -44,6 +44,6 @@ fun Collection<*>?.truthy(): Boolean = this != null && this.isNotEmpty()
 
 // third party types:
 
-fun okio.ByteString?.truthy(): Boolean = this != null && this.size() > 0
+fun okio.ByteString?.truthy(): Boolean = this != null && this.size > 0
 
 fun com.google.protobuf.ByteString?.truthy(): Boolean = this != null && !this.isEmpty

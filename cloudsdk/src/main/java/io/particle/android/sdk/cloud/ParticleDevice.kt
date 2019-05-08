@@ -17,7 +17,8 @@ import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.buildIntValueMap
 import io.particle.android.sdk.utils.join
-import okio.Okio
+import okio.buffer
+import okio.source
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONException
 import org.json.JSONObject
@@ -458,7 +459,7 @@ class ParticleDevice internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class, IOException::class)
     fun flashBinaryFile(stream: InputStream) {
-        val bytes = Okio.buffer(Okio.source(stream)).readByteArray()
+        val bytes = stream.source().buffer().readByteArray()
         performFlashingChange { mainApi.flashFile(deviceState.deviceId, TypedFakeFile(bytes)) }
     }
 
@@ -477,7 +478,7 @@ class ParticleDevice internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class, IOException::class)
     fun flashCodeFile(stream: InputStream) {
-        val bytes = Okio.buffer(Okio.source(stream)).readByteArray()
+        val bytes = stream.source().buffer().readByteArray()
         performFlashingChange {
             mainApi.flashFile(
                 deviceState.deviceId,

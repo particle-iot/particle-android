@@ -2,6 +2,7 @@ package io.particle.mesh.setup.utils;
 
 import androidx.annotation.NonNull;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -9,7 +10,7 @@ import okio.Buffer;
 
 public class ByteMath {
 
-    public static short readUint8LE(@NonNull Buffer buffer) {
+    public static short readUint8LE(@NonNull Buffer buffer) throws EOFException {
         return ((short) (buffer.readByte() & 0xff));
     }
 
@@ -18,7 +19,7 @@ public class ByteMath {
         return buffer.writeByte((byte) (value & 0xff));
     }
 
-    public static int readUint16LE(@NonNull Buffer source) {
+    public static int readUint16LE(@NonNull Buffer source) throws EOFException {
         return bytesAsInt(
                 source.readByte(),  // "low byte"/LSB
                 source.readByte(),  // "high byte"/MSB
