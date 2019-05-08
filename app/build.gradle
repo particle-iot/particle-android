@@ -78,6 +78,7 @@ dependencies {
     implementation project(':devicesetup')
     implementation project(':mesh')
     implementation project(':meshui')
+    implementation project(':commonui')
     implementation(name: 'slf4android', ext: 'aar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -45,6 +45,8 @@ import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Fragments
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.commonui.productImage
+import io.particle.commonui.productName
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*

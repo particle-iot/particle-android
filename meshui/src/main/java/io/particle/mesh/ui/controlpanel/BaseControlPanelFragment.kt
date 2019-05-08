@@ -2,10 +2,12 @@ package io.particle.mesh.ui.controlpanel
 
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
+import androidx.fragment.app.FragmentActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.SerialNumber
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.TitleBarOptions
 import mu.KotlinLogging
@@ -24,7 +26,14 @@ open class BaseControlPanelFragment : BaseFlowFragment() {
         showBackButton = true
     )
 
+    open val showDeviceInfoSlider: Boolean = false
+
     val device: ParticleDevice by lazy { (activity!! as DeviceProvider).device }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as ControlPanelActivity).showDeviceInfoView(showDeviceInfoSlider)
+    }
 
     @MainThread
     suspend fun startFlowWithBarcode(

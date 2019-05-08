@@ -4,10 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.particle.android.sdk.cloud.ParticleDevice
+import io.particle.commonui.DeviceInfoBottomSheetController
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
@@ -36,6 +40,11 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
         intent.getParcelableExtra(EXTRA_DEVICE) as ParticleDevice
     }
 
+    private lateinit var deviceInfoController: DeviceInfoBottomSheetController
+
+    private val scopes = Scopes()
+
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
@@ -48,6 +57,23 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
             if (!navController.navigateUp()) {
                 finish()
             }
+        }
+
+        deviceInfoController = DeviceInfoBottomSheetController(
+            this,
+            scopes,
+            findViewById(R.id.device_info_bottom_sheet),
+            device,
+            null
+        )
+        deviceInfoController.initializeBottomSheet()
+    }
+
+    override fun onBackPressed() {
+        if (deviceInfoController.sheetBehaviorState == BottomSheetBehavior.STATE_EXPANDED) {
+            deviceInfoController.sheetBehaviorState = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -68,4 +94,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
         p_action_close.visibility = if (options.showCloseButton) View.VISIBLE else View.INVISIBLE
     }
 
+    fun showDeviceInfoView(showDeviceInfoSlider: Boolean) {
+        findViewById<View>(R.id.device_info_bottom_sheet).isVisible = showDeviceInfoSlider
+    }
 }

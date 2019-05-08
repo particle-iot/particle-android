@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
+    android:paddingBottom="90dp"
     tools:context="io.particle.android.sdk.tinker.TinkerFragment">
 
     <RelativeLayout

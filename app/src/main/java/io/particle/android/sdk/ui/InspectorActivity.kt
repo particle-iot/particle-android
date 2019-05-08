@@ -28,10 +28,10 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.commonui.DeviceInfoBottomSheetController
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.view_device_info.*
 import mu.KotlinLogging
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -85,7 +85,7 @@ class InspectorActivity : BaseActivity() {
         deviceInfoController = DeviceInfoBottomSheetController(
             this,
             scopes,
-            device_info_bottom_sheet,
+            findViewById(R.id.device_info_bottom_sheet),
             device,
             null
         )
@@ -162,9 +162,8 @@ class InspectorActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        val behavior = BottomSheetBehavior.from(device_info_bottom_sheet)
-        if (behavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        if (deviceInfoController.sheetBehaviorState == BottomSheetBehavior.STATE_EXPANDED) {
+            deviceInfoController.sheetBehaviorState = BottomSheetBehavior.STATE_COLLAPSED
         } else {
             super.onBackPressed()
         }
