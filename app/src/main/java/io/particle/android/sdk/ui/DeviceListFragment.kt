@@ -178,7 +178,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     override fun onResume() {
         super.onResume()
         val devices = adapter.items
-        subscribeToSystemEvents(devices, false)
+//        subscribeToSystemEvents(devices, false)
     }
 
     override fun onStart() {
@@ -188,7 +188,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     override fun onPause() {
         val devices = adapter.items
-        subscribeToSystemEvents(devices, true)
+//        subscribeToSystemEvents(devices, true)
         super.onPause()
     }
 
@@ -227,7 +227,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         empty_message.isVisible = (adapter.itemCount == 0)
         //subscribe to system updates
-        subscribeToSystemEvents(devices, false)
+//        subscribeToSystemEvents(devices, false)
     }
 
     private fun subscribeToSystemEvents(
@@ -347,7 +347,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     private fun refreshDevices() {
         val devices = adapter.items
-        subscribeToSystemEvents(devices, true)
+//        subscribeToSystemEvents(devices, true)
         val loader = loaderManager.getLoader<Any>(R.id.device_list_devices_loader_id)
         loader!!.forceLoad()
     }
