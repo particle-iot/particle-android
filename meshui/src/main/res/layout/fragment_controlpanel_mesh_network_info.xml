@@ -183,6 +183,7 @@
             android:textSize="@dimen/text_size_medium" />
 
         <TextView
+            fontPath="@string/bold_text_font_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
@@ -190,7 +191,9 @@
             android:gravity="center_vertical|end"
             android:text=">"
             android:textColor="@color/half_black"
-            android:textSize="@dimen/text_size_medium" />
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            tools:ignore="MissingPrefix" />
 
     </LinearLayout>
 
