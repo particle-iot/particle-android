@@ -9,7 +9,6 @@ import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.ui.ProgressHack
 import io.particle.mesh.ui.BaseFlowUiDelegate
 import io.particle.mesh.ui.R
-import mu.KotlinLogging
 
 
 class ControlPanelFlowUiDelegate(
@@ -41,10 +40,6 @@ class ControlPanelFlowUiDelegate(
 
     override fun showSetWifiPasswordUi() {
         navigate(R.id.action_global_controlPanelEnterWifiNetworkPasswordFragment)
-    }
-
-    override fun showSingleTaskCongratsScreen(singleTaskCongratsMessage: String) {
-        navigate(R.id.action_global_controlPanelCongratsFragment)
     }
 
 }
