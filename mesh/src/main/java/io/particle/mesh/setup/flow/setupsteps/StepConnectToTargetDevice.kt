@@ -45,7 +45,6 @@ class StepConnectToTargetDevice(
                 .runBlockOnUiThreadAndAwaitUpdate(scopes) {
                     ctxs.targetDevice.updateDeviceTransceiver(transceiver)
                 }
-            delay(5000)
         }
     }
 
