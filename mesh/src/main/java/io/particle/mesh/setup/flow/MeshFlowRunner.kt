@@ -44,7 +44,7 @@ import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
-private const val FLOW_RETRIES = 10
+private const val FLOW_RETRIES = 5
 
 
 fun buildFlowManager(
