@@ -187,10 +187,7 @@ abstract class BaseFlowUiDelegate(
     }
 
     override fun showMeshInspectNetworkUi() {
-        navigate(
-            R.id.action_global_controlPanelMeshInspectNetworkFragment,
-            shouldPopBackstack = false
-        )
+        navigate(R.id.action_global_controlPanelMeshInspectNetworkFragment)
     }
 
     override fun popBackStack(): Boolean {
