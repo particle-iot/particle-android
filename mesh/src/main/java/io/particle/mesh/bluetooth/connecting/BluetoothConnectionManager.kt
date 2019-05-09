@@ -89,7 +89,7 @@ class BluetoothConnection(
 
 typealias BTDeviceAddress = String
 
-const val CONNECTION_TIMEOUT_MILLIS = 10000L
+const val SCAN_TIMEOUT_MILLIS = 8000L
 
 
 // FIXME: replace this with something elss hackish
@@ -105,11 +105,11 @@ class BluetoothConnectionManager(private val ctx: Context) {
     suspend fun connectToDevice(
         deviceName: String,
         scopes: Scopes,
-        timeout: Long = CONNECTION_TIMEOUT_MILLIS
+        timeout: Long = SCAN_TIMEOUT_MILLIS
     ): BluetoothConnection? {
         checkIsThisTheMainThread()
 
-        val address = scanForDevice(deviceName, timeout) ?: return null
+        val address = scanForDevice(deviceName, timeout, scopes) ?: return null
 
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(Intent(FOUND_IN_SCAN_BROADCAST))
 
@@ -140,12 +140,20 @@ class BluetoothConnectionManager(private val ctx: Context) {
         return conn
     }
 
-    private suspend fun scanForDevice(deviceName: String, timeout: Long): BTDeviceAddress? {
+    private suspend fun scanForDevice(
+        deviceName: String,
+        timeout: Long,
+        scopes: Scopes
+    ): BTDeviceAddress? {
         log.info { "entering scanForDevice()" }
         val scannerSuspender = buildMatchingDeviceNameSuspender(ctx, deviceName)
         val scanResult = withTimeoutOrNull(timeout) {
-            scannerSuspender.awaitResult()
+            val withMain = scopes.mainThreadScope.async {
+                return@async scannerSuspender.awaitResult()
+            }
+            return@withTimeoutOrNull withMain.await()
         }
+        log.info { "Address from scan result: ${scanResult?.device?.address}" }
         return scanResult?.device?.address
     }
 
