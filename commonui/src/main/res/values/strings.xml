@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">CommonUI</string>
 
     <string name="product_name_core">Core</string>
     <string name="product_name_electron">Electron</string>

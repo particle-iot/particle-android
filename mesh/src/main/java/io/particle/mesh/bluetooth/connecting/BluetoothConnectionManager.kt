@@ -5,8 +5,10 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
+import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.BTCharacteristicWriter
 import io.particle.mesh.bluetooth.btAdapter
@@ -90,6 +92,10 @@ typealias BTDeviceAddress = String
 const val CONNECTION_TIMEOUT_MILLIS = 10000L
 
 
+// FIXME: replace this with something elss hackish
+const val FOUND_IN_SCAN_BROADCAST = "FOUND_IN_SCAN"
+
+
 class BluetoothConnectionManager(private val ctx: Context) {
 
     private val log = KotlinLogging.logger {}
@@ -104,6 +110,8 @@ class BluetoothConnectionManager(private val ctx: Context) {
         checkIsThisTheMainThread()
 
         val address = scanForDevice(deviceName, timeout) ?: return null
+
+        LocalBroadcastManager.getInstance(ctx).sendBroadcast(Intent(FOUND_IN_SCAN_BROADCAST))
 
         log.info { "Connecting to device $address" }
         // 1. Attempt to connect

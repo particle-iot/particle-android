@@ -1,5 +1,7 @@
 package io.particle.mesh.ui.controlpanel
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +10,19 @@ import android.widget.VideoView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
+import io.particle.mesh.bluetooth.connecting.FOUND_IN_SCAN_BROADCAST
+import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.inflateFragment
 import kotlinx.android.synthetic.main.fragment_cp_prepare_for_pairing.*
+import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
@@ -23,6 +31,8 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
     private val log = KotlinLogging.logger {}
 
     override var titleBarOptions = TitleBarOptions(R.string.p_controlpanel_prepare_for_pairing)
+
+    private val btDeviceFoundLD by lazy { BTBroadcastLD(activity!!) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +56,17 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
         bodyText.text = Phrase.from(bodyText.text)
             .put("device_name", device.name)
             .format()
+
+        flowScopes.onMain {
+            delay(1000)
+            if (isResumed) {
+                btDeviceFoundLD.observe(this@PrepareForPairingFragment, Observer {
+                    val systemInterface = flowSystemInterface.navControllerLD.value!!
+                    systemInterface.popBackStack()
+                    systemInterface.navigate(R.id.action_global_BLEPairingProgressFragment)
+                })
+            }
+        }
     }
 
     override fun onStop() {
@@ -80,3 +101,11 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
     }
 
 }
+
+
+private class BTBroadcastLD(context: Context) : BroadcastReceiverLD<Intent>(
+    context,
+    FOUND_IN_SCAN_BROADCAST,
+    { it },
+    useLocalBroadcastManager = true
+)
