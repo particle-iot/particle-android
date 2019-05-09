@@ -27,11 +27,13 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.inflateFragment
 import io.particle.mesh.ui.navigateOnClick
 import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
+import kotlinx.coroutines.delay
 
 
 class ControlPanelLandingFragment : BaseControlPanelFragment() {
@@ -41,6 +43,9 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     override val showDeviceInfoSlider: Boolean = true
 
     private lateinit var cloud: ParticleCloud
+
+
+    private val flowManagementScope = Scopes()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +94,12 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
     override fun onResume() {
         super.onResume()
-        flowRunner.endCurrentFlow()  // end any current flows
+        flowManagementScope.onMain {
+            delay(1000)
+            if (isResumed) {
+                flowRunner.endCurrentFlow()  // end any current flows
+            }
+        }
     }
 
     private fun navigateToUnclaim() {
