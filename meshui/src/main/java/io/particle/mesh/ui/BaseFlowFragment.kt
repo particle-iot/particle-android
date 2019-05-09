@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.snakydesign.livedataextensions.first
 import com.snakydesign.livedataextensions.liveDataOf
 import com.snakydesign.livedataextensions.switchMap
 import io.particle.mesh.common.android.livedata.AbsentLiveData
@@ -52,14 +53,17 @@ abstract class BaseFlowFragment : Fragment() {
         super.onCreate(savedInstanceState)
         // make a LiveData which notifies when both onActivityCreated AND onViewCreated
         // have been called, no matter what the order they're called in
-        onActivityCreatedCalled.switchMap {
-            if (it == true) onViewCreatedCalled else AbsentLiveData()
-        }.observe(this, Observer {
-            if (it == true && !onFragmentReadyCalled) {
-                onFragmentReadyCalled = true
-                onFragmentReady(activity!!, flowUiListener!!)
+        onActivityCreatedCalled
+            .switchMap {
+                if (it == true) onViewCreatedCalled else AbsentLiveData()
             }
-        })
+            .first()
+            .observe(this, Observer {
+                if (it == true && !onFragmentReadyCalled) {
+                    onFragmentReadyCalled = true
+                    onFragmentReady(activity!!, flowUiListener!!)
+                }
+            })
     }
 
     @CallSuper
