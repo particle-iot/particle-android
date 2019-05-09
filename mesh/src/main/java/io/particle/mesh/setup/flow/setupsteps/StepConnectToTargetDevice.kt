@@ -3,13 +3,12 @@ package io.particle.mesh.setup.flow.setupsteps
 import androidx.annotation.WorkerThread
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
-import io.particle.mesh.setup.flow.DeviceConnector
-import io.particle.mesh.setup.flow.FailedToConnectException
-import io.particle.mesh.setup.flow.MeshSetupStep
-import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.connection.ProtocolTransceiver
+import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.FlowUiDelegate
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withTimeoutOrNull
 
 
 class StepConnectToTargetDevice(
@@ -28,12 +27,15 @@ class StepConnectToTargetDevice(
             ctxs.ble.connectingToTargetUiShown = true
         }
 
-        val transceiver = scopes.withMain {
-            try {
-                deviceConnector.connect(ctxs.targetDevice.barcode.value!!, "target", scopes)
-            } catch (ex: Exception) {
-                return@withMain null
+        val transceiver: ProtocolTransceiver? = withTimeoutOrNull(12000) {
+            val deferred: Deferred<ProtocolTransceiver?> = scopes.mainThreadScope.async {
+                try {
+                    return@async deviceConnector.connect(ctxs.targetDevice.barcode.value!!, "target", scopes)
+                } catch (ex: Exception) {
+                    return@async null
+                }
             }
+            return@withTimeoutOrNull deferred.await()
         }
 
         if (transceiver == null) {
