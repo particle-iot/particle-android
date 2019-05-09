@@ -94,6 +94,7 @@ dependencies {
         exclude module: 'support-v4'
     }
 
+    releaseImplementation 'com.google.firebase:firebase-core:16.0.9'
     releaseImplementation 'com.google.firebase:firebase-perf:17.0.0'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
