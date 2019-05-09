@@ -370,13 +370,9 @@ class MeshFlowRunner(
     }
 
     private suspend fun quitSetupfromError(scopes: Scopes, ex: Exception?) {
+        val preMsg = ex?.message ?: "Setup has encountered an error and cannot continue."
         scopes.withMain {
-            deps.dialogTool.newDialogRequest(
-                StringDialogSpec(
-                    "Setup has encountered an error and cannot " +
-                            "continue. Please exit setup and try again."
-                )
-            )
+            deps.dialogTool.newDialogRequest(StringDialogSpec(preMsg))
             deps.dialogTool.clearDialogResult()
             deps.dialogTool.dialogResultLD.nonNull().awaitUpdate(scopes)
             endSetup()
