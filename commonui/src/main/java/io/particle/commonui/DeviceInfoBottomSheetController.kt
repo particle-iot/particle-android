@@ -54,6 +54,11 @@ class DeviceInfoBottomSheetController(
             override fun onPause(owner: LifecycleOwner) {
                 updateNotesIfNeeded()
             }
+
+            override fun onStop(owner: LifecycleOwner) {
+                root.action_signal_device.isChecked = false
+            }
+
         })
 
         root.action_signal_device.setOnCheckedChangeListener(::onSignalSwitchChanged)
@@ -202,18 +207,23 @@ class DeviceInfoBottomSheetController(
         }
     }
 
-    private fun onSignalSwitchChanged(button: CompoundButton, isChecked: Boolean) {
+    private fun onSignalSwitchChanged(button: CompoundButton?, isChecked: Boolean) {
+        shouldDeviceSignal(isChecked)
+    }
+
+    private fun shouldDeviceSignal(shouldSignal: Boolean) {
         val deviceId = device.id
         scopes.onWorker {
             val cloud = ParticleCloudSDK.getCloud()
             val device = cloud.getDevice(deviceId)
             try {
-                device.startStopSignaling(isChecked)
+                device.startStopSignaling(shouldSignal)
             } catch (ex: Exception) {
-                log.error(ex) { "Error turning rainbow-shouting ${if (isChecked) "ON" else "OFF"}" }
+                log.error(ex) { "Error turning rainbows ${if (shouldSignal) "ON" else "OFF"}" }
             }
         }
     }
+
 }
 
 
