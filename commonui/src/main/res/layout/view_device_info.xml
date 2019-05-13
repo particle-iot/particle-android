@@ -138,6 +138,17 @@
         app:layout_constraintStart_toEndOf="@+id/online_status_text"
         app:layout_constraintTop_toTopOf="@+id/online_status_text" />
 
+    <ProgressBar
+        android:id="@+id/ping_progress_bar"
+        style="@style/p_spinner"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/action_ping_device"
+        app:layout_constraintStart_toEndOf="@+id/action_ping_device"
+        app:layout_constraintTop_toTopOf="@+id/action_ping_device" />
+
     <Switch
         android:id="@+id/action_signal_device"
         fontPath="@string/bold_text_font_name"

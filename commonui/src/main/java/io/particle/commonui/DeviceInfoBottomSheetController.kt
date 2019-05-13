@@ -7,6 +7,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -192,18 +193,21 @@ class DeviceInfoBottomSheetController(
     }
 
     private fun onPingClicked() {
-        scopes.onWorker {
-            val online = try {
-                systemInterface?.showGlobalProgressSpinner(true)
-                device.pingDevice()
-            } catch (ex: Exception) {
-                // FIXME: show error feedback here?
-                null
-            } finally {
-                systemInterface?.showGlobalProgressSpinner(false)
+        scopes.onMain {
+            root.action_ping_device.isEnabled = false
+            root.ping_progress_bar.isVisible = true
+
+            val online = scopes.withWorker {
+                try {
+                    return@withWorker device.pingDevice()
+                } catch (ex: Exception) {
+                    return@withWorker null
+                }
             }
 
-            scopes.onMain { online?.let { setUpStatusDotAndText(it) } }
+            root.ping_progress_bar.isVisible = false
+            root.action_ping_device.isEnabled = true
+            online?.let { setUpStatusDotAndText(it) }
         }
     }
 
