@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.android.common.easyDiffUtilCallback
-import io.particle.android.common.inflateRow
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.inflateRow
 import kotlinx.android.synthetic.main.fragment_scan_for_mesh_networks.*
 import kotlinx.android.synthetic.main.p_scanformeshnetwork_row_select_mesh_network.view.*
 
@@ -90,10 +90,7 @@ private class ScannedMeshNetworksAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScannedMeshNetworkHolder {
         return ScannedMeshNetworkHolder(
-            inflateRow(
-                parent,
-                R.layout.p_scanformeshnetwork_row_select_mesh_network
-            )
+            parent.inflateRow(R.layout.p_scanformeshnetwork_row_select_mesh_network)
         )
     }
 

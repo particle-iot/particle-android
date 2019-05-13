@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/device_info_bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_light_background"
+    android:elevation="8dp"
+    android:orientation="vertical"
+    android:theme="@style/p_MeshTheme"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="90dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    tools:ignore="MissingPrefix">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <ImageView
+        android:id="@+id/expanded_handle"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:minHeight="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_arrow_down_gray_24dp"
+        app:layout_constraintDimensionRatio="2:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/product_image"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:minWidth="32dp"
+        app:layout_constraintDimensionRatio="1:2"
+        app:layout_constraintStart_toStartOf="@+id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/expanded_handle"
+        app:srcCompat="@drawable/product_image_argon" />
+
+    <TextView
+        android:id="@+id/device_name"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="fancy-hoosier"
+        android:textColor="@android:color/black"
+        android:textIsSelectable="true"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/product_image"
+        app:layout_constraintTop_toTopOf="@+id/product_image" />
+
+    <ImageButton
+        android:id="@+id/action_device_rename"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/device_name"
+        app:layout_constraintStart_toEndOf="@+id/device_name"
+        app:layout_constraintTop_toTopOf="@+id/device_name"
+        app:srcCompat="@drawable/ic_edit_light_gray_24dp" />
+
+
+    <TextView
+        android:id="@+id/collapsed_device_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Argon"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/device_name"
+        app:layout_constraintTop_toBottomOf="@+id/device_name" />
+
+
+    <ImageView
+        android:id="@+id/collapsed_expander"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/collapsed_device_type"
+        app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+        app:layout_constraintTop_toTopOf="@+id/collapsed_device_type"
+        app:srcCompat="@drawable/ic_expand_less_black_24dp" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/online_status_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/device_name"
+        app:layout_constraintTop_toBottomOf="@+id/collapsed_device_type"
+        app:srcCompat="@drawable/device_status_dot_online_tinker" />
+
+    <TextView
+        android:id="@+id/online_status_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="Offline"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/online_status_dot"
+        app:layout_constraintStart_toEndOf="@+id/online_status_dot"
+        app:layout_constraintTop_toTopOf="@+id/online_status_dot" />
+
+    <TextView
+        android:id="@+id/action_ping_device"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="56dp"
+        android:layout_height="32dp"
+        android:background="@android:color/transparent"
+        android:text="Ping"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toBottomOf="@+id/online_status_text"
+        app:layout_constraintStart_toEndOf="@+id/online_status_text"
+        app:layout_constraintTop_toTopOf="@+id/online_status_text" />
+
+    <Switch
+        android:id="@+id/action_signal_device"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:text="🌈 Signal device"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+        app:layout_constraintStart_toStartOf="@+id/online_status_dot"
+        app:layout_constraintTop_toBottomOf="@+id/action_ping_device" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/p_mesh_element_border"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/product_image" />
+
+    <LinearLayout
+        android:id="@+id/device_type_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/separator">
+
+        <TextView
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Type"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+            android:id="@+id/device_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:gravity="end|center_vertical"
+            android:textColor="@android:color/black"
+            tools:text="Argon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/device_id_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/device_type_wrapper">
+
+        <TextView
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="ID"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+            android:id="@+id/device_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/serial_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/device_id_wrapper">
+
+        <TextView
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Serial"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+            android:id="@+id/serial"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/os_version_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/serial_wrapper">
+
+        <TextView
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Device OS"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+            android:id="@+id/os_version"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:gravity="end|center_vertical"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/last_handshake_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/os_version_wrapper">
+
+        <TextView
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Last Handshake"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+            android:id="@+id/last_handshake"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/p_mesh_element_border"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/last_handshake_wrapper" />
+
+    <LinearLayout
+        android:id="@+id/notes_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/separator2">
+
+        <TextView
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notes"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/notes"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="top|start"
+            android:hint="@string/p_deviceinfo_notes_hint_text"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/p_faded_gray" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

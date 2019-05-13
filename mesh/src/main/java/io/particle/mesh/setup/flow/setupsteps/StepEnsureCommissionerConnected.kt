@@ -25,7 +25,7 @@ class StepEnsureCommissionerConnected(
         }
 
         if (!ctxs.ble.connectingToAssistingDeviceUiShown) {
-            flowUi.showComissionerPairingProgressUi()
+            flowUi.showCommissionerPairingProgressUi()
             ctxs.ble.connectingToAssistingDeviceUiShown = true
         }
 

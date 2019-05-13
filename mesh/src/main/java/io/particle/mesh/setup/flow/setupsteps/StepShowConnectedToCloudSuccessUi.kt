@@ -19,9 +19,12 @@ class StepShowConnectedToCloudSuccessUi(private val flowUi: FlowUiDelegate) : Me
         ctxs.cloud.connectedToCloudCongratsUiShown = true
 
         val template = flowUi.getString(R.string.p_congrats_claimed)
-        val msg = template.format(ctxs.targetDevice.deviceType?.toUserFacingName())
-        flowUi.showSingleTaskCongratsScreen(msg)
+        val nameRes = ctxs.targetDevice.deviceType?.toUserFacingName()
+        val name = flowUi.getString(nameRes!!)
+        val msg = template.format(name)
+        flowUi.showCongratsScreen(msg)
         delay(1900)
+        flowUi.popBackStack()
     }
 
 }

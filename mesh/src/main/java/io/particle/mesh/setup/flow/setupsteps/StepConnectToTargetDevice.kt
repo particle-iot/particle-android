@@ -3,13 +3,9 @@ package io.particle.mesh.setup.flow.setupsteps
 import androidx.annotation.WorkerThread
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
-import io.particle.mesh.setup.flow.DeviceConnector
-import io.particle.mesh.setup.flow.FailedToConnectException
-import io.particle.mesh.setup.flow.MeshSetupStep
-import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.connection.ProtocolTransceiver
+import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.FlowUiDelegate
-import kotlinx.coroutines.delay
 
 
 class StepConnectToTargetDevice(
@@ -28,11 +24,11 @@ class StepConnectToTargetDevice(
             ctxs.ble.connectingToTargetUiShown = true
         }
 
-        val transceiver = scopes.withMain {
+        val transceiver: ProtocolTransceiver? = scopes.withMain(12000) {
             try {
                 deviceConnector.connect(ctxs.targetDevice.barcode.value!!, "target", scopes)
             } catch (ex: Exception) {
-                return@withMain null
+                null
             }
         }
 
@@ -45,7 +41,6 @@ class StepConnectToTargetDevice(
                 .runBlockOnUiThreadAndAwaitUpdate(scopes) {
                     ctxs.targetDevice.updateDeviceTransceiver(transceiver)
                 }
-            delay(5000)
         }
     }
 

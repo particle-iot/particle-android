@@ -16,8 +16,8 @@ class NavigationToolImpl(private val nav: NavController) : NavigationTool {
         nav.navigate(target, args)
     }
 
-    override fun popBackStack() {
-        nav.popBackStack()
+    override fun popBackStack(): Boolean {
+        return nav.popBackStack()
     }
 
 }

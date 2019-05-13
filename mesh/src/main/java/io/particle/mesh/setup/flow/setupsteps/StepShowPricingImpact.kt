@@ -13,7 +13,7 @@ import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.mesh.setup.flow.context.SetupContexts
 import io.particle.mesh.setup.flow.FlowUiDelegate
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin
 
 
 class StepShowPricingImpact(
@@ -23,7 +23,7 @@ class StepShowPricingImpact(
 
     @WorkerThread
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        if (ctxs.pricingImpactConfirmedLD.value == true) {
+        if (ctxs.cloud.pricingImpactConfirmedLD.value == true) {
             return
         }
 
@@ -34,9 +34,11 @@ class StepShowPricingImpact(
             flowUi.showGlobalProgressSpinner(false)
         }
 
-        ctxs.pricingImpactConfirmedLD.nonNull(scopes).runBlockOnUiThreadAndAwaitUpdate(scopes) {
-            flowUi.showPricingImpactScreen()
-        }
+        ctxs.cloud.pricingImpactConfirmedLD
+            .nonNull(scopes)
+            .runBlockOnUiThreadAndAwaitUpdate(scopes) {
+                flowUi.showPricingImpactScreen()
+            }
     }
 
 

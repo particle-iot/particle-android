@@ -8,7 +8,7 @@ import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.flow.context.SetupContexts
 import io.particle.mesh.setup.flow.FlowUiDelegate
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 

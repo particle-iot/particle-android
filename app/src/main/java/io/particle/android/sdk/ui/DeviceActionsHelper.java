@@ -3,12 +3,14 @@ package io.particle.android.sdk.ui;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.widget.PopupMenu;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import android.widget.PopupMenu;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.ui.Toaster;
+import io.particle.commonui.RenameHelper;
 import io.particle.sdk.app.R;
 
 

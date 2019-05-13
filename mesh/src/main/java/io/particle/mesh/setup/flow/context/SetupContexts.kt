@@ -36,10 +36,11 @@ class SetupContexts(
 
     // FIXME: this should go.  See notes on StepDetermineFlowAfterPreflow
     val getReadyNextButtonClickedLD: LiveData<Boolean?> = MutableLiveData()
-    val pricingImpactConfirmedLD: LiveData<Boolean?> = MutableLiveData()
 
 
     override fun clearState() {
+        log.info { "clearState()" }
+
         val clearables = listOf(
             ble,
             cellular,
@@ -53,8 +54,7 @@ class SetupContexts(
         }
 
         val liveDatas = listOf(
-            getReadyNextButtonClickedLD,
-            pricingImpactConfirmedLD
+            getReadyNextButtonClickedLD
         )
         for (ld in liveDatas) {
             ld.castAndPost(null)
@@ -71,6 +71,7 @@ class SetupContexts(
         currentFlow = emptyList()
         hasEthernet = null
         meshNetworkFlowAdded = false
+        log.info { "Calling scopes.cancelAll()" }
         scopes.cancelAll()
         scopes = Scopes()
     }
@@ -86,11 +87,6 @@ class SetupContexts(
     fun updateGetReadyNextButtonClicked(clicked: Boolean) {
         log.info { "updateGetReadyNextButtonClicked()" }
         getReadyNextButtonClickedLD.castAndPost(clicked)
-    }
-
-    fun updatePricingImpactConfirmed(clicked: Boolean) {
-        log.info { "updatePricingImpactConfirmed(): $clicked" }
-        pricingImpactConfirmedLD.castAndPost(clicked)
     }
 
 }

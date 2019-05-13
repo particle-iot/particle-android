@@ -9,7 +9,7 @@ import io.particle.mesh.setup.flow.FlowUiDelegate
 class StepShowSingleTaskCongratsScreen(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        flowUi.showSingleTaskCongratsScreen(ctxs.singleStepCongratsMessage)
+        flowUi.showCongratsScreen(ctxs.singleStepCongratsMessage)
     }
 
 }

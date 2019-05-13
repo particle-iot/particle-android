@@ -5,7 +5,7 @@
     <string name="app_name">@string/brand_name</string>
     <string name="device_name">Photon</string>
     <drawable name="device_image">@drawable/photon_vector</drawable>
-    <drawable name="device_image_small">@drawable/photon_vector_small</drawable>
+    <drawable name="device_image_small">@drawable/product_image_photon</drawable>
 
     <drawable name="brand_image_horizontal">@drawable/particle_horizontal_blue</drawable>
     <drawable name="brand_image_vertical">@drawable/particle_vertical_blue</drawable>

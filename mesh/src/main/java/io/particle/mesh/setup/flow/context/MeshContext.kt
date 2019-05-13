@@ -7,9 +7,9 @@ import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.logged
 import io.particle.mesh.setup.flow.Clearable
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.CreateNewNetwork
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin.SelectedNetwork
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin.CreateNewNetwork
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin.SelectedNetwork
 import mu.KotlinLogging
 
 
@@ -31,6 +31,7 @@ class MeshContext : Clearable {
     var targetJoinedSuccessfully by log.logged(false)
     var newNetworkCreatedSuccessfully by log.logged(false)
     var checkedForExistingNetwork by log.logged(false)
+    var currentlyJoinedNetwork: Mesh.NetworkInfo? by log.logged()
 
     override fun clearState() {
         val setToNulls = listOf(
@@ -52,6 +53,7 @@ class MeshContext : Clearable {
         checkedForExistingNetwork = false
         showNewNetworkOptionInScanner = false
         shownNetworkPasswordUi = false
+        currentlyJoinedNetwork = null
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {

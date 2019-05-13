@@ -274,4 +274,16 @@
         android:id="@+id/action_global_scanJoinerCodeIntroFragment"
         app:destination="@id/scanJoinerCodeIntroFragment" />
 
+    <fragment
+        android:id="@+id/controlPanelCongratsFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelCongratsFragment"
+        android:label="ControlPanelCongratsFragment" >
+        <argument
+            android:name="congratsMessage"
+            app:argType="string" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_controlPanelCongratsFragment"
+        app:destination="@id/controlPanelCongratsFragment" />
+
 </navigation>

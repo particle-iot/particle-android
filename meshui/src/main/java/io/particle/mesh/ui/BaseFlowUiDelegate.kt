@@ -4,21 +4,28 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew
 import io.particle.mesh.common.logged
-import io.particle.mesh.setup.flow.DialogTool
-import io.particle.mesh.setup.flow.FlowUiDelegate
-import io.particle.mesh.setup.flow.NavigationTool
-import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.flow.*
+import io.particle.mesh.setup.flow.PostCongratsAction.EXIT
+import io.particle.mesh.setup.flow.PostCongratsAction.NOTHING
+import io.particle.mesh.setup.flow.PostCongratsAction.RESET_TO_START
 import io.particle.mesh.setup.ui.ProgressHack
+import io.particle.mesh.ui.controlpanel.ControlPanelCongratsFragmentArgs
+import io.particle.mesh.ui.controlpanel.ControlPanelSimStatusChangeFragmentArgs
+import io.particle.mesh.ui.controlpanel.ControlPanelWifiInspectNetworkFragmentArgs
+import io.particle.mesh.ui.controlpanel.SimStatusMode
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
+
 
 abstract class BaseFlowUiDelegate(
     private val navControllerLD: LiveData<NavigationTool?>,
     private val everythingNeedsAContext: Application,
     override val dialogTool: DialogTool,
     protected val progressHack: ProgressHack,
-    protected val scopes: Scopes
+    protected val scopes: Scopes,
+    private val terminator: MeshFlowTerminator
 ) : FlowUiDelegate {
 
     private val log = KotlinLogging.logger {}
@@ -81,7 +88,7 @@ abstract class BaseFlowUiDelegate(
         navigate(R.id.action_global_manualCommissioningAddToNetworkFragment)
     }
 
-    override fun showComissionerPairingProgressUi() {
+    override fun showCommissionerPairingProgressUi() {
         navigate(R.id.action_global_assistingDevicePairingProgressFragment)
     }
 
@@ -106,8 +113,85 @@ abstract class BaseFlowUiDelegate(
             return false // already shown, no need to show again
         }
         shownTargetInitialIsConnectedScreen = true
-        showSingleTaskCongratsScreen("Successfully paired with $deviceName")
+        showCongratsScreen("Successfully paired with $deviceName")
         return true
+    }
+
+    override fun showCongratsScreen(
+        congratsMessage: String,
+        postCongratsAction: PostCongratsAction
+    ) {
+        navigate(
+            R.id.action_global_controlPanelCongratsFragment,
+            ControlPanelCongratsFragmentArgs(congratsMessage).toBundle()
+        )
+
+        when (postCongratsAction) {
+            EXIT -> terminator.terminateFlow()
+            RESET_TO_START -> {
+                val navTool = navControllerLD.value
+                navTool?.let {
+                    while (true) {
+                        val result = navTool.popBackStack()
+                        if (!result) {
+                            break
+                        }
+                    }
+                }
+            }
+            NOTHING -> { /* no-op */
+            }
+        }
+    }
+
+    override fun showInspectCurrentWifiNetworkUi(currentNetwork: WifiNew.GetCurrentNetworkReply) {
+        navigate(
+            R.id.action_global_controlPanelWifiInspectNetworkFragment,
+            ControlPanelWifiInspectNetworkFragmentArgs(currentNetwork).toBundle()
+        )
+    }
+
+    override fun showControlPanelCellularOptionsUi() {
+        navigate(R.id.action_global_controlPanelCellularOptionsFragment, shouldPopBackstack = false)
+    }
+
+    override fun showControlPanelUnpauseUi() {
+        navigate(
+            R.id.action_global_controlPanelSimStatusChangeFragment,
+            ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.UNPAUSE).toBundle(),
+            shouldPopBackstack = false
+        )
+    }
+
+    override fun showControlPanelDeactivateUi() {
+        navigate(
+            R.id.action_global_controlPanelSimStatusChangeFragment,
+            ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.DEACTIVATE).toBundle(),
+            shouldPopBackstack = false
+        )
+    }
+
+    override fun showControlPanelReactivateUi() {
+        navigate(
+            R.id.action_global_controlPanelSimStatusChangeFragment,
+            ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.REACTIVATE).toBundle(),
+            shouldPopBackstack = false
+        )
+    }
+
+    override fun showSetCellularDataLimitUi() {
+        navigate(
+            R.id.action_global_controlPanelCellularDataLimitFragment,
+            shouldPopBackstack = false
+        )
+    }
+
+    override fun showMeshInspectNetworkUi() {
+        navigate(R.id.action_global_controlPanelMeshInspectNetworkFragment)
+    }
+
+    override fun popBackStack(): Boolean {
+        return navControllerLD.value?.popBackStack() ?: false
     }
 
     override fun showGlobalProgressSpinner(shouldShow: Boolean) {
@@ -119,7 +203,11 @@ abstract class BaseFlowUiDelegate(
         return everythingNeedsAContext.getString(stringId)
     }
 
-    protected fun navigate(@IdRes navTargetId: Int, args: Bundle? = null) {
+    protected fun navigate(
+        @IdRes navTargetId: Int,
+        args: Bundle? = null,
+        shouldPopBackstack: Boolean = true
+    ) {
         val nav = navControllerLD.value
         if (nav == null) {
             log.warn { "Attempted to use nav controller but it was null!" }
@@ -128,7 +216,9 @@ abstract class BaseFlowUiDelegate(
 
         showGlobalProgressSpinner(false)
         scopes.mainThreadScope.launch {
-            nav.popBackStack()
+            if (shouldPopBackstack) {
+                nav.popBackStack()
+            }
             if (args == null) {
                 nav.navigate(navTargetId)
             } else {

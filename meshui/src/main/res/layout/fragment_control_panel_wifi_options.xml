@@ -8,11 +8,13 @@
     tools:context="io.particle.mesh.ui.controlpanel.ControlPanelWifiOptionsFragment">
 
     <FrameLayout
+        android:id="@+id/p_controlpanel_wifi_join_new_network_frame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@color/white"
+        android:background="@android:color/white"
         android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,14 +23,40 @@
             android:id="@+id/p_controlpanel_wifi_join_new_network"
             android:layout_width="match_parent"
             android:layout_height="?attr/listPreferredItemHeightSmall"
-            android:background="?attr/selectableItemBackground"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:paddingStart="?attr/listPreferredItemPaddingLeft"
             android:text="Join New Network"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium" />
+            android:textSize="@dimen/text_size_medium"
+            tools:layout_height="48dp" />
 
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/p_controlpanel_wifi_inspect_current_network_frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_wifi_join_new_network_frame">
+
+        <TextView
+            android:id="@+id/p_controlpanel_wifi_inspect_current_network"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:paddingStart="?attr/listPreferredItemPaddingLeft"
+            android:text="Inspect Current Network"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium"
+            tools:layout_height="48dp" />
+
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

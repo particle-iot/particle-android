@@ -65,12 +65,12 @@ public class InfoFragment extends Fragment {
         // FIXME: this and several other spots are doing the same work.  Make it generic.
         switch (device.getDeviceType()) {
             case CORE:
-                deviceType.setText(R.string.core);
-                deviceImage.setImageResource(R.drawable.core_vector);
+                deviceType.setText(R.string.product_name_core);
+                deviceImage.setImageResource(R.drawable.product_image_core);
                 break;
             case ELECTRON:
-                deviceType.setText(R.string.electron);
-                deviceImage.setImageResource(R.drawable.electron_vector_small);
+                deviceType.setText(R.string.product_name_electron);
+                deviceImage.setImageResource(R.drawable.product_image_electron);
                 //show extra fields
                 Ui.findView(rootView, R.id.device_iccid_label).setVisibility(View.VISIBLE);
                 Ui.findView(rootView, R.id.device_iccid).setVisibility(View.VISIBLE);
@@ -82,43 +82,43 @@ public class InfoFragment extends Fragment {
                 populateElectronInfoFields(rootView);
                 break;
             case PHOTON:
-                deviceType.setText(R.string.photon);
-                deviceImage.setImageResource(R.drawable.photon_vector_small);
+                deviceType.setText(R.string.product_name_photon);
+                deviceImage.setImageResource(R.drawable.product_image_photon);
                 break;
             case RASPBERRY_PI:
-                deviceType.setText(R.string.raspberry);
-                deviceImage.setImageResource(R.drawable.pi_vector);
+                deviceType.setText(R.string.product_name_raspberry);
+                deviceImage.setImageResource(R.drawable.product_image_pi);
                 break;
             case P1:
-                deviceType.setText(R.string.p1);
-                deviceImage.setImageResource(R.drawable.p1_vector);
+                deviceType.setText(R.string.product_name_p1);
+                deviceImage.setImageResource(R.drawable.product_image_p1);
                 break;
             case RED_BEAR_DUO:
-                deviceType.setText(R.string.red_bear_duo);
-                deviceImage.setImageResource(R.drawable.red_bear_duo_vector);
+                deviceType.setText(R.string.product_name_red_bear_duo);
+                deviceImage.setImageResource(R.drawable.product_image_red_bear_duo);
                 break;
 
             case ARGON:
             case A_SERIES:
                 deviceType.setText(R.string.product_name_argon);
-                deviceImage.setImageResource(R.drawable.argon_vector);
+                deviceImage.setImageResource(R.drawable.product_image_argon);
                 break;
 
             case BORON:
             case B_SERIES:
                 deviceType.setText(R.string.product_name_boron);
-                deviceImage.setImageResource(R.drawable.boron_vector);
+                deviceImage.setImageResource(R.drawable.product_image_boron);
                 break;
 
             case XENON:
             case X_SERIES:
                 deviceType.setText(R.string.product_name_xenon);
-                deviceImage.setImageResource(R.drawable.xenon_vector);
+                deviceImage.setImageResource(R.drawable.product_image_xenon);
                 break;
 
             default:
-                deviceType.setText(R.string.unknown);
-                deviceImage.setImageResource(R.drawable.unknown_vector);
+                deviceType.setText(R.string.product_name_unknown);
+                deviceImage.setImageResource(R.drawable.product_image_unknown);
                 break;
         }
 

@@ -10,11 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
-import io.particle.mesh.common.android.livedata.nonNull
+import com.snakydesign.livedataextensions.filter
+import com.snakydesign.livedataextensions.nonNull
 import io.particle.mesh.setup.flow.*
-import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.ui.utils.getViewModel
-import kotlinx.android.synthetic.main.activity_control_panel.*
 import mu.KotlinLogging
 
 
@@ -67,12 +66,14 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         flowSystemInterface.shouldShowProgressSpinnerLD.nonNull()
             .observe(this, Observer { showGlobalProgressSpinner(it!!) })
 
-        flowSystemInterface.shouldTerminateLD.nonNull()
+        flowSystemInterface.meshFlowTerminator.shouldTerminateFlowLD
+            .filter { it == true }
             .observe(this, Observer { finish() })
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        flowSystemInterface.shutdown()
         flowSystemInterface.setNavController(null)
     }
 

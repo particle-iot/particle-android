@@ -7,6 +7,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-fun Context.safeToast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
-    GlobalScope.launch(Dispatchers.Main) { Toast.makeText(this@safeToast, text, duration).show() }
+enum class ToastDuration(val length: Int) {
+    SHORT(Toast.LENGTH_SHORT),
+    LONG(Toast.LENGTH_LONG)
+}
+
+fun Context.safeToast(text: CharSequence, duration: ToastDuration = ToastDuration.SHORT) {
+    GlobalScope.launch(Dispatchers.Main) {
+        Toast.makeText(this@safeToast, text, duration.length).show()
+    }
 }

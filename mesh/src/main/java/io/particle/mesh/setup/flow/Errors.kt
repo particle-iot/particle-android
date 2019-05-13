@@ -1,5 +1,6 @@
 package io.particle.mesh.setup.flow
 
+import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_RECOVERABLE
 
 
@@ -20,6 +21,10 @@ open class MeshSetupFlowException(
 class ExpectedFlowException(
     message: String
 ) : MeshSetupFlowException(message, severity = ExceptionType.EXPECTED_FLOW)
+
+
+class TerminateFlowException(message: String
+) : MeshSetupFlowException(message, severity = ERROR_FATAL)
 
 
 class NoBarcodeScannedException(cause: Throwable? = null) : MeshSetupFlowException(

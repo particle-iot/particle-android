@@ -17,7 +17,7 @@ import mu.KotlinLogging
 interface NavigationTool {
     fun navigate(@IdRes target: Int)
     fun navigate(@IdRes target: Int, args: Bundle)
-    fun popBackStack()
+    fun popBackStack(): Boolean
 }
 
 
@@ -32,7 +32,7 @@ class FlowRunnerSystemInterface : ProgressHack {
     val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>()
     val dialogHack = DialogTool(dialogRequestLD, MutableLiveData())
     val shouldShowProgressSpinnerLD: LiveData<Boolean?> = MutableLiveData()
-    val shouldTerminateLD: LiveData<Boolean?> = ClearValueOnInactiveLiveData<Boolean>()
+    val meshFlowTerminator = MeshFlowTerminator()
 
     var navControllerLD: LiveData<NavigationTool?> = MutableLiveData()
 
@@ -43,7 +43,7 @@ class FlowRunnerSystemInterface : ProgressHack {
 
     fun terminateSetup() {
         log.info { "terminateSetup()" }
-        shouldTerminateLD.castAndPost(true)
+        meshFlowTerminator.terminateFlow()
     }
 
     fun setNavController(navController: NavigationTool?) {
@@ -75,7 +75,8 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
             app,
             ParticleCloudSDK.getCloud(),
             systemInterface.dialogHack,
-            flowUiDelegate
+            flowUiDelegate,
+            systemInterface.meshFlowTerminator
         )
 
         systemInterface.initialize(flowRunner)

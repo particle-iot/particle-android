@@ -1,11 +1,12 @@
 package io.particle.mesh.common.android.livedata
 
 import androidx.annotation.AnyThread
+import androidx.annotation.CallSuper
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.annotation.CallSuper
-import androidx.annotation.WorkerThread
+import com.snakydesign.livedataextensions.nonNull
 import io.particle.mesh.common.AsyncWorkSuspender
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import io.particle.mesh.setup.flow.Scopes

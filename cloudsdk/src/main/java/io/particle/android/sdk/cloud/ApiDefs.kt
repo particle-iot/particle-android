@@ -6,6 +6,7 @@ import io.particle.android.sdk.cloud.Responses.FirmwareUpdateInfoResponse
 import io.particle.android.sdk.cloud.Responses.MeshNetworkMembershipsResponse
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse
 import io.particle.android.sdk.cloud.Responses.Models
+import io.particle.android.sdk.cloud.Responses.PingResponse
 import io.particle.android.sdk.cloud.Responses.ReadDoubleVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadIntVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadObjectVariableResponse
@@ -174,8 +175,16 @@ class ApiDefs {
         fun takeActionOnSim(
             @Path("iccid") iccid: String,
             @Field("action") action: String,
+            @Field("mb_limit") limitInMBsForUnpause: Int? = null,
             @Field("country") isoAlpha2CountryCode: String? = "US"
         ): Response
+
+        @FormUrlEncoded
+        @PUT("/v1/sims/{iccid}")
+        fun setDataLimit(@Path("iccid") iccid: String, @Field("mb_limit") limitInMBs: Int): Response
+
+        @GET("/v1/sims/{iccid}")
+        fun getSim(@Path("iccid") iccid: String): ParticleSim
 
         @GET("/v1/pricing-impact")
         fun getPricingImpact(
@@ -200,6 +209,20 @@ class ApiDefs {
         fun shoutRainbows(
             @Path("deviceID") deviceID: String,
             @Field("signal") shouldSignal: Int  // "0" for no, "1" for yes
+        ): Response
+
+        @FormUrlEncoded
+        @PUT("/v1/devices/{deviceID}/ping")
+        fun pingDevice(
+            @Path("deviceID") deviceID: String,
+            @Field("blank") blankBody: String
+        ): PingResponse
+
+        @FormUrlEncoded
+        @PUT("/v1/devices/{deviceID}")
+        fun setDeviceNote(
+            @Path("deviceID") deviceID: String,
+            @Field("notes") note: String
         ): Response
 
     }

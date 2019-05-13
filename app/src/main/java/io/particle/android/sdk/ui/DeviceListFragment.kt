@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -46,6 +45,8 @@ import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Fragments
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.commonui.productImage
+import io.particle.commonui.productName
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
@@ -156,7 +157,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
         deviceSetupCompleteReceiver!!.register(activity)
 
-        loaderManager.initLoader(R.id.device_list_devices_loader_id, null, this)
+        LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
 
         if (savedInstanceState != null) {
@@ -177,7 +178,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     override fun onResume() {
         super.onResume()
         val devices = adapter.items
-        subscribeToSystemEvents(devices, false)
+//        subscribeToSystemEvents(devices, false)
     }
 
     override fun onStart() {
@@ -187,7 +188,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     override fun onPause() {
         val devices = adapter.items
-        subscribeToSystemEvents(devices, true)
+//        subscribeToSystemEvents(devices, true)
         super.onPause()
     }
 
@@ -226,7 +227,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         empty_message.isVisible = (adapter.itemCount == 0)
         //subscribe to system updates
-        subscribeToSystemEvents(devices, false)
+//        subscribeToSystemEvents(devices, false)
     }
 
     private fun subscribeToSystemEvents(
@@ -346,7 +347,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     private fun refreshDevices() {
         val devices = adapter.items
-        subscribeToSystemEvents(devices, true)
+//        subscribeToSystemEvents(devices, true)
         val loader = loaderManager.getLoader<Any>(R.id.device_list_devices_loader_id)
         loader!!.forceLoad()
     }
@@ -379,9 +380,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
             var modelName: TextView = topLevel.product_model_name
             var productImage: AppCompatImageView = topLevel.product_image
-            var statusIcon: AppCompatImageView = topLevel.online_status_image
             var deviceName: TextView = topLevel.product_name
-            var statusTextWithIcon: TextView = topLevel.online_status
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -400,33 +399,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
             holder.topLevel.setBackgroundResource(R.color.device_item_bg)
 
-            val (modelNameRes, productImageRes) = when (device.deviceType) {
-                ParticleDeviceType.CORE -> Pair(R.string.core, R.drawable.core_vector)
-                ParticleDeviceType.PHOTON -> Pair(R.string.photon, R.drawable.photon_vector_small)
-                ParticleDeviceType.ELECTRON -> Pair(R.string.electron, R.drawable.electron_vector_small)
-                ParticleDeviceType.RASPBERRY_PI -> Pair(R.string.raspberry, R.drawable.pi_vector)
-                ParticleDeviceType.P1 -> Pair(R.string.p1, R.drawable.p1_vector)
-                ParticleDeviceType.RED_BEAR_DUO -> Pair(R.string.red_bear_duo, R.drawable.red_bear_duo_vector)
-                ParticleDeviceType.ARGON,
-                ParticleDeviceType.A_SERIES -> Pair(R.string.product_name_argon, R.drawable.argon_vector)
-                ParticleDeviceType.BORON,
-                ParticleDeviceType.B_SERIES -> Pair(R.string.product_name_boron, R.drawable.boron_vector)
-                ParticleDeviceType.XENON,
-                ParticleDeviceType.X_SERIES -> Pair(R.string.product_name_xenon, R.drawable.xenon_vector)
-                else -> Pair(R.string.unknown, R.drawable.unknown_vector)
-            }
-            holder.modelName.setText(modelNameRes)
-            holder.productImage.setImageResource(productImageRes)
-
-            val (statusText, coloredDot) = getStatusTextAndColoredDot(device)
-            holder.statusTextWithIcon.text = statusText
-            holder.statusIcon.setImageResource(coloredDot)
-
-            if (device.isConnected) {
-                val animFade = AnimationUtils.loadAnimation(activity, R.anim.fade_in_out)
-                animFade.startOffset = (position * 1000).toLong()
-                holder.statusIcon.startAnimation(animFade)
-            }
+            holder.modelName.setText(device.deviceType!!.productName)
+            holder.productImage.setImageResource(device.deviceType!!.productImage)
 
             val ctx = holder.topLevel.context
             val name = if (truthy(device.name))
@@ -487,30 +461,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         fun getItem(position: Int): ParticleDevice {
             return devices[position]
-        }
-
-        private fun getStatusTextAndColoredDot(device: ParticleDevice): Pair<String, Int> {
-            val dot: Int
-            val msg: String
-            if (device.isFlashing) {
-                dot = R.drawable.device_flashing_dot
-                msg = ""
-
-            } else if (device.isConnected) {
-                if (device.isRunningTinker) {
-                    dot = R.drawable.online_dot
-                    msg = "Tinker"
-
-                } else {
-                    dot = R.drawable.online_non_tinker_dot
-                    msg = ""
-                }
-
-            } else {
-                dot = R.drawable.offline_dot
-                msg = ""
-            }
-            return Pair(msg, dot)
         }
     }
 

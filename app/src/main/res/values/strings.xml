@@ -64,15 +64,8 @@ Enjoy!]]></string>
     <string name="clipboard_copy_variable">Variable value was copied to the clipboard</string>
     <string name="clipboard_copy_iccid_msg">Device SIM ICCID was copied to the clipboard</string>
     <string name="clipboard_copy_event_msg">Event payload was copied to the clipboard</string>
-    <string name="core">Core</string>
-    <string name="electron">Electron</string>
-    <string name="photon">Photon</string>
-    <string name="unknown">Unknown</string>
-    <string name="raspberry">Raspberry Pi</string>
-    <string name="red_bear_duo">Red Bear Duo</string>
     <string name="bluz">Bluz</string>
     <string name="oak">Oak</string>
-    <string name="p1">P1</string>
     <string name="filters">Filters:</string>
     <string name="event">Event</string>
     <string name="data">Data</string>

@@ -6,12 +6,6 @@ import io.particle.mesh.setup.utils.isThisTheMainThread
 
 
 
-fun <T> liveDataWithInitialValue(initialValue: T): MutableLiveData<T> {
-    val ld = MutableLiveData<T>()
-    ld.value = initialValue
-    return ld
-}
-
 
 fun <T> MutableLiveData<T>.setOnMainThread(newValue: T) {
     if (isThisTheMainThread()) {

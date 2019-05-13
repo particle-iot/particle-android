@@ -1,5 +1,6 @@
 package io.particle.android.common
 
+import android.annotation.SuppressLint
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ fun <T, I> easyDiffUtilCallback(idFieldGetter: (T) -> I): DiffUtil.ItemCallback<
 
     return object: DiffUtil.ItemCallback<T>() {
 
+        @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
             return oldItem == newItem
         }
@@ -20,10 +22,4 @@ fun <T, I> easyDiffUtilCallback(idFieldGetter: (T) -> I): DiffUtil.ItemCallback<
         }
 
     }
-}
-
-
-fun inflateRow(parent: ViewGroup, @LayoutRes layoutId: Int): View {
-    val inflater = LayoutInflater.from(parent.context)
-    return inflater.inflate(layoutId, parent, false)
 }

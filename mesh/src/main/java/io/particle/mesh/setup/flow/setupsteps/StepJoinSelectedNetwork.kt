@@ -5,7 +5,7 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh.NetworkInfo
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.modules.meshsetup.MeshNetworkToJoin
+import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import kotlinx.coroutines.delay
 

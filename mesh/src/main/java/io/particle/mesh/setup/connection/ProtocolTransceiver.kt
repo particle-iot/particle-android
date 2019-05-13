@@ -4,10 +4,14 @@ import android.util.SparseArray
 import com.google.protobuf.AbstractMessage
 import com.google.protobuf.ByteString
 import com.google.protobuf.GeneratedMessageV3
+import io.particle.android.sdk.utils.UnknownEnumIntValueException
+import io.particle.android.sdk.utils.buildIntValueMap
 import io.particle.firmwareprotos.ctrl.Config.DeviceMode
 import io.particle.firmwareprotos.ctrl.Config.Feature
 import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdReply
 import io.particle.firmwareprotos.ctrl.Config.GetDeviceIdRequest
+import io.particle.firmwareprotos.ctrl.Config.GetFeatureReply
+import io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest
 import io.particle.firmwareprotos.ctrl.Config.GetNcpFirmwareVersionReply
 import io.particle.firmwareprotos.ctrl.Config.GetNcpFirmwareVersionRequest
 import io.particle.firmwareprotos.ctrl.Config.GetSerialNumberReply
@@ -71,6 +75,8 @@ import io.particle.firmwareprotos.ctrl.mesh.Mesh.StopCommissionerRequest
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Credentials
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkReply
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkRequest
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security
@@ -78,10 +84,6 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
-import io.particle.android.sdk.utils.UnknownEnumIntValueException
-import io.particle.android.sdk.utils.buildIntValueMap
-import io.particle.firmwareprotos.ctrl.Config.GetFeatureReply
-import io.particle.firmwareprotos.ctrl.Config.GetFeatureRequest
 import io.particle.mesh.setup.connection.ResultCode.Companion.toResultCode
 import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.Dispatchers
@@ -402,6 +404,11 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> GetSerialNumberReply.parseFrom(r.payloadData) }
     }
 
+    suspend fun sendGetCurrentWifiNetworkRequest(): Result<GetCurrentNetworkReply, ResultCode> {
+        val response = sendRequest(GetCurrentNetworkRequest.newBuilder().build())
+        return buildResult(response) { r -> GetCurrentNetworkReply.parseFrom(r.payloadData) }
+    }
+
     fun receiveResponse(responseFrame: DeviceResponse) {
         val callback = requestCallbacks[responseFrame.requestId.toInt()]
         if (callback != null) {
@@ -430,12 +437,15 @@ class ProtocolTransceiver internal constructor(
             return null
         }
 
-        val response = withTimeoutOrNull(timeout) {
-            suspendCoroutine { continuation: Continuation<DeviceResponse?> ->
-                doSendRequest(requestFrame) { continuation.resume(it) }
+        val response = try {
+            scopes.withWorker(timeout) {
+                suspendCoroutine { continuation: Continuation<DeviceResponse?> ->
+                    doSendRequest(requestFrame) { continuation.resume(it) }
+                }
             }
+        } catch (ex: Exception) {
+            null
         }
-
 
         val id = requestFrame.requestId.toInt()
         if (response == null) {

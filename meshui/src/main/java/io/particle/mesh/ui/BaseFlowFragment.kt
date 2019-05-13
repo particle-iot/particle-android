@@ -8,13 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.snakydesign.livedataextensions.first
+import com.snakydesign.livedataextensions.liveDataOf
+import com.snakydesign.livedataextensions.switchMap
 import io.particle.mesh.common.android.livedata.AbsentLiveData
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
-import io.particle.mesh.common.android.livedata.liveDataWithInitialValue
-import io.particle.mesh.common.android.livedata.switchMap
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.ui.utils.getResOrEmptyString
 import io.particle.mesh.ui.utils.getViewModel
+import mu.KotlinLogging
 
 
 data class TitleBarOptions(
@@ -31,6 +33,9 @@ interface TitleBarOptionsListener {
 
 abstract class BaseFlowFragment : Fragment() {
 
+    private val log = KotlinLogging.logger {}
+
+
     open val titleBarOptions = TitleBarOptions()
 
     val flowUiListener: FlowRunnerUiListener?
@@ -40,22 +45,25 @@ abstract class BaseFlowFragment : Fragment() {
     lateinit var flowRunner: MeshFlowRunner
     lateinit var flowSystemInterface: FlowRunnerSystemInterface
 
-    private val onActivityCreatedCalled: LiveData<Boolean?> = liveDataWithInitialValue(false)
-    private val onViewCreatedCalled: LiveData<Boolean?> = liveDataWithInitialValue(false)
+    private val onActivityCreatedCalled: LiveData<Boolean?> = liveDataOf(false)
+    private val onViewCreatedCalled: LiveData<Boolean?> = liveDataOf(false)
     private var onFragmentReadyCalled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // make a LiveData which notifies when both onActivityCreated AND onViewCreated
         // have been called, no matter what the order they're called in
-        onActivityCreatedCalled.switchMap {
-            if (it == true) onViewCreatedCalled else AbsentLiveData()
-        }.observe(this, Observer {
-            if (it == true && !onFragmentReadyCalled) {
-                onFragmentReadyCalled = true
-                onFragmentReady(activity!!, flowUiListener!!)
+        onActivityCreatedCalled
+            .switchMap {
+                if (it == true) onViewCreatedCalled else AbsentLiveData()
             }
-        })
+            .first()
+            .observe(this, Observer {
+                if (it == true && !onFragmentReadyCalled) {
+                    onFragmentReadyCalled = true
+                    onFragmentReady(activity!!, flowUiListener!!)
+                }
+            })
     }
 
     @CallSuper
@@ -81,6 +89,7 @@ abstract class BaseFlowFragment : Fragment() {
         super.onResume()
         val listener = (activity as TitleBarOptionsListener)
         listener.setTitleBarOptions(titleBarOptions)
+        log.info { "Resumed fragment: ${this::class.java.simpleName}" }
     }
 
     open fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {

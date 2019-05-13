@@ -6,27 +6,22 @@ import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply.Network
 import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.mesh.setup.flow.context.SetupContexts
 import io.particle.mesh.setup.flow.context.SetupDevice
-import io.particle.mesh.setup.flow.modules.cloudconnection.WifiNetworksScannerLD
-import io.particle.mesh.setup.flow.modules.cloudconnection.WifiScanData
-import io.particle.mesh.setup.flow.modules.meshsetup.TargetDeviceMeshNetworksScanner
+import io.particle.mesh.setup.flow.meshsetup.TargetDeviceMeshNetworksScanner
+import mu.KotlinLogging
 
 
-class FlowRunnerUiListener(
-    private val ctxs: SetupContexts
-) {
+class FlowRunnerUiListener(private val ctxs: SetupContexts) {
 
     val wifi = WifiData(ctxs)
     val deviceData = DeviceData(ctxs)
     val mesh = MeshData(ctxs)
     val cloud = CloudData(ctxs)
+    val cellular = CellularData(ctxs)
 
     val targetDevice: SetupDevice
         get() = ctxs.targetDevice
     val commissioner: SetupDevice
         get() = ctxs.commissioner
-    val singleTaskCongratsMessage: String
-        get() = ctxs.singleStepCongratsMessage
-
 
     fun setNetworkSetupType(setupType: NetworkSetupType) {
         ctxs.device.updateNetworkSetupType(setupType)
@@ -37,7 +32,17 @@ class FlowRunnerUiListener(
     }
 
     fun updateShouldConnectToDeviceCloudConfirmed(confirmed: Boolean) {
-       ctxs.cloud.updateShouldConnectToDeviceCloudConfirmed(confirmed)
+        ctxs.cloud.updateShouldConnectToDeviceCloudConfirmed(confirmed)
+    }
+
+}
+
+class CellularData(private val ctxs: SetupContexts) {
+
+    val newSelectedDataLimitLD: LiveData<Int?> = ctxs.cellular.newSelectedDataLimitLD
+
+    fun updateNewSelectedDataLimit(newLimit: Int) {
+        ctxs.cellular.updateNewSelectedDataLimit(newLimit)
     }
 
 }
@@ -49,7 +54,11 @@ class MeshData(private val ctxs: SetupContexts) {
     val networkCreatedOnLocalDeviceLD: LiveData<Boolean?> = ctxs.mesh.networkCreatedOnLocalDeviceLD
     val commissionerStartedLD: LiveData<Boolean?> = ctxs.mesh.commissionerStartedLD
     val targetJoinedMeshNetworkLD: LiveData<Boolean?> = ctxs.mesh.targetJoinedMeshNetworkLD
-    val showNewNetworkOptionInScanner = ctxs.mesh.showNewNetworkOptionInScanner
+    val showNewNetworkOptionInScanner
+        get() = ctxs.mesh.showNewNetworkOptionInScanner
+
+    val currentlyJoinedNetwork: Mesh.NetworkInfo?
+        get() = ctxs.mesh.currentlyJoinedNetwork
 
     fun getTargetDeviceVisibleMeshNetworksLD(): LiveData<List<Mesh.NetworkInfo>?> {
         return TargetDeviceMeshNetworksScanner(ctxs.targetDevice.transceiverLD, ctxs.scopes)
@@ -86,8 +95,12 @@ class DeviceData(private val ctxs: SetupContexts) {
 
     val networkSetupTypeLD: LiveData<NetworkSetupType?> = ctxs.device.networkSetupTypeLD
     val bleUpdateProgress: LiveData<Int?> = ctxs.device.bleOtaProgress
-    var shouldDetectEthernet = ctxs.device.shouldDetectEthernet
-    var firmwareUpdateCount = ctxs.device.firmwareUpdateCount
+    var shouldDetectEthernet: Boolean
+        get() = ctxs.device.shouldDetectEthernet
+        set(value) {
+            ctxs.device.shouldDetectEthernet = value
+        }
+    val firmwareUpdateCount get() = ctxs.device.firmwareUpdateCount
 
     fun updateUserConsentedToFirmwareUpdate(consented: Boolean) {
         ctxs.device.updateUserConsentedToFirmwareUpdate(consented)
@@ -99,7 +112,8 @@ class DeviceData(private val ctxs: SetupContexts) {
 class CloudData(private val ctxs: SetupContexts) {
 
     val targetDeviceNameToAssignLD: LiveData<String?> = ctxs.cloud.targetDeviceNameToAssignLD
-    val pricingImpact = ctxs.cloud.pricingImpact
+    val pricingImpact
+        get() = ctxs.cloud.pricingImpact
 
     fun updateTargetDeviceNameToAssign(name: String) {
         ctxs.cloud.updateTargetDeviceNameToAssign(name)

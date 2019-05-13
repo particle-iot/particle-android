@@ -4,20 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.MainThread
-import androidx.annotation.WorkerThread
-import io.particle.android.sdk.cloud.ParticleCloudSDK
-import io.particle.mesh.setup.SerialNumber
-import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.inflateFragment
 import kotlinx.android.synthetic.main.fragment_control_panel_wifi_options.*
-import mu.KotlinLogging
 
 
 class ControlPanelWifiOptionsFragment : BaseControlPanelFragment() {
-
-    private val log = KotlinLogging.logger {}
 
     override val titleBarOptions = TitleBarOptions(
         R.string.p_common_wifi,
@@ -30,39 +23,24 @@ class ControlPanelWifiOptionsFragment : BaseControlPanelFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_control_panel_wifi_options, container, false)
+        return container?.inflateFragment(R.layout.fragment_control_panel_wifi_options)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        p_controlpanel_wifi_join_new_network.setOnClickListener {
-            flowScopes.onMain { joinNewWifiClicked() }
+        p_controlpanel_wifi_join_new_network_frame.setOnClickListener { joinNewWifiClicked() }
+        p_controlpanel_wifi_inspect_current_network_frame.setOnClickListener {
+            inspectCurrentNetworkClicked()
         }
     }
 
-    @MainThread
-    private suspend fun joinNewWifiClicked() {
-        flowSystemInterface.showGlobalProgressSpinner(true)
-        val barcode = flowScopes.withWorker { fetchBarcodeData(deviceId) }
-        flowSystemInterface.showGlobalProgressSpinner(false)
-
-        flowRunner.startControlPanelWifiConfigFlow(deviceId, barcode)
+    private fun joinNewWifiClicked() {
+        flowScopes.onMain { startFlowWithBarcode(flowRunner::startControlPanelWifiConfigFlow) }
     }
 
-    @WorkerThread
-    private fun fetchBarcodeData(deviceId: String): CompleteBarcodeData {
-        val cloud = ParticleCloudSDK.getCloud()
-        val device = cloud.getDevice(deviceId)
-
-        val barcode = CompleteBarcodeData(
-            serialNumber = SerialNumber(device.serialNumber!!),
-            mobileSecret = device.mobileSecret!!
-        )
-
-        log.info { "built barcode: $barcode" }
-
-        return barcode
-
+    private fun inspectCurrentNetworkClicked() {
+        flowScopes.onMain {
+            startFlowWithBarcode(flowRunner::startControlPanelInspectCurrentWifiNetworkFlow)
+        }
     }
 }

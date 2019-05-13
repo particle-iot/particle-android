@@ -23,15 +23,15 @@ class NameYourDeviceFragment : BaseFlowFragment() {
         return inflater.inflate(R.layout.fragment_name_your_device, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
 
         setup_header_text.text = Phrase.from(view, R.string.p_namedevice_header)
             .put("product_type", getUserFacingTypeName())
             .format()
 
         // get the current name
-        val currentName = flowUiListener?.targetDevice?.currentDeviceName ?: ""
+        val currentName = flowUiListener.targetDevice.currentDeviceName ?: ""
 
         // set the current name on the field
         val nameField = deviceNameInputLayout.editText!!
@@ -43,11 +43,6 @@ class NameYourDeviceFragment : BaseFlowFragment() {
             val uniqueName = CoreNameGenerator.generateUniqueName(setOf())
             nameField.setText(uniqueName)
         }
-    }
-
-    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
-        super.onFragmentReady(activity, flowUiListener)
-
         action_next.setOnClickListener {
             val name = deviceNameInputLayout.editText!!.text.toString()
             this@NameYourDeviceFragment.flowUiListener?.cloud?.updateTargetDeviceNameToAssign(name)

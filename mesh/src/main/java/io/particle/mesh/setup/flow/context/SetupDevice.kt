@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.models.ParticleSim
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.common.logged
@@ -42,6 +43,7 @@ class SetupDevice(
     var shouldBeClaimed: Boolean? by log.logged()
     var currentDeviceName: String? by log.logged()
     var iccid: String? by log.logged()
+    var sim: ParticleSim? by log.logged()
 
     @WorkerThread
     fun updateBarcode(barcodeData: CompleteBarcodeData?, cloud: ParticleCloud) {

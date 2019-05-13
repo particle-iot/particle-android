@@ -13,16 +13,23 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
+import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.commonui.DeviceInfoBottomSheetController
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
 import mu.KotlinLogging
@@ -54,7 +61,12 @@ class InspectorActivity : BaseActivity() {
     }
 
     private lateinit var device: ParticleDevice
+    private val cloud = ParticleCloudSDK.getCloud()
     private val handler = Handler()
+
+    private lateinit var deviceInfoController: DeviceInfoBottomSheetController
+
+    private val scopes = Scopes()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +81,15 @@ class InspectorActivity : BaseActivity() {
 
         setupInspectorPages()
         handler.postDelayed(syncStatus, 1000 * 60L)
+
+        deviceInfoController = DeviceInfoBottomSheetController(
+            this,
+            scopes,
+            findViewById(R.id.device_info_bottom_sheet),
+            device,
+            null
+        )
+        deviceInfoController.initializeBottomSheet()
     }
 
     public override fun onResume() {
@@ -80,6 +101,14 @@ class InspectorActivity : BaseActivity() {
             //minor issue if we don't update online/offline states
         }
 
+        scopes.onWorker {
+            val owned = cloud.userOwnsDevice(device.id)
+            if (!owned) {
+                scopes.onMain { finish() }
+            } else {
+                device.refresh()
+            }
+        }
     }
 
     public override fun onPause() {
@@ -89,16 +118,23 @@ class InspectorActivity : BaseActivity() {
         } catch (ignore: ParticleCloudException) {
         }
 
+//        action_signal_device.isChecked = false
+
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scopes.cancelAll()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         when (id) {
             android.R.id.home -> finish()
-            R.id.action_event_publish -> presentPublishDialog()
+//            R.id.action_event_publish -> presentPublishDialog()
             R.id.action_launchcontrol_panel -> {
-                startActivity(ControlPanelActivity.buildIntent(this, device.id))
+                startActivity(ControlPanelActivity.buildIntent(this, device))
             }
             else -> {
                 val actionId = item.itemId
@@ -114,21 +150,23 @@ class InspectorActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.inspector, menu)
 
-        val type = device.deviceType
-        if (type === ParticleDeviceType.ARGON
-            || type === ParticleDeviceType.BORON
-            || type === ParticleDeviceType.XENON
-        ) {
-            menu.findItem(R.id.action_device_flash_tinker).isVisible = false
+        val menuRes = when (device.deviceType) {
+            ARGON, A_SERIES, BORON, B_SERIES, XENON, X_SERIES -> R.menu.inspector_gen3
+            else -> R.menu.inspector
         }
 
-        if (type !in listOf(ARGON, A_SERIES)) {
-            menu.findItem(R.id.action_launchcontrol_panel).isVisible = false
-        }
+        menuInflater.inflate(menuRes, menu)
 
         return true
+    }
+
+    override fun onBackPressed() {
+        if (deviceInfoController.sheetBehaviorState == BottomSheetBehavior.STATE_EXPANDED) {
+            deviceInfoController.sheetBehaviorState = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            super.onBackPressed()
+        }
     }
 
     @Subscribe
@@ -184,8 +222,8 @@ class InspectorActivity : BaseActivity() {
             .setPositiveButton(R.string.publish_positive_action) { _, _ ->
                 val nameView = Ui.findView<TextView>(publishDialogView, R.id.eventName)
                 val valueView = Ui.findView<TextView>(publishDialogView, R.id.eventValue)
-                val privateEventRadio =
-                    Ui.findView<RadioButton>(publishDialogView, R.id.privateEvent)
+                val privateEventRadio: RadioButton =
+                    Ui.findView(publishDialogView, R.id.privateEvent)
 
                 val name = nameView.text.toString()
                 val value = valueView.text.toString()
@@ -224,7 +262,6 @@ class InspectorActivity : BaseActivity() {
                         "' event", Toast.LENGTH_SHORT
             ).show()
         }
-
     }
 
 }

@@ -3,6 +3,8 @@ package io.particle.mesh.setup.flow.setupsteps
 import androidx.annotation.WorkerThread
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
+import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.FlowIntent.FIRST_TIME_SETUP
 import io.particle.mesh.setup.flow.FlowIntent.SINGLE_TASK_FLOW
@@ -15,7 +17,7 @@ import io.particle.mesh.setup.flow.context.SetupDevice
 import mu.KotlinLogging
 
 
-class StepDetermineFlowAfterPreflow : MeshSetupStep() {
+class StepDetermineFlowAfterPreflow(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     private val log = KotlinLogging.logger {}
 
@@ -33,11 +35,14 @@ class StepDetermineFlowAfterPreflow : MeshSetupStep() {
             return
         }
 
-        ctxs.currentFlow = determineRemainingFlow(ctxs)
+        ctxs.currentFlow = determineRemainingFlow(ctxs, scopes)
         throw ExpectedFlowException("Restarting flow to run new steps")
     }
 
-    private suspend fun determineRemainingFlow(ctxs: SetupContexts): List<FlowType> {
+    private suspend fun determineRemainingFlow(
+        ctxs: SetupContexts,
+        scopes: Scopes
+    ): List<FlowType> {
         ensureHasEthernetChecked(ctxs)
 
         val meshOnly = (ctxs.targetDevice.connectivityType == Gen3ConnectivityType.MESH_ONLY
@@ -55,10 +60,15 @@ class StepDetermineFlowAfterPreflow : MeshSetupStep() {
         }
 
         // if we get here, it's time to add the correct mesh network flow type & interface setup type
-        return addInterfaceSetupAndMeshNetworkFlows(ctxs)
+        return addInterfaceSetupAndMeshNetworkFlows(ctxs, scopes)
     }
 
-    private suspend fun addInterfaceSetupAndMeshNetworkFlows(ctxs: SetupContexts): List<FlowType> {
+    private suspend fun addInterfaceSetupAndMeshNetworkFlows(
+        ctxs: SetupContexts,
+        scopes: Scopes
+    ): List<FlowType> {
+        determineNetworkSetupType(ctxs, scopes)
+
         if (ctxs.device.networkSetupTypeLD.value!! == NetworkSetupType.NODE_JOINER) {
             return listOf(FlowType.JOINER_FLOW)
         }
@@ -69,6 +79,8 @@ class StepDetermineFlowAfterPreflow : MeshSetupStep() {
             STANDALONE -> FlowType.STANDALONE_POSTFLOW
             NODE_JOINER -> FlowType.JOINER_FLOW
         })
+
+        ctxs.meshNetworkFlowAdded = true
 
         return flows
     }
@@ -99,6 +111,16 @@ class StepDetermineFlowAfterPreflow : MeshSetupStep() {
 
         val interfaces = fetchInterfaceList(ctxs.targetDevice)
         ctxs.hasEthernet = null != interfaces.firstOrNull { it.type == InterfaceType.ETHERNET }
+    }
+
+    private suspend fun determineNetworkSetupType(ctxs: SetupContexts, scopes: Scopes) {
+        if (ctxs.device.networkSetupTypeLD.value != null) {
+            return
+        }
+
+        ctxs.device.networkSetupTypeLD.nonNull(scopes).runBlockOnUiThreadAndAwaitUpdate(scopes) {
+            flowUi.getNetworkSetupType()
+        }
     }
 
 }

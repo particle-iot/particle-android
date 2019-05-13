@@ -1,17 +1,16 @@
 package io.particle.mesh.bluetooth.scanning
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.snakydesign.livedataextensions.switchMap
 import io.particle.mesh.bluetooth.BluetoothAdapterState
 import io.particle.mesh.common.Predicate
 import io.particle.mesh.common.android.livedata.AbsentLiveData
-import io.particle.mesh.common.android.livedata.switchMap
-import io.particle.mesh.common.truthy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

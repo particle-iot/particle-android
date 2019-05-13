@@ -17,7 +17,8 @@ import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.buildIntValueMap
 import io.particle.android.sdk.utils.join
-import okio.Okio
+import okio.buffer
+import okio.source
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONException
 import org.json.JSONObject
@@ -60,6 +61,7 @@ class ParticleDevice internal constructor(
      */
     var name: String
         get() = deviceState.name ?: ""
+        @WorkerThread
         @Throws(ParticleCloudException::class)
         set(newName) {
             cloud.rename(this.deviceState.deviceId, newName)
@@ -87,7 +89,7 @@ class ParticleDevice internal constructor(
 
     /** Device firmware version string */
     val version: String?
-        get() = deviceState.version
+        get() = deviceState.systemFirmwareVersion
 
     val deviceType: ParticleDeviceType?
         get() = deviceState.deviceType
@@ -104,8 +106,11 @@ class ParticleDevice internal constructor(
     val imei: String?
         get() = deviceState.imei
 
-    val iccid: String?
+    val lastIccid: String?
         get() = deviceState.lastIccid
+
+    val iccid: String?
+        get() = deviceState.iccid
 
     val currentBuild: String?
         get() = deviceState.currentBuild
@@ -130,6 +135,18 @@ class ParticleDevice internal constructor(
 
     val mobileSecret: String?
         get() = deviceState.mobileSecret
+
+    var notes: String?
+        get() = deviceState.notes
+        @WorkerThread
+        @Throws(ParticleCloudException::class)
+        set(newNote) {
+            try {
+                mainApi.setDeviceNote(id, newNote ?: "")
+            } catch (e: RetrofitError) {
+                throw ParticleCloudException(e)
+            }
+        }
 
     val isRunningTinker: Boolean
         get() {
@@ -214,8 +231,10 @@ class ParticleDevice internal constructor(
         TINKER("tinker")
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Deprecated: field no longer available from the Particle devices API")
     fun requiresUpdate(): Boolean {
-        return deviceState.requiresUpdate ?: false
+        return false
     }
 
     @WorkerThread
@@ -450,7 +469,7 @@ class ParticleDevice internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class, IOException::class)
     fun flashBinaryFile(stream: InputStream) {
-        val bytes = Okio.buffer(Okio.source(stream)).readByteArray()
+        val bytes = stream.source().buffer().readByteArray()
         performFlashingChange { mainApi.flashFile(deviceState.deviceId, TypedFakeFile(bytes)) }
     }
 
@@ -469,7 +488,7 @@ class ParticleDevice internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class, IOException::class)
     fun flashCodeFile(stream: InputStream) {
-        val bytes = Okio.buffer(Okio.source(stream)).readByteArray()
+        val bytes = stream.source().buffer().readByteArray()
         performFlashingChange {
             mainApi.flashFile(
                 deviceState.deviceId,
@@ -587,6 +606,26 @@ class ParticleDevice internal constructor(
             throw ParticleCloudException(e)
         }
     }
+
+    /**
+     * Ping the device, updating its online/offline state
+     *
+     * @return true if online, else false
+     */
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun pingDevice(): Boolean {
+        try {
+            val response = mainApi.pingDevice(deviceState.deviceId, "requisite_put_body")
+
+            // FIXME: update device state here after switching to Kotlin
+
+            return response.online
+        } catch (e: RetrofitError) {
+            throw ParticleCloudException(e)
+        }
+    }
+
 
     private fun sendSystemEventBroadcast(deviceStateChange: DeviceStateChange, eventBus: EventBus) {
         cloud.sendSystemEventBroadcast(deviceStateChange)
