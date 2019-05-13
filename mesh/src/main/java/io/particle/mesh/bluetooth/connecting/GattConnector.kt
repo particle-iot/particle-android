@@ -72,7 +72,6 @@ class GattConnector(private val ctx: Context) {
         log.info { "About to connect to $device" }
         val gattRef = device.connectGatt(ctx.applicationContext, false, liveDataCallbacks)
         log.info { "Called connectGatt for $gattRef" }
-
         liveDataCallbacks.connectionStateChangedLD
             .filter { it == ConnectionState.CONNECTED }
             .first()

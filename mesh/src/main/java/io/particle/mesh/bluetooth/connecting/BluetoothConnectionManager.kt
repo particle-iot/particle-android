@@ -1,9 +1,6 @@
 package io.particle.mesh.bluetooth.connecting
 
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothGatt
-import android.bluetooth.BluetoothGattCharacteristic
-import android.bluetooth.BluetoothGattService
+import android.bluetooth.*
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.MainThread
