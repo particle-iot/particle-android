@@ -6,9 +6,6 @@ import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.context.SetupContexts
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withTimeoutOrNull
 
 
 class StepConnectToTargetDevice(
@@ -27,15 +24,12 @@ class StepConnectToTargetDevice(
             ctxs.ble.connectingToTargetUiShown = true
         }
 
-        val transceiver: ProtocolTransceiver? = withTimeoutOrNull(12000) {
-            val deferred: Deferred<ProtocolTransceiver?> = scopes.mainThreadScope.async {
-                try {
-                    return@async deviceConnector.connect(ctxs.targetDevice.barcode.value!!, "target", scopes)
-                } catch (ex: Exception) {
-                    return@async null
-                }
+        val transceiver: ProtocolTransceiver? = scopes.withMain(12000) {
+            try {
+                deviceConnector.connect(ctxs.targetDevice.barcode.value!!, "target", scopes)
+            } catch (ex: Exception) {
+                null
             }
-            return@withTimeoutOrNull deferred.await()
         }
 
         if (transceiver == null) {

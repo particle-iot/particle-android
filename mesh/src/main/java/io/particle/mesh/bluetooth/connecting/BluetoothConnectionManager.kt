@@ -36,13 +36,13 @@ enum class ConnectionPriority(val sdkVal: Int) {
 
 
 class BluetoothConnection(
-        private val connectionStateChangedLD: LiveData<ConnectionState?>,
-        private val gatt: BluetoothGatt,
-        private val callbacks: BLELiveDataCallbacks,
-        // this channel receives arbitrary-length arrays (not limited to BLE MTU)
-        val packetSendChannel: SendChannel<ByteArray>,
-        // this channel emits arbitrary-length arrays (not limited to BLE MTU)
-        private val closablePacketReceiveChannel: Channel<ByteArray>
+    private val connectionStateChangedLD: LiveData<ConnectionState?>,
+    private val gatt: BluetoothGatt,
+    private val callbacks: BLELiveDataCallbacks,
+    // this channel receives arbitrary-length arrays (not limited to BLE MTU)
+    val packetSendChannel: SendChannel<ByteArray>,
+    // this channel emits arbitrary-length arrays (not limited to BLE MTU)
+    private val closablePacketReceiveChannel: Channel<ByteArray>
 ) {
 
     init {
@@ -68,10 +68,10 @@ class BluetoothConnection(
 
     fun disconnect(closeGatt: Boolean = true) {
         QATool.runSafely(
-                { packetSendChannel.close() },
-                { closablePacketReceiveChannel.close() },
-                { callbacks.closeChannel() },
-                { gatt.disconnect() }
+            { packetSendChannel.close() },
+            { closablePacketReceiveChannel.close() },
+            { callbacks.closeChannel() },
+            { gatt.disconnect() }
         )
 
         if (!closeGatt) {
@@ -117,7 +117,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         // 1. Attempt to connect
         val device = ctx.btAdapter.getRemoteDevice(address)
         // If this returns null, we're finished, return null ourselves
-        val (gatt, bleWriteChannel, callbacks) = doConnectToDevice(device) ?: return null
+        val (gatt, bleWriteChannel, callbacks) = doConnectToDevice(device, scopes) ?: return null
 
 
         val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
@@ -128,11 +128,11 @@ class BluetoothConnectionManager(private val ctx: Context) {
         }
 
         val conn = BluetoothConnection(
-                callbacks.connectionStateChangedLD,
-                gatt,
-                callbacks,
-                messageWriteChannel,
-                callbacks.readOrChangedReceiveChannel as Channel<ByteArray>
+            callbacks.connectionStateChangedLD,
+            gatt,
+            callbacks,
+            messageWriteChannel,
+            callbacks.readOrChangedReceiveChannel as Channel<ByteArray>
         )
         // this is the default, but ensure that the OS isn't remembering it from the
         // previous connection to the device
@@ -147,22 +147,24 @@ class BluetoothConnectionManager(private val ctx: Context) {
     ): BTDeviceAddress? {
         log.info { "entering scanForDevice()" }
         val scannerSuspender = buildMatchingDeviceNameSuspender(ctx, deviceName)
-        val scanResult = withTimeoutOrNull(timeout) {
-            val withMain = scopes.mainThreadScope.async {
-                return@async scannerSuspender.awaitResult()
+        val scanResult = scopes.withMain(timeout) {
+            try {
+                scannerSuspender.awaitResult()
+            } catch (ex: Exception) {
+                null
             }
-            return@withTimeoutOrNull withMain.await()
         }
         log.info { "Address from scan result: ${scanResult?.device?.address}" }
         return scanResult?.device?.address
     }
 
     private suspend fun doConnectToDevice(
-            device: BluetoothDevice
+        device: BluetoothDevice,
+        scopes: Scopes
     ): Triple<BluetoothGatt, BTCharacteristicWriter, BLELiveDataCallbacks>? {
         val gattConnectionCreator = GattConnector(ctx)
         log.info { "Creating connection to device $device" }
-        val gattAndCallbacks = gattConnectionCreator.createGattConnection(device)
+        val gattAndCallbacks = gattConnectionCreator.createGattConnection(device, scopes)
 
         if (gattAndCallbacks == null) {
             log.warn { "Got nothing back from connection creation attempt!!" }
@@ -172,7 +174,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         log.info { "Got GATT and callbacks!" }
         val (gatt, callbacks) = gattAndCallbacks
 
-        val services = discoverServices(gatt, callbacks)
+        val services = discoverServices(gatt, callbacks, scopes)
         if (!services.truthy()) {
             log.warn { "Service discovery failed!" }
             return null
@@ -185,19 +187,20 @@ class BluetoothConnectionManager(private val ctx: Context) {
         }
 
         val bleWriteChannel = BTCharacteristicWriter(
-                gatt,
-                writeCharacteristic,
-                callbacks.onCharacteristicWriteCompleteLD
+            gatt,
+            writeCharacteristic,
+            callbacks.onCharacteristicWriteCompleteLD
         )
         return Triple(gatt, bleWriteChannel, callbacks)
     }
 
     private suspend fun discoverServices(
-            gatt: BluetoothGatt,
-            btCallbacks: BLELiveDataCallbacks
+        gatt: BluetoothGatt,
+        btCallbacks: BLELiveDataCallbacks,
+        scopes: Scopes
     ): List<BluetoothGattService>? {
         log.debug { "Discovering services" }
-        val discoverer = ServiceDiscoverer(btCallbacks, gatt)
+        val discoverer = ServiceDiscoverer(btCallbacks, gatt, scopes)
         val services = discoverer.discoverServices()
         log.debug { "Discovering services: DONE" }
 
@@ -207,10 +210,10 @@ class BluetoothConnectionManager(private val ctx: Context) {
     private fun initCharacteristics(gatt: BluetoothGatt): BluetoothGattCharacteristic? {
         log.debug { "Initializing characteristics" }
         val subscriber = CharacteristicSubscriber(
-                gatt,
-                BT_SETUP_SERVICE_ID,
-                BT_SETUP_RX_CHARACTERISTIC_ID,
-                BT_SETUP_TX_CHARACTERISTIC_ID
+            gatt,
+            BT_SETUP_SERVICE_ID,
+            BT_SETUP_RX_CHARACTERISTIC_ID,
+            BT_SETUP_TX_CHARACTERISTIC_ID
         )
         // return write characteristic
         return subscriber.subscribeToReadAndReturnWrite()

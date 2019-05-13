@@ -183,6 +183,7 @@
             android:textSize="@dimen/text_size_medium" />
 
         <TextView
+            android:id="@+id/textView12"
             fontPath="@string/bold_text_font_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -10,7 +10,7 @@ import com.snakydesign.livedataextensions.first
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.common.android.SimpleLifecycleOwner
-import kotlinx.coroutines.withTimeoutOrNull
+import io.particle.mesh.setup.flow.Scopes
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.Continuation
@@ -18,7 +18,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
-private val INITIAL_CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(10)
+private val INITIAL_CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(5)
 
 
 class GattConnector(private val ctx: Context) {
@@ -28,19 +28,24 @@ class GattConnector(private val ctx: Context) {
     private val log = KotlinLogging.logger {}
 
     suspend fun createGattConnection(
-            device: BluetoothDevice
+            device: BluetoothDevice,
+            scopes: Scopes
     ): Pair<BluetoothGatt, BLELiveDataCallbacks>? {
         lifecycleOwner.setNewState(Lifecycle.State.RESUMED)
 
         this.ctx.btAdapter.cancelDiscovery()
 
         val callbacks = BLELiveDataCallbacks()
-        val gatt = withTimeoutOrNull(INITIAL_CONNECTION_TIMEOUT) {
-            doCreateGattConnection(device, ctx, callbacks)
+        val gatt = try {
+            scopes.withMain(INITIAL_CONNECTION_TIMEOUT) {
+                doCreateGattConnection(device, ctx, callbacks)
+            }
+        } catch (ex: Exception) {
+            return null
         }
 
         try {
-            return if (gatt == null) null else Pair(gatt, callbacks)
+            return Pair(gatt, callbacks)
         } finally {
             lifecycleOwner.setNewState(Lifecycle.State.DESTROYED)
             callbacks.connectionStateChangedLD.removeObservers(lifecycleOwner)

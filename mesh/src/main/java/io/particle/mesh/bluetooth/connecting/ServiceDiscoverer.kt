@@ -9,6 +9,7 @@ import androidx.annotation.MainThread
 import io.particle.mesh.bluetooth.GATTStatusCode
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.common.android.SimpleLifecycleOwner
+import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -18,12 +19,13 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.coroutines.resume
 
 
-private val TIMEOUT = TimeUnit.SECONDS.toMillis(10)
+private val TIMEOUT = TimeUnit.SECONDS.toMillis(5)
 
 
 class ServiceDiscoverer(
-        private val observables: BLELiveDataCallbacks,
-        private val gatt: BluetoothGatt
+    private val observables: BLELiveDataCallbacks,
+    private val gatt: BluetoothGatt,
+    private val scopes: Scopes
 ) {
 
     // this lifecycleOwner exists just so we can cancel the observer used below
@@ -35,10 +37,10 @@ class ServiceDiscoverer(
     @CheckResult
     suspend fun discoverServices(): List<BluetoothGattService>? {
         lifecycleOwner.setNewState(Lifecycle.State.RESUMED)
-        try {
-            return withTimeoutOrNull(TIMEOUT) {
-                doDiscoverServices()
-            }
+        return try {
+            scopes.withMain(TIMEOUT) { doDiscoverServices() }
+        } catch (ex: Exception) {
+            null
         } finally {
             lifecycleOwner.setNewState(Lifecycle.State.DESTROYED)
         }
@@ -51,14 +53,14 @@ class ServiceDiscoverer(
     }
 
     private fun doDiscoverServices(callback: (List<BluetoothGattService>?) -> Unit) {
-        log.debug{ "Starting doDiscoverServices()" }
+        log.debug { "Starting doDiscoverServices()" }
         observables.onServicesDiscoveredLD.observe(lifecycleOwner,
-                Observer {
-                    log.debug { "Services discovered status updated: $it" }
-                    if (it == GATTStatusCode.SUCCESS) {
-                        callback(gatt.services)
-                    }
+            Observer {
+                log.debug { "Services discovered status updated: $it" }
+                if (it == GATTStatusCode.SUCCESS) {
+                    callback(gatt.services)
                 }
+            }
         )
         gatt.discoverServices()
     }
