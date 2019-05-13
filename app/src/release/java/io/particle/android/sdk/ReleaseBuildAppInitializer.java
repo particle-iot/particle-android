@@ -52,8 +52,8 @@ public class ReleaseBuildAppInitializer {
 
             @Override
             public void doReport(@NotNull Throwable exception) {
+                Log.e("Particle error reported", "Error: ", exception);
                 if (coveredByGDPR) {
-                    Log.e("Particle", "Error: ", exception);
                     return;
                 }
                 Crashlytics.logException(exception);
@@ -61,8 +61,8 @@ public class ReleaseBuildAppInitializer {
 
             @Override
             public void doLog(@NotNull String msg) {
+                Log.e("Particle", msg);
                 if (coveredByGDPR) {
-                    Log.e("Particle", msg);
                     return;
                 }
                 Crashlytics.log(msg);
