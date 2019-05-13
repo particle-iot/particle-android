@@ -10,6 +10,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.inflateFragment
@@ -41,10 +42,11 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
         }
 
         p_controlpanel_cellular_options_change_sim_status.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_global_controlPanelSimStatusChangeFragment,
-                ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.UNPAUSE).toBundle()
-            )
+            activity.safeToast("SIM actions are temporarily out of order: these will be available in the next release")
+//            findNavController().navigate(
+//                R.id.action_global_controlPanelSimStatusChangeFragment,
+//                ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.DEACTIVATE).toBundle()
+//            )
         }
     }
 
