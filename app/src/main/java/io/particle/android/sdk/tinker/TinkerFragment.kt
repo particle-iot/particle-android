@@ -225,52 +225,32 @@ class TinkerFragment : Fragment(), OnClickListener {
                 allPins.add(Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", noAnalogWrite))
                 allPins.add(Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", noAnalogWrite))
                 allPins.add(Pin(findPinView(R.id.tinker_a2), PinType.A, "A2", noAnalogWrite))
-                allPins.add(
-                    Pin(
-                        findPinView(R.id.tinker_a3),
-                        PinType.A,
-                        "A3",
-                        allFunctionsDAC,
-                        "A3",
-                        ANALOG_WRITE_MAX_ALT
-                    )
-                )
+                allPins.add(Pin(findPinView(R.id.tinker_a3), PinType.A, "A3", allFunctionsDAC, "A3", ANALOG_WRITE_MAX_ALT))
+
                 // (II) Analog write duplicated to value in D3 (mention in UI)
                 allPins.add(Pin(findPinView(R.id.tinker_a4), PinType.A, "A4", allFunctions))
+
                 // (I) Analog write duplicated to value in D2 (mention in UI)
                 allPins.add(Pin(findPinView(R.id.tinker_a5), PinType.A, "A5", allFunctions))
-                allPins.add(
-                    Pin(
-                        findPinView(R.id.tinker_a6),
-                        PinType.A,
-                        "A6",
-                        allFunctionsDAC,
-                        "DAC",
-                        ANALOG_WRITE_MAX_ALT
-                    )
-                )
-                allPins.add(
-                    Pin(
-                        findPinView(R.id.tinker_a7),
-                        PinType.A,
-                        "A7",
-                        allFunctions,
-                        "WKP",
-                        ANALOG_WRITE_MAX
-                    )
-                )
+
+                allPins.add(Pin(findPinView(R.id.tinker_a6), PinType.A, "A6", allFunctionsDAC, "DAC", ANALOG_WRITE_MAX_ALT))
+                allPins.add(Pin(findPinView(R.id.tinker_a7), PinType.A, "A7", allFunctions, "WKP", ANALOG_WRITE_MAX))
 
                 allPins.add(Pin(findPinView(R.id.tinker_d0), PinType.D, "D0", noAnalogRead))
                 allPins.add(Pin(findPinView(R.id.tinker_d1), PinType.D, "D1", noAnalogRead))
                 allPins.add(Pin(findPinView(R.id.tinker_d2), PinType.D, "D2", noAnalogRead))
+
                 // (II) Analog write duplicated to value in A3 (mention in UI)
                 allPins.add(Pin(findPinView(R.id.tinker_d3), PinType.D, "D3", noAnalogRead))
+
                 // (II) Analog write duplicated to value in A4 (mention in UI)
                 allPins.add(Pin(findPinView(R.id.tinker_d4), PinType.D, "D4", digitalOnly))
+
                 allPins.add(Pin(findPinView(R.id.tinker_d5), PinType.D, "D5", digitalOnly))
                 allPins.add(Pin(findPinView(R.id.tinker_d6), PinType.D, "D6", digitalOnly))
                 allPins.add(Pin(findPinView(R.id.tinker_d7), PinType.D, "D7", digitalOnly))
             }
+            
             else -> {
                 val allFunctionsDAC = EnumSet.of(
                     PinAction.ANALOG_READ,
