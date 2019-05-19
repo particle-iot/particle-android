@@ -38,7 +38,7 @@ internal class Pin(
 ) {
     internal val functions: Set<PinAction>
 
-    private var configuredAction: PinAction
+    var configuredAction: PinAction
     private var pinBackgroundAnim: ObjectAnimator? = null
     private var endAnimation: Animator? = null
 

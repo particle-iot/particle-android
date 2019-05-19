@@ -83,10 +83,10 @@ class TinkerFragment : Fragment(), OnClickListener {
         setHasOptionsMenu(true)
 
         prefs = Prefs.getInstance(activity)
-        if (savedInstanceState != null) {
-            device = savedInstanceState.getParcelable(STATE_DEVICE)
+        device = if (savedInstanceState != null) {
+            savedInstanceState.getParcelable(STATE_DEVICE)
         } else {
-            device = arguments!!.getParcelable(ARG_DEVICE)
+            arguments!!.getParcelable(ARG_DEVICE)
         }
         api = TinkerApi()
     }
@@ -102,6 +102,7 @@ class TinkerFragment : Fragment(), OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadViews()
+        unmutePins()  // hack to make the pins show their functions correctly on first load
         setupListeners()
 
         if (TinkerPrefs.getInstance(activity).isFirstVisit) {
@@ -149,6 +150,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                 pin.configuredAction = PinAction.NONE
                 pin.reset()
             }
+            unmutePins()
             return true
 
         } else {
@@ -575,23 +577,25 @@ class TinkerFragment : Fragment(), OnClickListener {
     private fun doAnalogWrite(pin: Pin) {
         mutePinsExcept(pin)
         toggleViewVisibilityWithFade(R.id.tinker_logo, false)
-        pin.showAnalogWrite { value ->
-            for (pin1 in allPins) {
-                if (pin1.isAnalogWriteMode) {
-                    pin1.showAnalogWriteValue()
+        pin.showAnalogWrite( object : OnAnalogWriteListener {
+            override fun onAnalogWrite(value: Int) {
+                for (pin1 in allPins) {
+                    if (pin1.isAnalogWriteMode) {
+                        pin1.showAnalogWriteValue()
+                    }
                 }
+                unmutePins()
+                hideTinkerSelect()
+                pin.animateYourself()
+                pin.showAnalogValue(value)
+                api!!.write(PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.analogValue), value)
             }
-            unmutePins()
-            hideTinkerSelect()
-            pin.animateYourself()
-            pin.showAnalogValue(value)
-            api!!.write(PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.analogValue), value)
-        }
+        })
     }
 
     private fun doDigitalRead(pin: Pin) {
         pin.animateYourself()
-        api!!.read(PinStuff(pin.name, PinAction.DIGITAL_READ, pin.digitalValue.intValue))
+        api!!.read(PinStuff(pin.name, PinAction.DIGITAL_READ, pin.digitalValue!!.intValue))
         // pin.showDigitalRead(DigitalValue.HIGH);
     }
 
@@ -603,7 +607,7 @@ class TinkerFragment : Fragment(), OnClickListener {
         else
             DigitalValue.HIGH
         api!!.write(
-            PinStuff(pin.name, PinAction.DIGITAL_WRITE, currentValue.intValue),
+            PinStuff(pin.name, PinAction.DIGITAL_WRITE, currentValue!!.intValue),
             newValue.intValue
         )
         // pin.showDigitalWrite(newValue);
@@ -729,40 +733,28 @@ class TinkerFragment : Fragment(), OnClickListener {
         }
     }
 
-
-    // FIXME: rename to something more descriptive
-    private class PinStuff internal constructor(
-        internal val pinName: String,
-        internal val pinAction: PinAction,
-        internal val currentValue: Int
-    ) {
-
-        override fun toString(): String {
-            return "PinStuff{" +
-                    "pinName='" + pinName + '\''.toString() +
-                    ", pinAction=" + pinAction +
-                    ", currentValue=" + currentValue +
-                    '}'.toString()
-        }
-    }
-
-
-    // Doing this as a fragment because I ran into touch issues doing it as just a view,
-    // and because this gives us back button support at no additional charge.
-    class InstructionsFragment : Fragment() {
-
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            val v = inflater.inflate(R.layout.tinker_instructions, container, false)
-            v.setOnClickListener {
-                TinkerPrefs.getInstance(activity).setVisited(true)
-                activity!!.supportFragmentManager.popBackStack()
-            }
-            return v
-        }
-    }
-
 }
 
+private data class PinStuff(
+    val pinName: String,
+    val pinAction: PinAction,
+    val currentValue: Int
+)
+
+
+// Doing this as a fragment because I ran into touch issues doing it as just a view,
+// and because this gives us back button support at no additional charge.
+class InstructionsFragment : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val v = inflater.inflate(R.layout.tinker_instructions, container, false)
+        v.setOnClickListener {
+            TinkerPrefs.getInstance(activity).setVisited(true)
+            activity!!.supportFragmentManager.popBackStack()
+        }
+        return v
+    }
+}
