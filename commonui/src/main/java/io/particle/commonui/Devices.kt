@@ -4,10 +4,10 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
@@ -17,7 +17,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 
 
 val ParticleDeviceType.productImage: Int
@@ -46,13 +46,13 @@ private val ParticleDeviceType.productImageAndName: ProductImageAndName
             RED_BEAR_DUO -> pin(R.string.product_name_red_bear_duo, R.drawable.product_image_red_bear_duo)
 
             ARGON,
-            A_SERIES -> pin(R.string.product_name_argon, R.drawable.product_image_argon)
+            A_SOM -> pin(R.string.product_name_argon, R.drawable.product_image_argon)
 
             BORON,
-            B_SERIES -> pin(R.string.product_name_boron, R.drawable.product_image_boron)
+            B_SOM -> pin(R.string.product_name_boron, R.drawable.product_image_boron)
 
             XENON,
-            X_SERIES -> pin(R.string.product_name_xenon, R.drawable.product_image_xenon)
+            X_SOM -> pin(R.string.product_name_xenon, R.drawable.product_image_xenon)
 
             // ALL OTHERS
             BLUZ,
