@@ -71,6 +71,7 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
         private set
 
     fun initialize(flowUiDelegate: FlowUiDelegate) {
+
         flowRunner = buildFlowManager(
             app,
             ParticleCloudSDK.getCloud(),

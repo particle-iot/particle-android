@@ -86,8 +86,7 @@ class InspectorActivity : BaseActivity() {
             this,
             scopes,
             findViewById(R.id.device_info_bottom_sheet),
-            device,
-            null
+            device
         )
         deviceInfoController.initializeBottomSheet()
     }
@@ -174,13 +173,19 @@ class InspectorActivity : BaseActivity() {
         //update device and UI
         //TODO update more fields
         this.device = device
-        runOnUiThread { title = device.name }
+        runOnUiThread {
+            title = device.name
+            deviceInfoController.updateDeviceDetails()
+        }
     }
 
     @Subscribe
     fun onEvent(deviceStateChange: DeviceStateChange) {
         //reload menu to display online/offline
         invalidateOptionsMenu()
+        runOnUiThread {
+            deviceInfoController.updateDeviceDetails()
+        }
     }
 
     private fun setupInspectorPages() {

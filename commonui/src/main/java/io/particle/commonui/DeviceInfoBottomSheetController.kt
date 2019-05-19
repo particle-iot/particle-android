@@ -10,6 +10,8 @@ import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import io.particle.android.sdk.cloud.ParticleCloudSDK
@@ -18,10 +20,10 @@ import io.particle.commonui.MutatorOp.FADE
 import io.particle.commonui.MutatorOp.RESIZE_HEIGHT
 import io.particle.commonui.MutatorOp.RESIZE_WIDTH
 import io.particle.commonui.ShownWhen.EXPANDED
-import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.setup.flow.Scopes
 import kotlinx.android.synthetic.main.view_device_info.view.*
 import mu.KotlinLogging
+import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 
 
@@ -29,9 +31,7 @@ class DeviceInfoBottomSheetController(
     private val activity: AppCompatActivity,
     private val scopes: Scopes,
     private val root: ConstraintLayout,
-    private val device: ParticleDevice,
-    // FIXME: use a simpler interface here
-    private val systemInterface: FlowRunnerSystemInterface?
+    var device: ParticleDevice
 ) {
 
     var sheetBehaviorState: Int
@@ -52,10 +52,6 @@ class DeviceInfoBottomSheetController(
                 updateDeviceDetails()
             }
 
-            override fun onPause(owner: LifecycleOwner) {
-                updateNotesIfNeeded()
-            }
-
             override fun onStop(owner: LifecycleOwner) {
                 root.action_signal_device.isChecked = false
             }
@@ -66,6 +62,14 @@ class DeviceInfoBottomSheetController(
         root.action_device_rename.setOnClickListener {
             RenameHelper.renameDevice(activity, device)
         }
+        root.action_edit_device_notes.setOnClickListener {
+            val liveData = MutableLiveData<String>()
+            DeviceNotesDelegate.editDeviceNotes(activity, device, scopes, liveData)
+            liveData.observe(activity, Observer {
+                root.notes.setText(it)
+            })
+        }
+
         val toggleOnTapListener = View.OnClickListener {
             when (behavior.state) {
                 BottomSheetBehavior.STATE_EXPANDED -> {
@@ -92,27 +96,11 @@ class DeviceInfoBottomSheetController(
         root.device_id.text = device.id.toUpperCase()
         root.serial.text = device.serialNumber
         root.os_version.text = device.version ?: "(Unknown)"
-        root.last_handshake.text = lastHeardDateFormat.format(device.lastHeard)
+        root.last_handshake.text = device.lastHeard?.let { lastHeardDateFormat.format(it) } ?: "(Unknown)"
         // FIXME: add notes editing functionality
         root.notes.setText(device.notes)
 
         setUpStatusDotAndText(device.isConnected)
-    }
-
-    private fun updateNotesIfNeeded() {
-        val notesInUi = root.notes.text.toString()
-        if (notesInUi == device.notes) {
-            return
-        }
-
-        scopes.onWorker {
-            try {
-                device.notes = notesInUi
-            } catch (ex: Exception) {
-                // FIXME: provide user feedback re: failure to update notes?
-                log.error(ex) { "Error while trying to update device notes" }
-            }
-        }
     }
 
     private fun initAnimations() {
@@ -212,10 +200,11 @@ class DeviceInfoBottomSheetController(
     }
 
     private fun onSignalSwitchChanged(button: CompoundButton?, isChecked: Boolean) {
-        shouldDeviceSignal(isChecked)
+        shouldDeviceSignal(button, isChecked)
     }
 
-    private fun shouldDeviceSignal(shouldSignal: Boolean) {
+    private fun shouldDeviceSignal(button: CompoundButton?, shouldSignal: Boolean) {
+        val buttonRef = WeakReference(button)
         val deviceId = device.id
         scopes.onWorker {
             val cloud = ParticleCloudSDK.getCloud()
@@ -224,6 +213,9 @@ class DeviceInfoBottomSheetController(
                 device.startStopSignaling(shouldSignal)
             } catch (ex: Exception) {
                 log.error(ex) { "Error turning rainbows ${if (shouldSignal) "ON" else "OFF"}" }
+                scopes.onMain {
+                    buttonRef.get()?.isChecked = false
+                }
             }
         }
     }
