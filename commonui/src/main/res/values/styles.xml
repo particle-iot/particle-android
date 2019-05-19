@@ -8,7 +8,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textAppearance">@style/p_ParticleText</item>
-        <!-- FIXME: why don't these work? -->
         <item name="buttonStyle">@style/p_mesh_button_style</item>
         <item name="android:buttonStyle">@style/p_mesh_button_style</item>
     </style>

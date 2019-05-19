@@ -12,4 +12,3 @@ fun Context.readRawResourceBytes(@RawRes resId: Int): ByteArray {
         it.readByteArray()
     }
 }
-}

@@ -40,8 +40,6 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
     override val titleBarOptions = TitleBarOptions(R.string.p_controlpanel_control_panel)
 
-    override val showDeviceInfoSlider: Boolean = true
-
     private lateinit var cloud: ParticleCloud
 
 
