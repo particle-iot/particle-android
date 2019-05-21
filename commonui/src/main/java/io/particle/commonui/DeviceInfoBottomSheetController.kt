@@ -20,7 +20,9 @@ import io.particle.commonui.MutatorOp.FADE
 import io.particle.commonui.MutatorOp.RESIZE_HEIGHT
 import io.particle.commonui.MutatorOp.RESIZE_WIDTH
 import io.particle.commonui.ShownWhen.EXPANDED
+import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.toConnectivityType
 import kotlinx.android.synthetic.main.view_device_info.view.*
 import mu.KotlinLogging
 import java.lang.ref.WeakReference
@@ -84,7 +86,36 @@ class DeviceInfoBottomSheetController(
         root.collapsed_expander.setOnClickListener(toggleOnTapListener)
         root.action_ping_device.setOnClickListener { onPingClicked() }
 
+        if (device.deviceType!!.toConnectivityType() != Gen3ConnectivityType.CELLULAR) {
+            root.iccid_wrapper.isVisible = false
+            root.data_usage_wrapper.isVisible = false
+            root.data_limit_wrapper.isVisible = false
+        } else {
+            initCellularDataFields()
+        }
+
         initAnimations()
+    }
+
+    private fun initCellularDataFields() {
+        scopes.onWorker {
+            val dataUsage: Float
+            val dataLimit: Int?
+            try {
+                dataUsage = device.getCurrentDataUsage()
+                dataLimit = device.iccid?.let {
+                    val sim = device.cloud.getSim(it)
+                    return@let sim.monthlyDataRateLimitInMBs
+                }
+            } catch (ex: Exception) {
+                return@onWorker
+            }
+
+            scopes.onMain {
+                root.data_usage.text = dataUsage?.let { "$dataUsage MB used" }
+                root.data_limit.text = dataLimit?.let { "$dataLimit MB per month" }
+            }
+        }
     }
 
     fun updateDeviceDetails() {
@@ -99,6 +130,7 @@ class DeviceInfoBottomSheetController(
         root.last_handshake.text = device.lastHeard?.let { lastHeardDateFormat.format(it) } ?: "(Unknown)"
         // FIXME: add notes editing functionality
         root.notes.setText(device.notes)
+        root.iccid.text = device.iccid
 
         setUpStatusDotAndText(device.isConnected)
     }

@@ -93,7 +93,8 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     override fun onResume() {
         super.onResume()
         flowManagementScope.onMain {
-            delay(1000)
+            // FIXME: hackish, try to remove
+            delay(500)
             if (isResumed) {
                 flowRunner.endCurrentFlow()  // end any current flows
             }

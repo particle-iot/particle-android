@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow.setupsteps
 
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
+import io.particle.mesh.setup.flow.FlowIntent
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
@@ -14,8 +15,8 @@ import io.particle.mesh.setup.flow.FlowUiDelegate
 class StepShowGetReadyForSetup(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        // FIXME: insert something here about whether we're in a control panel flow or not
-        if (ctxs.getReadyNextButtonClickedLD.value == true) {
+        if (ctxs.flowIntent != FlowIntent.FIRST_TIME_SETUP
+            || ctxs.getReadyNextButtonClickedLD.value == true) {
             return
         }
 

@@ -26,7 +26,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginBottom="24dp"
-        android:src="@android:drawable/sym_def_app_icon"
+        android:src="@drawable/unclaim_device_header_image"
         app:layout_constraintBottom_toTopOf="@+id/unclaim_header"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintHorizontal_bias="0.5"

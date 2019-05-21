@@ -11,12 +11,13 @@ import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.flow.Scopes
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.MutableLiveData
 
 
 class DeviceNotesDelegate private constructor(
-    private val activity: AppCompatActivity,
+    private val activity: FragmentActivity,
     private val device: ParticleDevice,
     private val scopes: Scopes,
     private val newNoteDataLD: MutableLiveData<String>
@@ -27,7 +28,7 @@ class DeviceNotesDelegate private constructor(
         @JvmStatic
         @MainThread
         fun editDeviceNotes(
-            activity: AppCompatActivity,
+            activity: FragmentActivity,
             device: ParticleDevice,
             scopes: Scopes,
             newNoteDataLD: MutableLiveData<String>
@@ -41,7 +42,7 @@ class DeviceNotesDelegate private constructor(
         val md = MaterialDialog.Builder(activity)
             .title("Notes")
             .theme(Theme.LIGHT)
-            .inputType(InputType.TYPE_CLASS_TEXT)
+            .inputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
             .input("Use this space to keep notes on this device",
                 if (device.notes.isNullOrBlank()) null else device.notes,
                 false) { _, _ ->  }
@@ -79,7 +80,8 @@ class DeviceNotesDelegate private constructor(
 
         val contentRoot = (activity.findViewById(android.R.id.content) as ViewGroup)
         val myRoot = contentRoot.getChildAt(0)
-        Snackbar.make(myRoot, "An error occurred. Device notes not updated", Snackbar.LENGTH_SHORT)
+        val msg = "An error occurred. Device notes not updated"
+        Snackbar.make(myRoot, msg, Snackbar.LENGTH_SHORT).show()
     }
 
 }

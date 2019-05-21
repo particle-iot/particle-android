@@ -119,9 +119,7 @@ class ProtocolTransceiver internal constructor(
 
     fun disconnect() {
         didDisconnect = true
-        GlobalScope.launch(Dispatchers.Default) {
-            launch(Dispatchers.Main) { connection.disconnect() }
-        }
+        GlobalScope.launch(Dispatchers.Main) { connection.disconnect() }
     }
 
     fun setConnectionPriority(priority: ConnectionPriority) {

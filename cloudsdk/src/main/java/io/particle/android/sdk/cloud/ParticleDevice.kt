@@ -240,6 +240,7 @@ class ParticleDevice internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getCurrentDataUsage(): Float {
+        // FIXME: create a proper GSON model for this.
         var maxUsage = 0f
         try {
             val response = mainApi.getCurrentDataUsage(deviceState.lastIccid!!)

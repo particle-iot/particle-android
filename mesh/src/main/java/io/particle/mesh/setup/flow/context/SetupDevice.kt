@@ -44,6 +44,7 @@ class SetupDevice(
     var currentDeviceName: String? by log.logged()
     var iccid: String? by log.logged()
     var sim: ParticleSim? by log.logged()
+    var dataUsedInMB: Float? by log.logged()
 
     @WorkerThread
     fun updateBarcode(barcodeData: CompleteBarcodeData?, cloud: ParticleCloud) {

@@ -194,6 +194,7 @@
             android:layout_weight="1"
             android:gravity="end|center_vertical"
             android:textColor="@android:color/black"
+            android:textIsSelectable="true"
             tools:text="Argon" />
     </LinearLayout>
 
@@ -280,7 +281,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end|center_vertical"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -308,7 +310,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end|center_vertical"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -317,6 +320,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingBottom="6dp"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/last_handshake_wrapper">
@@ -345,6 +349,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingBottom="6dp"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/iccid_wrapper">
@@ -363,7 +368,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end|center_vertical"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -372,6 +378,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingBottom="6dp"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         app:layout_constraintTop_toBottomOf="@id/data_usage_wrapper">
@@ -390,7 +397,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end|center_vertical"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
     <View
@@ -401,7 +409,7 @@
         android:background="@color/p_mesh_element_border"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@id/last_handshake_wrapper" />
+        app:layout_constraintTop_toBottomOf="@id/data_limit_wrapper" />
 
     <LinearLayout
         android:id="@+id/notes_wrapper"
@@ -452,7 +460,8 @@
             android:hint="Use this space to keep notes on this device."
             android:scrollbars="vertical"
             android:textColor="@android:color/black"
-            android:textColorHint="@color/p_faded_gray" />
+            android:textColorHint="@color/p_faded_gray"
+            android:textIsSelectable="true" />
 
     </LinearLayout>
 
