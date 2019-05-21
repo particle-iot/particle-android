@@ -16,7 +16,7 @@ class StepReactivateSim(
     private val log = KotlinLogging.logger {}
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        log.info { "Deactivating SIM with ICCID=${ctxs.targetDevice.iccid}" }
+        log.info { "Reactivating SIM with ICCID=${ctxs.targetDevice.iccid}" }
         flowUi.showGlobalProgressSpinner(true)
         retrySimAction {
             cloud.reactivateSim(ctxs.targetDevice.iccid!!)
