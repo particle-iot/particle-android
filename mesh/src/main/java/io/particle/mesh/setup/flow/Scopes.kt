@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 
 
 class Scopes(
-    val job: Job = Job(),
+    val job: Job = SupervisorJob(),
     val mainThreadScope: CoroutineScope = CoroutineScope(Dispatchers.Main + job),
     val backgroundScope: CoroutineScope = CoroutineScope(Dispatchers.Default + job)
 ) {
