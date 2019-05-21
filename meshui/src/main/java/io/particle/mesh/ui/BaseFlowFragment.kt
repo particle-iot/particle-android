@@ -45,27 +45,6 @@ abstract class BaseFlowFragment : Fragment() {
     lateinit var flowRunner: MeshFlowRunner
     lateinit var flowSystemInterface: FlowRunnerSystemInterface
 
-    private val onActivityCreatedCalled: LiveData<Boolean?> = liveDataOf(false)
-    private val onViewCreatedCalled: LiveData<Boolean?> = liveDataOf(false)
-    private var onFragmentReadyCalled = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // make a LiveData which notifies when both onActivityCreated AND onViewCreated
-        // have been called, no matter what the order they're called in
-        onActivityCreatedCalled
-            .switchMap {
-                if (it == true) onViewCreatedCalled else AbsentLiveData()
-            }
-            .first()
-            .observe(this, Observer {
-                if (it == true && !onFragmentReadyCalled) {
-                    onFragmentReadyCalled = true
-                    onFragmentReady(activity!!, flowUiListener!!)
-                }
-            })
-    }
-
     @CallSuper
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -75,14 +54,6 @@ abstract class BaseFlowFragment : Fragment() {
         flowRunner = flowModel.flowRunner
         flowSystemInterface = flowModel.systemInterface
         flowScopes = flowSystemInterface.scopes
-
-        onActivityCreatedCalled.castAndSetOnMainThread(true)
-    }
-
-    @CallSuper
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        onViewCreatedCalled.castAndSetOnMainThread(true)
     }
 
     override fun onResume() {
@@ -90,6 +61,11 @@ abstract class BaseFlowFragment : Fragment() {
         val listener = (activity as TitleBarOptionsListener)
         listener.setTitleBarOptions(titleBarOptions)
         log.info { "Resumed fragment: ${this::class.java.simpleName}" }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        onFragmentReady(activity!!, flowUiListener!!)
     }
 
     open fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
