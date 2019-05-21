@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,170 +7,298 @@
     android:background="#EEEFF3"
     tools:context="io.particle.mesh.ui.controlpanel.ControlPanelLandingFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/p_controlpanel_top_padding_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="32dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/p_controlpanel_landing_wifi_item_frame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/p_controlpanel_top_padding_guideline">
-
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
-            android:id="@+id/p_controlpanel_landing_wifi_item"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/listPreferredItemHeightSmall"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:paddingStart="?attr/listPreferredItemPaddingLeft"
-            android:text="Wi-Fi"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium"
-            app:compoundDrawableHeight="22dp"
-            app:compoundDrawableWidth="22dp"
-            app:drawableStartVector="@drawable/p_mesh_ic_capability_wifi_new" />
+            android:layout_height="wrap_content">
 
-    </FrameLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/p_controlpanel_top_padding_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="48dp" />
 
-    <FrameLayout
-        android:id="@+id/p_controlpanel_landing_cellular_item_frame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_wifi_item_frame">
+            <TextView
+                android:id="@+id/device_info_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                android:text="DEVICE INFO"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_top_padding_guideline" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
-            android:id="@+id/p_controlpanel_landing_cellular_item"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/listPreferredItemHeightSmall"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:paddingStart="?attr/listPreferredItemPaddingLeft"
-            android:text="Cellular"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium"
-            app:compoundDrawableHeight="22dp"
-            app:compoundDrawableWidth="22dp"
-            app:drawableStartVector="@drawable/p_mesh_ic_capability_cellular_new" />
+            <LinearLayout
+                android:id="@+id/p_controlpanel_landing_name_frame"
+                android:layout_width="0dp"
+                android:layout_height="?attr/listPreferredItemHeightSmall"
+                android:background="@color/white"
+                android:elevation="4dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                android:paddingEnd="?attr/listPreferredItemPaddingRight"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/device_info_header"
+                tools:layout_height="48dp">
 
-    </FrameLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical|start"
+                    android:text="Name"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:id="@+id/p_controlpanel_landing_name_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:textColor="#9c9c9c"
+                    android:textSize="@dimen/text_size_medium"
+                    tools:text="whateverrrrr" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/p_controlpanel_landing_notes_frame"
+                android:layout_width="0dp"
+                android:layout_height="?attr/listPreferredItemHeightSmall"
+                android:background="@color/white"
+                android:elevation="4dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                android:paddingEnd="?attr/listPreferredItemPaddingRight"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_name_frame"
+                tools:layout_height="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical|start"
+                    android:paddingEnd="144dp"
+                    android:text="Notes"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium" />
+
+                <TextView
+                    android:id="@+id/p_controlpanel_landing_notes_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical|end"
+                    android:maxWidth="250dp"
+                    android:maxLines="1"
+                    android:textColor="#9c9c9c"
+                    android:textSize="@dimen/text_size_medium"
+                    tools:text="whateverrrrr" />
+
+            </LinearLayout>
 
 
-    <FrameLayout
-        android:id="@+id/p_controlpanel_landing_mesh_item_frame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_cellular_item_frame">
-
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
-            android:id="@+id/p_controlpanel_landing_mesh_item"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/listPreferredItemHeightSmall"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:paddingStart="?attr/listPreferredItemPaddingLeft"
-            android:text="Mesh"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium"
-            app:compoundDrawableHeight="22dp"
-            app:compoundDrawableWidth="22dp"
-            app:drawableStartVector="@drawable/p_mesh_ic_capability_mesh_new" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/p_controlpanel_landing_ethernet_item_frame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_mesh_item_frame">
-
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
-            android:id="@+id/p_controlpanel_landing_ethernet_item"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/listPreferredItemHeightSmall"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:paddingStart="?attr/listPreferredItemPaddingLeft"
-            android:text="Ethernet"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium"
-            app:compoundDrawableHeight="22dp"
-            app:compoundDrawableWidth="22dp"
-            app:drawableStartVector="@drawable/p_mesh_ic_capability_ethernet_new" />
-
-    </FrameLayout>
+            <TextView
+                android:id="@+id/network_info_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                android:text="NETWORK INFO"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_notes_frame" />
 
 
-    <FrameLayout
-        android:id="@+id/p_controlpanel_landing_docs_item_frame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@color/white"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_ethernet_item_frame">
+            <FrameLayout
+                android:id="@+id/p_controlpanel_landing_wifi_item_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/network_info_header">
 
-        <TextView
-            android:id="@+id/p_controlpanel_landing_docs_item"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/listPreferredItemHeightSmall"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:paddingStart="?attr/listPreferredItemPaddingLeft"
-            android:text="Documentation"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium" />
-    </FrameLayout>
+                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                    android:id="@+id/p_controlpanel_landing_wifi_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/listPreferredItemHeightSmall"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                    android:text="Wi-Fi"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    app:compoundDrawableHeight="22dp"
+                    app:compoundDrawableWidth="22dp"
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_wifi_new" />
 
-    <FrameLayout
-        android:id="@+id/p_controlpanel_landing_unclaim_item_frame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:background="@color/white"
-        android:elevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_docs_item_frame"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+            </FrameLayout>
 
-        <TextView
-            android:id="@+id/p_controlpanel_landing_unclaim_item"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/listPreferredItemHeightSmall"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="8dp"
-            android:gravity="center"
-            android:paddingStart="?attr/listPreferredItemPaddingLeft"
-            android:text="Unclaim Device"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="@dimen/text_size_medium" />
+            <FrameLayout
+                android:id="@+id/p_controlpanel_landing_cellular_item_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_wifi_item_frame">
 
-    </FrameLayout>
+                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                    android:id="@+id/p_controlpanel_landing_cellular_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/listPreferredItemHeightSmall"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                    android:text="Cellular"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    app:compoundDrawableHeight="22dp"
+                    app:compoundDrawableWidth="22dp"
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_cellular_new" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/p_controlpanel_landing_mesh_item_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_cellular_item_frame">
+
+                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                    android:id="@+id/p_controlpanel_landing_mesh_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/listPreferredItemHeightSmall"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                    android:text="Mesh"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    app:compoundDrawableHeight="22dp"
+                    app:compoundDrawableWidth="22dp"
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_mesh_new" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/p_controlpanel_landing_ethernet_item_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_mesh_item_frame">
+
+                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                    android:id="@+id/p_controlpanel_landing_ethernet_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/listPreferredItemHeightSmall"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                    android:text="Ethernet"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    app:compoundDrawableHeight="22dp"
+                    app:compoundDrawableWidth="22dp"
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_ethernet_new" />
+
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/p_controlpanel_landing_docs_item_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_ethernet_item_frame">
+
+                <TextView
+                    android:id="@+id/p_controlpanel_landing_docs_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/listPreferredItemHeightSmall"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                    android:text="Documentation"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/p_controlpanel_landing_unclaim_item_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/p_controlpanel_bottom_padding_guideline"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_docs_item_frame">
+
+                <TextView
+                    android:id="@+id/p_controlpanel_landing_unclaim_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/listPreferredItemHeightSmall"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                    android:text="Unclaim Device"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="@dimen/text_size_medium" />
+
+            </FrameLayout>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/p_controlpanel_bottom_padding_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="16dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+</FrameLayout>
