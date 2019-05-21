@@ -315,7 +315,7 @@ class MeshFlowExecutor(
             )
 
             CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW -> listOf(
-                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),
+//                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),
                 StepPopBackStack(deps.flowUi)
             )
 
