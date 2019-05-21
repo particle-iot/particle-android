@@ -134,7 +134,7 @@ class MeshFlowExecutor(
                     if (ex is MeshSetupFlowException && ex.severity == ERROR_FATAL) {
                         log.info(ex) { "Hit fatal error, exiting setup: " }
                         QATool.log(ex.message ?: "(no message)")
-                        endSetup()
+                        quitSetupfromError(ctxs.scopes, ex)
                         return@onWorker
                     }
 
@@ -278,19 +278,19 @@ class MeshFlowExecutor(
 
             CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE -> listOf(
                 StepShowSimDeactivateUi(deps.flowUi),
-                StepDeactivateSim(deps.cloud)
+                StepDeactivateSim(deps.cloud, deps.flowUi)
             )
 
 
             CONTROL_PANEL_CELLULAR_SIM_REACTIVATE -> listOf(
                 StepShowSimReactivateUi(deps.flowUi),
-                StepReactivateSim(deps.cloud)
+                StepReactivateSim(deps.cloud, deps.flowUi)
             )
 
 
             CONTROL_PANEL_CELLULAR_SIM_UNPAUSE -> listOf(
                 StepShowSimUnpauseUi(deps.flowUi),
-                StepUnpauseSim(deps.cloud)
+                StepUnpauseSim(deps.cloud, deps.flowUi)
             )
 
             CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT -> listOf(
@@ -304,7 +304,8 @@ class MeshFlowExecutor(
             CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW -> listOf(
                 StepUnsetFullSimData(),
                 StepFetchFullSimData(deps.cloud, deps.flowUi),
-                StepPopBackStack(deps.flowUi)
+                StepShowSnackbar(deps.flowUi),
+                StepPopBackStack(deps.flowUi, true)
             )
 
 

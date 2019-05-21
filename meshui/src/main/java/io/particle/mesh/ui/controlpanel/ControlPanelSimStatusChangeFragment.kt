@@ -10,25 +10,20 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.setup.flow.SimStatusChangeMode.DEACTIVATE
+import io.particle.mesh.setup.flow.SimStatusChangeMode.REACTIVATE
+import io.particle.mesh.setup.flow.SimStatusChangeMode.UNPAUSE
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.controlpanel.SimStatusMode.DEACTIVATE
-import io.particle.mesh.ui.controlpanel.SimStatusMode.REACTIVATE
-import io.particle.mesh.ui.controlpanel.SimStatusMode.UNPAUSE
 import io.particle.mesh.ui.inflateFragment
 import io.particle.mesh.ui.setBackgroundTint
 import kotlinx.android.synthetic.main.fragment_control_panel_sim_status_change.*
-
-
-enum class SimStatusMode {
-    DEACTIVATE,
-    UNPAUSE,
-    REACTIVATE
-}
+import mu.KotlinLogging
 
 
 class ControlPanelSimStatusChangeFragment : BaseControlPanelFragment() {
@@ -37,7 +32,6 @@ class ControlPanelSimStatusChangeFragment : BaseControlPanelFragment() {
         R.string.p_controlpanel_simstatuschange_title,
         showBackButton = true
     )
-
 
     private val args: ControlPanelSimStatusChangeFragmentArgs by navArgs()
 
@@ -65,17 +59,29 @@ class ControlPanelSimStatusChangeFragment : BaseControlPanelFragment() {
         simstatus_big_icon.setImageResource(cfg.bigIcon)
         simstatus_header.text = getString(cfg.headerText)
         simstatus_fine_print.text = getString(cfg.finePrintText)
+
         action_change_sim_status.text = getString(cfg.actionButtonText)
         cfg.actionButtonColor?.let { action_change_sim_status.setBackgroundTint(it) }
+        action_change_sim_status.isEnabled = cfg.actionButtonInitiallyEnabled
+        if (!cfg.actionButtonInitiallyEnabled) {
+            flowUiListener!!.cellular.newSelectedDataLimitLD.observe(this, Observer {
+                it?.let { action_change_sim_status.isEnabled = true }
+            })
+        }
 
         simstatus_body.text = Phrase.from(simstatus_body, cfg.bodyText)
-            // FIXME: insert actual value
-            .putOptional(TEMPLATE_KEY_LAST_4_DIGITS, "1234")
+            .putOptional(TEMPLATE_KEY_LAST_4_DIGITS, device.iccid?.takeLast(4))
             .format()
 
         simstatus_data_limit_control.isVisible = cfg.showDataLimitRow
         if (cfg.showDataLimitRow) {
-            // FIXME: FILL IN CURRENT LIMIT
+
+            val limitFromApi = flowUiListener?.targetDevice?.sim?.monthlyDataRateLimitInMBs
+            val userSelectedLimit = flowUiListener?.cellular?.newSelectedDataLimitLD?.value
+            val limit = userSelectedLimit ?: limitFromApi
+
+            p_controlpanel_data_limit_value.text = "$limit MB"
+
             simstatus_data_limit_control.setOnClickListener {
                 findNavController().navigate(
                     R.id.action_global_controlPanelCellularDataLimitFragment
@@ -83,36 +89,13 @@ class ControlPanelSimStatusChangeFragment : BaseControlPanelFragment() {
             }
         }
 
-        simstatus_data_rates.isVisible = cfg.showDataRates
-        if (cfg.showDataRates) {
-            // FIXME: FILL IN MONTHLY DATA RATES
-        }
-
         action_change_sim_status.setOnClickListener {
-            when (args.simStatusChangeMode) {
-                DEACTIVATE -> onSimDeactivateClicked()
-                UNPAUSE -> onSimUnpauseClicked()
-                REACTIVATE -> onSimReactivateClicked()
-            }
+            flowUiListener?.cellular?.updateChangeSimStatusButtonClicked()
         }
     }
-
-    private fun onSimReactivateClicked() {
-        TODO("not implemented")
-    }
-
-    private fun onSimUnpauseClicked() {
-        TODO("not implemented")
-    }
-
-    private fun onSimDeactivateClicked() {
-        TODO("not implemented")
-    }
-
 }
 
 
-// FIXME: use correct icons here!
 
 private enum class SimStatusConfig(
     @DrawableRes val bigIcon: Int,
@@ -121,11 +104,11 @@ private enum class SimStatusConfig(
     @StringRes val finePrintText: Int,
     @StringRes val actionButtonText: Int,
     @ColorRes val actionButtonColor: Int? = null,
-    val showDataRates: Boolean = false,
-    val showDataLimitRow: Boolean = false
+    val showDataLimitRow: Boolean = false,
+    val actionButtonInitiallyEnabled: Boolean = true
 ) {
     DEACTIVATE(
-        R.drawable.p_particle_logo,
+        R.drawable.sim_deactivate_header_image,
         R.string.p_controlpanel_deactivate_sim_header,
         R.string.p_controlpanel_sim_deactivate_body_text,
         R.string.p_controlpanel_sim_deactivation_fine_print,
@@ -134,21 +117,21 @@ private enum class SimStatusConfig(
     ),
 
     UNPAUSE(
-        R.drawable.p_particle_logo,
+        R.drawable.sim_activate_header_image,
         R.string.p_controlpanel_unpause_sim_header,
         R.string.p_controlpanel_sim_unpause_body_text,
         R.string.p_controlpanel_sim_unpause_fine_print,
         R.string.p_action_unpause_sim,
-        showDataLimitRow = true
+        showDataLimitRow = true,
+        actionButtonInitiallyEnabled = false
     ),
 
     REACTIVATE(
-        R.drawable.p_particle_logo,
+        R.drawable.sim_activate_header_image,
         R.string.p_controlpanel_sim_reactivate_header,
         R.string.p_controlpanel_sim_reactivate_body_text,
         R.string.p_controlpanel_sim_reactivate_fine_print,
-        R.string.p_action_reactivate_sim,
-        showDataRates = true
+        R.string.p_action_reactivate_sim
     )
 
 }

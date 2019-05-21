@@ -8,9 +8,14 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.mesh.R
+import kotlinx.coroutines.delay
+import mu.KotlinLogging
+import retrofit.RetrofitError
+import java.net.SocketTimeoutException
 
-// Junk-drawer classes aren't great, but this function doesn't really belong anywhere else.
+// Junk-drawer classes aren't great, but these functions doesn't really belong anywhere else.
 
 @StringRes
 fun ParticleDeviceType.toUserFacingName(): Int {
@@ -22,5 +27,47 @@ fun ParticleDeviceType.toUserFacingName(): Int {
         B_SOM -> R.string.product_name_b_series
         X_SOM -> R.string.product_name_x_series
         else -> throw IllegalArgumentException("Not a mesh device: $this")
+    }
+}
+
+
+private val log = KotlinLogging.logger {}
+
+
+internal suspend fun retrySimAction(simActionBlock: () -> Unit) {
+
+    var error: Exception? = null
+
+    for (i in 1..SIM_ACTION_MAX_RETRY_COUNT) {
+
+        log.info { "Attempting SIM action, retry count=$i" }
+
+        try {
+            simActionBlock()
+            error = null
+
+        } catch (ex: ParticleCloudException) {
+            error = ex
+            if (ex.responseData?.httpStatusCode == 504) {
+                // this is apparently considered OK from the API and we should just retry...
+                delay(1000)
+                continue
+            }
+
+            // FIXME: verify that this is OK, too
+            if (ex.cause is RetrofitError
+                && (ex.cause as RetrofitError).cause is SocketTimeoutException
+            ) {
+                delay(1000)
+                continue
+            }
+
+            // if it's none of those errors, just bail
+            throw ex
+        }
+    }
+
+    if (error != null) {
+        throw error
     }
 }

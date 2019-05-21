@@ -61,15 +61,26 @@
         app:layout_constraintTop_toBottomOf="@+id/simstatus_header"
         tools:text="All work and no play makes Jack a dull boy All work and no play makes Jack a dull boy All work and no play makes Jack a dull boy All work and no play makes Jack a dull boy All work and no play makes Jack a dull boy " />
 
+    <!--    &lt;!&ndash;  FIXME: create an XML drawable to create these borders  &ndash;&gt;-->
+    <!--    <View-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="1dp"-->
+    <!--        android:background="#DDD"-->
+    <!--        app:layout_constraintBottom_toTopOf="@id/simstatus_data_limit_control"-->
+    <!--        app:layout_constraintEnd_toEndOf="@id/simstatus_data_limit_control"-->
+    <!--        app:layout_constraintStart_toStartOf="@id/simstatus_data_limit_control" />-->
+
     <LinearLayout
         android:id="@+id/simstatus_data_limit_control"
         android:layout_width="0dp"
         android:layout_height="?attr/listPreferredItemHeightSmall"
+        android:background="@drawable/background_top_bottom_gray_borders"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/simstatus_data_rates"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintHorizontal_bias="0.5"
-        android:gravity="center_vertical"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/simstatus_body"
         tools:layout_height="48dp">
@@ -85,44 +96,19 @@
             android:id="@+id/p_controlpanel_data_limit_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_chevron_right_gray_24dp"
+            android:gravity="center_vertical|end"
             tools:text="3MB" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/simstatus_data_rates"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/simstatus_data_limit_control">
+    <!--    <View-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="1dp"-->
+    <!--        android:background="#DDD"-->
+    <!--        app:layout_constraintBottom_toTopOf="@id/simstatus_data_limit_control"-->
+    <!--        app:layout_constraintEnd_toEndOf="@id/simstatus_data_limit_control"-->
+    <!--        app:layout_constraintStart_toStartOf="@id/simstatus_data_limit_control" />-->
 
-        <TextView
-            android:id="@+id/p_controlpanel_sim_status_billing_included_mbs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAlignment="center"
-            tools:text="3MB included/mo." />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/p_mesh_element_border" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textAlignment="center"
-            tools:text="$0.40+ additional MBs" />
-    </LinearLayout>
 
     <Button
         android:id="@+id/action_change_sim_status"
@@ -139,8 +125,8 @@
         android:id="@+id/simstatus_fine_print"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:text="@string/single_space"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textSize="12sp"

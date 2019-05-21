@@ -14,21 +14,25 @@ class CellularContext : Clearable {
     private val log = KotlinLogging.logger {}
 
     val newSelectedDataLimitLD: LiveData<Int?> = MutableLiveData()
+    val changeSimStatusButtonClickedLD: LiveData<Boolean?> = MutableLiveData()
 
     var connectingToCloudUiShown by log.logged(false)
+    var popOwnBackStackOnSelectingDataLimit by log.logged(false)
 
 
     override fun clearState() {
         log.info { "clearState()" }
 
         val liveDatas = listOf(
-            newSelectedDataLimitLD
+            newSelectedDataLimitLD,
+            changeSimStatusButtonClickedLD
         )
         for (ld in liveDatas) {
             ld.castAndPost(null)
         }
 
         connectingToCloudUiShown = false
+        popOwnBackStackOnSelectingDataLimit = false
     }
 
     fun updateNewSelectedDataLimit(newLimit: Int) {
@@ -36,4 +40,8 @@ class CellularContext : Clearable {
         newSelectedDataLimitLD.castAndPost(newLimit)
     }
 
+    fun updateChangeSimStatusButtonClicked(clicked: Boolean) {
+        log.info { "updateChangeSimStatusButtonClicked(): $clicked" }
+        changeSimStatusButtonClickedLD.castAndPost(clicked)
+    }
 }

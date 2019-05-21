@@ -33,6 +33,7 @@ class SetupContexts(
     var meshNetworkFlowAdded: Boolean by log.logged(false)
 
     var singleStepCongratsMessage by log.logged("")
+    var snackbarMessage by log.logged("")
 
     // FIXME: this should go.  See notes on StepDetermineFlowAfterPreflow
     val getReadyNextButtonClickedLD: LiveData<Boolean?> = MutableLiveData()
@@ -68,6 +69,7 @@ class SetupContexts(
 
         flowIntent = null
         singleStepCongratsMessage = ""
+        snackbarMessage = ""
         currentFlow = emptyList()
         hasEthernet = null
         meshNetworkFlowAdded = false

@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
-import io.particle.android.sdk.cloud.ParticleCloud
-import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.android.sdk.cloud.models.ParticleApiSimStatus
+import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.ACTIVE
+import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_DATA_LIMIT_REACHED
+import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_INVALID_PAYMENT_METHOD
+import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_NEVER_ACTIVATED
+import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_USER_DEACTIVATED
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
-import io.particle.mesh.setup.flow.Scopes
-import io.particle.mesh.setup.utils.safeToast
+import io.particle.mesh.setup.flow.SimStatusChangeMode
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.inflateFragment
@@ -25,6 +29,7 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
         showBackButton = true
     )
 
+    private val log = KotlinLogging.logger {}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,19 +47,72 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
         }
 
         p_controlpanel_cellular_options_change_sim_status.setOnClickListener {
-            activity.safeToast("SIM actions are temporarily out of order: these will be available in the next release")
-//            findNavController().navigate(
-//                R.id.action_global_controlPanelSimStatusChangeFragment,
-//                ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.DEACTIVATE).toBundle()
-//            )
+            onChangeSimStatusClicked()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val sim = flowUiListener?.targetDevice?.sim
-        val limit = sim?.monthlyDataRateLimitInMBs
+        val sim = flowUiListener!!.targetDevice.sim!!
+        log.info { "onResume() SIM=$sim" }
+        val limit = sim.monthlyDataRateLimitInMBs
         p_controlpanel_cellular_options_change_data_limit_value.text = "${limit}MB"
+        onSimStatusUpdated(sim.simStatus)
+    }
+    
+    private fun onSimStatusUpdated(status: ParticleApiSimStatus) {
+        val config = when (status) {
+            ACTIVE -> SimStatusSwitchConfig.ACTIVE
+            INACTIVE_USER_DEACTIVATED -> SimStatusSwitchConfig.INACTIVE
+            INACTIVE_DATA_LIMIT_REACHED -> SimStatusSwitchConfig.PAUSED
+            INACTIVE_INVALID_PAYMENT_METHOD -> TODO()
+            INACTIVE_NEVER_ACTIVATED -> throw IllegalArgumentException(
+                "SIMs shown in this screen should always have been activated"
+            )
+        }
+
+        p_controlpanel_cellular_options_current_sim_status.setText(config.statusString)
+        p_controlpanel_cellular_options_fine_print.setText(config.finePrint)
+        p_controlpanel_cellular_options_change_sim_status.isChecked = config.isSwitchChecked
+    }
+    
+    private fun onChangeSimStatusClicked() {
+        when (flowUiListener!!.targetDevice.sim!!.simStatus) {
+            ACTIVE -> flowRunner.startSimDeactivateFlow(device)
+            INACTIVE_USER_DEACTIVATED -> flowRunner.startSimReactivateFlow(device)
+            INACTIVE_DATA_LIMIT_REACHED -> flowRunner.startSimUnpauseFlow(device)
+            // FIXME: find out what we want here
+            INACTIVE_INVALID_PAYMENT_METHOD -> TODO()
+            INACTIVE_NEVER_ACTIVATED -> throw IllegalArgumentException(
+                "SIMs shown in this screen should always have been activated"
+            )
+        }
     }
 
+}
+
+
+private enum class SimStatusSwitchConfig(
+    @StringRes val statusString: Int,
+    @StringRes val finePrint: Int,
+    val isSwitchChecked: Boolean
+) {
+    
+    ACTIVE(
+        R.string.p_cp_cellular_options_sim_status_active,
+        R.string.p_cp_cellular_options_sim_status_fine_print_active,
+        true
+    ),
+
+    INACTIVE(
+        R.string.p_cp_cellular_options_sim_status_deactivated,
+        R.string.p_cp_cellular_options_sim_status_fine_print_deactivated,
+        false
+    ),
+    
+    PAUSED(
+        R.string.p_cp_cellular_options_sim_status_paused,
+        R.string.p_cp_cellular_options_sim_status_fine_print_paused,
+        false
+    )
 }

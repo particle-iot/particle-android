@@ -61,7 +61,7 @@
     <LinearLayout
         android:id="@+id/p_controlpanel_cellular_options_change_sim_status_frame"
         android:layout_width="0dp"
-        android:layout_height="?attr/listPreferredItemHeightSmall"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="4dp"
         android:foreground="?attr/selectableItemBackground"
@@ -86,6 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
+                android:layout_marginBottom="-2dp"
                 android:gravity="start|top"
                 android:text="SIM status"
                 android:textColor="@android:color/black"
@@ -96,7 +97,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
+                android:layout_marginTop="-1dp"
                 android:gravity="start|top"
+                android:paddingBottom="4dp"
                 android:text="Active"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />

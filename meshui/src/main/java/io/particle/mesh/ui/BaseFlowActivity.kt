@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.snackbar.Snackbar
 import com.snakydesign.livedataextensions.filter
 import com.snakydesign.livedataextensions.nonNull
 import io.particle.mesh.setup.flow.*
@@ -34,6 +35,7 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         systemInterface: FlowRunnerSystemInterface
     ): FlowUiDelegate
 
+    protected abstract fun onFlowTerminated()
 
     protected val navController: NavController
         get() = findNavController(navHostFragmentId)
@@ -63,12 +65,15 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         flowSystemInterface.dialogRequestLD.nonNull()
             .observe(this, Observer { onDialogSpecReceived(it) })
 
+        flowSystemInterface.snackbarRequestLD.nonNull()
+            .observe(this, Observer { onSnackbarRequestReceived(it) })
+
         flowSystemInterface.shouldShowProgressSpinnerLD.nonNull()
             .observe(this, Observer { showGlobalProgressSpinner(it!!) })
 
         flowSystemInterface.meshFlowTerminator.shouldTerminateFlowLD
             .filter { it == true }
-            .observe(this, Observer { finish() })
+            .observe(this, Observer { onFlowTerminated() })
     }
 
     override fun onDestroy() {
@@ -129,5 +134,18 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         builder.show()
     }
 
+    private fun onSnackbarRequestReceived(message: String?) {
+        log.debug { "Got snackbar msg request=$message" }
+        if (message == null) {
+            log.warn { "Got null snackbar message?!" }
+            return
+        }
+
+        Snackbar.make(
+            findViewById<View>(navHostFragmentId),
+            message,
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
 
 }

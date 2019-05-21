@@ -32,11 +32,17 @@ sealed class DialogSpec {
 // TODO: is this a hack, or is it just ideal for simple use cases?  Consider renaming.
 class DialogTool(
     private val dialogRequestLD: LiveData<DialogSpec?>,
+    private val snackbarRequestLD: LiveData<String?>,
     val dialogResultLD: LiveData<DialogResult?>
 ) {
 
     private val log = KotlinLogging.logger {}
 
+
+    fun newSnackbarRequest(messageToShow: String) {
+        log.debug { "newSnackbarRequest(): $messageToShow" }
+        snackbarRequestLD.castAndPost(messageToShow)
+    }
 
     fun newDialogRequest(spec: DialogSpec) {
         log.debug { "newDialogRequest(): $spec" }
@@ -56,4 +62,7 @@ class DialogTool(
         dialogRequestLD.castAndPost(null)
     }
 
+    fun clearSnackbarRequest() {
+        snackbarRequestLD.castAndPost(null)
+    }
 }

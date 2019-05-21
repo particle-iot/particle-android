@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.navigation.findNavController
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.setup.flow.FlowUiDelegate
@@ -37,6 +38,15 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
     override val device: ParticleDevice by lazy {
         intent.getParcelableExtra(EXTRA_DEVICE) as ParticleDevice
     }
+
+    override fun onFlowTerminated() {
+        val navController = findNavController(navHostFragmentId)
+        var result = true
+        while (result) {
+            result = navController.popBackStack()
+        }
+    }
+
 
     private val scopes = Scopes()
 

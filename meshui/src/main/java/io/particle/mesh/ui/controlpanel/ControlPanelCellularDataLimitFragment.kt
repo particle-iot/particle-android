@@ -26,6 +26,7 @@ import io.particle.mesh.ui.inflateFragment
 import io.particle.mesh.ui.inflateRow
 import kotlinx.android.synthetic.main.controlpanel_row_data_limit.view.*
 import kotlinx.android.synthetic.main.fragment_control_panel_cellular_data_limit.*
+import kotlin.math.roundToInt
 
 
 class ControlPanelCellularDataLimitFragment : BaseControlPanelFragment() {
@@ -53,6 +54,7 @@ class ControlPanelCellularDataLimitFragment : BaseControlPanelFragment() {
 
         adapter = DataLimitAdapter(::onDataLimitItemClicked, activity)
         adapter.currentDataLimit = flowUiListener.targetDevice.sim?.monthlyDataRateLimitInMBs
+        adapter.currentDataUsage = flowUiListener.targetDevice.dataUsedInMB?.roundToInt()
 
         limits_list.adapter = adapter
         adapter.submitList(limits)
@@ -67,15 +69,12 @@ class ControlPanelCellularDataLimitFragment : BaseControlPanelFragment() {
 
     private fun onChangeLimitClicked() {
         flowUiListener?.cellular?.updateNewSelectedDataLimit(selectedLimit!!)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (selectedLimit == null) {
-            // signal that we didn't get a limit
-            flowUiListener?.cellular?.updateNewSelectedDataLimit(-1)
+        // FIXME: this is a hack.  Look for a cleaner approach
+        if (flowUiListener?.cellular?.popOwnBackStackOnSelectingDataLimit == true) {
+            findNavController().popBackStack()
         }
     }
+
 }
 
 
@@ -92,6 +91,7 @@ private class DataLimitAdapter(
     }
 
     var currentDataLimit: Int? = null
+    var currentDataUsage: Int? = null
     var selectedDataLimit: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataLimitHolder {
@@ -116,7 +116,7 @@ private class DataLimitAdapter(
             else -> holder.checkbox.isVisible = false
         }
 
-        val enableItem = item > (currentDataLimit?: 0)
+        val enableItem = item > (currentDataUsage?: 0)
         holder.root.isEnabled = enableItem
         val textColor = ContextCompat.getColor(
             everythingNeedsAContext,

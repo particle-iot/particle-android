@@ -1,7 +1,33 @@
 package io.particle.android.sdk.cloud.models
 
+import com.google.gson.Gson
+import com.google.gson.TypeAdapter
+import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
+import io.particle.android.sdk.utils.UnknownEnumStringValueException
+import io.particle.android.sdk.utils.buildStringValueMap
+import java.io.IOException
 import java.util.*
+
+
+enum class ParticleApiSimStatus(val apiString: String) {
+    ACTIVE("active"),
+    INACTIVE_NEVER_ACTIVATED("never_before_activated"),
+    INACTIVE_USER_DEACTIVATED("inactive_user_deactivated"),
+    INACTIVE_DATA_LIMIT_REACHED("inactive_data_limit_reached"),
+    INACTIVE_INVALID_PAYMENT_METHOD("inactive_invalid_payment_method");
+
+    companion object {
+
+        private val mapping = buildStringValueMap(ParticleApiSimStatus.values()) { it.apiString }
+
+        fun fromString(stringFromApi: String): ParticleApiSimStatus? {
+            return mapping[stringFromApi]
+        }
+    }
+}
 
 
 data class ParticleSim(
@@ -42,8 +68,9 @@ data class ParticleSim(
     @SerializedName("overage_monthly_rate")
     val overageMonthlyRateCentsPerMB: Int,
 
+    @JsonAdapter(ParticleApiSimStatusAdapter::class)
     @SerializedName("status")
-    val simStatus: String,
+    val simStatus: ParticleApiSimStatus,
 
     @SerializedName("stripe_plan_slug")
     val stripePlanSlug: String?,
@@ -64,3 +91,29 @@ data class ParticleSim(
     val lastDeviceName: String?
 
 )
+
+
+internal class ParticleApiSimStatusAdapter : TypeAdapter<ParticleApiSimStatus?>() {
+
+    companion object {
+        private val wrappedGson = Gson()
+    }
+
+    @Throws(IOException::class)
+    override fun write(writer: JsonWriter, value: ParticleApiSimStatus?) {
+        if (value == null) {
+            synchronized(this) {
+                wrappedGson.toJson(value, writer)
+            }
+        } else {
+            writer.value(value.apiString)
+        }
+    }
+
+    @Throws(IOException::class)
+    override fun read(reader: JsonReader): ParticleApiSimStatus? {
+        val stringVal = reader.nextString()
+        return ParticleApiSimStatus.fromString(stringVal)
+    }
+
+}

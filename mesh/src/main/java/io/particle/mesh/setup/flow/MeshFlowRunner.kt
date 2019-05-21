@@ -154,11 +154,7 @@ class MeshFlowRunner(
 
     @MainThread
     fun startShowControlPanelCellularOptionsFlow(device: ParticleDevice) {
-        val ctxs = SetupContexts()
-        ctxs.updateGetReadyNextButtonClicked(true)
-
-        ctxs.targetDevice.deviceId = device.id
-        ctxs.targetDevice.iccid = device.iccid
+        val ctxs = initContextForSimFlow(device)
 
         flowExecutor.executeNewFlow(
             FlowIntent.SINGLE_TASK_FLOW,
@@ -186,32 +182,71 @@ class MeshFlowRunner(
 
     @MainThread
     fun startSimDeactivateFlow(device: ParticleDevice) {
-//        CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
+        val ctxs = initContextForSimFlow(device)
+        // FIXME: review this text with David, et al
+        ctxs.snackbarMessage = "SIM deactivation requested"
+
+        val flows = listOf(
+            FlowType.CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE,
+            FlowType.CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
+        )
+        ctxs.scopes.onMain {
+            flowExecutor.executeNewFlow(FlowIntent.SINGLE_TASK_FLOW, flows, ctxs)
+        }
     }
 
     @MainThread
     fun startSimReactivateFlow(device: ParticleDevice) {
-//        CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
+        val ctxs = initContextForSimFlow(device)
+        // FIXME: review this text with David, et al
+        ctxs.snackbarMessage = "SIM reactivation requested"
+
+        val flows = listOf(
+            FlowType.CONTROL_PANEL_CELLULAR_SIM_REACTIVATE,
+            FlowType.CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
+        )
+        ctxs.scopes.onMain {
+            flowExecutor.executeNewFlow(FlowIntent.SINGLE_TASK_FLOW, flows, ctxs)
+        }
     }
 
     @MainThread
     fun startSimUnpauseFlow(device: ParticleDevice) {
-//        CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
+        val ctxs = initContextForSimFlow(device)
+        ctxs.snackbarMessage = "SIM unpause requested"
+        ctxs.cellular.popOwnBackStackOnSelectingDataLimit = true
+
+        val flows = listOf(
+            FlowType.CONTROL_PANEL_CELLULAR_SIM_UNPAUSE,
+            FlowType.CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
+        )
+
+        ctxs.scopes.onWorker {
+            deps.flowUi.showGlobalProgressSpinner(true)
+            ctxs.targetDevice.dataUsedInMB = device.getCurrentDataUsage()
+
+            ctxs.scopes.onMain {
+                flowExecutor.executeNewFlow(FlowIntent.SINGLE_TASK_FLOW, flows, ctxs)
+            }
+        }
     }
 
     @MainThread
     fun startSetNewDataLimitFlow(device: ParticleDevice) {
-        val ctxs = SetupContexts()
-        ctxs.updateGetReadyNextButtonClicked(true)
+        val ctxs = initContextForSimFlow(device)
 
-        ctxs.targetDevice.deviceId = device.id
-        ctxs.targetDevice.iccid = device.iccid
+        ctxs.scopes.onWorker {
+            deps.flowUi.showGlobalProgressSpinner(true)
+            ctxs.targetDevice.dataUsedInMB = device.getCurrentDataUsage()
 
-        flowExecutor.executeNewFlow(
-            FlowIntent.SINGLE_TASK_FLOW,
-            listOf(FlowType.CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT),
-            ctxs
-        )
+            ctxs.scopes.onMain {
+                flowExecutor.executeNewFlow(
+                    FlowIntent.SINGLE_TASK_FLOW,
+                    listOf(FlowType.CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT),
+                    ctxs
+                )
+            }
+        }
     }
 
     @MainThread
@@ -228,6 +263,7 @@ class MeshFlowRunner(
 
         ctxs.scopes.onMain {
             val onWorker: Job = ctxs.scopes.onWorker {
+                deps.flowUi.showGlobalProgressSpinner(true)
                 ctxs.targetDevice.updateBarcode(barcode, deps.cloud)
                 ctxs.targetDevice.barcode.nonNull(ctxs.scopes).awaitUpdate(ctxs.scopes)
             }
@@ -235,6 +271,18 @@ class MeshFlowRunner(
         }
 
         return ctxs
+    }
+
+    private fun initContextForSimFlow(device: ParticleDevice): SetupContexts {
+        // get any current context to grab the SIM
+        val sim = flowExecutor.contexts?.targetDevice?.sim
+
+        return SetupContexts().apply {
+            updateGetReadyNextButtonClicked(true)
+            targetDevice.deviceId = device.id
+            targetDevice.iccid = device.iccid
+            targetDevice.sim = sim
+        }
     }
 
     // FIXME: disambiguate this vs ending the current *flow*
