@@ -21,11 +21,11 @@ fun BarcodeData.toConnectivityType(cloud: ParticleCloud): Gen3ConnectivityType {
 fun ParticleDeviceType.toConnectivityType(): Gen3ConnectivityType {
     return when (this) {
         ParticleDeviceType.ARGON,
-        ParticleDeviceType.A_SERIES -> Gen3ConnectivityType.WIFI
+        ParticleDeviceType.A_SOM -> Gen3ConnectivityType.WIFI
         ParticleDeviceType.BORON,
-        ParticleDeviceType.B_SERIES -> Gen3ConnectivityType.CELLULAR
+        ParticleDeviceType.B_SOM -> Gen3ConnectivityType.CELLULAR
         ParticleDeviceType.XENON,
-        ParticleDeviceType.X_SERIES -> Gen3ConnectivityType.MESH_ONLY
+        ParticleDeviceType.X_SOM -> Gen3ConnectivityType.MESH_ONLY
         else -> throw IllegalArgumentException("Not a mesh device: $this")
     }
 }

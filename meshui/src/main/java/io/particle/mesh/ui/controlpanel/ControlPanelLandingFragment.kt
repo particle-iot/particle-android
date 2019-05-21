@@ -8,15 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
@@ -26,7 +28,9 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
+import io.particle.commonui.DeviceNotesDelegate
+import io.particle.commonui.RenameHelper
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
@@ -39,8 +43,6 @@ import kotlinx.coroutines.delay
 class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
     override val titleBarOptions = TitleBarOptions(R.string.p_controlpanel_control_panel)
-
-    override val showDeviceInfoSlider: Boolean = true
 
     private lateinit var cloud: ParticleCloud
 
@@ -66,9 +68,15 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
         val deviceType = device.deviceType!!
 
-        p_controlpanel_landing_wifi_item_frame.isVisible = deviceType in listOf(ARGON, A_SERIES)
-        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SERIES)
-        p_controlpanel_landing_ethernet_item_frame.isVisible = false // this is just off for now
+        p_controlpanel_landing_name_frame.setOnClickListener {
+            RenameHelper.renameDevice(activity!!, device)
+        }
+
+        p_controlpanel_landing_notes_frame.setOnClickListener { editNotes() }
+
+        p_controlpanel_landing_wifi_item_frame.isVisible = deviceType in listOf(ARGON, A_SOM)
+        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SOM)
+        p_controlpanel_landing_ethernet_item_frame.isVisible = false
 
         p_controlpanel_landing_wifi_item.navigateOnClick(
             R.id.action_controlPanelLandingFragment_to_controlPanelWifiOptionsFragment
@@ -95,11 +103,14 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     override fun onResume() {
         super.onResume()
         flowManagementScope.onMain {
-            delay(1000)
+            // FIXME: hackish, try to remove
+            delay(500)
             if (isResumed) {
                 flowRunner.endCurrentFlow()  // end any current flows
             }
         }
+        p_controlpanel_landing_name_value.text = device.name
+        p_controlpanel_landing_notes_value.text = device.notes
     }
 
     private fun navigateToUnclaim() {
@@ -110,6 +121,19 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         )
         flowSystemInterface.showGlobalProgressSpinner(false)
     }
+
+    private fun editNotes() {
+        val editLD = MutableLiveData<String>()
+        DeviceNotesDelegate.editDeviceNotes(
+            activity!!,
+            device,
+            flowManagementScope,
+            editLD
+        )
+        editLD.observe(this, Observer {
+            p_controlpanel_landing_notes_value.text = it
+        })
+    }
 }
 
 
@@ -119,9 +143,9 @@ private fun showDocumentation(context: Context, deviceType: ParticleDeviceType) 
         PHOTON -> "photon"
         P1 -> "datasheets/wi-fi/p1-datasheet"
         ELECTRON -> "electron"
-        ARGON, A_SERIES -> "argon"
-        BORON, B_SERIES -> "boron"
-        XENON, X_SERIES -> "xenon"
+        ARGON, A_SOM -> "argon"
+        BORON, B_SOM -> "boron"
+        XENON, X_SOM -> "xenon"
         RASPBERRY_PI,
         RED_BEAR_DUO,
         BLUZ,

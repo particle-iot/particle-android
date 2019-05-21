@@ -22,6 +22,8 @@ interface FlowUiDelegate {
         postCongratsAction: PostCongratsAction = PostCongratsAction.NOTHING
     )
 
+    fun showSnackbarWithMessage(messageToShow: String)
+
     fun showGlobalProgressSpinner(shouldShow: Boolean)
 
     fun getDeviceBarcode()
@@ -78,11 +80,11 @@ interface FlowUiDelegate {
 
     fun showControlPanelCellularOptionsUi()
 
-    fun showControlPanelUnpauseUi()
+    fun showControlPanelSimUnpauseUi()
 
-    fun showControlPanelDeactivateUi()
+    fun showControlPanelSimDeactivateUi()
 
-    fun showControlPanelReactivateUi()
+    fun showControlPanelSimReactivateUi()
 
     fun showSetCellularDataLimitUi()
 

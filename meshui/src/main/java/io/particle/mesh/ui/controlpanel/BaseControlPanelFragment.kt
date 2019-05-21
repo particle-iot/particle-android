@@ -26,14 +26,7 @@ open class BaseControlPanelFragment : BaseFlowFragment() {
         showBackButton = true
     )
 
-    open val showDeviceInfoSlider: Boolean = false
-
     val device: ParticleDevice by lazy { (activity!! as DeviceProvider).device }
-
-    override fun onStart() {
-        super.onStart()
-        (activity as ControlPanelActivity).showDeviceInfoView(showDeviceInfoSlider)
-    }
 
     @MainThread
     suspend fun startFlowWithBarcode(

@@ -28,10 +28,10 @@ fun SerialNumber.toDeviceType(cloud: ParticleCloud): ParticleDeviceType {
             BORON_3G_SERIAL_PREFIX2 -> ParticleDeviceType.BORON
             XENON_SERIAL_PREFIX1,
             XENON_SERIAL_PREFIX2 -> ParticleDeviceType.XENON
-            A_SERIES_SERIAL_PREFIX -> ParticleDeviceType.A_SERIES
+            A_SERIES_SERIAL_PREFIX -> ParticleDeviceType.A_SOM
             B_SERIES_LTE_SERIAL_PREFIX1,
-            B_SERIES_3G_SERIAL_PREFIX2 -> ParticleDeviceType.B_SERIES
-            X_SERIES_SERIAL_PREFIX -> ParticleDeviceType.X_SERIES
+            B_SERIES_3G_SERIAL_PREFIX2 -> ParticleDeviceType.B_SOM
+            X_SERIES_SERIAL_PREFIX -> ParticleDeviceType.X_SOM
             else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
         }
     }

@@ -367,7 +367,7 @@
         android:label="ControlPanelSimStatusChangeFragment" >
         <argument
             android:name="simStatusChangeMode"
-            app:argType="io.particle.mesh.ui.controlpanel.SimStatusMode" />
+            app:argType="io.particle.mesh.setup.flow.SimStatusChangeMode" />
     </fragment>
     <action
         android:id="@+id/action_global_controlPanelSimStatusChangeFragment"

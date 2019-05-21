@@ -1,8 +1,10 @@
 package io.particle.mesh.setup.flow
 
 import androidx.lifecycle.LiveData
+import io.particle.android.sdk.cloud.ParticleNetwork
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply.Network
+import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.mesh.setup.flow.context.SetupContexts
 import io.particle.mesh.setup.flow.context.SetupDevice
@@ -40,11 +42,16 @@ class FlowRunnerUiListener(private val ctxs: SetupContexts) {
 class CellularData(private val ctxs: SetupContexts) {
 
     val newSelectedDataLimitLD: LiveData<Int?> = ctxs.cellular.newSelectedDataLimitLD
+    val popOwnBackStackOnSelectingDataLimit: Boolean
+        get() = ctxs.cellular.popOwnBackStackOnSelectingDataLimit
 
     fun updateNewSelectedDataLimit(newLimit: Int) {
         ctxs.cellular.updateNewSelectedDataLimit(newLimit)
     }
 
+    fun updateChangeSimStatusButtonClicked() {
+        ctxs.cellular.updateChangeSimStatusButtonClicked(true)
+    }
 }
 
 
@@ -114,6 +121,8 @@ class CloudData(private val ctxs: SetupContexts) {
     val targetDeviceNameToAssignLD: LiveData<String?> = ctxs.cloud.targetDeviceNameToAssignLD
     val pricingImpact
         get() = ctxs.cloud.pricingImpact
+    val meshNetworksFromAPI
+        get() = ctxs.cloud.apiNetworks
 
     fun updateTargetDeviceNameToAssign(name: String) {
         ctxs.cloud.updateTargetDeviceNameToAssign(name)

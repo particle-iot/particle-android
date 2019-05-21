@@ -18,11 +18,11 @@ import com.google.android.material.tabs.TabLayout
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
@@ -86,8 +86,7 @@ class InspectorActivity : BaseActivity() {
             this,
             scopes,
             findViewById(R.id.device_info_bottom_sheet),
-            device,
-            null
+            device
         )
         deviceInfoController.initializeBottomSheet()
     }
@@ -152,7 +151,7 @@ class InspectorActivity : BaseActivity() {
         super.onCreateOptionsMenu(menu)
 
         val menuRes = when (device.deviceType) {
-            ARGON, A_SERIES, BORON, B_SERIES, XENON, X_SERIES -> R.menu.inspector_gen3
+            ARGON, A_SOM, BORON, B_SOM, XENON, X_SOM -> R.menu.inspector_gen3
             else -> R.menu.inspector
         }
 
@@ -174,13 +173,19 @@ class InspectorActivity : BaseActivity() {
         //update device and UI
         //TODO update more fields
         this.device = device
-        runOnUiThread { title = device.name }
+        runOnUiThread {
+            title = device.name
+            deviceInfoController.updateDeviceDetails()
+        }
     }
 
     @Subscribe
     fun onEvent(deviceStateChange: DeviceStateChange) {
         //reload menu to display online/offline
         invalidateOptionsMenu()
+        runOnUiThread {
+            deviceInfoController.updateDeviceDetails()
+        }
     }
 
     private fun setupInspectorPages() {

@@ -29,8 +29,9 @@ class FlowRunnerSystemInterface : ProgressHack {
     lateinit var flowRunner: MeshFlowRunner
 
     val scopes = Scopes()
-    val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData<DialogSpec>()
-    val dialogHack = DialogTool(dialogRequestLD, MutableLiveData())
+    val dialogRequestLD: LiveData<DialogSpec?> = ClearValueOnInactiveLiveData()
+    val snackbarRequestLD: LiveData<String?> = ClearValueOnInactiveLiveData()
+    val dialogHack = DialogTool(dialogRequestLD, snackbarRequestLD, MutableLiveData())
     val shouldShowProgressSpinnerLD: LiveData<Boolean?> = MutableLiveData()
     val meshFlowTerminator = MeshFlowTerminator()
 
@@ -71,6 +72,7 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
         private set
 
     fun initialize(flowUiDelegate: FlowUiDelegate) {
+
         flowRunner = buildFlowManager(
             app,
             ParticleCloudSDK.getCloud(),

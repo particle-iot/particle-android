@@ -8,6 +8,7 @@ import okio.source
 
 fun Context.readRawResourceBytes(@RawRes resId: Int): ByteArray {
     val stream = this.resources.openRawResource(resId)
-    val buffer = stream.source().buffer()
-    return buffer.use { it.readByteArray() }
+    return stream.source().buffer().use {
+        it.readByteArray()
+    }
 }

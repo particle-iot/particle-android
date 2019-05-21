@@ -89,11 +89,17 @@
         <item name="android:layout_gravity">right</item>
     </style>
 
-    <style name="TinkerSetup" parent="ParticleSetupTheme">
+    <style name="TinkerSetup" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textAppearance">@style/p_ParticleText</item>
+        <item name="buttonStyle">@style/p_mesh_button_style</item>
+        <item name="android:buttonStyle">@style/p_mesh_button_style</item>
         <item name="actionBarStyle">@style/TriangyActionBar</item>
     </style>
 
-    <style name="TriangyActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="TriangyActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="background">@drawable/ic_triangy_toolbar_background</item>
     </style>
 

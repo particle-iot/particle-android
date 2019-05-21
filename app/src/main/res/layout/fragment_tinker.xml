@@ -7,6 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:paddingBottom="90dp"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
     tools:context="io.particle.android.sdk.tinker.TinkerFragment">
 
     <RelativeLayout

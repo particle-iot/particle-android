@@ -14,7 +14,7 @@ import io.particle.mesh.setup.ui.ProgressHack
 import io.particle.mesh.ui.controlpanel.ControlPanelCongratsFragmentArgs
 import io.particle.mesh.ui.controlpanel.ControlPanelSimStatusChangeFragmentArgs
 import io.particle.mesh.ui.controlpanel.ControlPanelWifiInspectNetworkFragmentArgs
-import io.particle.mesh.ui.controlpanel.SimStatusMode
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
@@ -144,6 +144,14 @@ abstract class BaseFlowUiDelegate(
         }
     }
 
+    override fun showSnackbarWithMessage(messageToShow: String) {
+        dialogTool.newSnackbarRequest(messageToShow)
+        scopes.onMain {
+            delay(50)
+            dialogTool.clearSnackbarRequest()
+        }
+    }
+
     override fun showInspectCurrentWifiNetworkUi(currentNetwork: WifiNew.GetCurrentNetworkReply) {
         navigate(
             R.id.action_global_controlPanelWifiInspectNetworkFragment,
@@ -155,26 +163,26 @@ abstract class BaseFlowUiDelegate(
         navigate(R.id.action_global_controlPanelCellularOptionsFragment, shouldPopBackstack = false)
     }
 
-    override fun showControlPanelUnpauseUi() {
+    override fun showControlPanelSimUnpauseUi() {
         navigate(
             R.id.action_global_controlPanelSimStatusChangeFragment,
-            ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.UNPAUSE).toBundle(),
+            ControlPanelSimStatusChangeFragmentArgs(SimStatusChangeMode.UNPAUSE).toBundle(),
             shouldPopBackstack = false
         )
     }
 
-    override fun showControlPanelDeactivateUi() {
+    override fun showControlPanelSimDeactivateUi() {
         navigate(
             R.id.action_global_controlPanelSimStatusChangeFragment,
-            ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.DEACTIVATE).toBundle(),
+            ControlPanelSimStatusChangeFragmentArgs(SimStatusChangeMode.DEACTIVATE).toBundle(),
             shouldPopBackstack = false
         )
     }
 
-    override fun showControlPanelReactivateUi() {
+    override fun showControlPanelSimReactivateUi() {
         navigate(
             R.id.action_global_controlPanelSimStatusChangeFragment,
-            ControlPanelSimStatusChangeFragmentArgs(SimStatusMode.REACTIVATE).toBundle(),
+            ControlPanelSimStatusChangeFragmentArgs(SimStatusChangeMode.REACTIVATE).toBundle(),
             shouldPopBackstack = false
         )
     }

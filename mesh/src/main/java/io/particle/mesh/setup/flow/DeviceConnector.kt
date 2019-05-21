@@ -4,11 +4,11 @@ import androidx.annotation.MainThread
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SERIES
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.mesh.bluetooth.connecting.BluetoothConnectionManager
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.SerialNumber
@@ -52,11 +52,11 @@ class DeviceConnector(
     ): String {
         val deviceTypeName = when (deviceType) {
             ARGON,
-            A_SERIES -> "Argon"
+            A_SOM -> "Argon"
             BORON,
-            B_SERIES -> "Boron"
+            B_SOM -> "Boron"
             XENON,
-            X_SERIES -> "Xenon"
+            X_SOM -> "Xenon"
             else -> throw IllegalArgumentException("Not a mesh device: $deviceType")
         }
         val serial = serialNum.value

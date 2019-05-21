@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 
 
 class Scopes(
-    val job: Job = Job(),
+    val job: Job = SupervisorJob(),
     val mainThreadScope: CoroutineScope = CoroutineScope(Dispatchers.Main + job),
     val backgroundScope: CoroutineScope = CoroutineScope(Dispatchers.Default + job)
 ) {
@@ -18,7 +18,7 @@ class Scopes(
     }
 
     suspend fun <T> withWorker(timeout: Long? = null, block: suspend CoroutineScope.() -> T): T {
-        return runDeferred(mainThreadScope, timeout, block)
+        return runDeferred(backgroundScope, timeout, block)
     }
 
     fun onMain(block: suspend CoroutineScope.() -> Unit): Job {

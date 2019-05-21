@@ -42,6 +42,10 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
     private val log = KotlinLogging.logger {}
 
 
+    override fun onFlowTerminated() {
+        finish()
+    }
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
