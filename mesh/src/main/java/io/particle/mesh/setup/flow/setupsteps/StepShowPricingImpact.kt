@@ -6,13 +6,9 @@ import io.particle.android.sdk.cloud.PricingImpactAction
 import io.particle.android.sdk.cloud.PricingImpactNetworkType
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
-import io.particle.mesh.setup.flow.FatalFlowException
-import io.particle.mesh.setup.flow.Gen3ConnectivityType
-import io.particle.mesh.setup.flow.MeshSetupStep
-import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.meshsetup.MeshNetworkToJoin
 
 
@@ -46,8 +42,8 @@ class StepShowPricingImpact(
         val action = when (ctxs.device.networkSetupTypeLD.value) {
             NetworkSetupType.AS_GATEWAY -> PricingImpactAction.CREATE_NETWORK
             NetworkSetupType.STANDALONE -> PricingImpactAction.ADD_USER_DEVICE
-            NetworkSetupType.NODE_JOINER -> throw FatalFlowException(
-                "Should not be showing billing for joiners!"
+            NetworkSetupType.NODE_JOINER -> throw InvalidOperationException(
+                "Should not be showing billing screen for joiners!"
             )
             null -> PricingImpactAction.ADD_NETWORK_DEVICE
         }

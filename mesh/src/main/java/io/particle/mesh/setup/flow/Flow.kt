@@ -13,16 +13,19 @@ enum class Gen3ConnectivityType {
     MESH_ONLY
 }
 
-private val log = KotlinLogging.logger {}
 
-
-fun <V, E> Result<V, E>.throwOnErrorOrAbsent(): V {
+inline fun <reified V, reified E> Result<V, E>.throwOnErrorOrAbsent(): V {
     return when (this) {
         is Result.Error,
         is Result.Absent -> {
-            val msg = "Error making request: ${this.error}"
+            val log = KotlinLogging.logger {}
+            val msg = if (this is Result.Error) {
+                "Error getting result: ${this.error}"
+            } else {
+                "Absent result returned! value type=${V::class}, error type=${E::class}"
+            }
             log.error { msg }
-            throw FlowException(msg)
+            throw MeshSetupFlowException(msg)
         }
         is Result.Present -> this.value
     }
