@@ -4,6 +4,7 @@ package io.particle.android.sdk.cloud
 import android.net.Uri
 import androidx.annotation.WorkerThread
 import androidx.collection.LongSparseArray
+import androidx.collection.keyIterator
 import com.google.gson.Gson
 import io.particle.android.sdk.cloud.ApiDefs.CloudApi
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
@@ -47,41 +48,36 @@ internal class EventsDelegate(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun publishEvent(
-        eventName: String, event: String?,
-        @ParticleEventVisibility eventVisibility: Int, timeToLive: Int
+        eventName: String,
+        event: String?,
+        @ParticleEventVisibility eventVisibility: Int,
+        timeToLive: Int
     ) {
-
         val isPrivate = eventVisibility != ParticleEventVisibility.PUBLIC
         try {
             cloudApi.publishEvent(eventName, event, isPrivate, timeToLive)
         } catch (error: RetrofitError) {
             throw ParticleCloudException(error)
         }
-
     }
 
     @WorkerThread
     @Throws(IOException::class)
-    fun subscribeToAllEvents(
-        eventNamePrefix: String?,
-        handler: ParticleEventHandler
-    ): Long {
+    fun subscribeToAllEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
         return subscribeToEventWithUri(uris.buildAllEventsUri(eventNamePrefix), handler)
     }
 
     @WorkerThread
     @Throws(IOException::class)
-    fun subscribeToMyDevicesEvents(
-        eventNamePrefix: String?,
-        handler: ParticleEventHandler
-    ): Long {
+    fun subscribeToMyDevicesEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
         return subscribeToEventWithUri(uris.buildMyDevicesEventUri(eventNamePrefix), handler)
     }
 
     @WorkerThread
     @Throws(IOException::class)
     fun subscribeToDeviceEvents(
-        eventNamePrefix: String?, deviceID: String,
+        eventNamePrefix: String?,
+        deviceID: String,
         eventHandler: ParticleEventHandler
     ): Long {
         return subscribeToEventWithUri(
@@ -93,61 +89,57 @@ internal class EventsDelegate(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun unsubscribeFromEventWithID(eventListenerID: Long) {
-        synchronized(eventReaders) {
-            val reader = eventReaders.get(eventListenerID)
-                ?: //                log.w("No event listener subscription found for ID '" + eventListenerID + "'!");
-                return
+        val reader = synchronized(eventReaders) {
+            val theReader = eventReaders.get(eventListenerID)
             eventReaders.remove(eventListenerID)
-            try {
-                reader.stopListening()
-            } catch (e: IOException) {
-                // handling the exception here instead of putting it in the method signature
-                // is inconsistent, but SDK consumers aren't going to care about receiving
-                // this exception, so just swallow it here.
-                log.w("Error while trying to stop event listener", e)
-            }
+            return@synchronized theReader
+        }
 
+        try {
+            reader?.stopListening()
+        } catch (e: IOException) {
+            // handling the exception here instead of putting it in the method signature
+            // is inconsistent, but SDK consumers aren't going to care about receiving
+            // this exception, so just swallow it here.
+            log.w("Error while trying to stop event listener", e)
         }
     }
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun unsubscribeFromEventWithHandler(handler: SimpleParticleEventHandler) {
+        var readerToStop: EventReader? = null
         synchronized(eventReaders) {
-            for (i in 0 until eventReaders.size()) {
-                val reader = eventReaders.valueAt(i)
-
-                if (reader.handler === handler) {
-                    eventReaders.remove(i.toLong())
-                    try {
-                        reader.stopListening()
-                    } catch (e: IOException) {
-                        // handling the exception here instead of putting it in the method signature
-                        // is inconsistent, but SDK consumers aren't going to care about receiving
-                        // this exception, so just swallow it here.
-                        log.w("Error while trying to stop event listener", e)
-                    }
-
-                    return
+            for (readerId in eventReaders.keyIterator()) {
+                val reader = eventReaders[readerId]
+                if (reader?.handler == handler) {
+                    eventReaders.remove(readerId)
+                    readerToStop = reader
+                    break
                 }
             }
+        }
+
+        try {
+            readerToStop?.stopListening()
+        } catch (e: IOException) {
+            // Handling the exception here instead of putting it in the method signature is
+            // inconsistent, but SDK consumers aren't going to care about receiving this exception,
+            // so just swallow it here.
+            log.e("Error while trying to stop event listener", e)
         }
     }
 
     @Throws(IOException::class)
     private fun subscribeToEventWithUri(uri: Uri, handler: ParticleEventHandler): Long {
+        val subscriptionId = subscriptionIdGenerator.getAndIncrement()
+        val reader = EventReader(handler, executor, gson, uri, eventSourceFactory)
+        // log.d("Created event subscription with ID " + subscriptionId + " for URI " + uri);
         synchronized(eventReaders) {
-
-            val subscriptionId = subscriptionIdGenerator.getAndIncrement()
-            val reader = EventReader(handler, executor, gson, uri, eventSourceFactory)
             eventReaders.put(subscriptionId, reader)
-
-            //            log.d("Created event subscription with ID " + subscriptionId + " for URI " + uri);
-
-            reader.startListening()
-
-            return subscriptionId
         }
+        reader.startListening()
+        return subscriptionId
     }
 
 
