@@ -1,3 +1,7 @@
+2.3.13
+======
+- Fix BLE pairing bug in mesh setup with devices that have new/unknown serial numbers
+
 2.3.11
 ======
 - Fix Photon claiming issue
