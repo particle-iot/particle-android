@@ -95,8 +95,8 @@ dependencies {
     }
 
     releaseImplementation 'com.google.firebase:firebase-core:16.0.9'
-    releaseImplementation 'com.google.firebase:firebase-perf:17.0.0'
-    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    releaseImplementation 'com.google.firebase:firebase-perf:17.0.2'
+    releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Segment
     //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
