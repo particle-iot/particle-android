@@ -33,7 +33,7 @@ android {
         versionCode 1_02_04_00_02
         versionName  "2.4.0 (2)"
 
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = false  // no need for this since we're min SDK=21
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
