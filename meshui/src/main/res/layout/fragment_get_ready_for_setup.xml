@@ -44,14 +44,14 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:checked="false"
-        android:text="@string/p_getreadyforsetup_antenna_confirmation_speedbump"
         android:textAppearance="@style/p_ParticleText"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/action_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/videoView" />
+        app:layout_constraintTop_toBottomOf="@+id/videoView"
+        tools:text="@string/p_getreadyforsetup_antenna_confirmation_speedbump_argon" />
 
     <Button
         android:id="@id/action_next"

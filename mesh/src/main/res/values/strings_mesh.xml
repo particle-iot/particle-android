@@ -173,7 +173,7 @@
     <string name="p_mesh_network_password_is_incorrect">Network password is incorrect</string>
     <string name="p_getreadyforsetup_use_ethernet_hintbox_header">Use with ethernet?</string>
     <string name="p_getreadyforsetup_use_ethernet_switch">Toggle Ethernet Featherwing setup</string>
-
+    <string name="p_getreadyforsetup_use_ethernet_switch_som">Toggle Ethernet setup</string>
     <string name="p_bleotaintro_header">Let\'s get your device updated</string>
     <string name="p_bleotaintro_subheader_1">Update your device to the latest-and-greatest version of <i>Device OS</i> to continue setup</string>
     <string name="p_bleotaintro_tipbox_content">Your device may <b>receive multiple files</b> as part of this Device OS update. It will reboot in-between each file it receives from Device Cloud.</string>
@@ -241,7 +241,11 @@
     <string name="p_letsgetbuilding_tip_content">Did you already close your web browser? You can always head straight to:</string>
     <string name="p_letsgetbuilding_header"><b>Let\'s get building!</b></string>
     <string name="p_letsgetbuilding_subheader">To start building with your device, <b>look back at your web browser where you got started with setup.</b></string>
-    <string name="p_getreadyforsetup_antenna_confirmation_speedbump">I have attached the antenna and see that the device is blinking blue</string>
+    <string name="p_getreadyforsetup_antenna_confirmation_speedbump_argon">I have attached the Wi-Fi antenna and see that the device is blinking blue</string>
+    <string name="p_getreadyforsetup_antenna_confirmation_speedbump_boron">I have attached the cellular antenna and see that the device is blinking blue</string>
+    <string name="p_getreadyforsetup_antenna_confirmation_speedbump_asom">I have attached the Wi-Fi and bluetooth antennas and see that the device is blinking blue</string>
+    <string name="p_getreadyforsetup_antenna_confirmation_speedbump_bsom">I have attached the cellular and bluetooth antennas and see that the device is blinking blue</string>
+    <string name="p_getreadyforsetup_antenna_confirmation_speedbump_xsom">I have attached the bluetooth antenna and see that the device is blinking blue</string>
     <string name="p_sticker_error_dialog_content">There is a problem with the sticker on your device. Please contact support for a solution.</string>
     <string name="p_action_contact_support">Contact Support</string>
 
