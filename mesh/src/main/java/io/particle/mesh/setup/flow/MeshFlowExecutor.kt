@@ -262,6 +262,10 @@ class MeshFlowExecutor(
                 StepShowCreateNetworkFinished(deps.flowUi)
             )
 
+            STANDALONE_POSTFLOW -> listOf(
+                StepSetNewDeviceName(deps.flowUi, deps.cloud),
+                StepShowLetsGetBuildingUi(deps.flowUi)
+            )
 
             CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW -> listOf(
                 StepEnsureListeningStoppedForBothDevices(),
@@ -317,11 +321,6 @@ class MeshFlowExecutor(
             CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW -> listOf(
 //                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),
                 StepPopBackStack(deps.flowUi)
-            )
-
-            STANDALONE_POSTFLOW -> listOf(
-                StepSetNewDeviceName(deps.flowUi, deps.cloud)
-                // StepOfferToAddOneMoreDevice()  // FIXME: add support for this
             )
 
 
