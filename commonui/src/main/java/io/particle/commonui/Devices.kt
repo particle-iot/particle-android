@@ -33,35 +33,38 @@ private data class ProductImageAndName(@StringRes val name: Int, @DrawableRes va
 private val ParticleDeviceType.productImageAndName: ProductImageAndName
     get() {
         return when (this) {
-            CORE -> pin(R.string.product_name_core, R.drawable.product_image_core)
+            CORE -> pian(R.string.product_name_core, R.drawable.product_image_core)
 
-            PHOTON -> pin(R.string.product_name_photon, R.drawable.product_image_photon)
+            PHOTON -> pian(R.string.product_name_photon, R.drawable.product_image_photon)
 
-            ELECTRON -> pin(R.string.product_name_electron, R.drawable.product_image_electron)
+            ELECTRON -> pian(R.string.product_name_electron, R.drawable.product_image_electron)
 
-            RASPBERRY_PI -> pin(R.string.product_name_raspberry, R.drawable.product_image_pi)
+            RASPBERRY_PI -> pian(R.string.product_name_raspberry, R.drawable.product_image_pi)
 
-            P1 -> pin(R.string.product_name_p1, R.drawable.product_image_p1)
+            P1 -> pian(R.string.product_name_p1, R.drawable.product_image_p1)
 
-            RED_BEAR_DUO -> pin(R.string.product_name_red_bear_duo, R.drawable.product_image_red_bear_duo)
+            RED_BEAR_DUO -> pian(R.string.product_name_red_bear_duo, R.drawable.product_image_red_bear_duo)
 
-            ARGON,
-            A_SOM -> pin(R.string.product_name_argon, R.drawable.product_image_argon)
+            ARGON -> pian(R.string.product_name_argon, R.drawable.product_image_argon)
 
-            BORON,
-            B_SOM -> pin(R.string.product_name_boron, R.drawable.product_image_boron)
+            A_SOM -> pian(R.string.product_name_a_series, R.drawable.product_image_argon)
 
-            XENON,
-            X_SOM -> pin(R.string.product_name_xenon, R.drawable.product_image_xenon)
+            BORON -> pian(R.string.product_name_boron, R.drawable.product_image_boron)
+
+            B_SOM -> pian(R.string.product_name_b_series, R.drawable.product_image_boron)
+
+            XENON -> pian(R.string.product_name_xenon, R.drawable.product_image_xenon)
+
+            X_SOM -> pian(R.string.product_name_x_series, R.drawable.product_image_xenon)
 
             // ALL OTHERS
             BLUZ,
             DIGISTUMP_OAK,
-            OTHER -> pin(R.string.product_name_unknown, R.drawable.product_image_unknown)
+            OTHER -> pian(R.string.product_name_unknown, R.drawable.product_image_unknown)
         }
     }
 
 
-private fun pin(@StringRes name: Int, @DrawableRes image: Int): ProductImageAndName {
+private fun pian(@StringRes name: Int, @DrawableRes image: Int): ProductImageAndName {
     return ProductImageAndName(name, image)
 }
