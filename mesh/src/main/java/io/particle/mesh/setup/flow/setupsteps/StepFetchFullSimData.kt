@@ -18,12 +18,8 @@ class StepFetchFullSimData(
         }
 
         flowUi.showGlobalProgressSpinner(true)
-        try {
-            val sim = cloud.getSim(ctxs.targetDevice.iccid!!)
-            ctxs.targetDevice.sim = sim
-        } finally {
-            flowUi.showGlobalProgressSpinner(false)
-        }
+        val sim = cloud.getSim(ctxs.targetDevice.iccid!!)
+        ctxs.targetDevice.sim = sim
     }
 
 }

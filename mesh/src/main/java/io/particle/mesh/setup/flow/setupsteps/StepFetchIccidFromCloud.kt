@@ -18,12 +18,8 @@ class StepFetchIccidFromCloud(
         }
 
         flowUi.showGlobalProgressSpinner(true)
-        try {
-            val device = cloud.getDevice(ctxs.targetDevice.deviceId!!)
-            ctxs.targetDevice.iccid = device.iccid
-        } finally {
-            flowUi.showGlobalProgressSpinner(false)
-        }
+        val device = cloud.getDevice(ctxs.targetDevice.deviceId!!)
+        ctxs.targetDevice.iccid = device.iccid
     }
 
 }

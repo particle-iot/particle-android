@@ -124,7 +124,6 @@ class MeshFlowExecutor(
                     return@onWorker
 
                 } catch (ex: Exception) {
-                    deps.flowUi.showGlobalProgressSpinner(false)
 
                     if (ex is MeshSetupFlowException && ex.severity == EXPECTED_FLOW) {
                         log.info { "Received EXPECTED_FLOW exception; retrying." }

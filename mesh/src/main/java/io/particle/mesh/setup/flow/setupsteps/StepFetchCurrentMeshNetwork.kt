@@ -18,9 +18,6 @@ class StepFetchCurrentMeshNetwork(private val flowUi: FlowUiDelegate) : MeshSetu
 
         } catch (ex: Exception) {
             ctxs.mesh.currentlyJoinedNetwork = null
-
-        } finally {
-            flowUi.showGlobalProgressSpinner(false)
         }
     }
 

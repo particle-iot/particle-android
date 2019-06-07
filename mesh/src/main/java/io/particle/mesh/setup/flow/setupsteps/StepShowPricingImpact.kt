@@ -24,11 +24,7 @@ class StepShowPricingImpact(
         }
 
         flowUi.showGlobalProgressSpinner(true)
-        try {
-            ensurePricingImpactRetrieved(ctxs)
-        } finally {
-            flowUi.showGlobalProgressSpinner(false)
-        }
+        ensurePricingImpactRetrieved(ctxs)
 
         ctxs.cloud.pricingImpactConfirmedLD
             .nonNull(scopes)
