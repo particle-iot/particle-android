@@ -3,6 +3,11 @@ package io.particle.mesh.setup
 import androidx.annotation.WorkerThread
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import mu.KotlinLogging
+import java.util.*
+
+
+private val log = KotlinLogging.logger {}
 
 
 inline class SerialNumber(val value: String)
@@ -17,28 +22,27 @@ fun SerialNumber.isSomSerial(): Boolean {
 fun SerialNumber.toDeviceType(cloud: ParticleCloud): ParticleDeviceType {
 
     fun SerialNumber.toDeviceType(): ParticleDeviceType {
-        val first4 = this.value.substring(0, 4)
-        return when (first4) {
-            ARGON_SERIAL_PREFIX1,
-            ARGON_SERIAL_PREFIX2,
-            ARGON_SERIAL_PREFIX3 -> ParticleDeviceType.ARGON
-            BORON_LTE_SERIAL_PREFIX1,
-            BORON_LTE_SERIAL_PREFIX2,
-            BORON_3G_SERIAL_PREFIX1,
-            BORON_3G_SERIAL_PREFIX2 -> ParticleDeviceType.BORON
-            XENON_SERIAL_PREFIX1,
-            XENON_SERIAL_PREFIX2 -> ParticleDeviceType.XENON
-            A_SERIES_SERIAL_PREFIX -> ParticleDeviceType.A_SOM
-            B_SERIES_LTE_SERIAL_PREFIX1,
-            B_SERIES_3G_SERIAL_PREFIX2 -> ParticleDeviceType.B_SOM
-            X_SERIES_SERIAL_PREFIX -> ParticleDeviceType.X_SOM
+        return when (this.value.take(4)) {
+            in ARGON_SERIAL_PREFIXES -> ParticleDeviceType.ARGON
+            in BORON_SERIAL_PREFIXES -> ParticleDeviceType.BORON
+            in XENON_SERIAL_PREFIXES -> ParticleDeviceType.XENON
+            in A_SERIES_SERIAL_PREFIXES -> ParticleDeviceType.A_SOM
+            in B_SERIES_SERIAL_PREFIXES -> ParticleDeviceType.B_SOM
+            in X_SERIES_SERIAL_PREFIXES -> ParticleDeviceType.X_SOM
             else -> throw IllegalArgumentException("Invalid serial number from barcode: $this")
         }
     }
 
-    return try {
-        return this.toDeviceType()
+    var gotTypeFromCloud = false
+    val dt = try {
+        this.toDeviceType()
     } catch (badArg: IllegalArgumentException) {
+        gotTypeFromCloud = true
         cloud.getPlatformId(this.value)
     }
+
+    val source = if (gotTypeFromCloud) "cloud" else "local serial number lookup"
+    log.info { "Retrieved device type $dt from $source" }
+
+    return dt
 }
