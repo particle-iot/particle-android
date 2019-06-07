@@ -89,8 +89,8 @@
     <string name="p_pricingimpact_FreeNetworksText">First {free_networks} networks FREE</string>
     <string name="p_pricingimpact_FreeMonthsText">FREE for {free_months} months</string>
 
-    <string name="p_pricingimpact_PriceText">${price}</string>
-    <string name="p_pricingimpact_PriceTextStrikethrough"><strike>${price}</strike></string>
+    <string name="p_pricingimpact_PriceText">{price}</string>
+    <string name="p_pricingimpact_PriceTextStrikethrough"><strike>{price}</strike></string>
     <string name="p_pricingimpact_PriceNoteText">per mo.</string>
 
     <string name="p_pricingimpact_DeviceCloudFeatures">DEVICE CLOUD INCLUDES</string>

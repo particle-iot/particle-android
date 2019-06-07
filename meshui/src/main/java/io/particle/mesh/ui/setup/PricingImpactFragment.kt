@@ -12,6 +12,7 @@ import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import kotlinx.android.synthetic.main.fragment_pricing_impact.*
+import java.text.NumberFormat
 
 
 class PricingImpactFragment : BaseFlowFragment() {
@@ -36,10 +37,10 @@ class PricingImpactFragment : BaseFlowFragment() {
 
     private fun formatBasedOnPricingImpact(pricingInfo: ParticlePricingInfo) {
         val v = view
+        val currencyFormatter = NumberFormat.getCurrencyInstance()
 
-        // FIXME: FORMAT AS CURRENCY
         p_pricingimpact_price.text = Phrase.from(v, R.string.p_pricingimpact_PriceTextStrikethrough)
-            .put("price", "${pricingInfo.plan.monthlyBaseAmount}")
+            .put("price", currencyFormatter.format(pricingInfo.plan.monthlyBaseAmount))
             .format()
 
         p_action_next.setText(
@@ -65,7 +66,7 @@ class PricingImpactFragment : BaseFlowFragment() {
                 p_pricingimpact_feature1.setText(R.string.p_pricingimpact_FeaturesDeviceCloud)
                 p_pricingimpact_feature2.text = Phrase.from(v, R.string.p_pricingimpact_FeaturesDataAllowence)
                     .put("emmbees", pricingInfo.plan.includedDataMb)
-                    .put("per_mb_price", "${pricingInfo.plan.overageMinCostMb}") // FIXME: FORMAT AS CURRENCY
+                    .put("per_mb_price", currencyFormatter.format(pricingInfo.plan.overageMinCostMb))
                     .format()
                 p_pricingimpact_feature3.setText(R.string.p_pricingimpact_FeaturesStandardSupport)
             }
@@ -87,9 +88,12 @@ class PricingImpactFragment : BaseFlowFragment() {
                 p_pricingimpact_feature3.text = Phrase.from(v, R.string.p_pricingimpact_FeaturesMaxGateways)
                     .put("total_gateways", pricingInfo.plan.includedGatewayCount)
                     .format()
+
+
+
                 p_pricingimpact_feature4.text = Phrase.from(v, R.string.p_pricingimpact_FeaturesDataAllowence)
                     .put("emmbees", pricingInfo.plan.includedDataMb)
-                    .put("per_mb_price", "${pricingInfo.plan.overageMinCostMb}") // FIXME: FORMAT AS CURRENCY
+                    .put("per_mb_price", currencyFormatter.format(pricingInfo.plan.overageMinCostMb))
                     .format()
                 p_pricingimpact_feature5.setText(R.string.p_pricingimpact_FeaturesStandardSupport)
             }
