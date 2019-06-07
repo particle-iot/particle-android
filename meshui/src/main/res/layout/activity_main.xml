@@ -7,6 +7,27 @@
     android:keepScreenOn="true"
     tools:context="io.particle.mesh.ui.setup.MeshSetupActivity">
 
+    <FrameLayout
+        android:id="@+id/p_mesh_globalProgressSpinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#AFFF"
+        android:foregroundGravity="center"
+        android:translationZ="1dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/p_spinner"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+    </FrameLayout>
+
     <ImageButton
         android:id="@+id/p_action_close"
         android:layout_width="0dp"
@@ -38,27 +59,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="?attr/actionBarSize" />
 
-    <FrameLayout
-        android:id="@+id/p_mesh_globalProgressSpinner"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#AFFF"
-        android:foregroundGravity="center"
-        android:translationZ="10dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@style/p_spinner"
-            android:layout_gravity="center"
-            android:indeterminate="true" />
-
-    </FrameLayout>
-
     <fragment
         android:id="@+id/main_nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -72,6 +72,5 @@
         app:navGraph="@navigation/mesh_setup"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="70dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
