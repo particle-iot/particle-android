@@ -45,7 +45,7 @@ class StepShowPricingImpact(
         }
 
         val connType = ctxs.targetDevice.connectivityType
-        val networkType = if (connType == Gen3ConnectivityType.CELLULAR) {
+        val networkType = if (connType == Gen3ConnectivityType.CELLULAR && !ctxs.hasEthernet!!) {
             PricingImpactNetworkType.CELLULAR
         } else {
             PricingImpactNetworkType.WIFI
