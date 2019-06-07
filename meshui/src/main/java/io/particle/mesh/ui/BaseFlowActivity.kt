@@ -1,5 +1,8 @@
 package io.particle.mesh.ui
 
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.IdRes
@@ -13,9 +16,15 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.snakydesign.livedataextensions.filter
 import com.snakydesign.livedataextensions.nonNull
+import io.particle.android.common.isLocationServicesAvailable
+import io.particle.android.common.promptUserToEnableLocationServices
+import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.ui.utils.getViewModel
 import mu.KotlinLogging
+
+
+private const val REQUEST_ENABLE_BT = 42
 
 
 abstract class BaseFlowActivity : AppCompatActivity() {
@@ -76,10 +85,29 @@ abstract class BaseFlowActivity : AppCompatActivity() {
             .observe(this, Observer { onFlowTerminated() })
     }
 
+    override fun onPostResume() {
+        super.onPostResume()
+        if (!btAdapter.isEnabled) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        }
+        if (!isLocationServicesAvailable()) {
+            promptUserToEnableLocationServices { finish() }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         flowSystemInterface.shutdown()
         flowSystemInterface.setNavController(null)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
+            // FIXME: inform the user why we're exiting?
+            finish()
+        }
     }
 
     private fun showGlobalProgressSpinner(show: Boolean) {

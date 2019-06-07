@@ -1,16 +1,10 @@
 package io.particle.mesh.ui.setup
 
-import android.app.Activity
-import android.bluetooth.BluetoothAdapter
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
-import io.particle.android.common.isLocationServicesAvailable
-import io.particle.android.common.promptUserToEnableLocationServices
 import io.particle.android.sdk.cloud.ParticleCloudSDK
-import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.setup.flow.FlowUiDelegate
@@ -19,12 +13,8 @@ import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.p_action_close
 import mu.KotlinLogging
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import java.lang.IllegalStateException
-
-private const val REQUEST_ENABLE_BT = 42
 
 
 class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
@@ -57,27 +47,8 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
         p_action_close.setOnClickListener { showCloseSetupConfirmation() }
     }
 
-    override fun onPostResume() {
-        super.onPostResume()
-        if (!btAdapter.isEnabled) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-        }
-        if (!isLocationServicesAvailable()) {
-            promptUserToEnableLocationServices { finish() }
-        }
-    }
-
     override fun onBackPressed() {
         showCloseSetupConfirmation()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
-            // FIXME: inform the user why we're exiting?
-            finish()
-        }
     }
 
     override fun setTitleBarOptions(options: TitleBarOptions) {
