@@ -86,6 +86,7 @@ import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ResultCode.Companion.toResultCode
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.utils.isThisTheMainThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -119,7 +120,11 @@ class ProtocolTransceiver internal constructor(
 
     fun disconnect() {
         didDisconnect = true
-        GlobalScope.launch(Dispatchers.Main) { connection.disconnect() }
+        if (isThisTheMainThread()) {
+            connection.disconnect()
+        } else {
+            GlobalScope.launch(Dispatchers.Main) { connection.disconnect() }
+        }
     }
 
     fun setConnectionPriority(priority: ConnectionPriority) {

@@ -42,10 +42,12 @@ class BluetoothConnection(
     private val closablePacketReceiveChannel: Channel<ByteArray>
 ) {
 
+    private val log = KotlinLogging.logger {}
+
     init {
         connectionStateChangedLD.observeForever {
             if (it == DISCONNECTED) {
-                disconnect(false)
+                doDisconnect(false)
             }
         }
     }
@@ -63,23 +65,24 @@ class BluetoothConnection(
         gatt.requestConnectionPriority(priority.sdkVal)
     }
 
-    fun disconnect(closeGatt: Boolean = true) {
+    fun disconnect() {
+        doDisconnect(true)
+    }
+
+    private fun doDisconnect(needToDisconnect: Boolean = false) {
+        log.info { "doDisconnect(): needToDisconnect=$needToDisconnect, this.gatt=${this.gatt}" }
         QATool.runSafely(
             { packetSendChannel.close() },
             { closablePacketReceiveChannel.close() },
             { callbacks.closeChannel() },
-            { gatt.disconnect() }
+            {
+                if (needToDisconnect) {
+                    gatt.disconnect()
+                } else {
+                    gatt.close()
+                }
+            }
         )
-
-        if (!closeGatt) {
-            return
-        }
-        // calling .close() *immediately* after .disconnect() was sometimes causing
-        // the disconnect to fail, thus the delay.  Hacky, but it works. :-/
-        GlobalScope.launch(Dispatchers.Main) {
-            delay(100)
-            QATool.runSafely({ gatt.close() })
-        }
     }
 }
 
