@@ -10,6 +10,7 @@ import io.particle.mesh.setup.flow.Scopes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 
 
 private const val FULL_PROTOCOL_HEADER_SIZE = 6
@@ -19,6 +20,8 @@ private const val AES_CCM_MAC_SIZE = 8
 class ProtocolTransceiverFactory(
         private val securityManager: SecurityManager
 ) {
+
+    private val log = KotlinLogging.logger {}
 
     @MainThread
     suspend fun buildProtocolTransceiver(
@@ -39,6 +42,8 @@ class ProtocolTransceiverFactory(
                 QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
             }
         }
+
+        log.info { "Creating connection crypto delegate" }
 
         val cryptoDelegate = securityManager.createCryptoDelegate(
                 jpakeLowEntropyPassword,

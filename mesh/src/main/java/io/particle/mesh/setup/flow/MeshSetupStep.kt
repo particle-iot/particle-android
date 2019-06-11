@@ -19,7 +19,9 @@ abstract class MeshSetupStep {
         log.info { "RUNNING STEP: ${this.javaClass.simpleName}" }
         try {
             doRunStep(contexts, scopes)
+            log.info { "RUNNING STEP COMPLETED: ${this.javaClass.simpleName}" }
         } catch (ex: Exception) {
+            log.info { "RUNNING STEP COMPLETED WITH EXCEPTION: ${this.javaClass.simpleName}" }
             throw wrapException(ex)
         }
         // TODO: any cleanup we need to do here?

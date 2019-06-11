@@ -15,6 +15,7 @@ import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.toDeviceType
+import mu.KotlinLogging
 
 
 class DeviceConnector(
@@ -23,6 +24,8 @@ class DeviceConnector(
     private val transceiverFactory: ProtocolTransceiverFactory
 ) {
 
+    private val log = KotlinLogging.logger {}
+
     @MainThread
     suspend fun connect(
         barcode: CompleteBarcodeData,
@@ -30,13 +33,17 @@ class DeviceConnector(
         scopes: Scopes
     ): ProtocolTransceiver? {
 
+        log.info { "Getting device type for barcode $barcode" }
         val deviceType = scopes.withWorker {
             barcode.serialNumber.toDeviceType(cloud)
         }
 
         val broadcastName = getDeviceBroadcastName(deviceType, barcode.serialNumber)
+        log.info { "Using broadcast name $broadcastName" }
+
         val device = btConnectionManager.connectToDevice(broadcastName, scopes)
             ?: return null
+
         return transceiverFactory.buildProtocolTransceiver(
             device,
             connName,

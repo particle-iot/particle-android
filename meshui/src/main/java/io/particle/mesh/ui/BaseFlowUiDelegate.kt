@@ -226,6 +226,9 @@ abstract class BaseFlowUiDelegate(
             return
         }
 
+        val navTargetName = everythingNeedsAContext.resources.getResourceName(navTargetId)
+        log.info { "Navigating to new target: $navTargetName" }
+
         showGlobalProgressSpinner(false)
         scopes.mainThreadScope.launch {
             if (shouldPopBackstack) {

@@ -667,6 +667,7 @@ class ParticleDevice internal constructor(
         eventNamePrefix: String,
         particleEventHandler: (String, ParticleEvent) -> Unit
     ): Long {
+        log.d("subscribeToSystemEvent: $eventNamePrefix")
         //Error would be handled in same way for every event name prefix, thus only simple onEvent listener is needed
         return subscribeToEvents(eventNamePrefix, object : ParticleEventHandler {
             override fun onEvent(eventName: String, particleEvent: ParticleEvent) {

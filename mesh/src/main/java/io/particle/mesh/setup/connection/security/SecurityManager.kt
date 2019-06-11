@@ -4,6 +4,7 @@ import io.particle.ecjpake4j.ECJPakeImpl
 import io.particle.ecjpake4j.Role.CLIENT
 import io.particle.mesh.setup.connection.InboundFrameReader
 import io.particle.mesh.setup.connection.OutboundFrameWriter
+import mu.KotlinLogging
 import okio.Buffer
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
@@ -22,6 +23,8 @@ private const val ALGORITHM_TRANSFORMATION = "AES/CCM/NoPadding"
 
 class SecurityManager {
 
+    private val log = KotlinLogging.logger {}
+
     suspend fun createCryptoDelegate(
             jpakeLowEntropyPassword: String,
             frameWriter: OutboundFrameWriter,
@@ -33,8 +36,9 @@ class SecurityManager {
                 transceiver
         )
 
+        log.info { "Beginning JPAKE exchange" }
         val jpakeSecret = jpakeManager.performJpakeExchange()
-
+        log.info { "Ending JPAKE exchange, secret created" }
         return AesCcmDelegate.newDelegateFromJpakeSecret(jpakeSecret)
     }
 }
