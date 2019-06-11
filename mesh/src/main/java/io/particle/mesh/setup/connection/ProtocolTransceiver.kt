@@ -285,7 +285,8 @@ class ProtocolTransceiver internal constructor(
         val response = sendRequest(
             FirmwareUpdateDataRequest.newBuilder()
                 .setData(ByteString.copyFrom(chunk))
-                .build()
+                .build(),
+            logContents = false
         )
         return buildResult(response) { r -> FirmwareUpdateDataReply.parseFrom(r.payloadData) }
     }
@@ -362,8 +363,6 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> AddJoinerReply.parseFrom(r.payloadData) }
     }
 
-    // NOTE: yes, 60 seconds is a CRAZY timeout, but... this is how long it takes to receive
-    // a response sometimes.
     suspend fun sendJoinNetwork(): Result<JoinNetworkReply, ResultCode> {
         val response = sendRequest(
             JoinNetworkRequest.newBuilder().build()
@@ -428,13 +427,20 @@ class ProtocolTransceiver internal constructor(
     //region PRIVATE
     private suspend fun sendRequest(
         message: GeneratedMessageV3,
-        timeout: Long = BLE_PROTO_REQUEST_TIMEOUT_MILLIS
+        timeout: Long = BLE_PROTO_REQUEST_TIMEOUT_MILLIS,
+        logContents: Boolean = true
     ): DeviceResponse? {
+
         val requestFrame = message.asRequest()
-        log.info {
+
+        val logMsg = if (logContents) {
             "Sending message ${message.javaClass} to '$connectionName': '$message' " +
                     "with ID: ${requestFrame.requestId}"
+        } else {
+            "Sending message ${message.javaClass} to '$connectionName', " +
+                    "with ID: ${requestFrame.requestId}"
         }
+        log.info { logMsg }
 
         if (!isConnected) {
             return null
