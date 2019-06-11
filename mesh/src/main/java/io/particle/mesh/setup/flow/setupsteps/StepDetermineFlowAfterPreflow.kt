@@ -50,13 +50,13 @@ class StepDetermineFlowAfterPreflow(private val flowUi: FlowUiDelegate) : MeshSe
 
         if (meshOnly) {
             ctxs.meshNetworkFlowAdded = true
-            return listOf(FlowType.JOINER_FLOW)
+            return listOf(FlowType.PREFLOW, FlowType.JOINER_FLOW)
         }
 
         if (!ctxs.currentFlow.contains(FlowType.INTERNET_CONNECTED_PREFLOW)) {
             // we're in an internet connected flow.  Run through that flow and come back here.
             ctxs.mesh.showNewNetworkOptionInScanner = true
-            return listOf(FlowType.INTERNET_CONNECTED_PREFLOW)
+            return listOf(FlowType.PREFLOW, FlowType.INTERNET_CONNECTED_PREFLOW)
         }
 
         // if we get here, it's time to add the correct mesh network flow type & interface setup type
@@ -70,10 +70,11 @@ class StepDetermineFlowAfterPreflow(private val flowUi: FlowUiDelegate) : MeshSe
         determineNetworkSetupType(ctxs, scopes)
 
         if (ctxs.device.networkSetupTypeLD.value!! == NetworkSetupType.NODE_JOINER) {
-            return listOf(FlowType.JOINER_FLOW)
+            return listOf(FlowType.PREFLOW, FlowType.JOINER_FLOW)
         }
 
-        val flows = mutableListOf(getInterfaceSetupFlow(ctxs))
+        val flows = mutableListOf(FlowType.PREFLOW)
+        flows.add(getInterfaceSetupFlow(ctxs))
         flows.add(when(ctxs.device.networkSetupTypeLD.value!!) {
             AS_GATEWAY -> FlowType.NETWORK_CREATOR_POSTFLOW
             STANDALONE -> FlowType.STANDALONE_POSTFLOW
