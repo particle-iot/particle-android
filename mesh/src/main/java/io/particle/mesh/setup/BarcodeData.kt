@@ -3,7 +3,25 @@ package io.particle.mesh.setup
 import androidx.annotation.WorkerThread
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
+import io.particle.mesh.setup.flow.Gen3ConnectivityType.CELLULAR
+import io.particle.mesh.setup.flow.Gen3ConnectivityType.MESH_ONLY
+import io.particle.mesh.setup.flow.Gen3ConnectivityType.WIFI
 
 
 @WorkerThread
@@ -20,13 +38,23 @@ fun BarcodeData.toConnectivityType(cloud: ParticleCloud): Gen3ConnectivityType {
 
 fun ParticleDeviceType.toConnectivityType(): Gen3ConnectivityType {
     return when (this) {
-        ParticleDeviceType.ARGON,
-        ParticleDeviceType.A_SOM -> Gen3ConnectivityType.WIFI
-        ParticleDeviceType.BORON,
-        ParticleDeviceType.B_SOM -> Gen3ConnectivityType.CELLULAR
-        ParticleDeviceType.XENON,
-        ParticleDeviceType.X_SOM -> Gen3ConnectivityType.MESH_ONLY
-        else -> throw IllegalArgumentException("Not a mesh device: $this")
+        OTHER,
+        CORE,
+        PHOTON,
+        P1,
+        RASPBERRY_PI,
+        RED_BEAR_DUO,
+        BLUZ,
+        DIGISTUMP_OAK,
+        ARGON,
+        A_SOM -> WIFI
+
+        ELECTRON,
+        BORON,
+        B_SOM -> CELLULAR
+
+        XENON,
+        X_SOM -> MESH_ONLY
     }
 }
 
