@@ -89,6 +89,8 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
     override fun onCleared() {
         super.onCleared()
         systemInterface.shutdown()
+        flowRunner.endCurrentFlow()
+        flowRunner.endSetup()
     }
 
 }

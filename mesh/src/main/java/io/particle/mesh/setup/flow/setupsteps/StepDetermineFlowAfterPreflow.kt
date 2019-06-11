@@ -70,6 +70,7 @@ class StepDetermineFlowAfterPreflow(private val flowUi: FlowUiDelegate) : MeshSe
         determineNetworkSetupType(ctxs, scopes)
 
         if (ctxs.device.networkSetupTypeLD.value!! == NetworkSetupType.NODE_JOINER) {
+            ctxs.meshNetworkFlowAdded = true
             return listOf(FlowType.PREFLOW, FlowType.JOINER_FLOW)
         }
 
@@ -122,6 +123,7 @@ class StepDetermineFlowAfterPreflow(private val flowUi: FlowUiDelegate) : MeshSe
         ctxs.device.networkSetupTypeLD.nonNull(scopes).runBlockOnUiThreadAndAwaitUpdate(scopes) {
             flowUi.getNetworkSetupType()
         }
+        flowUi.showGlobalProgressSpinner(true)
     }
 
 }

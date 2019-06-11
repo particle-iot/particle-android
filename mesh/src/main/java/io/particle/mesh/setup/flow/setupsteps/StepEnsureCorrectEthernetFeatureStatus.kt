@@ -10,7 +10,9 @@ import kotlinx.coroutines.delay
 class StepEnsureCorrectEthernetFeatureStatus : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        if (!ctxs.device.shouldDetectEthernet || ctxs.device.shouldDetectEthernet) {
+        // only run this step if we've been asked to detect ethernet,
+        // and we haven't already attempted to do so
+        if (!ctxs.device.shouldDetectEthernet || ctxs.device.ethernetDetectionComplete) {
             return
         }
 

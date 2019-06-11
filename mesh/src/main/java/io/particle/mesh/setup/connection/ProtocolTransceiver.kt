@@ -327,7 +327,8 @@ class ProtocolTransceiver internal constructor(
                 .setPassword(password)
                 .setChannel(channel)
                 .setNetworkId(networkId)
-                .build()
+                .build(),
+            timeout = TimeUnit.SECONDS.toMillis(25)
         )
         return buildResult(response) { r -> CreateNetworkReply.parseFrom(r.payloadData) }
     }

@@ -49,10 +49,15 @@ class SetupDevice(
     @WorkerThread
     fun updateBarcode(barcodeData: CompleteBarcodeData?, cloud: ParticleCloud) {
         log.info { "updateBarcode() for $deviceRole: $barcodeData" }
+
         barcode.castAndPost(barcodeData)
-        barcodeData?.let {
-            deviceType = it.toDeviceType(cloud)
-            connectivityType = it.toConnectivityType(cloud)
+
+        if (barcodeData == null) {
+            deviceType = null
+            connectivityType = null
+        } else {
+            deviceType = barcodeData.toDeviceType(cloud)
+            connectivityType = barcodeData.toConnectivityType(cloud)
         }
     }
 

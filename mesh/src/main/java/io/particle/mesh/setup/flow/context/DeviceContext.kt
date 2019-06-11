@@ -25,11 +25,13 @@ class DeviceContext : Clearable {
     val networkSetupTypeLD: LiveData<NetworkSetupType?> = MutableLiveData()
 
     var shouldDetectEthernet by log.logged(false)
+    var ethernetDetectionComplete by log.logged(false)
     var isDetectEthernetSent by log.logged(false)
     var firmwareUpdateCount by log.logged(1)
 
     override fun clearState() {
         shouldDetectEthernet = false
+        ethernetDetectionComplete = false
         isDetectEthernetSent = false
         firmwareUpdateCount = 1
 

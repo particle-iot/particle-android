@@ -118,7 +118,6 @@ class DeviceData(private val ctxs: SetupContexts) {
 
 class CloudData(private val ctxs: SetupContexts) {
 
-    val targetDeviceNameToAssignLD: LiveData<String?> = ctxs.cloud.targetDeviceNameToAssignLD
     val pricingImpact
         get() = ctxs.cloud.pricingImpact
     val meshNetworksFromAPI

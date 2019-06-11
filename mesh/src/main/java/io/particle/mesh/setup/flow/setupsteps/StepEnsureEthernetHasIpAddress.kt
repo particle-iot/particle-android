@@ -19,6 +19,9 @@ class StepEnsureEthernetHasIpAddress(private val flowUi: FlowUiDelegate) : MeshS
     private val log = KotlinLogging.logger {}
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
+        // delay for a moment here because otherwise this always ends up failing the first time
+        delay(2000)
+
         val targetXceiver = ctxs.requireTargetXceiver()
 
         suspend fun findEthernetInterface(): Network.InterfaceEntry? {
@@ -56,7 +59,6 @@ class StepEnsureEthernetHasIpAddress(private val flowUi: FlowUiDelegate) : MeshS
         log.info { "result from awaiting on 'ethernet must be plugged in dialog: $result" }
 
         flowUi.dialogTool.clearDialogResult()
-        delay(500)
         throw ExpectedFlowException("Ethernet connection not plugged in; user prompted.")
     }
 

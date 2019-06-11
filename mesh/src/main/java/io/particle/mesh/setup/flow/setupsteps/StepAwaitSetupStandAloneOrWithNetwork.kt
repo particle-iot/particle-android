@@ -26,6 +26,7 @@ class StepAwaitSetupStandAloneOrWithNetwork(
 
         // reset flow again!
         val networkSetupType = ctxs.device.networkSetupTypeLD.value
+        ctxs.meshNetworkFlowAdded = true
         throw ExpectedFlowException("Network setup type selected: $networkSetupType")
     }
 
