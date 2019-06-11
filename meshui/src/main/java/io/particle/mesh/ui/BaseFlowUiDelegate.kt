@@ -202,6 +202,10 @@ abstract class BaseFlowUiDelegate(
         navigate(R.id.action_global_controlPanelMeshInspectNetworkFragment)
     }
 
+    override fun showSetupFinishedUi() {
+        navigate(R.id.action_global_letsGetBuildingFragment)
+    }
+
     override fun popBackStack(): Boolean {
         return navControllerLD.value?.popBackStack() ?: false
     }

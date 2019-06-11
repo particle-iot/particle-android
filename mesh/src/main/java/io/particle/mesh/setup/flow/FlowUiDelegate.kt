@@ -74,6 +74,8 @@ interface FlowUiDelegate {
 
     fun showJoinerSetupFinishedUi()
 
+    fun showSetupFinishedUi()
+
     fun showCreateNetworkFinishedUi()
 
     fun showInspectCurrentWifiNetworkUi(currentNetwork: WifiNew.GetCurrentNetworkReply)
