@@ -66,9 +66,7 @@
 
     <string name="p_mesh_action_exit_setup">Exit Setup</string>
 
-    <string name="p_mesh_billing_please_go_to_your_browser">Please add a credit card at <b>console.particle.io/billing</b> on your desktop</string>
-
-
+    <string name="p_mesh_billing_please_go_to_your_browser">You need to add a credit card to your account to continue. Please visit <b>https://console.particle.io/billing/edit-card</b> to add a card and return here when you're done.</string>
 
     <string name="p_pricingimpact_FreeNetworkTitle">Woo-hoo! Enjoy this new mesh network on us</string>
     <string name="p_pricingimpact_PaidNetworkTitle">To create a new mesh network, please enroll in a Device Cloud subscription</string>
@@ -144,7 +142,7 @@
     <string name="p_newmeshnetworkfinished_start_mesh_setup_header">Adding more devices to your network?</string>
     <string name="p_newmeshnetworkfinished_subheader_1">Your network has been set up with {device_name} acting as a gateway</string>
     <string name="p_action_create_new_network">Create new network…</string>
-    <string name="p_manualcommissioning_commissioner_candidate_not_on_target_network">This device is not part the network you are trying to join.</string>
+    <string name="p_manualcommissioning_commissioner_candidate_not_on_target_network">The assisting device is on a different mesh network than the one you are trying to join. Please make sure the devices are trying to use the same network.</string>
     <string name="p_exitsetupconfirmation_exit">Exit setup</string>
     <string name="p_exitsetupconfirmation_content">Exit setup?</string>
     <string name="p_scancode_title">Pair device with your phone</string>

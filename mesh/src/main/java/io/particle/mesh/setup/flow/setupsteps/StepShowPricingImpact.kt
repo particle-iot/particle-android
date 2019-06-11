@@ -32,8 +32,7 @@ class StepShowPricingImpact(
                 flowUi.showPricingImpactScreen()
             }
     }
-
-
+    
     private fun ensurePricingImpactRetrieved(ctxs: SetupContexts) {
         val action = when (ctxs.device.networkSetupTypeLD.value) {
             NetworkSetupType.AS_GATEWAY -> PricingImpactAction.CREATE_NETWORK
@@ -58,12 +57,16 @@ class StepShowPricingImpact(
             null -> null
         }
 
-        ctxs.cloud.pricingImpact = cloud.getPricingImpact(
-            action = action,
-            deviceId = ctxs.targetDevice.deviceId,
-            networkId = networkId,
-            networkType = networkType,
-            iccid = ctxs.targetDevice.iccid
-        )
+        try {
+            ctxs.cloud.pricingImpact = cloud.getPricingImpact(
+                action = action,
+                deviceId = ctxs.targetDevice.deviceId,
+                networkId = networkId,
+                networkType = networkType,
+                iccid = ctxs.targetDevice.iccid
+            )
+        } catch (ex: Exception) {
+            throw UnableToGetPricingInformationException(ex)
+        }
     }
 }

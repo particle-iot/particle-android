@@ -5,6 +5,7 @@ import io.particle.android.sdk.cloud.models.ParticleSimStatus
 import io.particle.mesh.setup.flow.MeshSetupFlowException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.flow.UnableToGetSimStatusException
 import io.particle.mesh.setup.flow.context.SetupContexts
 
 
@@ -16,7 +17,11 @@ class StepEnsureSimActivationStatusUpdated(private val cloud: ParticleCloud) : M
         }
 
         // is SIM activated
-        val statusAndMsg = cloud.checkSim(ctxs.targetDevice.iccid!!)
+        val statusAndMsg = try {
+            cloud.checkSim(ctxs.targetDevice.iccid!!)
+        } catch (ex: Exception) {
+            throw UnableToGetSimStatusException(ex)
+        }
 
         val isActive = when (statusAndMsg.first) {
             ParticleSimStatus.READY_TO_ACTIVATE -> false
@@ -26,7 +31,7 @@ class StepEnsureSimActivationStatusUpdated(private val cloud: ParticleCloud) : M
 
             ParticleSimStatus.NOT_FOUND,
             ParticleSimStatus.NOT_OWNED_BY_USER,
-            ParticleSimStatus.ERROR -> throw MeshSetupFlowException(statusAndMsg.second)
+            ParticleSimStatus.ERROR -> throw MeshSetupFlowException(message = statusAndMsg.second)
         }
 
         ctxs.targetDevice.updateIsSimActivated(isActive)

@@ -3,10 +3,14 @@ package io.particle.mesh.setup.flow.setupsteps
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.ota.FirmwareUpdateManager
+import io.particle.mesh.ota.FirmwareUpdateResult.DEVICE_IS_UPDATING
+import io.particle.mesh.ota.FirmwareUpdateResult.HAS_LATEST_FIRMWARE
+import io.particle.mesh.setup.flow.FailedToUpdateDeviceOSException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
 import io.particle.mesh.setup.flow.FlowUiDelegate
+import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
@@ -20,7 +24,6 @@ class StepEnsureLatestFirmware(
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
         if (ctxs.targetDevice.hasLatestFirmware) {
             log.info { "Already checked device for latest firmware; skipping" }
-            flowUi.showGlobalProgressSpinner(false)
             return
         }
 
@@ -44,12 +47,25 @@ class StepEnsureLatestFirmware(
         // FIXME: change state to "updating OTA via BLE"
         flowUi.showBleOtaUi()
 
-        firmwareUpdateManager.startUpdateIfNecessary(xceiver, deviceType) {
-            ctxs.device.updateBleOtaProgress(it)
+        val status = try {
+            firmwareUpdateManager.startUpdateIfNecessary(xceiver, deviceType) {
+                ctxs.device.updateBleOtaProgress(it)
+            }
+        } catch (ex: Exception) {
+            throw FailedToUpdateDeviceOSException(ex)
         }
 
-        // FIXME: this probably shouldn't live in the flow, but in the UI
-        flowUi.showGlobalProgressSpinner(true)
+        when (status) {
+            HAS_LATEST_FIRMWARE -> { /* no-op */ }
+            DEVICE_IS_UPDATING -> {
+                flowUi.showGlobalProgressSpinner(true)
+                // there can be a *very* long delay after the FW update.
+                // FIXME: don't make this a static value, start a BT scanner
+                // to watch for the device again
+                delay(12000)
+            }
+        }
+
         ctxs.device.firmwareUpdateCount++
     }
 

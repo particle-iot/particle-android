@@ -13,6 +13,7 @@ import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.FlowIntent.FIRST_TIME_SETUP
 import io.particle.mesh.setup.flow.context.SetupContexts
 import mu.KotlinLogging
+import java.lang.Exception
 
 
 class StepEnsureTargetDeviceIsNotOnMeshNetwork(
@@ -30,14 +31,14 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
         val target = ctxs.requireTargetXceiver()
         val reply: Result<GetNetworkInfoReply, ResultCode> = target.sendGetNetworkInfo()
         val removeLocally = when (reply) {
-            is Result.Absent -> throw MeshSetupFlowException("No result received when getting existing network")
+            is Result.Absent -> throw MeshSetupFlowException(message = "No result received when getting existing network")
             is Result.Present -> true
             is Result.Error -> {
                 log.info { " Error when getting network info: ${reply.error}" }
                 if (reply.error == ResultCode.NOT_FOUND) {
                     false
                 } else {
-                    throw MeshSetupFlowException("Error when getting existing network")
+                    throw MeshSetupFlowException(message = "Error when getting existing network")
                 }
             }
         }
@@ -62,11 +63,11 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
             when (dialogResult) {
                 DialogResult.POSITIVE -> { /* no-op, continue flow */ }
                 DialogResult.NEGATIVE -> throw MeshSetupFlowException(
-                    "User does not want device to leave network; exiting setup",
+                    message = "User does not want device to leave network; exiting setup",
                     severity = ERROR_FATAL
                 )
                 null -> throw MeshSetupFlowException(
-                    "Unknown error when confirming leaving network"
+                    message = "Unknown error when confirming leaving network"
                 )
             }
 
@@ -75,7 +76,10 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
 
         ctxs.mesh.checkedForExistingNetwork = true
 
-        cloud.removeDeviceFromAnyMeshNetwork(ctxs.targetDevice.deviceId!!)
+        try {
+            cloud.removeDeviceFromAnyMeshNetwork(ctxs.targetDevice.deviceId!!)
+        } catch (ex: Exception) {
+            throw UnableToLeaveNetworkException(ex)
+        }
     }
-
 }

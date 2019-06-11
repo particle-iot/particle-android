@@ -6,6 +6,7 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.flow.UnableToPublishDeviceSetupEventException
 import io.particle.mesh.setup.flow.context.SetupContexts
 import java.util.concurrent.TimeUnit
 
@@ -22,4 +23,7 @@ class StepPublishDeviceSetupDoneEvent(val cloud: ParticleCloud) : MeshSetupStep(
         )
     }
 
+    override fun wrapException(cause: Exception): Exception {
+        return UnableToPublishDeviceSetupEventException(cause)
+    }
 }

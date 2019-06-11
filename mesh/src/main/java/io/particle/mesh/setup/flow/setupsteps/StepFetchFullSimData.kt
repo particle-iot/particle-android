@@ -4,6 +4,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.flow.UnableToGetSimStatusException
 import io.particle.mesh.setup.flow.context.SetupContexts
 
 
@@ -22,4 +23,7 @@ class StepFetchFullSimData(
         ctxs.targetDevice.sim = sim
     }
 
+    override fun wrapException(cause: Exception): Exception {
+        return UnableToGetSimStatusException(cause)
+    }
 }

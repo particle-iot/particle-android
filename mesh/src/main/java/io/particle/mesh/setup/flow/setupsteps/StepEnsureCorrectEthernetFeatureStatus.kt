@@ -15,18 +15,24 @@ class StepEnsureCorrectEthernetFeatureStatus : MeshSetupStep() {
         }
 
         val target = ctxs.targetDevice.transceiverLD.value!!
-        target.sendSetFeature(Feature.ETHERNET_DETECTION, true).throwOnErrorOrAbsent()
-        ctxs.device.isDetectEthernetSent = true
-        target.sendStartupMode(DeviceMode.LISTENING_MODE).throwOnErrorOrAbsent()
-        target.sendReset().throwOnErrorOrAbsent()
 
-        target.disconnect()
-        delay(4000)
+        val detectReply = target.sendGetFeature(Feature.ETHERNET_DETECTION).throwOnErrorOrAbsent()
+        ctxs.device.ethernetDetectionComplete = true
 
-        throw MeshSetupFlowException(
-            "Resetting device to enable ethernet detection!",
-            severity = ExceptionType.EXPECTED_FLOW
-        )
+        if (!detectReply.enabled) {
+            target.sendSetFeature(Feature.ETHERNET_DETECTION, true).throwOnErrorOrAbsent()
+            ctxs.device.isDetectEthernetSent = true
+            target.sendStartupMode(DeviceMode.LISTENING_MODE).throwOnErrorOrAbsent()
+            target.sendReset().throwOnErrorOrAbsent()
+
+            target.disconnect()
+            delay(4000)
+
+            throw MeshSetupFlowException(
+                message = "Resetting device to enable ethernet detection!",
+                severity = ExceptionType.EXPECTED_FLOW
+            )
+        }
     }
 
 }

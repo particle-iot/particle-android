@@ -33,7 +33,6 @@ class StepUnpauseSim(
     }
 
     override fun wrapException(cause: Exception): Exception {
-        // FIXME: create a new MeshSetupFlowException subclass for this?  Look at what iOS is doing.
-        return MeshSetupFlowException("Error: unable to unpause SIM", cause, ERROR_FATAL)
+        return FailedToChangeSimDataLimitException(cause)
     }
 }

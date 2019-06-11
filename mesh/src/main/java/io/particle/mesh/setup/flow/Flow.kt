@@ -25,7 +25,7 @@ inline fun <reified V, reified E> Result<V, E>.throwOnErrorOrAbsent(): V {
                 "Absent result returned! value type=${V::class}, error type=${E::class}"
             }
             log.error { msg }
-            throw MeshSetupFlowException(msg)
+            throw MeshSetupFlowException(null, msg)
         }
         is Result.Present -> this.value
     }

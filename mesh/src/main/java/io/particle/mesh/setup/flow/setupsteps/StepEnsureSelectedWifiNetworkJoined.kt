@@ -29,7 +29,7 @@ class StepEnsureSelectedWifiNetworkJoined(private val flowUi: FlowUiDelegate) : 
         )
 
         val genericError = MeshSetupFlowException(
-            "Could not join to Wi-Fi network due to an unknown error"
+            message = "Could not join to Wi-Fi network due to an unknown error"
         )
 
         val dialogHack = flowUi.dialogTool
@@ -56,7 +56,7 @@ class StepEnsureSelectedWifiNetworkJoined(private val flowUi: FlowUiDelegate) : 
                     dialogHack.clearDialogResult()
                     ctxs.wifi.updateTargetWifiNetworkPassword(null)
                     ctxs.wifi.connectingToCloudUiShown = false
-                    throw MeshSetupFlowException("Error connecting to Wi-Fi (bad password?)")
+                    throw MeshSetupFlowException(message = "Error connecting to Wi-Fi (bad password?)")
 
                 } else {
                     throw genericError

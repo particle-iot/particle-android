@@ -20,10 +20,13 @@ class StepCreateNewMeshNetworkOnLocalDevice : MeshSetupStep() {
         val reply = tx.sendCreateNetwork(name, password, networkId).throwOnErrorOrAbsent()
 
         if (reply.network.networkId.toUpperCase() != networkId.toUpperCase()) {
-            throw MeshSetupFlowException("Network ID received from CreateNetwork does not match")
+            throw MeshSetupFlowException(message = "Network ID received from CreateNetwork does not match")
         }
 
         ctxs.mesh.updateNetworkCreatedOnLocalDeviceLD(true)
     }
 
+    override fun wrapException(cause: Exception): Exception {
+        return UnableToCreateNetworkException(cause)
+    }
 }

@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow.setupsteps
 
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
+import io.particle.mesh.setup.flow.ExceptionType.ERROR_RECOVERABLE
 import io.particle.mesh.setup.flow.FailedToActivateSimException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
@@ -25,7 +26,7 @@ class StepEnsureSimActivated(private val cloud: ParticleCloud) : MeshSetupStep()
                 continue
 
             } else {
-                throw FailedToActivateSimException()
+                throw FailedToActivateSimException(ERROR_RECOVERABLE)
             }
         }
 

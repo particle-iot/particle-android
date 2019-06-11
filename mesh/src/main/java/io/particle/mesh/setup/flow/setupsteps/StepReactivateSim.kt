@@ -4,7 +4,6 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.retrySimAction
 import mu.KotlinLogging
 
 
@@ -24,7 +23,6 @@ class StepReactivateSim(
     }
 
     override fun wrapException(cause: Exception): Exception {
-        // FIXME: create a new MeshSetupFlowException subclass for this?  Look at what iOS is doing.
-        return MeshSetupFlowException("Error: unable to reactivate SIM", cause, ERROR_FATAL)
+        return FailedToActivateSimException(ERROR_FATAL, cause)
     }
 }

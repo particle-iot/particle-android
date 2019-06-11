@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow.setupsteps
 
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.mesh.setup.flow.DeviceConnectToCloudTimeoutException
+import io.particle.mesh.setup.flow.DeviceGettingClaimedTimeoutException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
@@ -49,7 +50,11 @@ class StepCheckDeviceGotClaimed(private val cloud: ParticleCloud) : MeshSetupSte
             throw DeviceConnectToCloudTimeoutException()
         }
 
-        val device = cloud.getDevice(ctxs.targetDevice.deviceId!!)
+        val device = try {
+            cloud.getDevice(ctxs.targetDevice.deviceId!!)
+        } catch (ex: Exception) {
+            throw DeviceGettingClaimedTimeoutException()
+        }
 
         ctxs.targetDevice.currentDeviceName = device.name
 

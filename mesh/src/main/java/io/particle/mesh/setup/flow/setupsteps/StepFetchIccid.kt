@@ -29,15 +29,16 @@ class StepFetchIccid : MeshSetupStep() {
                 if (iccidReply.error == ResultCode.INVALID_STATE) {
                     targetXceiver.sendReset()
                     delay(2000)
-                    throw MeshSetupFlowException("INVALID_STATE received while getting ICCID; " +
+                    throw MeshSetupFlowException(
+                        message = "INVALID_STATE received while getting ICCID; " +
                             "sending reset command and restarting flow"
                     )
                 }
-                throw MeshSetupFlowException("Error ${iccidReply.error} when retrieving ICCID")
+                throw MeshSetupFlowException(message = "Error ${iccidReply.error} when retrieving ICCID")
             }
 
             is Result.Absent -> {
-                throw MeshSetupFlowException("Unknown error when retrieving ICCID")
+                throw MeshSetupFlowException(message = "Unknown error when retrieving ICCID")
             }
         }
     }

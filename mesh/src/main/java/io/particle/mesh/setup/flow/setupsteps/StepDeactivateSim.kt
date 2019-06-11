@@ -24,7 +24,6 @@ class StepDeactivateSim(
     }
 
     override fun wrapException(cause: Exception): Exception {
-        // FIXME: create a new MeshSetupFlowException subclass for this?  Look at what iOS is doing.
-        return MeshSetupFlowException("Error: unable to deactivate SIM", cause, ERROR_FATAL)
+        return FailedToDeactivateSimException()
     }
 }

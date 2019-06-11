@@ -1,6 +1,7 @@
 package io.particle.mesh.setup.flow.setupsteps
 
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.mesh.setup.flow.FailedToChangeSimDataLimitException
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
@@ -22,5 +23,9 @@ class StepSetDataLimit(
         val limit = ctxs.cellular.newSelectedDataLimitLD.value!!
         log.info { "Setting data limit for $iccid to $limit" }
         cloud.setDataLimit(iccid, limit)
+    }
+
+    override fun wrapException(cause: Exception): Exception {
+        return FailedToChangeSimDataLimitException(cause)
     }
 }

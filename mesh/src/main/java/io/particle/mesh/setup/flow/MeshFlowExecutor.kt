@@ -152,9 +152,16 @@ class MeshFlowExecutor(
     }
 
     private suspend fun quitSetupfromError(scopes: Scopes, ex: Exception?) {
-        val preMsg = ex?.message ?: "Setup has encountered an error and cannot continue."
+        deps.flowUi.showGlobalProgressSpinner(false)
+
+        val msg: String = if (ex is MeshSetupFlowException && ex.userFacingMessage != null) {
+            ex.userFacingMessage
+        } else {
+            "Setup has encountered an error and cannot continue."
+        }
+
         scopes.withMain {
-            deps.dialogTool.newDialogRequest(StringDialogSpec(preMsg))
+            deps.dialogTool.newDialogRequest(StringDialogSpec(msg))
             deps.dialogTool.clearDialogResult()
             deps.dialogTool.dialogResultLD.nonNull().awaitUpdate(scopes)
             endSetup()
@@ -183,7 +190,7 @@ class MeshFlowExecutor(
 
             JOINER_FLOW -> listOf(
                 StepCollectMeshNetworkToJoinSelection(deps.flowUi),
-                StepCollectCommissionerDeviceInfo(deps.flowUi),
+                StepCollectCommissionerDeviceInfo(deps.flowUi, deps.cloud),
                 StepEnsureCommissionerConnected(deps.flowUi, deps.deviceConnector),
                 StepEnsureCommissionerNetworkMatches(deps.flowUi, deps.cloud),
                 StepCollectMeshNetworkToJoinPassword(deps.flowUi),
@@ -257,7 +264,6 @@ class MeshFlowExecutor(
                 StepShowCreateNewMeshNetworkUi(deps.flowUi),
                 StepCreateNewMeshNetworkOnCloud(deps.cloud),
                 StepCreateNewMeshNetworkOnLocalDevice(),
-                StepEnsureConnectionToCloud(),
                 StepShowCreateNetworkFinished(deps.flowUi)
             )
 
@@ -296,6 +302,7 @@ class MeshFlowExecutor(
                 StepUnpauseSim(deps.cloud, deps.flowUi)
             )
 
+
             CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT -> listOf(
                 StepShowSetDataLimitUi(deps.flowUi),
                 StepSetDataLimit(deps.flowUi, deps.cloud),
@@ -303,6 +310,7 @@ class MeshFlowExecutor(
                 StepFetchFullSimData(deps.cloud, deps.flowUi),
                 StepPopBackStack(deps.flowUi)
             )
+
 
             CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW -> listOf(
                 StepUnsetFullSimData(),
@@ -316,6 +324,7 @@ class MeshFlowExecutor(
                 StepFetchCurrentMeshNetwork(deps.flowUi),
                 StepShowMeshInspectNetworkUi(deps.flowUi)
             )
+
 
             CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW -> listOf(
 //                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),

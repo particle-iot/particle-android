@@ -1,6 +1,7 @@
 package io.particle.mesh.bluetooth.connecting
 
 import android.bluetooth.*
+import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.MainThread
@@ -15,6 +16,8 @@ import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.BT_SETUP_RX_CHARACTERISTIC_ID
 import io.particle.mesh.setup.connection.BT_SETUP_SERVICE_ID
 import io.particle.mesh.setup.connection.BT_SETUP_TX_CHARACTERISTIC_ID
+import io.particle.mesh.setup.flow.DeviceTooFarException
+import io.particle.mesh.setup.flow.FailedToScanBecauseOfTimeoutException
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.ui.utils.buildMatchingDeviceNameSuspender
 import io.particle.mesh.setup.utils.checkIsThisTheMainThread
@@ -109,7 +112,13 @@ class BluetoothConnectionManager(private val ctx: Context) {
     ): BluetoothConnection? {
         checkIsThisTheMainThread()
 
-        val address = scanForDevice(deviceName, timeout, scopes) ?: return null
+        val scanResult = scanForDevice(deviceName, timeout, scopes) ?: return null
+
+        val address = if (scanResult.rssi < -80) {
+            throw DeviceTooFarException()
+        } else {
+            scanResult.device.address
+        }
 
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(Intent(FOUND_IN_SCAN_BROADCAST))
 
@@ -144,7 +153,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         deviceName: String,
         timeout: Long,
         scopes: Scopes
-    ): BTDeviceAddress? {
+    ): ScanResult? {
         log.info { "entering scanForDevice()" }
         val scannerSuspender = buildMatchingDeviceNameSuspender(ctx, deviceName)
         val scanResult = scopes.withMain(timeout) {
@@ -153,9 +162,10 @@ class BluetoothConnectionManager(private val ctx: Context) {
             } catch (ex: Exception) {
                 null
             }
-        }
-        log.info { "Address from scan result: ${scanResult?.device?.address}" }
-        return scanResult?.device?.address
+        } ?: throw FailedToScanBecauseOfTimeoutException()
+
+        log.info { "Address from scan result: ${scanResult.device.address}" }
+        return scanResult
     }
 
     private suspend fun doConnectToDevice(

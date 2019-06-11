@@ -85,13 +85,18 @@ import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ResultCode.Companion.toResultCode
+import io.particle.mesh.setup.connection.ResultCode.UNKNOWN
+import io.particle.mesh.setup.flow.BluetoothConnectionDroppedException
+import io.particle.mesh.setup.flow.BluetoothErrorException
+import io.particle.mesh.setup.flow.BluetoothTimeoutException
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.utils.isThisTheMainThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import mu.KotlinLogging
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -443,7 +448,7 @@ class ProtocolTransceiver internal constructor(
         log.info { logMsg }
 
         if (!isConnected) {
-            return null
+            throw BluetoothConnectionDroppedException()
         }
 
         val response = try {
@@ -452,8 +457,10 @@ class ProtocolTransceiver internal constructor(
                     doSendRequest(requestFrame) { continuation.resume(it) }
                 }
             }
+        } catch (timeoutEx: TimeoutCancellationException) {
+            throw BluetoothTimeoutException()
         } catch (ex: Exception) {
-            null
+            throw BluetoothErrorException()
         }
 
         val id = requestFrame.requestId.toInt()
@@ -493,7 +500,7 @@ class ProtocolTransceiver internal constructor(
             Result.Present(transformed)
         } else {
             val code = response.resultCode.toResultCode()
-            if (code == ResultCode.UNKNOWN) {
+            if (code == UNKNOWN) {
                 QATool.report(UnknownErrorCodeException(response.resultCode, V::class.java))
             }
             log.error { "Error with request/response: error code $code" }
@@ -557,8 +564,8 @@ enum class ResultCode(val intValue: Int) {
         private val intValueMap = buildIntValueMap(values()) { state -> state.intValue }
 
         fun Int.toResultCode(): ResultCode {
-            val enumValue = intValueMap.get(this, ResultCode.UNKNOWN)
-            if (enumValue == ResultCode.UNKNOWN) {
+            val enumValue = intValueMap.get(this, UNKNOWN)
+            if (enumValue == UNKNOWN) {
                 QATool.report(UnknownEnumIntValueException(this))
             }
             return enumValue

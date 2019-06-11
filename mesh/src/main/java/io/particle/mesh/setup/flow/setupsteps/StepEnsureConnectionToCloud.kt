@@ -29,7 +29,7 @@ class StepEnsureConnectionToCloud : MeshSetupStep() {
             }
         }
 
-        throw MeshSetupFlowException("Error ensuring connection to cloud")
+        throw MeshSetupFlowException(message = "Error ensuring connection to cloud")
     }
 
 }

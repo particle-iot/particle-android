@@ -3,11 +3,13 @@ package io.particle.mesh.ota
 import androidx.annotation.WorkerThread
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
+import com.squareup.okhttp.ResponseBody
 import io.particle.firmwareprotos.ctrl.Config.DeviceMode
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.setup.connection.ProtocolTransceiver
+import io.particle.mesh.setup.flow.UnableToDownloadFirmwareBinaryException
 import mu.KotlinLogging
 import okio.Buffer
 import java.io.IOException
@@ -42,13 +44,17 @@ class FirmwareUpdater(
 
     @WorkerThread
     private fun retrieveUpdate(url: URL): ByteArray {
-        val request = Request.Builder()
-            .url(url)
-            .get()
-            .build()
-        val call = okHttpClient.newCall(request)
-        val response = call.execute()
-        return response.body().bytes()
+        try {
+            val request = Request.Builder()
+                .url(url)
+                .get()
+                .build()
+            val call = okHttpClient.newCall(request)
+            val response = call.execute()
+            return response.body().use { it.bytes() }
+        } catch (ex: Exception) {
+            throw UnableToDownloadFirmwareBinaryException()
+        }
     }
 
     private suspend fun doUpdateFirmware(

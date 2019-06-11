@@ -55,10 +55,10 @@ class StepEnsureCardOnFile(
                 "Restarting flow after user confirmed payment card"
             )
             DialogResult.NEGATIVE -> MeshSetupFlowException(
-                "User choosing not to enter payment card; exiting setup",
+                message = "User choosing not to enter payment card; exiting setup",
                 severity = ERROR_FATAL
             )
-            null -> MeshSetupFlowException("Unknown error when asking user to enter payment card")
+            null -> MeshSetupFlowException(message = "Unknown error when asking user to enter payment card")
         }
         throw err
     }
