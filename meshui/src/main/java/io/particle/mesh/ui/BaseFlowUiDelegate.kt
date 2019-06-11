@@ -108,6 +108,10 @@ abstract class BaseFlowUiDelegate(
         navigate(R.id.action_global_newMeshNetworkFinishedFragment)
     }
 
+    override fun showConnectingToDeviceCloudWiFiUi() {
+        navigate(R.id.action_global_argonConnectingStatusFragment)
+    }
+
     override fun onTargetPairingSuccessful(deviceName: String): Boolean {
         if (shownTargetInitialIsConnectedScreen) {
             return false // already shown, no need to show again

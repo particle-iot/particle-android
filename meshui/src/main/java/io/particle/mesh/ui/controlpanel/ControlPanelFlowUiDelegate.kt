@@ -28,11 +28,6 @@ class ControlPanelFlowUiDelegate(
         navigate(R.id.action_global_controlPanelPrepareForPairingFragment)
     }
 
-    override fun showConnectingToDeviceCloudWiFiUi() {
-        navigate(R.id.action_global_argonConnectingStatusFragment)
-//        navigate(R.id.action_global_connectingToDeviceCloudFragment)??
-    }
-
     override fun showScanForWifiNetworksUi() {
 //        navigate(R.id.action_global_controlPanelScanForWifiNetworksFragment)
         navigate(R.id.action_global_scanForWiFiNetworksFragment)

@@ -35,11 +35,6 @@ class SetupFlowUiDelegate(
         navigate(R.id.action_global_BLEPairingProgressFragment)
     }
 
-    override fun showConnectingToDeviceCloudWiFiUi() {
-        navigate(R.id.action_global_connectingToDeviceCloudFragment)
-//        navigate(R.id.action_global_argonConnectingStatusFragment)
-    }
-
     override fun showScanForWifiNetworksUi() {
         navigate(R.id.action_global_scanForWiFiNetworksFragment)
     }
