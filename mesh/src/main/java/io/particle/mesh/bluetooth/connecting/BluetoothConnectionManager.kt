@@ -156,12 +156,10 @@ class BluetoothConnectionManager(private val ctx: Context) {
     ): ScanResult? {
         log.info { "entering scanForDevice()" }
         val scannerSuspender = buildMatchingDeviceNameSuspender(ctx, deviceName)
-        val scanResult = scopes.withMain(timeout) {
-            try {
-                scannerSuspender.awaitResult()
-            } catch (ex: Exception) {
-                null
-            }
+        val scanResult = try {
+            scopes.withMain(timeout) { scannerSuspender.awaitResult() }
+        } catch (ex: Exception) {
+            null
         } ?: throw FailedToScanBecauseOfTimeoutException()
 
         log.info { "Address from scan result: ${scanResult.device.address}" }
