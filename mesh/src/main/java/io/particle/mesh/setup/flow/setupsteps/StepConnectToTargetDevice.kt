@@ -22,7 +22,10 @@ class StepConnectToTargetDevice(
 
         if (!ctxs.ble.connectingToTargetUiShown) {
             flowUi.showTargetPairingProgressUi()
+            ctxs.ble.showingConnectingToTargetUi = true
             ctxs.ble.connectingToTargetUiShown = true
+        } else if (!ctxs.ble.showingConnectingToTargetUi)  {
+            flowUi.showGlobalProgressSpinner(true)
         }
 
         var error: Exception? = null
@@ -45,6 +48,8 @@ class StepConnectToTargetDevice(
                     ctxs.targetDevice.updateDeviceTransceiver(transceiver)
                 }
         }
+
+        ctxs.ble.showingConnectingToTargetUi = false
     }
 
 }
