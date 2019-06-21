@@ -42,17 +42,15 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
         return container?.inflateFragment(R.layout.fragment_cp_prepare_for_pairing)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
+
         setUpVideoView(videoView)
 
         p_controlpanel_signal_switch.setOnCheckedChangeListener { _, isChecked ->
             onSignalSwitchChanged(isChecked)
         }
-    }
 
-    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
-        super.onFragmentReady(activity, flowUiListener)
         bodyText.text = Phrase.from(bodyText.text)
             .put("device_name", device.name)
             .format()

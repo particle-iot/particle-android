@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -31,6 +32,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.commonui.DeviceNotesDelegate
 import io.particle.commonui.RenameHelper
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
@@ -63,13 +65,12 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         return container?.inflateFragment(R.layout.fragment_control_panel_landing)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
         val deviceType = device.deviceType!!
 
         p_controlpanel_landing_name_frame.setOnClickListener {
-            RenameHelper.renameDevice(activity!!, device)
+            RenameHelper.renameDevice(activity, device)
         }
 
         p_controlpanel_landing_notes_frame.setOnClickListener { editNotes() }
@@ -91,7 +92,7 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         )
 
         p_controlpanel_landing_docs_item.setOnClickListener {
-            showDocumentation(activity!!, device.deviceType!!)
+            showDocumentation(activity, device.deviceType!!)
         }
 
         p_controlpanel_landing_unclaim_item.setOnClickListener {
