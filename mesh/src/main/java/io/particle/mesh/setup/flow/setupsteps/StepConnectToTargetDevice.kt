@@ -39,7 +39,11 @@ class StepConnectToTargetDevice(
         }
 
         if (transceiver == null) {
-            throw FailedToConnectException(error)
+            if (error is MeshSetupFlowException) {
+                throw error!!
+            } else {
+                throw FailedToConnectException(error)
+            }
         } else {
             // don't move any further until the value is set on the LiveData
             ctxs.targetDevice.transceiverLD
