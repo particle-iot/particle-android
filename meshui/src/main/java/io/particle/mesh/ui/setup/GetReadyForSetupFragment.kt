@@ -23,7 +23,6 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
-import io.particle.mesh.setup.isSomSerial
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.setup.HelpTextConfig.ARGON
