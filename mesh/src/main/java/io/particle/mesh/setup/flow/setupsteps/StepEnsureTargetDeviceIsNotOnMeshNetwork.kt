@@ -62,9 +62,8 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
 
             when (dialogResult) {
                 DialogResult.POSITIVE -> { /* no-op, continue flow */ }
-                DialogResult.NEGATIVE -> throw MeshSetupFlowException(
-                    message = "User does not want device to leave network; exiting setup",
-                    severity = ERROR_FATAL
+                DialogResult.NEGATIVE -> throw UserTerminatedFlowException(
+                    message = "User does not want device to leave network; exiting setup"
                 )
                 null -> throw MeshSetupFlowException(
                     message = "Unknown error when confirming leaving network"

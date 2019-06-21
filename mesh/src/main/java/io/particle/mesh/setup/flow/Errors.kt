@@ -31,6 +31,14 @@ class TerminateFlowException(
 )
 
 
+// For when a user bails out of setup, like hiting the "x" button before setup is complete
+class UserTerminatedFlowException(
+    message: String?
+) : MeshSetupFlowException(
+    message = message,
+    severity = ERROR_FATAL
+)
+
 class NoBarcodeScannedException(cause: Throwable? = null) : MeshSetupFlowException(
     cause,
     userFacingMessage = "No data matrix scanned.  Please exit setup and try again.",

@@ -125,16 +125,18 @@ class MeshFlowExecutor(
 
                 } catch (ex: Exception) {
 
-                    if (ex is MeshSetupFlowException && ex.severity == EXPECTED_FLOW) {
-                        log.info { "Received EXPECTED_FLOW exception; retrying." }
-                        continue  // avoid incrementing the counter, since this was expected flow
-                    }
+                    if (ex is MeshSetupFlowException) {
 
-                    if (ex is MeshSetupFlowException && ex.severity == ERROR_FATAL) {
-                        log.info(ex) { "Hit fatal error, exiting setup: " }
-                        QATool.log(ex.message ?: "(no message)")
-                        quitSetupfromError(ctxs.scopes, ex)
-                        return@onWorker
+                        if (ex.severity == EXPECTED_FLOW) {
+                            log.info { "Received EXPECTED_FLOW exception; retrying." }
+                            continue  // avoid incrementing the counter, since this was expected flow
+
+                        } else if (ex.severity == ERROR_FATAL) {
+                            log.info(ex) { "Hit fatal error, exiting setup: " }
+                            QATool.log(ex.message ?: "(no message)")
+                            quitSetupfromError(ctxs.scopes, ex)
+                            return@onWorker
+                        }
                     }
 
                     delay(1000)
@@ -161,9 +163,11 @@ class MeshFlowExecutor(
         }
 
         scopes.withMain {
-            deps.dialogTool.newDialogRequest(StringDialogSpec(msg))
-            deps.dialogTool.clearDialogResult()
-            deps.dialogTool.dialogResultLD.nonNull().awaitUpdate(scopes)
+            if (ex !is UserTerminatedFlowException) {
+                deps.dialogTool.newDialogRequest(StringDialogSpec(msg))
+                deps.dialogTool.clearDialogResult()
+                deps.dialogTool.dialogResultLD.nonNull().awaitUpdate(scopes)
+            }
             endSetup()
         }
     }
