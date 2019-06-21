@@ -62,6 +62,7 @@ abstract class BaseFlowActivity : AppCompatActivity() {
 
         if (savedInstanceState != null && !flowModel.isInitialized) {
             log.warn { "Returning to mesh setup after process death is not supported; exiting!" }
+            finish()
             return
         }
 
