@@ -66,7 +66,7 @@
 
     <string name="p_mesh_action_exit_setup">Exit Setup</string>
 
-    <string name="p_mesh_billing_please_go_to_your_browser">You need to add a credit card to your account to continue. Please visit <b>https://console.particle.io/billing/edit-card</b> to add a card and return here when you're done.</string>
+    <string name="p_mesh_billing_please_go_to_your_browser">You need to add a credit card to your account to continue. Please visit <b>https://console.particle.io/billing/edit-card</b> to add a card and return here when you\'re done.</string>
 
     <string name="p_pricingimpact_FreeNetworkTitle">Woo-hoo! Enjoy this new mesh network on us</string>
     <string name="p_pricingimpact_PaidNetworkTitle">To create a new mesh network, please enroll in a Device Cloud subscription</string>

@@ -33,7 +33,7 @@ internal class TinkerPrefs private constructor(context: Context) {
             if (instance == null) {
                 instance = TinkerPrefs(ctx)
             }
-            return instance
+            return instance!!
         }
     }
 

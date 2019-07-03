@@ -784,7 +784,7 @@ class ParticleCloud internal constructor(
      * [.subscribeToMyDevicesEvents] instead.
      *
      *
-     * Subscribe to the *firehose* of public events, plus all private events published by
+     * Subscribe to the *firehose* of public events, plpus all private events published by
      * the devices the API user owns.
      *
      * @param eventNamePrefix A string to filter on for events.  If null, all events will be matched.
