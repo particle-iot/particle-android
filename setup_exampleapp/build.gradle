@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "io.particle.devicesetup.exampleapp"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -36,6 +36,7 @@ dependencies {
     // (i.e.: you can make modifications to the device setup lib source in the local repo, and
     // the changes will appear in the example app just by rebuilding, as you'd expect)
     implementation project(':devicesetup')
+    implementation project(':commonui')
     //
     //  *OR*
     //

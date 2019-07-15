@@ -16,4 +16,27 @@
     <color name="p_action_button_blue">#09ACEE</color>
     <color name="p_action_button_red">#EC2028</color>
 
+
+    <!-- FIXME: all the below colors shouldn't live here (or should be removed elsewhere)! -->
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">@color/p_particle_cyan</color>
+
+    <!-- primary_color is used for the default action bar background -->
+    <color name="primary_color">@color/element_background_color</color>
+    <!-- As named, just a darker variant of the primary color, used to color the status bar -->
+    <color name="primary_color_dark">@color/shaded_background</color>
+    <!-- accent_color is used as the default value for tinting widgets -->
+    <color name="accent_color">@color/element_background_color</color>
+
+    <color name="element_background_color">#00BAEC</color>
+    <color name="shaded_background">#5222</color>
+
+    <color name="cyan">#00ACED</color>
+    <color name="emerald">#2ECC71</color>
+    <color name="sunflower">#F1C40F</color>
+    <color name="alizarin">#E74C3C</color>
+    <color name="teal">#00BAEC</color>
+
 </resources>

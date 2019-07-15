@@ -60,6 +60,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_global_controlPanelCongratsFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_global_creatingMeshNetworkFragment">
                     <value>
                       <LayoutPositions />
@@ -238,6 +243,18 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="1260" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="controlPanelCongratsFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
                             <option name="y" value="12" />
                           </Point>
                         </option>
