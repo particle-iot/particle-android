@@ -51,13 +51,17 @@ public class ApiFactory {
     private final OkHttpClient fastTimeoutClient;
     private final OauthBasicAuthCredentialsProvider basicAuthCredentialsProvider;
     private final Gson gson;
+    private final Uri apiBaseUri;
 
-    ApiFactory(Context ctx, TokenGetterDelegate tokenGetterDelegate,
-               OauthBasicAuthCredentialsProvider basicAuthProvider) {
+    ApiFactory(Context ctx,
+               TokenGetterDelegate tokenGetterDelegate,
+               OauthBasicAuthCredentialsProvider basicAuthProvider,
+               Uri uri) {
         this.ctx = ctx.getApplicationContext();
         this.tokenDelegate = tokenGetterDelegate;
         this.basicAuthCredentialsProvider = basicAuthProvider;
         this.gson = new Gson();
+        this.apiBaseUri = uri;
 
         normalTimeoutClient = buildClientWithTimeout(REGULAR_TIMEOUT);
         fastTimeoutClient = buildClientWithTimeout(PER_DEVICE_FAST_TIMEOUT);
@@ -98,7 +102,7 @@ public class ApiFactory {
     }
 
     Uri getApiUri() {
-        return Uri.parse(ctx.getString(R.string.api_base_uri));
+        return apiBaseUri;
     }
 
     Gson getGsonInstance() {

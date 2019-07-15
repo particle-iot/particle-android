@@ -1,6 +1,8 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
+import android.net.Uri;
+
 import androidx.annotation.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -21,12 +23,12 @@ public class ParticleCloudSDK {
      * (or anywhere else before your first Activity.onCreate() is called)
      */
     public static void init(Context ctx) {
-        initWithParams(ctx, null);
+        initWithInstanceCheck(ctx, null);
     }
 
     public static void initWithOauthCredentialsProvider(
             Context ctx, @Nullable OauthBasicAuthCredentialsProvider oauthProvider) {
-        initWithParams(ctx, oauthProvider);
+        initWithInstanceCheck(ctx, oauthProvider);
     }
 
     public static ParticleCloud getCloud() {
@@ -34,23 +36,34 @@ public class ParticleCloudSDK {
         return instance.sdkProvider.getParticleCloud();
     }
 
-
-    // NOTE: This is closer to the interface I'd like to provide eventually
-    static void initWithParams(Context ctx,
-                               @Nullable OauthBasicAuthCredentialsProvider oauthProvider) {
+    static void initWithInstanceCheck(Context ctx,
+                                      @Nullable OauthBasicAuthCredentialsProvider oauthProvider) {
         if (instance != null) {
             log.w("Calling ParticleCloudSDK.init() more than once does not re-initialize the SDK.");
             return;
         }
 
+        String asString = ctx.getString(R.string.api_base_uri);
+        doInit(ctx, oauthProvider, Uri.parse(asString));
+    }
+
+    private static void doInit(Context ctx,
+                               @Nullable OauthBasicAuthCredentialsProvider oauthProvider,
+                               Uri uri) {
         Context appContext = ctx.getApplicationContext();
-        SDKProvider sdkProvider = new SDKProvider(appContext, oauthProvider);
+        SDKProvider sdkProvider = new SDKProvider(appContext, oauthProvider, uri);
         instance = new ParticleCloudSDK(sdkProvider);
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     static boolean isInitialized() {
         return instance != null;
+    }
+
+    // FIXME: when switching this to Kotlin, find the best way to mark this as
+    // usable only from Particle packages
+    static void reinitializeWithNewBaseApiUri(Context ctx, Uri newUri) {
+        doInit(ctx, null, newUri);
     }
 
     static SDKProvider getSdkProvider() {
