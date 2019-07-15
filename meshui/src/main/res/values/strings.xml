@@ -34,7 +34,5 @@
     <string name="p_cp_cellular_options_sim_status_fine_print_deactivated">This Particle SIM card is deactivated.  The device using this SIM cannot connect to the Internet via cellular until it is reactivated.</string>
     <string name="p_cp_cellular_options_sim_status_fine_print_paused">This Particle SIM card is paused.  The device using this SIM cannot connect to the Internet via cellular until it is unpaused.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -52,8 +52,8 @@ class FirmwareUpdateManager(
             listener(it)
         }
 
-        // pause a bit before disconnecting...
-        delay(2000)
+        // pause a moment before disconnecting...
+        delay(1000)
         xceiver.disconnect()
 
         return FirmwareUpdateResult.DEVICE_IS_UPDATING

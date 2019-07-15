@@ -110,7 +110,6 @@ class FirmwareUpdater(
     }
 
     private fun showFeedback(msg: String) {
-//        ctx.safeToast(msg)
         log.debug { msg }
     }
 }

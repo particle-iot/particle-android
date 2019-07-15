@@ -207,7 +207,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         btCallbacks: BLELiveDataCallbacks,
         scopes: Scopes
     ): List<BluetoothGattService>? {
-        log.debug { "Discovering services" }
+        log.info { "Discovering services" }
         val discoverer = ServiceDiscoverer(btCallbacks, gatt, scopes)
         val services = discoverer.discoverServices()
         log.debug { "Discovering services: DONE" }

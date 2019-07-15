@@ -89,8 +89,10 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
     override fun onCleared() {
         super.onCleared()
         systemInterface.shutdown()
-        flowRunner.endCurrentFlow()
-        flowRunner.endSetup()
+        // have to use the "?" here because we shut down the mesh setup activity in onCreate()
+        // when we detect that the process has died (meaning we haven't initialized flowRunner)
+        flowRunner?.endCurrentFlow()
+        flowRunner?.endSetup()
     }
 
 }
