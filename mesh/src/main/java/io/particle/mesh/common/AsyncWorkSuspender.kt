@@ -1,8 +1,6 @@
 package io.particle.mesh.common
 
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CompletableDeferred
 
 
 fun <T> asyncSuspender(
@@ -33,7 +31,7 @@ fun <T> asyncSuspender(
 
 abstract class AsyncWorkSuspender<T> {
 
-//    private val deferred: CompletableDeferred<T> = CompletableDeferred()
+    private var deferred: CompletableDeferred<T> = CompletableDeferred()
 
     protected abstract fun startAsyncWork(workCompleteCallback: (T) -> Unit)
 
@@ -53,23 +51,18 @@ abstract class AsyncWorkSuspender<T> {
     }
 
     private suspend fun awaitCondition(): T {
-        val result = suspendCoroutine { continuation: Continuation<Result<T, Exception>> ->
-            try {
-                startAsyncWork {
-                    continuation.resume(Result.Present(it))
-                }
-            } catch (ex: Exception) {
-                continuation.resume(Result.Error(ex))
+        val originalDeferred = deferred
+        try {
+            startAsyncWork {
+                originalDeferred.complete(it)
             }
+        } catch (ex: Exception) {
+            originalDeferred.completeExceptionally(ex)
+        } finally {
+            deferred = CompletableDeferred()
         }
 
-        when(result) {
-            is Result.Present -> return result.value
-            is Result.Error -> throw result.error
-            is Result.Absent -> throw IllegalStateException(
-                "Absent result from awaitCondition() in ${this::class.java}??"
-            )
-        }
+        return originalDeferred.await()
     }
 
 }

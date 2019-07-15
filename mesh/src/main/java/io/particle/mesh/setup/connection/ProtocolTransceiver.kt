@@ -91,16 +91,10 @@ import io.particle.mesh.setup.flow.BluetoothErrorException
 import io.particle.mesh.setup.flow.BluetoothTimeoutException
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.utils.isThisTheMainThread
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 private const val DEFAULT_NETWORK_CHANNEL = 11
@@ -453,10 +447,10 @@ class ProtocolTransceiver internal constructor(
         }
 
         val response = try {
+            val completable = CompletableDeferred<DeviceResponse?>()
             scopes.withWorker(timeout) {
-                suspendCoroutine { continuation: Continuation<DeviceResponse?> ->
-                    doSendRequest(requestFrame) { continuation.resume(it) }
-                }
+                doSendRequest(requestFrame) { completable.complete(it) }
+                return@withWorker completable.await()
             }
         } catch (timeoutEx: TimeoutCancellationException) {
             throw BluetoothTimeoutException()
