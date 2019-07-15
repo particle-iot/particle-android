@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="SecondaryTextColor">#B1B1B1</color> //placeholder gray
+    <color name="DetailsTextColor">#8A8A8F</color>
+
+    <color name="DisclosureIndicatorColor">#B1B1B1</color>
+
+
+    <color name="InputTitleColor">#777777</color>
+    <color name="NoteBackgroundColor">#F7F7F7</color>
+    <color name="NoteBorderColor">#C7C7C7</color>
+
+    <color name="ProgressBarProgressColor">#02ADEF</color>
+    <color name="ProgressBarTrackColor">#F5F5F5</color>
+
+    <color name="EthernetToggleBackgroundColor">#F5F5F5</color>
+    <color name="ViewBackgroundColor">#FFFFFF</color>
+
+    <color name="AlternativeButtonColor">#FFFFFF</color>
+
+    <color name="ButtonTitleColor">#FFFFFF</color>
+
+    <color name="TableViewBackgroundColor">#EFEFF4</color>
+    <color name="CellSeparatorColor">#BCBBC1</color>
+    <color name="CellHighlightColor">#F5F5F5</color>
+
+    <color name="PairingActivityIndicatorColor">#02ADEF</color>
+    <color name="NetworkScanActivityIndicatorColor">#333333</color>
+    <color name="NetworkJoinActivityIndicatorColor">#333333</color>
+    <color name="ProgressActivityIndicatorColor">#333333</color>
+
+
+</resources>

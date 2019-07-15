@@ -7,6 +7,7 @@ import io.particle.mesh.setup.flow.NoBarcodeScannedException
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
 import io.particle.mesh.setup.flow.FlowUiDelegate
+import mu.KotlinLogging
 
 
 class StepGetTargetDeviceInfo(private var flowUi: FlowUiDelegate) : MeshSetupStep() {

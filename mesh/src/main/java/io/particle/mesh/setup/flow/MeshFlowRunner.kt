@@ -69,6 +69,7 @@ enum class FlowType {
     JOINER_FLOW,
     INTERNET_CONNECTED_PREFLOW,
     ETHERNET_FLOW,
+
     WIFI_FLOW,
     CELLULAR_FLOW,
     NETWORK_CREATOR_POSTFLOW,
@@ -79,9 +80,14 @@ enum class FlowType {
     CONTROL_PANEL_CELLULAR_SIM_REACTIVATE,
     CONTROL_PANEL_CELLULAR_SIM_UNPAUSE,
     CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW,
+
     CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW,
     CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW,
+
     CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW,
+
+    CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW,
+
     SINGLE_TASK_POSTFLOW
 }
 
@@ -246,6 +252,23 @@ class MeshFlowRunner(
                     ctxs
                 )
             }
+        }
+    }
+
+    @MainThread
+    fun startShowControlPanelEthernetOptionsFlow(
+        device: ParticleDevice,
+        barcode: CompleteBarcodeData
+    ) {
+        val scopes = Scopes()
+        scopes.onMain {
+            val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
+
+            flowExecutor.executeNewFlow(
+                FlowIntent.SINGLE_TASK_FLOW,
+                listOf(FlowType.PREFLOW, FlowType.CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW),
+                ctxs
+            )
         }
     }
 

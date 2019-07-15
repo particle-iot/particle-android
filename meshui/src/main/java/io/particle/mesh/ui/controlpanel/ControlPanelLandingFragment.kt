@@ -76,13 +76,11 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         p_controlpanel_landing_notes_frame.setOnClickListener { editNotes() }
 
         p_controlpanel_landing_wifi_item_frame.isVisible = deviceType in listOf(ARGON, A_SOM)
-        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SOM)
-        p_controlpanel_landing_ethernet_item_frame.isVisible = false
-
         p_controlpanel_landing_wifi_item.navigateOnClick(
             R.id.action_controlPanelLandingFragment_to_controlPanelWifiOptionsFragment
         )
 
+        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SOM)
         p_controlpanel_landing_cellular_item.setOnClickListener {
             flowRunner.startShowControlPanelCellularOptionsFlow(device)
         }
@@ -91,6 +89,12 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
             R.id.action_global_controlPanelMeshOptionsFragment
         )
 
+        p_controlpanel_landing_ethernet_item_frame.setOnClickListener {
+            flowScopes.onMain {
+                startFlowWithBarcode(flowRunner::startShowControlPanelEthernetOptionsFlow)
+            }
+        }
+
         p_controlpanel_landing_docs_item.setOnClickListener {
             showDocumentation(activity, device.deviceType!!)
         }
@@ -98,7 +102,6 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         p_controlpanel_landing_unclaim_item.setOnClickListener {
             navigateToUnclaim()
         }
-
     }
 
     override fun onResume() {

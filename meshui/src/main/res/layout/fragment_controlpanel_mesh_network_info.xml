@@ -7,11 +7,24 @@
     android:background="#EEEFF3"
     tools:context="io.particle.mesh.ui.controlpanel.ControlPanelMeshOptionsFragment">
 
+    <TextView
+        android:id="@+id/p_controlpanel_network_info_subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:text="Network Info"
+        android:textAllCaps="true"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/p_controlpanel_mesh_inspect_network_name_frame"
         android:layout_width="0dp"
         android:layout_height="?attr/listPreferredItemHeightSmall"
-        android:layout_marginTop="32dp"
         android:background="@android:color/white"
         android:elevation="4dp"
         android:foreground="?attr/selectableItemBackground"
@@ -20,7 +33,7 @@
         android:paddingEnd="?attr/listPreferredItemPaddingRight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_network_info_subheader"
         tools:layout_height="48dp">
 
         <TextView
@@ -198,5 +211,121 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/p_controlpanel_mesh_inspect_network_device_count_frame"
+        android:layout_width="0dp"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_network_id_frame"
+        tools:layout_height="48dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:gravity="center_vertical|start"
+            android:text="Device Count"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium" />
+
+        <TextView
+            android:id="@+id/p_controlpanel_mesh_inspect_network_device_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:textColor="@color/half_black"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="418" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/p_controlpanel_device_info_subheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:text="Device Info"
+        android:textAllCaps="true"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_device_count_frame" />
+
+
+    <LinearLayout
+        android:id="@+id/p_controlpanel_mesh_inspect_network_device_role_frame"
+        android:layout_width="0dp"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_device_info_subheader"
+        tools:layout_height="48dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:gravity="center_vertical|start"
+            android:text="Role"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium" />
+
+        <TextView
+            android:id="@+id/p_controlpanel_mesh_inspect_network_device_role"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:textColor="@color/half_black"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Gateway" />
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/p_controlpanel_action_leave_network_frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:background="@color/white"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/p_controlpanel_action_leave_network"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
+            android:background="?attr/selectableItemBackground"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:paddingStart="?attr/listPreferredItemPaddingLeft"
+            android:text="Leave Network"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="@dimen/text_size_medium" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

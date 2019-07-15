@@ -393,4 +393,13 @@
         android:id="@+id/action_global_controlPanelCellularDataLimitFragment"
         app:destination="@id/controlPanelCellularDataLimitFragment" />
 
+    <fragment
+        android:id="@+id/controlPanelEthernetOptionsFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelEthernetOptionsFragment"
+        android:label="ControlPanelEthernetOptionsFragment"
+        tools:layout="@layout/fragment_control_panel_ethernet_options" />
+    <action
+        android:id="@+id/action_global_controlPanelEthernetOptionsFragment"
+        app:destination="@id/controlPanelEthernetOptionsFragment" />
+
 </navigation>

@@ -27,6 +27,10 @@ class SetupFlowUiDelegate(
     terminator
 ) {
 
+    override fun getDeviceBarcode() {
+        navigate(R.id.action_global_scanJoinerCodeIntroFragment)
+    }
+
     override fun showGetReadyForSetupScreen() {
         navigate(R.id.action_global_getReadyForSetupFragment)
     }

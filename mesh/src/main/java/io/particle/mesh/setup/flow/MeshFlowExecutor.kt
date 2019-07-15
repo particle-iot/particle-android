@@ -17,6 +17,7 @@ import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_ACTION_PO
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_REACTIVATE
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_UNPAUSE
+import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW
 import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW
@@ -331,14 +332,39 @@ class MeshFlowExecutor(
 
 
             CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW -> listOf(
-//                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),
+                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),
                 StepPopBackStack(deps.flowUi)
             )
 
+            CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW -> listOf(
+
+
+
+
+
+                // WHEREWELEFTOFF
+
+
+                // First, fetch the state of the pins to be shown in the UI
+
+
+
+
+
+
+
+
+
+
+
+
+                StepShowEthernetOptionsUi(deps.flowUi)
+            )
 
             SINGLE_TASK_POSTFLOW -> listOf(
                 StepShowSingleTaskCongratsScreen(deps.flowUi)
             )
+
         }
     }
 

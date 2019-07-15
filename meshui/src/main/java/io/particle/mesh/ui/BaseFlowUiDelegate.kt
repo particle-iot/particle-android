@@ -32,10 +32,6 @@ abstract class BaseFlowUiDelegate(
 
     protected var shownTargetInitialIsConnectedScreen by log.logged(false)
 
-    override fun getDeviceBarcode() {
-        navigate(R.id.action_global_scanJoinerCodeIntroFragment)
-    }
-
     override fun getNetworkSetupType() {
         navigate(R.id.action_global_useStandaloneOrInMeshFragment)
     }
@@ -200,6 +196,10 @@ abstract class BaseFlowUiDelegate(
 
     override fun showMeshInspectNetworkUi() {
         navigate(R.id.action_global_controlPanelMeshInspectNetworkFragment)
+    }
+
+    override fun showEthernetOptionsUi() {
+        navigate(R.id.action_global_controlPanelEthernetOptionsFragment)
     }
 
     override fun showSetupFinishedUi() {

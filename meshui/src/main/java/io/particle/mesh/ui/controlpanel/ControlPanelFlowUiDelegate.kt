@@ -20,12 +20,16 @@ class ControlPanelFlowUiDelegate(
     scopes: Scopes = Scopes()
 ) : BaseFlowUiDelegate(navControllerLD, app, dialogTool,  progressHack, scopes, terminator) {
 
+    override fun getDeviceBarcode() {
+        progressHack.showGlobalProgressSpinner(true)
+    }
+
     override fun showGetReadyForSetupScreen() {
         navigate(R.id.action_global_controlPanelPrepareForPairingFragment)
     }
 
     override fun showTargetPairingProgressUi() {
-        navigate(R.id.action_global_controlPanelPrepareForPairingFragment)
+        navigate(R.id.action_global_controlPanelPrepareForPairingFragment, shouldPopBackstack = false)
     }
 
     override fun showScanForWifiNetworksUi() {

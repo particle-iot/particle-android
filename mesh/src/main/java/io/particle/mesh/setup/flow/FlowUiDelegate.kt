@@ -92,6 +92,8 @@ interface FlowUiDelegate {
 
     fun showMeshInspectNetworkUi()
 
+    fun showEthernetOptionsUi()
+
     fun popBackStack(): Boolean
 }
 
