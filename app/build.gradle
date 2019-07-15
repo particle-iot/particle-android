@@ -19,7 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
-apply plugin: 'io.fabric'  /* uncomment for release builds */
+//apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
 android {
@@ -142,4 +142,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
+//apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
