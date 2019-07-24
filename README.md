@@ -28,7 +28,7 @@ Full documentation, including a getting started guide, lots of API examples, sup
 
 ### Requirements for building
 
-1. Get [the latest stable version of Android Studio](https://d.android.com/studio/)
+1. Get [the latest preview version of Android Studio](https://developer.android.com/studio/preview)
 2. Once you have Android Studio installed, launch it, and from the "Welcome to 
 Android Studio" screen, pick "Open an existing Android Studio project".  When it prompts 
 you for the project location, point it at the top-level 'build.gradle' file in the repo.
