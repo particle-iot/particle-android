@@ -1,4 +1,4 @@
-package io.particle.android.sdk.ui
+package io.particle.android.sdk.ui.devicelist
 
 import android.content.Intent
 import android.os.Bundle
@@ -19,6 +19,7 @@ import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.ui.BaseActivity
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.SoftAPConfigRemover
 import io.particle.android.sdk.utils.WifiFacade

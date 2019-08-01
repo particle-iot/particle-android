@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.particle.android.sdk.ui.DeviceListFragment"
+    tools:context="io.particle.android.sdk.ui.devicelist.DeviceListFragment"
     tools:ignore="RtlHardcoded">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

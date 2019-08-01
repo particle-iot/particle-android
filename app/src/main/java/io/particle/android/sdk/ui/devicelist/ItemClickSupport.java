@@ -1,4 +1,4 @@
-package io.particle.android.sdk.ui;
+package io.particle.android.sdk.ui.devicelist;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;

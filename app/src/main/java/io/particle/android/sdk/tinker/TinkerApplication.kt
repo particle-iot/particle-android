@@ -4,7 +4,7 @@ import android.app.Application
 import io.particle.android.sdk.devicesetup.BuildConfig
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.onApplicationCreated
-import io.particle.android.sdk.ui.DeviceListActivity
+import io.particle.android.sdk.ui.devicelist.DeviceListActivity
 import io.particle.mesh.common.QATool
 
 

@@ -1,4 +1,4 @@
-package io.particle.android.sdk.ui
+package io.particle.android.sdk.ui.devicelist
 
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -35,9 +35,10 @@ import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
-import io.particle.android.sdk.ui.Comparators.BooleanComparator
-import io.particle.android.sdk.ui.Comparators.ComparatorChain
-import io.particle.android.sdk.ui.Comparators.NullComparator
+import io.particle.android.sdk.ui.InspectorActivity
+import io.particle.android.sdk.ui.devicelist.Comparators.BooleanComparator
+import io.particle.android.sdk.ui.devicelist.Comparators.ComparatorChain
+import io.particle.android.sdk.ui.devicelist.Comparators.NullComparator
 import io.particle.android.sdk.utils.EZ
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
@@ -62,7 +63,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
     private val dummyCallbacks = object : Callbacks {
-        override fun onDeviceSelected(device: ParticleDevice) { }
+        override fun onDeviceSelected(device: ParticleDevice) {}
     }
 
     private lateinit var adapter: DeviceListAdapter

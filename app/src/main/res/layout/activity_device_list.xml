@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/default_light_background"
-    tools:context="io.particle.android.sdk.ui.DeviceListActivity">
+    tools:context="io.particle.android.sdk.ui.devicelist.DeviceListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -203,7 +203,7 @@
 
     <fragment
         android:id="@+id/fragment_device_list"
-        android:name="io.particle.android.sdk.ui.DeviceListFragment"
+        android:name="io.particle.android.sdk.ui.devicelist.DeviceListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
