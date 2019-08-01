@@ -94,7 +94,7 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    releaseImplementation 'com.google.firebase:firebase-core:17.0.0'
+    releaseImplementation 'com.google.firebase:firebase-core:17.0.1'
     releaseImplementation 'com.google.firebase:firebase-perf:18.0.1'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
@@ -137,7 +137,7 @@ dependencies {
     // FIXME: remove explicit dep here later
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.protobuf:protobuf-java:3.5.1'
-    implementation 'com.squareup.okio:okio:2.2.2'
+    implementation 'com.squareup.okio:okio:2.3.0'
 
     testImplementation 'junit:junit:4.12'
 }
