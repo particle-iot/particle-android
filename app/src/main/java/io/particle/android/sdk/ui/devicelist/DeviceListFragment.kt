@@ -351,8 +351,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             get() = devices
 
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
-            var modelName: TextView = topLevel.product_model_name
-            var deviceName: TextView = topLevel.product_name
+            val modelName: TextView = topLevel.product_model_name
+            val deviceName: TextView = topLevel.product_name
             val statusDot: ImageView = topLevel.online_status_dot
         }
 
