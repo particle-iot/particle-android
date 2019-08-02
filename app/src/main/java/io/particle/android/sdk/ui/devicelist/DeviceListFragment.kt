@@ -352,7 +352,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
             var modelName: TextView = topLevel.product_model_name
-            var productImage: AppCompatImageView = topLevel.product_image
             var deviceName: TextView = topLevel.product_name
         }
 
@@ -373,7 +372,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             holder.topLevel.setBackgroundResource(R.color.device_item_bg)
 
             holder.modelName.setText(device.deviceType!!.productName)
-            holder.productImage.setImageResource(device.deviceType!!.productImage)
 
             val ctx = holder.topLevel.context
             val name = if (truthy(device.name))
