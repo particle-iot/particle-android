@@ -17,7 +17,7 @@ internal class ItemClickSupport private constructor(private val recyclerView: Re
 
         fun addTo(view: RecyclerView): ItemClickSupport {
             var support: ItemClickSupport? =
-                view.getTag(R.id.item_click_support) as ItemClickSupport
+                view.getTag(R.id.item_click_support) as ItemClickSupport?
             if (support == null) {
                 support = ItemClickSupport(view)
             }

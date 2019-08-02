@@ -3,19 +3,6 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_filter"
-        android:icon="@drawable/ic_filter"
-        android:title=""
-        app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/action_send_logs"
         android:title="Share app logs..."
         app:showAsAction="never"/>

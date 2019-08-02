@@ -29,16 +29,12 @@ import com.google.android.material.snackbar.Snackbar.Callback
 import io.particle.android.sdk.DevicesLoader
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult
 import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
-import io.particle.android.sdk.ui.devicelist.Comparators.BooleanComparator
-import io.particle.android.sdk.ui.devicelist.Comparators.ComparatorChain
-import io.particle.android.sdk.ui.devicelist.Comparators.NullComparator
 import io.particle.android.sdk.utils.EZ
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
@@ -73,19 +69,15 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     private val subscribeIds = ConcurrentLinkedQueue<Long>()
     private val reloadStateDelegate = ReloadStateDelegate()
-    private val comparator = helpfulOrderDeviceComparator()
 
     private var callbacks: Callbacks = dummyCallbacks
     private var deviceSetupCompleteReceiver: DeviceSetupCompleteReceiver? = null
-
-    val textFilter: String?
-        get() = adapter.textFilter
 
     internal interface Callbacks {
         fun onDeviceSelected(device: ParticleDevice)
     }
 
-    fun addXenon() {
+    private fun addXenon() {
         addXenonDevice()
         add_device_fab.collapse()
     }
@@ -107,7 +99,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        callbacks = Fragments.getCallbacksOrThrow<Callbacks>(this, Callbacks::class.java)
+        callbacks = Fragments.getCallbacksOrThrow(this, Callbacks::class.java)
     }
 
     override fun onCreateView(
@@ -133,7 +125,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         partialContentBar!!.layoutParams =
             LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
-        adapter = DeviceListAdapter(requireNonNull<FragmentActivity>(activity))
+        adapter = DeviceListAdapter()
         rv.adapter = adapter
         ItemClickSupport.addTo(rv).setOnItemClickListener(
             object : ItemClickSupport.OnItemClickListener {
@@ -142,6 +134,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
                 }
             }
         )
+
         return top
     }
 
@@ -165,30 +158,21 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
 
-        if (savedInstanceState != null) {
-            adapter.filter(savedInstanceState.getString("txtFilterState"))
-        }
-
         action_set_up_a_xenon.setOnClickListener { addXenon() }
         action_set_up_a_photon.setOnClickListener { addPhoton() }
         action_set_up_a_core.setOnClickListener { addCore() }
         action_set_up_an_electron.setOnClickListener { addElectron() }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("txtFilterState", adapter.textFilter)
+    override fun onStart() {
+        super.onStart()
+        refreshDevices()
     }
 
     override fun onResume() {
         super.onResume()
         val devices = adapter.items
 //        subscribeToSystemEvents(devices, false)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        refreshDevices()
     }
 
     override fun onPause() {
@@ -222,7 +206,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         refresh_layout.isRefreshing = false
 
         val devices = ArrayList(result.devices)
-        Collections.sort(devices, comparator)
+
+        empty_message.visibility = if (devices.size == 0) View.VISIBLE else View.GONE
 
         reloadStateDelegate.onDeviceLoadFinished(loader, result)
 
@@ -357,27 +342,10 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         loader!!.forceLoad()
     }
 
-    fun filter(typeArrayList: List<ParticleDeviceType?>) {
-        adapter.filter(typeArrayList)
-        empty_message.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
-    }
-
-    fun filter(query: String) {
-        adapter.filter(query)
-        empty_message.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
-    }
-
-    internal class DeviceListAdapter(private val activity: FragmentActivity) :
-        RecyclerView.Adapter<DeviceListAdapter.ViewHolder>() {
+    internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListAdapter.ViewHolder>() {
 
         private val devices = list<ParticleDevice>()
-        private val filteredData = list<ParticleDevice>()
         private var defaultBackground: Drawable? = null
-        var textFilter: String? = ""
-            private set
-        private var typeFilters: List<ParticleDeviceType?> = Arrays.asList(
-            *ParticleDeviceType.values()
-        )
 
         val items: List<ParticleDevice>
             get() = devices
@@ -397,7 +365,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val device = filteredData[position]
+            val device = devices[position]
 
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.background
@@ -416,52 +384,16 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         }
 
         override fun getItemCount(): Int {
-            return filteredData.size
+            return devices.size
         }
 
         fun clear() {
             devices.clear()
-            filteredData.clear()
             notifyDataSetChanged()
         }
 
         fun addAll(toAdd: List<ParticleDevice>) {
             devices.addAll(toAdd)
-            filter(textFilter, typeFilters)
-        }
-
-        fun filter(query: String?) {
-            textFilter = query
-            filteredData.clear()
-            notifyDataSetChanged()
-
-            filter(query, typeFilters)
-        }
-
-        fun filter(typeArrayList: List<ParticleDeviceType?>) {
-            typeFilters = typeArrayList
-            filteredData.clear()
-            notifyDataSetChanged()
-
-            filter(textFilter, typeArrayList)
-        }
-
-        private fun filter(query: String?, typeArrayList: List<ParticleDeviceType?>) {
-            for (device in devices) {
-                if ((containsFilter(device.name, query)
-                            || containsFilter(device.deviceType!!.name, query)
-                            || containsFilter(device.currentBuild, query)
-                            || containsFilter(device.iccid, query)
-                            || containsFilter(device.id, query)
-                            || containsFilter(
-                        device.imei,
-                        query
-                    )) && typeArrayList.contains(device.deviceType)
-                ) {
-                    filteredData.add(device)
-                    notifyItemInserted(devices.indexOf(device))
-                }
-            }
         }
 
         fun getItem(position: Int): ParticleDevice {
@@ -527,24 +459,3 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
 
 private val log = TLog.get(DeviceListFragment::class.java)
-
-private fun containsFilter(value: String?, query: String?): Boolean {
-    return value != null && value.contains(query ?: "")
-}
-
-private fun helpfulOrderDeviceComparator(): Comparator<ParticleDevice> {
-    val deviceOnlineStatusComparator = Comparator<ParticleDevice> { lhs, rhs ->
-        Comparators.trueFirstComparator.compare(lhs.isConnected, rhs.isConnected)
-    }
-    val nullComparator = NullComparator<String>(false)
-    val unnamedDevicesFirstComparator = Comparator<ParticleDevice> { lhs, rhs ->
-        val lhname = lhs.name
-        val rhname = rhs.name
-        nullComparator.compare(lhname, rhname)
-    }
-
-    val chain: ComparatorChain<ParticleDevice>
-    chain = ComparatorChain(deviceOnlineStatusComparator, false)
-    chain.addComparator(unnamedDevicesFirstComparator, false)
-    return chain
-}

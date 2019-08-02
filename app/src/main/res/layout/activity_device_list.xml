@@ -1,5 +1,4 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,206 +7,28 @@
     android:background="@color/default_light_background"
     tools:context="io.particle.android.sdk.ui.devicelist.DeviceListActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="@drawable/ic_triangy_toolbar_background"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="top|start"
-                android:layout_marginBottom="?attr/actionBarSize">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/filtersLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:text="@string/filters"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <CheckBox
-                        android:id="@+id/photonFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/product_name_photon"
-                        app:layout_constraintEnd_toStartOf="@+id/electronFilter"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
-
-                    <CheckBox
-                        android:id="@+id/electronFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/product_name_electron"
-                        app:layout_constraintEnd_toStartOf="@+id/p1Filter"
-                        app:layout_constraintStart_toEndOf="@+id/photonFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
-
-                    <CheckBox
-                        android:id="@+id/p1Filter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/product_name_p1"
-                        app:layout_constraintEnd_toStartOf="@+id/bluzFilter"
-                        app:layout_constraintStart_toEndOf="@+id/electronFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
-
-                    <CheckBox
-                        android:id="@+id/raspberryFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/product_name_raspberry"
-                        app:layout_constraintEnd_toStartOf="@+id/redBearFilter"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/photonFilter"/>
-
-                    <CheckBox
-                        android:id="@+id/redBearFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/product_name_red_bear_duo"
-                        app:layout_constraintEnd_toStartOf="@+id/coreFilter"
-                        app:layout_constraintStart_toEndOf="@+id/raspberryFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/electronFilter"/>
-
-                    <CheckBox
-                        android:id="@+id/coreFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/product_name_core"
-                        app:layout_constraintStart_toEndOf="@+id/redBearFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/p1Filter"/>
-
-                    <CheckBox
-                        android:id="@+id/bluzFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/bluz"
-                        app:layout_constraintEnd_toStartOf="@+id/oakFilter"
-                        app:layout_constraintStart_toEndOf="@+id/p1Filter"
-                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
-
-                    <CheckBox
-                        android:id="@+id/oakFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingStart="10dp"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/oak"
-                        app:layout_constraintStart_toEndOf="@+id/bluzFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel"/>
-
-                    <CheckBox
-                        android:id="@+id/xenonFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="8dp"
-                        android:checked="true"
-                        android:paddingStart="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
-                        android:text="@string/product_name_xenon"
-                        app:layout_constraintStart_toEndOf="@+id/coreFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/oakFilter" />
-
-                    <CheckBox
-                        android:id="@+id/argonFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:checked="true"
-                        android:text="@string/product_name_argon"
-                        app:layout_constraintStart_toEndOf="@+id/xenonFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/p1Filter"/>
-
-                    <CheckBox
-                        android:id="@+id/boronFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:checked="true"
-                        android:paddingStart="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingRight="10dp"
-                        android:text="@string/product_name_boron"
-                        app:layout_constraintStart_toEndOf="@+id/oakFilter"
-                        app:layout_constraintTop_toBottomOf="@+id/filtersLabel" />
-
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </HorizontalScrollView>
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="bottom"
-                app:layout_scrollFlags="scroll|enterAlways">
-
-                <TextView
-                    android:id="@android:id/title"
-                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="@string/your_devices"/>
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="@drawable/ic_triangy_toolbar_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/your_devices" />
 
     <fragment
         android:id="@+id/fragment_device_list"
         android:name="io.particle.android.sdk.ui.devicelist.DeviceListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:layout="@android:layout/list_content"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:layout="@android:layout/list_content" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
