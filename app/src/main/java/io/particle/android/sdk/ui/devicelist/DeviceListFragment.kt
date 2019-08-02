@@ -11,11 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageView
+import android.widget.*
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -42,13 +42,13 @@ import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Fragments
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
-import io.particle.commonui.productImage
 import io.particle.commonui.productName
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Objects.requireNonNull
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -353,6 +353,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
             var modelName: TextView = topLevel.product_model_name
             var deviceName: TextView = topLevel.product_name
+            val statusDot: ImageView = topLevel.online_status_dot
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -372,6 +373,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             holder.topLevel.setBackgroundResource(R.color.device_item_bg)
 
             holder.modelName.setText(device.deviceType!!.productName)
+            holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
 
             val ctx = holder.topLevel.context
             val name = if (truthy(device.name))
@@ -396,6 +398,14 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         fun getItem(position: Int): ParticleDevice {
             return devices[position]
+        }
+
+        private fun getStatusDotRes(device: ParticleDevice): Int {
+            return when {
+                device.isFlashing -> R.drawable.device_flashing_dot
+                device.isConnected -> R.drawable.online_dot
+                else -> R.drawable.offline_dot
+            }
         }
     }
 
