@@ -29,6 +29,22 @@ import com.google.android.material.snackbar.Snackbar.Callback
 import io.particle.android.sdk.DevicesLoader
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult
 import io.particle.android.sdk.cloud.ParticleDevice
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
@@ -113,10 +129,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         val layoutManager = LinearLayoutManager(inflater.context)
         rv.layoutManager = layoutManager
         rv.addItemDecoration(
-            DividerItemDecoration(
-                requireNonNull<Context>(context),
-                LinearLayout.VERTICAL
-            )
+            DividerItemDecoration(requireNonNull<Context>(context), LinearLayout.VERTICAL)
         )
 
         partialContentBar =
@@ -373,13 +386,23 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             if (defaultBackground == null) {
                 defaultBackground = holder.topLevel.background
             }
-            holder.topLevel.setBackgroundResource(R.color.device_item_bg)
 
+            val ctx = holder.topLevel.context
+
+            holder.topLevel.setBackgroundResource(R.color.device_item_bg)
             holder.modelName.setText(device.deviceType!!.productName)
             holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
             holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
 
-            val ctx = holder.topLevel.context
+            @ColorInt val colorValue: Int = ContextCompat.getColor(
+                ctx,
+                device.deviceType!!.getColorForDeviceType()
+            )
+            val bg = holder.modelName.background
+            bg.mutate()
+            DrawableCompat.setTint(bg, colorValue)
+            holder.modelName.setTextColor(colorValue)
+
             val name = if (truthy(device.name))
                 device.name
             else
@@ -471,3 +494,21 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
 
 private val log = TLog.get(DeviceListFragment::class.java)
+
+
+@ColorRes
+private fun ParticleDeviceType.getColorForDeviceType(): Int {
+    return when (this) {
+        ARGON, BORON, XENON,
+        A_SOM, B_SOM, X_SOM -> R.color.emerald
+        CORE -> R.color.spark_blue
+        ELECTRON -> R.color.device_color_electron
+        P1,
+        PHOTON -> R.color.device_color_photon
+        BLUZ -> R.color.belize
+        RED_BEAR_DUO -> R.color.orange
+        RASPBERRY_PI -> R.color.wisteria
+        DIGISTUMP_OAK,
+        OTHER -> R.color.gray
+    }
+}
