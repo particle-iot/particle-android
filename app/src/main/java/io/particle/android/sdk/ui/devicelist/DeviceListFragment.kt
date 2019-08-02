@@ -135,9 +135,13 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         adapter = DeviceListAdapter(requireNonNull<FragmentActivity>(activity))
         rv.adapter = adapter
-        ItemClickSupport.addTo(rv).setOnItemClickListener { _, position, _ ->
-            onDeviceRowClicked(position)
-        }
+        ItemClickSupport.addTo(rv).setOnItemClickListener(
+            object : ItemClickSupport.OnItemClickListener {
+                override fun onItemClicked(recyclerView: RecyclerView, position: Int, v: View) {
+                    onDeviceRowClicked(position)
+                }
+            }
+        )
         return top
     }
 
@@ -530,8 +534,7 @@ private fun containsFilter(value: String?, query: String?): Boolean {
 
 private fun helpfulOrderDeviceComparator(): Comparator<ParticleDevice> {
     val deviceOnlineStatusComparator = Comparator<ParticleDevice> { lhs, rhs ->
-        BooleanComparator.getTrueFirstComparator()
-            .compare(lhs.isConnected, rhs.isConnected)
+        Comparators.trueFirstComparator.compare(lhs.isConnected, rhs.isConnected)
     }
     val nullComparator = NullComparator<String>(false)
     val unnamedDevicesFirstComparator = Comparator<ParticleDevice> { lhs, rhs ->

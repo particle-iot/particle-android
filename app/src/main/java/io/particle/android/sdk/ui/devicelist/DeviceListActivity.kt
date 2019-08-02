@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.activity_device_list.*
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import java.util.*
+import kotlin.math.abs
 
 
 class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
@@ -42,7 +43,7 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
 
     private val offsetChangedListener: OnOffsetChangedListener =
         OnOffsetChangedListener { appBarLayout: AppBarLayout, verticalOffset: Int ->
-            isAppBarExpanded = Math.abs(verticalOffset) != appBarLayout.totalScrollRange
+            isAppBarExpanded = abs(verticalOffset) != appBarLayout.totalScrollRange
 
             if (!isAppBarExpanded && appBarLayout.isActivated) {
                 lockAppBarClosed()
