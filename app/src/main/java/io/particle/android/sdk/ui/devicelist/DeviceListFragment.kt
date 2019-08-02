@@ -347,12 +347,15 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         private val devices = list<ParticleDevice>()
         private var defaultBackground: Drawable? = null
 
+        private val dateFormatter = SimpleDateFormat("MMM dd, yyyy, HH:mm a", Locale.getDefault())
+
         val items: List<ParticleDevice>
             get() = devices
 
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
             val modelName: TextView = topLevel.product_model_name
             val deviceName: TextView = topLevel.product_name
+            val lastHandshake: TextView = topLevel.last_handshake_text
             val statusDot: ImageView = topLevel.online_status_dot
         }
 
@@ -373,6 +376,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             holder.topLevel.setBackgroundResource(R.color.device_item_bg)
 
             holder.modelName.setText(device.deviceType!!.productName)
+            holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
             holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
 
             val ctx = holder.topLevel.context
