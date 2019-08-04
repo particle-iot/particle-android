@@ -26,7 +26,9 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         // TODO: If exposing deep links into your app, handle intents here.
 
         if (Ui.findFrag<Fragment>(this, R.id.fragment_parent) == null) {
-            supportFragmentManager.commit { add(R.id.fragment_parent, DeviceListFragment()) }
+            supportFragmentManager.commit {
+                add(R.id.fragment_parent, DeviceListFragment.newInstance())
+            }
         }
 
         onProcessIntent(intent)

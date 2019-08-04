@@ -80,6 +80,10 @@ import java.util.logging.Level
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
 class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoadResult> {
 
+    companion object {
+        fun newInstance() = DeviceListFragment()
+    }
+
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
     private val dummyCallbacks = object : Callbacks {
         override fun onDeviceSelected(device: ParticleDevice) {}
