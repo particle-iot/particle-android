@@ -3,7 +3,6 @@ package io.particle.android.sdk.ui.devicelist
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -170,7 +169,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
-        
+
         action_set_up_a_xenon.setOnClickListener { addXenon() }
         action_set_up_a_photon.setOnClickListener { addPhoton() }
         action_set_up_a_core.setOnClickListener { addCore() }

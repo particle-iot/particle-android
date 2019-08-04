@@ -33,18 +33,8 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         deviceList = Ui.findFrag(this, R.id.fragment_device_list)
         // TODO: If exposing deep links into your app, handle intents here.
 
-        // Show the Up button in the action bar.
+//        // Show the Up button in the action bar.
         setSupportActionBar(Ui.findView(this, R.id.toolbar))
-//        val supportActionBar = supportActionBar
-//        if (supportActionBar != null) {
-//            val background =
-//                ContextCompat.getDrawable(this, R.drawable.ic_triangy_toolbar_background)
-//
-//            val toolBar = Ui.findView<CollapsingToolbarLayout>(this, R.id.collapsing_toolbar)
-//            toolBar.background = background
-//
-//            appbar.setExpanded(false)
-//        }
 
         onProcessIntent(intent)
     }
