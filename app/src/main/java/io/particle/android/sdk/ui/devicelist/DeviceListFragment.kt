@@ -1,6 +1,5 @@
 package io.particle.android.sdk.ui.devicelist
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,9 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
@@ -27,6 +30,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.Callback
 import io.particle.android.sdk.DevicesLoader
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult
+import io.particle.android.sdk.accountsetup.LoginActivity
+import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
@@ -62,11 +67,14 @@ import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
+import pl.brightinventions.slf4android.LogRecord
+import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Objects.requireNonNull
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.logging.Level
 
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
@@ -92,7 +100,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         fun onDeviceSelected(device: ParticleDevice)
     }
 
-    private fun addXenon() {
+    private fun addGen3() {
         addXenonDevice()
         add_device_fab.collapse()
     }
@@ -142,6 +150,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
         )
 
+
+
         return top
     }
 
@@ -165,9 +175,37 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
 
-        action_set_up_a_xenon.setOnClickListener { addXenon() }
+        action_set_up_a_xenon.setOnClickListener { addGen3() }
         action_set_up_a_photon.setOnClickListener { addPhoton() }
         action_set_up_an_electron.setOnClickListener { addElectron() }
+
+        toolbar.inflateMenu(R.menu.device_list)
+        toolbar.setOnMenuItemClickListener {
+            return@setOnMenuItemClickListener when (it.itemId) {
+
+                R.id.action_log_out -> {
+                    AlertDialog.Builder(requireActivity())
+                    .setMessage(R.string.logout_confirm_message)
+                    .setPositiveButton(R.string.log_out) { dialog, _ ->
+                        val cloud = ParticleCloudSDK.getCloud()
+                        cloud.logOut()
+                        startActivity(Intent(requireContext(), LoginActivity::class.java))
+                        requireActivity().finish()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
+                    .show()
+                    true
+                }
+
+                R.id.action_send_logs -> {
+                    sendLogs()
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 
     override fun onStart() {
@@ -293,11 +331,11 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     }
 
     fun onBackPressed(): Boolean {
-        if (add_device_fab.isExpanded) {
+        return if (add_device_fab.isExpanded) {
             add_device_fab.collapse()
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
@@ -326,6 +364,20 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         val loader = loaderManager.getLoader<Any>(R.id.device_list_devices_loader_id)
         loader!!.forceLoad()
     }
+
+    private fun sendLogs() {
+        val lr = LogRecord(Level.WARNING, "")
+
+        NotifyDeveloperDialogDisplayActivity.showDialogIn(
+            requireActivity(),
+            lr,
+            list(),
+            "Logs from the Particle Android app",
+            "",
+            list("pl.brightinventions.slf4android.ReadLogcatEntriesAsyncTask")
+        )
+    }
+
 
     internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListAdapter.ViewHolder>() {
 
@@ -452,7 +504,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             retryCount = 0
             partialContentBar!!.visibility = View.INVISIBLE
         }
-
     }
 
 }
