@@ -7,6 +7,18 @@
     tools:context="io.particle.android.sdk.ui.devicelist.DeviceListFragment"
     tools:ignore="RtlHardcoded">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="@drawable/ic_triangy_toolbar_background"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toTopOf="parent"
+        fab:title="@string/your_devices"
+        fab:titleTextColor="@color/white" />
+
     <ImageView
         android:id="@+id/search_icon"
         android:layout_width="48dp"
@@ -15,7 +27,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/ic_search_gray_24dp"
         fab:layout_constraintStart_toStartOf="parent"
-        fab:layout_constraintTop_toTopOf="parent" />
+        fab:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <EditText
         android:id="@+id/name_filter_input"
@@ -38,7 +50,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/ic_filter_list_gray_24dp"
         fab:layout_constraintEnd_toEndOf="parent"
-        fab:layout_constraintTop_toTopOf="parent" />
+        fab:layout_constraintTop_toTopOf="@id/search_icon" />
 
     <View
         android:id="@+id/filter_bar_divider"

@@ -1,34 +1,14 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     tools:context="io.particle.android.sdk.ui.devicelist.DeviceListActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="top"
-        android:background="@drawable/ic_triangy_toolbar_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/white"
-        app:title="@string/your_devices" />
+    <FrameLayout
+        android:id="@+id/fragment_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-    <fragment
-        android:id="@+id/fragment_device_list"
-        android:name="io.particle.android.sdk.ui.devicelist.DeviceListFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:layout="@android:layout/list_content" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
 
