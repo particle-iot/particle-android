@@ -24,4 +24,39 @@
         <item name="hintTextAppearance">@style/p_mesh_hintbox_header_grey</item>
     </style>
 
+    <style name="device_filter_radio_button">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">-5dp</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="device_filter_header">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="device_filter_button" parent="Widget.AppCompat.Button">
+        <item name="android:gravity">center</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/device_filter_button_background_unselected</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="device_filter_button.device_type">
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
 </resources>
