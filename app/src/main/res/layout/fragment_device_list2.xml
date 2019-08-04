@@ -13,9 +13,11 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="top"
         android:background="@drawable/ic_triangy_toolbar_background"
+        android:theme="@style/AppTheme.AppBarOverlay"
         fab:layout_constraintEnd_toEndOf="parent"
         fab:layout_constraintStart_toStartOf="parent"
         fab:layout_constraintTop_toTopOf="parent"
+        fab:popupTheme="@style/AppTheme.PopupOverlay"
         fab:title="@string/your_devices"
         fab:titleTextColor="@color/white" />
 
