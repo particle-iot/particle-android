@@ -21,6 +21,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -154,8 +155,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
         )
 
-
-
         return top
     }
 
@@ -208,6 +207,14 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
                 }
 
                 else -> false
+            }
+        }
+
+        filter_button.setOnClickListener {
+            // TODO: replace this with navigation lib calls
+            requireActivity().supportFragmentManager.commit {
+                DeviceFilterFragment.newInstance()
+                addToBackStack(null)
             }
         }
     }

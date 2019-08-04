@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.android.sdk.ui.devicelist.DeviceFilterFragment"
+    tools:ignore="MissingPrefix">
+
+    <Button
+        android:id="@+id/action_reset"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:text="Reset"
+        app:layout_constraintBaseline_toBaselineOf="@id/title_text"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/title_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center"
+        android:text="Filters"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/p_ic_close_cyan_24dp"
+        app:layout_constraintBottom_toBottomOf="@id/title_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_text" />
+
+    <View
+        android:id="@+id/top_bar_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_text" />
+
+    <View
+        android:id="@+id/action_button_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/action_filter_device_list" />
+
+    <Button
+        android:id="@+id/action_filter_device_list"
+        style="@style/p_mesh_button_style"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="SHOW 13 DEVICES" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
