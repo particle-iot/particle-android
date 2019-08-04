@@ -25,10 +25,6 @@ import androidx.fragment.app.commit
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.Snackbar.Callback
-import io.particle.android.sdk.DevicesLoader
-import io.particle.android.sdk.DevicesLoader.DevicesLoadResult
 import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
@@ -54,7 +50,6 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
-import io.particle.android.sdk.utils.EZ
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
@@ -83,23 +78,12 @@ class DeviceListFragment : Fragment() {
         fun newInstance() = DeviceListFragment()
     }
 
-    // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
-    private val dummyCallbacks = object : Callbacks {
-        override fun onDeviceSelected(device: ParticleDevice) {}
-    }
-
     private lateinit var adapter: DeviceListAdapter
     // FIXME: naming, document better
     private var partialContentBar: ProgressBar? = null
-    private var isLoadingSnackbarVisible: Boolean = false
 
     private val subscribeIds = ConcurrentLinkedQueue<Long>()
-    private var callbacks: Callbacks = dummyCallbacks
     private var deviceSetupCompleteReceiver: DeviceSetupCompleteReceiver? = null
-
-    internal interface Callbacks {
-        fun onDeviceSelected(device: ParticleDevice)
-    }
 
     private fun addGen3() {
         addXenonDevice()
@@ -114,11 +98,6 @@ class DeviceListFragment : Fragment() {
     fun addElectron() {
         addElectronDevice()
         add_device_fab.collapse()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = Fragments.getCallbacksOrThrow(this, Callbacks::class.java)
     }
 
     override fun onCreateView(
@@ -235,11 +214,6 @@ class DeviceListFragment : Fragment() {
         super.onStop()
         refresh_layout.isRefreshing = false
         add_device_fab.collapse()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        callbacks = dummyCallbacks
     }
 
     override fun onDestroy() {
