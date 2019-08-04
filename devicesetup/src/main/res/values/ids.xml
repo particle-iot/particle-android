@@ -6,8 +6,6 @@
     <item name="fine_print" type="id"/>
     <item name="tinker_button_color" type="id"/>
 
-    <item name="device_list_devices_loader_id" type="id"/>
-
     <!-- device actions -->
     <item name="action_device_rename" type="id"/>
     <item name="action_device_unclaim" type="id"/>

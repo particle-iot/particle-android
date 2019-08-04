@@ -22,8 +22,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.Loader
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -79,7 +77,7 @@ import java.util.logging.Level
 
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
-class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoadResult> {
+class DeviceListFragment : Fragment() {
 
     companion object {
         fun newInstance() = DeviceListFragment()
@@ -96,8 +94,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     private var isLoadingSnackbarVisible: Boolean = false
 
     private val subscribeIds = ConcurrentLinkedQueue<Long>()
-    private val reloadStateDelegate = ReloadStateDelegate()
-
     private var callbacks: Callbacks = dummyCallbacks
     private var deviceSetupCompleteReceiver: DeviceSetupCompleteReceiver? = null
 
@@ -175,7 +171,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             }
         deviceSetupCompleteReceiver!!.register(activity)
 
-        LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
 
         action_set_up_a_xenon.setOnClickListener { addGen3() }
@@ -240,7 +235,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         super.onStop()
         refresh_layout.isRefreshing = false
         add_device_fab.collapse()
-        reloadStateDelegate.reset()
     }
 
     override fun onDetach() {
@@ -253,18 +247,11 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         deviceSetupCompleteReceiver!!.unregister(activity)
     }
 
-    override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<DevicesLoadResult> {
-        return DevicesLoader(activity)
-    }
-
-    override fun onLoadFinished(loader: Loader<DevicesLoadResult>, result: DevicesLoadResult) {
+    // FIXME: remove this when possible
+    fun onLoadFinished(devices: List<ParticleDevice>) {
         refresh_layout.isRefreshing = false
 
-        val devices = ArrayList(result.devices)
-
         empty_message.visibility = if (devices.size == 0) View.VISIBLE else View.GONE
-
-        reloadStateDelegate.onDeviceLoadFinished(loader, result)
 
         adapter.clear()
         adapter.addAll(devices)
@@ -314,10 +301,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
                 }
             }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, device)
         }
-    }
-
-    override fun onLoaderReset(loader: Loader<DevicesLoadResult>) {
-        // no-op
     }
 
     private fun onDeviceRowClicked(position: Int) {
@@ -372,8 +355,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     private fun refreshDevices() {
         val devices = adapter.items
 //        subscribeToSystemEvents(devices, true)
-        val loader = loaderManager.getLoader<Any>(R.id.device_list_devices_loader_id)
-        loader!!.forceLoad()
+        filterViewModel.refreshDevices()
+
     }
 
     private fun sendLogs() {
@@ -389,135 +372,84 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         )
     }
 
-
-    internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListAdapter.ViewHolder>() {
-
-        private val devices = list<ParticleDevice>()
-        private val dateFormatter = SimpleDateFormat("MMM dd, yyyy, HH:mm a", Locale.getDefault())
-
-        val items: List<ParticleDevice>
-            get() = devices
-
-        internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
-            val modelName: TextView = topLevel.product_model_name
-            val deviceName: TextView = topLevel.product_name
-            val lastHandshake: TextView = topLevel.last_handshake_text
-            val statusDot: ImageView = topLevel.online_status_dot
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            // create a new view
-            val v = LayoutInflater.from(parent.context).inflate(
-                R.layout.row_device_list, parent, false
-            )
-            return ViewHolder(v)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val device = devices[position]
-
-            val ctx = holder.topLevel.context
-
-            holder.modelName.setText(device.deviceType!!.productName)
-            holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
-            holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
-
-            @ColorInt val colorValue: Int = ContextCompat.getColor(
-                ctx,
-                device.deviceType!!.getColorForDeviceType()
-            )
-            val bg = holder.modelName.background
-            bg.mutate()
-            DrawableCompat.setTint(bg, colorValue)
-            holder.modelName.setTextColor(colorValue)
-
-            val name = if (truthy(device.name))
-                device.name
-            else
-                ctx.getString(R.string.unnamed_device)
-            holder.deviceName.text = name
-        }
-
-        override fun getItemCount(): Int {
-            return devices.size
-        }
-
-        fun clear() {
-            devices.clear()
-            notifyDataSetChanged()
-        }
-
-        fun addAll(toAdd: List<ParticleDevice>) {
-            devices.addAll(toAdd)
-        }
-
-        fun getItem(position: Int): ParticleDevice {
-            return devices[position]
-        }
-
-        private fun getStatusDotRes(device: ParticleDevice): Int {
-            return when {
-                device.isFlashing -> R.drawable.device_flashing_dot
-                device.isConnected -> R.drawable.online_dot
-                else -> R.drawable.offline_dot
-            }
-        }
-    }
-
-
-    private inner class ReloadStateDelegate {
-
-        private val MAX_RETRIES = 10
-
-        internal var retryCount = 0
-
-        internal fun onDeviceLoadFinished(
-            loader: Loader<DevicesLoadResult>,
-            result: DevicesLoadResult
-        ) {
-            if (!result.isPartialResult) {
-                reset()
-                return
-            }
-
-            retryCount++
-            if (retryCount > MAX_RETRIES) {
-                // tried too many times, giving up. :(
-                partialContentBar!!.visibility = View.INVISIBLE
-                return
-            }
-
-            if (!isLoadingSnackbarVisible) {
-                isLoadingSnackbarVisible = true
-                val view = view
-                if (view != null) {
-                    Snackbar.make(view, "Unable to load all devices", Snackbar.LENGTH_SHORT)
-                        .addCallback(object : Callback() {
-                            override fun onDismissed(snackbar: Snackbar?, event: Int) {
-                                super.onDismissed(snackbar, event)
-                                isLoadingSnackbarVisible = false
-                            }
-                        }).show()
-                }
-            }
-
-            partialContentBar!!.visibility = View.VISIBLE
-            (loader as DevicesLoader).setUseLongTimeoutsOnNextLoad(true)
-            // FIXME: is it READY_TO_ACTIVATE to call forceLoad() in loader callbacks?  Test and be certain.
-            EZ.runOnMainThread {
-                if (isResumed) {
-                    loader.forceLoad()
-                }
-            }
-        }
-
-        internal fun reset() {
-            retryCount = 0
-            partialContentBar!!.visibility = View.INVISIBLE
-        }
-    }
-
 }
+
+
+internal class DeviceListViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
+    val modelName: TextView = topLevel.product_model_name
+    val deviceName: TextView = topLevel.product_name
+    val lastHandshake: TextView = topLevel.last_handshake_text
+    val statusDot: ImageView = topLevel.online_status_dot
+}
+
+
+internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListViewHolder>() {
+
+    private val devices = list<ParticleDevice>()
+    private val dateFormatter = SimpleDateFormat("MMM dd, yyyy, HH:mm a", Locale.getDefault())
+
+    val items: List<ParticleDevice>
+        get() = devices
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceListViewHolder {
+        // create a new view
+        val v = LayoutInflater.from(parent.context).inflate(
+            R.layout.row_device_list, parent, false
+        )
+        return DeviceListViewHolder(v)
+    }
+
+    override fun onBindViewHolder(holder: DeviceListViewHolder, position: Int) {
+        val device = devices[position]
+
+        val ctx = holder.topLevel.context
+
+        holder.modelName.setText(device.deviceType!!.productName)
+        holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
+        holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
+
+        @ColorInt val colorValue: Int = ContextCompat.getColor(
+            ctx,
+            device.deviceType!!.getColorForDeviceType()
+        )
+        val bg = holder.modelName.background
+        bg.mutate()
+        DrawableCompat.setTint(bg, colorValue)
+        holder.modelName.setTextColor(colorValue)
+
+        val name = if (truthy(device.name))
+            device.name
+        else
+            ctx.getString(R.string.unnamed_device)
+        holder.deviceName.text = name
+    }
+
+    override fun getItemCount(): Int {
+        return devices.size
+    }
+
+    fun clear() {
+        devices.clear()
+        notifyDataSetChanged()
+    }
+
+    fun addAll(toAdd: List<ParticleDevice>) {
+        devices.addAll(toAdd)
+    }
+
+    fun getItem(position: Int): ParticleDevice {
+        return devices[position]
+    }
+
+    private fun getStatusDotRes(device: ParticleDevice): Int {
+        return when {
+            device.isFlashing -> R.drawable.device_flashing_dot
+            device.isConnected -> R.drawable.online_dot
+            else -> R.drawable.offline_dot
+        }
+    }
+}
+
 
 
 private val log = TLog.get(DeviceListFragment::class.java)
