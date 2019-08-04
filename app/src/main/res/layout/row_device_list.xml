@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@+id/last_handshake_text"
         app:layout_constraintStart_toEndOf="@id/online_status_dot"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48000002"
+        app:layout_constraintVertical_bias="0.48"
         app:layout_constraintVertical_chainStyle="packed"
         tools:ignore="MissingPrefix"
         tools:text="device_name" />
