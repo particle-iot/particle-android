@@ -170,7 +170,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
-
+        
         action_set_up_a_xenon.setOnClickListener { addXenon() }
         action_set_up_a_photon.setOnClickListener { addPhoton() }
         action_set_up_a_core.setOnClickListener { addCore() }
@@ -358,8 +358,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListAdapter.ViewHolder>() {
 
         private val devices = list<ParticleDevice>()
-        private var defaultBackground: Drawable? = null
-
         private val dateFormatter = SimpleDateFormat("MMM dd, yyyy, HH:mm a", Locale.getDefault())
 
         val items: List<ParticleDevice>
@@ -383,13 +381,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val device = devices[position]
 
-            if (defaultBackground == null) {
-                defaultBackground = holder.topLevel.background
-            }
-
             val ctx = holder.topLevel.context
 
-            holder.topLevel.setBackgroundResource(R.color.device_item_bg)
             holder.modelName.setText(device.deviceType!!.productName)
             holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
             holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
