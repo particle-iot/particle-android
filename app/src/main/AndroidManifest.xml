@@ -13,7 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:isGame="false"
         android:label="@string/app_name"
-        android:theme="@style/ParticleSetupTheme"
+        android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <!-- Disable data collection by default for GDPR, re-enable at runtime -->
@@ -47,7 +47,7 @@
             android:name="io.particle.android.sdk.ui.devicelist.DeviceListActivity"
             android:label="@string/title_device_list"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
