@@ -102,11 +102,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         add_device_fab.collapse()
     }
 
-    fun addCore() {
-        addSparkCoreDevice()
-        add_device_fab.collapse()
-    }
-
     fun addElectron() {
         addElectronDevice()
         add_device_fab.collapse()
@@ -172,7 +167,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
         action_set_up_a_xenon.setOnClickListener { addXenon() }
         action_set_up_a_photon.setOnClickListener { addPhoton() }
-        action_set_up_a_core.setOnClickListener { addCore() }
         action_set_up_an_electron.setOnClickListener { addElectron() }
     }
 
@@ -316,27 +310,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             requireNonNull<FragmentActivity>(activity),
             DeviceListActivity::class.java
         )
-    }
-
-    private fun addSparkCoreDevice() {
-        try {
-            val coreAppPkg = "io.spark.core.android"
-            // Is the spark core app already installed?
-            var intent =
-                requireNonNull<FragmentActivity>(activity).packageManager.getLaunchIntentForPackage(
-                    coreAppPkg
-                )
-            if (intent == null) {
-                // Nope.  Send the user to the store.
-                intent = Intent(Intent.ACTION_VIEW)
-                    .setData(Uri.parse("market://details?id=$coreAppPkg"))
-            }
-            startActivity(intent)
-        } catch (ignored: ActivityNotFoundException) {
-            Toast.makeText(activity, "Cannot find spark core application.", Toast.LENGTH_SHORT)
-                .show()
-        }
-
     }
 
     private fun addElectronDevice() {
