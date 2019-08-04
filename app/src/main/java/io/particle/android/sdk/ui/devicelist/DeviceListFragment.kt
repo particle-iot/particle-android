@@ -112,7 +112,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         add_device_fab.collapse()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = Fragments.getCallbacksOrThrow(this, Callbacks::class.java)
     }
