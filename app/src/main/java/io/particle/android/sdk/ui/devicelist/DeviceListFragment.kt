@@ -213,7 +213,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         filter_button.setOnClickListener {
             // TODO: replace this with navigation lib calls
             requireActivity().supportFragmentManager.commit {
-                DeviceFilterFragment.newInstance()
+                replace(R.id.fragment_parent, DeviceFilterFragment.newInstance())
                 addToBackStack(null)
             }
         }
