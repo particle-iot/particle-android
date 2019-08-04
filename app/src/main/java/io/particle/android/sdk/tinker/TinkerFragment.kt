@@ -154,11 +154,8 @@ class TinkerFragment : Fragment(), OnClickListener {
             return true
 
         } else {
-            return DeviceMenuUrlHandler.handleActionItem(
-                activity,
-                actionId,
-                item.title
-            ) || super.onOptionsItemSelected(item)
+            return DeviceMenuUrlHandler.handleActionItem(activity, actionId, item.title)
+                    || super.onOptionsItemSelected(item)
         }
     }
 
@@ -577,7 +574,7 @@ class TinkerFragment : Fragment(), OnClickListener {
     private fun doAnalogWrite(pin: Pin) {
         mutePinsExcept(pin)
         toggleViewVisibilityWithFade(R.id.tinker_logo, false)
-        pin.showAnalogWrite( object : OnAnalogWriteListener {
+        pin.showAnalogWrite(object : OnAnalogWriteListener {
             override fun onAnalogWrite(value: Int) {
                 for (pin1 in allPins) {
                     if (pin1.isAnalogWriteMode) {
