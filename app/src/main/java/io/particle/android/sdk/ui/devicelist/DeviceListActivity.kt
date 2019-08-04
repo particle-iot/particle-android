@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
@@ -33,8 +35,9 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         deviceList = Ui.findFrag(this, R.id.fragment_device_list)
         // TODO: If exposing deep links into your app, handle intents here.
 
-//        // Show the Up button in the action bar.
-        setSupportActionBar(Ui.findView(this, R.id.toolbar))
+        if (Ui.findFrag<Fragment>(this, R.id.fragment_parent) == null) {
+            supportFragmentManager.commit { add(R.id.fragment_parent, DeviceListFragment()) }
+        }
 
         onProcessIntent(intent)
     }
