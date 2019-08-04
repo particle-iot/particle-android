@@ -62,7 +62,8 @@
             android:id="@+id/device_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -105,7 +106,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
-            fab:fab_title="Set up an Argon, Boron, or Xenon"/>
+            fab:fab_title="Set up an Argon, Boron, or Xenon" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/action_set_up_a_photon"
@@ -116,7 +117,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
-            fab:fab_title="Set up a Photon"/>
+            fab:fab_title="Set up a Photon" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/action_set_up_an_electron"
@@ -127,7 +128,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
-            fab:fab_title="Set up an Electron"/>
+            fab:fab_title="Set up an Electron" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/action_set_up_a_core"
@@ -138,7 +139,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
-            fab:fab_title="Set up a Core"/>
+            fab:fab_title="Set up a Core" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
