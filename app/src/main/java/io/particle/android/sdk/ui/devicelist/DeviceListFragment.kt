@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +23,9 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -81,6 +85,8 @@ class DeviceListFragment : Fragment() {
     }
 
     private lateinit var adapter: DeviceListAdapter
+    private val filterViewModel: DeviceFilterViewModel by activityViewModels()
+
     // FIXME: naming, document better
     private var partialContentBar: ProgressBar? = null
 
@@ -137,7 +143,6 @@ class DeviceListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         refresh_layout.setOnRefreshListener { this.refreshDevices() }
 
         deviceSetupCompleteReceiver =
@@ -194,16 +199,33 @@ class DeviceListFragment : Fragment() {
             }
         }
 
+        name_filter_input.afterTextChanged {
+            val asStr = it?.toString()
+
+            if (asStr.isNullOrEmpty()) {
+                empty_message.setText(R.string.device_list_default_empty_message)
+            } else {
+                val msg = "No devices found matching '$asStr'"
+                empty_message.text = msg
+            }
+
+            filterViewModel.updateNameQuery(asStr)
+        }
+
+        filterViewModel.filteredDeviceListLD.observe(
+            viewLifecycleOwner,
+            Observer { onDeviceListUpdated(it) }
+        )
     }
 
     override fun onResume() {
         super.onResume()
-        val devices = adapter.items
+        val devices = filterViewModel.fullDeviceListLD.value
 //        subscribeToSystemEvents(devices, false)
     }
 
     override fun onPause() {
-        val devices = adapter.items
+        val devices = filterViewModel.fullDeviceListLD.value
 //        subscribeToSystemEvents(devices, true)
         super.onPause()
     }
@@ -213,17 +235,10 @@ class DeviceListFragment : Fragment() {
         deviceSetupCompleteReceiver!!.unregister(activity)
     }
 
-    // FIXME: remove this when possible
-    fun onLoadFinished(devices: List<ParticleDevice>) {
+    private fun onDeviceListUpdated(devices: List<ParticleDevice>?) {
         refresh_layout.isRefreshing = false
-
-        empty_message.visibility = if (devices.size == 0) View.VISIBLE else View.GONE
-
-        adapter.clear()
-        adapter.addAll(devices)
-        adapter.notifyDataSetChanged()
-
-        empty_message.isVisible = (adapter.itemCount == 0)
+        empty_message.isVisible = devices.isNullOrEmpty()
+        adapter.submitList(devices)
         //subscribe to system updates
 //        subscribeToSystemEvents(devices, false)
     }
@@ -278,7 +293,7 @@ class DeviceListFragment : Fragment() {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        val device = adapter.getItem(position)
+        val device = filterViewModel.fullDeviceListLD.value!![position]
 
         if (device.isFlashing) {
             Toaster.s(
@@ -319,7 +334,7 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun refreshDevices() {
-        val devices = adapter.items
+        val devices = filterViewModel.fullDeviceListLD.value
 //        subscribeToSystemEvents(devices, true)
         filterViewModel.refreshDevices()
 
