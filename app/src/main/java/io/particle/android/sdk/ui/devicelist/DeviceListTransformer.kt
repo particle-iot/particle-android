@@ -73,15 +73,16 @@ internal fun sortAndFilterDeviceList(
         .filter(getOnlineStatusFilter(config.onlineStatusFilter))
         .filter(getDeviceTypeFilter(config.deviceTypeFilters))
         .filter(getDeviceNameFilter(config.deviceNameQueryString))
+        .sortedBy { it.name }
         .sortedWith(getSortingComparator(config.sortCriteria))
 }
 
 private fun getSortingComparator(criteria: SortCriteria): Comparator<ParticleDevice> {
     return when (criteria) {
-        ONLINE_STATUS -> compareBy { it.isConnected }
+        ONLINE_STATUS -> compareByDescending { it.isConnected }
         DEVICE_TYPE -> compareBy { it.deviceType }
         NAME -> compareBy { it.name }
-        LAST_HEARD -> compareBy { it.lastHeard }
+        LAST_HEARD -> compareByDescending { it.lastHeard }
     }
 }
 
