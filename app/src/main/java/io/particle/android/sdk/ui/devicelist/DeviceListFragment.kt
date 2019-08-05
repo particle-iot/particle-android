@@ -24,7 +24,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
@@ -53,10 +55,10 @@ import io.particle.android.sdk.ui.InspectorActivity
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
-import io.particle.android.sdk.utils.ui.Fragments
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.commonui.productName
+import io.particle.mesh.ui.inflateRow
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
@@ -357,24 +359,18 @@ internal class DeviceListViewHolder(val topLevel: View) : RecyclerView.ViewHolde
 }
 
 
-internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListViewHolder>() {
+internal class DeviceListAdapter : ListAdapter<ParticleDevice, DeviceListViewHolder>(
+    easyDiffUtilCallback { device: ParticleDevice -> device.id }
+) {
 
-    private val devices = list<ParticleDevice>()
     private val dateFormatter = SimpleDateFormat("MMM dd, yyyy, HH:mm a", Locale.getDefault())
 
-    val items: List<ParticleDevice>
-        get() = devices
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceListViewHolder {
-        // create a new view
-        val v = LayoutInflater.from(parent.context).inflate(
-            R.layout.row_device_list, parent, false
-        )
-        return DeviceListViewHolder(v)
+        return DeviceListViewHolder(parent.inflateRow(R.layout.row_device_list))
     }
 
     override fun onBindViewHolder(holder: DeviceListViewHolder, position: Int) {
-        val device = devices[position]
+        val device = getItem(position)
 
         val ctx = holder.topLevel.context
 
@@ -396,23 +392,6 @@ internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListViewHolder>() 
         else
             ctx.getString(R.string.unnamed_device)
         holder.deviceName.text = name
-    }
-
-    override fun getItemCount(): Int {
-        return devices.size
-    }
-
-    fun clear() {
-        devices.clear()
-        notifyDataSetChanged()
-    }
-
-    fun addAll(toAdd: List<ParticleDevice>) {
-        devices.addAll(toAdd)
-    }
-
-    fun getItem(position: Int): ParticleDevice {
-        return devices[position]
     }
 
     private fun getStatusDotRes(device: ParticleDevice): Int {
