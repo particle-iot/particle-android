@@ -193,11 +193,7 @@ class DeviceListFragment : Fragment() {
                 addToBackStack(null)
             }
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-        refreshDevices()
     }
 
     override fun onResume() {
@@ -210,12 +206,6 @@ class DeviceListFragment : Fragment() {
         val devices = adapter.items
 //        subscribeToSystemEvents(devices, true)
         super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        refresh_layout.isRefreshing = false
-        add_device_fab.collapse()
     }
 
     override fun onDestroy() {
