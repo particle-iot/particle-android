@@ -169,16 +169,16 @@ class DeviceListFragment : Fragment() {
 
                 R.id.action_log_out -> {
                     AlertDialog.Builder(requireActivity())
-                    .setMessage(R.string.logout_confirm_message)
-                    .setPositiveButton(R.string.log_out) { dialog, _ ->
-                        val cloud = ParticleCloudSDK.getCloud()
-                        cloud.logOut()
-                        startActivity(Intent(requireContext(), LoginActivity::class.java))
-                        requireActivity().finish()
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
-                    .show()
+                        .setMessage(R.string.logout_confirm_message)
+                        .setPositiveButton(R.string.log_out) { dialog, _ ->
+                            val cloud = ParticleCloudSDK.getCloud()
+                            cloud.logOut()
+                            startActivity(Intent(requireContext(), LoginActivity::class.java))
+                            requireActivity().finish()
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
+                        .show()
                     true
                 }
 
@@ -407,7 +407,6 @@ internal class DeviceListAdapter : ListAdapter<ParticleDevice, DeviceListViewHol
         }
     }
 }
-
 
 
 private val log = TLog.get(DeviceListFragment::class.java)
