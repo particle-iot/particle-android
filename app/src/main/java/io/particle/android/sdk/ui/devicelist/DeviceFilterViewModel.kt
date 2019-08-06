@@ -10,15 +10,31 @@ import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
 import io.particle.mesh.setup.flow.Scopes
 import mu.KotlinLogging
+import kotlin.coroutines.coroutineContext
+
+
+private val defaultDeviceListConfig = DeviceListViewConfig(
+    SortCriteria.ONLINE_STATUS,
+    OnlineStatusFilter.ALL,
+    DeviceTypeFilter.values().toSet()
+)
 
 
 class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
 
     val fullDeviceListLD: LiveData<List<ParticleDevice>> = MutableLiveData()
     val filteredDeviceListLD: LiveData<List<ParticleDevice>>
+    val deviceListViewConfigLD: MutableLiveData<DeviceListViewConfig> = MutableLiveData()
+
+    private var currentConfig: DeviceListViewConfig
+        get() {
+            return deviceListViewConfigLD.value!!
+        }
+        set(value) {
+            deviceListViewConfigLD.castAndPost(value)
+        }
 
     private val cloud = ParticleCloudSDK.getCloud()
-    private val deviceListViewConfigLD: MutableLiveData<DeviceListViewConfig> = MutableLiveData()
     private val devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
     private val refreshObserver = Observer<Any?> { refreshDevices() }
     private val scopes = Scopes()
@@ -27,13 +43,7 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         // set initial value on list config LD
-        deviceListViewConfigLD.castAndSetOnMainThread(
-            DeviceListViewConfig(
-                SortCriteria.ONLINE_STATUS,
-                OnlineStatusFilter.ALL,
-                DeviceTypeFilter.values().toSet()
-            )
-        )
+        deviceListViewConfigLD.castAndSetOnMainThread(defaultDeviceListConfig)
 
         filteredDeviceListLD = Transformations.map(fullDeviceListLD) {
             sortAndFilterDeviceList(it, deviceListViewConfigLD.value!!)
@@ -68,14 +78,23 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun updateNameQuery(query: String?) {
-        val currentConfig = deviceListViewConfigLD.value!!
-        updateConfig(
-            currentConfig.copy(deviceNameQueryString = query)
-        )
+        currentConfig.copy(deviceNameQueryString = query)
     }
 
-    fun updateConfig(listConfig: DeviceListViewConfig) {
-        deviceListViewConfigLD.castAndPost(listConfig)
+    fun updateSort(sortCriteria: SortCriteria) {
+        currentConfig = currentConfig.copy(sortCriteria = sortCriteria)
+    }
+
+    fun updateOnlineStatus(onlineStatusFilter: OnlineStatusFilter) {
+        currentConfig = currentConfig.copy(onlineStatusFilter = onlineStatusFilter)
+    }
+
+    fun updateDeviceTypeFilter(deviceTypeFilter: Set<DeviceTypeFilter>) {
+        currentConfig = currentConfig.copy(deviceTypeFilters = deviceTypeFilter)
+    }
+
+    fun resetConfig() {
+        currentConfig = defaultDeviceListConfig
     }
 
     private suspend fun doRefreshDevices() {

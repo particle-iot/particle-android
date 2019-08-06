@@ -432,7 +432,7 @@ private fun ParticleDeviceType.getColorForDeviceType(): Int {
 
 
 private fun ParticleDeviceType.getIconText(): String {
-    when (this) {
+    return when (this) {
         CORE -> "C"
         ELECTRON -> "E"
         PHOTON -> "P"
@@ -447,4 +447,3 @@ private fun ParticleDeviceType.getIconText(): String {
         else -> "?"
     }
 }
-
