@@ -415,16 +415,36 @@ private val log = TLog.get(DeviceListFragment::class.java)
 @ColorRes
 private fun ParticleDeviceType.getColorForDeviceType(): Int {
     return when (this) {
-        ARGON, BORON, XENON,
-        A_SOM, B_SOM, X_SOM -> R.color.emerald
         CORE -> R.color.spark_blue
         ELECTRON -> R.color.device_color_electron
-        P1,
-        PHOTON -> R.color.device_color_photon
-        BLUZ -> R.color.belize
-        RED_BEAR_DUO -> R.color.orange
+        PHOTON,
+        P1 -> R.color.device_color_photon
         RASPBERRY_PI -> R.color.wisteria
+        RED_BEAR_DUO -> R.color.orange
+//        ESP32 -> 0x000000
+        BLUZ -> R.color.belize
+        ARGON, BORON, XENON,
+        A_SOM, B_SOM, X_SOM -> R.color.emerald
         DIGISTUMP_OAK,
         OTHER -> R.color.gray
     }
 }
+
+
+private fun ParticleDeviceType.getIconText(): String {
+    when (this) {
+        CORE -> "C"
+        ELECTRON -> "E"
+        PHOTON -> "P"
+        P1 -> "1"
+        RASPBERRY_PI -> "R"
+        RED_BEAR_DUO -> "D"
+//        ESP32 -> "ES"
+        BLUZ -> "BZ"
+        ARGON, A_SOM -> "A"
+        BORON, B_SOM -> "B"
+        XENON, X_SOM -> "X"
+        else -> "?"
+    }
+}
+
