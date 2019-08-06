@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
+                <CheckedTextView
                     android:id="@+id/action_filter_online_status_online"
                     style="@style/device_filter_button"
                     android:background="@drawable/device_filter_button_background_selected"
@@ -156,7 +156,7 @@
                     android:layout_width="12dp"
                     android:layout_height="match_parent" />
 
-                <Button
+                <CheckedTextView
                     android:id="@+id/action_filter_online_status_offline"
                     style="@style/device_filter_button"
                     android:drawableStart="@drawable/offline_dot"
