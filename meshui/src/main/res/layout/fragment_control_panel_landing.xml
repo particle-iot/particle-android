@@ -183,34 +183,6 @@
 
             </FrameLayout>
 
-
-            <FrameLayout
-                android:id="@+id/p_controlpanel_landing_mesh_item_frame"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:elevation="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_cellular_item_frame">
-
-                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
-                    android:id="@+id/p_controlpanel_landing_mesh_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/listPreferredItemHeightSmall"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
-                    android:text="Mesh"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/text_size_medium"
-                    app:compoundDrawableHeight="22dp"
-                    app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_mesh_new" />
-
-            </FrameLayout>
-
             <FrameLayout
                 android:id="@+id/p_controlpanel_landing_ethernet_item_frame"
                 android:layout_width="0dp"
@@ -219,7 +191,7 @@
                 android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_mesh_item_frame">
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_cellular_item_frame">
 
                 <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
                     android:id="@+id/p_controlpanel_landing_ethernet_item"
@@ -238,6 +210,33 @@
 
             </FrameLayout>
 
+            <FrameLayout
+                android:id="@+id/p_controlpanel_landing_mesh_item_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_ethernet_item_frame">
+
+                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                    android:id="@+id/p_controlpanel_landing_mesh_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/listPreferredItemHeightSmall"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="?attr/listPreferredItemPaddingLeft"
+                    android:text="Mesh"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    app:compoundDrawableHeight="22dp"
+                    app:compoundDrawableWidth="22dp"
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_mesh_new" />
+
+            </FrameLayout>
+
 
             <FrameLayout
                 android:id="@+id/p_controlpanel_landing_docs_item_frame"
@@ -248,7 +247,7 @@
                 android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_ethernet_item_frame">
+                app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_mesh_item_frame">
 
                 <TextView
                     android:id="@+id/p_controlpanel_landing_docs_item"

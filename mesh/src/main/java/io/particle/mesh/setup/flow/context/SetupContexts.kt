@@ -61,8 +61,8 @@ class SetupContexts(
             ld.castAndPost(null)
         }
 
-        targetDevice.transceiverLD.value?.disconnect()
-        commissioner.transceiverLD.value?.disconnect()
+//        targetDevice.transceiverLD.value?.disconnect()
+//        commissioner.transceiverLD.value?.disconnect()
 
         targetDevice = SetupDevice(DeviceRole.SETUP_TARGET)
         commissioner = SetupDevice(DeviceRole.COMMISSIONER)
@@ -73,9 +73,7 @@ class SetupContexts(
         currentFlow = emptyList()
         hasEthernet = null
         meshNetworkFlowAdded = false
-        log.info { "Calling scopes.cancelAll()" }
-        scopes.cancelAll()
-        scopes = Scopes()
+        scopes.cancelChildren()
     }
 
     fun requireTargetXceiver(): ProtocolTransceiver {

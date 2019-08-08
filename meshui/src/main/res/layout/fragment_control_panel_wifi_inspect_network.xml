@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".controlpanel.ControlPanelWifiInspectNetworkFragment">
+
+    <TextView
+        android:id="@+id/network_info_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:text="Network info"
+        android:textAllCaps="true"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/p_controlpanel_wifi_inspect_ssid"
         android:layout_width="0dp"
         android:layout_height="?attr/listPreferredItemHeightSmall"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="4dp"
         android:background="@android:color/white"
         android:elevation="4dp"
         android:orientation="horizontal"
@@ -18,7 +32,7 @@
         android:paddingEnd="?attr/listPreferredItemPaddingRight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/network_info_header"
         tools:layout_height="48dp">
 
         <TextView
@@ -46,6 +60,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/p_controlpanel_wifi_inspect_channel_frame"
         android:layout_width="0dp"
         android:layout_height="?attr/listPreferredItemHeightSmall"
         android:background="@android:color/white"
@@ -77,10 +92,101 @@
             android:layout_gravity="center_vertical|end"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textColor="@android:color/black"
+            android:textColor="@color/half_black"
             android:textSize="@dimen/text_size_medium"
             tools:text="11" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/p_controlpanel_wifi_inspect_rssi"
+        android:layout_width="0dp"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="48dp"
+        android:orientation="horizontal"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_wifi_inspect_channel_frame"
+        tools:layout_height="48dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical|start"
+            android:text="RSSI"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium" />
+
+        <TextView
+            android:id="@+id/p_controlpanel_wifi_inspect_rssi_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:textColor="@color/half_black"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="-51" />
 
     </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/p_controlpanel_wifi_join_new_network_frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_wifi_inspect_rssi">
+
+        <TextView
+            android:id="@+id/p_controlpanel_wifi_join_new_network"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:paddingStart="?attr/listPreferredItemPaddingLeft"
+            android:text="Connect to new Wi-Fi"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium"
+            tools:layout_height="48dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/p_controlpanel_wifi_manage_wifi_frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_wifi_join_new_network_frame">
+
+        <TextView
+            android:id="@+id/p_controlpanel_wifi_manage_wifi"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:paddingStart="?attr/listPreferredItemPaddingLeft"
+            android:text="Manage Wi-Fi"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium"
+            tools:layout_height="48dp" />
+
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

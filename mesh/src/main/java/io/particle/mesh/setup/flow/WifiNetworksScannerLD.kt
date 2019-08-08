@@ -4,10 +4,12 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ProtocolTransceiver
+import io.particle.mesh.setup.connection.ResultCode
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
@@ -48,7 +50,11 @@ class WifiNetworksScannerLD(
     private suspend fun doScan() {
         log.debug { "doScan()" }
         val xceiver = targetXceiverLD.value!!
-        val networksReply = xceiver.sendScanWifiNetworks()
+        val networksReply: Result<ScanNetworksReply, ResultCode> = try {
+            xceiver.sendScanWifiNetworks()
+        } catch (ex: Exception) {
+            Result.Absent()
+        }
         val networks = when(networksReply) {
             is Result.Present -> networksReply.value.networksList
             is Result.Error,

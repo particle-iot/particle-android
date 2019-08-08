@@ -1,8 +1,6 @@
 package io.particle.mesh.common
 
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.suspendCoroutine
-import kotlin.coroutines.resume
+import kotlinx.coroutines.CompletableDeferred
 
 
 fun <T> asyncSuspender(
@@ -33,6 +31,8 @@ fun <T> asyncSuspender(
 
 abstract class AsyncWorkSuspender<T> {
 
+    private var deferred: CompletableDeferred<T> = CompletableDeferred()
+
     protected abstract fun startAsyncWork(workCompleteCallback: (T) -> Unit)
 
     protected open fun beforeAwait() {
@@ -51,9 +51,18 @@ abstract class AsyncWorkSuspender<T> {
     }
 
     private suspend fun awaitCondition(): T {
-        return suspendCoroutine { continuation: Continuation<T> ->
-            startAsyncWork { continuation.resume(it) }
+        val originalDeferred = deferred
+        try {
+            startAsyncWork {
+                originalDeferred.complete(it)
+            }
+        } catch (ex: Exception) {
+            originalDeferred.completeExceptionally(ex)
+        } finally {
+            deferred = CompletableDeferred()
         }
+
+        return originalDeferred.await()
     }
 
 }

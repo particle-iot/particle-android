@@ -2,6 +2,7 @@ package io.particle.mesh.setup.flow.context
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.ScanNetworksReply.Network
 import io.particle.mesh.common.android.livedata.castAndPost
@@ -17,10 +18,13 @@ class WifiContext : Clearable {
     val targetWifiNetworkLD: LiveData<Network?> = MutableLiveData()
     val targetWifiNetworkPasswordLD: LiveData<String?> = MutableLiveData()
     val targetWifiNetworkJoinedLD: LiveData<Boolean?> = MutableLiveData()
+    val targetKnownWifiNetworksLD: LiveData<List<GetKnownNetworksReply.Network>?> = MutableLiveData()
 
     var connectingToCloudUiShown by log.logged(false)
 
     override fun clearState() {
+        log.info { "clearState()" }
+
         connectingToCloudUiShown = false
 
         val setToNulls = listOf(
@@ -47,6 +51,11 @@ class WifiContext : Clearable {
     fun updateTargetWifiNetworkJoined(joined: Boolean) {
         log.info { "updateTargetWifiNetworkJoined(): $joined" }
         targetWifiNetworkJoinedLD.castAndPost(joined)
+    }
+
+    fun updateTargetKnownWifiNetworks(networks: List<GetKnownNetworksReply.Network>?) {
+        log.info { "updateTargetKnownWifiNetworks(): $networks" }
+        targetKnownWifiNetworksLD.castAndPost(networks)
     }
 
 }

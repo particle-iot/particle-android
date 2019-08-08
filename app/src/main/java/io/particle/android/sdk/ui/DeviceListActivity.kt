@@ -112,7 +112,6 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         }
     }
 
-
     override fun onStart() {
         super.onStart()
         softAPConfigRemover!!.removeAllSoftApConfigs()

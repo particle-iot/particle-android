@@ -17,14 +17,14 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
-import io.particle.mesh.ui.R
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
-import io.particle.mesh.setup.isSomSerial
 import io.particle.mesh.ui.BaseFlowFragment
+import io.particle.mesh.ui.R
 import io.particle.mesh.ui.setup.HelpTextConfig.ARGON
 import io.particle.mesh.ui.setup.HelpTextConfig.A_SERIES
 import io.particle.mesh.ui.setup.HelpTextConfig.A_SERIES_ETHERNET
@@ -74,8 +74,7 @@ class GetReadyForSetupFragment : BaseFlowFragment() {
     private fun setContentFromDeviceModel() {
         val ful = flowUiListener!!
 
-        val barcodeLD = ful.targetDevice.barcode
-        val isSomSerial = barcodeLD.value?.serialNumber?.isSomSerial() ?: false
+        val isSomSerial = ful.targetDevice.deviceType?.isSoM() ?: false
 
         val config = if (p_getreadyforsetup_use_ethernet_switch.isChecked) {
             when (ful.targetDevice.deviceType) {
@@ -247,4 +246,14 @@ internal enum class HelpTextConfig(
         R.string.p_getreadyforsetup_use_ethernet_switch_som
     )
 
+}
+
+
+private fun ParticleDeviceType.isSoM(): Boolean {
+    return when(this) {
+        A_SOM,
+        B_SOM,
+        X_SOM -> true
+        else -> false
+    }
 }

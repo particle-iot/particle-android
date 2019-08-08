@@ -10,7 +10,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.navigation.findNavController
 
 
-fun View.navigateOnClick(@IdRes actionId: Int) {
+inline fun View.navigateOnClick(@IdRes actionId: Int) {
     this.setOnClickListener { findNavController().navigate(actionId) }
 }
 

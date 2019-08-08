@@ -1,6 +1,8 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
+import android.net.Uri;
+
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -34,7 +36,8 @@ class SDKProvider {
     private final TokenGetterDelegateImpl tokenGetter;
 
     SDKProvider(Context context,
-                @Nullable OauthBasicAuthCredentialsProvider oAuthCredentialsProvider) {
+                @Nullable OauthBasicAuthCredentialsProvider oAuthCredentialsProvider,
+                Uri uri) {
         this.ctx = context.getApplicationContext();
 
         if (oAuthCredentialsProvider == null) {
@@ -44,7 +47,7 @@ class SDKProvider {
 
         tokenGetter = new TokenGetterDelegateImpl();
 
-        ApiFactory apiFactory = new ApiFactory(ctx, tokenGetter, oAuthCredentialsProvider);
+        ApiFactory apiFactory = new ApiFactory(ctx, tokenGetter, oAuthCredentialsProvider, uri);
         cloudApi = apiFactory.buildNewCloudApi();
         identityApi = apiFactory.buildNewIdentityApi();
         fastTimeoutCloudApi = apiFactory.buildNewFastTimeoutCloudApi();

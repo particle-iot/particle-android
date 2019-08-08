@@ -10,15 +10,18 @@ class BLEContext : Clearable {
     private val log = KotlinLogging.logger {}
 
     var connectingToTargetUiShown by log.logged(false)
+    var showingConnectingToTargetUi by log.logged(false)
 
     var connectingToAssistingDeviceUiShown by log.logged(false)
     var shownAssistingDeviceInitialIsConnectedScreen by log.logged(false)
 
 
     override fun clearState() {
+        log.info { "clearState()" }
         connectingToAssistingDeviceUiShown = false
         shownAssistingDeviceInitialIsConnectedScreen = false
         connectingToTargetUiShown = false
+        showingConnectingToTargetUi = false
     }
 
 }

@@ -7,6 +7,7 @@
     <string name="single_space"> </string>
     <string name="p_controlpanel_prepare_for_pairing">Prepare for Pairing</string>
     <string name="p_cp_cellular">Cellular</string>
+    <string name="p_cp_ethernet">Ethernet</string>
 
     <string name="p_controlpanel_deactivate_sim_header">Deactivate SIM Card</string>
     <string name="p_controlpanel_sim_deactivate_body_text">Are you sure that you want to deactivate data service of the SIM with an ICCID ending in <b>…{sim_last_four_digits}</b>?\n\nThis will immediately stop any Boron using this SIM from sending or receiving data via a cellular network, and will disrupt expected device behavior until an active SIM is used.</string>
@@ -34,7 +35,10 @@
     <string name="p_cp_cellular_options_sim_status_fine_print_deactivated">This Particle SIM card is deactivated.  The device using this SIM cannot connect to the Internet via cellular until it is reactivated.</string>
     <string name="p_cp_cellular_options_sim_status_fine_print_paused">This Particle SIM card is paused.  The device using this SIM cannot connect to the Internet via cellular until it is unpaused.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="p_controlpanel_ethernet_options_fine_print">To enable Ethernet connectivity using the Particle Ethernet Featherwing, the SPI interface (SCK, MOSI, MISO) is used. Activating the Ethernet interface uses pins D3, D4, and D5 for control signals, and you will not be able to use those pins in your project.</string>
+    <string name="p_controlpanel_action_leave_network">Leave network?</string>
+    <string name="p_controlpanel_confirm_leave_network_dialog_text">Are you sure you want this device to leave %1$s?</string>
+
+    <string name="p_control_panel_manage_wifi_title">Manage Wi-Fi</string>
 
 </resources>

@@ -10,6 +10,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
+import io.particle.android.sdk.cloud.Responses.CardOnFileResponse
+import io.particle.android.sdk.cloud.Responses.DeviceMeshMembership
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse.RegisteredNetwork
 import io.particle.android.sdk.cloud.Responses.Models
 import io.particle.android.sdk.cloud.Responses.Models.CompleteDevice
@@ -566,7 +568,14 @@ class ParticleCloud internal constructor(
         return runHandlingCommonErrors {
             val networkData = mainApi.getNetwork(networkId)
             ParticleNetwork(networkData)        }
+    }
 
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun getNetworkDevices(networkId: String): List<DeviceMeshMembership> {
+        return runHandlingCommonErrors {
+            mainApi.getNetworkDevices(networkId)
+        }
     }
 
     // FIXME: this is not great API.
@@ -784,7 +793,7 @@ class ParticleCloud internal constructor(
      * [.subscribeToMyDevicesEvents] instead.
      *
      *
-     * Subscribe to the *firehose* of public events, plus all private events published by
+     * Subscribe to the *firehose* of public events, plpus all private events published by
      * the devices the API user owns.
      *
      * @param eventNamePrefix A string to filter on for events.  If null, all events will be matched.

@@ -5,7 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.android.sdk.cloud.ParticleNetwork
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
+import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
+import io.particle.mesh.setup.flow.DialogResult.NEGATIVE
+import io.particle.mesh.setup.flow.DialogResult.POSITIVE
+import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
@@ -22,8 +29,10 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
 
     private val log = KotlinLogging.logger {}
 
-    private var cacheSet = false
-    private var cachedNetwork: Mesh.NetworkInfo? = null
+    private val cloud = ParticleCloudSDK.getCloud()
+
+    private var cachedMeshNetworkDataFromDevice: Mesh.NetworkInfo? = null
+    private var cachedMeshNetworkDataFromCloud: ParticleNetwork? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,17 +45,23 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
         log.info { "onFragmentReady()" }
-        if (cacheSet == false) {
-            log.info { "Getting network from flow listener config blah" }
-            cachedNetwork = flowUiListener.mesh.currentlyJoinedNetwork!!
-            cacheSet = true
-        }
-        onNetworkInfoUpdated(cachedNetwork!!)
+
+        p_controlpanel_action_leave_network.setOnClickListener { leaveNetwork() }
+
+        updateLocalNetworkInfoCaches(flowUiListener)
+
+        onNetworkInfoUpdated(cachedMeshNetworkDataFromDevice!!)
+    }
+
+    private fun updateLocalNetworkInfoCaches(flowUiListener: FlowRunnerUiListener) {
+        cachedMeshNetworkDataFromDevice = flowUiListener.mesh.currentlyJoinedNetwork!!
+        cachedMeshNetworkDataFromCloud = flowUiListener.cloud.meshNetworksFromAPI!!
+            .firstOrNull { cachedMeshNetworkDataFromDevice?.networkId == it.id }
     }
 
     override fun onResume() {
         super.onResume()
-        onNetworkInfoUpdated(cachedNetwork!!)
+        onNetworkInfoUpdated(cachedMeshNetworkDataFromDevice!!)
     }
 
     private fun onNetworkInfoUpdated(networkInfo: Mesh.NetworkInfo) {
@@ -63,6 +78,53 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
                 ControlPanelNetworkIdFragmentArgs(networkInfo.networkId).toBundle()
             )
         }
+
+        flowScopes.onMain {
+            flowSystemInterface.showGlobalProgressSpinner(true)
+
+            val (isGateway, count) = flowScopes.withWorker {
+                val meshMemberships = cloud.getNetworkDevices(networkInfo.networkId)
+                val isGw = meshMemberships.firstOrNull { it.deviceId == device.id }
+                    ?.membership
+                    ?.roleData
+                    ?.isGateway
+                return@withWorker Pair(isGw, meshMemberships.size)
+            }
+
+            val roleLabel = if (isGateway == true) "Gateway" else "Node"
+            p_controlpanel_mesh_inspect_network_device_role.text = roleLabel
+            p_controlpanel_mesh_inspect_network_device_count.text = count.toString()
+
+            flowSystemInterface.showGlobalProgressSpinner(false)
+        }
     }
 
+    private fun leaveNetwork() {
+        val meshName = cachedMeshNetworkDataFromDevice?.name
+
+        flowScopes.onMain {
+            val result = flowSystemInterface.dialogHack.dialogResultLD
+                .nonNull(flowScopes)
+                .runBlockOnUiThreadAndAwaitUpdate(flowScopes) {
+                    flowSystemInterface.dialogHack.newDialogRequest(
+                        StringDialogSpec(
+                            "Remove this device from the current mesh network, '$meshName'?",
+                            "Leave network",
+                            "Cancel",
+                            "Leave current network?"
+                        )
+                    )
+                }
+
+            when (result) {
+                NEGATIVE -> { /* no-op */
+                }
+                POSITIVE -> {
+                    startFlowWithBarcode(
+                        flowRunner::startControlPanelMeshLeaveCurrentMeshNetworkFlow
+                    )
+                }
+            }
+        }
+    }
 }

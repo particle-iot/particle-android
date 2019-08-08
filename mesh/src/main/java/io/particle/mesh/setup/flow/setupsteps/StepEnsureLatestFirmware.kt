@@ -5,11 +5,8 @@ import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.ota.FirmwareUpdateResult.DEVICE_IS_UPDATING
 import io.particle.mesh.ota.FirmwareUpdateResult.HAS_LATEST_FIRMWARE
-import io.particle.mesh.setup.flow.FailedToUpdateDeviceOSException
-import io.particle.mesh.setup.flow.MeshSetupStep
-import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.context.SetupContexts
-import io.particle.mesh.setup.flow.FlowUiDelegate
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
@@ -59,10 +56,7 @@ class StepEnsureLatestFirmware(
             HAS_LATEST_FIRMWARE -> { /* no-op */ }
             DEVICE_IS_UPDATING -> {
                 flowUi.showGlobalProgressSpinner(true)
-                // there can be a *very* long delay after the FW update.
-                // FIXME: don't make this a static value, start a BT scanner
-                // to watch for the device again
-                delay(12000)
+                throw ExpectedFlowException("Restarting after sending DeviceOS update")
             }
         }
 

@@ -7,9 +7,6 @@ import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.Scopes
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
 
 
@@ -25,19 +22,20 @@ class ProtocolTransceiverFactory(
 
     @MainThread
     suspend fun buildProtocolTransceiver(
-            deviceConnection: BluetoothConnection,
-            name: String,
-            scopes: Scopes,
-            jpakeLowEntropyPassword: String
+        deviceConnection: BluetoothConnection,
+        name: String,
+        connectionScopes: Scopes,
+        jpakeLowEntropyPassword: String,
+        setupContextScopes: Scopes
     ): ProtocolTransceiver? {
 
         val packetMTUSplitter = PacketMTUSplitter({ packet ->
             deviceConnection.packetSendChannel.offer(packet)
         })
         val frameWriter = OutboundFrameWriter { packetMTUSplitter.splitIntoPackets(it) }
-        val frameReader = InboundFrameReader(scopes)
+        val frameReader = InboundFrameReader(connectionScopes)
 
-        scopes.onWorker {
+        connectionScopes.onWorker {
             for (packet in deviceConnection.packetReceiveChannel) {
                 QATool.runSafely({ frameReader.receivePacket(BlePacket(packet)) })
             }
@@ -59,9 +57,15 @@ class ProtocolTransceiverFactory(
         frameReader.extraHeaderBytes = FULL_PROTOCOL_HEADER_SIZE + AES_CCM_MAC_SIZE
 
         val requestWriter = RequestWriter { frameWriter.writeFrame(it) }
-        val requestSender = ProtocolTransceiver(requestWriter, deviceConnection, scopes, name)
+        val requestSender = ProtocolTransceiver(
+            requestWriter,
+            deviceConnection,
+            connectionScopes,
+            name,
+            setupContextScopes
+        )
         val responseReader = ResponseReader { requestSender.receiveResponse(it) }
-        scopes.onWorker  {
+        connectionScopes.onWorker  {
             for (inboundFrame in frameReader.inboundFrameChannel) {
                 QATool.runSafely({ responseReader.receiveResponseFrame(inboundFrame) })
             }

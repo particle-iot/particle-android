@@ -2,6 +2,8 @@ package io.particle.mesh.ui.controlpanel
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +13,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
 import io.particle.mesh.bluetooth.connecting.FOUND_IN_SCAN_BROADCAST
@@ -42,17 +42,15 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
         return container?.inflateFragment(R.layout.fragment_cp_prepare_for_pairing)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
+
         setUpVideoView(videoView)
 
         p_controlpanel_signal_switch.setOnCheckedChangeListener { _, isChecked ->
             onSignalSwitchChanged(isChecked)
         }
-    }
 
-    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
-        super.onFragmentReady(activity, flowUiListener)
         bodyText.text = Phrase.from(bodyText.text)
             .put("device_name", device.name)
             .format()
@@ -85,7 +83,12 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
     }
 
     private fun setUpVideoView(vidView: VideoView) {
-        vidView.setVideoURI(requireActivity().buildRawResourceUri(R.raw.commissioner_to_listening_mode))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // stop pausing the user's music when showing the video!
+            vidView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE)
+        }
+
+        vidView.setVideoURI(requireActivity().buildRawResourceUri(R.raw.cp_device_in_listening_mode))
 
         lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {

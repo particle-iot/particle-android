@@ -26,7 +26,7 @@ class BLEPairingProgressFragment : BaseFlowFragment() {
         super.onFragmentReady(activity, flowUiListener)
 
         status_text.text = Phrase.from(view, R.string.pairing_with_your_device)
-            .put("product_type", getUserFacingTypeName())
+            .putOptional("product_type", getUserFacingTypeName())
             .format()
     }
 }

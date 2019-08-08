@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.navigateOnClick
@@ -30,16 +31,11 @@ class ControlPanelMeshOptionsFragment : BaseControlPanelFragment() {
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
-
-        p_controlpanel_mesh_inspect_current_network_frame.setOnClickListener {
-            inspectNetworkClicked()
-        }
+        p_controlpanel_mesh_add_to_network_frame.setOnClickListener { addToMesh() }
     }
 
-    private fun inspectNetworkClicked() {
-        flowScopes.onMain {
-            startFlowWithBarcode(flowRunner::startControlPanelMeshInspectCurrentNetworkFlow)
-        }
+    private fun addToMesh() {
+        flowScopes.onMain { startFlowWithBarcode(flowRunner::startControlPanelMeshAddToMeshFlow) }
     }
 
 }

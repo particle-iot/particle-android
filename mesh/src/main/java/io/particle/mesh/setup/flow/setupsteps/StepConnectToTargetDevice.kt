@@ -6,7 +6,6 @@ import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.context.SetupContexts
-import mu.KotlinLogging
 
 
 class StepConnectToTargetDevice(
@@ -20,9 +19,24 @@ class StepConnectToTargetDevice(
             return
         }
 
+        val cachedXceiver: ProtocolTransceiver? = scopes.withMain {
+            deviceConnector.getCachedDevice(ctxs.targetDevice.barcode.value!!, "target", scopes)
+        }
+        cachedXceiver?.let {
+            ctxs.targetDevice.transceiverLD
+                .nonNull(scopes)
+                .runBlockOnUiThreadAndAwaitUpdate(scopes) {
+                    ctxs.targetDevice.updateDeviceTransceiver(it)
+                }
+            return
+        }
+
         if (!ctxs.ble.connectingToTargetUiShown) {
             flowUi.showTargetPairingProgressUi()
+            ctxs.ble.showingConnectingToTargetUi = true
             ctxs.ble.connectingToTargetUiShown = true
+        } else if (!ctxs.ble.showingConnectingToTargetUi)  {
+            flowUi.showGlobalProgressSpinner(true)
         }
 
         var error: Exception? = null
@@ -36,7 +50,11 @@ class StepConnectToTargetDevice(
         }
 
         if (transceiver == null) {
-            throw FailedToConnectException(error)
+            if (error is MeshSetupFlowException) {
+                throw error!!
+            } else {
+                throw FailedToConnectException(error)
+            }
         } else {
             // don't move any further until the value is set on the LiveData
             ctxs.targetDevice.transceiverLD
@@ -45,6 +63,8 @@ class StepConnectToTargetDevice(
                     ctxs.targetDevice.updateDeviceTransceiver(transceiver)
                 }
         }
+
+        ctxs.ble.showingConnectingToTargetUi = false
     }
 
 }

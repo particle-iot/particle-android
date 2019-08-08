@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEFF3"
+    tools:context=".controlpanel.ControlPanelEthernetOptionsFragment">
+
+    <LinearLayout
+        android:id="@+id/p_controlpanel_ethernet_options_toggle_pins_frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="start|center_vertical"
+        android:minHeight="48dp"
+        android:orientation="horizontal"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:layout_marginTop="32dp"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="48dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:gravity="start|top"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:layout_marginBottom="-2dp"
+                android:gravity="start|top"
+                android:text="Ethernet pins"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_medium" />
+
+            <TextView
+                android:id="@+id/p_controlpanel_ethernet_options_current_pins_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top"
+                android:layout_marginTop="-1dp"
+                android:gravity="start|top"
+                android:paddingBottom="4dp"
+                android:text="Active"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/p_controlpanel_ethernet_options_toggle_pins_switch"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_weight="1"
+            android:checked="true"
+            android:gravity="center_vertical|end" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/p_controlpanel_ethernet_options_fine_print"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight"
+        android:text="@string/p_controlpanel_ethernet_options_fine_print"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/p_controlpanel_ethernet_options_toggle_pins_frame"
+        app:layout_constraintTop_toBottomOf="@+id/p_controlpanel_ethernet_options_toggle_pins_frame" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

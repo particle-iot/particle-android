@@ -30,12 +30,6 @@ fun BarcodeData.toDeviceType(cloud: ParticleCloud): ParticleDeviceType {
 }
 
 
-@WorkerThread
-fun BarcodeData.toConnectivityType(cloud: ParticleCloud): Gen3ConnectivityType {
-    return this.serialNumber.toDeviceType(cloud).toConnectivityType()
-}
-
-
 fun ParticleDeviceType.toConnectivityType(): Gen3ConnectivityType {
     return when (this) {
         OTHER,

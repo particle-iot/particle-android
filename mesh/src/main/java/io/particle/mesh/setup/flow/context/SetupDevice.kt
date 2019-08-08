@@ -50,15 +50,17 @@ class SetupDevice(
     fun updateBarcode(barcodeData: CompleteBarcodeData?, cloud: ParticleCloud) {
         log.info { "updateBarcode() for $deviceRole: $barcodeData" }
 
-        barcode.castAndPost(barcodeData)
-
         if (barcodeData == null) {
             deviceType = null
             connectivityType = null
         } else {
             deviceType = barcodeData.toDeviceType(cloud)
-            connectivityType = barcodeData.toConnectivityType(cloud)
+            connectivityType = deviceType!!.toConnectivityType()
         }
+
+        // update this last to guarantee that deviceType and connectivityType are set by the time
+        // the barcode is updated
+        barcode.castAndPost(barcodeData)
     }
 
     fun updateDeviceTransceiver(transceiver: ProtocolTransceiver?) {

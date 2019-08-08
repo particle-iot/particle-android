@@ -21,7 +21,7 @@ class ControlPanelEnterWifiNetworkPasswordFragment : BaseControlPanelFragment() 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val headerText = Phrase.from(view, io.particle.mesh.R.string.p_enterwifipassword_header)
-            .put("wifi_ssid", flowUiListener?.wifi?.wifiNetworkToConfigure?.ssid)
+            .putOptional("wifi_ssid", flowUiListener?.wifi?.wifiNetworkToConfigure?.ssid)
             .format()
         setup_header_text.text = headerText
 

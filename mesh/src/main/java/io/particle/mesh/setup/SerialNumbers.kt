@@ -13,10 +13,6 @@ private val log = KotlinLogging.logger {}
 inline class SerialNumber(val value: String)
 
 
-fun SerialNumber.isSomSerial(): Boolean {
-    return value.toLowerCase().startsWith("p00")
-}
-
 
 @WorkerThread
 fun SerialNumber.toDeviceType(cloud: ParticleCloud): ParticleDeviceType {

@@ -22,7 +22,10 @@ sealed class DialogSpec {
     ) : DialogSpec()
 
     data class StringDialogSpec(
-        val text: String
+        val text: String,
+        val positiveText: String = "OK",
+        val negativeText: String? = null,
+        val title: String? = null
     ) : DialogSpec()
 
 }

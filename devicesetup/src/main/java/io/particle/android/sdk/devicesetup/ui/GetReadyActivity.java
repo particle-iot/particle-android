@@ -171,11 +171,11 @@ public class GetReadyActivity extends BaseActivity implements PermissionsFragmen
     }
 
     private void handleClaimCode(@NonNull ClaimCodeResponse result) {
-        log.d("Claim code generated: " + result.claimCode);
+        log.d("Claim code generated: " + result.getClaimCode());
 
-        DeviceSetupState.claimCode = result.claimCode;
-        if (truthy(result.deviceIds)) {
-            DeviceSetupState.claimedDeviceIds.addAll(Arrays.asList(result.deviceIds));
+        DeviceSetupState.claimCode = result.getClaimCode();
+        if (truthy(result.getDeviceIds())) {
+            DeviceSetupState.claimedDeviceIds.addAll(Arrays.asList(result.getDeviceIds()));
         }
 
         if (isFinishing()) {

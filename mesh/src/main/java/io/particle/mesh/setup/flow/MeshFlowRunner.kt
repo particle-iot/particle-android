@@ -14,6 +14,7 @@ import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
+import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.connection.ProtocolTransceiverFactory
 import io.particle.mesh.setup.connection.security.SecurityManager
 import io.particle.mesh.setup.flow.context.SetupContexts
@@ -69,20 +70,33 @@ enum class FlowType {
     JOINER_FLOW,
     INTERNET_CONNECTED_PREFLOW,
     ETHERNET_FLOW,
+
     WIFI_FLOW,
     CELLULAR_FLOW,
     NETWORK_CREATOR_POSTFLOW,
     STANDALONE_POSTFLOW,
+
+    CONTROL_PANEL_PREFLOW,
+
     CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW,
     CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT,
     CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE,
     CONTROL_PANEL_CELLULAR_SIM_REACTIVATE,
     CONTROL_PANEL_CELLULAR_SIM_UNPAUSE,
     CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW,
+
     CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW,
+    CONTROL_PANEL_MESH_ADD_PREFLOW,
+    CONTROL_PANEL_MESH_JOINER_FLOW,
+    CONTROL_PANEL_MESH_CREATE_NETWORK_FLOW,
     CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW,
+
     CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW,
-    SINGLE_TASK_POSTFLOW
+    CONTROL_PANEL_WIFI_ADD_NETWORK_FLOW,
+    CONTROL_PANEL_WIFI_MANAGE_NETWORKS_FLOW,
+
+    CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW,
+    CONTROL_PANEL_ETHERNET_TOGGLE_PINS_FLOW
 }
 
 
@@ -104,7 +118,11 @@ class MeshFlowRunner(
     @MainThread
     fun startFlow() {
         log.info { "startFlow()" }
-        flowExecutor.executeNewFlow(FlowIntent.FIRST_TIME_SETUP, listOf(FlowType.PREFLOW))
+        flowExecutor.executeNewFlow(
+            FlowIntent.FIRST_TIME_SETUP,
+            listOf(FlowType.PREFLOW),
+            SetupContexts()
+        )
     }
 
     @MainThread
@@ -112,7 +130,11 @@ class MeshFlowRunner(
         log.info { "startNewFlowWithCommissioner()" }
 
 //        val oldContexts = contexts!!
-        flowExecutor.executeNewFlow(FlowIntent.FIRST_TIME_SETUP, listOf(FlowType.PREFLOW))
+        flowExecutor.executeNewFlow(
+            FlowIntent.FIRST_TIME_SETUP,
+            listOf(FlowType.PREFLOW),
+            SetupContexts()
+        )
 //        val newContexts = contexts!!
     }
 
@@ -124,12 +146,14 @@ class MeshFlowRunner(
 
             ctxs.cloud.updatePricingImpactConfirmed(true)
             ctxs.cloud.updateShouldConnectToDeviceCloudConfirmed(true)
-            val deviceName = ctxs.targetDevice.transceiverLD.value?.bleBroadcastName
-            ctxs.singleStepCongratsMessage = "Wi-Fi credentials were successfully added to $deviceName"
+            ctxs.singleStepCongratsMessage = "Wi-Fi credentials were successfully added"
 
             flowExecutor.executeNewFlow(
                 FlowIntent.SINGLE_TASK_FLOW,
-                listOf(FlowType.PREFLOW, FlowType.WIFI_FLOW),
+                listOf(
+                    FlowType.CONTROL_PANEL_PREFLOW,
+                    FlowType.CONTROL_PANEL_WIFI_ADD_NETWORK_FLOW
+                ),
                 ctxs
             )
         }
@@ -146,7 +170,10 @@ class MeshFlowRunner(
 
             flowExecutor.executeNewFlow(
                 FlowIntent.SINGLE_TASK_FLOW,
-                listOf(FlowType.PREFLOW, FlowType.CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW),
+                listOf(
+                    FlowType.CONTROL_PANEL_PREFLOW,
+                    FlowType.CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW
+                ),
                 ctxs
             )
         }
@@ -174,7 +201,50 @@ class MeshFlowRunner(
 
             flowExecutor.executeNewFlow(
                 FlowIntent.SINGLE_TASK_FLOW,
-                listOf(FlowType.PREFLOW, FlowType.CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW),
+                listOf(
+                    FlowType.CONTROL_PANEL_PREFLOW,
+                    FlowType.CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW
+                ),
+                ctxs
+            )
+        }
+    }
+
+    @MainThread
+    fun startControlPanelManageWifiNetworksFlow(
+        device: ParticleDevice,
+        barcode: CompleteBarcodeData
+    ) {
+        val scopes = Scopes()
+        scopes.onMain {
+            val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
+
+            flowExecutor.executeNewFlow(
+                FlowIntent.SINGLE_TASK_FLOW,
+                listOf(
+                    FlowType.CONTROL_PANEL_PREFLOW,
+                    FlowType.CONTROL_PANEL_WIFI_MANAGE_NETWORKS_FLOW
+                ),
+                ctxs
+            )
+        }
+    }
+
+    @MainThread
+    fun startControlPanelMeshAddToMeshFlow(
+        device: ParticleDevice,
+        barcode: CompleteBarcodeData
+    ) {
+        val scopes = Scopes()
+        scopes.onMain {
+            val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
+            ctxs.cloud.updateIsTargetDeviceNamed(true)
+
+            val flowType = FlowType.CONTROL_PANEL_MESH_ADD_PREFLOW
+
+            flowExecutor.executeNewFlow(
+                FlowIntent.SINGLE_TASK_FLOW,
+                listOf(FlowType.CONTROL_PANEL_PREFLOW, flowType),
                 ctxs
             )
         }
@@ -249,6 +319,78 @@ class MeshFlowRunner(
         }
     }
 
+    // FIXME: remove this after reviewing the concept of using flows for ControlPanel
+    @MainThread
+    suspend fun getProtocolTransceiver(
+        barcode: CompleteBarcodeData,
+        scopes: Scopes
+    ): ProtocolTransceiver? {
+        return deps.deviceConnector.connect(barcode, "target", scopes)
+    }
+
+    @MainThread
+    fun startShowControlPanelEthernetOptionsFlow(
+        device: ParticleDevice,
+        barcode: CompleteBarcodeData
+    ) {
+        val scopes = Scopes()
+        scopes.onMain {
+            val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
+
+            flowExecutor.executeNewFlow(
+                FlowIntent.SINGLE_TASK_FLOW,
+                listOf(
+                    FlowType.CONTROL_PANEL_PREFLOW,
+                    FlowType.CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW
+                ),
+                ctxs
+            )
+        }
+    }
+
+    @MainThread
+    fun startControlPanelToggleEthernetPinsFlow(
+        device: ParticleDevice,
+        barcode: CompleteBarcodeData,
+        enableEthernetPin: Boolean
+    ) {
+        val scopes = Scopes()
+        scopes.onMain {
+            val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
+
+            ctxs.device.shouldEthernetBeEnabled = enableEthernetPin
+
+            flowExecutor.executeNewFlow(
+                FlowIntent.SINGLE_TASK_FLOW,
+                listOf(
+                    FlowType.CONTROL_PANEL_PREFLOW,
+                    FlowType.CONTROL_PANEL_ETHERNET_TOGGLE_PINS_FLOW
+                ),
+                ctxs
+            )
+        }
+    }
+
+    @MainThread
+    fun startControlPanelMeshLeaveCurrentMeshNetworkFlow(
+        device: ParticleDevice,
+        barcode: CompleteBarcodeData
+    ) {
+        val scopes = Scopes()
+        scopes.onMain {
+            val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
+
+            flowExecutor.executeNewFlow(
+                FlowIntent.SINGLE_TASK_FLOW,
+                listOf(
+                    FlowType.CONTROL_PANEL_PREFLOW,
+                    FlowType.CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW
+                ),
+                ctxs
+            )
+        }
+    }
+
     @MainThread
     private suspend fun initContextWithDeviceIdAndBarcode(
         device: ParticleDevice,
@@ -292,10 +434,15 @@ class MeshFlowRunner(
 
     fun endCurrentFlow() {
         log.info { "endCurrentFlow()" }
+        deps.flowUi.showGlobalProgressSpinner(false)
         flowExecutor.contexts?.let {
             log.info { "Clearing state and cancelling scopes..." }
             it.clearState()
         }
+    }
+
+    fun shutdown() {
+        deps.deviceConnector.clearCache()
     }
 
     fun getString(@StringRes stringRes: Int): String {

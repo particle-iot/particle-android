@@ -77,8 +77,12 @@ import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Credentials
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.CredentialsType
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkRequest
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksRequest
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkReply
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.JoinNewNetworkRequest
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkReply
+import io.particle.firmwareprotos.ctrl.wifi.WifiNew.RemoveKnownNetworkRequest
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security
 import io.particle.mesh.bluetooth.connecting.BluetoothConnection
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
@@ -91,16 +95,10 @@ import io.particle.mesh.setup.flow.BluetoothErrorException
 import io.particle.mesh.setup.flow.BluetoothTimeoutException
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.utils.isThisTheMainThread
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 private const val DEFAULT_NETWORK_CHANNEL = 11
@@ -109,8 +107,9 @@ private const val DEFAULT_NETWORK_CHANNEL = 11
 class ProtocolTransceiver internal constructor(
     private val requestWriter: RequestWriter,
     private val connection: BluetoothConnection,
-    private val scopes: Scopes,
-    private val connectionName: String
+    private val connectionScopes: Scopes,
+    var connectionName: String,
+    var messageSendingScopes: Scopes
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -127,8 +126,12 @@ class ProtocolTransceiver internal constructor(
         didDisconnect = true
         if (isThisTheMainThread()) {
             connection.disconnect()
+            connectionScopes.cancelChildren()
         } else {
-            GlobalScope.launch(Dispatchers.Main) { connection.disconnect() }
+            GlobalScope.launch(Dispatchers.Main) {
+                connection.disconnect()
+                connectionScopes.cancelChildren()
+            }
         }
     }
 
@@ -417,6 +420,21 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> GetCurrentNetworkReply.parseFrom(r.payloadData) }
     }
 
+    suspend fun sendGetKnownNetworksRequest(): Result<GetKnownNetworksReply, ResultCode> {
+        val response = sendRequest(GetKnownNetworksRequest.newBuilder().build())
+        return buildResult(response) { r -> GetKnownNetworksReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendRemoveKnownNetworkRequest(
+        ssid: String
+    ): Result<RemoveKnownNetworkReply, ResultCode> {
+        val response = sendRequest(RemoveKnownNetworkRequest.newBuilder()
+            .setSsid(ssid)
+            .build()
+        )
+        return buildResult(response) { r -> RemoveKnownNetworkReply.parseFrom(r.payloadData) }
+    }
+
     fun receiveResponse(responseFrame: DeviceResponse) {
         val callback = requestCallbacks[responseFrame.requestId.toInt()]
         if (callback != null) {
@@ -427,8 +445,6 @@ class ProtocolTransceiver internal constructor(
             log.error { "No callbacks found for request! ID: ${responseFrame.requestId}" }
         }
     }
-
-    // FIXME: timeouts don't appear to be working as intended
 
     //region PRIVATE
     private suspend fun sendRequest(
@@ -453,15 +469,16 @@ class ProtocolTransceiver internal constructor(
         }
 
         val response = try {
-            scopes.withWorker(timeout) {
-                suspendCoroutine { continuation: Continuation<DeviceResponse?> ->
-                    doSendRequest(requestFrame) { continuation.resume(it) }
-                }
+            val completable = CompletableDeferred<DeviceResponse?>()
+            messageSendingScopes.withWorker(timeout) {
+                doSendRequest(requestFrame) { completable.complete(it) }
+                return@withWorker completable.await()
             }
         } catch (timeoutEx: TimeoutCancellationException) {
             throw BluetoothTimeoutException()
         } catch (ex: Exception) {
-            throw BluetoothErrorException()
+            val name = message::class.java.simpleName
+            throw BluetoothErrorException(ex, "Error sending message: $name")
         }
 
         val id = requestFrame.requestId.toInt()
@@ -478,9 +495,9 @@ class ProtocolTransceiver internal constructor(
 
     private fun doSendRequest(
         request: DeviceRequest,
-        continuationCallback: (DeviceResponse?) -> Unit
+        responseCallback: (DeviceResponse?) -> Unit
     ) {
-        val requestCallback = { frame: DeviceResponse? -> continuationCallback(frame) }
+        val requestCallback = { frame: DeviceResponse? -> responseCallback(frame) }
         synchronized(requestCallbacks) {
             requestCallbacks.put(request.requestId.toInt(), requestCallback)
         }

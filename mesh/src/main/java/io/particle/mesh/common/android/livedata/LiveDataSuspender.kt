@@ -88,20 +88,20 @@ abstract class LiveDataSuspender<T> : AsyncWorkSuspender<T?>() {
 
     @CallSuper
     override fun beforeAwait() {
-        log.info { "beforeAwait()" }
+        log.trace { "beforeAwait()" }
         lifecycleOwner.setNewState(Lifecycle.State.RESUMED)
     }
 
     @CallSuper
     override fun cleanUp() {
-        log.info { "cleanUp()" }
+        log.trace { "cleanUp()" }
         lifecycleOwner.setNewState(Lifecycle.State.DESTROYED)
         liveData.removeObservers(lifecycleOwner)
     }
 
     @CallSuper
     override fun startAsyncWork(workCompleteCallback: (T?) -> Unit) {
-        log.info { "startAsyncWork()" }
+        log.trace { "startAsyncWork()" }
         liveData.observe(lifecycleOwner, Observer { workCompleteCallback(it) })
     }
 

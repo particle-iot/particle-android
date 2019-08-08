@@ -105,7 +105,7 @@ class TinkerFragment : Fragment(), OnClickListener {
         unmutePins()  // hack to make the pins show their functions correctly on first load
         setupListeners()
 
-        if (TinkerPrefs.getInstance(activity).isFirstVisit) {
+        if (TinkerPrefs.getInstance(activity!!).isFirstVisit) {
             fragmentManager!!.beginTransaction()
                 .add(R.id.instructions_container, InstructionsFragment())
                 .addToBackStack("InstructionsFragment_TRANSACTION")
@@ -679,7 +679,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                             else
                                 stuff.currentValue
                         } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            Toaster.s(activity!!, e.message)
+                            activity?.let { Toaster.s(it, e.message) }
                             return stuff.currentValue // it didn't change
                         }
 
@@ -706,7 +706,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                                 list(stuff.pinName)
                             )
                         } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            Toaster.s(activity!!, e.message)
+                            activity?.let { Toaster.s(it, e.message) }
                             return stuff.currentValue
                         }
 
@@ -752,7 +752,7 @@ class InstructionsFragment : Fragment() {
     ): View? {
         val v = inflater.inflate(R.layout.tinker_instructions, container, false)
         v.setOnClickListener {
-            TinkerPrefs.getInstance(activity).setVisited(true)
+            TinkerPrefs.getInstance(activity!!).setVisited(true)
             activity!!.supportFragmentManager.popBackStack()
         }
         return v

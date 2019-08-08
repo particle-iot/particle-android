@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
         android:layout_weight="1"
+        android:textSize="16dp"
         android:ellipsize="middle"
         tools:text="Aether?" />
 

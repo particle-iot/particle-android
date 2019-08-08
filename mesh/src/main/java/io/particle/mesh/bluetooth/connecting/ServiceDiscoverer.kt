@@ -1,22 +1,18 @@
 package io.particle.mesh.bluetooth.connecting
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattService
 import androidx.annotation.CheckResult
 import androidx.annotation.MainThread
-import io.particle.mesh.bluetooth.GATTStatusCode
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import io.particle.mesh.bluetooth.BLELiveDataCallbacks
+import io.particle.mesh.bluetooth.GATTStatusCode
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import io.particle.mesh.setup.flow.Scopes
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.coroutines.CompletableDeferred
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.suspendCoroutine
-import kotlin.coroutines.resume
 
 
 private val TIMEOUT = TimeUnit.SECONDS.toMillis(5)
@@ -47,18 +43,18 @@ class ServiceDiscoverer(
     }
 
     private suspend fun doDiscoverServices(): List<BluetoothGattService>? {
-        return suspendCoroutine { continuation ->
-            doDiscoverServices { continuation.resume(it) }
-        }
+        val deferred = CompletableDeferred<List<BluetoothGattService>?>()
+        doDiscoverServices(deferred)
+        return deferred.await()
     }
 
-    private fun doDiscoverServices(callback: (List<BluetoothGattService>?) -> Unit) {
+    private fun doDiscoverServices(deferred: CompletableDeferred<List<BluetoothGattService>?>) {
         log.debug { "Starting doDiscoverServices()" }
         observables.onServicesDiscoveredLD.observe(lifecycleOwner,
             Observer {
                 log.debug { "Services discovered status updated: $it" }
                 if (it == GATTStatusCode.SUCCESS) {
-                    callback(gatt.services)
+                    deferred.complete(gatt.services)
                 }
             }
         )

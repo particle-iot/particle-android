@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -31,6 +32,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.commonui.DeviceNotesDelegate
 import io.particle.commonui.RenameHelper
+import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
@@ -38,6 +40,7 @@ import io.particle.mesh.ui.inflateFragment
 import io.particle.mesh.ui.navigateOnClick
 import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
 import kotlinx.coroutines.delay
+import mu.KotlinLogging
 
 
 class ControlPanelLandingFragment : BaseControlPanelFragment() {
@@ -48,6 +51,9 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
 
     private val flowManagementScope = Scopes()
+
+
+    private val log = KotlinLogging.logger {}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,54 +69,58 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         return container?.inflateFragment(R.layout.fragment_control_panel_landing)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
+        super.onFragmentReady(activity, flowUiListener)
         val deviceType = device.deviceType!!
 
         p_controlpanel_landing_name_frame.setOnClickListener {
-            RenameHelper.renameDevice(activity!!, device)
+            RenameHelper.renameDevice(activity, device)
         }
 
         p_controlpanel_landing_notes_frame.setOnClickListener { editNotes() }
 
         p_controlpanel_landing_wifi_item_frame.isVisible = deviceType in listOf(ARGON, A_SOM)
+        p_controlpanel_landing_wifi_item.setOnClickListener {
+            flowScopes.onMain {
+                startFlowWithBarcode(flowRunner::startControlPanelInspectCurrentWifiNetworkFlow)
+            }
+        }
+
         p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SOM)
-        p_controlpanel_landing_ethernet_item_frame.isVisible = false
-
-        p_controlpanel_landing_wifi_item.navigateOnClick(
-            R.id.action_controlPanelLandingFragment_to_controlPanelWifiOptionsFragment
-        )
-
         p_controlpanel_landing_cellular_item.setOnClickListener {
             flowRunner.startShowControlPanelCellularOptionsFlow(device)
         }
 
-        p_controlpanel_landing_mesh_item.navigateOnClick(
-            R.id.action_global_controlPanelMeshOptionsFragment
-        )
+        p_controlpanel_landing_ethernet_item_frame.setOnClickListener {
+            flowScopes.onMain {
+                startFlowWithBarcode(flowRunner::startShowControlPanelEthernetOptionsFlow)
+            }
+        }
+
+        p_controlpanel_landing_mesh_item.setOnClickListener {
+            flowScopes.onMain {
+                startFlowWithBarcode(flowRunner::startControlPanelMeshInspectCurrentNetworkFlow)
+            }
+        }
 
         p_controlpanel_landing_docs_item.setOnClickListener {
-            showDocumentation(activity!!, device.deviceType!!)
+            showDocumentation(activity, device.deviceType!!)
         }
 
         p_controlpanel_landing_unclaim_item.setOnClickListener {
             navigateToUnclaim()
         }
-
     }
 
     override fun onResume() {
         super.onResume()
-        flowManagementScope.onMain {
-            // FIXME: hackish, try to remove
-            delay(500)
-            if (isResumed) {
-                flowRunner.endCurrentFlow()  // end any current flows
-            }
-        }
         p_controlpanel_landing_name_value.text = device.name
         p_controlpanel_landing_notes_value.text = device.notes
+    }
+
+    override fun onStop() {
+        super.onStop()
+        log.info { "onStop()" }
     }
 
     private fun navigateToUnclaim() {

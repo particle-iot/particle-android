@@ -32,6 +32,7 @@ class ControlPanelWifiOptionsFragment : BaseControlPanelFragment() {
         p_controlpanel_wifi_inspect_current_network_frame.setOnClickListener {
             inspectCurrentNetworkClicked()
         }
+        p_controlpanel_wifi_manage_wifi_frame.setOnClickListener { manageWifiClicked() }
     }
 
     private fun joinNewWifiClicked() {
@@ -41,6 +42,12 @@ class ControlPanelWifiOptionsFragment : BaseControlPanelFragment() {
     private fun inspectCurrentNetworkClicked() {
         flowScopes.onMain {
             startFlowWithBarcode(flowRunner::startControlPanelInspectCurrentWifiNetworkFlow)
+        }
+    }
+
+    private fun manageWifiClicked() {
+        flowScopes.onMain {
+            startFlowWithBarcode(flowRunner::startControlPanelManageWifiNetworksFlow)
         }
     }
 }

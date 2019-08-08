@@ -28,13 +28,13 @@ public class ParticleAccessToken {
 
 
     public static synchronized ParticleAccessToken fromNewSession(Responses.LogInResponse logInResponse) {
-        if (!Py.truthy(logInResponse.accessToken) || !"bearer".equalsIgnoreCase(logInResponse.tokenType)) {
+        if (!Py.truthy(logInResponse.getAccessToken()) || !"bearer".equalsIgnoreCase(logInResponse.getTokenType())) {
             throw new IllegalArgumentException("Invalid LogInResponse: " + logInResponse);
         }
 
-        long expirationMillis = logInResponse.expiresInSeconds * 1000;
+        long expirationMillis = logInResponse.getExpiresInSeconds() * 1000;
         Date expirationDate = new Date(System.currentTimeMillis() + expirationMillis);
-        return fromTokenData(expirationDate, logInResponse.accessToken, logInResponse.refreshToken);
+        return fromTokenData(expirationDate, logInResponse.getAccessToken(), logInResponse.getRefreshToken());
     }
 
 

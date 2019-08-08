@@ -9,11 +9,8 @@ import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.connection.ResultCode
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.DialogSpec.ResDialogSpec
-import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
-import io.particle.mesh.setup.flow.FlowIntent.FIRST_TIME_SETUP
 import io.particle.mesh.setup.flow.context.SetupContexts
 import mu.KotlinLogging
-import java.lang.Exception
 
 
 class StepEnsureTargetDeviceIsNotOnMeshNetwork(
@@ -62,9 +59,8 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
 
             when (dialogResult) {
                 DialogResult.POSITIVE -> { /* no-op, continue flow */ }
-                DialogResult.NEGATIVE -> throw MeshSetupFlowException(
-                    message = "User does not want device to leave network; exiting setup",
-                    severity = ERROR_FATAL
+                DialogResult.NEGATIVE -> throw UserTerminatedFlowException(
+                    message = "User does not want device to leave network; exiting setup"
                 )
                 null -> throw MeshSetupFlowException(
                     message = "Unknown error when confirming leaving network"

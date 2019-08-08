@@ -11,11 +11,9 @@ import io.particle.mesh.bluetooth.BLELiveDataCallbacks
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.common.android.SimpleLifecycleOwner
 import io.particle.mesh.setup.flow.Scopes
+import kotlinx.coroutines.CompletableDeferred
 import mu.KotlinLogging
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 private val INITIAL_CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(5)
@@ -38,6 +36,7 @@ class GattConnector(private val ctx: Context) {
         val callbacks = BLELiveDataCallbacks()
         val gatt = try {
             scopes.withMain(INITIAL_CONNECTION_TIMEOUT) {
+                log.info { "Creating GATT connection" }
                 doCreateGattConnection(device, ctx, callbacks)
             }
         } catch (ex: Exception) {
@@ -57,9 +56,11 @@ class GattConnector(private val ctx: Context) {
             ctx: Context,
             callbacks: BLELiveDataCallbacks
     ): BluetoothGatt {
-        return suspendCoroutine { continuation: Continuation<BluetoothGatt> ->
-            doCreateGattConnection(device, ctx, callbacks) { continuation.resume(it) }
+        val completable = CompletableDeferred<BluetoothGatt>()
+        doCreateGattConnection(device, ctx, callbacks) {
+            completable.complete(it)
         }
+        return completable.await()
     }
 
 
