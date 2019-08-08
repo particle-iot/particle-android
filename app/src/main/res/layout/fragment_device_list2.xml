@@ -1,23 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.particle.android.sdk.ui.DeviceListFragment"
+    tools:context="io.particle.android.sdk.ui.devicelist.DeviceListFragment"
     tools:ignore="RtlHardcoded">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="@drawable/ic_triangy_toolbar_background"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toTopOf="parent"
+        fab:popupTheme="@style/AppTheme.PopupOverlay"
+        fab:title="@string/your_devices"
+        fab:titleTextColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/search_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_search_gray_24dp"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <EditText
+        android:id="@+id/name_filter_input"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:hint="Search devices..."
+        android:textColorHint="@color/gray"
+        fab:layout_constraintBottom_toBottomOf="@id/search_icon"
+        fab:layout_constraintEnd_toStartOf="@id/filter_button"
+        fab:layout_constraintStart_toEndOf="@id/search_icon"
+        fab:layout_constraintTop_toTopOf="@id/search_icon" />
+
+    <ImageButton
+        android:id="@+id/filter_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_filter_list_gray_24dp"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintTop_toTopOf="@id/search_icon" />
+
+    <View
+        android:id="@+id/filter_bar_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@id/name_filter_input" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@id/filter_bar_divider">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/device_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -30,16 +90,26 @@
         android:text="No devices found.\nPress '+' to add your device."
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:textSize="@dimen/material_text_size_subhead"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@id/name_filter_input" />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/add_device_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginRight="12dp"
-        fab:fab_labelStyle="@style/menu_labels_style">
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintHorizontal_bias="1.0"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toTopOf="parent"
+        fab:layout_constraintVertical_bias="1.0">
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/action_set_up_a_xenon"
@@ -50,7 +120,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
-            fab:fab_title="Set up an Argon, Boron, or Xenon"/>
+            fab:fab_title="Set up an Argon, Boron, or Xenon" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/action_set_up_a_photon"
@@ -61,7 +131,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
-            fab:fab_title="Set up a Photon"/>
+            fab:fab_title="Set up a Photon" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/action_set_up_an_electron"
@@ -72,20 +142,9 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_plusIconColor="@color/accent_color"
             fab:fab_size="mini"
-            fab:fab_title="Set up an Electron"/>
-
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/action_set_up_a_core"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_addButtonStrokeVisible="true"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_plusIconColor="@color/accent_color"
-            fab:fab_size="mini"
-            fab:fab_title="Set up a Core"/>
+            fab:fab_title="Set up an Electron" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

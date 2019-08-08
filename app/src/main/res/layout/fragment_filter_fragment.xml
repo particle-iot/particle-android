@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.particle.android.sdk.ui.devicelist.DeviceFilterFragment"
+    tools:ignore="MissingPrefix">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <TextView
+        android:id="@+id/action_reset"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="Reset"
+        android:textAllCaps="true"
+        android:textColor="@color/p_particle_cyan"
+        app:layout_constraintBottom_toBottomOf="@id/title_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_text"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center"
+        android:text="Filters"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/action_close"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:background="?attr/selectableItemBackground"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/p_ic_close_cyan_24dp"
+        app:layout_constraintBottom_toBottomOf="@id/title_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_text" />
+
+    <View
+        android:id="@+id/top_bar_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_text" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/action_button_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar_divider">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
+
+
+            <!-- SORT BY -->
+
+            <TextView
+                style="@style/device_filter_header"
+                fontPath="@string/bold_text_font_name"
+                android:layout_marginTop="8dp"
+                android:text="Sort by" />
+
+            <RadioGroup
+                android:id="@+id/sort_by_radiogroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/action_sort_by_online_status"
+                    style="@style/device_filter_radio_button"
+                    android:layout_width="match_parent"
+                    android:checked="true"
+                    android:text="Online status" />
+
+                <RadioButton
+                    android:id="@+id/action_sort_by_device_type"
+                    style="@style/device_filter_radio_button"
+                    android:layout_width="match_parent"
+                    android:text="Device type" />
+
+                <RadioButton
+                    android:id="@+id/action_sort_by_name"
+                    style="@style/device_filter_radio_button"
+                    android:layout_width="match_parent"
+                    android:text="Name" />
+
+                <RadioButton
+                    android:id="@+id/action_sort_by_last_heard"
+                    style="@style/device_filter_radio_button"
+                    android:layout_width="match_parent"
+                    android:text="Last heard" />
+
+            </RadioGroup>
+
+
+            <!-- ONLINE STATUS FILTER -->
+
+            <TextView
+                style="@style/device_filter_header"
+                fontPath="@string/bold_text_font_name"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
+                android:text="Online status" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/action_filter_online_status_online"
+                    style="@style/device_filter_button"
+                    android:background="@drawable/device_filter_button_background_selected"
+                    android:drawableStart="@drawable/online_dot"
+                    android:text="@string/online" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/action_filter_online_status_offline"
+                    style="@style/device_filter_button"
+                    android:drawableStart="@drawable/offline_dot"
+                    android:text="@string/offline" />
+
+            </LinearLayout>
+
+
+            <!-- DEVICE TYPE FILTER -->
+
+            <TextView
+                style="@style/device_filter_header"
+                fontPath="@string/bold_text_font_name"
+                android:layout_marginBottom="8dp"
+                android:text="Device type" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/action_filter_device_type_boron"
+                    style="@style/device_filter_button.device_type"
+                    android:background="@drawable/device_filter_button_background_selected"
+                    android:drawableTop="@drawable/device_status_dot_online_tinker"
+                    android:text="Boron / B SoM" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent" />
+
+                <CheckedTextView
+                    android:id="@+id/action_filter_device_type_electron"
+                    style="@style/device_filter_button.device_type"
+                    android:drawableTop="@drawable/device_status_dot_online_tinker"
+                    android:text="Electron / E SoM" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/action_filter_device_type_argon"
+                    style="@style/device_filter_button.device_type"
+                    android:background="@drawable/device_filter_button_background_selected"
+                    android:drawableTop="@drawable/device_status_dot_online_tinker"
+                    android:text="Argon" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent" />
+
+                <CheckedTextView
+                    android:id="@+id/action_filter_device_type_photon"
+                    style="@style/device_filter_button.device_type"
+                    android:drawableTop="@drawable/device_status_dot_online_tinker"
+                    android:text="Photon / P1" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/action_filter_device_type_xenon"
+                    style="@style/device_filter_button.device_type"
+                    android:background="@drawable/device_filter_button_background_selected"
+                    android:drawableTop="@drawable/device_status_dot_online_tinker"
+                    android:text="Xenon" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent" />
+
+                <CheckedTextView
+                    android:id="@+id/action_filter_device_type_offline"
+                    style="@style/device_filter_button.device_type"
+                    android:layout_height="match_parent"
+                    android:text="@string/offline" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/action_button_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintBottom_toTopOf="@id/action_filter_device_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/action_filter_device_list"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:text="Show X devices"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        tools:text="SHOW 13 DEVICES" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

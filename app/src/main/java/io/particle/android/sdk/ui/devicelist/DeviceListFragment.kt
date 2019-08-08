@@ -1,9 +1,7 @@
-package io.particle.android.sdk.ui
+package io.particle.android.sdk.ui.devicelist
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -11,14 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageView
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -28,16 +31,31 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.Callback
 import io.particle.android.sdk.DevicesLoader
 import io.particle.android.sdk.DevicesLoader.DevicesLoadResult
+import io.particle.android.sdk.accountsetup.LoginActivity
+import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
-import io.particle.android.sdk.ui.Comparators.BooleanComparator
-import io.particle.android.sdk.ui.Comparators.ComparatorChain
-import io.particle.android.sdk.ui.Comparators.NullComparator
+import io.particle.android.sdk.ui.InspectorActivity
 import io.particle.android.sdk.utils.EZ
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
@@ -45,24 +63,31 @@ import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Fragments
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
-import io.particle.commonui.productImage
 import io.particle.commonui.productName
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
+import pl.brightinventions.slf4android.LogRecord
+import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Objects.requireNonNull
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.logging.Level
 
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
 class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoadResult> {
 
+    companion object {
+        fun newInstance() = DeviceListFragment()
+    }
+
     // A no-op impl of {@link Callbacks}. Used when this fragment is not attached to an activity.
     private val dummyCallbacks = object : Callbacks {
-        override fun onDeviceSelected(device: ParticleDevice) { }
+        override fun onDeviceSelected(device: ParticleDevice) {}
     }
 
     private lateinit var adapter: DeviceListAdapter
@@ -72,19 +97,15 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
     private val subscribeIds = ConcurrentLinkedQueue<Long>()
     private val reloadStateDelegate = ReloadStateDelegate()
-    private val comparator = helpfulOrderDeviceComparator()
 
     private var callbacks: Callbacks = dummyCallbacks
     private var deviceSetupCompleteReceiver: DeviceSetupCompleteReceiver? = null
-
-    val textFilter: String?
-        get() = adapter.textFilter
 
     internal interface Callbacks {
         fun onDeviceSelected(device: ParticleDevice)
     }
 
-    fun addXenon() {
+    private fun addGen3() {
         addXenonDevice()
         add_device_fab.collapse()
     }
@@ -94,19 +115,14 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         add_device_fab.collapse()
     }
 
-    fun addCore() {
-        addSparkCoreDevice()
-        add_device_fab.collapse()
-    }
-
     fun addElectron() {
         addElectronDevice()
         add_device_fab.collapse()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
-        callbacks = Fragments.getCallbacksOrThrow<Callbacks>(this, Callbacks::class.java)
+        callbacks = Fragments.getCallbacksOrThrow(this, Callbacks::class.java)
     }
 
     override fun onCreateView(
@@ -120,10 +136,7 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         val layoutManager = LinearLayoutManager(inflater.context)
         rv.layoutManager = layoutManager
         rv.addItemDecoration(
-            DividerItemDecoration(
-                requireNonNull<Context>(context),
-                LinearLayout.VERTICAL
-            )
+            DividerItemDecoration(requireNonNull<Context>(context), LinearLayout.VERTICAL)
         )
 
         partialContentBar =
@@ -132,11 +145,16 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         partialContentBar!!.layoutParams =
             LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
-        adapter = DeviceListAdapter(requireNonNull<FragmentActivity>(activity))
+        adapter = DeviceListAdapter()
         rv.adapter = adapter
-        ItemClickSupport.addTo(rv).setOnItemClickListener { _, position, _ ->
-            onDeviceRowClicked(position)
-        }
+        ItemClickSupport.addTo(rv).setOnItemClickListener(
+            object : ItemClickSupport.OnItemClickListener {
+                override fun onItemClicked(recyclerView: RecyclerView, position: Int, v: View) {
+                    onDeviceRowClicked(position)
+                }
+            }
+        )
+
         return top
     }
 
@@ -160,30 +178,56 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         LoaderManager.getInstance(this).initLoader(R.id.device_list_devices_loader_id, null, this)
         refresh_layout.isRefreshing = true
 
-        if (savedInstanceState != null) {
-            adapter.filter(savedInstanceState.getString("txtFilterState"))
+        action_set_up_a_xenon.setOnClickListener { addGen3() }
+        action_set_up_a_photon.setOnClickListener { addPhoton() }
+        action_set_up_an_electron.setOnClickListener { addElectron() }
+
+        toolbar.inflateMenu(R.menu.device_list)
+        toolbar.setOnMenuItemClickListener {
+            return@setOnMenuItemClickListener when (it.itemId) {
+
+                R.id.action_log_out -> {
+                    AlertDialog.Builder(requireActivity())
+                    .setMessage(R.string.logout_confirm_message)
+                    .setPositiveButton(R.string.log_out) { dialog, _ ->
+                        val cloud = ParticleCloudSDK.getCloud()
+                        cloud.logOut()
+                        startActivity(Intent(requireContext(), LoginActivity::class.java))
+                        requireActivity().finish()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
+                    .show()
+                    true
+                }
+
+                R.id.action_send_logs -> {
+                    sendLogs()
+                    true
+                }
+
+                else -> false
+            }
         }
 
-        action_set_up_a_xenon.setOnClickListener { addXenon() }
-        action_set_up_a_photon.setOnClickListener { addPhoton() }
-        action_set_up_a_core.setOnClickListener { addCore() }
-        action_set_up_an_electron.setOnClickListener { addElectron() }
+        filter_button.setOnClickListener {
+            // TODO: replace this with navigation lib calls
+            requireActivity().supportFragmentManager.commit {
+                replace(R.id.fragment_parent, DeviceFilterFragment.newInstance())
+                addToBackStack(null)
+            }
+        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("txtFilterState", adapter.textFilter)
+    override fun onStart() {
+        super.onStart()
+        refreshDevices()
     }
 
     override fun onResume() {
         super.onResume()
         val devices = adapter.items
 //        subscribeToSystemEvents(devices, false)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        refreshDevices()
     }
 
     override fun onPause() {
@@ -217,7 +261,8 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         refresh_layout.isRefreshing = false
 
         val devices = ArrayList(result.devices)
-        Collections.sort(devices, comparator)
+
+        empty_message.visibility = if (devices.size == 0) View.VISIBLE else View.GONE
 
         reloadStateDelegate.onDeviceLoadFinished(loader, result)
 
@@ -297,11 +342,11 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
     }
 
     fun onBackPressed(): Boolean {
-        if (add_device_fab.isExpanded) {
+        return if (add_device_fab.isExpanded) {
             add_device_fab.collapse()
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
@@ -314,27 +359,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             requireNonNull<FragmentActivity>(activity),
             DeviceListActivity::class.java
         )
-    }
-
-    private fun addSparkCoreDevice() {
-        try {
-            val coreAppPkg = "io.spark.core.android"
-            // Is the spark core app already installed?
-            var intent =
-                requireNonNull<FragmentActivity>(activity).packageManager.getLaunchIntentForPackage(
-                    coreAppPkg
-                )
-            if (intent == null) {
-                // Nope.  Send the user to the store.
-                intent = Intent(Intent.ACTION_VIEW)
-                    .setData(Uri.parse("market://details?id=$coreAppPkg"))
-            }
-            startActivity(intent)
-        } catch (ignored: ActivityNotFoundException) {
-            Toast.makeText(activity, "Cannot find spark core application.", Toast.LENGTH_SHORT)
-                .show()
-        }
-
     }
 
     private fun addElectronDevice() {
@@ -352,35 +376,33 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         loader!!.forceLoad()
     }
 
-    fun filter(typeArrayList: List<ParticleDeviceType?>) {
-        adapter.filter(typeArrayList)
-        empty_message.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
+    private fun sendLogs() {
+        val lr = LogRecord(Level.WARNING, "")
+
+        NotifyDeveloperDialogDisplayActivity.showDialogIn(
+            requireActivity(),
+            lr,
+            list(),
+            "Logs from the Particle Android app",
+            "",
+            list("pl.brightinventions.slf4android.ReadLogcatEntriesAsyncTask")
+        )
     }
 
-    fun filter(query: String) {
-        adapter.filter(query)
-        empty_message.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
-    }
 
-    internal class DeviceListAdapter(private val activity: FragmentActivity) :
-        RecyclerView.Adapter<DeviceListAdapter.ViewHolder>() {
+    internal class DeviceListAdapter : RecyclerView.Adapter<DeviceListAdapter.ViewHolder>() {
 
         private val devices = list<ParticleDevice>()
-        private val filteredData = list<ParticleDevice>()
-        private var defaultBackground: Drawable? = null
-        var textFilter: String? = ""
-            private set
-        private var typeFilters: List<ParticleDeviceType?> = Arrays.asList(
-            *ParticleDeviceType.values()
-        )
+        private val dateFormatter = SimpleDateFormat("MMM dd, yyyy, HH:mm a", Locale.getDefault())
 
         val items: List<ParticleDevice>
             get() = devices
 
         internal class ViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
-            var modelName: TextView = topLevel.product_model_name
-            var productImage: AppCompatImageView = topLevel.product_image
-            var deviceName: TextView = topLevel.product_name
+            val modelName: TextView = topLevel.product_model_name
+            val deviceName: TextView = topLevel.product_name
+            val lastHandshake: TextView = topLevel.last_handshake_text
+            val statusDot: ImageView = topLevel.online_status_dot
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -392,17 +414,23 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val device = filteredData[position]
-
-            if (defaultBackground == null) {
-                defaultBackground = holder.topLevel.background
-            }
-            holder.topLevel.setBackgroundResource(R.color.device_item_bg)
-
-            holder.modelName.setText(device.deviceType!!.productName)
-            holder.productImage.setImageResource(device.deviceType!!.productImage)
+            val device = devices[position]
 
             val ctx = holder.topLevel.context
+
+            holder.modelName.setText(device.deviceType!!.productName)
+            holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
+            holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
+
+            @ColorInt val colorValue: Int = ContextCompat.getColor(
+                ctx,
+                device.deviceType!!.getColorForDeviceType()
+            )
+            val bg = holder.modelName.background
+            bg.mutate()
+            DrawableCompat.setTint(bg, colorValue)
+            holder.modelName.setTextColor(colorValue)
+
             val name = if (truthy(device.name))
                 device.name
             else
@@ -411,56 +439,28 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
         }
 
         override fun getItemCount(): Int {
-            return filteredData.size
+            return devices.size
         }
 
         fun clear() {
             devices.clear()
-            filteredData.clear()
             notifyDataSetChanged()
         }
 
         fun addAll(toAdd: List<ParticleDevice>) {
             devices.addAll(toAdd)
-            filter(textFilter, typeFilters)
-        }
-
-        fun filter(query: String?) {
-            textFilter = query
-            filteredData.clear()
-            notifyDataSetChanged()
-
-            filter(query, typeFilters)
-        }
-
-        fun filter(typeArrayList: List<ParticleDeviceType?>) {
-            typeFilters = typeArrayList
-            filteredData.clear()
-            notifyDataSetChanged()
-
-            filter(textFilter, typeArrayList)
-        }
-
-        private fun filter(query: String?, typeArrayList: List<ParticleDeviceType?>) {
-            for (device in devices) {
-                if ((containsFilter(device.name, query)
-                            || containsFilter(device.deviceType!!.name, query)
-                            || containsFilter(device.currentBuild, query)
-                            || containsFilter(device.iccid, query)
-                            || containsFilter(device.id, query)
-                            || containsFilter(
-                        device.imei,
-                        query
-                    )) && typeArrayList.contains(device.deviceType)
-                ) {
-                    filteredData.add(device)
-                    notifyItemInserted(devices.indexOf(device))
-                }
-            }
         }
 
         fun getItem(position: Int): ParticleDevice {
             return devices[position]
+        }
+
+        private fun getStatusDotRes(device: ParticleDevice): Int {
+            return when {
+                device.isFlashing -> R.drawable.device_flashing_dot
+                device.isConnected -> R.drawable.online_dot
+                else -> R.drawable.offline_dot
+            }
         }
     }
 
@@ -515,7 +515,6 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
             retryCount = 0
             partialContentBar!!.visibility = View.INVISIBLE
         }
-
     }
 
 }
@@ -523,24 +522,20 @@ class DeviceListFragment : Fragment(), LoaderManager.LoaderCallbacks<DevicesLoad
 
 private val log = TLog.get(DeviceListFragment::class.java)
 
-private fun containsFilter(value: String?, query: String?): Boolean {
-    return value != null && value.contains(query ?: "")
-}
 
-private fun helpfulOrderDeviceComparator(): Comparator<ParticleDevice> {
-    val deviceOnlineStatusComparator = Comparator<ParticleDevice> { lhs, rhs ->
-        BooleanComparator.getTrueFirstComparator()
-            .compare(lhs.isConnected, rhs.isConnected)
+@ColorRes
+private fun ParticleDeviceType.getColorForDeviceType(): Int {
+    return when (this) {
+        ARGON, BORON, XENON,
+        A_SOM, B_SOM, X_SOM -> R.color.emerald
+        CORE -> R.color.spark_blue
+        ELECTRON -> R.color.device_color_electron
+        P1,
+        PHOTON -> R.color.device_color_photon
+        BLUZ -> R.color.belize
+        RED_BEAR_DUO -> R.color.orange
+        RASPBERRY_PI -> R.color.wisteria
+        DIGISTUMP_OAK,
+        OTHER -> R.color.gray
     }
-    val nullComparator = NullComparator<String>(false)
-    val unnamedDevicesFirstComparator = Comparator<ParticleDevice> { lhs, rhs ->
-        val lhname = lhs.name
-        val rhname = rhs.name
-        nullComparator.compare(lhname, rhname)
-    }
-
-    val chain: ComparatorChain<ParticleDevice>
-    chain = ComparatorChain(deviceOnlineStatusComparator, false)
-    chain.addComparator(unnamedDevicesFirstComparator, false)
-    return chain
 }

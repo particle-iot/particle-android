@@ -132,15 +132,15 @@ class TinkerFragment : Fragment(), OnClickListener {
         outState.putParcelable(STATE_DEVICE, device)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         // we handle both the context device row actions here and our own
         //        inflater.inflate(R.menu.context_device_row, menu);
-        inflater!!.inflate(R.menu.tinker, menu)
+        inflater.inflate(R.menu.tinker, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val actionId = item!!.itemId
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val actionId = item.itemId
         if (DeviceActionsHelper.takeActionForDevice(actionId, activity, device)) {
             return true
 
@@ -154,11 +154,8 @@ class TinkerFragment : Fragment(), OnClickListener {
             return true
 
         } else {
-            return DeviceMenuUrlHandler.handleActionItem(
-                activity,
-                actionId,
-                item.title
-            ) || super.onOptionsItemSelected(item)
+            return DeviceMenuUrlHandler.handleActionItem(activity, actionId, item.title)
+                    || super.onOptionsItemSelected(item)
         }
     }
 
@@ -577,7 +574,7 @@ class TinkerFragment : Fragment(), OnClickListener {
     private fun doAnalogWrite(pin: Pin) {
         mutePinsExcept(pin)
         toggleViewVisibilityWithFade(R.id.tinker_logo, false)
-        pin.showAnalogWrite( object : OnAnalogWriteListener {
+        pin.showAnalogWrite(object : OnAnalogWriteListener {
             override fun onAnalogWrite(value: Int) {
                 for (pin1 in allPins) {
                     if (pin1.isAnalogWriteMode) {

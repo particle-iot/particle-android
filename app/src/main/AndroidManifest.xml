@@ -13,7 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:isGame="false"
         android:label="@string/app_name"
-        android:theme="@style/ParticleSetupTheme"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <!-- Disable data collection by default for GDPR, re-enable at runtime -->
@@ -38,16 +38,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="io.particle.android.sdk.ui.IntroActivity"
             android:label="@string/title_activity_intro"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars" />
+
         <activity
-            android:name="io.particle.android.sdk.ui.DeviceListActivity"
+            android:name="io.particle.android.sdk.ui.devicelist.DeviceListActivity"
             android:label="@string/title_device_list"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -59,15 +61,16 @@
                     android:scheme="particle" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="io.particle.android.sdk.ui.InspectorActivity"
             android:label="@string/title_inspector_detail"
-            android:parentActivityName="io.particle.android.sdk.ui.DeviceListActivity"
+            android:parentActivityName="io.particle.android.sdk.ui.devicelist.DeviceListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TinkerSetup">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="io.particle.android.sdk.ui.DeviceListActivity" />
+                android:value="io.particle.android.sdk.ui.devicelist.DeviceListActivity" />
         </activity>
         <!--
         All of the following are from the device setup lib, and must be present in your app's

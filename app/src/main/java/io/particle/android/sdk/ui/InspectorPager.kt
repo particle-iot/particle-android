@@ -33,8 +33,8 @@ internal class InspectorPager(
         return fragmentsData[position]?.title
     }
 
-    override fun getItem(position: Int): Fragment? {
-        return fragmentsData[position]?.fragment
+    override fun getItem(position: Int): Fragment {
+        return fragmentsData[position]?.fragment!!
     }
 
     override fun getCount(): Int {
