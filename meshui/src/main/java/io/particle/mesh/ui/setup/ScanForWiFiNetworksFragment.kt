@@ -31,7 +31,8 @@ class ScanForWiFiNetworksFragment : BaseFlowFragment() {
     private val log = KotlinLogging.logger {}
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_scan_for_wi_fi_networks, container, false)

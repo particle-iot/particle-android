@@ -27,12 +27,10 @@ class SetupFlowUiDelegate(
     terminator
 ) {
 
+    override val rootDestinationId: Int = R.id.selectDeviceFragment
+
     override fun getDeviceBarcode() {
         navigate(R.id.action_global_scanJoinerCodeIntroFragment)
-    }
-
-    override fun showGetReadyForSetupScreen() {
-        navigate(R.id.action_global_getReadyForSetupFragment)
     }
 
     override fun showTargetPairingProgressUi() {
@@ -46,6 +44,10 @@ class SetupFlowUiDelegate(
     override fun showSetWifiPasswordUi() {
         navigate(R.id.action_global_enterWifiNetworkPasswordFragment)
 //        navigate(R.id.action_global_controlPanelEnterWifiNetworkPasswordFragment)
+    }
+
+    override fun showJoinerSetupFinishedUi() {
+        navigate(R.id.action_global_setupFinishedFragment)
     }
 
 }

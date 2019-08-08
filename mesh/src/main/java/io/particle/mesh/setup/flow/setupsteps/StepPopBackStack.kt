@@ -13,6 +13,7 @@ class StepPopBackStack(
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
         if (!popToRoot) {
             flowUi.popBackStack()
+            flowUi.showGlobalProgressSpinner(false)
             return
         }
 
@@ -20,6 +21,7 @@ class StepPopBackStack(
         while (popped) {
             popped = flowUi.popBackStack()
         }
+        flowUi.showGlobalProgressSpinner(false)
     }
 
 }

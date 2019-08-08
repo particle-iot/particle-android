@@ -17,6 +17,7 @@ class BLEContext : Clearable {
 
 
     override fun clearState() {
+        log.info { "clearState()" }
         connectingToAssistingDeviceUiShown = false
         shownAssistingDeviceInitialIsConnectedScreen = false
         connectingToTargetUiShown = false

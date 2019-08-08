@@ -15,6 +15,7 @@ import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
 import kotlinx.android.synthetic.main.activity_control_panel.*
+import mu.KotlinLogging
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
@@ -35,14 +36,18 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
     override val navHostFragmentId: Int = R.id.main_nav_host_fragment
     override val contentViewIdRes: Int = R.layout.activity_control_panel
 
+    private val log = KotlinLogging.logger {}
+
     override val device: ParticleDevice by lazy {
         intent.getParcelableExtra(EXTRA_DEVICE) as ParticleDevice
     }
 
     override fun onFlowTerminated() {
+        log.info { "onFlowTerminated()" }
         val navController = findNavController(navHostFragmentId)
         var result = true
         while (result) {
+            log.info { "Popping back stack" }
             result = navController.popBackStack()
         }
     }

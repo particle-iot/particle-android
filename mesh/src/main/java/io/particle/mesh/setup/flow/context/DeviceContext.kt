@@ -27,13 +27,20 @@ class DeviceContext : Clearable {
     var shouldDetectEthernet by log.logged(false)
     var ethernetDetectionComplete by log.logged(false)
     var isDetectEthernetSent by log.logged(false)
+    var isEthernetEnabled by log.logged(false)
+    var shouldEthernetBeEnabled: Boolean? by log.logged()
+
     var firmwareUpdateCount by log.logged(1)
 
     override fun clearState() {
+        log.info { "clearState()" }
+
         shouldDetectEthernet = false
         ethernetDetectionComplete = false
         isDetectEthernetSent = false
         firmwareUpdateCount = 1
+        isEthernetEnabled = false
+        shouldEthernetBeEnabled = null
 
         bleOtaProgress.castAndSetOnMainThread(0)
 

@@ -111,8 +111,9 @@ class BluetoothConnectionDroppedException(cause: Throwable? = null) : MeshSetupF
 )
 
 //Can happen in any step, when result != NONE and special class is not handled by onReply handler
-class BluetoothErrorException(cause: Throwable? = null) : MeshSetupFlowException(
+class BluetoothErrorException(cause: Throwable? = null, message: String? = null) : MeshSetupFlowException(
     cause,
+    message = message,
     userFacingMessage = "Something went wrong with Bluetooth. Please restart the set up process and try again."
 )
 

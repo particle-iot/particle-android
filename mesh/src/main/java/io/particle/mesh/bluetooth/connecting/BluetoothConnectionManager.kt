@@ -107,12 +107,13 @@ class BluetoothConnectionManager(private val ctx: Context) {
     @MainThread
     suspend fun connectToDevice(
         deviceName: String,
-        scopes: Scopes,
+        setupScopes: Scopes,
         timeout: Long = SCAN_TIMEOUT_MILLIS
-    ): BluetoothConnection? {
+    ): Pair<BluetoothConnection, Scopes>? {
         checkIsThisTheMainThread()
 
-        val scanResult = scanForDevice(deviceName, timeout, scopes) ?: return null
+        val newConnectionScopes = Scopes()
+        val scanResult = scanForDevice(deviceName, timeout, setupScopes) ?: return null
 
         val address = if (scanResult.rssi < -80) {
             throw DeviceTooFarException()
@@ -126,11 +127,11 @@ class BluetoothConnectionManager(private val ctx: Context) {
         // 1. Attempt to connect
         val device = ctx.btAdapter.getRemoteDevice(address)
         // If this returns null, we're finished, return null ourselves
-        val (gatt, bleWriteChannel, callbacks) = doConnectToDevice(device, scopes) ?: return null
+        val (gatt, bleWriteChannel, callbacks) = doConnectToDevice(device, setupScopes) ?: return null
 
 
         val messageWriteChannel = Channel<ByteArray>(Channel.UNLIMITED)
-        scopes.backgroundScope.launch {
+        newConnectionScopes.backgroundScope.launch {
             for (packet in messageWriteChannel) {
                 QATool.runSafely({ bleWriteChannel.writeToCharacteristic(packet) })
             }
@@ -146,7 +147,7 @@ class BluetoothConnectionManager(private val ctx: Context) {
         // this is the default, but ensure that the OS isn't remembering it from the
         // previous connection to the device
         conn.setConnectionPriority(ConnectionPriority.BALANCED)
-        return conn
+        return Pair(conn, newConnectionScopes)
     }
 
     private suspend fun scanForDevice(

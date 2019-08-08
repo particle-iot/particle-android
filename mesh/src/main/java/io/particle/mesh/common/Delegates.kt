@@ -23,7 +23,9 @@ private class NullableLogWhenSetVar<T>(logger: KLogger?) : ReadWriteProperty<Any
     }
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
-        log.info { "'${property.name}' value being updated to: $value" }
+        if (this.value != value) {
+            log.info { "'${property.name}' value being updated to: $value" }
+        }
         this.value = value
     }
 }
@@ -42,7 +44,9 @@ private class NonNullLogWhenSetVar<T>(initialValue: T, logger: KLogger?) :
     }
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-        log.info { "'${property.name}' value being updated to: $value" }
+        if (this.value != value) {
+            log.info { "'${property.name}' value being updated to: $value" }
+        }
         this.value = value
     }
 }

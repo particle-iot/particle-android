@@ -34,6 +34,8 @@ class MeshContext : Clearable {
     var currentlyJoinedNetwork: Mesh.NetworkInfo? by log.logged()
 
     override fun clearState() {
+        log.info { "clearState()" }
+
         val setToNulls = listOf(
             meshNetworkToJoinLD,
             meshNetworkToJoinCommissionerPassword,

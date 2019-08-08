@@ -64,7 +64,6 @@ class ScanForMeshNetworksFragment : BaseFlowFragment() {
     }
 
     private fun onMeshNetworkSelected(networkInfo: NetworkInfo) {
-        flowUiListener?.mesh?.updateNetworkSetupType(NetworkSetupType.AS_GATEWAY)
         flowUiListener?.mesh?.updateNetworkSetupType(NetworkSetupType.NODE_JOINER)
         flowUiListener?.mesh?.updateSelectedMeshNetworkToJoin(networkInfo)
     }

@@ -10,25 +10,7 @@ import io.particle.mesh.ota.FirmwareUpdateManager
 import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.ExceptionType.EXPECTED_FLOW
-import io.particle.mesh.setup.flow.FlowType.CELLULAR_FLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_ACTION_POSTFLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_DEACTIVATE
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_REACTIVATE
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_CELLULAR_SIM_UNPAUSE
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_MESH_INSPECT_NETWORK_FLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW
-import io.particle.mesh.setup.flow.FlowType.CONTROL_PANEL_WIFI_INSPECT_NETWORK_FLOW
-import io.particle.mesh.setup.flow.FlowType.ETHERNET_FLOW
-import io.particle.mesh.setup.flow.FlowType.INTERNET_CONNECTED_PREFLOW
-import io.particle.mesh.setup.flow.FlowType.JOINER_FLOW
-import io.particle.mesh.setup.flow.FlowType.NETWORK_CREATOR_POSTFLOW
-import io.particle.mesh.setup.flow.FlowType.PREFLOW
-import io.particle.mesh.setup.flow.FlowType.SINGLE_TASK_POSTFLOW
-import io.particle.mesh.setup.flow.FlowType.STANDALONE_POSTFLOW
-import io.particle.mesh.setup.flow.FlowType.WIFI_FLOW
+import io.particle.mesh.setup.flow.FlowType.*
 import io.particle.mesh.setup.flow.context.SetupContexts
 import io.particle.mesh.setup.flow.setupsteps.*
 import kotlinx.coroutines.delay
@@ -193,6 +175,17 @@ class MeshFlowExecutor(
             )
 
 
+            CONTROL_PANEL_PREFLOW -> listOf(
+                StepGetTargetDeviceInfo(deps.flowUi),
+                StepConnectToTargetDevice(deps.flowUi, deps.deviceConnector),
+                StepEnsureLatestFirmware(deps.flowUi, deps.firmwareUpdateManager),
+                StepFetchDeviceId(),
+                StepGetAPINetworks(deps.cloud),
+                StepShowTargetPairingSuccessful(deps.flowUi),
+                StepDetermineFlowAfterPreflow(deps.flowUi)
+            )
+
+
             JOINER_FLOW -> listOf(
                 StepCollectMeshNetworkToJoinSelection(deps.flowUi),
                 StepCollectCommissionerDeviceInfo(deps.flowUi, deps.cloud),
@@ -213,6 +206,22 @@ class MeshFlowExecutor(
 
             INTERNET_CONNECTED_PREFLOW -> listOf(
                 StepAwaitSetupStandAloneOrWithNetwork(deps.cloud, deps.flowUi)
+            )
+
+            CONTROL_PANEL_MESH_ADD_PREFLOW -> listOf(
+                StepControlPanelDetermineFlowAfterPreflow(deps.flowUi)
+            )
+
+            CONTROL_PANEL_MESH_JOINER_FLOW -> listOf(
+                StepCollectMeshNetworkToJoinSelection(deps.flowUi),
+                StepCollectCommissionerDeviceInfo(deps.flowUi, deps.cloud),
+                StepEnsureCommissionerConnected(deps.flowUi, deps.deviceConnector),
+                StepEnsureCommissionerNetworkMatches(deps.flowUi, deps.cloud),
+                StepCollectMeshNetworkToJoinPassword(deps.flowUi),
+                StepJoinSelectedNetwork(deps.cloud),
+                StepEnsureListeningStoppedForBothDevices(),
+                StepEnsureConnectionToCloud(),
+                StepShowSingleTaskCongratsScreen(deps.flowUi, "Mesh network joined")
             )
 
 
@@ -272,6 +281,15 @@ class MeshFlowExecutor(
                 StepShowCreateNetworkFinished(deps.flowUi)
             )
 
+            CONTROL_PANEL_MESH_CREATE_NETWORK_FLOW -> listOf(
+                StepGetNewMeshNetworkName(deps.flowUi),
+                StepGetNewMeshNetworkPassword(deps.flowUi),
+                StepRemoveDeviceFromAnyMeshNetwork(deps.cloud, deps.flowUi),
+                StepCreateNewMeshNetworkOnCloud(deps.cloud),
+                StepCreateNewMeshNetworkOnLocalDevice(),
+                StepShowSingleTaskCongratsScreen(deps.flowUi, "Mesh network created")
+            )
+
             STANDALONE_POSTFLOW -> listOf(
                 StepSetNewDeviceName(deps.flowUi, deps.cloud),
                 StepShowLetsGetBuildingUi(deps.flowUi)
@@ -282,6 +300,21 @@ class MeshFlowExecutor(
                 StepInspectCurrentWifiNetwork(deps.flowUi)
             )
 
+
+            CONTROL_PANEL_WIFI_ADD_NETWORK_FLOW -> listOf(
+                StepShowPricingImpact(deps.flowUi, deps.cloud),
+                StepShowShouldConnectToDeviceCloudConfirmation(deps.flowUi),
+                StepCollectUserWifiNetworkSelection(deps.flowUi),
+                StepCollectSelectedWifiNetworkPassword(deps.flowUi),
+                StepEnsureSelectedWifiNetworkJoined(deps.flowUi),
+                StepEnsureListeningStoppedForBothDevices(),
+                StepShowSingleTaskCongratsScreen(deps.flowUi)
+            )
+
+            CONTROL_PANEL_WIFI_MANAGE_NETWORKS_FLOW -> listOf(
+//                StepRetrieveWifiNetworks(deps.flowUi),
+                StepShowDeviceWifiNetworks(deps.flowUi)
+            )
 
             CONTROL_PANEL_CELLULAR_PRESENT_OPTIONS_FLOW -> listOf(
                 StepFetchIccidFromCloud(deps.cloud, deps.flowUi),
@@ -337,34 +370,13 @@ class MeshFlowExecutor(
             )
 
             CONTROL_PANEL_ETHERNET_PRESENT_OPTIONS_FLOW -> listOf(
-
-
-
-
-
-                // WHEREWELEFTOFF
-
-
-                // First, fetch the state of the pins to be shown in the UI
-
-
-
-
-
-
-
-
-
-
-
-
+                StepGetEthernetPinStatus(deps.flowUi),
                 StepShowEthernetOptionsUi(deps.flowUi)
             )
 
-            SINGLE_TASK_POSTFLOW -> listOf(
-                StepShowSingleTaskCongratsScreen(deps.flowUi)
+            CONTROL_PANEL_ETHERNET_TOGGLE_PINS_FLOW -> listOf(
+                StepSetEthernetPinStatus(deps.flowUi)
             )
-
         }
     }
 

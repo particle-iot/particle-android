@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
+import io.particle.mesh.common.QATool
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.common.truthy
@@ -47,7 +48,13 @@ class TargetDeviceMeshNetworksScanner(
     private suspend fun doScan() {
         log.debug { "doScan()" }
         val xceiver = targetXceiverLD.value!!
-        val networksReply = xceiver.sendScanNetworks()
+        val networksReply = try {
+            xceiver.sendScanNetworks()
+        } catch (ex: Exception) {
+            QATool.log(ex.message ?: "Error sending scanNetworksRequest")
+            return
+        }
+
         val networks = when (networksReply) {
             is Result.Present -> networksReply.value.networksList
             is Result.Error,

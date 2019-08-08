@@ -1,6 +1,8 @@
 package io.particle.mesh.ui.setup
 
 
+import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -49,6 +51,11 @@ class ManualCommissioningAddToNetworkFragment : BaseFlowFragment() {
     }
 
     private fun setUpVideoView(vidView: VideoView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // stop pausing the user's music when showing the video!
+            vidView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE)
+        }
+
         vidView.setVideoURI(activity!!.buildRawResourceUri(R.raw.commissioner_to_listening_mode))
 
         lifecycle.addObserver(object : DefaultLifecycleObserver {

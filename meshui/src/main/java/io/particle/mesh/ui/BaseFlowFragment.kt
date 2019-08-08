@@ -56,6 +56,11 @@ abstract class BaseFlowFragment : Fragment() {
         flowScopes = flowSystemInterface.scopes
     }
 
+    override fun onPause() {
+        super.onPause()
+        log.info { "Paused fragment: ${this::class.java.simpleName}" }
+    }
+
     override fun onResume() {
         super.onResume()
         val listener = (activity as TitleBarOptionsListener)
@@ -70,6 +75,11 @@ abstract class BaseFlowFragment : Fragment() {
 
     open fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         // no-op -- this is for subclasses to use.
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        log.info { "Destroyed fragment: ${this::class.java.simpleName}" }
     }
 
     fun getUserFacingTypeName(): String {

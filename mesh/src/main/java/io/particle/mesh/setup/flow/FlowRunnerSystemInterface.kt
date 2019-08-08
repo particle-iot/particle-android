@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -17,7 +18,7 @@ import mu.KotlinLogging
 interface NavigationTool {
     fun navigate(@IdRes target: Int)
     fun navigate(@IdRes target: Int, args: Bundle)
-    fun popBackStack(): Boolean
+    fun popBackStack(@IdRes destinationId: Int? = null): Boolean
 }
 
 
@@ -56,8 +57,9 @@ class FlowRunnerSystemInterface : ProgressHack {
     }
 
     fun shutdown() {
+        flowRunner.shutdown()
         setNavController(null)
-        scopes.cancelAll()
+        scopes.cancelChildren()
     }
 }
 
@@ -70,6 +72,8 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
 
     var isInitialized = false
         private set
+
+    private val log = KotlinLogging.logger {}
 
     fun initialize(flowUiDelegate: FlowUiDelegate) {
 
@@ -88,11 +92,20 @@ class FlowRunnerAccessModel(private val app: Application) : AndroidViewModel(app
 
     override fun onCleared() {
         super.onCleared()
-        systemInterface.shutdown()
-        // have to use the "?" here because we shut down the mesh setup activity in onCreate()
-        // when we detect that the process has died (meaning we haven't initialized flowRunner)
-        flowRunner?.endCurrentFlow()
-        flowRunner?.endSetup()
+
+        log.info { "onCleared()" }
+        shutdown()
+    }
+
+    fun shutdown() {
+        log.info { "shutdown()" }
+        QATool.runSafely(
+            { systemInterface.shutdown() },
+            // have to use the "?" here because we shut down the mesh setup activity in onCreate()
+            // when we detect that the process has died (meaning we haven't initialized flowRunner)
+            { flowRunner?.endCurrentFlow() },
+            { flowRunner?.endSetup() }
+        )
     }
 
 }

@@ -270,14 +270,6 @@
         app:destination="@id/scanJoinerCodeIntroFragment" />
 
     <fragment
-        android:id="@+id/controlPanelBLEPairingProgressFragment"
-        android:name="io.particle.mesh.ui.controlpanel.ControlPanelBLEPairingProgressFragment"
-        android:label="ControlPanelBLEPairingProgressFragment" />
-    <action
-        android:id="@+id/action_global_controlPanelBLEPairingProgressFragment"
-        app:destination="@id/controlPanelBLEPairingProgressFragment" />
-
-    <fragment
         android:id="@+id/controlPanelPrepareForPairingFragment"
         android:name="io.particle.mesh.ui.controlpanel.PrepareForPairingFragment"
         android:label="PrepareForPairingFragment" />
@@ -343,7 +335,8 @@
         android:label="ControlPanelWifiInspectNetworkFragment" >
         <argument
             android:name="currentNetwork"
-            app:argType="io.particle.firmwareprotos.ctrl.wifi.WifiNew$GetCurrentNetworkReply" />
+            app:argType="io.particle.firmwareprotos.ctrl.wifi.WifiNew$GetCurrentNetworkReply"
+            app:nullable="true" />
     </fragment>
     <action
         android:id="@+id/action_global_controlPanelWifiInspectNetworkFragment"
@@ -401,5 +394,14 @@
     <action
         android:id="@+id/action_global_controlPanelEthernetOptionsFragment"
         app:destination="@id/controlPanelEthernetOptionsFragment" />
+
+    <fragment
+        android:id="@+id/controlPanelWifiManageNetworksFragment"
+        android:name="io.particle.mesh.ui.controlpanel.ControlPanelWifiManageNetworksFragment"
+        android:label="ControlPanelWifiManageNetworksFragment"
+        tools:layout="@layout/fragment_control_panel_wifi_manage_networks" />
+    <action
+        android:id="@+id/action_global_controlPanelWifiManageNetworksFragment"
+        app:destination="@id/controlPanelWifiManageNetworksFragment" />
 
 </navigation>

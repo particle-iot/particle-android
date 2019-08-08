@@ -5,8 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleNetwork
 import io.particle.firmwareprotos.ctrl.mesh.Mesh
+import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
+import io.particle.mesh.setup.flow.DialogResult.NEGATIVE
+import io.particle.mesh.setup.flow.DialogResult.POSITIVE
+import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
@@ -22,6 +28,8 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
     )
 
     private val log = KotlinLogging.logger {}
+
+    private val cloud = ParticleCloudSDK.getCloud()
 
     private var cachedMeshNetworkDataFromDevice: Mesh.NetworkInfo? = null
     private var cachedMeshNetworkDataFromCloud: ParticleNetwork? = null
@@ -70,10 +78,53 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
                 ControlPanelNetworkIdFragmentArgs(networkInfo.networkId).toBundle()
             )
         }
+
+        flowScopes.onMain {
+            flowSystemInterface.showGlobalProgressSpinner(true)
+
+            val (isGateway, count) = flowScopes.withWorker {
+                val meshMemberships = cloud.getNetworkDevices(networkInfo.networkId)
+                val isGw = meshMemberships.firstOrNull { it.deviceId == device.id }
+                    ?.membership
+                    ?.roleData
+                    ?.isGateway
+                return@withWorker Pair(isGw, meshMemberships.size)
+            }
+
+            val roleLabel = if (isGateway == true) "Gateway" else "Node"
+            p_controlpanel_mesh_inspect_network_device_role.text = roleLabel
+            p_controlpanel_mesh_inspect_network_device_count.text = count.toString()
+
+            flowSystemInterface.showGlobalProgressSpinner(false)
+        }
     }
 
     private fun leaveNetwork() {
-        TODO()
-    }
+        val meshName = cachedMeshNetworkDataFromDevice?.name
 
+        flowScopes.onMain {
+            val result = flowSystemInterface.dialogHack.dialogResultLD
+                .nonNull(flowScopes)
+                .runBlockOnUiThreadAndAwaitUpdate(flowScopes) {
+                    flowSystemInterface.dialogHack.newDialogRequest(
+                        StringDialogSpec(
+                            "Remove this device from the current mesh network, '$meshName'?",
+                            "Leave network",
+                            "Cancel",
+                            "Leave current network?"
+                        )
+                    )
+                }
+
+            when (result) {
+                NEGATIVE -> { /* no-op */
+                }
+                POSITIVE -> {
+                    startFlowWithBarcode(
+                        flowRunner::startControlPanelMeshLeaveCurrentMeshNetworkFlow
+                    )
+                }
+            }
+        }
+    }
 }

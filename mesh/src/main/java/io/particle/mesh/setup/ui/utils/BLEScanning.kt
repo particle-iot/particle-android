@@ -58,6 +58,5 @@ fun buildMatchingDeviceNameSuspender(
                     .filter { it!!.isNotEmpty() }
                     .map { it!![0] }
         }
-
     }
 }

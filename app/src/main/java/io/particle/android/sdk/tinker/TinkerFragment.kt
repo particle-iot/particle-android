@@ -679,7 +679,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                             else
                                 stuff.currentValue
                         } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            Toaster.s(activity!!, e.message)
+                            activity?.let { Toaster.s(it, e.message) }
                             return stuff.currentValue // it didn't change
                         }
 
@@ -706,7 +706,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                                 list(stuff.pinName)
                             )
                         } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            Toaster.s(activity!!, e.message)
+                            activity?.let { Toaster.s(it, e.message) }
                             return stuff.currentValue
                         }
 

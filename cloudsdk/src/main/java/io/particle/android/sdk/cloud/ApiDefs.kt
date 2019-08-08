@@ -1,9 +1,10 @@
 package io.particle.android.sdk.cloud
 
 import io.particle.android.sdk.cloud.Responses.CallFunctionResponse
+import io.particle.android.sdk.cloud.Responses.CardOnFileResponse
 import io.particle.android.sdk.cloud.Responses.ClaimCodeResponse
+import io.particle.android.sdk.cloud.Responses.DeviceMeshMembership
 import io.particle.android.sdk.cloud.Responses.FirmwareUpdateInfoResponse
-import io.particle.android.sdk.cloud.Responses.MeshNetworkMembershipsResponse
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse
 import io.particle.android.sdk.cloud.Responses.Models
 import io.particle.android.sdk.cloud.Responses.PingResponse
@@ -16,7 +17,6 @@ import io.particle.android.sdk.cloud.models.*
 import retrofit.client.Response
 import retrofit.http.*
 import retrofit.mime.TypedOutput
-import retrofit.http.GET
 
 
 /** Particle cloud REST APIs, modelled for the Retrofit library */
@@ -128,7 +128,7 @@ class ApiDefs {
         fun getNetwork(@Path("networkId") networkId: String): ParticleNetworkData
 
         @GET("/v1/networks/{networkId}/devices")
-        fun getNetworkDevices(@Path("networkId") networkId: String): MeshNetworkMembershipsResponse
+        fun getNetworkDevices(@Path("networkId") networkId: String): List<DeviceMeshMembership>
 
         @FormUrlEncoded
         @POST("/v1/networks")

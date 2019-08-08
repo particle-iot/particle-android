@@ -56,6 +56,7 @@ abstract class BaseFlowActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         setContentView(contentViewIdRes)
 
         flowModel = this.getViewModel()
@@ -67,7 +68,9 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         }
 
         flowSystemInterface = flowModel.systemInterface
-        flowSystemInterface.setNavController(NavigationToolImpl(navController))
+        flowSystemInterface.setNavController(
+            BaseNavigationToolImpl(navController, applicationContext)
+        )
 
         flowModel.initialize(buildFlowUiDelegate(flowSystemInterface))
 
@@ -97,10 +100,14 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        flowSystemInterface.shutdown()
-        flowSystemInterface.setNavController(null)
+    override fun onPause() {
+        super.onPause()
+        log.info { "onPause()" }
+        if (isFinishing) {
+            flowSystemInterface.shutdown()
+            flowSystemInterface.setNavController(null)
+            flowModel.shutdown()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -112,7 +119,6 @@ abstract class BaseFlowActivity : AppCompatActivity() {
     }
 
     private fun showGlobalProgressSpinner(show: Boolean) {
-        log.info { "showGlobalProgressSpinner(): $show" }
         runOnUiThread { findViewById<View>(progressSpinnerViewId).isVisible = show }
     }
 
@@ -128,30 +134,34 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         }
         flowSystemInterface.dialogHack.clearDialogRequest()
 
-
         val builder = MaterialDialog.Builder(this)
-        when (spec) {
-            is DialogSpec.StringDialogSpec? -> {
-                builder.content(spec.text)
-                    .positiveText(android.R.string.ok)
 
-            }
-
+        val strSpec: DialogSpec.StringDialogSpec = when (spec) {
+            is DialogSpec.StringDialogSpec? -> spec
             is DialogSpec.ResDialogSpec? -> {
-                builder.content(spec.text)
-                    .positiveText(spec.positiveText)
-
-                spec.negativeText?.let {
-                    builder.negativeText(it)
-                    builder.onNegative { dialog, _ ->
-                        dialog.dismiss()
-                        flowSystemInterface.dialogHack.updateDialogResult(DialogResult.NEGATIVE)
-                    }
-                }
-
-                spec.title?.let { builder.title(it) }
+                val negativeText = spec.negativeText?.let { getString(it) }
+                val title = spec.title?.let { getString(it) }
+                DialogSpec.StringDialogSpec(
+                    getString(spec.text),
+                    getString(spec.positiveText),
+                    negativeText,
+                    title
+                )
             }
         }
+
+        builder.content(strSpec.text)
+            .positiveText(strSpec.positiveText)
+
+        strSpec.negativeText?.let {
+            builder.negativeText(it)
+            builder.onNegative { dialog, _ ->
+                dialog.dismiss()
+                flowSystemInterface.dialogHack.updateDialogResult(DialogResult.NEGATIVE)
+            }
+        }
+
+        strSpec.title?.let { builder.title(it) }
 
         builder.canceledOnTouchOutside(false)
             .onPositive { dialog, _ ->
@@ -171,7 +181,7 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         }
 
         Snackbar.make(
-            findViewById<View>(navHostFragmentId),
+            findViewById(navHostFragmentId),
             message,
             Snackbar.LENGTH_LONG
         ).show()

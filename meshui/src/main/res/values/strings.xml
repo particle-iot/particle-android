@@ -36,5 +36,9 @@
     <string name="p_cp_cellular_options_sim_status_fine_print_paused">This Particle SIM card is paused.  The device using this SIM cannot connect to the Internet via cellular until it is unpaused.</string>
 
     <string name="p_controlpanel_ethernet_options_fine_print">To enable Ethernet connectivity using the Particle Ethernet Featherwing, the SPI interface (SCK, MOSI, MISO) is used. Activating the Ethernet interface uses pins D3, D4, and D5 for control signals, and you will not be able to use those pins in your project.</string>
+    <string name="p_controlpanel_action_leave_network">Leave network?</string>
+    <string name="p_controlpanel_confirm_leave_network_dialog_text">Are you sure you want this device to leave %1$s?</string>
+
+    <string name="p_control_panel_manage_wifi_title">Manage Wi-Fi</string>
 
 </resources>

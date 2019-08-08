@@ -15,15 +15,15 @@ class StepInspectCurrentWifiNetwork(private val flowUi: FlowUiDelegate) : MeshSe
 
         val reply = ctxs.requireTargetXceiver().sendGetCurrentWifiNetworkRequest()
         when (reply) {
-            is Present -> flowUi.showInspectCurrentWifiNetworkUi(reply.value)
+            is Present -> flowUi.showInspectCurrentWifiNetworkUi(
+                reply.value,
+                ctxs.ble.connectingToTargetUiShown
+            )
             is Absent -> throw IllegalStateException(
                 "Received blank reply from device when requesting current Wi-Fi network"
             )
             is Error -> {
-                flowUi.dialogTool.newSnackbarRequest(
-                    "${ctxs.targetDevice.currentDeviceName} is not currently on any Wi-Fi network"
-                )
-                flowUi.popBackStack()
+                flowUi.showInspectCurrentWifiNetworkUi(null, ctxs.ble.connectingToTargetUiShown)
             }
         }
     }

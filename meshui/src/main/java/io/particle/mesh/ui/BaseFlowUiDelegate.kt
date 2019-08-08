@@ -32,6 +32,14 @@ abstract class BaseFlowUiDelegate(
 
     protected var shownTargetInitialIsConnectedScreen by log.logged(false)
 
+    override fun getDeviceBarcode() {
+        navigate(R.id.action_global_scanJoinerCodeIntroFragment)
+    }
+
+    override fun showGetReadyForSetupScreen() {
+        navigate(R.id.action_global_getReadyForSetupFragment)
+    }
+
     override fun getNetworkSetupType() {
         navigate(R.id.action_global_useStandaloneOrInMeshFragment)
     }
@@ -121,26 +129,26 @@ abstract class BaseFlowUiDelegate(
         congratsMessage: String,
         postCongratsAction: PostCongratsAction
     ) {
+
         navigate(
             R.id.action_global_controlPanelCongratsFragment,
-            ControlPanelCongratsFragmentArgs(congratsMessage).toBundle()
+            ControlPanelCongratsFragmentArgs(congratsMessage).toBundle(),
+            shouldPopBackstack = false
         )
 
         when (postCongratsAction) {
             EXIT -> terminator.terminateFlow()
             RESET_TO_START -> {
+                log.info { "Resetting to top of stack" }
                 val navTool = navControllerLD.value
-                navTool?.let {
-                    while (true) {
-                        val result = navTool.popBackStack()
-                        if (!result) {
-                            break
-                        }
+                scopes.onMain {
+                    delay(2000)
+                    navTool?.let {
+                        navTool.popBackStack(R.id.controlPanelLandingFragment)
                     }
                 }
             }
-            NOTHING -> { /* no-op */
-            }
+            NOTHING -> { /* no-op */ }
         }
     }
 
@@ -152,10 +160,14 @@ abstract class BaseFlowUiDelegate(
         }
     }
 
-    override fun showInspectCurrentWifiNetworkUi(currentNetwork: WifiNew.GetCurrentNetworkReply) {
+    override fun showInspectCurrentWifiNetworkUi(
+        currentNetwork: WifiNew.GetCurrentNetworkReply?,
+        connectingToTargetUiShown: Boolean
+    ) {
         navigate(
             R.id.action_global_controlPanelWifiInspectNetworkFragment,
-            ControlPanelWifiInspectNetworkFragmentArgs(currentNetwork).toBundle()
+            ControlPanelWifiInspectNetworkFragmentArgs(currentNetwork).toBundle(),
+            shouldPopBackstack = connectingToTargetUiShown
         )
     }
 
@@ -194,19 +206,40 @@ abstract class BaseFlowUiDelegate(
         )
     }
 
-    override fun showMeshInspectNetworkUi() {
-        navigate(R.id.action_global_controlPanelMeshInspectNetworkFragment)
+    override fun showMeshInspectNetworkUi(connectingToTargetUiShown: Boolean) {
+        navigate(
+            R.id.action_global_controlPanelMeshInspectNetworkFragment,
+            shouldPopBackstack = connectingToTargetUiShown
+        )
     }
 
-    override fun showEthernetOptionsUi() {
-        navigate(R.id.action_global_controlPanelEthernetOptionsFragment)
+    override fun showEthernetOptionsUi(connectingToTargetUiShown: Boolean) {
+        navigate(
+            R.id.action_global_controlPanelEthernetOptionsFragment,
+            shouldPopBackstack = connectingToTargetUiShown
+        )
     }
 
     override fun showSetupFinishedUi() {
         navigate(R.id.action_global_letsGetBuildingFragment)
     }
 
+    override fun showMeshOptionsUi(connectingToTargetUiShown: Boolean) {
+        navigate(
+            R.id.action_global_controlPanelMeshOptionsFragment,
+            shouldPopBackstack = connectingToTargetUiShown
+        )
+    }
+
+    override fun showControlPanelWifiManageList() {
+        navigate(
+            R.id.action_global_controlPanelWifiManageNetworksFragment,
+            shouldPopBackstack = false
+        )
+    }
+
     override fun popBackStack(): Boolean {
+        log.info { "popBackStack()" }
         return navControllerLD.value?.popBackStack() ?: false
     }
 
@@ -230,12 +263,13 @@ abstract class BaseFlowUiDelegate(
             return
         }
 
-        val navTargetName = everythingNeedsAContext.resources.getResourceName(navTargetId)
-        log.info { "Navigating to new target: $navTargetName" }
+        val name = everythingNeedsAContext.resources.getResourceName(navTargetId)
+        log.info { "Navigating to new target: $name, shouldPopBackstack=$shouldPopBackstack" }
 
         showGlobalProgressSpinner(false)
         scopes.mainThreadScope.launch {
             if (shouldPopBackstack) {
+                log.info { "Popping back stack" }
                 nav.popBackStack()
             }
             if (args == null) {

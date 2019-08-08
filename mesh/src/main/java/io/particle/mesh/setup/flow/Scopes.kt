@@ -1,6 +1,7 @@
 package io.particle.mesh.setup.flow
 
 import kotlinx.coroutines.*
+import mu.KotlinLogging
 
 
 class Scopes(
@@ -9,8 +10,16 @@ class Scopes(
     val backgroundScope: CoroutineScope = CoroutineScope(Dispatchers.Default + job)
 ) {
 
+    private val log = KotlinLogging.logger {}
+
     fun cancelAll() {
+        log.info { "cancelAll()" }
         job.cancel()
+    }
+
+    fun cancelChildren() {
+        log.info { "cancelChildren()" }
+        job.cancelChildren()
     }
 
     suspend fun <T> withMain(timeout: Long? = null, block: suspend CoroutineScope.() -> T): T {

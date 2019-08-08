@@ -9,7 +9,7 @@ import io.particle.mesh.setup.flow.context.SetupContexts
 class StepShowEthernetOptionsUi(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        flowUi.showEthernetOptionsUi()
+        flowUi.showEthernetOptionsUi(ctxs.ble.connectingToTargetUiShown)
     }
 
 }

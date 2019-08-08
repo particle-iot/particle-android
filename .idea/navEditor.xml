@@ -602,11 +602,6 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="action_global_controlPanelBLEPairingProgressFragment">
-                    <value>
-                      <LayoutPositions />
-                    </value>
-                  </entry>
                   <entry key="action_global_controlPanelCellularDataLimitFragment">
                     <value>
                       <LayoutPositions />
@@ -623,6 +618,11 @@
                     </value>
                   </entry>
                   <entry key="action_global_controlPanelEnterWifiNetworkPasswordFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_controlPanelEthernetOptionsFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -663,6 +663,11 @@
                     </value>
                   </entry>
                   <entry key="action_global_controlPanelWifiInspectNetworkFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_global_controlPanelWifiManageNetworksFragment">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -851,18 +856,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="controlPanelBLEPairingProgressFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="1080" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="controlPanelCellularDataLimitFragment">
                     <value>
                       <LayoutPositions>
@@ -906,6 +899,18 @@
                           <Point>
                             <option name="x" value="988" />
                             <option name="y" value="1080" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="controlPanelEthernetOptionsFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -1023,6 +1028,18 @@
                           <Point>
                             <option name="x" value="256" />
                             <option name="y" value="1436" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="controlPanelWifiManageNetworksFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="256" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>

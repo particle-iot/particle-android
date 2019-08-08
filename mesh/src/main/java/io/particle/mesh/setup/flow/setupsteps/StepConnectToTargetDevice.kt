@@ -6,7 +6,6 @@ import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.connection.ProtocolTransceiver
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.context.SetupContexts
-import mu.KotlinLogging
 
 
 class StepConnectToTargetDevice(
@@ -17,6 +16,18 @@ class StepConnectToTargetDevice(
     @WorkerThread
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
         if (ctxs.targetDevice.transceiverLD.value?.isConnected == true) {
+            return
+        }
+
+        val cachedXceiver: ProtocolTransceiver? = scopes.withMain {
+            deviceConnector.getCachedDevice(ctxs.targetDevice.barcode.value!!, "target", scopes)
+        }
+        cachedXceiver?.let {
+            ctxs.targetDevice.transceiverLD
+                .nonNull(scopes)
+                .runBlockOnUiThreadAndAwaitUpdate(scopes) {
+                    ctxs.targetDevice.updateDeviceTransceiver(it)
+                }
             return
         }
 

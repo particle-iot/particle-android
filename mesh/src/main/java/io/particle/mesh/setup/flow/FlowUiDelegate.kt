@@ -13,6 +13,8 @@ enum class PostCongratsAction {
 
 interface FlowUiDelegate {
 
+    val rootDestinationId: Int
+
     val dialogTool: DialogTool
 
     fun getString(@StringRes stringId: Int): String
@@ -78,7 +80,10 @@ interface FlowUiDelegate {
 
     fun showCreateNetworkFinishedUi()
 
-    fun showInspectCurrentWifiNetworkUi(currentNetwork: WifiNew.GetCurrentNetworkReply)
+    fun showInspectCurrentWifiNetworkUi(
+        currentNetwork: WifiNew.GetCurrentNetworkReply?,
+        connectingToTargetUiShown: Boolean
+    )
 
     fun showControlPanelCellularOptionsUi()
 
@@ -90,9 +95,13 @@ interface FlowUiDelegate {
 
     fun showSetCellularDataLimitUi()
 
-    fun showMeshInspectNetworkUi()
+    fun showMeshInspectNetworkUi(connectingToTargetUiShown: Boolean)
 
-    fun showEthernetOptionsUi()
+    fun showMeshOptionsUi(connectingToTargetUiShown: Boolean)
+
+    fun showEthernetOptionsUi(connectingToTargetUiShown: Boolean)
+
+    fun showControlPanelWifiManageList()
 
     fun popBackStack(): Boolean
 }

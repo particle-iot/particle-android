@@ -30,6 +30,8 @@ class CloudConnectionContext : Clearable {
     private var checkEthernetGatewayUiShown by log.logged(false)
 
     override fun clearState() {
+        log.info { "clearState()" }
+
         claimCode = null
         pricingImpact = null
         checkEthernetGatewayUiShown = false

@@ -124,7 +124,7 @@ class InspectorActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        scopes.cancelAll()
+        scopes.cancelChildren()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

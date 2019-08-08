@@ -25,6 +25,9 @@ class StepEnsureCommissionerNetworkMatches(
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
         val commissioner = ctxs.requireCommissionerXceiver()
+
+        flowUi.showGlobalProgressSpinner(true)
+
         val reply: Result<GetNetworkInfoReply, ResultCode> = commissioner.sendGetNetworkInfo()
 
         when (reply) {
