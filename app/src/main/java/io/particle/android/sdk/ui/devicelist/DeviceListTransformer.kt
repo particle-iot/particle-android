@@ -17,7 +17,8 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
-import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ALL
+import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ALL_SELECTED
+import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.NONE_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.OFFLINE_ONLY
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ONLINE_ONLY
 import io.particle.android.sdk.ui.devicelist.SortCriteria.DEVICE_TYPE
@@ -34,9 +35,9 @@ enum class SortCriteria {
     LAST_HEARD
 }
 
-
 enum class OnlineStatusFilter {
-    ALL,
+    ALL_SELECTED,
+    NONE_SELECTED,
     ONLINE_ONLY,
     OFFLINE_ONLY
 }
@@ -90,7 +91,8 @@ private fun getSortingComparator(criteria: SortCriteria): Comparator<ParticleDev
 
 private fun getOnlineStatusFilter(filter: OnlineStatusFilter): (ParticleDevice) -> Boolean {
     return when (filter) {
-        ALL -> { _: ParticleDevice -> true }
+        ALL_SELECTED,
+        NONE_SELECTED -> { _: ParticleDevice -> true }
         ONLINE_ONLY -> { d: ParticleDevice -> d.isConnected }
         OFFLINE_ONLY -> { d: ParticleDevice -> !d.isConnected }
     }
