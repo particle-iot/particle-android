@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -62,11 +61,16 @@ import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.commonui.productName
+import io.particle.mesh.common.android.livedata.awaitUpdate
+import io.particle.mesh.common.android.livedata.nonNull
+import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.inflateRow
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
+import kotlinx.coroutines.delay
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import java.io.IOException
@@ -90,8 +94,11 @@ class DeviceListFragment : Fragment() {
     // FIXME: naming, document better
     private var partialContentBar: ProgressBar? = null
 
+    private lateinit var nameFilterTextWatcher: TextWatcher
     private val subscribeIds = ConcurrentLinkedQueue<Long>()
     private var deviceSetupCompleteReceiver: DeviceSetupCompleteReceiver? = null
+
+    private val scopes = Scopes()
 
     private fun addGen3() {
         addXenonDevice()
@@ -128,21 +135,16 @@ class DeviceListFragment : Fragment() {
         partialContentBar!!.layoutParams =
             LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
-        adapter = DeviceListAdapter()
+        adapter = DeviceListAdapter { onDeviceRowClicked(it) }
         rv.adapter = adapter
-        ItemClickSupport.addTo(rv).setOnItemClickListener(
-            object : ItemClickSupport.OnItemClickListener {
-                override fun onItemClicked(recyclerView: RecyclerView, position: Int, v: View) {
-                    onDeviceRowClicked(position)
-                }
-            }
-        )
 
         return top
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        nameFilterTextWatcher = buildNameFilterTextWatcher()
+
         refresh_layout.setOnRefreshListener { this.refreshDevices() }
 
         deviceSetupCompleteReceiver =
@@ -199,20 +201,8 @@ class DeviceListFragment : Fragment() {
             }
         }
 
-        name_filter_input.afterTextChanged {
-            val asStr = it?.toString()
 
-            if (asStr.isNullOrEmpty()) {
-                empty_message.setText(R.string.device_list_default_empty_message)
-            } else {
-                val msg = "No devices found matching '$asStr'"
-                empty_message.text = msg
-            }
-
-            filterViewModel.updateNameQuery(asStr)
-        }
-
-        filterViewModel.filteredDeviceListLD.observe(
+        filterViewModel.currentDeviceFilter.filteredDeviceListLD.observe(
             viewLifecycleOwner,
             Observer { onDeviceListUpdated(it) }
         )
@@ -220,11 +210,14 @@ class DeviceListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        name_filter_input.addTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
 //        subscribeToSystemEvents(devices, false)
+
     }
 
     override fun onPause() {
+        name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
 //        subscribeToSystemEvents(devices, true)
         super.onPause()
@@ -237,10 +230,50 @@ class DeviceListFragment : Fragment() {
 
     private fun onDeviceListUpdated(devices: List<ParticleDevice>?) {
         refresh_layout.isRefreshing = false
+
+        updateEmptyMessageAndSearchBox()
+
         empty_message.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
         //subscribe to system updates
 //        subscribeToSystemEvents(devices, false)
+    }
+
+    private fun updateEmptyMessageAndSearchBox() {
+        val config = filterViewModel.currentDeviceFilter.deviceListViewConfigLD.value!!
+        if (filterViewModel.fullDeviceListLD.value.isNullOrEmpty()) {
+            empty_message.setText(R.string.device_list_default_empty_message)
+        } else {
+            if (config.deviceNameQueryString.isNullOrBlank()) {
+                empty_message.text = "No devices found matching the current filter"
+            } else {
+                val msg = "No devices found matching '${config.deviceNameQueryString}'"
+                empty_message.text = msg
+            }
+        }
+
+        val filteredDevices = filterViewModel.currentDeviceFilter.filteredDeviceListLD.value!!
+        val completeDevices = filterViewModel.fullDeviceListLD.value!!
+        if (completeDevices.size == filteredDevices.size) {
+            name_filter_input.hint = "Search devices"
+        } else {
+            name_filter_input.hint = "Search in ${filteredDevices.size} of ${completeDevices.size} devices"
+        }
+    }
+
+    private fun buildNameFilterTextWatcher(): TextWatcher {
+        return afterTextChangedListener {
+            val asStr = it?.toString()
+
+            scopes.onMain {
+                filterViewModel.draftDeviceFilter.deviceListViewConfigLD
+                    .nonNull(scopes)
+                    .runBlockOnUiThreadAndAwaitUpdate(scopes) {
+                        filterViewModel.draftDeviceFilter.updateNameQuery(asStr)
+                    }
+                filterViewModel.draftDeviceFilter.commitDraftConfig()
+            }
+        }
     }
 
     private fun subscribeToSystemEvents(
@@ -284,17 +317,8 @@ class DeviceListFragment : Fragment() {
         }
     }
 
-    private fun onDeviceRowClicked(position: Int) {
-        log.i("Clicked on item at position: #$position")
-        if (position >= adapter.itemCount || position == -1) {
-            // we're at the header or footer view, do nothing.
-            return
-        }
-
-        // Notify the active callbacks interface (the activity, if the
-        // fragment is attached to one) that an item has been selected.
-        val device = filterViewModel.fullDeviceListLD.value!![position]
-
+    private fun onDeviceRowClicked(device: ParticleDevice) {
+        log.i("Clicked on item at position: #$device")
         if (device.isFlashing) {
             Toaster.s(
                 activity,
@@ -337,7 +361,6 @@ class DeviceListFragment : Fragment() {
         val devices = filterViewModel.fullDeviceListLD.value
 //        subscribeToSystemEvents(devices, true)
         filterViewModel.refreshDevices()
-
     }
 
     private fun sendLogs() {
@@ -364,7 +387,9 @@ internal class DeviceListViewHolder(val topLevel: View) : RecyclerView.ViewHolde
 }
 
 
-internal class DeviceListAdapter : ListAdapter<ParticleDevice, DeviceListViewHolder>(
+internal class DeviceListAdapter(
+    private val onClickHandler: (ParticleDevice) -> Unit
+) : ListAdapter<ParticleDevice, DeviceListViewHolder>(
     easyDiffUtilCallback { device: ParticleDevice -> device.id }
 ) {
 
@@ -397,6 +422,8 @@ internal class DeviceListAdapter : ListAdapter<ParticleDevice, DeviceListViewHol
         else
             ctx.getString(R.string.unnamed_device)
         holder.deviceName.text = name
+
+        holder.topLevel.setOnClickListener { onClickHandler(device) }
     }
 
     private fun getStatusDotRes(device: ParticleDevice): Int {
