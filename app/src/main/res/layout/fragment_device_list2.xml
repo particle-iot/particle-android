@@ -37,6 +37,8 @@
         android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:hint="Search devices..."
+        android:inputType="text"
+        android:maxLines="1"
         android:textColorHint="@color/gray"
         fab:layout_constraintBottom_toBottomOf="@id/search_icon"
         fab:layout_constraintEnd_toStartOf="@id/filter_button"
