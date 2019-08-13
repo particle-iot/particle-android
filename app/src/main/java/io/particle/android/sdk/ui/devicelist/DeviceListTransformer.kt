@@ -67,15 +67,16 @@ internal fun sortAndFilterDeviceList(
     config: DeviceListViewConfig
 ): List<ParticleDevice> {
 
-    log.info { "Transforming list with ${devices.size} using config=$config" }
-
-    return devices.asSequence()
         .filter(getOnlineStatusFilter(config.onlineStatusFilter))
         .filter(getDeviceTypeFilter(config.deviceTypeFilters))
         .filter(getDeviceNameFilter(config.deviceNameQueryString))
         .sortedBy { it.name }
         .sortedWith(getSortingComparator(config.sortCriteria))
         .toList()
+
+    log.info { "Transformed list of ${devices.size} devices down to ${result.size} using config=$config" }
+
+    return result
 }
 
 private fun getSortingComparator(criteria: SortCriteria): Comparator<ParticleDevice> {
