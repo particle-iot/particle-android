@@ -23,7 +23,7 @@ import mu.KotlinLogging
 
 private val defaultDeviceListConfig = DeviceListViewConfig(
     SortCriteria.ONLINE_STATUS,
-    OnlineStatusFilter.ALL_SELECTED,
+    OnlineStatusFilter.NONE_SELECTED,
     emptySet()
 )
 
