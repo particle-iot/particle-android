@@ -107,7 +107,6 @@
                     android:id="@+id/action_sort_by_online_status"
                     style="@style/device_filter_radio_button"
                     android:layout_width="match_parent"
-                    android:checked="true"
                     android:text="Online status" />
 
                 <RadioButton
@@ -246,10 +245,10 @@
                     android:layout_height="match_parent" />
 
                 <CheckedTextView
-                    android:id="@+id/action_filter_device_type_offline"
+                    android:id="@+id/action_filter_device_type_other"
                     style="@style/device_filter_button.device_type"
                     android:layout_height="match_parent"
-                    android:text="@string/offline" />
+                    android:text="Other" />
 
             </LinearLayout>
 
