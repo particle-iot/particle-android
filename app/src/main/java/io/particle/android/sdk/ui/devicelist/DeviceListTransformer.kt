@@ -4,17 +4,11 @@ import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ALL_SELECTED
@@ -68,6 +62,7 @@ internal fun sortAndFilterDeviceList(
     config: DeviceListViewConfig
 ): List<ParticleDevice> {
 
+    val result = devices.asSequence()
         .filter(getOnlineStatusFilter(config.onlineStatusFilter))
         .filter(getDeviceTypeFilter(config.deviceTypeFilters))
         .filter(getDeviceNameFilter(config.deviceNameQueryString))
@@ -83,7 +78,10 @@ internal fun sortAndFilterDeviceList(
 private fun getSortingComparator(criteria: SortCriteria): Comparator<ParticleDevice> {
     return when (criteria) {
         ONLINE_STATUS -> compareByDescending { it.isConnected }
-        DEVICE_TYPE -> compareBy { it.deviceType }
+        DEVICE_TYPE -> compareBy(
+            { it.deviceType.toDeviceTypeFilter().ordinal },
+            { it.deviceType.toString() }
+        )
         NAME -> compareBy { it.name }
         LAST_HEARD -> compareByDescending { it.lastHeard }
     }
@@ -98,36 +96,34 @@ private fun getOnlineStatusFilter(filter: OnlineStatusFilter): (ParticleDevice) 
     }
 }
 
-private fun getDeviceTypeFilter(filters: Set<DeviceTypeFilter>): (ParticleDevice) -> Boolean {
+private fun ParticleDeviceType?.toDeviceTypeFilter(): DeviceTypeFilter {
+    return when (this) {
+        A_SOM,
+        ARGON -> DeviceTypeFilter.ARGON
 
+        B_SOM,
+        BORON -> DeviceTypeFilter.BORON
+
+        PHOTON,
+        P1 -> DeviceTypeFilter.PHOTON
+
+        ELECTRON -> DeviceTypeFilter.ELECTRON
+
+        X_SOM,
+        XENON -> DeviceTypeFilter.XENON
+
+        else -> DeviceTypeFilter.OTHER
+    }
+}
+
+
+private fun getDeviceTypeFilter(filters: Set<DeviceTypeFilter>): (ParticleDevice) -> Boolean {
     if (filters.isEmpty()) {
         return { true }
     }
-
-    fun ParticleDeviceType?.toDeviceTypeFilter(): DeviceTypeFilter {
-        return when (this) {
-            A_SOM,
-            ARGON -> DeviceTypeFilter.ARGON
-
-            B_SOM,
-            BORON -> DeviceTypeFilter.BORON
-
-            PHOTON,
-            P1 -> DeviceTypeFilter.PHOTON
-
-            ELECTRON -> DeviceTypeFilter.ELECTRON
-
-            X_SOM,
-            XENON -> DeviceTypeFilter.XENON
-
-            else -> DeviceTypeFilter.OTHER
-        }
-    }
-
     return { d: ParticleDevice ->
         filters.contains(d.deviceType.toDeviceTypeFilter())
     }
-
 }
 
 private fun getDeviceNameFilter(query: String?): (ParticleDevice) -> Boolean {
