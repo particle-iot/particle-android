@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/tinker_selection_overlay_bg"
+    android:importantForAutofill="noExcludeDescendants"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -12,9 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
+        android:textSize="22sp"
         android:gravity="center_horizontal"
-        android:minWidth="200dp"
-        android:text="Publish an event."/>
+        android:minWidth="300dp"
+        android:text="Publish an event" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:hint="Name"
-            android:maxLines="1"/>
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -39,37 +39,37 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:hint="Value"
-            android:maxLines="1"/>
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="Event visibility:"/>
+        android:layout_marginEnd="10dp"
+        android:text="Event visibility:" />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/privateEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Private"/>
+            android:text="Private" />
 
         <RadioButton
             android:id="@+id/publicEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Public"/>
+            android:text="Public" />
 
     </RadioGroup>
 

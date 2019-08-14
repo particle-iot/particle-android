@@ -13,16 +13,12 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
@@ -135,7 +131,7 @@ class InspectorActivity : BaseActivity() {
         val id = item.itemId
         when (id) {
             android.R.id.home -> finish()
-//            R.id.action_event_publish -> presentPublishDialog()
+            R.id.action_event_publish -> presentPublishDialog()
             R.id.action_launchcontrol_panel -> {
                 startActivity(ControlPanelActivity.buildIntent(this, device))
             }
@@ -215,12 +211,10 @@ class InspectorActivity : BaseActivity() {
     private fun presentPublishDialog() {
         val publishDialogView = View.inflate(this, R.layout.publish_event, null)
 
-        AlertDialog.Builder(
-            this,
-            R.style.ParticleSetupTheme_DialogNoDimBackground
-        )
-            .setView(publishDialogView)
-            .setPositiveButton(R.string.publish_positive_action) { _, _ ->
+        MaterialDialog.Builder(this)
+            .customView(publishDialogView, false)
+            .positiveText(R.string.publish_positive_action)
+            .onPositive { _, _ ->
                 val nameView = Ui.findView<TextView>(publishDialogView, R.id.eventName)
                 val valueView = Ui.findView<TextView>(publishDialogView, R.id.eventValue)
                 val privateEventRadio: RadioButton =
@@ -235,9 +229,9 @@ class InspectorActivity : BaseActivity() {
 
                 publishEvent(name, value, eventVisibility)
             }
-            .setNegativeButton(R.string.cancel, null)
-            .setCancelable(true)
-            .setOnCancelListener { it.dismiss() }
+            .negativeText(R.string.cancel)
+            .cancelable(true)
+            .cancelListener { it.dismiss() }
             .show()
     }
 

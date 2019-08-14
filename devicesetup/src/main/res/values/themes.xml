@@ -50,8 +50,26 @@
         <!-- only applies to API 19 + 21, but we still need this here as a placeholder. -->
     </style>
 
-    <style name="ParticleSetupTheme_DialogNoDimBackground"
-           parent="@android:style/Theme.Holo.Dialog">
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/primary_color</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/primary_color_dark</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/accent_color</item>
+
+        <item name="colorButtonNormal">@color/primary_color</item>
+        <item name="colorControlNormal">@color/primary_color</item>
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight, and colorSwitchThumbNormal. -->
+
+        <!--        <item name="android:textColor">@color/normal_text_color</item>-->
+    </style>
+
+    <style name="ParticleSetupTheme_DialogNoDimBackground" parent="@android:style/Theme.Holo.Dialog">
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
