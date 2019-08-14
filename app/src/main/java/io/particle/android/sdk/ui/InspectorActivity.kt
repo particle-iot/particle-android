@@ -139,7 +139,6 @@ class InspectorActivity : BaseActivity() {
                 val actionId = item.itemId
 
                 return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
-                        DeviceMenuUrlHandler.handleActionItem(this, actionId, item.title) ||
                         super.onOptionsItemSelected(item)
             }
         }
@@ -149,14 +148,7 @@ class InspectorActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-
-        val menuRes = when (device.deviceType) {
-            ARGON, A_SOM, BORON, B_SOM, XENON, X_SOM -> R.menu.inspector_gen3
-            else -> R.menu.inspector
-        }
-
-        menuInflater.inflate(menuRes, menu)
-
+        menuInflater.inflate(R.menu.inspector, menu)
         return true
     }
 

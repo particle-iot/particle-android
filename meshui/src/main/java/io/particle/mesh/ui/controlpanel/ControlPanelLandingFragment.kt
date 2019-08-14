@@ -79,6 +79,8 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
         p_controlpanel_landing_notes_frame.setOnClickListener { editNotes() }
 
+        network_info_header.isVisible = deviceType in gen3Devices
+
         p_controlpanel_landing_wifi_item_frame.isVisible = deviceType in listOf(ARGON, A_SOM)
         p_controlpanel_landing_wifi_item.setOnClickListener {
             flowScopes.onMain {
@@ -91,12 +93,14 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
             flowRunner.startShowControlPanelCellularOptionsFlow(device)
         }
 
+        p_controlpanel_landing_ethernet_item_frame.isVisible = deviceType in gen3Devices
         p_controlpanel_landing_ethernet_item_frame.setOnClickListener {
             flowScopes.onMain {
                 startFlowWithBarcode(flowRunner::startShowControlPanelEthernetOptionsFlow)
             }
         }
 
+        p_controlpanel_landing_mesh_item.isVisible = deviceType in gen3Devices
         p_controlpanel_landing_mesh_item.setOnClickListener {
             flowScopes.onMain {
                 startFlowWithBarcode(flowRunner::startControlPanelMeshInspectCurrentNetworkFlow)
@@ -145,6 +149,15 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         })
     }
 }
+
+private val gen3Devices = setOf(
+    ParticleDeviceType.ARGON,
+    ParticleDeviceType.A_SOM,
+    ParticleDeviceType.BORON,
+    ParticleDeviceType.B_SOM,
+    ParticleDeviceType.XENON,
+    ParticleDeviceType.X_SOM
+)
 
 
 private fun showDocumentation(context: Context, deviceType: ParticleDeviceType) {

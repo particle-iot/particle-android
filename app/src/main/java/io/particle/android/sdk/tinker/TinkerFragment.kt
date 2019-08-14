@@ -19,7 +19,6 @@ import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.ui.DeviceActionsHelper
-import io.particle.android.sdk.ui.DeviceMenuUrlHandler
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Prefs
 import io.particle.android.sdk.utils.Py.list
@@ -154,8 +153,7 @@ class TinkerFragment : Fragment(), OnClickListener {
             return true
 
         } else {
-            return DeviceMenuUrlHandler.handleActionItem(activity, actionId, item.title)
-                    || super.onOptionsItemSelected(item)
+            return super.onOptionsItemSelected(item)
         }
     }
 
