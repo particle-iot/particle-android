@@ -342,7 +342,7 @@ class ParticleCloud internal constructor(
     // FIXME: stop the duplication that's happening here
     // FIXME: ...think harder about this whole thing.  This is unique in that it's the only
     // operation that could _partially_ succeed.
-    // FIXME: make this internal!
+    @Deprecated("This will be removed with the next major version update. Use getDevices() instead")
     @WorkerThread
     @Throws(PartialDeviceListResultException::class, ParticleCloudException::class)
     fun getDevicesParallel(useShortTimeout: Boolean): List<ParticleDevice> {

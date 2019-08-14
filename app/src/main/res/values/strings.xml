@@ -91,5 +91,6 @@ Enjoy!]]></string>
     <string name="publish_positive_action">Publish event</string>
     <string name="cancel">Cancel</string>
     <string name="logout_confirm_message">Are you sure you want to log out?</string>
+    <string name="device_list_default_empty_message">No devices found. Press \'+\' to add your device.</string>
 
 </resources>

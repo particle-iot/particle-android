@@ -3,7 +3,10 @@ package io.particle.android.sdk.ui.devicelist
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.ui.BaseActivity
 import io.particle.android.sdk.utils.SoftAPConfigRemover
@@ -13,13 +16,17 @@ import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 
 
-class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
+class DeviceListActivity : BaseActivity() {
 
     private var softAPConfigRemover: SoftAPConfigRemover? = null
+    private lateinit var filterViewModel: DeviceFilterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_list)
+
+        filterViewModel = ViewModelProviders.of(this).get(DeviceFilterViewModel::class.java)
+        filterViewModel.refreshDevices()
 
         softAPConfigRemover = SoftAPConfigRemover(this, WifiFacade.get(this))
 
@@ -53,6 +60,7 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
         }
     }
 
+
     override fun onStart() {
         super.onStart()
         softAPConfigRemover!!.removeAllSoftApConfigs()
@@ -69,10 +77,4 @@ class DeviceListActivity : BaseActivity(), DeviceListFragment.Callbacks {
             super.onBackPressed()
         }
     }
-
-    //region DeviceListFragment.Callbacks
-    override fun onDeviceSelected(device: ParticleDevice) {
-        // was used for two-pane mode, but we no longer support that.
-    }
-    //endregion
 }
