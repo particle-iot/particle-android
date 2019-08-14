@@ -61,7 +61,6 @@ import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.commonui.productName
-import io.particle.mesh.common.android.livedata.awaitUpdate
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.flow.Scopes
@@ -70,7 +69,6 @@ import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
-import kotlinx.coroutines.delay
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import java.io.IOException
@@ -318,7 +316,7 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun onDeviceRowClicked(device: ParticleDevice) {
-        log.i("Clicked on item at position: #$device")
+        log.i("Clicked on device=$device")
         if (device.isFlashing) {
             Toaster.s(
                 activity,
