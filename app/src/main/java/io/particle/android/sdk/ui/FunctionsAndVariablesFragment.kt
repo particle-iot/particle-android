@@ -104,12 +104,7 @@ class FunctionsAndVariablesFragment : Fragment() {
         data_list.setHasFixedSize(true)  // perf. optimization
         data_list.layoutManager = LinearLayoutManager(context)
         data_list.adapter = DataListAdapter(device, displayMode)
-        data_list.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayout.VERTICAL
-            )
-        )
+        data_list.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
 }
 
