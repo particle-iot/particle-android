@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
@@ -106,8 +107,8 @@ class EventsFragment : Fragment() {
     }
 
     private fun setupClearListener(rootView: View, adapter: EventListAdapter) {
-        rootView.findViewById<View>(R.id.events_clear).setOnClickListener { _ ->
-            AlertDialog.Builder(requireNonNull<FragmentActivity>(activity))
+        rootView.findViewById<View>(R.id.events_clear).setOnClickListener {
+            AlertDialog.Builder(requireNonNull<FragmentActivity>(activity), R.style.DialogTheme)
                 .setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
                 .setPositiveButton(R.string.ok) { _, _ ->
