@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 class StepInspectCurrentWifiNetwork(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
+        flowUi.showGlobalProgressSpinner(true)
         delay(2000) // delay to allow the device time to reconnect to wifi after listening mode
 
         val reply = ctxs.requireTargetXceiver().sendGetCurrentWifiNetworkRequest()

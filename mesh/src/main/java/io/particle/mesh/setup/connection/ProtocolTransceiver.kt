@@ -416,7 +416,7 @@ class ProtocolTransceiver internal constructor(
     }
 
     suspend fun sendGetCurrentWifiNetworkRequest(): Result<GetCurrentNetworkReply, ResultCode> {
-        val response = sendRequest(GetCurrentNetworkRequest.newBuilder().build())
+        val response = sendRequest(GetCurrentNetworkRequest.newBuilder().build(), timeout = 20000)
         return buildResult(response) { r -> GetCurrentNetworkReply.parseFrom(r.payloadData) }
     }
 

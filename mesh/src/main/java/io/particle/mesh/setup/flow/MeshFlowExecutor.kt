@@ -302,6 +302,7 @@ class MeshFlowExecutor(
 
 
             CONTROL_PANEL_WIFI_ADD_NETWORK_FLOW -> listOf(
+                StepStartListeningModeForTarget(deps.flowUi),
                 StepShowPricingImpact(deps.flowUi, deps.cloud),
                 StepShowShouldConnectToDeviceCloudConfirmation(deps.flowUi),
                 StepCollectUserWifiNetworkSelection(deps.flowUi),
@@ -312,7 +313,7 @@ class MeshFlowExecutor(
             )
 
             CONTROL_PANEL_WIFI_MANAGE_NETWORKS_FLOW -> listOf(
-//                StepRetrieveWifiNetworks(deps.flowUi),
+                StepStartListeningModeForTarget(deps.flowUi),
                 StepShowDeviceWifiNetworks(deps.flowUi)
             )
 
