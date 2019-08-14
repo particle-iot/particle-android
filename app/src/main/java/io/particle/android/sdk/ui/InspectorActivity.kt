@@ -94,13 +94,14 @@ class InspectorActivity : BaseActivity() {
     public override fun onResume() {
         super.onResume()
         EventBus.getDefault().register(this)
-        try {
-            device.subscribeToSystemEvents()
-        } catch (ignore: ParticleCloudException) {
-            //minor issue if we don't update online/offline states
-        }
 
         scopes.onWorker {
+            try {
+                device.subscribeToSystemEvents()
+            } catch (ex: ParticleCloudException) {
+                // minor issue if we don't update online/offline states
+            }
+
             val owned = cloud.userOwnsDevice(device.id)
             if (!owned) {
                 scopes.onMain { finish() }
@@ -112,9 +113,12 @@ class InspectorActivity : BaseActivity() {
 
     public override fun onPause() {
         EventBus.getDefault().unregister(this)
-        try {
-            device.unsubscribeFromSystemEvents()
-        } catch (ignore: ParticleCloudException) {
+        scopes.onWorker {
+            try {
+                device.unsubscribeFromSystemEvents()
+            } catch (ex: ParticleCloudException) {
+                // ignore
+            }
         }
 
 //        action_signal_device.isChecked = false

@@ -546,7 +546,7 @@ class ParticleDevice internal constructor(
      * @throws ParticleCloudException Failure to subscribe to system events.
      * @see [EventBus](https://github.com/greenrobot/EventBus)
      */
-    @MainThread
+    @WorkerThread
     @Throws(ParticleCloudException::class)
     fun subscribeToSystemEvents() {
         try {
@@ -592,8 +592,9 @@ class ParticleDevice internal constructor(
                 }
             )
         } catch (e: IOException) {
-            log.d("Failed to auto-subscribe to system events")
-            throw ParticleCloudException(e)
+            val ex = ParticleCloudException(e)
+            log.d("Failed to auto-subscribe to system events", ex)
+            throw ex
         }
     }
 
