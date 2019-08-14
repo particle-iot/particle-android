@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
@@ -32,14 +33,13 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.commonui.DeviceNotesDelegate
 import io.particle.commonui.RenameHelper
+import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.inflateFragment
-import io.particle.mesh.ui.navigateOnClick
 import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
-import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
@@ -49,9 +49,8 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
     private lateinit var cloud: ParticleCloud
 
-
+    private lateinit var devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
     private val flowManagementScope = Scopes()
-
 
     private val log = KotlinLogging.logger {}
 
@@ -59,6 +58,14 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cloud = ParticleCloudSDK.getCloud()
+
+        var initialValue = 0
+        devicesUpdatedBroadcast = BroadcastReceiverLD(
+            requireActivity(),
+            BroadcastContract.BROADCAST_DEVICES_UPDATED,
+            { ++initialValue },
+            true
+        )
     }
 
     override fun onCreateView(
@@ -67,6 +74,11 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return container?.inflateFragment(R.layout.fragment_control_panel_landing)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        devicesUpdatedBroadcast.observe(viewLifecycleOwner, Observer { updateDetails() })
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -118,13 +130,17 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
     override fun onResume() {
         super.onResume()
-        p_controlpanel_landing_name_value.text = device.name
-        p_controlpanel_landing_notes_value.text = device.notes
+        updateDetails()
     }
 
     override fun onStop() {
         super.onStop()
         log.info { "onStop()" }
+    }
+
+    private fun updateDetails() {
+        p_controlpanel_landing_name_value.text = device.name
+        p_controlpanel_landing_notes_value.text = device.notes
     }
 
     private fun navigateToUnclaim() {

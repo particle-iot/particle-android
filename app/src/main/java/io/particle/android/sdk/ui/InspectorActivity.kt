@@ -12,11 +12,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
+import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleEventVisibility
@@ -25,6 +27,7 @@ import io.particle.android.sdk.cloud.models.DeviceStateChange
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.commonui.DeviceInfoBottomSheetController
+import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
@@ -56,6 +59,7 @@ class InspectorActivity : BaseActivity() {
         }
     }
 
+    private lateinit var devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
     private lateinit var device: ParticleDevice
     private val cloud = ParticleCloudSDK.getCloud()
     private val handler = Handler()
@@ -73,7 +77,7 @@ class InspectorActivity : BaseActivity() {
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
-        title = device.name
+        updateDetails()
 
         setupInspectorPages()
         handler.postDelayed(syncStatus, 1000 * 60L)
@@ -85,6 +89,19 @@ class InspectorActivity : BaseActivity() {
             device
         )
         deviceInfoController.initializeBottomSheet()
+
+        var initialValue = 0
+        devicesUpdatedBroadcast = BroadcastReceiverLD(
+            this,
+            BroadcastContract.BROADCAST_DEVICES_UPDATED,
+            { ++initialValue },
+            true
+        )
+        devicesUpdatedBroadcast.observe(this, Observer { updateDetails() })
+    }
+
+    private fun updateDetails() {
+        title = device.name
     }
 
     public override fun onResume() {
