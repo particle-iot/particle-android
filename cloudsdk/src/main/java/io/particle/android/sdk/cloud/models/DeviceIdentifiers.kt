@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DeviceIdentifiers(
     @SerializedName("device_id")
-    val deviceId: String?,
+    val deviceId: String,
 
     @SerializedName("iccid")
     val iccid: String?,
