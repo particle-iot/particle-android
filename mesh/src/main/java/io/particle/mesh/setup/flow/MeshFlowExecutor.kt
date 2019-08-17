@@ -17,7 +17,7 @@ import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
-private const val FLOW_RETRIES = 5
+private const val FLOW_RETRIES = 6
 
 
 class StepDeps(
@@ -112,7 +112,9 @@ class MeshFlowExecutor(
 
                         if (ex.severity == EXPECTED_FLOW) {
                             log.info { "Received EXPECTED_FLOW exception; retrying." }
-                            continue  // avoid incrementing the counter, since this was expected flow
+                            // Things are still working as expected; reset the retry count
+                            i = 0
+                            continue
 
                         } else if (ex.severity == ERROR_FATAL) {
                             log.info(ex) { "Hit fatal error, exiting setup: " }
