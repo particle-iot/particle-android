@@ -181,6 +181,7 @@ class ParticleDevice internal constructor(
         BLUZ(103),
         DIGISTUMP_OAK(82),
         ELECTRON(10),
+        ESP32(11),
         ARGON(12),
         BORON(13),
         XENON(14),

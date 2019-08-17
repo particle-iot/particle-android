@@ -11,6 +11,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ESP32
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
@@ -41,6 +42,7 @@ fun ParticleDeviceType.toConnectivityType(): Gen3ConnectivityType {
         RED_BEAR_DUO,
         BLUZ,
         DIGISTUMP_OAK,
+        ESP32,
         ARGON,
         A_SOM -> WIFI
 
