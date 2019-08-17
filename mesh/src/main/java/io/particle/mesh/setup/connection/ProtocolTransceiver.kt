@@ -28,8 +28,11 @@ import io.particle.firmwareprotos.ctrl.Config.SetStartupModeReply
 import io.particle.firmwareprotos.ctrl.Config.SetStartupModeRequest
 import io.particle.firmwareprotos.ctrl.Config.StartListeningModeReply
 import io.particle.firmwareprotos.ctrl.Config.StartListeningModeRequest
+import io.particle.firmwareprotos.ctrl.Config.StartNyanSignalRequest
 import io.particle.firmwareprotos.ctrl.Config.StopListeningModeReply
 import io.particle.firmwareprotos.ctrl.Config.StopListeningModeRequest
+import io.particle.firmwareprotos.ctrl.Config.StopNyanSignalReply
+import io.particle.firmwareprotos.ctrl.Config.StopNyanSignalRequest
 import io.particle.firmwareprotos.ctrl.Config.SystemResetReply
 import io.particle.firmwareprotos.ctrl.Config.SystemResetRequest
 import io.particle.firmwareprotos.ctrl.Extensions
@@ -435,7 +438,17 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> RemoveKnownNetworkReply.parseFrom(r.payloadData) }
     }
 
-    fun receiveResponse(responseFrame: DeviceResponse) {
+    suspend fun sendStartNyanSignaling(): Result<StartNyanSignalRequest, ResultCode> {
+        val response = sendRequest(StartListeningModeRequest.newBuilder().build())
+        return buildResult(response) { r -> StartNyanSignalRequest.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendStopNyanSignaling(): Result<StopNyanSignalReply, ResultCode> {
+        val response = sendRequest(StopNyanSignalRequest.newBuilder().build())
+        return buildResult(response) { r -> StopNyanSignalReply.parseFrom(r.payloadData) }
+    }
+
+    internal fun receiveResponse(responseFrame: DeviceResponse) {
         val callback = requestCallbacks[responseFrame.requestId.toInt()]
         if (callback != null) {
             callback(responseFrame)

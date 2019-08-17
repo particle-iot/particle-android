@@ -45,7 +45,8 @@ class SetupDevice(
     var iccid: String? by log.logged()
     var sim: ParticleSim? by log.logged()
     var dataUsedInMB: Float? by log.logged()
-    var ownershipCheckedForSwitchingToControlPanel: Boolean  by log.logged(false)
+    var ownershipCheckedForSwitchingToControlPanel: Boolean by log.logged(false)
+    var nyanSignalingStopped: Boolean by log.logged(false)
 
     @WorkerThread
     fun updateBarcode(barcodeData: CompleteBarcodeData?, cloud: ParticleCloud) {
