@@ -137,7 +137,7 @@ abstract class BaseFlowUiDelegate(
         )
 
         when (postCongratsAction) {
-            EXIT -> terminator.terminateFlow()
+            EXIT -> terminator.terminateFlow(FlowTerminationAction.NoFurtherAction)
             RESET_TO_START -> {
                 log.info { "Resetting to top of stack" }
                 val navTool = navControllerLD.value

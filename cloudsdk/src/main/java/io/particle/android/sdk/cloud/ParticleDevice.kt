@@ -702,6 +702,7 @@ class ParticleDevice internal constructor(
     override fun toString(): String {
         return "ParticleDevice{" +
                 "deviceId=" + deviceState.deviceId +
+                ", serialNumber=" + deviceState.serialNumber +
                 ", isConnected=" + deviceState.isConnected +
                 ", deviceType=" + deviceState.deviceType +
                 '}'.toString()

@@ -51,10 +51,12 @@ fun buildFlowManager(
 
 class MeshFlowTerminator {
 
-    val shouldTerminateFlowLD: LiveData<Boolean> = liveDataOf(false)
+    val shouldTerminateFlowLD: LiveData<Pair<Boolean, FlowTerminationAction>> = liveDataOf(
+        Pair(false, FlowTerminationAction.NoFurtherAction)
+    )
 
-    fun terminateFlow() {
-        shouldTerminateFlowLD.castAndPost(true)
+    fun terminateFlow(nextAction: FlowTerminationAction) {
+        shouldTerminateFlowLD.castAndPost(Pair(true, nextAction))
     }
 }
 
@@ -431,7 +433,7 @@ class MeshFlowRunner(
 
     // FIXME: disambiguate this vs ending the current *flow*
     fun endSetup() {
-        flowExecutor.endSetup()
+        flowExecutor.endSetup(FlowTerminationAction.NoFurtherAction)
     }
 
     fun endCurrentFlow() {

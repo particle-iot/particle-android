@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.squareup.phrase.Phrase
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.setup.flow.FlowTerminationAction
 import io.particle.mesh.setup.utils.ToastDuration
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.R
@@ -75,7 +76,7 @@ class ControlPanelUnclaimDeviceFragment : BaseControlPanelFragment() {
                 if (err == null) "Device unclaimed!" else "Error unclaiming device",
                 ToastDuration.LONG
             )
-            flowSystemInterface.terminateSetup()
+            flowSystemInterface.terminateSetup(FlowTerminationAction.NoFurtherAction)
         }
     }
 }

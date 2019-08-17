@@ -8,6 +8,9 @@ import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
+import io.particle.mesh.setup.flow.FlowTerminationAction
+import io.particle.mesh.setup.flow.FlowTerminationAction.NoFurtherAction
+import io.particle.mesh.setup.flow.FlowTerminationAction.StartControlPanelAction
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.BaseFlowActivity
@@ -42,13 +45,23 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
         intent.getParcelableExtra(EXTRA_DEVICE) as ParticleDevice
     }
 
-    override fun onFlowTerminated() {
+    override fun onFlowTerminated(nextAction: FlowTerminationAction) {
         log.info { "onFlowTerminated()" }
-        val navController = findNavController(navHostFragmentId)
-        var result = true
-        while (result) {
-            log.info { "Popping back stack" }
-            result = navController.popBackStack()
+
+        when (nextAction) {
+            is StartControlPanelAction -> {
+                throw IllegalArgumentException(
+                    "This action not supported by ${this.javaClass.simpleName}"
+                )
+            }
+            is NoFurtherAction -> {
+                val navController = findNavController(navHostFragmentId)
+                var result = true
+                while (result) {
+                    log.info { "Popping back stack" }
+                    result = navController.popBackStack()
+                }
+            }
         }
     }
 

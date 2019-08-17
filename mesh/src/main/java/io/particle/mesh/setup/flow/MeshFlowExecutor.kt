@@ -1,9 +1,11 @@
 package io.particle.mesh.setup.flow
 
+import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import com.snakydesign.livedataextensions.nonNull
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.awaitUpdate
 import io.particle.mesh.ota.FirmwareUpdateManager
@@ -18,6 +20,14 @@ import mu.KotlinLogging
 
 
 private const val FLOW_RETRIES = 6
+
+
+sealed class FlowTerminationAction {
+    object NoFurtherAction : FlowTerminationAction()
+    class StartControlPanelAction(val device: ParticleDevice) : FlowTerminationAction()
+}
+
+
 
 
 class StepDeps(
@@ -59,9 +69,9 @@ class MeshFlowExecutor(
         }
     }
 
-    fun endSetup() {
+    fun endSetup(nextAction: FlowTerminationAction) {
         log.info { "endSetup()" }
-        flowTerminator.terminateFlow()
+        flowTerminator.terminateFlow(nextAction)
     }
 
     private fun initNewFlow(intent: FlowIntent, preInitializedContext: SetupContexts?) {
@@ -108,6 +118,13 @@ class MeshFlowExecutor(
 
                 } catch (ex: Exception) {
 
+                    if (ex is TerminateFlowAndStartControlPanelException) {
+                        log.info { "User is leaving setup for Control Panel for this device" }
+                        endSetup(FlowTerminationAction.StartControlPanelAction(ex.device))
+                        return@onWorker
+                    }
+
+
                     if (ex is MeshSetupFlowException) {
 
                         if (ex.severity == EXPECTED_FLOW) {
@@ -153,7 +170,7 @@ class MeshFlowExecutor(
                 deps.dialogTool.clearDialogResult()
                 deps.dialogTool.dialogResultLD.nonNull().awaitUpdate(scopes)
             }
-            endSetup()
+            endSetup(FlowTerminationAction.NoFurtherAction)
         }
     }
 
@@ -163,6 +180,7 @@ class MeshFlowExecutor(
 
             PREFLOW -> listOf(
                 StepGetTargetDeviceInfo(deps.flowUi),
+                StepCheckShouldSwitchToControlPanel(deps.cloud, deps.flowUi),
                 StepShowGetReadyForSetup(deps.flowUi),
                 StepConnectToTargetDevice(deps.flowUi, deps.deviceConnector),
                 StepEnsureCorrectEthernetFeatureStatus(),
