@@ -304,6 +304,7 @@ class MeshFlowExecutor(
             )
 
             CONTROL_PANEL_MESH_CREATE_NETWORK_FLOW -> listOf(
+                StepLeaveMeshNetwork(deps.cloud, deps.flowUi, false),
                 StepGetNewMeshNetworkName(deps.flowUi),
                 StepGetNewMeshNetworkPassword(deps.flowUi),
                 StepRemoveDeviceFromAnyMeshNetwork(deps.cloud, deps.flowUi),
@@ -388,7 +389,7 @@ class MeshFlowExecutor(
 
 
             CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW -> listOf(
-                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),
+                StepLeaveMeshNetwork(deps.cloud, deps.flowUi, true),
                 StepPopBackStack(deps.flowUi)
             )
 
