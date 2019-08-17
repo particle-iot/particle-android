@@ -15,7 +15,6 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -33,28 +32,13 @@ import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
+import io.particle.android.sdk.ui.toDecorationColor
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
@@ -408,7 +392,7 @@ internal class DeviceListAdapter(
 
         @ColorInt val colorValue: Int = ContextCompat.getColor(
             ctx,
-            device.deviceType!!.getColorForDeviceType()
+            device.deviceType!!.toDecorationColor()
         )
         val bg = holder.modelName.background
         bg.mutate()
@@ -435,40 +419,3 @@ internal class DeviceListAdapter(
 
 
 private val log = TLog.get(DeviceListFragment::class.java)
-
-
-@ColorRes
-private fun ParticleDeviceType.getColorForDeviceType(): Int {
-    return when (this) {
-        CORE -> R.color.spark_blue
-        ELECTRON -> R.color.device_color_electron
-        PHOTON,
-        P1 -> R.color.device_color_photon
-        RASPBERRY_PI -> R.color.wisteria
-        RED_BEAR_DUO -> R.color.orange
-//        ESP32 -> 0x000000
-        BLUZ -> R.color.belize
-        ARGON, BORON, XENON,
-        A_SOM, B_SOM, X_SOM -> R.color.emerald
-        DIGISTUMP_OAK,
-        OTHER -> R.color.gray
-    }
-}
-
-
-private fun ParticleDeviceType.getIconText(): String {
-    return when (this) {
-        CORE -> "C"
-        ELECTRON -> "E"
-        PHOTON -> "P"
-        P1 -> "1"
-        RASPBERRY_PI -> "R"
-        RED_BEAR_DUO -> "D"
-//        ESP32 -> "ES"
-        BLUZ -> "BZ"
-        ARGON, A_SOM -> "A"
-        BORON, B_SOM -> "B"
-        XENON, X_SOM -> "X"
-        else -> "?"
-    }
-}
