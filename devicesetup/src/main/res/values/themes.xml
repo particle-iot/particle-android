@@ -26,6 +26,14 @@
         <item name="android:textAppearanceSmallPopupMenu">@style/PopupMenuText</item>
     </style>
 
+    <style name="ParticleSetupTheme.NoActionBar.TranslucentSystemBars.Honeycomb">
+        <item name="android:windowBackground">@drawable/honeycomb_bg</item>
+    </style>
+
+    <style name="ParticleSetupTheme.NoActionBar.Honeycomb">
+        <item name="android:windowBackground">@drawable/honeycomb_bg</item>
+    </style>
+
     <style name="PopupMenuParent">
         <item name="overlapAnchor">true</item>
         <item name="android:dropDownHorizontalOffset">-4dip</item>
