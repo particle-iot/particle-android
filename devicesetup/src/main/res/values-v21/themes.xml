@@ -9,4 +9,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ParticleSetupTheme.NoActionBar.TranslucentSystemBars.Honeycomb">
+        <item name="android:windowBackground">@drawable/honeycomb_bg</item>
+    </style>
+
 </resources>
