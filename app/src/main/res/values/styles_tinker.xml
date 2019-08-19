@@ -100,7 +100,7 @@
     </style>
 
     <style name="TriangyActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="background">@drawable/ic_triangy_toolbar_background</item>
+        <item name="background">@drawable/bg_app_bar_gradient</item>
     </style>
 
 </resources>

@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="top"
-        android:background="@drawable/ic_triangy_toolbar_background"
+        android:background="@drawable/bg_app_bar_gradient"
         android:theme="@style/AppTheme.AppBarOverlay"
         fab:layout_constraintEnd_toEndOf="parent"
         fab:layout_constraintStart_toStartOf="parent"
