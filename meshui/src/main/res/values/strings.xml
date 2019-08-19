@@ -41,4 +41,11 @@
 
     <string name="p_control_panel_manage_wifi_title">Manage Wi-Fi</string>
 
+    <string name="mesh_location_permission_dialog_text">Control Panel uses Bluetooth scanning to find your devices.\n\nBecause it could potentially reveal your location, Bluetooth scanning requires the Location permission.\n\nControl Panel features will be available after you tap ALLOW on the next screen.</string>
+    <string name="mesh_location_permission_dialog_title">Permission needed</string>
+    <string name="mesh_got_it">got it</string>
+    <string name="mesh_location_permission_denied_dialog_title">Location permission required</string>
+    <string name="mesh_location_permission_denied_dialog_text"><![CDATA[The Location permission has been disabled for this app.  Please change this in Permissions for this app under Settings -> Apps.]]></string>
+
+
 </resources>

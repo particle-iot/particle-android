@@ -1,7 +1,6 @@
 package io.particle.mesh.ui.setup
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -12,13 +11,11 @@ import io.particle.mesh.setup.flow.FlowTerminationAction
 import io.particle.mesh.setup.flow.FlowTerminationAction.NoFurtherAction
 import io.particle.mesh.setup.flow.FlowTerminationAction.StartControlPanelAction
 import io.particle.mesh.setup.flow.FlowUiDelegate
-import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
-import io.particle.mesh.ui.controlpanel.ControlPanelActivity.Companion
 import kotlinx.android.synthetic.main.activity_main.*
 import mu.KotlinLogging
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper

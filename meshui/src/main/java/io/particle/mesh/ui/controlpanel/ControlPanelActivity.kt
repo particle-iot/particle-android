@@ -1,5 +1,6 @@
 package io.particle.mesh.ui.controlpanel
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,16 +8,21 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import io.particle.android.sdk.cloud.ParticleDevice
+import io.particle.android.sdk.utils.appHasPermission
+import io.particle.android.sdk.utils.pass
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.setup.flow.FlowTerminationAction
 import io.particle.mesh.setup.flow.FlowTerminationAction.NoFurtherAction
 import io.particle.mesh.setup.flow.FlowTerminationAction.StartControlPanelAction
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.utils.ToastGravity
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
+import io.particle.mesh.ui.setup.PermissionsFragment
 import kotlinx.android.synthetic.main.activity_control_panel.*
 import mu.KotlinLogging
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -25,7 +31,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 private const val EXTRA_DEVICE = "EXTRA_DEVICE"
 
 
-class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowActivity() {
+class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, PermissionsFragment.Client,
+    BaseFlowActivity() {
 
     companion object {
         fun buildIntent(ctx: Context, device: ParticleDevice): Intent {
@@ -67,7 +74,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
 
 
     private val scopes = Scopes()
-
+    private var shouldCheckPermissions = true
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
@@ -84,6 +91,16 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
         }
 
         showDeviceInfoView(false)
+
+        PermissionsFragment.ensureAttached(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (shouldCheckPermissions) {
+            shouldCheckPermissions = !appHasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+            ensureLocationPermission()
+        }
     }
 
     override fun buildFlowUiDelegate(systemInterface: FlowRunnerSystemInterface): FlowUiDelegate {
@@ -103,7 +120,21 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, BaseFlowAc
         p_action_close.visibility = if (options.showCloseButton) View.VISIBLE else View.INVISIBLE
     }
 
-    fun showDeviceInfoView(showDeviceInfoSlider: Boolean) {
+    override fun onUserAllowedPermission(permission: String) {
+        pass
+    }
+
+    override fun onUserDeniedPermission(permission: String) {
+        safeToast("Permission denied, exiting Control Panel", gravity = ToastGravity.CENTER)
+        finish()
+    }
+
+    private fun ensureLocationPermission() {
+        PermissionsFragment.get(this)!!.ensurePermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+    }
+
+    private fun showDeviceInfoView(showDeviceInfoSlider: Boolean) {
         findViewById<View>(R.id.device_info_bottom_sheet).isVisible = showDeviceInfoSlider
     }
+
 }
