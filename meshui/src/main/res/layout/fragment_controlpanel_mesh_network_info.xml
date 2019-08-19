@@ -60,6 +60,47 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/p_controlpanel_mesh_inspect_network_network_id_frame"
+        android:layout_width="0dp"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingRight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_name_frame"
+        tools:layout_height="48dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:gravity="center_vertical|start"
+            android:text="Network ID"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium" />
+
+        <TextView
+            android:id="@+id/p_controlpanel_mesh_inspect_network_network_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:maxLines="1"
+            android:textColor="@color/half_black"
+            android:textSize="18sp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="18sp"
+            tools:text="abcdef123456" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/p_controlpanel_mesh_inspect_network_xpan_id_frame"
         android:layout_width="0dp"
         android:layout_height="?attr/listPreferredItemHeightSmall"
@@ -71,7 +112,7 @@
         android:paddingEnd="?attr/listPreferredItemPaddingRight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_name_frame"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_network_id_frame"
         tools:layout_height="48dp">
 
         <TextView
@@ -171,48 +212,6 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/p_controlpanel_mesh_inspect_network_network_id_frame"
-        android:layout_width="0dp"
-        android:layout_height="?attr/listPreferredItemHeightSmall"
-        android:background="@android:color/white"
-        android:elevation="4dp"
-        android:foreground="?attr/selectableItemBackground"
-        android:orientation="horizontal"
-        android:paddingStart="?attr/listPreferredItemPaddingLeft"
-        android:paddingEnd="4dp"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_channel_frame"
-        tools:layout_height="48dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:gravity="center_vertical|start"
-            android:text="Network ID"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium" />
-
-        <TextView
-            android:id="@+id/p_controlpanel_data_limit_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/ic_chevron_right_gray_24dp"
-            android:gravity="center_vertical|end"
-            android:text=" "
-            android:textColor="@color/half_black"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
-            tools:ignore="MissingPrefix" />
-
-    </LinearLayout>
-
     <LinearLayout
         android:id="@+id/p_controlpanel_mesh_inspect_network_device_count_frame"
         android:layout_width="0dp"
@@ -225,7 +224,7 @@
         android:paddingEnd="?attr/listPreferredItemPaddingRight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_network_id_frame"
+        app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_channel_frame"
         tools:layout_height="48dp">
 
         <TextView
@@ -303,6 +302,7 @@
             tools:text="Gateway" />
 
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/p_controlpanel_action_leave_network_frame"
         android:layout_width="0dp"
@@ -310,9 +310,9 @@
         android:layout_marginTop="80dp"
         android:background="@color/white"
         android:elevation="4dp"
+        app:layout_constraintBottom_toTopOf="@id/p_controlpanel_bottom_padding_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/p_controlpanel_bottom_padding_guideline"
         app:layout_constraintTop_toBottomOf="@id/p_controlpanel_mesh_inspect_network_device_role_frame">
 
         <TextView

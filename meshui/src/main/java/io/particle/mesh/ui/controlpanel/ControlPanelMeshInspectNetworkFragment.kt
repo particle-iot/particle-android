@@ -71,13 +71,7 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
         p_controlpanel_mesh_inspect_network_pan_id.text = networkInfo.panId.toString()
         p_controlpanel_mesh_inspect_network_xpan_id.text = networkInfo.extPanId.toString()
         p_controlpanel_mesh_inspect_network_channel.text = networkInfo.channel.toString()
-
-        p_controlpanel_mesh_inspect_network_network_id_frame.setOnClickListener {
-            flowSystemInterface.navControllerLD.value?.navigate(
-                R.id.action_global_controlPanelNetworkIdFragment,
-                ControlPanelNetworkIdFragmentArgs(networkInfo.networkId).toBundle()
-            )
-        }
+        p_controlpanel_mesh_inspect_network_network_id.text = networkInfo.networkId
 
         flowScopes.onMain {
             flowSystemInterface.showGlobalProgressSpinner(true)
