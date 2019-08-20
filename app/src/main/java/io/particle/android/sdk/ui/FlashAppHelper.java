@@ -38,7 +38,7 @@ class FlashAppHelper {
 
     static void flashPhotonTinkerWithDialog(final FragmentActivity activity,
                                             final ParticleDevice device) {
-        final InputStream inputStream = activity.getResources().openRawResource(R.raw.photon_tinker);
+        final InputStream inputStream = activity.getResources().openRawResource(R.raw.tinker_firmware_photon);
         new AlertDialog.Builder(activity)
                 .setMessage("Flash Tinker?")
                 .setPositiveButton(R.string.flash, (dialog, which) -> flashFromStream(
