@@ -69,7 +69,7 @@ class DeviceFilterFragment : Fragment() {
 
         action_reset.setOnClickListener { filterViewModel.draftDeviceFilter.resetConfig() }
 
-        action_close.setOnClickListener {
+        p_action_back.setOnClickListener {
             draftDeviceFilter.updateFromLiveConfig()
             closeFilterView()
         }
