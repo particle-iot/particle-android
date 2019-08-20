@@ -47,14 +47,10 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_model_name"
+        style="@style/device_type_pill"
         fontPath="@string/bold_text_font_name"
-        android:layout_width="70sp"
-        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/inspector_border"
-        android:gravity="center"
         android:textColor="@color/teal"
-        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

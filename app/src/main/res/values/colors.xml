@@ -12,13 +12,6 @@
     <color name="wisteria">#8e44ad</color>
     <color name="orange">#f39c12</color>
 
-    <color name="spark_blue">#00aeef</color>
-    <color name="device_color_electron">#00AE42</color>
-    <color name="device_color_photon">#B31983</color>
-    <color name="device_color_xenon">#F5A800</color>
-    <color name="device_color_boron">#ED1C24</color>
-    <color name="device_color_other">#76777A</color>
-
     <color name="device_item_bg">#11555555</color>
 
     <array name="core_colors">

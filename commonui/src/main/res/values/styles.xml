@@ -109,4 +109,13 @@
         <item name="android:indeterminateDuration">2000</item>
     </style>
 
+    <style name="device_type_pill">
+        <item name="fontPath">@string/bold_text_font_name</item>
+        <item name="android:layout_width">70sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/inspector_border</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

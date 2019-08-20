@@ -121,9 +121,8 @@ class DeviceInfoBottomSheetController(
     }
 
     fun updateDeviceDetails() {
-        val productName = root.context.getString(device.deviceType!!.productName)
-        root.device_type.text = productName
-        root.collapsed_device_type.text = productName
+        root.device_type.styleAsPill(device.deviceType!!)
+        root.collapsed_device_pill.styleAsPill(device.deviceType!!)
         root.product_image.setImageResource(device.deviceType!!.productImage)
         root.device_name.text = device.name
         root.device_id.text = device.id.toUpperCase()
@@ -152,7 +151,7 @@ class DeviceInfoBottomSheetController(
             ),
 
             Mutator(
-                root.collapsed_device_type,
+                root.collapsed_device_pill,
                 listOf(FADE, RESIZE_HEIGHT),
                 ShownWhen.COLLAPSED
             )

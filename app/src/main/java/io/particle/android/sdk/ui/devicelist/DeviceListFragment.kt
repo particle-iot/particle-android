@@ -39,13 +39,14 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
-import io.particle.android.sdk.ui.toDecorationColor
+import io.particle.commonui.toDecorationColor
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.commonui.productName
+import io.particle.commonui.styleAsPill
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.flow.Scopes
@@ -387,7 +388,7 @@ internal class DeviceListAdapter(
 
         val ctx = holder.topLevel.context
 
-        holder.modelName.setText(device.deviceType!!.productName)
+        holder.modelName.styleAsPill(device.deviceType!!)
         holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
         holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
         holder.statusDot.animation?.cancel()
@@ -395,16 +396,6 @@ internal class DeviceListAdapter(
             val animFade = AnimationUtils.loadAnimation(ctx, R.anim.fade_in_out)
             holder.statusDot.startAnimation(animFade)
         }
-
-
-        @ColorInt val colorValue: Int = ContextCompat.getColor(
-            ctx,
-            device.deviceType!!.toDecorationColor()
-        )
-        val bg = holder.modelName.background
-        bg.mutate()
-        DrawableCompat.setTint(bg, colorValue)
-        holder.modelName.setTextColor(colorValue)
 
         val name = if (truthy(device.name))
             device.name

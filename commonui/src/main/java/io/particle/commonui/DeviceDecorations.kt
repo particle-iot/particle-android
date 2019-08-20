@@ -1,6 +1,10 @@
-package io.particle.android.sdk.ui
+package io.particle.commonui
 
+import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
@@ -18,7 +22,19 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
-import io.particle.sdk.app.R
+
+
+fun TextView.styleAsPill(deviceType: ParticleDeviceType) {
+    @ColorInt val colorValue: Int = ContextCompat.getColor(
+        context,
+        deviceType.toDecorationColor()
+    )
+    val bg = this.background
+    bg.mutate()
+    DrawableCompat.setTint(bg, colorValue)
+    this.setTextColor(colorValue)
+    this.setText(deviceType.productName)
+}
 
 
 // this would be an extension property, but you can't use annotations like @ColorRes on
@@ -57,9 +73,12 @@ fun ParticleDeviceType.toDecorationLetter(): String {
         RED_BEAR_DUO -> "D"
         ESP32 -> "ES"
         BLUZ -> "BZ"
-        ARGON, A_SOM -> "A"
-        BORON, B_SOM -> "B"
-        XENON, X_SOM -> "X"
+        ARGON,
+        A_SOM -> "A"
+        BORON,
+        B_SOM -> "B"
+        XENON,
+        X_SOM -> "X"
         DIGISTUMP_OAK,
         OTHER -> "?"
     }
