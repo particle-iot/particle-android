@@ -36,7 +36,7 @@ class DeviceFilterFragment : Fragment() {
             action_filter_online_status_offline to OnlineStatusFilter.OFFLINE_ONLY
         )
     }
-    private val deviceTypeFilterbuttons: Map<DeviceTypeFilter, CheckedTextView> by lazy {
+    private val deviceTypeFilterbuttons: Map<DeviceTypeFilter, DeviceTypeFilterButton> by lazy {
         arrayMapOf(
             DeviceTypeFilter.BORON to action_filter_device_type_boron,
             DeviceTypeFilter.ELECTRON to action_filter_device_type_electron,
@@ -96,7 +96,8 @@ class DeviceFilterFragment : Fragment() {
             )
     }
 
-    private fun setUpDeviceTypeFilter(view: CheckedTextView, filter: DeviceTypeFilter) {
+    private fun setUpDeviceTypeFilter(view: DeviceTypeFilterButton, filter: DeviceTypeFilter) {
+        view.filter = filter
         view.setOnClickListener {
             val isChecked = !view.isChecked // set from the last time the UI updated from the model
 
@@ -153,7 +154,7 @@ class DeviceFilterFragment : Fragment() {
         for (deviceTypeFilter in DeviceTypeFilter.values()) {
             val shouldBeChecked = config.deviceTypeFilters.contains(deviceTypeFilter)
             val button = deviceTypeFilterbuttons[deviceTypeFilter]
-            updateCheckedButton(button!!, shouldBeChecked)
+            button?.isChecked = shouldBeChecked
         }
 
         // set this last to avoid some observer loops
