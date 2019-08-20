@@ -93,10 +93,11 @@
         android:id="@+id/collapsed_expander"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@+id/collapsed_device_type"
         app:layout_constraintEnd_toStartOf="@+id/end_guideline"
-        app:layout_constraintTop_toTopOf="@+id/collapsed_device_type"
+        app:layout_constraintTop_toTopOf="@+id/device_name"
         app:srcCompat="@drawable/ic_expand_less_black_24dp" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -106,6 +107,17 @@
         app:layout_constraintBottom_toBottomOf="@+id/online_status_text"
         app:layout_constraintStart_toStartOf="@+id/device_name"
         app:layout_constraintTop_toTopOf="@+id/online_status_text"
+        app:srcCompat="@drawable/device_status_dot_online_tinker" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/online_status_dot_collapsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/collapsed_device_type"
+        app:layout_constraintEnd_toStartOf="@+id/collapsed_expander"
+        app:layout_constraintTop_toTopOf="@+id/device_name"
         app:srcCompat="@drawable/device_status_dot_online_tinker" />
 
     <TextView
