@@ -64,8 +64,6 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-
-
         adapter = KnownWifiNetworksAdapter(::onWifiNetworkSelected)
         recyclerView.adapter = adapter
 
@@ -127,9 +125,9 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
         flowSystemInterface.showGlobalProgressSpinner(true)
         runWithTransceiver("Error removing network ${toRemove.ssid}") { xceiver, scopes ->
             scopes.onWorker {
-                xceiver.sendRemoveKnownNetworkRequest(toRemove.ssid)
-                delay(100)
                 xceiver.sendStartListeningMode()
+                delay(100)
+                xceiver.sendRemoveKnownNetworkRequest(toRemove.ssid)
                 delay(1000)
                 xceiver.sendStopListeningMode()
                 scopes.onMain { reloadNetworks() }
