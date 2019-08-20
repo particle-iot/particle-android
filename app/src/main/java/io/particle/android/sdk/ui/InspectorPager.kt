@@ -19,7 +19,7 @@ internal class InspectorPager(
 
     // NOTE: the keys in this map are the positions of the fragments.
     private val fragmentsData = SparseArrayCompat<FragmentData>().apply {
-        addAllInThisOrder(
+        addInGivenOrder(
             "Events" to EventsFragment.newInstance(device),
             "Functions" to FunctionsAndVariablesFragment.newInstance(device, DisplayMode.FUNCTIONS),
             "Variables" to FunctionsAndVariablesFragment.newInstance(device, DisplayMode.VARIABLES),
@@ -43,7 +43,7 @@ internal class InspectorPager(
 }
 
 
-private fun SparseArrayCompat<FragmentData>.addAllInThisOrder(vararg pairs: Pair<String, Fragment>) {
+private fun SparseArrayCompat<FragmentData>.addInGivenOrder(vararg pairs: Pair<String, Fragment>) {
     pairs.forEachIndexed { index, element ->
         this.put(index, FragmentData(element.first, element.second))
     }
