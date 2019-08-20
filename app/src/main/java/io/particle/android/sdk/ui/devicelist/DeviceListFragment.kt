@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -389,6 +390,12 @@ internal class DeviceListAdapter(
         holder.modelName.setText(device.deviceType!!.productName)
         holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
         holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
+        holder.statusDot.animation?.cancel()
+        if (device.isConnected) {
+            val animFade = AnimationUtils.loadAnimation(ctx, R.anim.fade_in_out)
+            holder.statusDot.startAnimation(animFade)
+        }
+
 
         @ColorInt val colorValue: Int = ContextCompat.getColor(
             ctx,
