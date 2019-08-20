@@ -152,12 +152,7 @@ class InspectorActivity : BaseActivity() {
             R.id.action_launchcontrol_panel -> {
                 startActivity(ControlPanelActivity.buildIntent(this, device))
             }
-            else -> {
-                val actionId = item.itemId
-
-                return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
-                        super.onOptionsItemSelected(item)
-            }
+            else -> { return false }
         }
 
         return true

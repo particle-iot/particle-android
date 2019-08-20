@@ -1,7 +1,10 @@
 package io.particle.mesh.setup.utils
 
+import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,11 +24,18 @@ enum class ToastGravity(val asGravityInt: Int) {
 }
 
 
-fun Context.safeToast(
-    text: CharSequence,
+fun Context?.safeToast(
+    text: CharSequence?,
     duration: ToastDuration = ToastDuration.SHORT,
     gravity: ToastGravity = ToastGravity.BOTTOM
 ) {
+    if (this == null) {
+        return
+    }
+    if (text == null) {
+        Log.w("safeToast", "No text specified!")
+        return
+    }
     GlobalScope.launch(Dispatchers.Main) {
         val toast = Toast.makeText(this@safeToast, text, duration.length)
         toast.setGravity(gravity.asGravityInt, 0, 0)
