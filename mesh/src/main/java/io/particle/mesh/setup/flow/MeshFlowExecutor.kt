@@ -1,6 +1,5 @@
 package io.particle.mesh.setup.flow
 
-import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import com.snakydesign.livedataextensions.nonNull
@@ -326,8 +325,6 @@ class MeshFlowExecutor(
 
             CONTROL_PANEL_WIFI_ADD_NETWORK_FLOW -> listOf(
                 StepStartListeningModeForTarget(deps.flowUi),
-                StepShowPricingImpact(deps.flowUi, deps.cloud),
-                StepShowShouldConnectToDeviceCloudConfirmation(deps.flowUi),
                 StepCollectUserWifiNetworkSelection(deps.flowUi),
                 StepCollectSelectedWifiNetworkPassword(deps.flowUi),
                 StepEnsureSelectedWifiNetworkJoined(deps.flowUi),
@@ -363,7 +360,6 @@ class MeshFlowExecutor(
                 StepShowSimUnpauseUi(deps.flowUi),
                 StepUnpauseSim(deps.cloud, deps.flowUi)
             )
-
 
             CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT -> listOf(
                 StepShowSetDataLimitUi(deps.flowUi),
