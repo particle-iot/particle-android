@@ -135,7 +135,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/home/jensck/Library/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_filter_list_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/home/jensck/Library/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_clear_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -145,9 +145,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="afafaf" />
-                            <entry key="outputName" value="p_mesh_ic_capability_wifi" />
+                            <entry key="outputName" value="ic_clear_text_black_24dp" />
                             <entry key="sourceFile" value="$USER_HOME$/Inbox/device_connectivity_icons/p_mesh_ic_capability_wifi.svg" />
                           </map>
                         </option>

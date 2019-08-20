@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -18,6 +19,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
@@ -187,6 +189,12 @@ class DeviceListFragment : Fragment() {
             }
         }
 
+        search_icon.setOnClickListener {
+            name_filter_input.requestFocus()
+            val imm: InputMethodManager? = requireContext().getSystemService()
+            imm?.showSoftInput(name_filter_input, InputMethodManager.SHOW_IMPLICIT)
+        }
+        clear_text_icon.setOnClickListener { name_filter_input.setText("") }
 
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
             viewLifecycleOwner,
@@ -263,6 +271,8 @@ class DeviceListFragment : Fragment() {
         } else {
             name_filter_input.hint = "Search in ${filteredDevices.size} of ${completeDevices.size} devices"
         }
+
+        clear_text_icon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
     }
 
     private fun buildNameFilterTextWatcher(): TextWatcher {
