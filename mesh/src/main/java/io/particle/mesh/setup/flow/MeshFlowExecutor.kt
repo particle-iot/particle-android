@@ -309,7 +309,8 @@ class MeshFlowExecutor(
                 StepRemoveDeviceFromAnyMeshNetwork(deps.cloud, deps.flowUi),
                 StepCreateNewMeshNetworkOnCloud(deps.cloud),
                 StepCreateNewMeshNetworkOnLocalDevice(),
-                StepShowSingleTaskCongratsScreen(deps.flowUi, "Mesh network created")
+                StepShowSingleTaskCongratsScreen(deps.flowUi, "Mesh network created"),
+                StepEnsureListeningStoppedForBothDevices()
             )
 
             STANDALONE_POSTFLOW -> listOf(
