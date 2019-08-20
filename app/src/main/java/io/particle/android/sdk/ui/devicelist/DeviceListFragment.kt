@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -29,6 +30,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.snakydesign.livedataextensions.nonNull
 import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
@@ -186,7 +188,7 @@ class DeviceListFragment : Fragment() {
         }
 
 
-        filterViewModel.currentDeviceFilter.filteredDeviceListLD.observe(
+        filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
             viewLifecycleOwner,
             Observer { onDeviceListUpdated(it) }
         )
@@ -212,8 +214,26 @@ class DeviceListFragment : Fragment() {
         deviceSetupCompleteReceiver!!.unregister(activity)
     }
 
-    private fun onDeviceListUpdated(devices: List<ParticleDevice>?) {
+    private fun onDeviceListUpdated(devices: List<ParticleDevice>) {
+        val ctx = context ?: return
+
         refresh_layout.isRefreshing = false
+
+        val currentConfig = filterViewModel.currentDeviceFilter.deviceListViewConfigLD.value
+        val (filterIcon, filterBg) = if (currentConfig == defaultDeviceListConfig) {
+            Pair(
+                ctx.getDrawable(R.drawable.ic_filter_list_gray_24dp),
+                null
+            )
+        } else {
+            val gray = ctx.getDrawable(R.drawable.ic_filter_list_gray_24dp)!!
+            gray.mutate()
+            val white = ContextCompat.getColor(ctx, android.R.color.white)
+            DrawableCompat.setTint(gray, white)
+            Pair(gray, ctx.getDrawable(R.drawable.bg_device_filter_active))
+        }
+        filter_button.setImageDrawable(filterIcon)
+        filter_button.background = filterBg
 
         updateEmptyMessageAndSearchBox()
 
