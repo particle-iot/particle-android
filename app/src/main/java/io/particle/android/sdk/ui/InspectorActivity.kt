@@ -1,6 +1,5 @@
 package io.particle.android.sdk.ui
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,7 +14,6 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import io.particle.android.sdk.cloud.BroadcastContract
@@ -102,6 +100,8 @@ class InspectorActivity : BaseActivity() {
 
     private fun updateDetails() {
         title = device.name
+        // FIXME: and update the device indicator that we have to add to the device info slider
+        // FIXME: and update the Tinker fragment state
     }
 
     public override fun onResume() {
@@ -109,17 +109,17 @@ class InspectorActivity : BaseActivity() {
         EventBus.getDefault().register(this)
 
         scopes.onWorker {
+            val owned = cloud.userOwnsDevice(device.id)
+            if (!owned) {
+                scopes.onMain { finish() }
+            }
+
+            device.refresh()
+
             try {
                 device.subscribeToSystemEvents()
             } catch (ex: ParticleCloudException) {
                 // minor issue if we don't update online/offline states
-            }
-
-            val owned = cloud.userOwnsDevice(device.id)
-            if (!owned) {
-                scopes.onMain { finish() }
-            } else {
-                device.refresh()
             }
         }
     }
