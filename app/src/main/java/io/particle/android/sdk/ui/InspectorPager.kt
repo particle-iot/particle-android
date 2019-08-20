@@ -27,8 +27,6 @@ internal class InspectorPager(
         )
     }
 
-    private val isRunningTinker = device.isRunningTinker
-
     override fun getPageTitle(position: Int): CharSequence? {
         return fragmentsData[position]?.title
     }
@@ -38,7 +36,7 @@ internal class InspectorPager(
     }
 
     override fun getCount(): Int {
-        return if (isRunningTinker) 4 else 3
+        return fragmentsData.size()
     }
 }
 
