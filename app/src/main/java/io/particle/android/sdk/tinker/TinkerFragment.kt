@@ -14,18 +14,20 @@ import android.widget.TextView
 import androidx.collection.ArrayMap
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.ui.DeviceActionsHelper
+import io.particle.android.sdk.ui.flashTinkerWithDialog
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Prefs
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.map
 import io.particle.android.sdk.utils.TLog
-import io.particle.android.sdk.utils.Toaster
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import java.io.IOException
 import java.util.*
@@ -40,9 +42,8 @@ private const val ANALOG_READ_MAX = 4095
 private const val ANALOG_WRITE_MAX = 255
 private const val ANALOG_WRITE_MAX_ALT = ANALOG_READ_MAX
 
-/**
- * A fragment representing a single Tinker screen.
- */
+
+/** A fragment representing a single Tinker screen. */
 class TinkerFragment : Fragment(), OnClickListener {
 
     companion object {
@@ -58,14 +59,14 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private val allPins = list<Pin>()
     private val pinsByName = map<String, Pin>()
+    private val devicesUpdatedListener = DevicesUpdatedListener()
+
+    private lateinit var device: ParticleDevice
+    private lateinit var api: TinkerApi
+    private lateinit var prefs: Prefs
 
     private var selectedPin: Pin? = null
     private var selectDialog: AlertDialog? = null
-    private var device: ParticleDevice? = null
-    private var api: TinkerApi? = null
-    private var prefs: Prefs? = null
-
-    private val devicesUpdatedListener = DevicesUpdatedListener()
 
     private val pinInWriteMode: Pin?
         get() {
@@ -85,7 +86,7 @@ class TinkerFragment : Fragment(), OnClickListener {
         device = if (savedInstanceState != null) {
             savedInstanceState.getParcelable(STATE_DEVICE)
         } else {
-            arguments!!.getParcelable(ARG_DEVICE)
+            requireArguments().getParcelable(ARG_DEVICE)
         }
         api = TinkerApi()
     }
@@ -104,11 +105,12 @@ class TinkerFragment : Fragment(), OnClickListener {
         unmutePins()  // hack to make the pins show their functions correctly on first load
         setupListeners()
 
-        if (TinkerPrefs.getInstance(activity!!).isFirstVisit) {
-            fragmentManager!!.beginTransaction()
-                .add(R.id.instructions_container, InstructionsFragment())
-                .addToBackStack("InstructionsFragment_TRANSACTION")
-                .commit()
+        if (TinkerPrefs.getInstance(requireActivity()).isFirstVisit) {
+            fragmentManager?.commit {
+                add(R.id.instructions_container, InstructionsFragment())
+                addToBackStack("InstructionsFragment_TRANSACTION")
+            }
+        }
         }
     }
 
@@ -133,27 +135,31 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        // we handle both the context device row actions here and our own
-        //        inflater.inflate(R.menu.context_device_row, menu);
         inflater.inflate(R.menu.tinker, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val actionId = item.itemId
-        if (DeviceActionsHelper.takeActionForDevice(actionId, activity, device)) {
-            return true
+        return if (DeviceActionsHelper.takeActionForDevice(
+                actionId,
+                requireActivity(),
+                device,
+                requireActivity().findViewById(R.id.inspector_tab_section)
+            )
+        ) {
+            true
 
         } else if (actionId == R.id.action_device_clear_tinker) {
-            prefs!!.clearTinker(device!!.id)
+            prefs.clearTinker(device.id)
             for (pin in allPins) {
                 pin.configuredAction = PinAction.NONE
                 pin.reset()
             }
             unmutePins()
-            return true
+            true
 
         } else {
-            return super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
         }
     }
 
@@ -189,7 +195,7 @@ class TinkerFragment : Fragment(), OnClickListener {
             PinAction.DIGITAL_WRITE
         )
 
-        when (device!!.deviceType) {
+        when (device.deviceType) {
             ParticleDevice.ParticleDeviceType.CORE -> {
                 allPins.add(Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", allFunctions))
                 allPins.add(Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", allFunctions))
@@ -303,7 +309,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         for (pin in allPins) {
             pinsByName[pin.name] = pin
-            val pinFunction = prefs!!.getPinFunction(device!!.id, pin.name)
+            val pinFunction = prefs.getPinFunction(device.id, pin.name)
             pin.configuredAction = pinFunction
         }
     }
@@ -557,7 +563,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         selectedPin!!.reset()
         selectedPin.configuredAction = action
-        prefs!!.savePinFunction(device!!.id, selectedPin.name, action)
+        prefs.savePinFunction(device.id, selectedPin.name, action)
         // FIXME: should this actually be commented out?
         //		 hideTinkerSelect();
         //		 unmutePins();
@@ -565,7 +571,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private fun doAnalogRead(pin: Pin) {
         pin.animateYourself()
-        api!!.read(PinStuff(pin.name, PinAction.ANALOG_READ, pin.analogValue))
+        api.read(PinStuff(pin.name, PinAction.ANALOG_READ, pin.analogValue))
         // pin.showAnalogRead(850);
     }
 
@@ -583,14 +589,14 @@ class TinkerFragment : Fragment(), OnClickListener {
                 hideTinkerSelect()
                 pin.animateYourself()
                 pin.showAnalogValue(value)
-                api!!.write(PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.analogValue), value)
+                api.write(PinStuff(pin.name, PinAction.ANALOG_WRITE, pin.analogValue), value)
             }
         })
     }
 
     private fun doDigitalRead(pin: Pin) {
         pin.animateYourself()
-        api!!.read(PinStuff(pin.name, PinAction.DIGITAL_READ, pin.digitalValue!!.intValue))
+        api.read(PinStuff(pin.name, PinAction.DIGITAL_READ, pin.digitalValue!!.intValue))
         // pin.showDigitalRead(DigitalValue.HIGH);
     }
 
@@ -601,7 +607,7 @@ class TinkerFragment : Fragment(), OnClickListener {
             DigitalValue.LOW
         else
             DigitalValue.HIGH
-        api!!.write(
+        api.write(
             PinStuff(pin.name, PinAction.DIGITAL_WRITE, currentValue!!.intValue),
             newValue.intValue
         )
@@ -654,7 +660,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         internal fun write(stuff: PinStuff, newValue: Int) {
             try {
-                Async.executeAsync(device!!, object : TinkerWork(stuff) {
+                Async.executeAsync(device, object : TinkerWork(stuff) {
                     @Throws(ParticleCloudException::class, IOException::class)
                     override fun callApi(sparkDevice: ParticleDevice): Int? {
                         val stringValue: String
@@ -674,7 +680,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                             else
                                 stuff.currentValue
                         } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            activity?.let { Toaster.s(it, e.message) }
+                            e.message?.let { activity.safeToast(it) }
                             return stuff.currentValue // it didn't change
                         }
 
@@ -692,7 +698,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         internal fun read(stuff: PinStuff) {
             try {
-                Async.executeAsync(device!!, object : TinkerWork(stuff) {
+                Async.executeAsync(device, object : TinkerWork(stuff) {
                     @Throws(ParticleCloudException::class, IOException::class)
                     override fun callApi(sparkDevice: ParticleDevice): Int? {
                         try {
@@ -701,7 +707,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                                 list(stuff.pinName)
                             )
                         } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            activity?.let { Toaster.s(it, e.message) }
+                            activity.safeToast(e.message)
                             return stuff.currentValue
                         }
 
