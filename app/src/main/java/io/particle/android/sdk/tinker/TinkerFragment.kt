@@ -12,6 +12,7 @@ import android.view.*
 import android.view.View.OnClickListener
 import android.widget.TextView
 import androidx.collection.ArrayMap
+import androidx.collection.arrayMapOf
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -23,8 +24,6 @@ import io.particle.android.sdk.ui.DeviceActionsHelper
 import io.particle.android.sdk.ui.flashTinkerWithDialog
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Prefs
-import io.particle.android.sdk.utils.Py.list
-import io.particle.android.sdk.utils.Py.map
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.mesh.setup.utils.safeToast
@@ -57,8 +56,8 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private val log = TLog.get(TinkerFragment::class.java)
 
-    private val allPins = list<Pin>()
-    private val pinsByName = map<String, Pin>()
+    private var allPins: MutableList<Pin> = mutableListOf()
+    private var pinsByName: MutableMap<String, Pin> = arrayMapOf()
     private val devicesUpdatedListener = DevicesUpdatedListener()
 
     private lateinit var device: ParticleDevice
@@ -317,7 +316,7 @@ class TinkerFragment : Fragment(), OnClickListener {
     private fun setupListeners() {
         // Set up pin listeners
         for (pin in allPins) {
-            for (view in list(pin.view, pin.view.parent as ViewGroup)) {
+            for (view in listOf(pin.view, pin.view.parent as ViewGroup)) {
                 view.setOnClickListener { v ->
                     val writeModePin = pinInWriteMode
                     if (writeModePin != null && pin != selectedPin) {
@@ -396,7 +395,7 @@ class TinkerFragment : Fragment(), OnClickListener {
         val analogWrite = Ui.findView<View>(selectDialogView, R.id.tinker_button_analog_write)
         val digitalRead = Ui.findView<View>(selectDialogView, R.id.tinker_button_digital_read)
         val digitalWrite = Ui.findView<View>(selectDialogView, R.id.tinker_button_digital_write)
-        val allButtons = list(analogRead, analogWrite, digitalRead, digitalWrite)
+        val allButtons = listOf(analogRead, analogWrite, digitalRead, digitalWrite)
 
         analogRead.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
@@ -673,7 +672,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                         try {
                             return if (sparkDevice.callFunction(
                                     actionToFunctionName[stuff.pinAction]!!,
-                                    list(stuff.pinName, stringValue)
+                                    listOf(stuff.pinName, stringValue)
                                 ) == 1
                             )
                                 newValue
@@ -704,7 +703,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                         try {
                             return sparkDevice.callFunction(
                                 actionToFunctionName[stuff.pinAction]!!,
-                                list(stuff.pinName)
+                                listOf(stuff.pinName)
                             )
                         } catch (e: ParticleDevice.FunctionDoesNotExistException) {
                             activity.safeToast(e.message)
