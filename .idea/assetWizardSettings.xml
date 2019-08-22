@@ -51,7 +51,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="55" />
+                                                <entry key="scalingPercent" value="53" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -62,7 +62,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundImage" value="$PROJECT_DIR$/app/src/main/res/drawable/bg_adaptive_icon.xml" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Inbox/ic_launcher_fg_new.png" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Inbox/app_assets_self_made/ic_launcher_fg_new_take2.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
