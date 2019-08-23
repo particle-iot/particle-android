@@ -23,7 +23,8 @@ import kotlinx.coroutines.delay
 class CreatingMeshNetworkFragment : BaseFlowFragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_creating_mesh_network, container, false)
@@ -37,15 +38,17 @@ class CreatingMeshNetworkFragment : BaseFlowFragment() {
 
 
         // "Registering network with the cloud"
-        flowUiListener.mesh.newNetworkIdLD
-            .map { it.truthy() }
-            .observeForProgress(R.id.status_stage_2)
+        observeForProgress(
+            flowUiListener.mesh.newNetworkIdLD.map { it.truthy() },
+            R.id.status_stage_2
+        ) {
+            observeForProgress(
+                flowUiListener.mesh.networkCreatedOnLocalDeviceLD,
+                R.id.status_stage_3
+            ) { flowScopes.onMain { markFakeProgress() } }
+        }
 
         // "Device creating the mesh network locally"
-        flowUiListener.mesh.networkCreatedOnLocalDeviceLD
-            .observeForProgressNullable(R.id.status_stage_3) {
-                flowScopes.onMain { markFakeProgress() }
-            }
 
         status_stage_1.text = Phrase.from(view, R.string.p_creatingyournetwork_step_1)
             .put("product_type", getUserFacingTypeName())
@@ -61,44 +64,6 @@ class CreatingMeshNetworkFragment : BaseFlowFragment() {
         if (isVisible) {
             markProgress(true, R.id.status_stage_5)
         }
-    }
-
-    internal fun LiveData<Boolean>.observeForProgress(
-        @IdRes progressStage: Int,
-        delayMillis: Long = 0,
-        runAfter: (() -> Unit)? = null
-    ) {
-        this.observe(
-            this@CreatingMeshNetworkFragment,
-            Observer {
-                flowScopes.onMain {
-                    if (delayMillis > 0) {
-                        delay(delayMillis)
-                    }
-                    markProgress(it, progressStage)
-                    runAfter?.invoke()
-                }
-            }
-        )
-    }
-
-    internal fun LiveData<Boolean?>.observeForProgressNullable(
-        @IdRes progressStage: Int,
-        delayMillis: Long = 0,
-        runAfter: (() -> Unit)? = null
-    ) {
-        this.observe(
-            this@CreatingMeshNetworkFragment,
-            Observer {
-                flowScopes.onMain {
-                    if (delayMillis > 0) {
-                        delay(delayMillis)
-                    }
-                    markProgress(it, progressStage)
-                    runAfter?.invoke()
-                }
-            }
-        )
     }
 
 }

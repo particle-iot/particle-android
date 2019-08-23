@@ -33,18 +33,13 @@ class EthernetConnectingToDeviceCloudFragment : BaseFlowFragment() {
         markProgress(true, R.id.status_stage_1)
 
         val target = flowUiListener.targetDevice
-        target.isDeviceConnectedToCloudLD.observeForProgress(R.id.status_stage_2)
-        target.isClaimedLD.observeForProgress(R.id.status_stage_3)
+        observeForProgress(target.isDeviceConnectedToCloudLD, R.id.status_stage_2) {
+            observeForProgress(target.isClaimedLD, R.id.status_stage_3)
+        }
 
         setup_header_text.text = Phrase.from(view, R.string.p_connectingtodevicecloud_title)
             .put("product_type", getUserFacingTypeName())
             .format()
     }
 
-    private fun LiveData<Boolean?>.observeForProgress(@IdRes progressStage: Int) {
-        this.observe(
-            this@EthernetConnectingToDeviceCloudFragment,
-            Observer { markProgress(it, progressStage) }
-        )
-    }
 }

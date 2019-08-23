@@ -28,17 +28,9 @@ class ArgonConnectingStatusFragment : BaseFlowFragment() {
 
         markProgress(true, R.id.status_stage_1) // setting Wi-Fi credentials, which is already done
 
-        flowUiListener.wifi.targetWifiNetworkJoinedLD.observe(this, Observer {
-            if (it.truthy()) {
-                markProgress(true, R.id.status_stage_2)
-            }
-        })
-
-        flowUiListener.targetDevice.isDeviceConnectedToCloudLD.observe(this, Observer {
-            if (it.truthy()) {
-                markProgress(true, R.id.status_stage_3)
-            }
-        })
+        observeForProgress(flowUiListener.wifi.targetWifiNetworkJoinedLD, R.id.status_stage_2) {
+            observeForProgress(flowUiListener.targetDevice.isDeviceConnectedToCloudLD, R.id.status_stage_3)
+        }
 
 //        flowUiListener.targetDevice.isClaimedLD.observe(this, Observer {
 //            if (it.truthy()) {
