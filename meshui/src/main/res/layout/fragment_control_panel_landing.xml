@@ -152,7 +152,7 @@
                     android:textSize="@dimen/text_size_medium"
                     app:compoundDrawableHeight="22dp"
                     app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_wifi_new" />
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_wifi" />
 
             </FrameLayout>
 
@@ -179,7 +179,7 @@
                     android:textSize="@dimen/text_size_medium"
                     app:compoundDrawableHeight="22dp"
                     app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_cellular_new" />
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_cellular" />
 
             </FrameLayout>
 
@@ -204,9 +204,9 @@
                     android:text="Ethernet"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_size_medium"
-                    app:compoundDrawableHeight="22dp"
-                    app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_ethernet_new" />
+                    app:compoundDrawableHeight="21dp"
+                    app:compoundDrawableWidth="21dp"
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_ethernet" />
 
             </FrameLayout>
 
@@ -233,7 +233,7 @@
                     android:textSize="@dimen/text_size_medium"
                     app:compoundDrawableHeight="22dp"
                     app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_mesh_new" />
+                    app:drawableStartVector="@drawable/p_mesh_ic_capability_mesh" />
 
             </FrameLayout>
 

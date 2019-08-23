@@ -11,5 +11,6 @@
     <dimen name="p_setup_step_text_size">15sp</dimen>
 
     <dimen name="p_mesh_bottom_element_margin">16dp</dimen>
+    <dimen name="p_device_info_slider_peek_height">82dp</dimen>
 
 </resources>

@@ -16,45 +16,56 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/device_status_dot_online_tinker" />
 
-
-    <TextView
-        android:id="@+id/product_name"
-        fontPath="@string/bold_text_font_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/material_text_size_subhead"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/last_handshake_text"
+    <LinearLayout
         app:layout_constraintStart_toEndOf="@id/online_status_dot"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:ignore="MissingPrefix"
-        tools:text="device_name" />
-
-    <TextView
-        android:id="@+id/last_handshake_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/p_faded_gray"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/product_name"
-        app:layout_constraintTop_toBottomOf="@+id/product_name"
-        tools:text="Mar 21, 2019, 12:31 PM" />
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="1dp"
+        android:gravity="center_vertical|start"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/product_name"
+            fontPath="@string/bold_text_font_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-1dp"
+            android:gravity="bottom|start"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/material_text_size_subhead"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/last_handshake_text"
+            app:layout_constraintStart_toEndOf="@id/online_status_dot"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.48"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:ignore="MissingPrefix"
+            tools:text="device_name" />
+
+        <TextView
+            android:id="@+id/last_handshake_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            android:gravity="top|start"
+            android:textColor="@color/p_faded_gray"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/product_name"
+            app:layout_constraintTop_toBottomOf="@+id/product_name"
+            tools:text="Mar 21, 2019, 12:31 PM" />
+
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_model_name"
+        style="@style/device_type_pill"
         fontPath="@string/bold_text_font_name"
-        android:layout_width="70sp"
-        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/inspector_border"
-        android:gravity="center"
         android:textColor="@color/teal"
-        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

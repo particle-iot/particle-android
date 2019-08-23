@@ -45,6 +45,7 @@ internal suspend fun retrySimAction(simActionBlock: () -> Unit) {
         try {
             simActionBlock()
             error = null
+            return
 
         } catch (ex: ParticleCloudException) {
             error = ex

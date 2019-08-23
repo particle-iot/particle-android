@@ -12,19 +12,17 @@ import androidx.lifecycle.Observer
 import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
-import io.particle.mesh.ui.utils.markProgress
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.utils.markProgress
 import kotlinx.android.synthetic.main.fragment_joining_mesh_network_progress.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class JoiningMeshNetworkProgressFragment : BaseFlowFragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_joining_mesh_network_progress, container, false)
@@ -33,11 +31,22 @@ class JoiningMeshNetworkProgressFragment : BaseFlowFragment() {
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        flowUiListener.mesh.commissionerStartedLD.observeForProgress(R.id.status_stage_1)
-        flowUiListener.mesh.targetJoinedMeshNetworkLD.observeForProgress(R.id.status_stage_2)
-        // FIXME: WAT.  These shouldn't observe the same LiveData!
-        flowUiListener.targetDevice.isClaimedLD.observeForProgress(R.id.status_stage_3, 1000)
-        flowUiListener.targetDevice.isClaimedLD.observeForProgress(R.id.status_stage_4, 2000)
+        observeForProgress(flowUiListener.mesh.commissionerStartedLD, R.id.status_stage_1) {
+            observeForProgress(flowUiListener.mesh.targetJoinedMeshNetworkLD, R.id.status_stage_2) {
+                observeForProgress(
+                    flowUiListener.targetDevice.isClaimedLD,
+                    R.id.status_stage_3,
+                    1000
+                ) {
+                    // FIXME: WAT.  These shouldn't observe the same LiveData!
+                    observeForProgress(
+                        flowUiListener.targetDevice.isClaimedLD,
+                        R.id.status_stage_4,
+                        2000
+                    )
+                }
+            }
+        }
 
         val productName = getUserFacingTypeName()
 
@@ -54,21 +63,28 @@ class JoiningMeshNetworkProgressFragment : BaseFlowFragment() {
             .put("product_type", productName)
             .format()
     }
+}
 
-    internal fun LiveData<Boolean?>.observeForProgress(
-        @IdRes progressStage: Int,
-        delayMillis: Long = 0
-    ) {
-        this.observe(
-            this@JoiningMeshNetworkProgressFragment,
-            Observer {
-                flowScopes.onMain {
-                    if (delayMillis > 0) {
-                        delay(delayMillis)
-                    }
-                    markProgress(it, progressStage)
-                }
+internal fun BaseFlowFragment.observeForProgress(
+    liveData: LiveData<Boolean?>,
+    @IdRes progressStage: Int,
+    delayMillis: Long = 0,
+    andThen: (() -> Unit)? = null
+) {
+    liveData.observe(
+        this,
+        Observer {
+            if (it != true) {
+                return@Observer
             }
-        )
-    }
+
+            flowScopes.onMain {
+                if (delayMillis > 0) {
+                    delay(delayMillis)
+                }
+                markProgress(it, progressStage)
+                andThen?.let { it() }
+            }
+        }
+    )
 }

@@ -34,11 +34,10 @@ class StepCheckIfTargetDeviceShouldBeClaimed(
     private suspend fun checkTargetDeviceIsClaimed(ctxs: SetupContexts, scopes: Scopes) {
         log.info { "checkTargetDeviceIsClaimed()" }
 
-        val targetDeviceId = ctxs.targetDevice.deviceId!!
-        val userOwnsDevice = cloud.userOwnsDevice(targetDeviceId)
+        val userOwnsDevice = userOwnsDevice(ctxs)
         log.info { "User owns device?: $userOwnsDevice" }
         if (userOwnsDevice) {
-            val device = cloud.getDevice(targetDeviceId)
+            val device = cloud.getDevice(ctxs.targetDevice.deviceId!!)
             ctxs.targetDevice.currentDeviceName = device.name
             ctxs.targetDevice.updateIsClaimed(true)
             ctxs.targetDevice.shouldBeClaimed = false
@@ -49,6 +48,15 @@ class StepCheckIfTargetDeviceShouldBeClaimed(
         ctxs.targetDevice.shouldBeClaimed = true
         // run through step again...
         doRunStep(ctxs, scopes)
+    }
+
+    private fun userOwnsDevice(ctxs: SetupContexts): Boolean {
+        if (ctxs.targetDevice.isClaimedLD.value == true) {
+            return true
+        }
+
+        val targetDeviceId = ctxs.targetDevice.deviceId!!
+        return cloud.userOwnsDevice(targetDeviceId)
     }
 
     private fun fetchClaimCode(ctxs: SetupContexts) {

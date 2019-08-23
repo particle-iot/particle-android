@@ -44,7 +44,7 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         systemInterface: FlowRunnerSystemInterface
     ): FlowUiDelegate
 
-    protected abstract fun onFlowTerminated()
+    protected abstract fun onFlowTerminated(nextAction: FlowTerminationAction)
 
     protected val navController: NavController
         get() = findNavController(navHostFragmentId)
@@ -84,9 +84,9 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         flowSystemInterface.shouldShowProgressSpinnerLD.nonNull()
             .observe(this, Observer { showGlobalProgressSpinner(it!!) })
 
-        flowSystemInterface.meshFlowTerminator.shouldTerminateFlowLD
-            .filter { it == true }
-            .observe(this, Observer { onFlowTerminated() })
+        flowSystemInterface.meshFlowTerminator.shouldTerminateFlowLD.nonNull()
+            .filter { it!!.first }
+            .observe(this, Observer { onFlowTerminated(it.second) })
     }
 
     override fun onPostResume() {

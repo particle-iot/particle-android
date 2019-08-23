@@ -21,19 +21,22 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <TextView
-        android:id="@+id/action_reset"
-        fontPath="@string/bold_text_font_name"
-        android:layout_width="wrap_content"
+<!--    <ImageButton-->
+<!--        android:id="@+id/p_action_back"-->
+<!--        android:layout_width="?attr/actionBarSize"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="?attr/selectableItemBackground"-->
+<!--        android:src="@drawable/p_ic_arrow_back_cyan_24dp" />-->
+
+    <ImageButton
+        android:id="@+id/p_action_back"
+        android:layout_width="48dp"
         android:layout_height="0dp"
+        android:adjustViewBounds="true"
         android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="Reset"
-        android:textAllCaps="true"
-        android:textColor="@color/p_particle_cyan"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/p_ic_arrow_back_cyan_24dp"
         app:layout_constraintBottom_toBottomOf="@id/title_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,15 +55,20 @@
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/action_close"
-        android:layout_width="48dp"
+    <TextView
+        android:id="@+id/action_reset"
+        fontPath="@string/bold_text_font_name"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:adjustViewBounds="true"
         android:background="?attr/selectableItemBackground"
-        android:padding="12dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/p_ic_close_cyan_24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="Clear all"
+        android:textAllCaps="true"
+        android:textColor="@color/p_particle_cyan"
         app:layout_constraintBottom_toBottomOf="@id/title_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/title_text" />
@@ -77,6 +85,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/action_button_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -177,22 +186,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <CheckedTextView
+                <io.particle.android.sdk.ui.devicelist.DeviceTypeFilterButton
                     android:id="@+id/action_filter_device_type_boron"
                     style="@style/device_filter_button.device_type"
                     android:background="@drawable/device_filter_button_background_selected"
-                    android:drawableTop="@drawable/device_status_dot_online_tinker"
-                    android:text="Boron / B SoM" />
+                    android:drawableTop="@drawable/device_status_dot_online_tinker" />
 
                 <View
                     android:layout_width="12dp"
                     android:layout_height="match_parent" />
 
-                <CheckedTextView
+                <io.particle.android.sdk.ui.devicelist.DeviceTypeFilterButton
                     android:id="@+id/action_filter_device_type_electron"
                     style="@style/device_filter_button.device_type"
-                    android:drawableTop="@drawable/device_status_dot_online_tinker"
-                    android:text="Electron / E SoM" />
+                    android:drawableTop="@drawable/device_status_dot_online_tinker" />
 
             </LinearLayout>
 
@@ -205,22 +212,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <CheckedTextView
+                <io.particle.android.sdk.ui.devicelist.DeviceTypeFilterButton
                     android:id="@+id/action_filter_device_type_argon"
                     style="@style/device_filter_button.device_type"
                     android:background="@drawable/device_filter_button_background_selected"
-                    android:drawableTop="@drawable/device_status_dot_online_tinker"
-                    android:text="Argon" />
+                    android:drawableTop="@drawable/device_status_dot_online_tinker" />
 
                 <View
                     android:layout_width="12dp"
                     android:layout_height="match_parent" />
 
-                <CheckedTextView
+                <io.particle.android.sdk.ui.devicelist.DeviceTypeFilterButton
                     android:id="@+id/action_filter_device_type_photon"
                     style="@style/device_filter_button.device_type"
-                    android:drawableTop="@drawable/device_status_dot_online_tinker"
-                    android:text="Photon / P1" />
+                    android:drawableTop="@drawable/device_status_dot_online_tinker" />
 
             </LinearLayout>
 
@@ -233,22 +238,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <CheckedTextView
+                <io.particle.android.sdk.ui.devicelist.DeviceTypeFilterButton
                     android:id="@+id/action_filter_device_type_xenon"
                     style="@style/device_filter_button.device_type"
                     android:background="@drawable/device_filter_button_background_selected"
-                    android:drawableTop="@drawable/device_status_dot_online_tinker"
-                    android:text="Xenon" />
+                    android:drawableTop="@drawable/device_status_dot_online_tinker" />
 
                 <View
                     android:layout_width="12dp"
                     android:layout_height="match_parent" />
 
-                <CheckedTextView
+                <io.particle.android.sdk.ui.devicelist.DeviceTypeFilterButton
                     android:id="@+id/action_filter_device_type_other"
                     style="@style/device_filter_button.device_type"
-                    android:layout_height="match_parent"
-                    android:text="Other" />
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 
@@ -267,10 +270,10 @@
 
     <Button
         android:id="@+id/action_filter_device_list"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/p_mesh_button_style"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:text="Show X devices"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"

@@ -1,6 +1,5 @@
 package io.particle.android.sdk.ui
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,23 +11,21 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
+import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.ParticleEventVisibility
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.models.DeviceStateChange
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.commonui.DeviceInfoBottomSheetController
+import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
@@ -60,6 +57,7 @@ class InspectorActivity : BaseActivity() {
         }
     }
 
+    private lateinit var devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
     private lateinit var device: ParticleDevice
     private val cloud = ParticleCloudSDK.getCloud()
     private val handler = Handler()
@@ -70,6 +68,12 @@ class InspectorActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_inspector)
 
         device = intent.getParcelableExtra(EXTRA_DEVICE)
@@ -77,7 +81,7 @@ class InspectorActivity : BaseActivity() {
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
-        title = device.name
+        updateDetails()
 
         setupInspectorPages()
         handler.postDelayed(syncStatus, 1000 * 60L)
@@ -89,32 +93,51 @@ class InspectorActivity : BaseActivity() {
             device
         )
         deviceInfoController.initializeBottomSheet()
+
+        var initialValue = 0
+        devicesUpdatedBroadcast = BroadcastReceiverLD(
+            this,
+            BroadcastContract.BROADCAST_DEVICES_UPDATED,
+            { ++initialValue },
+            true
+        )
+        devicesUpdatedBroadcast.observe(this, Observer { updateDetails() })
+    }
+
+    private fun updateDetails() {
+        title = device.name
+        // FIXME: and update the device indicator that we have to add to the device info slider
+        // FIXME: and update the Tinker fragment state
     }
 
     public override fun onResume() {
         super.onResume()
         EventBus.getDefault().register(this)
-        try {
-            device.subscribeToSystemEvents()
-        } catch (ignore: ParticleCloudException) {
-            //minor issue if we don't update online/offline states
-        }
 
         scopes.onWorker {
             val owned = cloud.userOwnsDevice(device.id)
             if (!owned) {
                 scopes.onMain { finish() }
-            } else {
-                device.refresh()
+            }
+
+            device.refresh()
+
+            try {
+                device.subscribeToSystemEvents()
+            } catch (ex: ParticleCloudException) {
+                // minor issue if we don't update online/offline states
             }
         }
     }
 
     public override fun onPause() {
         EventBus.getDefault().unregister(this)
-        try {
-            device.unsubscribeFromSystemEvents()
-        } catch (ignore: ParticleCloudException) {
+        scopes.onWorker {
+            try {
+                device.unsubscribeFromSystemEvents()
+            } catch (ex: ParticleCloudException) {
+                // ignore
+            }
         }
 
 //        action_signal_device.isChecked = false
@@ -131,17 +154,11 @@ class InspectorActivity : BaseActivity() {
         val id = item.itemId
         when (id) {
             android.R.id.home -> finish()
-//            R.id.action_event_publish -> presentPublishDialog()
+            R.id.action_event_publish -> presentPublishDialog()
             R.id.action_launchcontrol_panel -> {
                 startActivity(ControlPanelActivity.buildIntent(this, device))
             }
-            else -> {
-                val actionId = item.itemId
-
-                return DeviceActionsHelper.takeActionForDevice(actionId, this, device) ||
-                        DeviceMenuUrlHandler.handleActionItem(this, actionId, item.title) ||
-                        super.onOptionsItemSelected(item)
-            }
+            else -> { return false }
         }
 
         return true
@@ -149,14 +166,7 @@ class InspectorActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
-
-        val menuRes = when (device.deviceType) {
-            ARGON, A_SOM, BORON, B_SOM, XENON, X_SOM -> R.menu.inspector_gen3
-            else -> R.menu.inspector
-        }
-
-        menuInflater.inflate(menuRes, menu)
-
+        menuInflater.inflate(R.menu.inspector, menu)
         return true
     }
 
@@ -219,12 +229,10 @@ class InspectorActivity : BaseActivity() {
     private fun presentPublishDialog() {
         val publishDialogView = View.inflate(this, R.layout.publish_event, null)
 
-        AlertDialog.Builder(
-            this,
-            R.style.ParticleSetupTheme_DialogNoDimBackground
-        )
-            .setView(publishDialogView)
-            .setPositiveButton(R.string.publish_positive_action) { _, _ ->
+        MaterialDialog.Builder(this)
+            .customView(publishDialogView, false)
+            .positiveText(R.string.publish_positive_action)
+            .onPositive { _, _ ->
                 val nameView = Ui.findView<TextView>(publishDialogView, R.id.eventName)
                 val valueView = Ui.findView<TextView>(publishDialogView, R.id.eventValue)
                 val privateEventRadio: RadioButton =
@@ -239,9 +247,9 @@ class InspectorActivity : BaseActivity() {
 
                 publishEvent(name, value, eventVisibility)
             }
-            .setNegativeButton(R.string.cancel, null)
-            .setCancelable(true)
-            .setOnCancelListener { it.dismiss() }
+            .negativeText(R.string.cancel)
+            .cancelable(true)
+            .cancelListener { it.dismiss() }
             .show()
     }
 

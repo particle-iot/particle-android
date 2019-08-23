@@ -1,6 +1,5 @@
 package io.particle.android.sdk.ui
 
-import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -19,6 +18,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme.LIGHT
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
@@ -103,12 +104,7 @@ class FunctionsAndVariablesFragment : Fragment() {
         data_list.setHasFixedSize(true)  // perf. optimization
         data_list.layoutManager = LinearLayoutManager(context)
         data_list.adapter = DataListAdapter(device, displayMode)
-        data_list.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayout.VERTICAL
-            )
-        )
+        data_list.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
 }
 
@@ -162,7 +158,7 @@ private class DataListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        // the view type here is a layout res ID
+        // the pinLabelView type here is a layout res ID
         val v = parent.inflateRow(viewType)
 
         return when (viewType) {
@@ -222,21 +218,24 @@ private class DataListAdapter(
         }
     }
 
-    private fun createValuePopup(context: Context, title: String, message: String) {
-        AlertDialog.Builder(context)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(R.string.action_clipboard) { dialog, _ ->
+    fun createValuePopup(context: Context, title: String, message: String) {
+        MaterialDialog.Builder(context)
+            .theme(LIGHT)
+            .title(title)
+            .content(message)
+            .positiveText(R.string.action_clipboard)
+            .onPositive { dialog, which ->
                 val clipboard: ClipboardManager? = context.getSystemService()
                 val clip = ClipData.newPlainText(title, message)
                 if (clipboard != null) {
                     clipboard.primaryClip = clip
                 }
-                Toast.makeText(context, R.string.clipboard_copy_variable, Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(context, R.string.clipboard_copy_variable, Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
-            .setNegativeButton(R.string.close) { dialogInterface, _ -> dialogInterface.dismiss() }
+            .negativeText(R.string.cancel)
+            .autoDismiss(true)
+            .canceledOnTouchOutside(true)
             .show()
     }
 

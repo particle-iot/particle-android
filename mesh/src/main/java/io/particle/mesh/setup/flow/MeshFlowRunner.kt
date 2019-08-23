@@ -51,10 +51,12 @@ fun buildFlowManager(
 
 class MeshFlowTerminator {
 
-    val shouldTerminateFlowLD: LiveData<Boolean> = liveDataOf(false)
+    val shouldTerminateFlowLD: LiveData<Pair<Boolean, FlowTerminationAction>> = liveDataOf(
+        Pair(false, FlowTerminationAction.NoFurtherAction)
+    )
 
-    fun terminateFlow() {
-        shouldTerminateFlowLD.castAndPost(true)
+    fun terminateFlow(nextAction: FlowTerminationAction) {
+        shouldTerminateFlowLD.castAndPost(Pair(true, nextAction))
     }
 }
 
@@ -129,13 +131,23 @@ class MeshFlowRunner(
     fun startNewFlowWithCommissioner() {
         log.info { "startNewFlowWithCommissioner()" }
 
-//        val oldContexts = contexts!!
+        val oldContexts = flowExecutor.contexts!!
+        val newContexts = SetupContexts()
+
+        var commissionerPwd = oldContexts.mesh.meshNetworkToJoinCommissionerPassword.value
+        if (commissionerPwd == null) {  // and if it's still null...
+            commissionerPwd = oldContexts.mesh.newNetworkPasswordLD.value
+        }
+
+        newContexts.mesh.updateTargetDeviceMeshNetworkToJoinCommissionerPassword(commissionerPwd)
+        newContexts.commissioner = oldContexts.targetDevice
+
+
         flowExecutor.executeNewFlow(
             FlowIntent.FIRST_TIME_SETUP,
             listOf(FlowType.PREFLOW),
-            SetupContexts()
+            newContexts
         )
-//        val newContexts = contexts!!
     }
 
     @MainThread
@@ -147,6 +159,7 @@ class MeshFlowRunner(
             ctxs.cloud.updatePricingImpactConfirmed(true)
             ctxs.cloud.updateShouldConnectToDeviceCloudConfirmed(true)
             ctxs.singleStepCongratsMessage = "Wi-Fi credentials were successfully added"
+            ctxs.targetDevice.hasLatestFirmware = true  // skip the firmware update at this stage
 
             flowExecutor.executeNewFlow(
                 FlowIntent.SINGLE_TASK_FLOW,
@@ -218,6 +231,7 @@ class MeshFlowRunner(
         val scopes = Scopes()
         scopes.onMain {
             val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
+            ctxs.targetDevice.hasLatestFirmware = true  // skip the firmware update at this stage
 
             flowExecutor.executeNewFlow(
                 FlowIntent.SINGLE_TASK_FLOW,
@@ -429,7 +443,7 @@ class MeshFlowRunner(
 
     // FIXME: disambiguate this vs ending the current *flow*
     fun endSetup() {
-        flowExecutor.endSetup()
+        flowExecutor.endSetup(FlowTerminationAction.NoFurtherAction)
     }
 
     fun endCurrentFlow() {

@@ -181,6 +181,7 @@ class ParticleDevice internal constructor(
         BLUZ(103),
         DIGISTUMP_OAK(82),
         ELECTRON(10),
+        ESP32(11),
         ARGON(12),
         BORON(13),
         XENON(14),
@@ -512,7 +513,6 @@ class ParticleDevice internal constructor(
     @Throws(ParticleCloudException::class)
     private fun performFlashingChange(flashingChange: () -> Unit) {
         try {
-            flashingChange()
             //listens for flashing event, on success unsubscribe from listening.
             subscribeToSystemEvent("spark/flash/status", object : SimpleParticleEventHandler {
                 override fun onEvent(eventName: String, particleEvent: ParticleEvent) {
@@ -532,6 +532,20 @@ class ParticleDevice internal constructor(
                     cloud.notifyDeviceChanged()
                 }
             })
+            subscribeToSystemEvent("spark/device/app-hash", object : SimpleParticleEventHandler {
+                override fun onEvent(eventName: String, particleEvent: ParticleEvent) {
+                    isFlashing = false
+                    try {
+                        this@ParticleDevice.refresh()
+                        cloud.unsubscribeFromEventWithHandler(this)
+                    } catch (e: ParticleCloudException) {
+                        // not much else we can really do here...
+                        log.w("Unable to reset flashing state for %s" + deviceState.deviceId, e)
+                    }
+                    cloud.notifyDeviceChanged()
+                }
+            })
+            flashingChange()
         } catch (e: RetrofitError) {
             throw ParticleCloudException(e)
         } catch (e: IOException) {
@@ -546,7 +560,7 @@ class ParticleDevice internal constructor(
      * @throws ParticleCloudException Failure to subscribe to system events.
      * @see [EventBus](https://github.com/greenrobot/EventBus)
      */
-    @MainThread
+    @WorkerThread
     @Throws(ParticleCloudException::class)
     fun subscribeToSystemEvents() {
         try {
@@ -592,8 +606,9 @@ class ParticleDevice internal constructor(
                 }
             )
         } catch (e: IOException) {
-            log.d("Failed to auto-subscribe to system events")
-            throw ParticleCloudException(e)
+            val ex = ParticleCloudException(e)
+            log.d("Failed to auto-subscribe to system events", ex)
+            throw ex
         }
     }
 
@@ -701,6 +716,7 @@ class ParticleDevice internal constructor(
     override fun toString(): String {
         return "ParticleDevice{" +
                 "deviceId=" + deviceState.deviceId +
+                ", serialNumber=" + deviceState.serialNumber +
                 ", isConnected=" + deviceState.isConnected +
                 ", deviceType=" + deviceState.deviceType +
                 '}'.toString()

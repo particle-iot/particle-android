@@ -3,10 +3,12 @@ package io.particle.mesh.ui.controlpanel
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.fragment.app.FragmentActivity
+import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.SerialNumber
+import io.particle.mesh.setup.fetchBarcodeData
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.TitleBarOptions
@@ -32,8 +34,9 @@ open class BaseControlPanelFragment : BaseFlowFragment() {
     suspend fun startFlowWithBarcode(
         flowStarter: (device: ParticleDevice, barcode: CompleteBarcodeData) -> Unit
     ) {
+        val cloud = ParticleCloudSDK.getCloud()
         flowSystemInterface.showGlobalProgressSpinner(true)
-        val barcode = flowScopes.withWorker { fetchBarcodeData(device.id) }
+        val barcode = flowScopes.withWorker { cloud.fetchBarcodeData(device.id) }
         flowSystemInterface.showGlobalProgressSpinner(false)
 
         flowStarter(device, barcode)

@@ -43,9 +43,9 @@ class FlowRunnerSystemInterface : ProgressHack {
         this.flowRunner = flowRunner
     }
 
-    fun terminateSetup() {
-        log.info { "terminateSetup()" }
-        meshFlowTerminator.terminateFlow()
+    fun terminateSetup(nextAction: FlowTerminationAction) {
+        log.info { "terminateSetup(): nextAction=$nextAction" }
+        meshFlowTerminator.terminateFlow(nextAction)
     }
 
     fun setNavController(navController: NavigationTool?) {

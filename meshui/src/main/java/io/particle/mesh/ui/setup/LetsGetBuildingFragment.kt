@@ -17,6 +17,11 @@ import java.util.concurrent.TimeUnit
 
 class LetsGetBuildingFragment : BaseFlowFragment() {
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as MeshSetupActivity).confirmExitingSetup = false
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -1,5 +1,7 @@
 package io.particle.mesh.setup.flow
 
+import io.particle.android.sdk.cloud.ParticleDevice
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_FATAL
 import io.particle.mesh.setup.flow.ExceptionType.ERROR_RECOVERABLE
 
@@ -23,12 +25,17 @@ class ExpectedFlowException(message: String) :
     MeshSetupFlowException(message = message, severity = ExceptionType.EXPECTED_FLOW)
 
 
-class TerminateFlowException(
+open class TerminateFlowException(
     message: String
 ) : MeshSetupFlowException(
     message = message,
     severity = ERROR_FATAL
 )
+
+
+class TerminateFlowAndStartControlPanelException(
+    val device: ParticleDevice
+) : TerminateFlowException("Ending flow and starting Control Panel!")
 
 
 // For when a user bails out of setup, like hiting the "x" button before setup is complete

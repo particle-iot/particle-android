@@ -4,6 +4,8 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.widget.CompoundButton
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnNextLayout
@@ -119,9 +121,8 @@ class DeviceInfoBottomSheetController(
     }
 
     fun updateDeviceDetails() {
-        val productName = root.context.getString(device.deviceType!!.productName)
-        root.device_type.text = productName
-        root.collapsed_device_type.text = productName
+        root.device_type.styleAsPill(device.deviceType!!)
+        root.collapsed_device_pill.styleAsPill(device.deviceType!!)
         root.product_image.setImageResource(device.deviceType!!.productImage)
         root.device_name.text = device.name
         root.device_id.text = device.id.toUpperCase()
@@ -144,7 +145,13 @@ class DeviceInfoBottomSheetController(
             ),
 
             Mutator(
-                root.collapsed_device_type,
+                root.online_status_dot_collapsed,
+                listOf(FADE),
+                ShownWhen.COLLAPSED
+            ),
+
+            Mutator(
+                root.collapsed_device_pill,
                 listOf(FADE, RESIZE_HEIGHT),
                 ShownWhen.COLLAPSED
             )
@@ -186,13 +193,18 @@ class DeviceInfoBottomSheetController(
     private fun setUpStatusDotAndText(isOnline: Boolean) {
         root.online_status_text.text = if (isOnline) "Online" else "Offline"
 
-        val statusDot = root.online_status_dot
-        statusDot.setImageResource(getStatusColoredDot(device, isOnline))
+        fun setUpDot(imageView: ImageView) {
+            imageView.setImageResource(getStatusColoredDot(device, isOnline))
 
-        statusDot.animation?.cancel()
-        if (isOnline) {
-            val animFade = AnimationUtils.loadAnimation(root.context, R.anim.fade_in_out)
-            statusDot.startAnimation(animFade)
+            imageView.animation?.cancel()
+            if (isOnline) {
+                val animFade = AnimationUtils.loadAnimation(root.context, R.anim.fade_in_out)
+                imageView.startAnimation(animFade)
+            }
+        }
+
+        for (dotView in listOf(root.online_status_dot, root.online_status_dot_collapsed)) {
+            setUpDot(dotView)
         }
     }
 

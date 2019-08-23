@@ -18,8 +18,8 @@ ext {
             "includes all the necessary device communication code, an easily customizable UI, and " +
             "a simple developer API."
 
-    siteUrl = 'https://github.com/spark/spark-setup-android'
-    gitUrl = 'https://github.com/spark/spark-setup-android.git'
+    siteUrl = 'https://github.com/particle-iot/particle-android'
+    gitUrl = 'https://github.com/particle-iot/particle-android.git'
 
     libraryVersion = project.version
 
@@ -84,12 +84,6 @@ dependencies {
     api 'androidx.recyclerview:recyclerview:1.0.0'
 }
 
-
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += [
-            "-Adagger.gradle.incremental=enabled"
-    ]
-}
 
 apply from: '../pom_generator_v1.gradle'
 apply from: '../bintray_upload_v1.gradle'

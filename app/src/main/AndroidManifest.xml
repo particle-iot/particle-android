@@ -30,7 +30,7 @@
         <activity
             android:name="io.particle.android.sdk.ui.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars"
+            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars.Honeycomb"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +43,7 @@
             android:name="io.particle.android.sdk.ui.IntroActivity"
             android:label="@string/title_activity_intro"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars" />
+            android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars.Honeycomb" />
 
         <activity
             android:name="io.particle.android.sdk.ui.devicelist.DeviceListActivity"
@@ -76,12 +76,12 @@
         All of the following are from the device setup lib, and must be present in your app's
         manifest or you will not go to space today.
         -->
-        <activity
-            android:name="io.particle.android.sdk.accountsetup.CreateAccountActivity"
-            android:label="@string/title_activity_create_account"
-            android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+<!--        <activity-->
+<!--            android:name="io.particle.android.sdk.accountsetup.CreateAccountActivity"-->
+<!--            android:label="@string/title_activity_create_account"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/ParticleSetupTheme.NoActionBar.Honeycomb"-->
+<!--            android:windowSoftInputMode="adjustResize|stateHidden">-->
 
             <!--
             FIXME: revisit using these custom schemes (or using
@@ -107,7 +107,7 @@
                     android:scheme="http" />
             </intent-filter>
             -->
-        </activity>
+<!--        </activity>-->
         <activity
             android:name="io.particle.android.sdk.utils.ui.WebViewActivity"
             android:label="@string/title_activity_web_view"
@@ -117,7 +117,7 @@
             android:name="io.particle.android.sdk.accountsetup.TwoFactorActivity"
             android:label="@string/title_activity_two_factor"
             android:screenOrientation="portrait"
-            android:theme="@style/ParticleSetupTheme.NoActionBar"
+            android:theme="@style/ParticleSetupTheme.NoActionBar.Honeycomb"
             android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>
 

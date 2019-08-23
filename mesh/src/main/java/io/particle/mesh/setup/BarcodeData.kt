@@ -11,6 +11,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ESP32
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
@@ -18,6 +19,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
+import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.flow.Gen3ConnectivityType.CELLULAR
 import io.particle.mesh.setup.flow.Gen3ConnectivityType.MESH_ONLY
@@ -40,6 +42,7 @@ fun ParticleDeviceType.toConnectivityType(): Gen3ConnectivityType {
         RED_BEAR_DUO,
         BLUZ,
         DIGISTUMP_OAK,
+        ESP32,
         ARGON,
         A_SOM -> WIFI
 
@@ -58,13 +61,13 @@ sealed class BarcodeData {
     abstract val serialNumber: SerialNumber
 
 
-    data class CompleteBarcodeData (
+    data class CompleteBarcodeData(
         override val serialNumber: SerialNumber,
         val mobileSecret: String
     ) : BarcodeData()
 
 
-    data class PartialBarcodeData (
+    data class PartialBarcodeData(
         override val serialNumber: SerialNumber,
         val partialMobileSecret: String
     ) : BarcodeData()
@@ -99,4 +102,14 @@ sealed class BarcodeData {
             }
         }
     }
+}
+
+
+@WorkerThread
+fun ParticleCloud.fetchBarcodeData(deviceId: String): CompleteBarcodeData {
+    val device = this.getDevice(deviceId)
+    return CompleteBarcodeData(
+        serialNumber = SerialNumber(device.serialNumber!!),
+        mobileSecret = device.mobileSecret!!
+    )
 }

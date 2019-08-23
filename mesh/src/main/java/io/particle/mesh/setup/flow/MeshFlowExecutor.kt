@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import com.snakydesign.livedataextensions.nonNull
 import io.particle.android.sdk.cloud.ParticleCloud
+import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.awaitUpdate
 import io.particle.mesh.ota.FirmwareUpdateManager
@@ -17,7 +18,15 @@ import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
-private const val FLOW_RETRIES = 5
+private const val FLOW_RETRIES = 6
+
+
+sealed class FlowTerminationAction {
+    object NoFurtherAction : FlowTerminationAction()
+    class StartControlPanelAction(val device: ParticleDevice) : FlowTerminationAction()
+}
+
+
 
 
 class StepDeps(
@@ -59,9 +68,9 @@ class MeshFlowExecutor(
         }
     }
 
-    fun endSetup() {
+    fun endSetup(nextAction: FlowTerminationAction) {
         log.info { "endSetup()" }
-        flowTerminator.terminateFlow()
+        flowTerminator.terminateFlow(nextAction)
     }
 
     private fun initNewFlow(intent: FlowIntent, preInitializedContext: SetupContexts?) {
@@ -108,11 +117,20 @@ class MeshFlowExecutor(
 
                 } catch (ex: Exception) {
 
+                    if (ex is TerminateFlowAndStartControlPanelException) {
+                        log.info { "User is leaving setup for Control Panel for this device" }
+                        endSetup(FlowTerminationAction.StartControlPanelAction(ex.device))
+                        return@onWorker
+                    }
+
+
                     if (ex is MeshSetupFlowException) {
 
                         if (ex.severity == EXPECTED_FLOW) {
                             log.info { "Received EXPECTED_FLOW exception; retrying." }
-                            continue  // avoid incrementing the counter, since this was expected flow
+                            // Things are still working as expected; reset the retry count
+                            i = 0
+                            continue
 
                         } else if (ex.severity == ERROR_FATAL) {
                             log.info(ex) { "Hit fatal error, exiting setup: " }
@@ -151,7 +169,7 @@ class MeshFlowExecutor(
                 deps.dialogTool.clearDialogResult()
                 deps.dialogTool.dialogResultLD.nonNull().awaitUpdate(scopes)
             }
-            endSetup()
+            endSetup(FlowTerminationAction.NoFurtherAction)
         }
     }
 
@@ -161,10 +179,12 @@ class MeshFlowExecutor(
 
             PREFLOW -> listOf(
                 StepGetTargetDeviceInfo(deps.flowUi),
+                StepCheckShouldSwitchToControlPanel(deps.cloud, deps.flowUi),
                 StepShowGetReadyForSetup(deps.flowUi),
                 StepConnectToTargetDevice(deps.flowUi, deps.deviceConnector),
                 StepEnsureCorrectEthernetFeatureStatus(),
                 StepEnsureLatestFirmware(deps.flowUi, deps.firmwareUpdateManager),
+                StepStopSignal(),
                 StepFetchDeviceId(),
                 StepGetAPINetworks(deps.cloud),
                 StepCheckIfTargetDeviceShouldBeClaimed(deps.cloud, deps.flowUi),
@@ -179,6 +199,7 @@ class MeshFlowExecutor(
                 StepGetTargetDeviceInfo(deps.flowUi),
                 StepConnectToTargetDevice(deps.flowUi, deps.deviceConnector),
                 StepEnsureLatestFirmware(deps.flowUi, deps.firmwareUpdateManager),
+                StepStopSignal(),
                 StepFetchDeviceId(),
                 StepGetAPINetworks(deps.cloud),
                 StepShowTargetPairingSuccessful(deps.flowUi),
@@ -282,12 +303,14 @@ class MeshFlowExecutor(
             )
 
             CONTROL_PANEL_MESH_CREATE_NETWORK_FLOW -> listOf(
+                StepLeaveMeshNetwork(deps.cloud, deps.flowUi, false),
                 StepGetNewMeshNetworkName(deps.flowUi),
                 StepGetNewMeshNetworkPassword(deps.flowUi),
                 StepRemoveDeviceFromAnyMeshNetwork(deps.cloud, deps.flowUi),
                 StepCreateNewMeshNetworkOnCloud(deps.cloud),
                 StepCreateNewMeshNetworkOnLocalDevice(),
-                StepShowSingleTaskCongratsScreen(deps.flowUi, "Mesh network created")
+                StepShowSingleTaskCongratsScreen(deps.flowUi, "Mesh network created"),
+                StepEnsureListeningStoppedForBothDevices()
             )
 
             STANDALONE_POSTFLOW -> listOf(
@@ -302,8 +325,7 @@ class MeshFlowExecutor(
 
 
             CONTROL_PANEL_WIFI_ADD_NETWORK_FLOW -> listOf(
-                StepShowPricingImpact(deps.flowUi, deps.cloud),
-                StepShowShouldConnectToDeviceCloudConfirmation(deps.flowUi),
+                StepStartListeningModeForTarget(deps.flowUi),
                 StepCollectUserWifiNetworkSelection(deps.flowUi),
                 StepCollectSelectedWifiNetworkPassword(deps.flowUi),
                 StepEnsureSelectedWifiNetworkJoined(deps.flowUi),
@@ -312,7 +334,7 @@ class MeshFlowExecutor(
             )
 
             CONTROL_PANEL_WIFI_MANAGE_NETWORKS_FLOW -> listOf(
-//                StepRetrieveWifiNetworks(deps.flowUi),
+                StepStartListeningModeForTarget(deps.flowUi),
                 StepShowDeviceWifiNetworks(deps.flowUi)
             )
 
@@ -340,7 +362,6 @@ class MeshFlowExecutor(
                 StepUnpauseSim(deps.cloud, deps.flowUi)
             )
 
-
             CONTROL_PANEL_CELLULAR_SET_NEW_DATA_LIMIT -> listOf(
                 StepShowSetDataLimitUi(deps.flowUi),
                 StepSetDataLimit(deps.flowUi, deps.cloud),
@@ -365,7 +386,7 @@ class MeshFlowExecutor(
 
 
             CONTROL_PANEL_MESH_LEAVE_NETWORK_FLOW -> listOf(
-                StepLeaveMeshNetwork(deps.cloud, deps.flowUi),
+                StepLeaveMeshNetwork(deps.cloud, deps.flowUi, true),
                 StepPopBackStack(deps.flowUi)
             )
 

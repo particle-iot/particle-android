@@ -21,9 +21,9 @@ import mu.KLogger
 import mu.KotlinLogging
 
 
-private val defaultDeviceListConfig = DeviceListViewConfig(
+val defaultDeviceListConfig = DeviceListViewConfig(
     SortCriteria.ONLINE_STATUS,
-    OnlineStatusFilter.ALL_SELECTED,
+    OnlineStatusFilter.NONE_SELECTED,
     emptySet()
 )
 
@@ -58,7 +58,6 @@ open class DeviceFilter(
         deviceListViewConfigLD.castAndSetOnMainThread(_currentConfig)
 
         filteredDeviceListLD = deviceListViewConfigLD
-            .distinctUntilChanged()
             .switchMap {
                 fullDeviceListLD
                     .map { sortAndFilterDeviceList(it, currentConfig) }
@@ -194,6 +193,8 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
         }
         log.info { "Posting new device list: $deviceList" }
         fullDeviceListLD.castAndPost(deviceList)
+        val config = currentDeviceFilter.deviceListViewConfigLD.value!!
+        currentDeviceFilter.applyNewConfig(config)
     }
 
 }

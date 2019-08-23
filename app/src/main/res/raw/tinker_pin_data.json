@@ -1,0 +1,1342 @@
+[
+    {
+        "deviceType": "PHOTON",
+        "deviceTypeId": 6,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "WKP",
+                "tinkerName": "A7"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWriteDAC"
+                ],
+                "label": "DAC",
+                "tinkerName": "A6"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A5",
+                "tinkerName": "A5"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A4",
+                "tinkerName": "A4"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWriteDAC"
+                ],
+                "label": "A3",
+                "tinkerName": "A3"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A2",
+                "tinkerName": "A2"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A1",
+                "tinkerName": "A1"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A0",
+                "tinkerName": "A0"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            }
+        ]
+    },
+    {
+        "deviceType": "P1",
+        "deviceTypeId": 8,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "WKP",
+                "tinkerName": "A7"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWriteDAC"
+                ],
+                "label": "DAC",
+                "tinkerName": "A6"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A5",
+                "tinkerName": "A5"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A4",
+                "tinkerName": "A4"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWriteDAC"
+                ],
+                "label": "A3",
+                "tinkerName": "A3"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A2",
+                "tinkerName": "A2"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A1",
+                "tinkerName": "A1"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A0",
+                "tinkerName": "A0"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            }
+        ]
+    },
+    {
+        "deviceType": "ELECTRON",
+        "deviceTypeId": 10,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "WKP",
+                "tinkerName": "A7"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWriteDAC"
+                ],
+                "label": "DAC",
+                "tinkerName": "A6"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A5",
+                "tinkerName": "A5"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A4",
+                "tinkerName": "A4"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWriteDAC"
+                ],
+                "label": "A3",
+                "tinkerName": "A3"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A2",
+                "tinkerName": "A2"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A1",
+                "tinkerName": "A1"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A0",
+                "tinkerName": "A0"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            }
+        ]
+    },
+    {
+        "deviceType": "ARGON",
+        "deviceTypeId": 12,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A0",
+                "tinkerName": "D19"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A1",
+                "tinkerName": "D18"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A2",
+                "tinkerName": "D17"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A3",
+                "tinkerName": "D16"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A4",
+                "tinkerName": "D15"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A5",
+                "tinkerName": "D14"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D8",
+                "tinkerName": "D8"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            }
+        ]
+    },
+    {
+        "deviceType": "BORON",
+        "deviceTypeId": 13,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A0",
+                "tinkerName": "D19"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A1",
+                "tinkerName": "D18"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A2",
+                "tinkerName": "D17"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A3",
+                "tinkerName": "D16"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A4",
+                "tinkerName": "D15"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A5",
+                "tinkerName": "D14"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D8",
+                "tinkerName": "D8"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            }
+        ]
+    },
+    {
+        "deviceType": "XENON",
+        "deviceTypeId": 14,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A0",
+                "tinkerName": "D19"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A1",
+                "tinkerName": "D18"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A2",
+                "tinkerName": "D17"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A3",
+                "tinkerName": "D16"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A4",
+                "tinkerName": "D15"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A5",
+                "tinkerName": "D14"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D8",
+                "tinkerName": "D8"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            }
+        ]
+    },
+    {
+        "deviceType": "B_SOM",
+        "deviceTypeId": 23,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A0",
+                "tinkerName": "D19"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A1",
+                "tinkerName": "D18"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A2",
+                "tinkerName": "D17"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A3",
+                "tinkerName": "D16"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A4",
+                "tinkerName": "D15"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A5",
+                "tinkerName": "D14"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A6",
+                "tinkerName": "A6"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A7",
+                "tinkerName": "A7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D8",
+                "tinkerName": "D8"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D23",
+                "tinkerName": "D23"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D22",
+                "tinkerName": "D22"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            }
+        ]
+    },
+    {
+        "deviceType": "CORE",
+        "deviceTypeId": 0,
+        "pins": [
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A7",
+                "tinkerName": "A7"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A6",
+                "tinkerName": "A6"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A5",
+                "tinkerName": "A5"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A4",
+                "tinkerName": "A4"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A3",
+                "tinkerName": "A3"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead"
+                ],
+                "label": "A2",
+                "tinkerName": "A2"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A1",
+                "tinkerName": "A1"
+            },
+            {
+                "column": "LEFT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogRead",
+                    "AnalogWritePWM"
+                ],
+                "label": "A0",
+                "tinkerName": "A0"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D0",
+                "tinkerName": "D0"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite",
+                    "AnalogWritePWM"
+                ],
+                "label": "D1",
+                "tinkerName": "D1"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D2",
+                "tinkerName": "D2"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D3",
+                "tinkerName": "D3"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D4",
+                "tinkerName": "D4"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D5",
+                "tinkerName": "D5"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D6",
+                "tinkerName": "D6"
+            },
+            {
+                "column": "RIGHT",
+                "functions": [
+                    "DigitalRead",
+                    "DigitalWrite"
+                ],
+                "label": "D7",
+                "tinkerName": "D7"
+            }
+        ]
+    }
+]

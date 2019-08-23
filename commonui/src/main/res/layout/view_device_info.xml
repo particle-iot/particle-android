@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:theme="@style/p_MeshTheme"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="90dp"
+    app:behavior_peekHeight="@dimen/p_device_info_slider_peek_height"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     tools:ignore="MissingPrefix">
 
@@ -79,24 +79,23 @@
         app:srcCompat="@drawable/ic_edit_light_gray_24dp" />
 
     <TextView
-        android:id="@+id/collapsed_device_type"
+        android:id="@+id/collapsed_device_pill"
+        style="@style/device_type_pill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Argon"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/device_name"
-        app:layout_constraintTop_toBottomOf="@+id/device_name" />
-
+        app:layout_constraintTop_toBottomOf="@+id/device_name"
+        tools:text="Argon" />
 
     <ImageView
         android:id="@+id/collapsed_expander"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="@+id/collapsed_device_type"
+        app:layout_constraintBottom_toBottomOf="@id/collapsed_device_pill"
         app:layout_constraintEnd_toStartOf="@+id/end_guideline"
-        app:layout_constraintTop_toTopOf="@+id/collapsed_device_type"
+        app:layout_constraintTop_toTopOf="@+id/device_name"
         app:srcCompat="@drawable/ic_expand_less_black_24dp" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -106,6 +105,17 @@
         app:layout_constraintBottom_toBottomOf="@+id/online_status_text"
         app:layout_constraintStart_toStartOf="@+id/device_name"
         app:layout_constraintTop_toTopOf="@+id/online_status_text"
+        app:srcCompat="@drawable/device_status_dot_online_tinker" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/online_status_dot_collapsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/collapsed_device_pill"
+        app:layout_constraintEnd_toStartOf="@+id/collapsed_expander"
+        app:layout_constraintTop_toTopOf="@+id/device_name"
         app:srcCompat="@drawable/device_status_dot_online_tinker" />
 
     <TextView
@@ -143,7 +153,7 @@
         app:layout_constraintEnd_toStartOf="@+id/end_guideline"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/online_status_text"
-        app:layout_constraintTop_toBottomOf="@+id/collapsed_device_type" />
+        app:layout_constraintTop_toBottomOf="@id/collapsed_device_pill" />
 
     <Switch
         android:id="@+id/action_signal_device"
@@ -184,17 +194,24 @@
             fontPath="@string/bold_text_font_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:text="Type"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
-            android:id="@+id/device_type"
+        <View
             android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/device_type"
+            style="@style/device_type_pill"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end|center_vertical"
-            android:textColor="@android:color/black"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:textIsSelectable="true"
             tools:text="Argon" />
     </LinearLayout>

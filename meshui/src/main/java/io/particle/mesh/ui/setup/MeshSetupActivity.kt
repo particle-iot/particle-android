@@ -7,17 +7,23 @@ import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
+import io.particle.mesh.setup.flow.FlowTerminationAction
+import io.particle.mesh.setup.flow.FlowTerminationAction.NoFurtherAction
+import io.particle.mesh.setup.flow.FlowTerminationAction.StartControlPanelAction
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
+import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import mu.KotlinLogging
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
+
+    var confirmExitingSetup = true
 
     override val progressSpinnerViewId: Int
         get() = R.id.p_mesh_globalProgressSpinner
@@ -31,9 +37,20 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
 
     private val log = KotlinLogging.logger {}
 
-
-    override fun onFlowTerminated() {
+    override fun onFlowTerminated(nextAction: FlowTerminationAction) {
+        val nextActionFunction = when (nextAction) {
+            is NoFurtherAction -> {
+                { /* no-op */ }
+            }
+            is StartControlPanelAction -> {
+                {
+                    val intent = ControlPanelActivity.buildIntent(this, nextAction.device)
+                    startActivity(intent)
+                }
+            }
+        }
         finish()
+        nextActionFunction()
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -73,6 +90,11 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
     }
 
     private fun showCloseSetupConfirmation() {
+        if (!confirmExitingSetup) {
+            finish()
+            return
+        }
+
         MaterialDialog.Builder(this)
             .content(R.string.p_exitsetupconfirmation_content)
             .positiveText(R.string.p_exitsetupconfirmation_exit)

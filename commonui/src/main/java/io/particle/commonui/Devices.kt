@@ -11,6 +11,7 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ESP32
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
@@ -58,6 +59,7 @@ private val ParticleDeviceType.productImageAndName: ProductImageAndName
             X_SOM -> pian(R.string.product_name_x_series, R.drawable.product_image_xenon)
 
             // ALL OTHERS
+            ESP32,
             BLUZ,
             DIGISTUMP_OAK,
             OTHER -> pian(R.string.product_name_unknown, R.drawable.product_image_unknown)

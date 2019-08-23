@@ -3,21 +3,21 @@ package io.particle.android.sdk.ui.devicelist
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -29,26 +29,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.snakydesign.livedataextensions.nonNull
 import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.sdk.accountsetup.LoginActivity
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.CORE
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.DIGISTUMP_OAK
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.OTHER
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.P1
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.PHOTON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RASPBERRY_PI
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.RED_BEAR_DUO
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
@@ -60,8 +45,7 @@ import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
-import io.particle.commonui.productName
-import io.particle.mesh.common.android.livedata.awaitUpdate
+import io.particle.commonui.styleAsPill
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.flow.Scopes
@@ -70,7 +54,6 @@ import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
-import kotlinx.coroutines.delay
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import java.io.IOException
@@ -115,10 +98,12 @@ class DeviceListFragment : Fragment() {
         add_device_fab.collapse()
     }
 
+    @ExperimentalStdlibApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val top = inflater.inflate(R.layout.fragment_device_list2, container, false)
 
         val rv = Ui.findView<RecyclerView>(top, R.id.device_list)
@@ -201,8 +186,14 @@ class DeviceListFragment : Fragment() {
             }
         }
 
+        search_icon.setOnClickListener {
+            name_filter_input.requestFocus()
+            val imm: InputMethodManager? = requireContext().getSystemService()
+            imm?.showSoftInput(name_filter_input, InputMethodManager.SHOW_IMPLICIT)
+        }
+        clear_text_icon.setOnClickListener { name_filter_input.setText("") }
 
-        filterViewModel.currentDeviceFilter.filteredDeviceListLD.observe(
+        filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
             viewLifecycleOwner,
             Observer { onDeviceListUpdated(it) }
         )
@@ -212,14 +203,13 @@ class DeviceListFragment : Fragment() {
         super.onResume()
         name_filter_input.addTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
-//        subscribeToSystemEvents(devices, false)
-
+        devices?.let { subscribeToSystemEvents(devices, false) }
     }
 
     override fun onPause() {
         name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
-//        subscribeToSystemEvents(devices, true)
+        devices?.let { subscribeToSystemEvents(devices, true) }
         super.onPause()
     }
 
@@ -228,15 +218,34 @@ class DeviceListFragment : Fragment() {
         deviceSetupCompleteReceiver!!.unregister(activity)
     }
 
-    private fun onDeviceListUpdated(devices: List<ParticleDevice>?) {
+    private fun onDeviceListUpdated(devices: List<ParticleDevice>) {
+        log.i("onDeviceListUpdated(): $devices")
+        val ctx = context ?: return
+
         refresh_layout.isRefreshing = false
+
+        val currentConfig = filterViewModel.currentDeviceFilter.deviceListViewConfigLD.value
+        val (filterIcon, filterBg) = if (currentConfig == defaultDeviceListConfig) {
+            Pair(
+                ctx.getDrawable(R.drawable.ic_filter_list_gray_24dp),
+                null
+            )
+        } else {
+            val gray = ctx.getDrawable(R.drawable.ic_filter_list_gray_24dp)!!
+            gray.mutate()
+            val white = ContextCompat.getColor(ctx, android.R.color.white)
+            DrawableCompat.setTint(gray, white)
+            Pair(gray, ctx.getDrawable(R.drawable.bg_device_filter_active))
+        }
+        filter_button.setImageDrawable(filterIcon)
+        filter_button.background = filterBg
 
         updateEmptyMessageAndSearchBox()
 
         empty_message.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
         //subscribe to system updates
-//        subscribeToSystemEvents(devices, false)
+        subscribeToSystemEvents(devices, false)
     }
 
     private fun updateEmptyMessageAndSearchBox() {
@@ -259,6 +268,8 @@ class DeviceListFragment : Fragment() {
         } else {
             name_filter_input.hint = "Search in ${filteredDevices.size} of ${completeDevices.size} devices"
         }
+
+        clear_text_icon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
     }
 
     private fun buildNameFilterTextWatcher(): TextWatcher {
@@ -280,45 +291,41 @@ class DeviceListFragment : Fragment() {
         devices: List<ParticleDevice>,
         revertSubscription: Boolean
     ) {
-        for (device in devices) {
-            object : AsyncTask<ParticleDevice, Void, Void>() {
-                override fun doInBackground(vararg particleDevices: ParticleDevice): Void? {
-                    try {
-                        if (revertSubscription) {
-                            for (id in subscribeIds) {
-                                device.unsubscribeFromEvents(id!!)
-                            }
-                        } else {
-                            subscribeIds.add(
-                                device.subscribeToEvents(
-                                    "spark/status",
-                                    object : ParticleEventHandler {
-                                        override fun onEventError(e: Exception) {
-                                            //ignore for now, events aren't vital
-                                        }
-
-                                        override fun onEvent(
-                                            eventName: String,
-                                            particleEvent: ParticleEvent
-                                        ) {
-                                            refreshDevices()
-                                        }
-                                    })
-                            )
+        scopes.onWorker {
+            for (device in devices) {
+                try {
+                    if (revertSubscription) {
+                        for (id in subscribeIds) {
+                            device.unsubscribeFromEvents(id!!)
                         }
-                    } catch (ignore: IOException) {
-                        //ignore for now, events aren't vital
-                    } catch (ignore: ParticleCloudException) {
-                    }
+                    } else {
+                        subscribeIds.add(
+                            device.subscribeToEvents(
+                                "spark/status",
+                                object : ParticleEventHandler {
+                                    override fun onEventError(e: Exception) {
+                                        //ignore for now, events aren't vital
+                                    }
 
-                    return null
+                                    override fun onEvent(
+                                        eventName: String,
+                                        particleEvent: ParticleEvent
+                                    ) {
+                                        refreshDevices()
+                                    }
+                                })
+                        )
+                    }
+                } catch (ignore: IOException) {
+                    //ignore for now, events aren't vital
+                } catch (ignore: ParticleCloudException) {
                 }
-            }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, device)
+            }
         }
     }
 
     private fun onDeviceRowClicked(device: ParticleDevice) {
-        log.i("Clicked on item at position: #$device")
+        log.i("Clicked on device=$device")
         if (device.isFlashing) {
             Toaster.s(
                 activity,
@@ -359,7 +366,7 @@ class DeviceListFragment : Fragment() {
 
     private fun refreshDevices() {
         val devices = filterViewModel.fullDeviceListLD.value
-//        subscribeToSystemEvents(devices, true)
+        devices?.let { subscribeToSystemEvents(it, true) }
         filterViewModel.refreshDevices()
     }
 
@@ -404,18 +411,14 @@ internal class DeviceListAdapter(
 
         val ctx = holder.topLevel.context
 
-        holder.modelName.setText(device.deviceType!!.productName)
+        holder.modelName.styleAsPill(device.deviceType!!)
         holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
         holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
-
-        @ColorInt val colorValue: Int = ContextCompat.getColor(
-            ctx,
-            device.deviceType!!.getColorForDeviceType()
-        )
-        val bg = holder.modelName.background
-        bg.mutate()
-        DrawableCompat.setTint(bg, colorValue)
-        holder.modelName.setTextColor(colorValue)
+        holder.statusDot.animation?.cancel()
+        if (device.isConnected) {
+            val animFade = AnimationUtils.loadAnimation(ctx, R.anim.fade_in_out)
+            holder.statusDot.startAnimation(animFade)
+        }
 
         val name = if (truthy(device.name))
             device.name
@@ -437,40 +440,3 @@ internal class DeviceListAdapter(
 
 
 private val log = TLog.get(DeviceListFragment::class.java)
-
-
-@ColorRes
-private fun ParticleDeviceType.getColorForDeviceType(): Int {
-    return when (this) {
-        CORE -> R.color.spark_blue
-        ELECTRON -> R.color.device_color_electron
-        PHOTON,
-        P1 -> R.color.device_color_photon
-        RASPBERRY_PI -> R.color.wisteria
-        RED_BEAR_DUO -> R.color.orange
-//        ESP32 -> 0x000000
-        BLUZ -> R.color.belize
-        ARGON, BORON, XENON,
-        A_SOM, B_SOM, X_SOM -> R.color.emerald
-        DIGISTUMP_OAK,
-        OTHER -> R.color.gray
-    }
-}
-
-
-private fun ParticleDeviceType.getIconText(): String {
-    return when (this) {
-        CORE -> "C"
-        ELECTRON -> "E"
-        PHOTON -> "P"
-        P1 -> "1"
-        RASPBERRY_PI -> "R"
-        RED_BEAR_DUO -> "D"
-//        ESP32 -> "ES"
-        BLUZ -> "BZ"
-        ARGON, A_SOM -> "A"
-        BORON, B_SOM -> "B"
-        XENON, X_SOM -> "X"
-        else -> "?"
-    }
-}
