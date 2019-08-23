@@ -68,6 +68,12 @@ class InspectorActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_inspector)
 
         device = intent.getParcelableExtra(EXTRA_DEVICE)
