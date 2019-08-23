@@ -23,6 +23,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
 
+    var confirmExitingSetup = true
+
     override val progressSpinnerViewId: Int
         get() = R.id.p_mesh_globalProgressSpinner
 
@@ -88,6 +90,11 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
     }
 
     private fun showCloseSetupConfirmation() {
+        if (!confirmExitingSetup) {
+            finish()
+            return
+        }
+
         MaterialDialog.Builder(this)
             .content(R.string.p_exitsetupconfirmation_content)
             .positiveText(R.string.p_exitsetupconfirmation_exit)
