@@ -85,6 +85,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
 
         p_action_close.setOnClickListener { finish() }
         p_action_back.setOnClickListener {
+            onUserNavigatedBack()
             if (!navController.navigateUp()) {
                 finish()
             }
@@ -95,12 +96,22 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
         PermissionsFragment.ensureAttached(this)
     }
 
+    private fun onUserNavigatedBack() {
+        flowSystemInterface.showGlobalProgressSpinner(false)
+        flowModel.flowRunner.endCurrentFlow()
+    }
+
     override fun onResume() {
         super.onResume()
         if (shouldCheckPermissions) {
             shouldCheckPermissions = !appHasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
             ensureLocationPermission()
         }
+    }
+
+    override fun onBackPressed() {
+        onUserNavigatedBack()
+        super.onBackPressed()
     }
 
     override fun buildFlowUiDelegate(systemInterface: FlowRunnerSystemInterface): FlowUiDelegate {
