@@ -94,8 +94,8 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    releaseImplementation 'com.google.firebase:firebase-core:17.0.1'
-    releaseImplementation 'com.google.firebase:firebase-perf:18.0.1'
+    releaseImplementation 'com.google.firebase:firebase-core:17.1.0'
+    releaseImplementation 'com.google.firebase:firebase-perf:19.0.0'
     releaseImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Segment
