@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tinker_pin_radius">33dp</dimen>
+    <dimen name="tinker_pin_label_text_size">12sp</dimen>
+    <dimen name="tinker_pin_frame_padding">5dp</dimen>
+    <dimen name="tinker_pin_frame_minwidth">150dp</dimen>
+    <dimen name="tinker_device_frame_width">300dp</dimen>
+    <dimen name="tinker_device_frame_vertical_padding">4dp</dimen>
+</resources>

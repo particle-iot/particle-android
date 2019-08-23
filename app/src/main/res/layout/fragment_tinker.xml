@@ -1,7 +1,6 @@
-<RelativeLayout
-    android:id="@+id/tinker_main"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tinker_main"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -11,207 +10,274 @@
 
     <RelativeLayout
         android:id="@+id/tinker_content_view"
-        android:layout_width="@dimen/content_width"
+        android:layout_width="@dimen/tinker_device_frame_width"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/tinker_core_shadow_temp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        android:paddingTop="@dimen/tinker_device_frame_vertical_padding"
+        android:paddingBottom="@dimen/tinker_device_frame_vertical_padding"
+        android:background="@drawable/bg_tinker_device_shadow">
 
         <LinearLayout
+            android:id="@+id/left_column"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:gravity="start"
+            android:gravity="bottom|start"
             android:orientation="vertical">
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a7"
+                    android:id="@+id/tinker_pin_left1"
                     style="@style/SparkTinkerPin"
-                    android:text="A7"/>
+                    android:text="A7" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a6"
+                    android:id="@+id/tinker_pin_left2"
                     style="@style/SparkTinkerPin"
-                    android:text="A6"/>
+                    android:text="A6" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a5"
+                    android:id="@+id/tinker_pin_left3"
                     style="@style/SparkTinkerPin"
-                    android:text="A5"/>
+                    android:text="A5" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a4"
+                    android:id="@+id/tinker_pin_left4"
                     style="@style/SparkTinkerPin"
-                    android:text="A4"/>
+                    android:text="A4" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a3"
+                    android:id="@+id/tinker_pin_left5"
                     style="@style/SparkTinkerPin"
-                    android:text="A3"/>
+                    android:text="A3" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a2"
+                    android:id="@+id/tinker_pin_left6"
                     style="@style/SparkTinkerPin"
-                    android:text="A2"/>
+                    android:text="A2" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a1"
+                    android:id="@+id/tinker_pin_left7"
                     style="@style/SparkTinkerPin"
-                    android:text="A1"/>
+                    android:text="A1" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Left">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
 
                 <TextView
-                    android:id="@+id/tinker_a0"
+                    android:id="@+id/tinker_pin_left8"
                     style="@style/SparkTinkerPin"
-                    android:text="A0"/>
+                    android:text="A0" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
+
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
+
+                <TextView
+                    android:id="@+id/tinker_pin_left9"
+                    style="@style/SparkTinkerPin"
+                    android:text="NOPE" />
+            </io.particle.android.sdk.tinker.BgColorLinearLayout>
+
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
+
+                <TextView
+                    android:id="@+id/tinker_pin_left10"
+                    style="@style/SparkTinkerPin"
+                    android:text="NOPE" />
+            </io.particle.android.sdk.tinker.BgColorLinearLayout>
+
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Left">
+
+                <TextView
+                    android:id="@+id/tinker_pin_left11"
+                    style="@style/SparkTinkerPin"
+                    android:text="NOPE" />
+            </io.particle.android.sdk.tinker.BgColorLinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:gravity="end"
+            android:gravity="bottom|end"
             android:orientation="vertical">
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d7"
+                    android:id="@+id/tinker_pin_right11"
                     style="@style/SparkTinkerPin"
-                    android:text="D7"/>
+                    android:text="NOPE" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d6"
+                    android:id="@+id/tinker_pin_right10"
                     style="@style/SparkTinkerPin"
-                    android:text="D6"/>
+                    android:text="NOPE" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d5"
+                    android:id="@+id/tinker_pin_right9"
                     style="@style/SparkTinkerPin"
-                    android:text="D5"/>
+                    android:text="NOPE" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d4"
+                    android:id="@+id/tinker_pin_right8"
                     style="@style/SparkTinkerPin"
-                    android:text="D4"/>
+                    android:text="D7" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d3"
+                    android:id="@+id/tinker_pin_right7"
                     style="@style/SparkTinkerPin"
-                    android:text="D3"/>
+                    android:text="D6" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d2"
+                    android:id="@+id/tinker_pin_right6"
                     style="@style/SparkTinkerPin"
-                    android:text="D2"/>
+                    android:text="D5" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d1"
+                    android:id="@+id/tinker_pin_right5"
                     style="@style/SparkTinkerPin"
-                    android:text="D1"/>
+                    android:text="D4" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
 
-            <io.particle.android.sdk.tinker.BgColorLinearLayout
-                style="@style/SparkTinkerPinBG.Right">
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
 
                 <TextView
-                    android:id="@+id/tinker_d0"
+                    android:id="@+id/tinker_pin_right4"
                     style="@style/SparkTinkerPin"
-                    android:text="D0"/>
+                    android:text="D3" />
+            </io.particle.android.sdk.tinker.BgColorLinearLayout>
+
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
+
+                <TextView
+                    android:id="@+id/tinker_pin_right3"
+                    style="@style/SparkTinkerPin"
+                    android:text="D2" />
+            </io.particle.android.sdk.tinker.BgColorLinearLayout>
+
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
+
+                <TextView
+                    android:id="@+id/tinker_pin_right2"
+                    style="@style/SparkTinkerPin"
+                    android:text="D1" />
+            </io.particle.android.sdk.tinker.BgColorLinearLayout>
+
+            <io.particle.android.sdk.tinker.BgColorLinearLayout style="@style/SparkTinkerPinBG.Right">
+
+                <TextView
+                    android:id="@+id/tinker_pin_right1"
+                    style="@style/SparkTinkerPin"
+                    android:text="D0" />
             </io.particle.android.sdk.tinker.BgColorLinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/tinker_logo"
-        android:layout_width="135dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/tinker_logo_temp"/>
+    <!--    <androidx.appcompat.widget.AppCompatImageView-->
+    <!--        android:id="@+id/tinker_logo"-->
+    <!--        android:layout_width="135dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_centerInParent="true"-->
+    <!--        android:src="@drawable/tinker_logo_temp" />-->
 
     <FrameLayout
         android:id="@+id/instructions_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp"
+        android:visibility="gone" />
 
     <FrameLayout
-        android:id="@+id/get_device_progress_spinner"
+        android:id="@+id/flashing_progress_spinner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#5EEE"
+        android:background="#CEEE"
         android:visibility="gone">
 
         <ProgressBar
             style="@android:style/Widget.Holo.ProgressBar.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/flash_tinker_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CEEE"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="To enable Tinker, you need to flash the Tinker firmware to this device"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/action_device_flash_tinker"
+            style="@style/p_mesh_button_style"
+            android:layout_width="200dp"
+            android:layout_height="56dp"
+            android:text="Flash Tinker" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/device_offline_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="(Device is offline)"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:visibility="gone" />
 
 </RelativeLayout>

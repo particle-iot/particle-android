@@ -12,10 +12,10 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.annotation.AnimatorRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.sdk.app.R
-import java.util.*
 
 
 interface OnAnalogWriteListener {
@@ -24,21 +24,16 @@ interface OnAnalogWriteListener {
 }
 
 
-private const val ANALOG_WRITE_MAX = 255
-private const val ANALOG_READ_MAX = 4095
-
-
 internal class Pin(
-    val view: TextView,
+    val pinLabelView: TextView,
     private val pinType: PinType,
     val name: String,
-    functions: EnumSet<PinAction>,
-    internal val label: String = name,
-    private val maxAnalogWriteValue: Int = ANALOG_WRITE_MAX
+    internal val functions: Set<PinAction>,
+    internal val label: String = name
 ) {
-    internal val functions: Set<PinAction>
 
-    var configuredAction: PinAction
+    var configuredAction: PinAction = PinAction.NONE
+
     private var pinBackgroundAnim: ObjectAnimator? = null
     private var endAnimation: Animator? = null
 
@@ -57,11 +52,11 @@ internal class Pin(
 
     private val cancelAnimator: Animator
         get() {
-            val ctx = view.context
+            val ctx = pinLabelView.context
             val backToTransparent1 = ctx.loadObjectAnimator(R.animator.pin_background_end)
             val goDark = ctx.loadObjectAnimator(R.animator.pin_background_go_dark)
             val backToTransparent2 = ctx.loadObjectAnimator(R.animator.pin_background_end)
-            val parent = view.parent as ViewGroup
+            val parent = pinLabelView.parent as ViewGroup
             val evaluator = CastCheckArgbEvaluator()
             for (animator in list(backToTransparent1, goDark, backToTransparent2)) {
                 animator.target = parent
@@ -80,15 +75,17 @@ internal class Pin(
             if (configuredAction === PinAction.ANALOG_READ) {
                 max = ANALOG_READ_MAX
             } else if (configuredAction === PinAction.ANALOG_WRITE) {
-                max = maxAnalogWriteValue
+                max = if (PinAction.ANALOG_WRITE_DAC in functions) {
+                    ANALOG_WRITE_MAX_DAC
+                } else {
+                    ANALOG_WRITE_MAX_PWM
+                }
             }
             return max
         }
 
     init {
-        this.configuredAction = PinAction.NONE
-        this.functions = Collections.unmodifiableSet(functions)
-        this.view.text = label
+        this.pinLabelView.text = label
         reset()
     }
 
@@ -137,49 +134,39 @@ internal class Pin(
         }
 
         if (!stopAnimating()) {
-            (view.parent as View).setBackgroundColor(0)
+            (pinLabelView.parent as View).setBackgroundColor(0)
         }
 
         analogValue = 0
         digitalValue = DigitalValue.NONE
     }
 
-    private fun updatePinColor() {
-        view.setTextColor(view.context.resources.getColor(android.R.color.white))
+    fun updatePinColor() {
+        pinLabelView.setTextColor(pinLabelView.context.resources.getColor(android.R.color.white))
 
         when (configuredAction) {
-            PinAction.ANALOG_READ -> view.setBackgroundResource(R.drawable.tinker_pin_emerald)
-            PinAction.ANALOG_WRITE -> view.setBackgroundResource(R.drawable.tinker_pin_sunflower)
+            PinAction.ANALOG_READ -> pinLabelView.setBackgroundResource(R.drawable.tinker_pin_emerald)
+            PinAction.ANALOG_WRITE -> pinLabelView.setBackgroundResource(R.drawable.tinker_pin_sunflower)
             PinAction.DIGITAL_READ -> if (digitalValue === DigitalValue.HIGH) {
-                view.setBackgroundResource(R.drawable.tinker_pin_read_high)
-                view.setTextColor(view.context.resources.getColor(R.color.tinker_pin_text_dark))
+                pinLabelView.setBackgroundResource(R.drawable.tinker_pin_read_high)
+                pinLabelView.setTextColor(pinLabelView.context.resources.getColor(R.color.tinker_pin_text_dark))
             } else {
-                view.setBackgroundResource(R.drawable.tinker_pin_cyan)
+                pinLabelView.setBackgroundResource(R.drawable.tinker_pin_cyan)
             }
             PinAction.DIGITAL_WRITE -> if (digitalValue === DigitalValue.HIGH) {
-                view.setBackgroundResource(R.drawable.tinker_pin_write_high)
-                view.setTextColor(view.context.resources.getColor(R.color.tinker_pin_text_dark))
+                pinLabelView.setBackgroundResource(R.drawable.tinker_pin_write_high)
+                pinLabelView.setTextColor(pinLabelView.context.resources.getColor(R.color.tinker_pin_text_dark))
             } else {
-                view.setBackgroundResource(R.drawable.tinker_pin_alizarin)
+                pinLabelView.setBackgroundResource(R.drawable.tinker_pin_alizarin)
             }
-            PinAction.NONE -> view.setBackgroundResource(R.drawable.tinker_pin)
+            PinAction.NONE -> pinLabelView.setBackgroundResource(R.drawable.tinker_pin)
         }
     }
 
-    internal fun getConfiguredAction(): PinAction {
-        return configuredAction
-    }
-
-    internal fun setConfiguredAction(action: PinAction) {
-        this.configuredAction = action
-        // Clear out any views
-        updatePinColor()
-    }
-
     internal fun mute() {
-        view.setBackgroundResource(R.drawable.tinker_pin_muted)
-        view.setTextColor(
-            view.context.resources.getColor(
+        pinLabelView.setBackgroundResource(R.drawable.tinker_pin_muted)
+        pinLabelView.setTextColor(
+            pinLabelView.context.resources.getColor(
                 R.color.tinker_pin_text_muted
             )
         )
@@ -208,7 +195,7 @@ internal class Pin(
         if (pinBackgroundAnim != null) {
             pinBackgroundAnim!!.end()
         }
-        val parent = view.parent as View
+        val parent = pinLabelView.parent as View
         parent.setBackgroundColor(0)
     }
 
@@ -235,7 +222,7 @@ internal class Pin(
             analogWriteView = null
         }
 
-        val parent = view.parent as ViewGroup
+        val parent = pinLabelView.parent as ViewGroup
 
         if (pinBackgroundAnim != null) {
             pinBackgroundAnim!!.cancel()
@@ -245,11 +232,9 @@ internal class Pin(
             analogReadView = Ui.findView(parent, R.id.tinker_analog_read_main)
         }
 
-        // If the view does not exist, inflate it
+        // If the pinLabelView does not exist, inflate it
         if (analogReadView == null) {
-            val inflater = view.context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
+            val inflater = pinLabelView.layoutInflater
             if (pinType === PinType.A) {
                 analogReadView = inflater.inflate(R.layout.tinker_analog_read_left, parent, false)
                 parent.addView(analogReadView)
@@ -272,11 +257,11 @@ internal class Pin(
 
         if (PinAction.ANALOG_READ == configuredAction) {
             barGraph.progressDrawable = ContextCompat.getDrawable(
-                view.context, R.drawable.progress_emerald
+                pinLabelView.context, R.drawable.progress_emerald
             )
         } else {
             barGraph.progressDrawable = ContextCompat.getDrawable(
-                view.context, R.drawable.progress_sunflower
+                pinLabelView.context, R.drawable.progress_sunflower
             )
         }
 
@@ -292,15 +277,14 @@ internal class Pin(
             analogReadView = null
         }
 
-        val parent = view.parent as ViewGroup
+        val parent = pinLabelView.parent as ViewGroup
         if (analogWriteView == null) {
             analogWriteView = Ui.findView(parent, R.id.tinker_analog_write_main)
         }
 
-        // If the view does not exist, inflate it
+        // If the pinLabelView does not exist, inflate it
         if (analogWriteView == null) {
-            val inflater = view.context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = pinLabelView.layoutInflater
 
             if (pinType === PinType.A) {
                 analogWriteView = inflater.inflate(
@@ -361,15 +345,14 @@ internal class Pin(
 
     fun showDigitalWrite(newValue: DigitalValue) {
         this.digitalValue = newValue
-        val parent = view.parent as ViewGroup
+        val parent = pinLabelView.parent as ViewGroup
         if (digitalWriteView == null) {
             digitalWriteView = Ui.findView(parent, R.id.tinker_digital_write_main)
         }
 
-        // If the view does not exist, inflate it
+        // If the pinLabelView does not exist, inflate it
         if (digitalWriteView == null) {
-            val inflater = view.context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = pinLabelView.layoutInflater
             digitalWriteView = inflater.inflate(R.layout.tinker_digital_write, parent, false)
             if (pinType === PinType.A) {
                 parent.addView(digitalWriteView)
@@ -389,7 +372,7 @@ internal class Pin(
 
     internal fun showDigitalRead(newValue: DigitalValue) {
         this.digitalValue = newValue
-        val parent = view.parent as ViewGroup
+        val parent = pinLabelView.parent as ViewGroup
         if (digitalReadView == null) {
             digitalReadView = Ui.findView(
                 parent,
@@ -397,10 +380,9 @@ internal class Pin(
             )
         }
 
-        // If the view does not exist, inflate it
+        // If the pinLabelView does not exist, inflate it
         if (digitalReadView == null) {
-            val inflater = view.context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater = pinLabelView.layoutInflater
             digitalReadView = inflater.inflate(R.layout.tinker_digital_read, parent, false)
             if (pinType === PinType.A) {
                 parent.addView(digitalReadView)
@@ -426,7 +408,7 @@ internal class Pin(
         val prime = 31
         var result = 1
         result = prime * result + if (configuredAction == null) 0 else configuredAction.hashCode()
-        result = prime * result + (view.hashCode() ?: 0)
+        result = prime * result + (pinLabelView.hashCode() ?: 0)
         return result
     }
 
@@ -440,16 +422,16 @@ internal class Pin(
         val other = obj as Pin?
         if (configuredAction !== other!!.configuredAction)
             return false
-        if (view == null) {
-            if (other!!.view != null)
+        if (pinLabelView == null) {
+            if (other!!.pinLabelView != null)
                 return false
-        } else if (view != other!!.view)
+        } else if (pinLabelView != other!!.pinLabelView)
             return false
         return true
     }
 
     internal fun animateYourself() {
-        val parent = view.parent as ViewGroup
+        val parent = pinLabelView.parent as ViewGroup
 
         if (pinBackgroundAnim != null) {
             pinBackgroundAnim!!.end()
@@ -457,7 +439,7 @@ internal class Pin(
         }
 
         pinBackgroundAnim = AnimatorInflater.loadAnimator(
-            view.context, R.animator.pin_background_start
+            pinLabelView.context, R.animator.pin_background_start
         ) as ObjectAnimator
 
         pinBackgroundAnim!!.target = parent
@@ -513,3 +495,7 @@ private class CastCheckArgbEvaluator : TypeEvaluator<Any> {
 private fun Context.loadObjectAnimator(@AnimatorRes animatorId: Int): ObjectAnimator {
     return AnimatorInflater.loadAnimator(this, animatorId) as ObjectAnimator
 }
+
+
+private val View.layoutInflater: LayoutInflater
+    get() { return context.getSystemService()!! }

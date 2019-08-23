@@ -14,22 +14,28 @@ import android.widget.TextView
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle.State
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
+import io.particle.android.sdk.tinker.DeviceUiState.ONLINE_USING_TINKER
 import io.particle.android.sdk.ui.DeviceActionsHelper
 import io.particle.android.sdk.ui.flashTinkerWithDialog
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Prefs
 import io.particle.android.sdk.utils.TLog
+import io.particle.android.sdk.utils.pass
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
+import kotlinx.android.synthetic.main.fragment_tinker.*
+import kotlinx.coroutines.delay
 import java.io.IOException
-import java.util.*
 
 
 // The device that this fragment represents
@@ -37,9 +43,9 @@ private const val ARG_DEVICE = "ARG_DEVICE"
 // The device that this fragment represents
 private const val STATE_DEVICE = "STATE_DEVICE"
 
-private const val ANALOG_READ_MAX = 4095
-private const val ANALOG_WRITE_MAX = 255
-private const val ANALOG_WRITE_MAX_ALT = ANALOG_READ_MAX
+internal const val ANALOG_READ_MAX = 4095
+internal const val ANALOG_WRITE_MAX_PWM = 255
+internal const val ANALOG_WRITE_MAX_DAC = ANALOG_READ_MAX
 
 
 /** A fragment representing a single Tinker screen. */
@@ -56,7 +62,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private val log = TLog.get(TinkerFragment::class.java)
 
-    private var allPins: MutableList<Pin> = mutableListOf()
+    private var allPins: List<Pin> = mutableListOf()
     private var pinsByName: MutableMap<String, Pin> = arrayMapOf()
     private val devicesUpdatedListener = DevicesUpdatedListener()
 
@@ -102,14 +108,31 @@ class TinkerFragment : Fragment(), OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         loadViews()
         unmutePins()  // hack to make the pins show their functions correctly on first load
+
         setupListeners()
 
         if (TinkerPrefs.getInstance(requireActivity()).isFirstVisit) {
+            instructions_container.isVisible = true
             fragmentManager?.commit {
                 add(R.id.instructions_container, InstructionsFragment())
                 addToBackStack("InstructionsFragment_TRANSACTION")
             }
         }
+
+        updateState()
+
+        action_device_flash_tinker.setOnClickListener {
+            flashTinkerWithDialog(
+                requireActivity(),
+                requireActivity().findViewById(R.id.inspector_tab_section),
+                device
+            )
+            Scopes().onMain {
+                delay(3000)
+                if (isVisible && viewLifecycleOwner.lifecycle.currentState.isAtLeast(State.STARTED)) {
+                    updateState()
+                }
+            }
         }
     }
 
@@ -132,179 +155,24 @@ class TinkerFragment : Fragment(), OnClickListener {
         outState.putParcelable(STATE_DEVICE, device)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.tinker, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val actionId = item.itemId
-        return if (DeviceActionsHelper.takeActionForDevice(
-                actionId,
-                requireActivity(),
-                device,
-                requireActivity().findViewById(R.id.inspector_tab_section)
-            )
-        ) {
-            true
-
-        } else if (actionId == R.id.action_device_clear_tinker) {
-            prefs.clearTinker(device.id)
-            for (pin in allPins) {
-                pin.configuredAction = PinAction.NONE
-                pin.reset()
-            }
-            unmutePins()
-            true
-
-        } else {
-            super.onOptionsItemSelected(item)
+    private fun updateFromState(newUiState: DeviceUiState) {
+        for (state in DeviceUiState.values()) {
+            val contentView = view?.findViewById<View>(state.contentViewId)
+            contentView?.isVisible = (state == newUiState)
         }
-    }
 
-    private fun findPinView(id: Int): TextView {
-        return Ui.findView(this, id)
+        if (newUiState != ONLINE_USING_TINKER) {
+            muteAllPins()
+        } else {
+            unmutePins()
+        }
     }
 
     private fun loadViews() {
         // This is kind of wrong, since the other enum value for this type is "NONE", which isn't
         // a function, but it seemed even more absurd to create a whole second enum where 3/4 of
         // the values are identical
-        val allFunctions = EnumSet.of(
-            PinAction.ANALOG_READ,
-            PinAction.ANALOG_WRITE,
-            PinAction.DIGITAL_READ,
-            PinAction.DIGITAL_WRITE
-        )
-
-        val noAnalogWrite = EnumSet.of(
-            PinAction.ANALOG_READ,
-            PinAction.DIGITAL_READ,
-            PinAction.DIGITAL_WRITE
-        )
-
-        val noAnalogRead = EnumSet.of(
-            PinAction.ANALOG_WRITE,
-            PinAction.DIGITAL_READ,
-            PinAction.DIGITAL_WRITE
-        )
-
-        val digitalOnly = EnumSet.of(
-            PinAction.DIGITAL_READ,
-            PinAction.DIGITAL_WRITE
-        )
-
-        when (device.deviceType) {
-            ParticleDevice.ParticleDeviceType.CORE -> {
-                allPins.add(Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", allFunctions))
-                allPins.add(Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", allFunctions))
-                allPins.add(Pin(findPinView(R.id.tinker_a2), PinType.A, "A2", noAnalogWrite))
-                allPins.add(Pin(findPinView(R.id.tinker_a3), PinType.A, "A3", noAnalogWrite))
-                allPins.add(Pin(findPinView(R.id.tinker_a4), PinType.A, "A4", allFunctions))
-                allPins.add(Pin(findPinView(R.id.tinker_a5), PinType.A, "A5", allFunctions))
-                allPins.add(Pin(findPinView(R.id.tinker_a6), PinType.A, "A6", allFunctions))
-                allPins.add(Pin(findPinView(R.id.tinker_a7), PinType.A, "A7", allFunctions))
-
-                allPins.add(Pin(findPinView(R.id.tinker_d0), PinType.D, "D0", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d1), PinType.D, "D1", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d2), PinType.D, "D2", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d3), PinType.D, "D3", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d4), PinType.D, "D4", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d5), PinType.D, "D5", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d6), PinType.D, "D6", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d7), PinType.D, "D7", digitalOnly))
-            }
-
-            // default: Photon/"cuppa"
-            ParticleDevice.ParticleDeviceType.PHOTON -> {
-                val allFunctionsDAC = EnumSet.of(
-                    PinAction.ANALOG_READ,
-                    PinAction.ANALOG_WRITE_DAC,
-                    PinAction.DIGITAL_READ,
-                    PinAction.DIGITAL_WRITE
-                )
-
-                allPins.add(Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", noAnalogWrite))
-                allPins.add(Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", noAnalogWrite))
-                allPins.add(Pin(findPinView(R.id.tinker_a2), PinType.A, "A2", noAnalogWrite))
-                allPins.add(Pin(findPinView(R.id.tinker_a3), PinType.A, "A3", allFunctionsDAC, "A3", ANALOG_WRITE_MAX_ALT))
-
-                // (II) Analog write duplicated to value in D3 (mention in UI)
-                allPins.add(Pin(findPinView(R.id.tinker_a4), PinType.A, "A4", allFunctions))
-
-                // (I) Analog write duplicated to value in D2 (mention in UI)
-                allPins.add(Pin(findPinView(R.id.tinker_a5), PinType.A, "A5", allFunctions))
-
-                allPins.add(Pin(findPinView(R.id.tinker_a6), PinType.A, "A6", allFunctionsDAC, "DAC", ANALOG_WRITE_MAX_ALT))
-                allPins.add(Pin(findPinView(R.id.tinker_a7), PinType.A, "A7", allFunctions, "WKP", ANALOG_WRITE_MAX))
-
-                allPins.add(Pin(findPinView(R.id.tinker_d0), PinType.D, "D0", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d1), PinType.D, "D1", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d2), PinType.D, "D2", noAnalogRead))
-
-                // (II) Analog write duplicated to value in A3 (mention in UI)
-                allPins.add(Pin(findPinView(R.id.tinker_d3), PinType.D, "D3", noAnalogRead))
-
-                // (II) Analog write duplicated to value in A4 (mention in UI)
-                allPins.add(Pin(findPinView(R.id.tinker_d4), PinType.D, "D4", digitalOnly))
-
-                allPins.add(Pin(findPinView(R.id.tinker_d5), PinType.D, "D5", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d6), PinType.D, "D6", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d7), PinType.D, "D7", digitalOnly))
-            }
-            
-            else -> {
-                val allFunctionsDAC = EnumSet.of(
-                    PinAction.ANALOG_READ,
-                    PinAction.ANALOG_WRITE_DAC,
-                    PinAction.DIGITAL_READ,
-                    PinAction.DIGITAL_WRITE
-                )
-                allPins.add(Pin(findPinView(R.id.tinker_a0), PinType.A, "A0", noAnalogWrite))
-                allPins.add(Pin(findPinView(R.id.tinker_a1), PinType.A, "A1", noAnalogWrite))
-                allPins.add(Pin(findPinView(R.id.tinker_a2), PinType.A, "A2", noAnalogWrite))
-                allPins.add(
-                    Pin(
-                        findPinView(R.id.tinker_a3),
-                        PinType.A,
-                        "A3",
-                        allFunctionsDAC,
-                        "A3",
-                        ANALOG_WRITE_MAX_ALT
-                    )
-                )
-                allPins.add(Pin(findPinView(R.id.tinker_a4), PinType.A, "A4", allFunctions))
-                allPins.add(Pin(findPinView(R.id.tinker_a5), PinType.A, "A5", allFunctions))
-                allPins.add(
-                    Pin(
-                        findPinView(R.id.tinker_a6),
-                        PinType.A,
-                        "A6",
-                        allFunctionsDAC,
-                        "DAC",
-                        ANALOG_WRITE_MAX_ALT
-                    )
-                )
-                allPins.add(
-                    Pin(
-                        findPinView(R.id.tinker_a7),
-                        PinType.A,
-                        "A7",
-                        allFunctions,
-                        "WKP",
-                        ANALOG_WRITE_MAX
-                    )
-                )
-                allPins.add(Pin(findPinView(R.id.tinker_d0), PinType.D, "D0", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d1), PinType.D, "D1", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d2), PinType.D, "D2", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d3), PinType.D, "D3", noAnalogRead))
-                allPins.add(Pin(findPinView(R.id.tinker_d4), PinType.D, "D4", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d5), PinType.D, "D5", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d6), PinType.D, "D6", digitalOnly))
-                allPins.add(Pin(findPinView(R.id.tinker_d7), PinType.D, "D7", digitalOnly))
-            }
-        }
+        allPins = loadPins(device.deviceType!!, this)
 
         for (pin in allPins) {
             pinsByName[pin.name] = pin
@@ -316,7 +184,7 @@ class TinkerFragment : Fragment(), OnClickListener {
     private fun setupListeners() {
         // Set up pin listeners
         for (pin in allPins) {
-            for (view in listOf(pin.view, pin.view.parent as ViewGroup)) {
+            for (view in listOf(pin.pinLabelView, pin.pinLabelView.parent as ViewGroup)) {
                 view.setOnClickListener { v ->
                     val writeModePin = pinInWriteMode
                     if (writeModePin != null && pin != selectedPin) {
@@ -335,15 +203,28 @@ class TinkerFragment : Fragment(), OnClickListener {
                         unmutePins()
                         return@setOnLongClickListener true
                     }
-                    selectedPin = pin
-                    showTinkerSelect(pin)
+
+                    if (pin.configuredAction != PinAction.NONE) {
+                        pin.configuredAction = PinAction.NONE
+                        onFunctionSelected(pin, PinAction.NONE)
+                    } else {
+                        selectedPin = pin
+                        showTinkerSelectFunctionDialog(pin)
+                    }
                     true
                 }
             }
         }
 
         // Set up other listeners
-        Ui.findView<View>(this, R.id.tinker_main).setOnClickListener(this)
+        tinker_main.setOnClickListener {
+            for (pin in allPins) {
+                if (pin.isAnalogWriteMode) {
+                    pin.showAnalogWriteValue()
+                }
+            }
+            unmutePins()
+        }
     }
 
     private fun onPinClick(selectedPin: Pin) {
@@ -359,18 +240,17 @@ class TinkerFragment : Fragment(), OnClickListener {
                 }
                 PinAction.DIGITAL_READ -> doDigitalRead(selectedPin)
                 PinAction.DIGITAL_WRITE -> doDigitalWrite(selectedPin)
-                else -> {
-                }
+                else -> pass
             }
         } else {
-            showTinkerSelect(selectedPin)
+            showTinkerSelectFunctionDialog(selectedPin)
         }
     }
 
-    private fun showTinkerSelect(pin: Pin) {
+    private fun showTinkerSelectFunctionDialog(pin: Pin) {
         // No current action on the pin
         mutePinsExcept(pin)
-        toggleViewVisibilityWithFade(R.id.tinker_logo, false)
+//        toggleViewVisibilityWithFade(R.id.tinker_logo, false)
 
         val selectDialogView = activity!!.layoutInflater.inflate(
             R.layout.tinker_select, view as ViewGroup?, false
@@ -385,9 +265,9 @@ class TinkerFragment : Fragment(), OnClickListener {
             .setOnCancelListener { it.dismiss() }
             .create()
         selectDialog!!.setCanceledOnTouchOutside(true)
-        selectDialog!!.setOnDismissListener { dialog ->
+        selectDialog!!.setOnDismissListener {
             unmutePins()
-            toggleViewVisibilityWithFade(R.id.tinker_logo, true)
+//            toggleViewVisibilityWithFade(R.id.tinker_logo, true)
             selectDialog = null
         }
 
@@ -444,7 +324,8 @@ class TinkerFragment : Fragment(), OnClickListener {
         when (pin.configuredAction) {
             PinAction.ANALOG_READ -> setTinkerSelectButtonSelected(analogRead, allButtons)
 
-            PinAction.ANALOG_WRITE_DAC, PinAction.ANALOG_WRITE -> setTinkerSelectButtonSelected(
+            PinAction.ANALOG_WRITE_DAC,
+            PinAction.ANALOG_WRITE -> setTinkerSelectButtonSelected(
                 analogWrite,
                 allButtons
             )
@@ -514,6 +395,12 @@ class TinkerFragment : Fragment(), OnClickListener {
         }
     }
 
+    private fun muteAllPins() {
+        for (pin in allPins) {
+            pin.mute()
+        }
+    }
+
     private fun unmutePins() {
         // Unmute pins
         for (pin in allPins) {
@@ -523,9 +410,8 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private fun hideTinkerSelect() {
         // Reset tinker select dialog state
-        toggleViewVisibilityWithFade(R.id.tinker_logo, true)
+//        toggleViewVisibilityWithFade(R.id.tinker_logo, true)
     }
-
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -542,27 +428,18 @@ class TinkerFragment : Fragment(), OnClickListener {
                 selectedPin,
                 PinAction.DIGITAL_WRITE
             )
-            R.id.tinker_main -> {
-                for (pin in allPins) {
-                    if (pin.isAnalogWriteMode) {
-                        pin.showAnalogWriteValue()
-                    }
-                }
-                unmutePins()
-            }
         }// hideTinkerSelect();
     }
 
-    private fun onFunctionSelected(selectedPin: Pin?, action: PinAction) {
-        if (selectDialog != null) {
-            selectDialog!!.dismiss()
-            selectDialog = null
-        }
-        toggleViewVisibilityWithFade(R.id.tinker_logo, true)
+    private fun onFunctionSelected(selected: Pin?, action: PinAction) {
+        selectDialog?.dismiss()
+        selectDialog = null
+//        toggleViewVisibilityWithFade(R.id.tinker_logo, true)
 
-        selectedPin!!.reset()
-        selectedPin.configuredAction = action
-        prefs.savePinFunction(device.id, selectedPin.name, action)
+        selected?.reset()
+        selected?.configuredAction = action
+        selected?.let { prefs.savePinFunction(device.id, it.name, action) }
+        selected?.updatePinColor()
         // FIXME: should this actually be commented out?
         //		 hideTinkerSelect();
         //		 unmutePins();
@@ -576,7 +453,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private fun doAnalogWrite(pin: Pin) {
         mutePinsExcept(pin)
-        toggleViewVisibilityWithFade(R.id.tinker_logo, false)
+//        toggleViewVisibilityWithFade(R.id.tinker_logo, false)
         pin.showAnalogWrite(object : OnAnalogWriteListener {
             override fun onAnalogWrite(value: Int) {
                 for (pin1 in allPins) {
@@ -723,10 +600,16 @@ class TinkerFragment : Fragment(), OnClickListener {
         }
     }
 
+    private fun updateState() {
+        updateFromState(device.uiState)
+    }
+
 
     private inner class DevicesUpdatedListener : BroadcastReceiver() {
 
-        override fun onReceive(context: Context, intent: Intent) {}
+        override fun onReceive(context: Context, intent: Intent) {
+            updateState()
+        }
 
         internal fun buildIntentFilter(): IntentFilter {
             return IntentFilter(BroadcastContract.BROADCAST_DEVICES_UPDATED)
@@ -742,7 +625,7 @@ private data class PinStuff(
 )
 
 
-// Doing this as a fragment because I ran into touch issues doing it as just a view,
+// Doing this as a fragment because I ran into touch issues doing it as just a pinLabelView,
 // and because this gives us back button support at no additional charge.
 class InstructionsFragment : Fragment() {
 
