@@ -131,13 +131,23 @@ class MeshFlowRunner(
     fun startNewFlowWithCommissioner() {
         log.info { "startNewFlowWithCommissioner()" }
 
-//        val oldContexts = contexts!!
+        val oldContexts = flowExecutor.contexts!!
+        val newContexts = SetupContexts()
+
+        var commissionerPwd = oldContexts.mesh.meshNetworkToJoinCommissionerPassword.value
+        if (commissionerPwd == null) {  // and if it's still null...
+            commissionerPwd = oldContexts.mesh.newNetworkPasswordLD.value
+        }
+
+        newContexts.mesh.updateTargetDeviceMeshNetworkToJoinCommissionerPassword(commissionerPwd)
+        newContexts.commissioner = oldContexts.targetDevice
+
+
         flowExecutor.executeNewFlow(
             FlowIntent.FIRST_TIME_SETUP,
             listOf(FlowType.PREFLOW),
-            SetupContexts()
+            newContexts
         )
-//        val newContexts = contexts!!
     }
 
     @MainThread
