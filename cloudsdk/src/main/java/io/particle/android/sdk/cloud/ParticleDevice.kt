@@ -513,7 +513,6 @@ class ParticleDevice internal constructor(
     @Throws(ParticleCloudException::class)
     private fun performFlashingChange(flashingChange: () -> Unit) {
         try {
-            flashingChange()
             //listens for flashing event, on success unsubscribe from listening.
             subscribeToSystemEvent("spark/flash/status", object : SimpleParticleEventHandler {
                 override fun onEvent(eventName: String, particleEvent: ParticleEvent) {
@@ -533,6 +532,20 @@ class ParticleDevice internal constructor(
                     cloud.notifyDeviceChanged()
                 }
             })
+            subscribeToSystemEvent("spark/device/app-hash", object : SimpleParticleEventHandler {
+                override fun onEvent(eventName: String, particleEvent: ParticleEvent) {
+                    isFlashing = false
+                    try {
+                        this@ParticleDevice.refresh()
+                        cloud.unsubscribeFromEventWithHandler(this)
+                    } catch (e: ParticleCloudException) {
+                        // not much else we can really do here...
+                        log.w("Unable to reset flashing state for %s" + deviceState.deviceId, e)
+                    }
+                    cloud.notifyDeviceChanged()
+                }
+            })
+            flashingChange()
         } catch (e: RetrofitError) {
             throw ParticleCloudException(e)
         } catch (e: IOException) {
