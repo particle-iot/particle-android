@@ -10,6 +10,7 @@ import io.particle.mesh.setup.connection.ResultCode
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.flow.context.SetupContexts
+import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
@@ -40,6 +41,9 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
             }
         }
 
+        dialogTool.clearDialogResult()
+        delay(1000)
+
         if (removeLocally) {
             val dialogResult = dialogTool.dialogResultLD
                 .nonNull(scopes)
@@ -56,6 +60,8 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
 
             log.info { "Result for leave network confirmation dialog: $dialogResult" }
             dialogTool.clearDialogResult()
+
+            delay(1000)
 
             when (dialogResult) {
                 DialogResult.POSITIVE -> { /* no-op, continue flow */ }
