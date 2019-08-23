@@ -158,7 +158,7 @@ private class DataListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        // the view type here is a layout res ID
+        // the pinLabelView type here is a layout res ID
         val v = parent.inflateRow(viewType)
 
         return when (viewType) {

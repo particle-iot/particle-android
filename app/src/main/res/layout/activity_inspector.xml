@@ -3,13 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginEnd="0dp"
+    android:layout_marginBottom="0dp"
     android:background="@color/default_light_background">
+
+    <!--
+        set the above bottom and end margins to 183 and 51 respectively
+        to emulate a typical "small" screen device
+    -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inspector_tab_section"
-        android:paddingBottom="@dimen/p_device_info_slider_peek_height"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/p_device_info_slider_peek_height">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"

@@ -2,13 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginEnd="0dp"
+    android:layout_marginBottom="0dp"
     android:animateLayoutChanges="true"
     tools:context="io.particle.android.sdk.ui.devicelist.DeviceListActivity">
+
+    <!--
+    set the above bottom and end margins to 183 and 51 respectively
+    to emulate a typical "small" screen device
+    -->
 
     <FrameLayout
         android:id="@+id/fragment_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </FrameLayout>
 
