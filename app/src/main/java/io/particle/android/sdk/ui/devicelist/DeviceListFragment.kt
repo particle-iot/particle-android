@@ -3,7 +3,6 @@ package io.particle.android.sdk.ui.devicelist
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -16,11 +15,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -43,13 +40,11 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
-import io.particle.commonui.toDecorationColor
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
-import io.particle.commonui.productName
 import io.particle.commonui.styleAsPill
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
@@ -103,10 +98,12 @@ class DeviceListFragment : Fragment() {
         add_device_fab.collapse()
     }
 
+    @ExperimentalStdlibApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val top = inflater.inflate(R.layout.fragment_device_list2, container, false)
 
         val rv = Ui.findView<RecyclerView>(top, R.id.device_list)
@@ -206,14 +203,13 @@ class DeviceListFragment : Fragment() {
         super.onResume()
         name_filter_input.addTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
-//        subscribeToSystemEvents(devices, false)
-
+        devices?.let { subscribeToSystemEvents(devices, false) }
     }
 
     override fun onPause() {
         name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
-//        subscribeToSystemEvents(devices, true)
+        devices?.let { subscribeToSystemEvents(devices, true) }
         super.onPause()
     }
 
@@ -223,6 +219,7 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun onDeviceListUpdated(devices: List<ParticleDevice>) {
+        log.i("onDeviceListUpdated(): $devices")
         val ctx = context ?: return
 
         refresh_layout.isRefreshing = false
@@ -248,7 +245,7 @@ class DeviceListFragment : Fragment() {
         empty_message.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
         //subscribe to system updates
-//        subscribeToSystemEvents(devices, false)
+        subscribeToSystemEvents(devices, false)
     }
 
     private fun updateEmptyMessageAndSearchBox() {
@@ -294,40 +291,36 @@ class DeviceListFragment : Fragment() {
         devices: List<ParticleDevice>,
         revertSubscription: Boolean
     ) {
-        for (device in devices) {
-            object : AsyncTask<ParticleDevice, Void, Void>() {
-                override fun doInBackground(vararg particleDevices: ParticleDevice): Void? {
-                    try {
-                        if (revertSubscription) {
-                            for (id in subscribeIds) {
-                                device.unsubscribeFromEvents(id!!)
-                            }
-                        } else {
-                            subscribeIds.add(
-                                device.subscribeToEvents(
-                                    "spark/status",
-                                    object : ParticleEventHandler {
-                                        override fun onEventError(e: Exception) {
-                                            //ignore for now, events aren't vital
-                                        }
-
-                                        override fun onEvent(
-                                            eventName: String,
-                                            particleEvent: ParticleEvent
-                                        ) {
-                                            refreshDevices()
-                                        }
-                                    })
-                            )
+        scopes.onWorker {
+            for (device in devices) {
+                try {
+                    if (revertSubscription) {
+                        for (id in subscribeIds) {
+                            device.unsubscribeFromEvents(id!!)
                         }
-                    } catch (ignore: IOException) {
-                        //ignore for now, events aren't vital
-                    } catch (ignore: ParticleCloudException) {
-                    }
+                    } else {
+                        subscribeIds.add(
+                            device.subscribeToEvents(
+                                "spark/status",
+                                object : ParticleEventHandler {
+                                    override fun onEventError(e: Exception) {
+                                        //ignore for now, events aren't vital
+                                    }
 
-                    return null
+                                    override fun onEvent(
+                                        eventName: String,
+                                        particleEvent: ParticleEvent
+                                    ) {
+                                        refreshDevices()
+                                    }
+                                })
+                        )
+                    }
+                } catch (ignore: IOException) {
+                    //ignore for now, events aren't vital
+                } catch (ignore: ParticleCloudException) {
                 }
-            }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, device)
+            }
         }
     }
 
@@ -373,7 +366,7 @@ class DeviceListFragment : Fragment() {
 
     private fun refreshDevices() {
         val devices = filterViewModel.fullDeviceListLD.value
-//        subscribeToSystemEvents(devices, true)
+        devices?.let { subscribeToSystemEvents(it, true) }
         filterViewModel.refreshDevices()
     }
 
