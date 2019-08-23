@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inspector_tab_section"
-        android:paddingBottom="90dp"
+        android:paddingBottom="@dimen/p_device_info_slider_peek_height"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -269,10 +269,10 @@
 
     <Button
         android:id="@+id/action_filter_device_list"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/p_mesh_button_style"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:text="Show X devices"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
