@@ -18,8 +18,8 @@ ext {
             "includes all the necessary device communication code, an easily customizable UI, and " +
             "a simple developer API."
 
-    siteUrl = 'https://github.com/spark/spark-setup-android'
-    gitUrl = 'https://github.com/spark/spark-setup-android.git'
+    siteUrl = 'https://github.com/particle-iot/particle-android'
+    gitUrl = 'https://github.com/particle-iot/particle-android.git'
 
     libraryVersion = project.version
 
