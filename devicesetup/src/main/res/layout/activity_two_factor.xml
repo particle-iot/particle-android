@@ -55,7 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
                 android:hint="@string/login_code_hint"
-                android:inputType="textNoSuggestions"/>
+                android:importantForAutofill="no"
+                android:inputType="number"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
