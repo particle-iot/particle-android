@@ -3,11 +3,8 @@ package io.particle.android.sdk.ui.devicelist
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.ui.BaseActivity
 import io.particle.android.sdk.utils.SoftAPConfigRemover
 import io.particle.android.sdk.utils.WifiFacade
