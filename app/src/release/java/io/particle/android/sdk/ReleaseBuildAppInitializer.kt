@@ -70,6 +70,16 @@ fun onApplicationCreated(app: Application) {
 }
 
 
+fun updateUsernameWithCrashlytics(username: String?) {
+    val coveredByGDPR = isUserCoveredByGDPR()
+    if (coveredByGDPR) {
+        return
+    }
+
+    Crashlytics.setUserIdentifier(username)
+}
+
+
 internal class CrashlyticsLoggerHandler : Handler() {
 
     private var messageValueSupplier = MessageValueSupplier()
