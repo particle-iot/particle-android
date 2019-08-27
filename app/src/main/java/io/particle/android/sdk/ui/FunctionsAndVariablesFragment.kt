@@ -143,13 +143,17 @@ private class DataListAdapter(
     init {
         when (mode) {
             DisplayMode.VARIABLES -> {
-                data.add(HeaderRow("Particle.variable()"))
+                if (device.variables.isEmpty()) {
+                    data.add(HeaderRow(""))
+                }
                 for ((key, value) in device.variables) {
                     data.add(VariableRow(key, value))
                 }
             }
             DisplayMode.FUNCTIONS -> {
-                data.add(HeaderRow("Particle.function()"))
+                if (device.functions.isEmpty()) {
+                    data.add(HeaderRow(""))
+                }
                 for (function in device.functions) {
                     data.add(FunctionRow(function))
                 }
