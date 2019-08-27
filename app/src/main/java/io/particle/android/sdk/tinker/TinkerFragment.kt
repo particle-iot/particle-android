@@ -8,8 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.OnClickListener
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
@@ -17,13 +20,15 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.Lifecycle.State
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.tinker.DeviceUiState.ONLINE_USING_TINKER
-import io.particle.android.sdk.ui.DeviceActionsHelper
 import io.particle.android.sdk.ui.flashTinkerWithDialog
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Prefs
@@ -539,27 +544,27 @@ class TinkerFragment : Fragment(), OnClickListener {
                 Async.executeAsync(device, object : TinkerWork(stuff) {
                     @Throws(ParticleCloudException::class, IOException::class)
                     override fun callApi(sparkDevice: ParticleDevice): Int? {
-                        val stringValue: String
-                        if (stuff.pinAction === PinAction.ANALOG_WRITE) {
-                            stringValue = newValue.toString()
+                        val stringValue: String = if (stuff.pinAction === PinAction.ANALOG_WRITE) {
+                            newValue.toString()
                         } else {
-                            stringValue =
-                                if (newValue == DigitalValue.HIGH.intValue) "HIGH" else "LOW"
-                        }
-                        try {
-                            return if (sparkDevice.callFunction(
-                                    actionToFunctionName[stuff.pinAction]!!,
-                                    listOf(stuff.pinName, stringValue)
-                                ) == 1
-                            )
-                                newValue
-                            else
-                                stuff.currentValue
-                        } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            e.message?.let { activity.safeToast(it) }
-                            return stuff.currentValue // it didn't change
+                            if (newValue == DigitalValue.HIGH.intValue) "HIGH" else "LOW"
                         }
 
+                        return try {
+                            val result = sparkDevice.callFunction(
+                                actionToFunctionName[stuff.pinAction]!!,
+                                listOf(stuff.pinName, stringValue))
+
+                            if (result  == 1) {
+                                newValue
+                            } else {
+                                stuff.currentValue
+                            }
+
+                        } catch (e: ParticleCloudException) {
+                            e.message?.let { activity.safeToast(it) }
+                            stuff.currentValue // it didn't change
+                        }
                     }
 
                     override fun onSuccess(returnValue: Int) {
@@ -582,7 +587,7 @@ class TinkerFragment : Fragment(), OnClickListener {
                                 actionToFunctionName[stuff.pinAction]!!,
                                 listOf(stuff.pinName)
                             )
-                        } catch (e: ParticleDevice.FunctionDoesNotExistException) {
+                        } catch (e: ParticleCloudException) {
                             activity.safeToast(e.message)
                             return stuff.currentValue
                         }
