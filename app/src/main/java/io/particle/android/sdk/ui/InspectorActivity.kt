@@ -115,7 +115,12 @@ class InspectorActivity : BaseActivity() {
         EventBus.getDefault().register(this)
 
         scopes.onWorker {
-            val owned = cloud.userOwnsDevice(device.id)
+            val owned = try {
+                cloud.userOwnsDevice(device.id)
+            } catch (ex: Exception) {
+                false
+            }
+
             if (!owned) {
                 scopes.onMain { finish() }
             }
