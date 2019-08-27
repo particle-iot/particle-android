@@ -15,6 +15,10 @@ import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle.Event
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +36,7 @@ import io.particle.android.sdk.ui.RowItem.VariableRow
 import io.particle.android.sdk.utils.AnimationUtil
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Py.list
+import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.inflateFragment
 import io.particle.mesh.ui.inflateRow
 import io.particle.sdk.app.R
@@ -40,7 +45,6 @@ import kotlinx.android.synthetic.main.fragment_data.*
 import kotlinx.android.synthetic.main.row_function_list.view.*
 import kotlinx.android.synthetic.main.row_variable_list.view.*
 import java.io.IOException
-import java.util.*
 
 
 sealed class RowItem {
@@ -87,11 +91,25 @@ class FunctionsAndVariablesFragment : Fragment() {
         }
     }
 
+    private var viewLifecycleScopes = Scopes()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewLifecycleOwner.lifecycle.addObserver(
+            object : LifecycleEventObserver {
+                override fun onStateChanged(source: LifecycleOwner, event: Event) {
+                    if (event == Event.ON_CREATE) {
+                        viewLifecycleScopes = Scopes()
+                    } else if (event == Event.ON_DESTROY) {
+                        viewLifecycleScopes.cancelAll()
+                    }
+                }
+
+            }
+        )
         return container?.inflateFragment(R.layout.fragment_data)
     }
 
@@ -103,15 +121,17 @@ class FunctionsAndVariablesFragment : Fragment() {
 
         data_list.setHasFixedSize(true)  // perf. optimization
         data_list.layoutManager = LinearLayoutManager(context)
-        data_list.adapter = DataListAdapter(device, displayMode)
+        data_list.adapter = DataListAdapter(device, displayMode, viewLifecycleScopes)
         data_list.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
+
 }
 
 
 private class DataListAdapter(
     private val device: ParticleDevice,
-    private val mode: DisplayMode
+    private val mode: DisplayMode,
+    private val scopes: Scopes
 ) : RecyclerView.Adapter<DataListAdapter.BaseViewHolder>() {
 
     internal open class BaseViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel)
@@ -266,43 +286,42 @@ private class DataListAdapter(
                 holder.value.visibility = View.GONE
 
                 try {
-                    Async.executeAsync(device, object : Async.ApiWork<ParticleDevice, Int>() {
-                        @Throws(ParticleCloudException::class, IOException::class)
-                        override fun callApi(particleDevice: ParticleDevice): Int? {
-                            try {
-                                val imm = context.getSystemService<InputMethodManager>()
+                    scopes.onWorker {
+                        val result: Int = try {
+                            val imm = context.getSystemService<InputMethodManager>()
 
-                                imm?.hideSoftInputFromWindow(holder.argument.windowToken, 0)
-                                return particleDevice.callFunction(
-                                    function.name,
-                                    ArrayList(listOf(holder.argument.text.toString()))
-                                )
-                            } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                                e.printStackTrace()
-                            } catch (e: IllegalArgumentException) {
-                                e.printStackTrace()
+                            imm?.hideSoftInputFromWindow(holder.argument.windowToken, 0)
+                            device.callFunction(
+                                function.name,
+                                ArrayList(listOf(holder.argument.text.toString()))
+                            )
+
+                        } catch (e: ParticleDevice.FunctionDoesNotExistException) {
+                            e.printStackTrace()
+                            -1
+                        } catch (e: IllegalArgumentException) {
+                            e.printStackTrace()
+                            -1
+                        }
+
+                        scopes.onMain {
+                            if (result == -1) {
+                                holder.value.text = ""
+                                Toast.makeText(
+                                    context,
+                                    R.string.sending_argument_failed,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                holder.progressBar.visibility = View.GONE
+                                holder.value.visibility = View.VISIBLE
+                            } else {
+                                holder.value.text = result.toString()
+                                holder.progressBar.visibility = View.GONE
+                                holder.value.visibility = View.VISIBLE
                             }
-
-                            return -1
                         }
+                    }
 
-                        override fun onSuccess(value: Int) {
-                            holder.value.text = value.toString()
-                            holder.progressBar.visibility = View.GONE
-                            holder.value.visibility = View.VISIBLE
-                        }
-
-                        override fun onFailure(exception: ParticleCloudException) {
-                            holder.value.text = ""
-                            Toast.makeText(
-                                context,
-                                R.string.sending_argument_failed,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            holder.progressBar.visibility = View.GONE
-                            holder.value.visibility = View.VISIBLE
-                        }
-                    })
                 } catch (e: ParticleCloudException) {
                     holder.value.text = ""
                     Toast.makeText(
