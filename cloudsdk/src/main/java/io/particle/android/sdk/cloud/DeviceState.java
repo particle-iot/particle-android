@@ -194,6 +194,77 @@ class DeviceState implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DeviceState that = (DeviceState) o;
+
+        if (!deviceId.equals(that.deviceId)) return false;
+        if (platformId != null ? !platformId.equals(that.platformId) : that.platformId != null)
+            return false;
+        if (productId != null ? !productId.equals(that.productId) : that.productId != null)
+            return false;
+        if (ipAddress != null ? !ipAddress.equals(that.ipAddress) : that.ipAddress != null)
+            return false;
+        if (lastAppName != null ? !lastAppName.equals(that.lastAppName) : that.lastAppName != null)
+            return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (isConnected != null ? !isConnected.equals(that.isConnected) : that.isConnected != null)
+            return false;
+        if (cellular != null ? !cellular.equals(that.cellular) : that.cellular != null)
+            return false;
+        if (imei != null ? !imei.equals(that.imei) : that.imei != null) return false;
+        if (lastIccid != null ? !lastIccid.equals(that.lastIccid) : that.lastIccid != null)
+            return false;
+        if (currentBuild != null ? !currentBuild.equals(that.currentBuild) : that.currentBuild != null)
+            return false;
+        if (defaultBuild != null ? !defaultBuild.equals(that.defaultBuild) : that.defaultBuild != null)
+            return false;
+        if (!functions.equals(that.functions)) return false;
+        if (!variables.equals(that.variables)) return false;
+        if (deviceType != that.deviceType) return false;
+        if (lastHeard != null ? !lastHeard.equals(that.lastHeard) : that.lastHeard != null)
+            return false;
+        if (serialNumber != null ? !serialNumber.equals(that.serialNumber) : that.serialNumber != null)
+            return false;
+        if (mobileSecret != null ? !mobileSecret.equals(that.mobileSecret) : that.mobileSecret != null)
+            return false;
+        if (iccid != null ? !iccid.equals(that.iccid) : that.iccid != null) return false;
+        if (systemFirmwareVersion != null ? !systemFirmwareVersion.equals(that.systemFirmwareVersion) : that.systemFirmwareVersion != null)
+            return false;
+        return notes != null ? notes.equals(that.notes) : that.notes == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = deviceId.hashCode();
+        result = 31 * result + (platformId != null ? platformId.hashCode() : 0);
+        result = 31 * result + (productId != null ? productId.hashCode() : 0);
+        result = 31 * result + (ipAddress != null ? ipAddress.hashCode() : 0);
+        result = 31 * result + (lastAppName != null ? lastAppName.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (isConnected != null ? isConnected.hashCode() : 0);
+        result = 31 * result + (cellular != null ? cellular.hashCode() : 0);
+        result = 31 * result + (imei != null ? imei.hashCode() : 0);
+        result = 31 * result + (lastIccid != null ? lastIccid.hashCode() : 0);
+        result = 31 * result + (currentBuild != null ? currentBuild.hashCode() : 0);
+        result = 31 * result + (defaultBuild != null ? defaultBuild.hashCode() : 0);
+        result = 31 * result + functions.hashCode();
+        result = 31 * result + variables.hashCode();
+        result = 31 * result + (deviceType != null ? deviceType.hashCode() : 0);
+        result = 31 * result + (lastHeard != null ? lastHeard.hashCode() : 0);
+        result = 31 * result + (serialNumber != null ? serialNumber.hashCode() : 0);
+        result = 31 * result + (mobileSecret != null ? mobileSecret.hashCode() : 0);
+        result = 31 * result + (iccid != null ? iccid.hashCode() : 0);
+        result = 31 * result + (systemFirmwareVersion != null ? systemFirmwareVersion.hashCode() : 0);
+        result = 31 * result + (notes != null ? notes.hashCode() : 0);
+        return result;
+    }
     //endregion
 
     public static class DeviceStateBuilder {
