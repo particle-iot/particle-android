@@ -83,8 +83,8 @@ class Responses {
             val currentBuild: String,
             @SerializedName("default_build_target")
             val defaultBuild: String,
-            val variables: Map<String, String>,
-            val functions: List<String>,
+            val variables: Map<String, String>?,
+            val functions: List<String?>?,
             @SerializedName("product_id")
             val productId: Int,
             @SerializedName("platform_id")
