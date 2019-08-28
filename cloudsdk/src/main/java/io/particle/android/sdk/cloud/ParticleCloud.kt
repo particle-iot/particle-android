@@ -48,8 +48,6 @@ class ParticleCloud internal constructor(
     schemeAndHostname: Uri,
     private val mainApi: ApiDefs.CloudApi,
     private val identityApi: ApiDefs.IdentityApi,
-    // FIXME: document why this exists (and try to make it not exist...)
-    private val deviceFastTimeoutApi: ApiDefs.CloudApi,
     private val appDataStorage: AppDataStorage,
     private val broadcastManager: LocalBroadcastManager,
     gson: Gson,
@@ -336,78 +334,6 @@ class ParticleCloud internal constructor(
             ) { testTarget -> idLower == testTarget.id.toLowerCase() }
             firstMatch != null
         }
-    }
-
-    // FIXME: devise a less temporary way to expose this method
-    // FIXME: stop the duplication that's happening here
-    // FIXME: ...think harder about this whole thing.  This is unique in that it's the only
-    // operation that could _partially_ succeed.
-    @Deprecated("This will be removed with the next major version update. Use getDevices() instead")
-    @WorkerThread
-    @Throws(PartialDeviceListResultException::class, ParticleCloudException::class)
-    fun getDevicesParallel(useShortTimeout: Boolean): List<ParticleDevice> {
-        val simpleDevices: List<Models.SimpleDevice>
-        try {
-            simpleDevices = mainApi.getDevices()
-            appDataStorage.saveUserHasClaimedDevices(truthy(simpleDevices))
-
-
-            // divide up into online and offline
-            val offlineDevices = list<Models.SimpleDevice>()
-            val onlineDevices = list<Models.SimpleDevice>()
-
-            for (simpleDevice in simpleDevices) {
-                val targetList = if (simpleDevice.isConnected)
-                    onlineDevices
-                else
-                    offlineDevices
-                targetList.add(simpleDevice)
-            }
-
-
-            val result = list<ParticleDevice>()
-
-            // handle the offline devices
-            for (offlineDevice in offlineDevices) {
-                result.add(getOfflineDevice(offlineDevice))
-            }
-
-
-            // handle the online devices
-            val apiToUse = if (useShortTimeout)
-                deviceFastTimeoutApi
-            else
-                mainApi
-            // FIXME: don't hardcode this here
-            val timeoutInSecs = if (useShortTimeout) 5 else 35
-            val results = parallelDeviceFetcher.fetchDevicesInParallel(
-                onlineDevices, apiToUse, timeoutInSecs
-            )
-
-            // FIXME: make this logic more elegant
-            var shouldThrowIncompleteException = false
-            for (fetchResult in results) {
-                // fetchResult shouldn't be null, but...
-                // FIXME: eliminate this ambiguity ^^^, it's either possible that it's null, or it isn't.
-                if (fetchResult?.fetchedDevice == null) {
-                    shouldThrowIncompleteException = true
-                } else {
-                    result.add(getDevice(fetchResult.fetchedDevice, false))
-                }
-            }
-
-            pruneDeviceMap(simpleDevices)
-
-            if (shouldThrowIncompleteException) {
-                throw PartialDeviceListResultException(result)
-            }
-
-            return result
-
-        } catch (error: RetrofitError) {
-            throw ParticleCloudException(error)
-        }
-
     }
 
     /**

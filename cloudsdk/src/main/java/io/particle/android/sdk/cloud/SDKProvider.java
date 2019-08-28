@@ -30,7 +30,6 @@ class SDKProvider {
 
     private final Context ctx;
     private final CloudApi cloudApi;
-    private final CloudApi fastTimeoutCloudApi;
     private final IdentityApi identityApi;
     private final ParticleCloud particleCloud;
     private final TokenGetterDelegateImpl tokenGetter;
@@ -50,7 +49,6 @@ class SDKProvider {
         ApiFactory apiFactory = new ApiFactory(ctx, tokenGetter, oAuthCredentialsProvider, uri);
         cloudApi = apiFactory.buildNewCloudApi();
         identityApi = apiFactory.buildNewIdentityApi();
-        fastTimeoutCloudApi = apiFactory.buildNewFastTimeoutCloudApi();
         particleCloud = buildCloud(apiFactory);
     }
 
@@ -73,9 +71,14 @@ class SDKProvider {
 
         // FIXME: see if this TokenGetterDelegate setter issue can be resolved reasonably
         ParticleCloud cloud = new ParticleCloud(
-                apiFactory.getApiUri(), cloudApi, identityApi, fastTimeoutCloudApi,
-                SDKGlobals.getAppDataStorage(), LocalBroadcastManager.getInstance(ctx),
-                apiFactory.getGsonInstance(), buildExecutor());
+                apiFactory.getApiUri(),
+                cloudApi,
+                identityApi,
+                SDKGlobals.getAppDataStorage(),
+                LocalBroadcastManager.getInstance(ctx),
+                apiFactory.getGsonInstance(),
+                buildExecutor()
+        );
         // FIXME: gross circular dependency
         tokenGetter.cloud = cloud;
 
