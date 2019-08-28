@@ -93,7 +93,7 @@ class DeviceConnector(
         var xceiver = getCachedDevice(barcode, connName, scopes)
         xceiver?.let { return it }
 
-        log.info { "Connected device not found in cache, continuing to connect" }
+        log.info { "Connected device NOT found in cache, continuing to connect" }
 
         log.info { "Getting device type for barcode $barcode" }
         val deviceType = scopes.withWorker {

@@ -424,6 +424,7 @@ class ParticleDevice internal constructor(
      */
     @Throws(IOException::class)
     fun subscribeToEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
+        log.d("Subscribing to events with prefix: $eventNamePrefix for device ${deviceState.deviceId}")
         return cloud.subscribeToDeviceEvents(eventNamePrefix, deviceState.deviceId, handler)
     }
 
@@ -435,6 +436,7 @@ class ParticleDevice internal constructor(
      */
     @Throws(ParticleCloudException::class)
     fun unsubscribeFromEvents(eventListenerID: Long) {
+        log.v("Unsubscribing from events where eventListenerID=$eventListenerID")
         cloud.unsubscribeFromEventWithID(eventListenerID)
     }
 
@@ -660,6 +662,8 @@ class ParticleDevice internal constructor(
         }
     }
 
+
+
     @Throws(IOException::class)
     private fun subscribeToSystemEvent(
         eventNamePrefix: String,
@@ -807,7 +811,7 @@ class ParticleDevice internal constructor(
 
     companion object {
 
-        private val MAX_PARTICLE_FUNCTION_ARG_LENGTH = 622
+        private const val MAX_PARTICLE_FUNCTION_ARG_LENGTH = 622
 
         private val log = TLog.get(ParticleDevice::class.java)
 
