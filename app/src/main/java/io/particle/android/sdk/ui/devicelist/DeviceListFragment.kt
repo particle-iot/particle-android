@@ -244,8 +244,6 @@ class DeviceListFragment : Fragment() {
 
         empty_message.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
-        //subscribe to system updates
-        subscribeToSystemEvents(devices, false)
     }
 
     private fun updateEmptyMessageAndSearchBox() {
@@ -365,8 +363,6 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun refreshDevices() {
-        val devices = filterViewModel.fullDeviceListLD.value
-        devices?.let { subscribeToSystemEvents(it, true) }
         filterViewModel.refreshDevices()
     }
 
