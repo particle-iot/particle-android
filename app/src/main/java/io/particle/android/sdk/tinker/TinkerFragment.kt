@@ -9,24 +9,23 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.Lifecycle.State
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleDevice
+import io.particle.android.sdk.cloud.ParticleDevice.FunctionDoesNotExistException
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.tinker.DeviceUiState.ONLINE_USING_TINKER
 import io.particle.android.sdk.ui.flashTinkerWithDialog
@@ -94,9 +93,9 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         prefs = Prefs.getInstance(activity)
         device = if (savedInstanceState != null) {
-            savedInstanceState.getParcelable(STATE_DEVICE)
+            savedInstanceState.getParcelable(STATE_DEVICE)!!
         } else {
-            requireArguments().getParcelable(ARG_DEVICE)
+            requireArguments().getParcelable(ARG_DEVICE)!!
         }
         api = TinkerApi()
     }
@@ -257,99 +256,69 @@ class TinkerFragment : Fragment(), OnClickListener {
         mutePinsExcept(pin)
 //        toggleViewVisibilityWithFade(R.id.tinker_logo, false)
 
-        val selectDialogView = activity!!.layoutInflater.inflate(
+        val selectDialogView = requireActivity().layoutInflater.inflate(
             R.layout.tinker_select, view as ViewGroup?, false
         )
 
         selectDialog = AlertDialog.Builder(
             activity,
-            R.style.ParticleSetupTheme_DialogNoDimBackground
+            R.style.Theme_MaterialComponents_Dialog_Alert
         )
             .setView(selectDialogView)
             .setCancelable(true)
             .setOnCancelListener { it.dismiss() }
             .create()
-        selectDialog!!.setCanceledOnTouchOutside(true)
-        selectDialog!!.setOnDismissListener {
+
+        val dialog = selectDialog!!
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.setOnDismissListener {
             unmutePins()
 //            toggleViewVisibilityWithFade(R.id.tinker_logo, true)
             selectDialog = null
+        }
+
+        val buttonsAndColors = mapOf(
+            R.id.tinker_button_analog_read to R.color.tinker_analog_read,
+            R.id.tinker_button_analog_write to R.color.tinker_analog_write,
+            R.id.tinker_button_digital_read to R.color.tinker_digital_read,
+            R.id.tinker_button_digital_write to R.color.tinker_digital_write
+        )
+
+        val ctx = requireContext()
+        for ((buttonId, colorId) in buttonsAndColors) {
+            val outlineBg = ctx.getDrawable(R.drawable.device_filter_button_background_selected)!!
+            outlineBg.mutate()
+            val functionColor = ContextCompat.getColor(ctx, colorId)
+            DrawableCompat.setTint(outlineBg, functionColor)
+            val button = Ui.findView<View>(selectDialogView, buttonId)
+            button.background = outlineBg
+            button.setOnClickListener(this)
+        }
+
+        fun View.setVisible(shouldBeVisible: Boolean) {
+            this.visibility = if (shouldBeVisible) View.VISIBLE else View.INVISIBLE
         }
 
         val analogRead = Ui.findView<View>(selectDialogView, R.id.tinker_button_analog_read)
         val analogWrite = Ui.findView<View>(selectDialogView, R.id.tinker_button_analog_write)
         val digitalRead = Ui.findView<View>(selectDialogView, R.id.tinker_button_digital_read)
         val digitalWrite = Ui.findView<View>(selectDialogView, R.id.tinker_button_digital_write)
-        val allButtons = listOf(analogRead, analogWrite, digitalRead, digitalWrite)
 
-        analogRead.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                setTinkerSelectButtonSelected(analogRead, allButtons)
-            }
-            false
-        }
-
-        analogWrite.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                setTinkerSelectButtonSelected(analogWrite, allButtons)
-            }
-            false
-        }
-
-        digitalRead.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                setTinkerSelectButtonSelected(digitalRead, allButtons)
-            }
-            false
-        }
-
-        digitalWrite.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                setTinkerSelectButtonSelected(digitalWrite, allButtons)
-            }
-            false
-        }
-
-        digitalRead.setOnClickListener(this)
-        digitalWrite.setOnClickListener(this)
-        analogRead.setOnClickListener(this)
-        analogWrite.setOnClickListener(this)
-
-        setVisible(digitalRead, pin.functions.contains(PinAction.DIGITAL_READ))
-        setVisible(digitalWrite, pin.functions.contains(PinAction.DIGITAL_WRITE))
-        setVisible(analogRead, pin.functions.contains(PinAction.ANALOG_READ))
-        setVisible(
-            analogWrite,
-            (pin.functions.contains(PinAction.ANALOG_WRITE)
-                    || pin.functions.contains(PinAction.ANALOG_WRITE_DAC))
+        digitalRead.setVisible(pin.functions.contains(PinAction.DIGITAL_READ))
+        digitalWrite.setVisible(pin.functions.contains(PinAction.DIGITAL_WRITE))
+        analogRead.setVisible(pin.functions.contains(PinAction.ANALOG_READ))
+        analogWrite.setVisible(
+            PinAction.ANALOG_WRITE in pin.functions
+                    || PinAction.ANALOG_WRITE_DAC in pin.functions
         )
 
         (selectDialogView.findViewById<View>(R.id.tinker_select_pin) as TextView).text = pin.label
 
-        when (pin.configuredAction) {
-            PinAction.ANALOG_READ -> setTinkerSelectButtonSelected(analogRead, allButtons)
-
-            PinAction.ANALOG_WRITE_DAC,
-            PinAction.ANALOG_WRITE -> setTinkerSelectButtonSelected(
-                analogWrite,
-                allButtons
-            )
-
-            PinAction.DIGITAL_READ -> setTinkerSelectButtonSelected(digitalRead, allButtons)
-
-            PinAction.DIGITAL_WRITE -> setTinkerSelectButtonSelected(digitalWrite, allButtons)
-
-            PinAction.NONE -> setTinkerSelectButtonSelected(null, allButtons)
+        selectDialogView.findViewById<View>(R.id.p_action_close).setOnClickListener {
+            dialog.dismiss()
         }
 
         selectDialog!!.show()
-
-        val decorView = selectDialog!!.window!!.decorView
-        noIReallyMeanItIWantThisToBeTransparent(decorView)
-    }
-
-    private fun setVisible(view: View, shouldBeVisible: Boolean) {
-        view.visibility = if (shouldBeVisible) View.VISIBLE else View.INVISIBLE
     }
 
     private fun setTinkerSelectButtonSelected(selectButtonView: View?, allButtons: List<View>) {
@@ -484,10 +453,11 @@ class TinkerFragment : Fragment(), OnClickListener {
     private fun doDigitalWrite(pin: Pin) {
         pin.animateYourself()
         val currentValue = pin.digitalValue
-        val newValue = if (currentValue === DigitalValue.HIGH)
+        val newValue = if (currentValue === DigitalValue.HIGH) {
             DigitalValue.LOW
-        else
+        } else {
             DigitalValue.HIGH
+        }
         api.write(
             PinStuff(pin.name, PinAction.DIGITAL_WRITE, currentValue!!.intValue),
             newValue.intValue
@@ -561,6 +531,9 @@ class TinkerFragment : Fragment(), OnClickListener {
                                 stuff.currentValue
                             }
 
+                        } catch (e: FunctionDoesNotExistException) {
+                            e.message?.let { activity.safeToast(it) }
+                            stuff.currentValue // it didn't change
                         } catch (e: ParticleCloudException) {
                             e.message?.let { activity.safeToast(it) }
                             stuff.currentValue // it didn't change
@@ -582,16 +555,18 @@ class TinkerFragment : Fragment(), OnClickListener {
                 Async.executeAsync(device, object : TinkerWork(stuff) {
                     @Throws(ParticleCloudException::class, IOException::class)
                     override fun callApi(sparkDevice: ParticleDevice): Int? {
-                        try {
-                            return sparkDevice.callFunction(
+                        return try {
+                            sparkDevice.callFunction(
                                 actionToFunctionName[stuff.pinAction]!!,
                                 listOf(stuff.pinName)
                             )
+                        } catch (e: FunctionDoesNotExistException) {
+                            e.message?.let { activity.safeToast(it) }
+                            stuff.currentValue // it didn't change
                         } catch (e: ParticleCloudException) {
                             activity.safeToast(e.message)
-                            return stuff.currentValue
+                            stuff.currentValue
                         }
-
                     }
 
                     override fun onSuccess(returnValue: Int) {

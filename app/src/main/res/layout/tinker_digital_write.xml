@@ -17,6 +17,7 @@
         android:layout_marginRight="10dip"
         android:gravity="center_vertical|end"
         android:text="HIGH"
+        android:textColor="@android:color/black"
         android:textSize="18sp"/>
 
 </LinearLayout>

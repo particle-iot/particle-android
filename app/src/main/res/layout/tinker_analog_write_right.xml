@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
+        android:textColor="@android:color/black"
         android:gravity="center_vertical|start"
         android:textSize="@dimen/analog_write_text_value_size"
         android:text="0"/>
