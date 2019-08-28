@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 
 // This is the library version used when deploying the artifact
@@ -52,6 +53,10 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+    }
+
+    androidExtensions {
+        experimental = true
     }
 
 }

@@ -27,10 +27,7 @@ class Responses {
         )
 
 
-        /**
-         * Represents a single Particle device in the list returned
-         * by a call to "GET /v1/devices"
-         */
+        /** Represents a single Particle device in the list returned by a call to "GET /v1/devices" */
         class SimpleDevice(
             val id: String,
             val name: String,

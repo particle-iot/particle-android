@@ -61,6 +61,10 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/main.kotlin_module'
     }
+
+    androidExtensions {
+        experimental = true
+    }
 }
 
 

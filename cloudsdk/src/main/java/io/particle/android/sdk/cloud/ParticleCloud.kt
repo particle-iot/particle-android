@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
+import androidx.collection.arrayMapOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
@@ -13,10 +14,8 @@ import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.Responses.CardOnFileResponse
 import io.particle.android.sdk.cloud.Responses.DeviceMeshMembership
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse.RegisteredNetwork
-import io.particle.android.sdk.cloud.Responses.Models
 import io.particle.android.sdk.cloud.Responses.Models.CompleteDevice
 import io.particle.android.sdk.cloud.Responses.Models.SimpleDevice
-import io.particle.android.sdk.cloud.exceptions.PartialDeviceListResultException
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
 import io.particle.android.sdk.cloud.models.*
@@ -33,6 +32,7 @@ import retrofit.RetrofitError.Kind
 import retrofit.client.Response
 import retrofit.mime.TypedByteArray
 import java.io.IOException
+import java.lang.RuntimeException
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -54,10 +54,8 @@ class ParticleCloud internal constructor(
 ) {
     private val tokenDelegate = TokenDelegate()
     private val eventsDelegate: EventsDelegate
-    private val parallelDeviceFetcher: ParallelDeviceFetcher
 
     private val devices = ArrayMap<String, ParticleDevice>()
-    private val networks = ArrayMap<String, ParticleNetwork>()
 
     @Volatile
     private var token: ParticleAccessToken? = null
@@ -94,7 +92,6 @@ class ParticleCloud internal constructor(
             this.token!!.delegate = TokenDelegate()
         }
         this.eventsDelegate = EventsDelegate(mainApi, schemeAndHostname, gson, executor, this)
-        this.parallelDeviceFetcher = ParallelDeviceFetcher.newFetcherUsingExecutor(executor)
     }
 
     @JvmOverloads
@@ -299,6 +296,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getDevices(): List<ParticleDevice> {
+        log.i("getDevices()")
         return runHandlingCommonErrors {
             val simpleDevices = mainApi.getDevices()
 
@@ -307,11 +305,13 @@ class ParticleCloud internal constructor(
             val result = list<ParticleDevice>()
 
             for (simpleDevice in simpleDevices) {
-                val device: ParticleDevice
-                if (simpleDevice.isConnected) {
-                    device = getDevice(simpleDevice.id, false)
+                val device: ParticleDevice = if (simpleDevice.isConnected) {
+                    doGetDevice(simpleDevice.id,
+                        copyCompleteModelAttrsFromExistingState = true,
+                        sendUpdateBroadcast = false
+                    )
                 } else {
-                    device = getOfflineDevice(simpleDevice)
+                    getOfflineDevice(simpleDevice)
                 }
                 result.add(device)
             }
@@ -342,17 +342,11 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getDevice(deviceID: String): ParticleDevice {
-
-        log.w("Called getDevice($deviceID)")
-
-        val deviceCloudModel = runHandlingCommonErrors {
-            mainApi.getDevice(deviceID)
-        }
-
-        val newDeviceState = fromCompleteDevice(deviceCloudModel)
-        val device = getDeviceFromState(newDeviceState)
-        updateDeviceState(device, newDeviceState, true)
-        return device
+        return doGetDevice(
+            deviceID,
+            copyCompleteModelAttrsFromExistingState = false,
+            sendUpdateBroadcast = true
+        )
     }
 
     /**
@@ -565,17 +559,6 @@ class ParticleCloud internal constructor(
     @Throws(ParticleCloudException::class)
     fun disableGatewayOnMeshNetwork(deviceId: String, networkId: String) {
         modifyMeshNetwork(deviceId, "gateway-disable", networkId)
-    }
-
-    @WorkerThread
-    @Throws(ParticleCloudException::class)
-    private fun modifyMeshNetwork(deviceId: String, action: String, networkId: String): Response {
-        return runHandlingCommonErrors {
-            mainApi.modifyMeshNetwork(
-                networkId,
-                MeshNetworkChange(action, deviceId)
-            )
-        }
     }
 
     @WorkerThread
@@ -820,7 +803,7 @@ class ParticleCloud internal constructor(
         }
         val originalDeviceState = particleDevice.deviceState
 
-        val stateWithNewName = DeviceState.withNewName(originalDeviceState, newName)
+        val stateWithNewName = originalDeviceState.copy(name = newName)
         updateDeviceState(particleDevice, stateWithNewName, true)
         try {
             mainApi.nameDevice(originalDeviceState.deviceId, newName)
@@ -842,7 +825,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     internal fun onDeviceNotConnected(deviceState: DeviceState) {
         // Called when a cloud API call receives a result in which the "coreInfo.connected" is false
-        val newState = DeviceState.withNewConnectedState(deviceState, false)
+        val newState = deviceState.copy(isConnected = false)
         val device = getDeviceFromState(newState)
         updateDeviceState(device, newState, true)
     }
@@ -864,7 +847,6 @@ class ParticleCloud internal constructor(
             return if (devices.containsKey(deviceState.deviceId)) {
                 devices[deviceState.deviceId]!!
             } else {
-                log.i("Creating new instance of ParticleDevice with ID=${deviceState.deviceId}")
                 val device = ParticleDevice(mainApi, this, deviceState)
                 devices[deviceState.deviceId] = device
                 device
@@ -875,7 +857,32 @@ class ParticleCloud internal constructor(
 
 
     //region private API
-    private fun getOfflineDevice(offlineDevice: Models.SimpleDevice): ParticleDevice {
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    private fun doGetDevice(
+        deviceID: String,
+        copyCompleteModelAttrsFromExistingState: Boolean,
+        sendUpdateBroadcast: Boolean = true
+    ): ParticleDevice {
+
+        log.w("Called doGetDevice($deviceID)")
+
+        val deviceCloudModel = runHandlingCommonErrors {
+            mainApi.getDevice(deviceID)
+        }
+
+        val newDeviceState = fromCompleteDevice(deviceCloudModel)
+        val device = getDeviceFromState(newDeviceState)
+        updateDeviceState(
+            device,
+            newDeviceState,
+            sendUpdateBroadcast = sendUpdateBroadcast,
+            copyCompleteModelAttrsFromExistingState = copyCompleteModelAttrsFromExistingState
+        )
+        return device
+    }
+
+    private fun getOfflineDevice(offlineDevice: SimpleDevice): ParticleDevice {
         val newDeviceState = fromSimpleDeviceModel(offlineDevice)
         val device = getDeviceFromState(newDeviceState)
         updateDeviceState(device, newDeviceState, false)
@@ -885,15 +892,41 @@ class ParticleCloud internal constructor(
     private fun updateDeviceState(
         device: ParticleDevice,
         newState: DeviceState,
-        sendUpdateBroadcast: Boolean
+        sendUpdateBroadcast: Boolean,
+        copyCompleteModelAttrsFromExistingState: Boolean = true
     ) {
-        device.deviceState = newState
+        val actualNewState = if (!copyCompleteModelAttrsFromExistingState) {
+            newState
+        } else {
+            val mobileSecret = newState.mobileSecret ?: device.deviceState.mobileSecret
+
+            val functions = if (newState.functions.isNullOrEmpty()) {
+                device.deviceState.functions
+            } else {
+                newState.functions
+            }
+
+            val variables = if (newState.variables.isNullOrEmpty()) {
+                device.deviceState.variables
+            } else {
+                newState.variables
+            }
+
+            newState.copy(
+                mobileSecret = mobileSecret,
+                functions = functions,
+                variables = variables
+            )
+        }
+
+        device.deviceState = actualNewState
         if (sendUpdateBroadcast) {
             sendUpdateBroadcast()
         }
     }
 
     private fun sendUpdateBroadcast() {
+        log.i("sendUpdateBroadcast()")
         broadcastManager.sendBroadcast(Intent(BroadcastContract.BROADCAST_DEVICES_UPDATED))
     }
 
@@ -912,54 +945,61 @@ class ParticleCloud internal constructor(
         val functions = completeDevice.functions?.filterNotNull()?.toSet() ?: setOf()
         val variables = transformVariables(completeDevice)
 
-        return DeviceState.DeviceStateBuilder(completeDevice.deviceId, functions, variables)
-            .name(completeDevice.name)
-            .cellular(completeDevice.cellular)
-            .connected(completeDevice.isConnected)
-            .deviceType(ParticleDeviceType.fromInt(completeDevice.productId))
-            .platformId(completeDevice.platformId)
-            .productId(completeDevice.productId)
-            .imei(completeDevice.imei)
-            .lastIccid(completeDevice.lastIccid)
-            .currentBuild(completeDevice.currentBuild)
-            .defaultBuild(completeDevice.defaultBuild)
-            .ipAddress(completeDevice.ipAddress)
-            .lastAppName(completeDevice.lastAppName)
-            .status(completeDevice.status)
-            .lastHeard(completeDevice.lastHeard)
-            .serialNumber(completeDevice.serialNumber)
-            .mobileSecret(completeDevice.mobileSecret)
-            .iccid(completeDevice.iccid)
-            .systemFirmwareVersion(completeDevice.systemFirmwareVersion)
-            .notes(completeDevice.notes)
-            .build()
+        return DeviceState(
+            deviceId = completeDevice.deviceId,
+            name = completeDevice.name,
+            isConnected = completeDevice.isConnected,
+            cellular = completeDevice.cellular,
+            deviceType = ParticleDeviceType.fromInt(completeDevice.productId),
+            platformId = completeDevice.platformId,
+            productId = completeDevice.productId,
+            imei = completeDevice.imei,
+            lastIccid = completeDevice.lastIccid,
+            currentBuild = completeDevice.currentBuild,
+            defaultBuild = completeDevice.defaultBuild,
+            functions = functions,
+            variables = variables,
+            ipAddress = completeDevice.ipAddress,
+            lastAppName = completeDevice.lastAppName,
+            status = completeDevice.status,
+            lastHeard = completeDevice.lastHeard,
+            serialNumber = completeDevice.serialNumber,
+            mobileSecret = completeDevice.mobileSecret,
+            iccid = completeDevice.iccid,
+            systemFirmwareVersion = completeDevice.systemFirmwareVersion,
+            notes = completeDevice.notes
+        )
     }
 
     // for offline devices
-    private fun fromSimpleDeviceModel(offlineDevice: Models.SimpleDevice): DeviceState {
-        val functions = HashSet<String>()
-        val variables = ArrayMap<String, VariableType>()
+    private fun fromSimpleDeviceModel(offlineDevice: SimpleDevice): DeviceState {
+        return DeviceState(
 
-        return DeviceState.DeviceStateBuilder(offlineDevice.id, functions, variables)
-            .name(offlineDevice.name)
-            .cellular(offlineDevice.cellular)
-            .connected(offlineDevice.isConnected)
-            .deviceType(ParticleDeviceType.fromInt(offlineDevice.productId))
-            .platformId(offlineDevice.platformId)
-            .productId(offlineDevice.productId)
-            .imei(offlineDevice.imei)
-            .lastIccid(offlineDevice.lastIccid)
-            .currentBuild(offlineDevice.currentBuild)
-            .defaultBuild(offlineDevice.defaultBuild)
-            .ipAddress(offlineDevice.ipAddress)
-            .lastAppName(offlineDevice.lastAppName)
-            .status(offlineDevice.status)
-            .lastHeard(offlineDevice.lastHeard)
-            .serialNumber(offlineDevice.serialNumber)
-            .iccid(offlineDevice.iccid)
-            .systemFirmwareVersion(offlineDevice.systemFirmwareVersion)
-            .notes(offlineDevice.notes)
-            .build()
+            // these are the only three properties not returned in the "simple" model now
+            functions = setOf(),
+            variables = mapOf(),
+            mobileSecret = null,
+
+            deviceId = offlineDevice.id,
+            name = offlineDevice.name,
+            isConnected = offlineDevice.isConnected,
+            cellular = offlineDevice.cellular,
+            deviceType = ParticleDeviceType.fromInt(offlineDevice.productId),
+            platformId = offlineDevice.platformId,
+            productId = offlineDevice.productId,
+            imei = offlineDevice.imei,
+            lastIccid = offlineDevice.lastIccid,
+            currentBuild = offlineDevice.currentBuild,
+            defaultBuild = offlineDevice.defaultBuild,
+            ipAddress = offlineDevice.ipAddress,
+            lastAppName = offlineDevice.lastAppName,
+            status = offlineDevice.status,
+            lastHeard = offlineDevice.lastHeard,
+            serialNumber = offlineDevice.serialNumber,
+            iccid = offlineDevice.iccid,
+            systemFirmwareVersion = offlineDevice.systemFirmwareVersion,
+            notes = offlineDevice.notes
+        )
     }
 
 
@@ -991,6 +1031,7 @@ class ParticleCloud internal constructor(
         }
     }
 
+    @WorkerThread
     @Throws(ParticleCloudException::class)
     private fun <T> runHandlingCommonErrors(toRun: () -> T): T {
         try {
@@ -1001,6 +1042,17 @@ class ParticleCloud internal constructor(
 
         } catch (e: MalformedURLException) {
             throw ParticleCloudException(e)
+        }
+    }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    private fun modifyMeshNetwork(deviceId: String, action: String, networkId: String): Response {
+        return runHandlingCommonErrors {
+            mainApi.modifyMeshNetwork(
+                networkId,
+                MeshNetworkChange(action, deviceId)
+            )
         }
     }
 
@@ -1054,7 +1106,7 @@ class ParticleCloud internal constructor(
 
         private fun transformVariables(completeDevice: CompleteDevice): Map<String, VariableType> {
             if (completeDevice.variables == null) {
-                return emptyMap()
+                return arrayMapOf()
             }
 
             val variables = ArrayMap<String, VariableType>()
