@@ -21,7 +21,6 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
 import io.particle.android.sdk.cloud.models.*
 import io.particle.android.sdk.persistance.AppDataStorage
-import io.particle.android.sdk.utils.Funcy
 import io.particle.android.sdk.utils.Py.all
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.set
@@ -329,9 +328,7 @@ class ParticleCloud internal constructor(
         val idLower = deviceId.toLowerCase()
         return runHandlingCommonErrors {
             val devices = mainApi.getDevices()
-            val firstMatch = Funcy.findFirstMatch(
-                devices
-            ) { testTarget -> idLower == testTarget.id.toLowerCase() }
+            val firstMatch = devices.firstOrNull { idLower == it.id.toLowerCase() }
             firstMatch != null
         }
     }
@@ -919,7 +916,7 @@ class ParticleCloud internal constructor(
         // Once analytics are in place, look into adding something here so we know where
         // this is coming from.  In the meantime, filter out nulls from this list, since that's
         // obviously doubleplusungood.
-        val functions = set(Funcy.filter(completeDevice.functions, Funcy.notNull()))
+        val functions = completeDevice.functions?.filterNotNull()?.toSet() ?: setOf()
         val variables = transformVariables(completeDevice)
 
         return DeviceState.DeviceStateBuilder(completeDevice.deviceId, functions, variables)
