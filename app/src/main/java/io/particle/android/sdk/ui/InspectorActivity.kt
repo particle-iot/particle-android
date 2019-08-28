@@ -58,7 +58,7 @@ class InspectorActivity : BaseActivity() {
     }
 
     private lateinit var devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
-    private lateinit var device: ParticleDevice
+    lateinit var device: ParticleDevice
     private val cloud = ParticleCloudSDK.getCloud()
     private val handler = Handler()
 
@@ -126,6 +126,7 @@ class InspectorActivity : BaseActivity() {
             }
 
             device.refresh()
+
 
             try {
                 device.subscribeToSystemEvents()

@@ -17,7 +17,6 @@ import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -28,6 +27,7 @@ import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.FunctionDoesNotExistException
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.tinker.DeviceUiState.ONLINE_USING_TINKER
+import io.particle.android.sdk.ui.InspectorActivity
 import io.particle.android.sdk.ui.flashTinkerWithDialog
 import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Prefs
@@ -39,13 +39,9 @@ import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_tinker.*
 import kotlinx.coroutines.delay
+import mu.KotlinLogging
 import java.io.IOException
 
-
-// The device that this fragment represents
-private const val ARG_DEVICE = "ARG_DEVICE"
-// The device that this fragment represents
-private const val STATE_DEVICE = "STATE_DEVICE"
 
 internal const val ANALOG_READ_MAX = 4095
 internal const val ANALOG_WRITE_MAX_PWM = 255
@@ -55,23 +51,15 @@ internal const val ANALOG_WRITE_MAX_DAC = ANALOG_READ_MAX
 /** A fragment representing a single Tinker screen. */
 class TinkerFragment : Fragment(), OnClickListener {
 
-    companion object {
-
-        fun newInstance(device: ParticleDevice): TinkerFragment {
-            return TinkerFragment().apply {
-                arguments = bundleOf(ARG_DEVICE to device)
-            }
-        }
-    }
-
     private val log = TLog.get(TinkerFragment::class.java)
 
     private var allPins: List<Pin> = mutableListOf()
     private var pinsByName: MutableMap<String, Pin> = arrayMapOf()
     private val devicesUpdatedListener = DevicesUpdatedListener()
 
-    private lateinit var device: ParticleDevice
-    private lateinit var api: TinkerApi
+    private val device: ParticleDevice
+        get() { return (requireActivity() as InspectorActivity).device }
+    private val api: TinkerApi by lazy { TinkerApi(this@TinkerFragment) }
     private lateinit var prefs: Prefs
 
     private var selectedPin: Pin? = null
@@ -92,12 +80,6 @@ class TinkerFragment : Fragment(), OnClickListener {
         setHasOptionsMenu(true)
 
         prefs = Prefs.getInstance(activity)
-        device = if (savedInstanceState != null) {
-            savedInstanceState.getParcelable(STATE_DEVICE)!!
-        } else {
-            requireArguments().getParcelable(ARG_DEVICE)!!
-        }
-        api = TinkerApi()
     }
 
     override fun onCreateView(
@@ -152,11 +134,6 @@ class TinkerFragment : Fragment(), OnClickListener {
         LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(
             devicesUpdatedListener
         )
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(STATE_DEVICE, device)
     }
 
     private fun updateFromState(newUiState: DeviceUiState) {
@@ -421,6 +398,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private fun doAnalogRead(pin: Pin) {
         pin.animateYourself()
+
         api.read(PinStuff(pin.name, PinAction.ANALOG_READ, pin.analogValue))
         // pin.showAnalogRead(850);
     }
@@ -446,6 +424,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
     private fun doDigitalRead(pin: Pin) {
         pin.animateYourself()
+
         api.read(PinStuff(pin.name, PinAction.DIGITAL_READ, pin.digitalValue!!.intValue))
         // pin.showDigitalRead(DigitalValue.HIGH);
     }
@@ -484,11 +463,17 @@ class TinkerFragment : Fragment(), OnClickListener {
     }
 
 
-    private abstract inner class TinkerWork internal constructor(internal val stuff: PinStuff) :
-        Async.ApiWork<ParticleDevice, Int>() {
+    abstract class TinkerWork(
+        private val stuff: PinStuff,
+        private val tinkerFragment: TinkerFragment
+    ) : Async.ApiWork<ParticleDevice, Int>() {
+
+        override fun onSuccess(returnValue: Int) {
+            tinkerFragment.onTinkerCallComplete(stuff, returnValue)
+        }
 
         override fun onFailure(exception: ParticleCloudException) {
-            onTinkerCallComplete(stuff, stuff.currentValue)
+            tinkerFragment.onTinkerCallComplete(stuff, stuff.currentValue)
             // FIXME: do real error handling!
             //			ErrorsDelegate errorsDelegate = ((BaseActivity) getActivity()).getErrorsDelegate();
             //			errorsDelegate.showTinkerError();
@@ -497,9 +482,13 @@ class TinkerFragment : Fragment(), OnClickListener {
     }
 
 
-    private inner class TinkerApi internal constructor() {
+    private class TinkerApi(
+        private val tinkerFragment: TinkerFragment
+    ) {
 
         private val actionToFunctionName: MutableMap<PinAction, String>
+
+        private val log = KotlinLogging.logger {}
 
         init {
             actionToFunctionName = ArrayMap(4)
@@ -511,9 +500,10 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         internal fun write(stuff: PinStuff, newValue: Int) {
             try {
-                Async.executeAsync(device, object : TinkerWork(stuff) {
+                Async.executeAsync(tinkerFragment.device, object : TinkerWork(stuff, tinkerFragment) {
                     @Throws(ParticleCloudException::class, IOException::class)
                     override fun callApi(sparkDevice: ParticleDevice): Int? {
+
                         val stringValue: String = if (stuff.pinAction === PinAction.ANALOG_WRITE) {
                             newValue.toString()
                         } else {
@@ -532,16 +522,12 @@ class TinkerFragment : Fragment(), OnClickListener {
                             }
 
                         } catch (e: FunctionDoesNotExistException) {
-                            e.message?.let { activity.safeToast(it) }
+                            e.message?.let { tinkerFragment.activity.safeToast(it) }
                             stuff.currentValue // it didn't change
                         } catch (e: ParticleCloudException) {
-                            e.message?.let { activity.safeToast(it) }
+                            e.message?.let { tinkerFragment.activity.safeToast(it) }
                             stuff.currentValue // it didn't change
                         }
-                    }
-
-                    override fun onSuccess(returnValue: Int) {
-                        onTinkerCallComplete(stuff, returnValue)
                     }
                 })
             } catch (e: ParticleCloudException) {
@@ -552,25 +538,22 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         internal fun read(stuff: PinStuff) {
             try {
-                Async.executeAsync(device, object : TinkerWork(stuff) {
+                Async.executeAsync(tinkerFragment.device, object : TinkerWork(stuff, tinkerFragment) {
                     @Throws(ParticleCloudException::class, IOException::class)
                     override fun callApi(sparkDevice: ParticleDevice): Int? {
+
                         return try {
                             sparkDevice.callFunction(
                                 actionToFunctionName[stuff.pinAction]!!,
                                 listOf(stuff.pinName)
                             )
                         } catch (e: FunctionDoesNotExistException) {
-                            e.message?.let { activity.safeToast(it) }
+                            e.message?.let { tinkerFragment.activity.safeToast(it) }
                             stuff.currentValue // it didn't change
                         } catch (e: ParticleCloudException) {
-                            activity.safeToast(e.message)
+                            tinkerFragment.activity.safeToast(e.message)
                             stuff.currentValue
                         }
-                    }
-
-                    override fun onSuccess(returnValue: Int) {
-                        onTinkerCallComplete(stuff, returnValue)
                     }
                 })
             } catch (e: ParticleCloudException) {
@@ -598,7 +581,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
 }
 
-private data class PinStuff(
+data class PinStuff(
     val pinName: String,
     val pinAction: PinAction,
     val currentValue: Int

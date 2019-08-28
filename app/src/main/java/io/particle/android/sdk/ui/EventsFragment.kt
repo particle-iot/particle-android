@@ -18,14 +18,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
@@ -48,20 +46,8 @@ import java.util.Objects.requireNonNull
  */
 class EventsFragment : Fragment() {
 
-    companion object {
 
-        const val ARG_DEVICE = "ARG_DEVICE"  // The device that this fragment represents
-
-        @JvmStatic
-        fun newInstance(device: ParticleDevice): EventsFragment {
-            return EventsFragment().apply {
-                arguments = bundleOf(EventsFragment.ARG_DEVICE to device)
-            }
-        }
-    }
-
-
-    private var device: ParticleDevice? = null
+    private val device: ParticleDevice by lazy { (requireActivity() as InspectorActivity).device }
     private var subscriptionId: Long? = null
     private var subscribed: Boolean = false
 
@@ -73,7 +59,6 @@ class EventsFragment : Fragment() {
     ): View? {
         val top = inflater.inflate(R.layout.fragment_events, container, false)
 
-        device = requireNonNull<Bundle>(arguments).getParcelable(ARG_DEVICE)
         top.events_empty.visibility = View.VISIBLE
 
         top.events_list.setHasFixedSize(true)  // perf. optimization
@@ -148,7 +133,7 @@ class EventsFragment : Fragment() {
 
     private fun initEventSubscription(top: View, adapter: EventListAdapter) {
         val eventButton = top.findViewById<ImageView>(R.id.events_pause)
-        eventButton.setOnClickListener { _ ->
+        eventButton.setOnClickListener {
             if (subscribed) {
                 eventButton.setImageResource(R.drawable.ic_play)
                 stopEventSubscription()
@@ -163,12 +148,12 @@ class EventsFragment : Fragment() {
     private fun startEventSubscription(adapter: EventListAdapter) {
         subscribed = true
         try {
-            Async.executeAsync(device!!, object : Async.ApiProcedure<ParticleDevice>() {
+            Async.executeAsync(device, object : Async.ApiProcedure<ParticleDevice>() {
                 @Throws(IOException::class)
                 override fun callApi(particleDevice: ParticleDevice): Void? {
                     try {
                         subscriptionId =
-                            device!!.subscribeToEvents(null, object : ParticleEventHandler {
+                            device.subscribeToEvents(null, object : ParticleEventHandler {
                                 override fun onEventError(e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -206,11 +191,11 @@ class EventsFragment : Fragment() {
     private fun stopEventSubscription() {
         subscribed = false
         try {
-            Async.executeAsync(device!!, object : Async.ApiProcedure<ParticleDevice>() {
+            Async.executeAsync(device, object : Async.ApiProcedure<ParticleDevice>() {
                 @Throws(ParticleCloudException::class)
                 override fun callApi(particleDevice: ParticleDevice): Void? {
                     try {
-                        device!!.unsubscribeFromEvents(subscriptionId!!)
+                        device.unsubscribeFromEvents(subscriptionId!!)
                     } catch (ignore: NullPointerException) {
                         //set to still subscribed
                         subscribed = true
