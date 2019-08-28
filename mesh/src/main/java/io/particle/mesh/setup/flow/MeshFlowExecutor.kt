@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
 
-private const val FLOW_RETRIES = 6
+private const val FLOW_RETRIES = 4
 
 
 sealed class FlowTerminationAction {
