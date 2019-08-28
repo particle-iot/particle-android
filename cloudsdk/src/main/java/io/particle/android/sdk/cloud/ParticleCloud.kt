@@ -345,7 +345,14 @@ class ParticleCloud internal constructor(
 
         log.w("Called getDevice($deviceID)")
 
-        return getDevice(deviceID, true)
+        val deviceCloudModel = runHandlingCommonErrors {
+            mainApi.getDevice(deviceID)
+        }
+
+        val newDeviceState = fromCompleteDevice(deviceCloudModel)
+        val device = getDeviceFromState(newDeviceState)
+        updateDeviceState(device, newDeviceState, true)
+        return device
     }
 
     /**
@@ -814,12 +821,12 @@ class ParticleCloud internal constructor(
         val originalDeviceState = particleDevice.deviceState
 
         val stateWithNewName = DeviceState.withNewName(originalDeviceState, newName)
-        updateDeviceState(stateWithNewName, true)
+        updateDeviceState(particleDevice, stateWithNewName, true)
         try {
             mainApi.nameDevice(originalDeviceState.deviceId, newName)
         } catch (e: RetrofitError) {
             // oops, change the name back.
-            updateDeviceState(originalDeviceState, true)
+            updateDeviceState(particleDevice, originalDeviceState, true)
             throw ParticleCloudException(e)
         }
 
@@ -836,7 +843,8 @@ class ParticleCloud internal constructor(
     internal fun onDeviceNotConnected(deviceState: DeviceState) {
         // Called when a cloud API call receives a result in which the "coreInfo.connected" is false
         val newState = DeviceState.withNewConnectedState(deviceState, false)
-        updateDeviceState(newState, true)
+        val device = getDeviceFromState(newState)
+        updateDeviceState(device, newState, true)
     }
 
     // FIXME: exposing this is weak, figure out something better
@@ -856,6 +864,7 @@ class ParticleCloud internal constructor(
             return if (devices.containsKey(deviceState.deviceId)) {
                 devices[deviceState.deviceId]!!
             } else {
+                log.i("Creating new instance of ParticleDevice with ID=${deviceState.deviceId}")
                 val device = ParticleDevice(mainApi, this, deviceState)
                 devices[deviceState.deviceId] = device
                 device
@@ -866,34 +875,18 @@ class ParticleCloud internal constructor(
 
 
     //region private API
-    @WorkerThread
-    @Throws(ParticleCloudException::class)
-    private fun getDevice(deviceID: String, sendUpdate: Boolean): ParticleDevice {
-        log.w("Called PRIVATE getDevice($deviceID)")
-
-        val deviceCloudModel = runHandlingCommonErrors {
-            mainApi.getDevice(deviceID)
-        }
-
-        return getDevice(deviceCloudModel, sendUpdate)
-    }
-
-    private fun getDevice(deviceModel: CompleteDevice, sendUpdate: Boolean): ParticleDevice {
-        val newDeviceState = fromCompleteDevice(deviceModel)
-        val device = getDeviceFromState(newDeviceState)
-        updateDeviceState(newDeviceState, sendUpdate)
-        return device
-    }
-
     private fun getOfflineDevice(offlineDevice: Models.SimpleDevice): ParticleDevice {
         val newDeviceState = fromSimpleDeviceModel(offlineDevice)
         val device = getDeviceFromState(newDeviceState)
-        updateDeviceState(newDeviceState, false)
+        updateDeviceState(device, newDeviceState, false)
         return device
     }
 
-    private fun updateDeviceState(newState: DeviceState, sendUpdateBroadcast: Boolean) {
-        val device = getDeviceFromState(newState)
+    private fun updateDeviceState(
+        device: ParticleDevice,
+        newState: DeviceState,
+        sendUpdateBroadcast: Boolean
+    ) {
         device.deviceState = newState
         if (sendUpdateBroadcast) {
             sendUpdateBroadcast()
