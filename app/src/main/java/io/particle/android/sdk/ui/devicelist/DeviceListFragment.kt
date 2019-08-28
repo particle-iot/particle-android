@@ -259,14 +259,6 @@ class DeviceListFragment : Fragment() {
             }
         }
 
-        val filteredDevices = filterViewModel.currentDeviceFilter.filteredDeviceListLD.value!!
-        val completeDevices = filterViewModel.fullDeviceListLD.value!!
-        if (completeDevices.size == filteredDevices.size) {
-            name_filter_input.hint = "Search devices"
-        } else {
-            name_filter_input.hint = "Search in ${filteredDevices.size} of ${completeDevices.size} devices"
-        }
-
         clear_text_icon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
     }
 
