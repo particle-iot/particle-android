@@ -43,7 +43,7 @@ class WifiContext : Clearable {
     }
 
     fun updateTargetWifiNetworkPassword(password: String?) {
-        val pwdString = if (password == null) "(null)" else "[hidden]"
+        val pwdString = if (password == null) "(null)" else "[REDACTED]"
         log.info { "updateTargetWifiNetworkPassword(): $pwdString" }
         targetWifiNetworkPasswordLD.castAndPost(password)
     }

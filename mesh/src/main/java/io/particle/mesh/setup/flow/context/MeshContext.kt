@@ -64,7 +64,8 @@ class MeshContext : Clearable {
     }
 
     fun updateTargetDeviceMeshNetworkToJoinCommissionerPassword(password: String?) {
-        log.info { "updateTargetDeviceMeshNetworkToJoinCommissionerPassword()" }
+        val pwdLogString = if (password == null) "(null)" else "[REDACTED]"
+        log.info { "updateTargetDeviceMeshNetworkToJoinCommissionerPassword(): $pwdLogString" }
         meshNetworkToJoinCommissionerPassword.castAndSetOnMainThread(password)
     }
 
@@ -89,7 +90,8 @@ class MeshContext : Clearable {
     }
 
     fun updateNewNetworkPassword(password: String) {
-        log.info { "updateNewNetworkPassword()" }
+        val pwdLogString = if (password == null) "(null)" else "[REDACTED]"
+        log.info { "updateNewNetworkPassword(): $pwdLogString" }
         newNetworkPasswordLD.castAndPost(password)
     }
 
