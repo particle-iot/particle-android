@@ -163,6 +163,7 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
     private val devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
     private val refreshObserver = Observer<Any?> { refreshDevices() }
     private val scopes = Scopes()
+    private var firstRefreshRequested = false
 
     private val log = KotlinLogging.logger {}
 
@@ -197,6 +198,22 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
         fullDeviceListLD.castAndPost(deviceList)
         val config = currentDeviceFilter.deviceListViewConfigLD.value!!
         currentDeviceFilter.applyNewConfig(config)
+
+        if (!firstRefreshRequested) {
+            // make sure devices are as "live" as possible
+            loadDeviceDetails(deviceList)
+            firstRefreshRequested = true
+        }
+    }
+
+    private fun loadDeviceDetails(devices: List<ParticleDevice>) {
+        scopes.onWorker {
+            for (device in devices) {
+                if (device.isConnected) {
+                    device.refresh()
+                }
+            }
+        }
     }
 
 }
