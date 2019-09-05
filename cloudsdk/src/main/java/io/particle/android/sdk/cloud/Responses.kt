@@ -26,44 +26,9 @@ class Responses {
             val deviceId: String
         )
 
-
-        /** Represents a single Particle device in the list returned by a call to "GET /v1/devices" */
-        class SimpleDevice(
-            val id: String,
-            val name: String,
-            @SerializedName("connected")
-            val isConnected: Boolean,
-            val cellular: Boolean,
-            val imei: String,
-            val iccid: String,
-            @SerializedName("last_iccid")
-            val lastIccid: String,
-            @SerializedName("current_build_target")
-            val currentBuild: String,
-            @SerializedName("default_build_target")
-            val defaultBuild: String,
-            @SerializedName("platform_id")
-            val platformId: Int,
-            @SerializedName("product_id")
-            val productId: Int,
-            @SerializedName("last_ip_address")
-            val ipAddress: String,
-            @SerializedName("status")
-            val status: String,
-            @SerializedName("last_heard")
-            val lastHeard: Date,
-            @SerializedName("system_firmware_version")
-            val systemFirmwareVersion: String,
-            @SerializedName("serial_number")
-            val serialNumber: String,
-            @SerializedName("last_app")
-            val lastAppName: String,
-            val notes: String?
-        )
-
         /**
-         * Represents a single Particle device as returned from the
-         * call to "GET /v1/devices/{device id}"
+         * Represents a Particle device from "GET /v1/devices/{device id}"
+         * and "GET /v1/devices"
          */
         class CompleteDevice internal constructor(
             @SerializedName("id")

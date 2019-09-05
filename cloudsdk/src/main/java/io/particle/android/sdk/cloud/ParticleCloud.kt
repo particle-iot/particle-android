@@ -15,14 +15,11 @@ import io.particle.android.sdk.cloud.Responses.CardOnFileResponse
 import io.particle.android.sdk.cloud.Responses.DeviceMeshMembership
 import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse.RegisteredNetwork
 import io.particle.android.sdk.cloud.Responses.Models.CompleteDevice
-import io.particle.android.sdk.cloud.Responses.Models.SimpleDevice
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
 import io.particle.android.sdk.cloud.models.*
 import io.particle.android.sdk.persistance.AppDataStorage
 import io.particle.android.sdk.utils.Py.all
-import io.particle.android.sdk.utils.Py.list
-import io.particle.android.sdk.utils.Py.set
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import org.json.JSONException
@@ -32,11 +29,13 @@ import retrofit.RetrofitError.Kind
 import retrofit.client.Response
 import retrofit.mime.TypedByteArray
 import java.io.IOException
-import java.lang.RuntimeException
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 import java.util.concurrent.ExecutorService
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
 
 // FIXME: move device state management out to another class
@@ -140,7 +139,6 @@ class ParticleCloud internal constructor(
         } catch (error: RetrofitError) {
             throw ParticleLoginException(error)
         }
-
     }
 
     /**
@@ -298,26 +296,10 @@ class ParticleCloud internal constructor(
     fun getDevices(): List<ParticleDevice> {
         log.i("getDevices()")
         return runHandlingCommonErrors {
-            val simpleDevices = mainApi.getDevices()
-
-            appDataStorage.saveUserHasClaimedDevices(truthy(simpleDevices))
-
-            val result = list<ParticleDevice>()
-
-            for (simpleDevice in simpleDevices) {
-                val device: ParticleDevice = if (simpleDevice.isConnected) {
-                    doGetDevice(simpleDevice.id,
-                        copyCompleteModelAttrsFromExistingState = true,
-                        sendUpdateBroadcast = false
-                    )
-                } else {
-                    getOfflineDevice(simpleDevice)
-                }
-                result.add(device)
-            }
-
-            pruneDeviceMap(simpleDevices)
-
+            val apiDevices = mainApi.getDevices()
+            appDataStorage.saveUserHasClaimedDevices(truthy(apiDevices))
+            val result = apiDevices.map { getOfflineDevice(it) }
+            pruneDeviceMap(apiDevices)
             result
         }
     }
@@ -328,7 +310,7 @@ class ParticleCloud internal constructor(
         val idLower = deviceId.toLowerCase()
         return runHandlingCommonErrors {
             val devices = mainApi.getDevices()
-            val firstMatch = devices.firstOrNull { idLower == it.id.toLowerCase() }
+            val firstMatch = devices.firstOrNull { idLower == it.deviceId.toLowerCase() }
             firstMatch != null
         }
     }
@@ -342,11 +324,20 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getDevice(deviceID: String): ParticleDevice {
-        return doGetDevice(
-            deviceID,
-            copyCompleteModelAttrsFromExistingState = false,
-            sendUpdateBroadcast = true
+        log.i("getDevice(): $deviceID")
+        val deviceCloudModel = runHandlingCommonErrors {
+            mainApi.getDevice(deviceID)
+        }
+
+        val newDeviceState = fromCompleteDevice(deviceCloudModel)
+        val device = getDeviceFromState(newDeviceState)
+        updateDeviceState(
+            device,
+            newDeviceState,
+            sendUpdateBroadcast = true,
+            copyCompleteModelAttrsFromExistingState = false
         )
+        return device
     }
 
     /**
@@ -857,33 +848,8 @@ class ParticleCloud internal constructor(
 
 
     //region private API
-    @WorkerThread
-    @Throws(ParticleCloudException::class)
-    private fun doGetDevice(
-        deviceID: String,
-        copyCompleteModelAttrsFromExistingState: Boolean,
-        sendUpdateBroadcast: Boolean = true
-    ): ParticleDevice {
-
-        log.w("Called doGetDevice($deviceID)")
-
-        val deviceCloudModel = runHandlingCommonErrors {
-            mainApi.getDevice(deviceID)
-        }
-
-        val newDeviceState = fromCompleteDevice(deviceCloudModel)
-        val device = getDeviceFromState(newDeviceState)
-        updateDeviceState(
-            device,
-            newDeviceState,
-            sendUpdateBroadcast = sendUpdateBroadcast,
-            copyCompleteModelAttrsFromExistingState = copyCompleteModelAttrsFromExistingState
-        )
-        return device
-    }
-
-    private fun getOfflineDevice(offlineDevice: SimpleDevice): ParticleDevice {
-        val newDeviceState = fromSimpleDeviceModel(offlineDevice)
+    private fun getOfflineDevice(offlineDevice: CompleteDevice): ParticleDevice {
+        val newDeviceState = fromCompleteDevice(offlineDevice)
         val device = getDeviceFromState(newDeviceState)
         updateDeviceState(device, newDeviceState, false)
         return device
@@ -971,49 +937,14 @@ class ParticleCloud internal constructor(
         )
     }
 
-    // for offline devices
-    private fun fromSimpleDeviceModel(offlineDevice: SimpleDevice): DeviceState {
-        return DeviceState(
-
-            // these are the only three properties not returned in the "simple" model now
-            functions = setOf(),
-            variables = mapOf(),
-            mobileSecret = null,
-
-            deviceId = offlineDevice.id,
-            name = offlineDevice.name,
-            isConnected = offlineDevice.isConnected,
-            cellular = offlineDevice.cellular,
-            deviceType = ParticleDeviceType.fromInt(offlineDevice.productId),
-            platformId = offlineDevice.platformId,
-            productId = offlineDevice.productId,
-            imei = offlineDevice.imei,
-            lastIccid = offlineDevice.lastIccid,
-            currentBuild = offlineDevice.currentBuild,
-            defaultBuild = offlineDevice.defaultBuild,
-            ipAddress = offlineDevice.ipAddress,
-            lastAppName = offlineDevice.lastAppName,
-            status = offlineDevice.status,
-            lastHeard = offlineDevice.lastHeard,
-            serialNumber = offlineDevice.serialNumber,
-            iccid = offlineDevice.iccid,
-            systemFirmwareVersion = offlineDevice.systemFirmwareVersion,
-            notes = offlineDevice.notes
-        )
-    }
-
-
-    private fun pruneDeviceMap(latestCloudDeviceList: List<SimpleDevice>) {
+    private fun pruneDeviceMap(latestCloudDeviceList: List<CompleteDevice>) {
         synchronized(devices) {
             // make a copy of the current keyset since we mutate `devices` below
-            val currentDeviceIds = set(devices.keys)
-            val newDeviceIds = set(latestCloudDeviceList.map { it.id })
-            // quoting the Sets docs for this next operation:
-            // "The returned set contains all elements that are contained by set1 and
-            //  not contained by set2"
-            // In short, this set is all the device IDs which we have in our devices map,
+            val currentDeviceIds = devices.keys.toSet()
+            val newDeviceIds = latestCloudDeviceList.map { it.deviceId }.toSet()
+            // The resulting set, "toRemove" is all the device IDs which we have in our devices map,
             // but which we did not hear about in this latest update from the cloud
-            val toRemove = currentDeviceIds.getDifference(newDeviceIds)
+            val toRemove = currentDeviceIds.minus(newDeviceIds)
             for (deviceId in toRemove) {
                 devices.remove(deviceId)
             }
