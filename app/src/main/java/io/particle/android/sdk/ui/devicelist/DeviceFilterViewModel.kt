@@ -192,9 +192,14 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private suspend fun doRefreshDevices() {
-        val deviceList = scopes.withWorker {
-            cloud.getDevices()
+        val deviceList = try {
+            scopes.withWorker {
+                cloud.getDevices()
+            }
+        } catch (ex: Exception) {
+            return
         }
+
         fullDeviceListLD.castAndPost(deviceList)
         val config = currentDeviceFilter.deviceListViewConfigLD.value!!
         currentDeviceFilter.applyNewConfig(config)
