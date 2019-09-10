@@ -125,10 +125,8 @@ class InspectorActivity : BaseActivity() {
                 scopes.onMain { finish() }
             }
 
-            device.refresh()
-
-
             try {
+                device.refresh()
                 device.subscribeToSystemEvents()
             } catch (ex: ParticleCloudException) {
                 // minor issue if we don't update online/offline states
