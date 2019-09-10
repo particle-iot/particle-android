@@ -277,9 +277,9 @@ class ParticleDevice internal constructor(
      */
     @WorkerThread
     @Throws(ParticleCloudException::class, IOException::class, VariableDoesNotExistException::class)
-    fun getVariable(variableName: String): Any {
+    fun getVariable(variableName: String): Any? {
 
-        val requester = object : VariableRequester<Any, ReadObjectVariableResponse>(this) {
+        val requester = object : VariableRequester<Any?, ReadObjectVariableResponse>(this) {
             override fun callApi(variableName: String): ReadObjectVariableResponse {
                 return mainApi.getVariable(deviceState.deviceId, variableName)
             }
