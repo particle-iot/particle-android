@@ -1,3 +1,11 @@
+3.0.0
+======
+- Control Panel — rename devices, set notes, or even unclaim, all from a single section of the mobile app.
+- Device Info Screen — view device ID, serial number, Device OS version; plus, you can ping, shout rainbows (signal mode), rename, and edit device notes.
+- Device list filtering — sort and filter your fleet based on your needs right from the main screen of the app.
+- UI refresh — improved information density and readability, plus multiple UI element tweaks across the app.
+- Fixes firmware update and setup flow issues
+
 2.3.13
 ======
 - Fix BLE pairing bug in mesh setup with devices that have new/unknown serial numbers
