@@ -244,8 +244,6 @@ class DeviceListFragment : Fragment() {
 
         empty_message.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
-        //subscribe to system updates
-        subscribeToSystemEvents(devices, false)
     }
 
     private fun updateEmptyMessageAndSearchBox() {
@@ -259,14 +257,6 @@ class DeviceListFragment : Fragment() {
                 val msg = "No devices found matching '${config.deviceNameQueryString}'"
                 empty_message.text = msg
             }
-        }
-
-        val filteredDevices = filterViewModel.currentDeviceFilter.filteredDeviceListLD.value!!
-        val completeDevices = filterViewModel.fullDeviceListLD.value!!
-        if (completeDevices.size == filteredDevices.size) {
-            name_filter_input.hint = "Search devices"
-        } else {
-            name_filter_input.hint = "Search in ${filteredDevices.size} of ${completeDevices.size} devices"
         }
 
         clear_text_icon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
@@ -365,8 +355,6 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun refreshDevices() {
-        val devices = filterViewModel.fullDeviceListLD.value
-        devices?.let { subscribeToSystemEvents(it, true) }
         filterViewModel.refreshDevices()
     }
 

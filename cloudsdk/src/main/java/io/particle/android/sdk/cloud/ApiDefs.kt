@@ -29,7 +29,7 @@ class ApiDefs {
         fun getCurrentDataUsage(@Path("lastIccid") lastIccid: String): Response
 
         @GET("/v1/devices")
-        fun getDevices(): List<Models.SimpleDevice>
+        fun getDevices(): List<Models.CompleteDevice>
 
         @GET("/v1/devices/{deviceID}")
         fun getDevice(@Path("deviceID") deviceID: String): Models.CompleteDevice

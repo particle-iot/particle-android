@@ -61,7 +61,13 @@ public class WifiFacade {
     public int getIdForConfiguredNetwork(SSID ssid) {
         WifiConfiguration configuredNetwork = Funcy.findFirstMatch(
                 getConfiguredNetworks(),
-                wifiConfiguration -> SSID.from(wifiConfiguration).equals(ssid));
+                wifiConfiguration -> {
+                    if (wifiConfiguration.SSID == null) {
+                        return false;
+                    } else {
+                        return SSID.from(wifiConfiguration).equals(ssid);
+                    }
+                });
         if (configuredNetwork == null) {
             log.d("No network found (returning -1) for SSID: " + ssid);
             return -1;

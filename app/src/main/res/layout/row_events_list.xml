@@ -1,105 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:background="@color/device_item_bg"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/device_item_bg">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/event_name_label"
         fontPath="@string/normal_text_font_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/event"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/event_name"
         fontPath="@string/bold_text_font_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@android:color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_name_label"
         app:layout_constraintEnd_toStartOf="@+id/event_copy"
-        app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
+        app:layout_constraintStart_toEndOf="@+id/event_name_label" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/event_copy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_content_copy"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_content_copy" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/event_data_label"
         fontPath="@string/normal_text_font_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         android:text="@string/data"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_name_label"/>
+        app:layout_constraintStart_toStartOf="@+id/event_name_label"
+        app:layout_constraintTop_toBottomOf="@+id/event_name_label" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/event_data"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@android:color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_data_label"
-        app:layout_constraintEnd_toStartOf="@+id/event_copy"
-        app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
+        app:layout_constraintEnd_toEndOf="@+id/event_name"
+        app:layout_constraintStart_toStartOf="@+id/event_name" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/event_time_label"
         fontPath="@string/normal_text_font_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/time"
         android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_data_label"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/event_data_label"
+        app:layout_constraintTop_toBottomOf="@+id/event_data_label" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/event_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@android:color/black"
         app:layout_constraintBaseline_toBaselineOf="@+id/event_time_label"
-        app:layout_constraintEnd_toStartOf="@+id/event_copy"
-        app:layout_constraintStart_toEndOf="@+id/event_name_label"/>
+        app:layout_constraintEnd_toEndOf="@+id/event_name"
+        app:layout_constraintStart_toStartOf="@+id/event_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

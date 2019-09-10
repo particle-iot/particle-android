@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import kotlin.Deprecated;
+
 
 /**
  * Python-inspired painkillers for Java
@@ -23,6 +25,7 @@ import java.util.Set;
  *
  * @author jens.knutson@gmail.com
  */
+@Deprecated(message = "Kotlin makes this class unnecessary")
 public class Py {
 
     /**

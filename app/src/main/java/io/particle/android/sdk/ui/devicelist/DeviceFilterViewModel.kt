@@ -1,10 +1,12 @@
 package io.particle.android.sdk.ui.devicelist
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.snakydesign.livedataextensions.distinctUntilChanged
 import com.snakydesign.livedataextensions.map
-import com.snakydesign.livedataextensions.nonNull
 import com.snakydesign.livedataextensions.switchMap
 import io.particle.android.sdk.cloud.BroadcastContract
 import io.particle.android.sdk.cloud.ParticleCloudSDK
@@ -41,10 +43,10 @@ open class DeviceFilter(
         }
         set(value) {
             if (value == _currentConfig) {
-                log.info { "New config matches; doing nothing." }
+                log.debug { "New config matches; doing nothing." }
                 return
             }
-            log.info { "Changing config to: $value" }
+            log.debug { "Changing config to: $value" }
             _currentConfig = value
             deviceListViewConfigLD.castAndPost(_currentConfig)
         }
@@ -58,6 +60,7 @@ open class DeviceFilter(
         deviceListViewConfigLD.castAndSetOnMainThread(_currentConfig)
 
         filteredDeviceListLD = deviceListViewConfigLD
+            .distinctUntilChanged()
             .switchMap {
                 fullDeviceListLD
                     .map { sortAndFilterDeviceList(it, currentConfig) }
@@ -65,7 +68,7 @@ open class DeviceFilter(
     }
 
     fun applyNewConfig(newConfig: DeviceListViewConfig) {
-        log.info { "Applying new config: $newConfig" }
+        log.debug { "Applying new config: $newConfig" }
         currentConfig = newConfig
     }
 
@@ -85,7 +88,7 @@ class DraftDeviceFilter(
     override val log: KLogger = KotlinLogging.logger {}
 
     fun commitDraftConfig() {
-        log.info { "Committing draft config" }
+        log.debug { "Committing draft config" }
         deviceFilter.applyNewConfig(currentConfig)
     }
 
@@ -160,6 +163,7 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
     private val devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
     private val refreshObserver = Observer<Any?> { refreshDevices() }
     private val scopes = Scopes()
+    private var firstRefreshRequested = false
 
     private val log = KotlinLogging.logger {}
 
@@ -188,13 +192,33 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private suspend fun doRefreshDevices() {
-        val deviceList = scopes.withWorker {
-            cloud.getDevices()
+        val deviceList = try {
+            scopes.withWorker {
+                cloud.getDevices()
+            }
+        } catch (ex: Exception) {
+            return
         }
-        log.info { "Posting new device list: $deviceList" }
+
         fullDeviceListLD.castAndPost(deviceList)
         val config = currentDeviceFilter.deviceListViewConfigLD.value!!
         currentDeviceFilter.applyNewConfig(config)
+
+        if (!firstRefreshRequested) {
+            // make sure devices are as "live" as possible
+            loadDeviceDetails(deviceList)
+            firstRefreshRequested = true
+        }
+    }
+
+    private fun loadDeviceDetails(devices: List<ParticleDevice>) {
+        scopes.onWorker {
+            for (device in devices) {
+                if (device.isConnected) {
+                    device.refresh()
+                }
+            }
+        }
     }
 
 }

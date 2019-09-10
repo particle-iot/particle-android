@@ -18,6 +18,7 @@
     <TextView
         android:id="@+id/tinker_analog_read_value"
         android:layout_width="wrap_content"
+        android:textColor="@android:color/black"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="8dip"

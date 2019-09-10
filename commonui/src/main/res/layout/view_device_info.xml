@@ -235,7 +235,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        <TextView
             android:id="@+id/device_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -264,7 +264,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        <TextView
             android:id="@+id/serial"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -293,7 +293,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        <TextView
             android:id="@+id/os_version"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -322,7 +322,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        <TextView
             android:id="@+id/last_handshake"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -351,7 +351,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        <TextView
             android:id="@+id/iccid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -380,7 +380,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        <TextView
             android:id="@+id/data_usage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -409,7 +409,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        <TextView
             android:id="@+id/data_limit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

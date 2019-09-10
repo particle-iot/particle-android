@@ -3,7 +3,6 @@ package io.particle.android.sdk.cloud
 import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import io.particle.android.sdk.cloud.Responses.ReadDoubleVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadIntVariableResponse
@@ -60,7 +59,8 @@ class ParticleDevice internal constructor(
      * Rename the device in the cloud. If renaming fails name will stay the same.
      */
     var name: String
-        get() = deviceState.name ?: ""
+        get() { return deviceState.name ?: "" }
+
         @WorkerThread
         @Throws(ParticleCloudException::class)
         set(newName) {
@@ -71,73 +71,73 @@ class ParticleDevice internal constructor(
      * Is device connected to the cloud?
      */
     val isConnected: Boolean
-        get() = deviceState.isConnected ?: false
+        get() { return deviceState.isConnected ?: false }
 
     /**
      * Get an immutable set of all the function names exposed by device
      */
     // no need for a defensive copy, this is an immutable set
     val functions: Set<String>
-        get() = deviceState.functions
+        get() { return deviceState.functions }
 
     /**
      * Get an immutable map of exposed variables on device with their respective types.
      */
     // no need for a defensive copy, this is an immutable set
     val variables: Map<String, VariableType>
-        get() = deviceState.variables
+        get() { return deviceState.variables }
 
     /** Device firmware version string */
     val version: String?
-        get() = deviceState.systemFirmwareVersion
+        get() { return deviceState.systemFirmwareVersion }
 
     val deviceType: ParticleDeviceType?
-        get() = deviceState.deviceType
+        get() { return deviceState.deviceType }
 
     val platformID: Int?
-        get() = deviceState.platformId
+        get() { return deviceState.platformId }
 
     val productID: Int?
-        get() = deviceState.productId
+        get() { return deviceState.productId }
 
     val isCellular: Boolean?
-        get() = deviceState.cellular
+        get() { return deviceState.cellular }
 
     val imei: String?
-        get() = deviceState.imei
+        get() { return deviceState.imei }
 
     val lastIccid: String?
-        get() = deviceState.lastIccid
+        get() { return deviceState.lastIccid }
 
     val iccid: String?
-        get() = deviceState.iccid
+        get() { return deviceState.iccid }
 
     val currentBuild: String?
-        get() = deviceState.currentBuild
+        get() { return deviceState.currentBuild }
 
     val defaultBuild: String?
-        get() = deviceState.defaultBuild
+        get() { return deviceState.defaultBuild }
 
     val ipAddress: String?
-        get() = deviceState.ipAddress
+        get() { return deviceState.ipAddress }
 
     val lastAppName: String?
-        get() = deviceState.lastAppName
+        get() { return deviceState.lastAppName }
 
     val status: String?
-        get() = deviceState.status
+        get() { return deviceState.status }
 
     val lastHeard: Date?
-        get() = deviceState.lastHeard
+        get() { return deviceState.lastHeard }
 
     val serialNumber: String?
-        get() = deviceState.serialNumber
+        get() { return deviceState.serialNumber }
 
     val mobileSecret: String?
-        get() = deviceState.mobileSecret
+        get() { return deviceState.mobileSecret }
 
     var notes: String?
-        get() = deviceState.notes
+        get() { return deviceState.notes }
         @WorkerThread
         @Throws(ParticleCloudException::class)
         set(newNote) {
@@ -424,6 +424,7 @@ class ParticleDevice internal constructor(
      */
     @Throws(IOException::class)
     fun subscribeToEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
+        log.d("Subscribing to events with prefix: $eventNamePrefix for device ${deviceState.deviceId}")
         return cloud.subscribeToDeviceEvents(eventNamePrefix, deviceState.deviceId, handler)
     }
 
@@ -435,6 +436,7 @@ class ParticleDevice internal constructor(
      */
     @Throws(ParticleCloudException::class)
     fun unsubscribeFromEvents(eventListenerID: Long) {
+        log.v("Unsubscribing from events where eventListenerID=$eventListenerID")
         cloud.unsubscribeFromEventWithID(eventListenerID)
     }
 
@@ -660,6 +662,8 @@ class ParticleDevice internal constructor(
         }
     }
 
+
+
     @Throws(IOException::class)
     private fun subscribeToSystemEvent(
         eventNamePrefix: String,
@@ -730,6 +734,21 @@ class ParticleDevice internal constructor(
     override fun describeContents(): Int {
         return 0
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ParticleDevice
+
+        if (deviceState != other.deviceState) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return deviceState.hashCode()
+    }
     //endregion
 
 
@@ -792,7 +811,7 @@ class ParticleDevice internal constructor(
 
     companion object {
 
-        private val MAX_PARTICLE_FUNCTION_ARG_LENGTH = 622
+        private const val MAX_PARTICLE_FUNCTION_ARG_LENGTH = 622
 
         private val log = TLog.get(ParticleDevice::class.java)
 

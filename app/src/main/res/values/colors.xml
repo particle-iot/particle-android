@@ -14,6 +14,11 @@
 
     <color name="device_item_bg">#11555555</color>
 
+    <color name="tinker_analog_read">#00AE42</color>
+    <color name="tinker_analog_write">#f5a800</color>
+    <color name="tinker_digital_read">#0075c9</color>
+    <color name="tinker_digital_write">#ed1c24</color>
+
     <array name="core_colors">
         <item>#1ABC9C</item>
         <item>#16A085</item>
@@ -36,8 +41,8 @@
 
     <!-- tinker -->
     <color name="tinker_instructions_bg">#A5000000</color>
-    <color name="tinker_pin_bg">#A5000000</color>
-    <color name="tinker_pin_bg_selected">#A5000000</color>
+    <color name="tinker_pin_bg">#fff5f5f5</color>
+    <color name="tinker_pin_bg_selected">#fff5f5f5</color>
     <color name="tinker_pin_bg_muted">#19000000</color>
     <color name="tinker_pin_text_muted">#19FFFFFF</color>
     <color name="tinker_pin_text_dark">#b2000000</color>

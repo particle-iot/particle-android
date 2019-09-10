@@ -11,10 +11,13 @@ import java.util.Set;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import kotlin.Deprecated;
+
 
 /**
  * Some functional-style utilities for processing collections
  */
+@Deprecated(message = "Just use Kotlin!")
 @ParametersAreNonnullByDefault
 public class Funcy {
 

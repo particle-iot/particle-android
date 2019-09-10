@@ -58,7 +58,7 @@ class InspectorActivity : BaseActivity() {
     }
 
     private lateinit var devicesUpdatedBroadcast: BroadcastReceiverLD<Int>
-    private lateinit var device: ParticleDevice
+    lateinit var device: ParticleDevice
     private val cloud = ParticleCloudSDK.getCloud()
     private val handler = Handler()
 
@@ -115,12 +115,18 @@ class InspectorActivity : BaseActivity() {
         EventBus.getDefault().register(this)
 
         scopes.onWorker {
-            val owned = cloud.userOwnsDevice(device.id)
+            val owned = try {
+                cloud.userOwnsDevice(device.id)
+            } catch (ex: Exception) {
+                false
+            }
+
             if (!owned) {
                 scopes.onMain { finish() }
             }
 
             device.refresh()
+
 
             try {
                 device.subscribeToSystemEvents()

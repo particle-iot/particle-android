@@ -2,13 +2,14 @@ package io.particle.android.sdk.ui.devicelist
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import io.particle.android.sdk.cloud.ParticleDevice
+import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.ui.BaseActivity
+import io.particle.android.sdk.updateUsernameWithCrashlytics
 import io.particle.android.sdk.utils.SoftAPConfigRemover
 import io.particle.android.sdk.utils.WifiFacade
 import io.particle.android.sdk.utils.ui.Ui
@@ -23,6 +24,9 @@ class DeviceListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        updateUsernameWithCrashlytics(ParticleCloudSDK.getCloud().loggedInUsername)
+
         setContentView(R.layout.activity_device_list)
 
         filterViewModel = ViewModelProviders.of(this).get(DeviceFilterViewModel::class.java)

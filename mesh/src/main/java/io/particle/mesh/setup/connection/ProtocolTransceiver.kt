@@ -199,14 +199,27 @@ class ProtocolTransceiver internal constructor(
                 .build()
         }
 
-        val response = sendRequest(
-            JoinNewNetworkRequest.newBuilder()
-                .setSsid(network.ssid)
-                .setSecurity(network.security)
-                .setCredentials(credentials)
-                .build()
-        )
+        val request = JoinNewNetworkRequest.newBuilder()
+            .setSsid(network.ssid)
+            .setSecurity(network.security)
+            .setCredentials(credentials)
+            .build()
 
+        val toStringFunc = if (request.credentials.type != CredentialsType.NO_CREDENTIALS) {
+            val length = if (request.credentials.password.length >= 8) "AT LEAST" else "LESS than!"
+            val safeCreds = Credentials.newBuilder()
+                .setType(CredentialsType.PASSWORD)
+                .setPassword("[REDACTED ($length 8 characters)]")
+                .build()
+            val safeToLogRequest = request.toBuilder()
+                .setCredentials(safeCreds)
+                .build()
+
+            val c: (GeneratedMessageV3) -> String = { safeToLogRequest.toString() }
+            c
+        } else null // null == "use default toString()"
+
+        val response = sendRequest(request, customMessageToStringFunction = toStringFunc)
         return buildResult(response) { r -> JoinNewNetworkReply.parseFrom(r.payloadData) }
     }
 
@@ -297,7 +310,7 @@ class ProtocolTransceiver internal constructor(
             FirmwareUpdateDataRequest.newBuilder()
                 .setData(ByteString.copyFrom(chunk))
                 .build(),
-            logContents = false
+            customMessageToStringFunction = null // nobody wants a log full of binary noise
         )
         return buildResult(response) { r -> FirmwareUpdateDataReply.parseFrom(r.payloadData) }
     }
@@ -327,23 +340,42 @@ class ProtocolTransceiver internal constructor(
         networkId: String,
         channel: Int = DEFAULT_NETWORK_CHANNEL
     ): Result<CreateNetworkReply, ResultCode> {
+
+        val request = CreateNetworkRequest.newBuilder()
+            .setName(name)
+            .setPassword(password)
+            .setChannel(channel)
+            .setNetworkId(networkId)
+            .build()
+
+        val toString: (GeneratedMessageV3) -> String = {
+            request.toBuilder()
+                .setPassword("[REDACTED]")
+                .build()
+                .toString()
+        }
+
         val response = sendRequest(
-            CreateNetworkRequest.newBuilder()
-                .setName(name)
-                .setPassword(password)
-                .setChannel(channel)
-                .setNetworkId(networkId)
-                .build(),
-            timeout = TimeUnit.SECONDS.toMillis(25)
+            request,
+            timeout = TimeUnit.SECONDS.toMillis(25),
+            customMessageToStringFunction = toString
         )
         return buildResult(response) { r -> CreateNetworkReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendAuth(commissionerCredential: String): Result<AuthReply, ResultCode> {
+        val toString: (GeneratedMessageV3) -> String = {
+            AuthRequest.newBuilder()
+                .setPassword("[REDACTED]")
+                .build()
+                .toString()
+        }
+
         val response = sendRequest(
             AuthRequest.newBuilder()
                 .setPassword(commissionerCredential)
-                .build()
+                .build(),
+            customMessageToStringFunction = toString
         )
         return buildResult(response) { r -> AuthReply.parseFrom(r.payloadData) }
     }
@@ -459,17 +491,20 @@ class ProtocolTransceiver internal constructor(
         }
     }
 
+    private fun simpleMessageLogger(message: GeneratedMessageV3): String = message.toString()
+
     //region PRIVATE
     private suspend fun sendRequest(
         message: GeneratedMessageV3,
         timeout: Long = BLE_PROTO_REQUEST_TIMEOUT_MILLIS,
-        logContents: Boolean = true
+        customMessageToStringFunction: ((GeneratedMessageV3) -> String)? = ::simpleMessageLogger
     ): DeviceResponse? {
 
         val requestFrame = message.asRequest()
 
-        val logMsg = if (logContents) {
-            "Sending message ${message.javaClass} to '$connectionName': '$message' " +
+        val msgLogContent = customMessageToStringFunction?.let { it(message) }
+        val logMsg = if (msgLogContent != null) {
+            "Sending message ${message.javaClass} to '$connectionName': '$msgLogContent' " +
                     "with ID: ${requestFrame.requestId}"
         } else {
             "Sending message ${message.javaClass} to '$connectionName', " +

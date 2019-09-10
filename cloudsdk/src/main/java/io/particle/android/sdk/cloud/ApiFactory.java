@@ -17,6 +17,7 @@ import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
+
 /**
  * Constructs ParticleCloud instances
  */
@@ -25,8 +26,6 @@ public class ApiFactory {
 
     // both values are in seconds
     private static final int REGULAR_TIMEOUT = 35;
-    // FIXME: find a less cheesy solution to the "rapid timeout" problem
-    private static final int PER_DEVICE_FAST_TIMEOUT = 5;
 
 
     // FIXME: this feels kind of lame... but maybe it's READY_TO_ACTIVATE in practice. Need to think more about it.
@@ -48,7 +47,6 @@ public class ApiFactory {
     private final Context ctx;
     private final TokenGetterDelegate tokenDelegate;
     private final OkHttpClient normalTimeoutClient;
-    private final OkHttpClient fastTimeoutClient;
     private final OauthBasicAuthCredentialsProvider basicAuthCredentialsProvider;
     private final Gson gson;
     private final Uri apiBaseUri;
@@ -64,7 +62,6 @@ public class ApiFactory {
         this.apiBaseUri = uri;
 
         normalTimeoutClient = buildClientWithTimeout(REGULAR_TIMEOUT);
-        fastTimeoutClient = buildClientWithTimeout(PER_DEVICE_FAST_TIMEOUT);
     }
 
     private static OkHttpClient buildClientWithTimeout(int timeoutInSeconds) {
@@ -77,15 +74,6 @@ public class ApiFactory {
 
     ApiDefs.CloudApi buildNewCloudApi() {
         RestAdapter restAdapter = buildCommonRestAdapterBuilder(gson, normalTimeoutClient)
-                .setRequestInterceptor(request -> request.addHeader("Authorization", "Bearer " +
-                        tokenDelegate.getTokenValue()))
-                .build();
-        return restAdapter.create(ApiDefs.CloudApi.class);
-    }
-
-    // FIXME: fix this ugliness
-    ApiDefs.CloudApi buildNewFastTimeoutCloudApi() {
-        RestAdapter restAdapter = buildCommonRestAdapterBuilder(gson, fastTimeoutClient)
                 .setRequestInterceptor(request -> request.addHeader("Authorization", "Bearer " +
                         tokenDelegate.getTokenValue()))
                 .build();

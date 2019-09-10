@@ -60,30 +60,30 @@ class PermissionsFragment : Fragment(), OnRequestPermissionsResultCallback {
 
         // FIXME: stop referring to these location permission-specific strings here,
         // make them part of the client interface
-        if (shouldShowRequestPermissionRationale(permission)) {
+//        if (shouldShowRequestPermissionRationale(permission)) {
             dialogBuilder.setTitle(R.string.mesh_location_permission_dialog_title)
                 .setMessage(R.string.mesh_location_permission_dialog_text)
                 .setPositiveButton(R.string.mesh_got_it) { dialog, _ ->
                     dialog.dismiss()
                     requestPermission(permission)
                 }
-        } else {
-            // user has explicitly denied this permission to setup.
-            // show a simple dialog and bail out.
-            dialogBuilder.setTitle(R.string.mesh_location_permission_denied_dialog_title)
-                .setMessage(R.string.mesh_location_permission_denied_dialog_text)
-                .setPositiveButton("Settings") { dialog, _ ->
-                    dialog.dismiss()
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val pkgName = aktivity.applicationInfo.packageName
-                    intent.data = Uri.parse("package:$pkgName")
-                    startActivity(intent)
-                }
-                .setNegativeButton("Exit") { _, _ ->
-                    val client = activity as Client?
-                    client!!.onUserDeniedPermission(permission)
-                }
-        }
+//        } else {
+//            // user has explicitly denied this permission to setup.
+//            // show a simple dialog and bail out.
+//            dialogBuilder.setTitle(R.string.mesh_location_permission_denied_dialog_title)
+//                .setMessage(R.string.mesh_location_permission_denied_dialog_text)
+//                .setPositiveButton("Settings") { dialog, _ ->
+//                    dialog.dismiss()
+//                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                    val pkgName = aktivity.applicationInfo.packageName
+//                    intent.data = Uri.parse("package:$pkgName")
+//                    startActivity(intent)
+//                }
+//                .setNegativeButton("Exit") { _, _ ->
+//                    val client = activity as Client?
+//                    client!!.onUserDeniedPermission(permission)
+//                }
+//        }
 
         dialogBuilder.show()
     }

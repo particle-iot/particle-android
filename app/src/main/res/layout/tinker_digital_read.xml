@@ -16,6 +16,7 @@
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:gravity="center_vertical"
+        android:textColor="@android:color/black"
         android:text="HIGH"
         android:textSize="18sp"/>
 

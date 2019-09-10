@@ -45,7 +45,7 @@
         <item name="android:progressDrawable">@drawable/progress_emerald</item>
     </style>
 
-    <style name="TinkerSeekBar" parent="android:Widget.ProgressBar.Horizontal">
+    <style name="TinkerSeekBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:layout_width">150dip</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">5dip</item>
@@ -59,13 +59,14 @@
     </style>
 
     <style name="SparkTinkerPin" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">@string/bold_text_font_name</item>
         <item name="android:layout_width">@dimen/tinker_pin_radius</item>
         <item name="android:layout_height">@dimen/tinker_pin_radius</item>
         <item name="android:textSize">@dimen/tinker_pin_label_text_size</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:background">@drawable/tinker_pin</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="SparkTinkerPinBG">

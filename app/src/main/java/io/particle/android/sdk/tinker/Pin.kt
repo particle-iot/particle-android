@@ -142,7 +142,7 @@ internal class Pin(
     }
 
     fun updatePinColor() {
-        pinLabelView.setTextColor(pinLabelView.context.resources.getColor(android.R.color.white))
+        pinLabelView.setTextColor(pinLabelView.context.resources.getColor(android.R.color.black))
 
         when (configuredAction) {
             PinAction.ANALOG_READ -> pinLabelView.setBackgroundResource(R.drawable.tinker_pin_emerald)
@@ -314,7 +314,6 @@ internal class Pin(
             pinBackgroundAnim!!.cancel()
             pinBackgroundAnim = null
         }
-        parent.setBackgroundColor(0x4C000000)
 
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
 
