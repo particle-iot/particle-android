@@ -65,9 +65,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:gravity="center_vertical|end"
+                    android:maxLines="1"
                     android:textColor="#9c9c9c"
                     android:textSize="@dimen/text_size_medium"
+                    app:autoSizeMaxTextSize="@dimen/text_size_medium"
+                    app:autoSizeTextType="uniform"
                     tools:text="whateverrrrr" />
 
             </LinearLayout>
@@ -269,9 +273,9 @@
                 android:layout_marginTop="80dp"
                 android:background="@color/white"
                 android:elevation="4dp"
+                app:layout_constraintBottom_toTopOf="@id/p_controlpanel_bottom_padding_guideline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/p_controlpanel_bottom_padding_guideline"
                 app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_docs_item_frame">
 
                 <TextView

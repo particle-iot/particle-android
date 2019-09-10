@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="device_info_slider_name_max_width">270dp</dimen>
+</resources>

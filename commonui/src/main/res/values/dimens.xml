@@ -12,5 +12,6 @@
 
     <dimen name="p_mesh_bottom_element_margin">16dp</dimen>
     <dimen name="p_device_info_slider_peek_height">82dp</dimen>
+    <dimen name="device_info_slider_name_max_width">220dp</dimen>
 
 </resources>
