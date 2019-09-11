@@ -13,6 +13,7 @@ import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_DATA_L
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_INVALID_PAYMENT_METHOD
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_NEVER_ACTIVATED
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_USER_DEACTIVATED
+import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.SimStatusChangeMode
 import io.particle.mesh.ui.R
@@ -53,13 +54,18 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
 
     override fun onResume() {
         super.onResume()
-        val sim = flowUiListener!!.targetDevice.sim!!
+        val sim = flowUiListener?.targetDevice?.sim
         log.info { "onResume() SIM=$sim" }
-        val limit = sim.monthlyDataRateLimitInMBs
+        if (sim == null) {
+            val msg = "device=${flowUiListener?.targetDevice}, sim=$sim"
+            QATool.report(IllegalStateException("Missing information from cellular device: $msg"))
+        }
+        val limit = sim?.monthlyDataRateLimitInMBs
         p_controlpanel_cellular_options_change_data_limit_value.text = "${limit}MB"
-        onSimStatusUpdated(sim.simStatus)
+        sim?.let { onSimStatusUpdated(it.simStatus) }
     }
-    
+
+
     private fun onSimStatusUpdated(status: ParticleApiSimStatus) {
         val config = when (status) {
             ACTIVE -> SimStatusSwitchConfig.ACTIVE
