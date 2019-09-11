@@ -6,6 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import io.particle.mesh.ui.R
 
@@ -13,7 +14,7 @@ import io.particle.mesh.ui.R
 class OverlayWithHoleView(
         context: Context,
         attrs: AttributeSet
-) : ImageView(context, attrs) {
+) : AppCompatImageView(context, attrs) {
 
     private var circleRect: RectF? = null
     private var radius: Float = 0.0f
