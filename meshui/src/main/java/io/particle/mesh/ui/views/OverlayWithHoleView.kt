@@ -6,6 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import io.particle.mesh.ui.R
 
 
@@ -23,7 +24,7 @@ class OverlayWithHoleView(
 
     init {
         setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        blackTransparency = resources.getColor(R.color.p_mesh_black_sorta_transparent, null)
+        blackTransparency = ContextCompat.getColor(context, R.color.p_mesh_black_sorta_transparent)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
