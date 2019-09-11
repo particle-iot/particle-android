@@ -104,8 +104,8 @@
     <string name="p_action_enroll_in_subscription">Enroll in subscription</string>
 
 
-    <string name="pair_assisting_device_with_your_phone">Pair assisting {product_type} with your phone</string>
-    <string name="p_pairassistingdevice_subheader_1">Use your phone\'s camera to scan the sticker printed on the front of the assisting {product_type}</string>
+    <string name="pair_assisting_device_with_your_phone">Pair assisting device with your phone</string>
+    <string name="p_pairassistingdevice_subheader_1">Use your phone\'s camera to scan the sticker printed on the front of the assisting device</string>
     <string name="p_connecttocloud_xenon_gateway_needs_ethernet">You must connect an ethernet cable to a switch/router with an active internet connection to proceed.</string>
     <string name="p_checkethernetgateway_title">Connect Xenon to Device Cloud</string>
     <string name="p_checkethernetgateway_device_cloud_intro">The Device Cloud is (larger network at play here, introduce the concept)</string>
