@@ -15,6 +15,7 @@ import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ALL_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.NONE_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.OFFLINE_ONLY
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ONLINE_ONLY
+import io.particle.android.sdk.utils.pass
 import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -215,7 +216,13 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
         scopes.onWorker {
             for (device in devices) {
                 if (device.isConnected) {
-                    device.refresh()
+                    try {
+                        device.refresh()
+                    } catch (ex: Exception) {
+                        // This is just an optimization to give online devices their full
+                        // function/variable info faster; no need to do anything if it fails
+                        continue
+                    }
                 }
             }
         }
