@@ -27,6 +27,8 @@ import io.particle.android.sdk.utils.ui.Ui
 import io.particle.commonui.DeviceInfoBottomSheetController
 import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.utils.ToastGravity
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import io.particle.sdk.app.R
 import mu.KotlinLogging
@@ -118,11 +120,17 @@ class InspectorActivity : BaseActivity() {
             val owned = try {
                 cloud.userOwnsDevice(device.id)
             } catch (ex: Exception) {
-                false
+                // this seems odd to return true here, but there are a load of different errors
+                // which can be thrown if,  e.g.: this Android device has no internet access at
+                // the moment.  That shouldn't cause us to bail here
+                true
             }
 
             if (!owned) {
-                scopes.onMain { finish() }
+                scopes.onMain {
+                    safeToast("Device is not owned by this user", gravity = ToastGravity.CENTER)
+                    finish()
+                }
             }
 
             try {
