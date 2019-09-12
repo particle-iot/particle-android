@@ -10,6 +10,7 @@ import com.snakydesign.livedataextensions.distinctUntilChanged
 import com.snakydesign.livedataextensions.filter
 import com.snakydesign.livedataextensions.map
 import com.snakydesign.livedataextensions.nonNull
+import io.particle.android.sdk.utils.appHasPermission
 import io.particle.mesh.bluetooth.BluetoothAdapterStateLD
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.scanning.BLEScannerLD
@@ -24,8 +25,8 @@ private val log = KotlinLogging.logger {}
 
 
 fun buildMatchingDeviceNameScanner(
-        context: Context,
-        deviceName: String
+    context: Context,
+    deviceName: String
 ): LiveData<List<ScanResult>?> {
     log.info { "Scanning for device $deviceName" }
 
@@ -33,14 +34,20 @@ fun buildMatchingDeviceNameScanner(
 
     val toggleScanLD = MutableLiveData<Boolean>()
     toggleScanLD.value = true
+
+    val hasPermissionFunc: () -> Boolean = {
+        ctx.appHasPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+    }
+
     val scannerLD = buildReactiveBluetoothScanner(
-            toggleScanLD,
-            BluetoothAdapterStateLD(ctx),
-            BLEScannerLD(
-                    ctx.btAdapter,
-                    { sr -> sr.device.name != null && sr.device.name == deviceName },
-                    listOf(Builder().setServiceUuid(ParcelUuid(BT_SETUP_SERVICE_ID)).build())
-            )
+        toggleScanLD,
+        BluetoothAdapterStateLD(ctx),
+        BLEScannerLD(
+            ctx.btAdapter,
+            { sr -> sr.device.name != null && sr.device.name == deviceName },
+            hasPermissionFunc,
+            listOf(Builder().setServiceUuid(ParcelUuid(BT_SETUP_SERVICE_ID)).build())
+        )
     )
 
     return scannerLD.distinctUntilChanged()
@@ -48,15 +55,15 @@ fun buildMatchingDeviceNameScanner(
 
 
 fun buildMatchingDeviceNameSuspender(
-        context: Context,
-        deviceName: String
+    context: Context,
+    deviceName: String
 ): AsyncWorkSuspender<ScanResult?> {
     val scannerLD = buildMatchingDeviceNameScanner(context, deviceName)
-    return object: LiveDataSuspender<ScanResult?>() {
+    return object : LiveDataSuspender<ScanResult?>() {
         override fun buildLiveData(): LiveData<ScanResult?> {
             return scannerLD.nonNull()
-                    .filter { it!!.isNotEmpty() }
-                    .map { it!![0] }
+                .filter { it!!.isNotEmpty() }
+                .map { it!![0] }
         }
     }
 }
