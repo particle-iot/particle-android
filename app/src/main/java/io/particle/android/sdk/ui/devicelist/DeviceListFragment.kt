@@ -211,7 +211,7 @@ class DeviceListFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        deviceSetupCompleteReceiver!!.unregister(activity)
+        deviceSetupCompleteReceiver?.unregister(activity)
     }
 
     private fun onDeviceListUpdated(devices: List<ParticleDevice>) {
