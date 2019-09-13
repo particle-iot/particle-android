@@ -93,8 +93,10 @@ class EventsFragment : Fragment() {
 
     private fun setupClearListener(rootView: View, adapter: EventListAdapter) {
         rootView.findViewById<View>(R.id.events_clear).setOnClickListener {
-            AlertDialog.Builder(requireNonNull<FragmentActivity>(activity), R.style.DialogTheme)
-                .setTitle(R.string.clear_events_title)
+            AlertDialog.Builder(
+                requireActivity(),
+                R.style.Theme_MaterialComponents_Light_Dialog_Alert
+            ).setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
                 .setPositiveButton(R.string.ok) { _, _ ->
                     events_empty.visibility = View.VISIBLE
