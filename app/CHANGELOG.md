@@ -1,3 +1,8 @@
+3.0.1
+======
+- Properly ellipsize long device names
+- Crash fixes from 3.0.0
+
 3.0.0
 ======
 - Control Panel — rename devices, set notes, or even unclaim, all from a single section of the mobile app.
