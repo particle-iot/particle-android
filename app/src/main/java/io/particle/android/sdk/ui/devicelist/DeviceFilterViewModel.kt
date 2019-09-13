@@ -15,7 +15,6 @@ import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ALL_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.NONE_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.OFFLINE_ONLY
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ONLINE_ONLY
-import io.particle.android.sdk.utils.pass
 import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -63,8 +62,7 @@ open class DeviceFilter(
         filteredDeviceListLD = deviceListViewConfigLD
             .distinctUntilChanged()
             .switchMap {
-                fullDeviceListLD
-                    .map { sortAndFilterDeviceList(it, currentConfig) }
+                fullDeviceListLD.map { sortAndFilterDeviceList(it, currentConfig) }
             }
     }
 
