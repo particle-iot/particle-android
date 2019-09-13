@@ -96,7 +96,6 @@ class DeviceListFragment : Fragment() {
         add_device_fab.collapse()
     }
 
-    @ExperimentalStdlibApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
