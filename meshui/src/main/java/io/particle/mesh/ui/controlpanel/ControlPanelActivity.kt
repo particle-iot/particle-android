@@ -83,6 +83,12 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // This should be impossible, but somehow we had a crash with this issue.
+        // Investigate further later.
+        if (device == null) {
+            finish()
+        }
+
         p_action_close.setOnClickListener { finish() }
         p_action_back.setOnClickListener {
             onUserNavigatedBack()

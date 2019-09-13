@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle.Event
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -296,10 +295,7 @@ private class DataListAdapter(
                                 ArrayList(listOf(holder.argument.text.toString()))
                             )
 
-                        } catch (e: ParticleDevice.FunctionDoesNotExistException) {
-                            e.printStackTrace()
-                            -1
-                        } catch (e: IllegalArgumentException) {
+                        } catch (e: Exception) {
                             e.printStackTrace()
                             -1
                         }

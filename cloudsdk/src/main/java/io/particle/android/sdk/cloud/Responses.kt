@@ -154,8 +154,8 @@ class Responses {
         commandName: String,
         variableName: String,
         coreInfo: CoreInfo,
-        result: Any
-    ) : ReadVariableResponse<Any>(commandName, variableName, coreInfo, result)
+        result: Any?
+    ) : ReadVariableResponse<Any?>(commandName, variableName, coreInfo, result)
 
 
     class MeshNetworkRegistrationResponse(val network: RegisteredNetwork) {

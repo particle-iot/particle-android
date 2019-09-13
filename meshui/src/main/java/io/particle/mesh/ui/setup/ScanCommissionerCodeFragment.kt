@@ -20,16 +20,7 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
         val productName = getUserFacingTypeName()
-
-        textView.text = Phrase.from(view, R.string.p_scancommissionercode_tip_content)
-            .put("product_type", productName)
-            .format()
-
-        setup_header_text.text = Phrase.from(view, R.string.pair_assisting_device_with_your_phone)
-            .put("product_type", productName)
-            .format()
-
-        assistantText.text = Phrase.from(view, R.string.p_pairassistingdevice_subheader_1)
+        p_commissionerscan_hint_text.text = Phrase.from(view, R.string.p_scancommissionercode_tip_content)
             .put("product_type", productName)
             .format()
     }

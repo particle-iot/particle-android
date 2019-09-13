@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.snakydesign.livedataextensions.switchMap
 import io.particle.mesh.bluetooth.BluetoothAdapterState
 import io.particle.mesh.common.Predicate
+import io.particle.mesh.common.QATool
 import io.particle.mesh.common.android.livedata.AbsentLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,6 +41,7 @@ fun buildReactiveBluetoothScanner(
 class BLEScannerLD(
         private val bluetoothAdapter: BluetoothAdapter,
         private val resultsFilter: Predicate<ScanResult>,
+        private val hasPermissionChecker: () -> Boolean,
         private val scanFilters: List<ScanFilter> = listOf(),
         private val scanSettings: ScanSettings = ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
@@ -65,6 +67,13 @@ class BLEScannerLD(
             return
         }
         log.info { "Starting scan!" }
+
+        val hasPermission = hasPermissionChecker()
+        val permissionStatus = if (hasPermission) "GRANTED" else "DENIED"
+        log.info { "Starting scan! Location permission status=$permissionStatus" }
+        if (!hasPermission) {
+            QATool.illegalState("Attempting to scan without BT permission!")
+        }
         bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback)
         isScanning = true
     }

@@ -62,8 +62,7 @@ open class DeviceFilter(
         filteredDeviceListLD = deviceListViewConfigLD
             .distinctUntilChanged()
             .switchMap {
-                fullDeviceListLD
-                    .map { sortAndFilterDeviceList(it, currentConfig) }
+                fullDeviceListLD.map { sortAndFilterDeviceList(it, currentConfig) }
             }
     }
 
@@ -215,7 +214,13 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
         scopes.onWorker {
             for (device in devices) {
                 if (device.isConnected) {
-                    device.refresh()
+                    try {
+                        device.refresh()
+                    } catch (ex: Exception) {
+                        // This is just an optimization to give online devices their full
+                        // function/variable info faster; no need to do anything if it fails
+                        continue
+                    }
                 }
             }
         }
