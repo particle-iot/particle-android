@@ -36,7 +36,6 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleEvent
 import io.particle.android.sdk.cloud.ParticleEventHandler
-import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
@@ -56,7 +55,6 @@ import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Objects.requireNonNull
@@ -197,8 +195,7 @@ class DeviceListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         name_filter_input.addTextChangedListener(nameFilterTextWatcher)
-        val devices = filterViewModel.fullDeviceListLD.value
-        devices?.let { subscribeToSystemEvents(devices, false) }
+        subscribeToSystemEvents()
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
             viewLifecycleOwner,
             Observer { onDeviceListUpdated(it) }
@@ -208,8 +205,7 @@ class DeviceListFragment : Fragment() {
     override fun onPause() {
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.removeObservers(viewLifecycleOwner)
         name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
-        val devices = filterViewModel.fullDeviceListLD.value
-        devices?.let { subscribeToSystemEvents(devices, true) }
+        unsubscribeFromSystemEvents()
         super.onPause()
     }
 
@@ -278,40 +274,57 @@ class DeviceListFragment : Fragment() {
         }
     }
 
-    private fun subscribeToSystemEvents(
-        devices: List<ParticleDevice>,
-        revertSubscription: Boolean
-    ) {
+    private fun unsubscribeFromSystemEvents() {
         scopes.onWorker {
-            for (device in devices) {
-                try {
-                    if (revertSubscription) {
-                        for (id in subscribeIds) {
-                            device.unsubscribeFromEvents(id!!)
-                        }
-                    } else {
-                        subscribeIds.add(
-                            device.subscribeToEvents(
-                                "spark/status",
-                                object : ParticleEventHandler {
-                                    override fun onEventError(e: Exception) {
-                                        //ignore for now, events aren't vital
-                                    }
+            val ids = subscribeIds.toLongArray()
+            subscribeIds.clear()
+            for (id in ids) {
+                ParticleCloudSDK.getCloud().unsubscribeFromEventWithID(id)
+            }
+        }
+    }
 
-                                    override fun onEvent(
-                                        eventName: String,
-                                        particleEvent: ParticleEvent
-                                    ) {
-                                        refreshDevices()
+    private fun subscribeToSystemEvents() {
+        scopes.onWorker {
+            val cloud = ParticleCloudSDK.getCloud()
+            val eventList = listOf(
+                "spark/status",
+                "spark/flash/status",
+                "spark/device/app-hash",
+                "spark/status/safe-mode",
+                "spark/safe-mode-updater/updating"
+            )
+            for (event in eventList) {
+                try {
+                    val subscriberId = cloud.subscribeToMyDevicesEvents(
+                        event,
+                        object: ParticleEventHandler {
+                            override fun onEventError(e: java.lang.Exception?) {
+                                // ignore
+                            }
+
+                            override fun onEvent(eventName: String?, particleEvent: ParticleEvent?) {
+                                scopes.onWorker {
+                                    particleEvent?.deviceId?.let {
+                                        try {
+                                            val device = cloud.getDevice(it)
+                                            log.i("Refreshing device from event $eventName")
+                                            device.refresh()
+                                        } catch (ex: Exception) {
+                                            // ignore
+                                        }
                                     }
-                                })
-                        )
-                    }
-                } catch (ignore: IOException) {
-                    //ignore for now, events aren't vital
-                } catch (ignore: ParticleCloudException) {
+                                }
+                            }
+                        }
+                    )
+                    subscribeIds.add(subscriberId)
+                } catch (ex: Exception) {
+                    // ignore
                 }
             }
+
+            log.i("Subscriber IDs: $subscribeIds")
         }
     }
 
