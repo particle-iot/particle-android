@@ -192,11 +192,6 @@ class DeviceListFragment : Fragment() {
             imm?.showSoftInput(name_filter_input, InputMethodManager.SHOW_IMPLICIT)
         }
         clear_text_icon.setOnClickListener { name_filter_input.setText("") }
-
-        filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
-            viewLifecycleOwner,
-            Observer { onDeviceListUpdated(it) }
-        )
     }
 
     override fun onResume() {
@@ -204,9 +199,14 @@ class DeviceListFragment : Fragment() {
         name_filter_input.addTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
         devices?.let { subscribeToSystemEvents(devices, false) }
+        filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
+            viewLifecycleOwner,
+            Observer { onDeviceListUpdated(it) }
+        )
     }
 
     override fun onPause() {
+        filterViewModel.currentDeviceFilter.filteredDeviceListLD.removeObservers(viewLifecycleOwner)
         name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
         val devices = filterViewModel.fullDeviceListLD.value
         devices?.let { subscribeToSystemEvents(devices, true) }
@@ -244,6 +244,7 @@ class DeviceListFragment : Fragment() {
 
         empty_message.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
+        adapter.notifyDataSetChanged()
     }
 
     private fun updateEmptyMessageAndSearchBox() {
