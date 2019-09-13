@@ -94,9 +94,6 @@ dependencies {
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
     // implemented by hand (and as such, might not be worth it.)
     implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation('com.f2prateek.bundler:bundler:1.1.2') {
-        exclude module: 'support-v4'
-    }
 
     releaseImplementation 'com.google.firebase:firebase-core:17.2.0'
     releaseImplementation 'com.google.firebase:firebase-analytics:17.2.0'
