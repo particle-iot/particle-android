@@ -436,7 +436,6 @@ class ParticleDevice internal constructor(
      */
     @Throws(ParticleCloudException::class)
     fun unsubscribeFromEvents(eventListenerID: Long) {
-        log.v("Unsubscribing from events where eventListenerID=$eventListenerID")
         cloud.unsubscribeFromEventWithID(eventListenerID)
     }
 
@@ -505,6 +504,7 @@ class ParticleDevice internal constructor(
     @Throws(ParticleCloudException::class)
     fun refresh() {
         // just calling this get method will update everything as expected.
+        log.i("refresh() for device ${deviceState.deviceId}")
         cloud.getDevice(deviceState.deviceId)
     }
 
@@ -720,9 +720,11 @@ class ParticleDevice internal constructor(
     override fun toString(): String {
         return "ParticleDevice{" +
                 "deviceId=" + deviceState.deviceId +
+                ", name=" + deviceState.name +
                 ", serialNumber=" + deviceState.serialNumber +
                 ", isConnected=" + deviceState.isConnected +
                 ", deviceType=" + deviceState.deviceType +
+                ", status=" + deviceState.status +
                 '}'.toString()
     }
 

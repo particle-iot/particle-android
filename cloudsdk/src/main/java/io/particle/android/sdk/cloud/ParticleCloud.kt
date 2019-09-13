@@ -705,6 +705,8 @@ class ParticleCloud internal constructor(
      * @return a unique subscription ID for the eventListener that's been registered.  This ID is
      * used to unsubscribe this event listener later.
      */
+    @Deprecated("This method will be removed in a future revision of the SDK.  " +
+            "Please use .subscribeToMyDevicesEvents() instead")
     @WorkerThread
     @Throws(IOException::class)
     fun subscribeToAllEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
@@ -725,6 +727,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(IOException::class)
     fun subscribeToMyDevicesEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
+        Log.d("ParticleCloud", "subscribeToMyDevicesEvents(), prefix=$eventNamePrefix")
         return eventsDelegate.subscribeToMyDevicesEvents(eventNamePrefix, handler)
     }
 
@@ -760,6 +763,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun unsubscribeFromEventWithID(eventListenerID: Long) {
+        log.v("Unsubscribing from events where eventListenerID=$eventListenerID")
         eventsDelegate.unsubscribeFromEventWithID(eventListenerID)
     }
 
