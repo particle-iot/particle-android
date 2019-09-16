@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
@@ -85,8 +86,9 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
 
         // This should be impossible, but somehow we had a crash with this issue.
         // Investigate further later.
-        if (device == null) {
+        if (intent.getParcelableExtra<Parcelable?>(EXTRA_DEVICE) == null) {
             finish()
+            return
         }
 
         p_action_close.setOnClickListener { finish() }
