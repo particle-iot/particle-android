@@ -85,7 +85,6 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/action_button_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -255,6 +254,10 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -262,7 +265,7 @@
         android:id="@+id/action_button_divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="2dp"
         android:background="?attr/dividerHorizontal"
         app:layout_constraintBottom_toTopOf="@id/action_filter_device_list"
         app:layout_constraintEnd_toEndOf="parent"
@@ -273,7 +276,7 @@
         style="@style/p_mesh_button_style"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="6dp"
         android:text="Show X devices"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
