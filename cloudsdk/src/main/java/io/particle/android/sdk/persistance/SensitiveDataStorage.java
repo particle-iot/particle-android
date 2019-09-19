@@ -19,6 +19,7 @@ public class SensitiveDataStorage {
     private static final String KEY_TOKEN = "KEY_TOKEN";
     private static final String KEY_TOKEN_EXPIRATION_DATE = "KEY_TOKEN_EXPIRATION_DATE";
     private static final String KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN";
+    private static final String KEY_HAS_EVER_HAD_STORED_USERNAME = "KEY_HAS_EVER_HAD_STORED_USERNAME";
 
     private final SharedPreferences sharedPrefs;
 
@@ -29,6 +30,9 @@ public class SensitiveDataStorage {
     }
 
     public void saveUser(String user) {
+        if (user != null && !user.isEmpty()) {
+            saveHasEverHadStoredUsername(true);
+        }
         sharedPrefs.edit()
                 .putString(KEY_USERNAME, user)
                 .apply();
@@ -109,6 +113,16 @@ public class SensitiveDataStorage {
     public void resetTokenExpirationDate() {
         sharedPrefs.edit()
                 .remove(KEY_TOKEN_EXPIRATION_DATE)
+                .apply();
+    }
+
+    public boolean getHasEverHadStoredUsername() {
+        return sharedPrefs.getBoolean(KEY_HAS_EVER_HAD_STORED_USERNAME, false);
+    }
+
+    private void saveHasEverHadStoredUsername(Boolean value) {
+        sharedPrefs.edit()
+                .putBoolean(KEY_HAS_EVER_HAD_STORED_USERNAME, value)
                 .apply();
     }
 
