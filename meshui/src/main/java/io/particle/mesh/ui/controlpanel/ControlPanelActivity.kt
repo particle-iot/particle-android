@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.utils.appHasPermission
 import io.particle.android.sdk.utils.pass
+import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
 import io.particle.mesh.setup.flow.FlowTerminationAction
 import io.particle.mesh.setup.flow.FlowTerminationAction.NoFurtherAction
@@ -87,6 +88,8 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
         // This should be impossible, but somehow we had a crash with this issue.
         // Investigate further later.
         if (intent.getParcelableExtra<Parcelable?>(EXTRA_DEVICE) == null) {
+            val nullmsg = if (savedInstanceState == null) "IS" else "IS NOT"
+            QATool.illegalState("Device is null! savedInstanceState $nullmsg null")
             finish()
             return
         }
