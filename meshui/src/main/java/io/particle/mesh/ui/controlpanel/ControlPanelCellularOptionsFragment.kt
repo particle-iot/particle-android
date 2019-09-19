@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.fragment.findNavController
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.ACTIVE
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_DATA_LIMIT_REACHED
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_INVALID_PAYMENT_METHOD
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_NEVER_ACTIVATED
 import io.particle.android.sdk.cloud.models.ParticleApiSimStatus.INACTIVE_USER_DEACTIVATED
+import io.particle.android.sdk.utils.pass
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
-import io.particle.mesh.setup.flow.SimStatusChangeMode
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.inflateFragment
@@ -71,7 +71,7 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
             ACTIVE -> SimStatusSwitchConfig.ACTIVE
             INACTIVE_USER_DEACTIVATED -> SimStatusSwitchConfig.INACTIVE
             INACTIVE_DATA_LIMIT_REACHED -> SimStatusSwitchConfig.PAUSED
-            INACTIVE_INVALID_PAYMENT_METHOD -> TODO()
+            INACTIVE_INVALID_PAYMENT_METHOD -> SimStatusSwitchConfig.INACTIVE
             INACTIVE_NEVER_ACTIVATED -> throw IllegalArgumentException(
                 "SIMs shown in this screen should always have been activated"
             )
@@ -88,13 +88,24 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
             INACTIVE_USER_DEACTIVATED -> flowRunner.startSimReactivateFlow(device)
             INACTIVE_DATA_LIMIT_REACHED -> flowRunner.startSimUnpauseFlow(device)
             // FIXME: find out what we want here
-            INACTIVE_INVALID_PAYMENT_METHOD -> TODO()
+            INACTIVE_INVALID_PAYMENT_METHOD -> showInvalidPaymentDialog()
             INACTIVE_NEVER_ACTIVATED -> throw IllegalArgumentException(
                 "SIMs shown in this screen should always have been activated"
             )
         }
     }
 
+    private fun showInvalidPaymentDialog() {
+        val aktivity = activity ?: return
+
+        p_controlpanel_cellular_options_change_sim_status.isChecked = false
+
+        AlertDialog.Builder(aktivity, R.style.Theme_MaterialComponents_Light_Dialog_Alert)
+            .setTitle("Invalid payment method")
+            .setMessage("To continue, please update your payment method at https://console.particle.io/billing/edit-card")
+            .setPositiveButton("OK") { _, _ -> pass } /* just close. */
+            .show()
+    }
 }
 
 

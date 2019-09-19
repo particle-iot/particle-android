@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.squareup.phrase.Phrase
 import io.particle.android.common.buildRawResourceUri
+import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
@@ -38,9 +39,19 @@ class ManualCommissioningAddToNetworkFragment : BaseFlowFragment() {
 
         action_next.setOnClickListener {
             // FIXME: this flow logic should live outside the UI
-            findNavController().navigate(
-                R.id.action_manualCommissioningAddToNetworkFragment_to_scanCommissionerCodeFragment
-            )
+            try {
+                findNavController().navigate(
+                    R.id.action_manualCommissioningAddToNetworkFragment_to_scanCommissionerCodeFragment
+                )
+            } catch (ex: Exception) {
+                // Workaround to avoid this seemingly impossible crash: http://bit.ly/2kTpnIb
+                val error = IllegalStateException(
+                    "Navigation error, Activity=${activity.javaClass}, isFinishing=${activity.isFinishing}",
+                    ex
+                )
+                QATool.report(error)
+                this@ManualCommissioningAddToNetworkFragment.activity?.finish()
+            }
         }
 
         setup_header_text.text = Phrase.from(view, R.string.add_xenon_to_mesh_network)

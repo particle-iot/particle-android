@@ -110,7 +110,13 @@ public class CommandClient {
 
         String responseData = buffer.readUtf8();
         log.d("Command response (raw): " + CommandClientUtils.escapeJava(responseData));
-        T tee = gson.fromJson(responseData, responseType);
+        T tee;
+        try {
+            tee = gson.fromJson(responseData, responseType);
+        } catch (Exception ex) {
+            throw new IOException(ex);
+        }
+
         log.d("Command response: " + tee);
         EZ.closeThisThingOrMaybeDont(buffer);
         return tee;

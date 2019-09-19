@@ -2,14 +2,12 @@ package io.particle.mesh.ui.controlpanel
 
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
-import androidx.fragment.app.FragmentActivity
-import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.SerialNumber
 import io.particle.mesh.setup.fetchBarcodeData
-import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.TitleBarOptions
 import mu.KotlinLogging
@@ -36,8 +34,19 @@ open class BaseControlPanelFragment : BaseFlowFragment() {
     ) {
         val cloud = ParticleCloudSDK.getCloud()
         flowSystemInterface.showGlobalProgressSpinner(true)
-        val barcode = flowScopes.withWorker { cloud.fetchBarcodeData(device.id) }
+        val barcode = try {
+            flowScopes.withWorker {
+                cloud.fetchBarcodeData(device.id)
+            }
+        } catch (ex: Exception) {
+            null
+        }
         flowSystemInterface.showGlobalProgressSpinner(false)
+
+        if (barcode == null) {
+            activity?.safeToast("Unable to communicate with the Particle Cloud.  Please try again.")
+            return
+        }
 
         flowStarter(device, barcode)
     }
