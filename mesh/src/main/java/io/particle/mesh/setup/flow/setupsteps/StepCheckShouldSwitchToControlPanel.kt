@@ -2,14 +2,11 @@ package io.particle.mesh.setup.flow.setupsteps
 
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.utils.pass
-import io.particle.mesh.R.string
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.SerialNumber
-import io.particle.mesh.setup.fetchBarcodeData
 import io.particle.mesh.setup.flow.DialogResult.NEGATIVE
 import io.particle.mesh.setup.flow.DialogResult.POSITIVE
-import io.particle.mesh.setup.flow.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.MeshSetupStep

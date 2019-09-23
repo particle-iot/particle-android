@@ -44,8 +44,6 @@
             android:textColor="@android:color/black"
             android:textSize="@dimen/material_text_size_subhead"
             android:textStyle="bold"
-            app:autoSizeMaxTextSize="@dimen/material_text_size_subhead"
-            app:autoSizeTextType="uniform"
             tools:ignore="MissingPrefix"
             tools:text="device_name" />
 

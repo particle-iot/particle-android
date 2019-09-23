@@ -4,7 +4,6 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.widget.CompoundButton
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -252,8 +251,8 @@ class DeviceInfoBottomSheetController(
         val deviceId = device.id
         scopes.onWorker {
             val cloud = ParticleCloudSDK.getCloud()
-            val device = cloud.getDevice(deviceId)
             try {
+                val device = cloud.getDevice(deviceId)
                 device.startStopSignaling(shouldSignal)
             } catch (ex: Exception) {
                 log.error(ex) { "Error turning rainbows ${if (shouldSignal) "ON" else "OFF"}" }

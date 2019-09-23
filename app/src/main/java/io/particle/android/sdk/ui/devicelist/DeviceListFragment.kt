@@ -96,9 +96,9 @@ class DeviceListFragment : Fragment() {
         add_device_fab.collapse()
     }
 
-    @ExperimentalStdlibApi
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
@@ -211,7 +211,7 @@ class DeviceListFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        deviceSetupCompleteReceiver!!.unregister(activity)
+        deviceSetupCompleteReceiver?.unregister(activity)
     }
 
     private fun onDeviceListUpdated(devices: List<ParticleDevice>) {

@@ -99,10 +99,7 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         if (TinkerPrefs.getInstance(requireActivity()).isFirstVisit) {
             instructions_container.isVisible = true
-            fragmentManager?.commit {
-                add(R.id.instructions_container, InstructionsFragment())
-                addToBackStack("InstructionsFragment_TRANSACTION")
-            }
+            fragmentManager?.commit { add(R.id.instructions_container, InstructionsFragment()) }
         }
 
         updateState()
@@ -599,7 +596,7 @@ class InstructionsFragment : Fragment() {
         val v = inflater.inflate(R.layout.tinker_instructions, container, false)
         v.setOnClickListener {
             TinkerPrefs.getInstance(activity!!).setVisited(true)
-            activity!!.supportFragmentManager.popBackStack()
+            fragmentManager?.commit { remove(this@InstructionsFragment) }
         }
         return v
     }

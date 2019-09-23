@@ -13,7 +13,6 @@ import io.particle.android.sdk.persistance.SensitiveDataStorage;
 import io.particle.android.sdk.utils.Preconditions;
 import io.particle.android.sdk.utils.TLog;
 
-import static io.particle.android.sdk.utils.Py.any;
 import static io.particle.android.sdk.utils.Py.truthy;
 
 /**
@@ -68,7 +67,7 @@ public class NextActivitySelector {
     }
 
     boolean hasUserBeenLoggedInBefore() {
-        return any(credStorage.getUser(), credStorage.getToken());
+        return credStorage.getHasEverHadStoredUsername();
     }
 
     boolean isOAuthTokenPresent() {

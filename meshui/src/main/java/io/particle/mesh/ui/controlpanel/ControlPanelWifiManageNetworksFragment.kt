@@ -33,6 +33,7 @@ import io.particle.mesh.ui.inflateRow
 import kotlinx.android.synthetic.main.fragment_control_panel_wifi_manage_networks.*
 import kotlinx.android.synthetic.main.p_mesh_row_wifi_scan.view.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.yield
 
 
 class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
@@ -48,6 +49,7 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
 
     private var barcode: CompleteBarcodeData? = null
     private var transceiver: ProtocolTransceiver? = null
+    private val scopes = Scopes()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +69,7 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
         adapter = KnownWifiNetworksAdapter(::onWifiNetworkSelected)
         recyclerView.adapter = adapter
 
-        Scopes().onMain {
+        scopes.onMain {
             startFlowWithBarcode { _, barcode ->
                 this@ControlPanelWifiManageNetworksFragment.barcode = barcode
                 reloadNetworks()
@@ -78,6 +80,11 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
     override fun onStart() {
         super.onStart()
         barcode?.let { reloadNetworks() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        scopes.cancelChildren()
     }
 
     @MainThread
@@ -141,7 +148,6 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
     ) {
         flowSystemInterface.showGlobalProgressSpinner(true)
         var connected = false
-        val scopes = Scopes()
         scopes.onMain {
             val xceiver = transceiver
             try {
@@ -156,8 +162,9 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
                 QATool.log(ex.toString())
                 val error = if (connected) errorMsg else "Error connecting to device"
                 flowSystemInterface.dialogHack.newSnackbarRequest(error)
-                findNavController().popBackStack()
-
+                if (isAdded) {
+                    findNavController().popBackStack()
+                }
             } finally {
                 flowSystemInterface.showGlobalProgressSpinner(false)
             }

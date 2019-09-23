@@ -1,3 +1,11 @@
+3.0.2
+======
+- Crash fixes
+- Remove some unnecessary resources, cutting down APK size
+- Remove textviewrichdrawable library now that jetpack supports XML compound drawables
+- Make the login screen the default if anyone has ever been logged in before
+- Enable x86_64 builds
+
 3.0.1
 ======
 - Properly ellipsize long device names

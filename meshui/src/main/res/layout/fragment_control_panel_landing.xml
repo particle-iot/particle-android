@@ -143,20 +143,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/network_info_header">
 
-                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                <TextView
                     android:id="@+id/p_controlpanel_landing_wifi_item"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/listPreferredItemHeightSmall"
                     android:background="?attr/selectableItemBackground"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="12dp"
                     android:gravity="center_vertical"
                     android:paddingStart="?attr/listPreferredItemPaddingLeft"
                     android:text="Wi-Fi"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_size_medium"
-                    app:compoundDrawableHeight="22dp"
-                    app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_wifi" />
+                    app:drawableStartCompat="@drawable/p_mesh_ic_capability_wifi" />
 
             </FrameLayout>
 
@@ -170,20 +168,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_wifi_item_frame">
 
-                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                <TextView
                     android:id="@+id/p_controlpanel_landing_cellular_item"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/listPreferredItemHeightSmall"
                     android:background="?attr/selectableItemBackground"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="12dp"
                     android:gravity="center_vertical"
                     android:paddingStart="?attr/listPreferredItemPaddingLeft"
                     android:text="Cellular"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_size_medium"
-                    app:compoundDrawableHeight="22dp"
-                    app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_cellular" />
+                    app:drawableStartCompat="@drawable/p_mesh_ic_capability_cellular" />
 
             </FrameLayout>
 
@@ -197,20 +193,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_cellular_item_frame">
 
-                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                <TextView
                     android:id="@+id/p_controlpanel_landing_ethernet_item"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/listPreferredItemHeightSmall"
                     android:background="?attr/selectableItemBackground"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="12dp"
                     android:gravity="center_vertical"
                     android:paddingStart="?attr/listPreferredItemPaddingLeft"
                     android:text="Ethernet"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_size_medium"
-                    app:compoundDrawableHeight="21dp"
-                    app:compoundDrawableWidth="21dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_ethernet" />
+                    app:drawableStartCompat="@drawable/p_mesh_ic_capability_ethernet" />
 
             </FrameLayout>
 
@@ -224,20 +218,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/p_controlpanel_landing_ethernet_item_frame">
 
-                <com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+                <TextView
                     android:id="@+id/p_controlpanel_landing_mesh_item"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/listPreferredItemHeightSmall"
                     android:background="?attr/selectableItemBackground"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="12dp"
                     android:gravity="center_vertical"
                     android:paddingStart="?attr/listPreferredItemPaddingLeft"
                     android:text="Mesh"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_size_medium"
-                    app:compoundDrawableHeight="22dp"
-                    app:compoundDrawableWidth="22dp"
-                    app:drawableStartVector="@drawable/p_mesh_ic_capability_mesh" />
+                    app:drawableStartCompat="@drawable/p_mesh_ic_capability_mesh" />
 
             </FrameLayout>
 

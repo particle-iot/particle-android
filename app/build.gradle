@@ -30,13 +30,13 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         // scheme for these version numbers: EPOCH MAJOR MINOR PATCH BUILD
-        versionCode 1_03_00_01_04
-        versionName  "3.0.1"
+        versionCode 1_03_00_02_00
+        versionName  "3.0.2"
 
         vectorDrawables.useSupportLibrary = false  // no need for this since we're min SDK=21
 
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a' //, "x86_64"
+            abiFilters 'armeabi-v7a', 'arm64-v8a', "x86_64"
         }
     }
 
@@ -94,9 +94,6 @@ dependencies {
     // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
     // implemented by hand (and as such, might not be worth it.)
     implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation('com.f2prateek.bundler:bundler:1.1.2') {
-        exclude module: 'support-v4'
-    }
 
     releaseImplementation 'com.google.firebase:firebase-core:17.2.0'
     releaseImplementation 'com.google.firebase:firebase-analytics:17.2.0'
@@ -120,7 +117,7 @@ dependencies {
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
