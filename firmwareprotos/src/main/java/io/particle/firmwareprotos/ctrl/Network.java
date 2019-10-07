@@ -16,117 +16,6 @@ public final class Network {
   }
   /**
    * <pre>
-   * Data types
-   * </pre>
-   *
-   * Protobuf enum {@code particle.ctrl.NetworkState}
-   */
-  public enum NetworkState
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <code>NETWORK_STATUS_NONE = 0;</code>
-     */
-    NETWORK_STATUS_NONE(0),
-    /**
-     * <code>DOWN = 1;</code>
-     */
-    DOWN(1),
-    /**
-     * <code>UP = 2;</code>
-     */
-    UP(2),
-    UNRECOGNIZED(-1),
-    ;
-
-    /**
-     * <code>NETWORK_STATUS_NONE = 0;</code>
-     */
-    public static final int NETWORK_STATUS_NONE_VALUE = 0;
-    /**
-     * <code>DOWN = 1;</code>
-     */
-    public static final int DOWN_VALUE = 1;
-    /**
-     * <code>UP = 2;</code>
-     */
-    public static final int UP_VALUE = 2;
-
-
-    public final int getNumber() {
-      if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
-            "Can't get the number of an unknown enum value.");
-      }
-      return value;
-    }
-
-    /**
-     * @deprecated Use {@link #forNumber(int)} instead.
-     */
-    @java.lang.Deprecated
-    public static NetworkState valueOf(int value) {
-      return forNumber(value);
-    }
-
-    public static NetworkState forNumber(int value) {
-      switch (value) {
-        case 0: return NETWORK_STATUS_NONE;
-        case 1: return DOWN;
-        case 2: return UP;
-        default: return null;
-      }
-    }
-
-    public static com.google.protobuf.Internal.EnumLiteMap<NetworkState>
-        internalGetValueMap() {
-      return internalValueMap;
-    }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        NetworkState> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<NetworkState>() {
-            public NetworkState findValueByNumber(int number) {
-              return NetworkState.forNumber(number);
-            }
-          };
-
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
-      return getDescriptor().getValues().get(ordinal());
-    }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
-      return getDescriptor();
-    }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.getDescriptor().getEnumTypes().get(0);
-    }
-
-    private static final NetworkState[] VALUES = values();
-
-    public static NetworkState valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-      if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
-      }
-      if (desc.getIndex() == -1) {
-        return UNRECOGNIZED;
-      }
-      return VALUES[desc.getIndex()];
-    }
-
-    private final int value;
-
-    private NetworkState(int value) {
-      this.value = value;
-    }
-
-    // @@protoc_insertion_point(enum_scope:particle.ctrl.NetworkState)
-  }
-
-  /**
-   * <pre>
    * Direct mapping to if_flags_t
    * </pre>
    *
@@ -299,7 +188,7 @@ public final class Network {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.getDescriptor().getEnumTypes().get(1);
+      return io.particle.firmwareprotos.ctrl.Network.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final InterfaceFlag[] VALUES = {
@@ -441,7 +330,7 @@ public final class Network {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.getDescriptor().getEnumTypes().get(2);
+      return io.particle.firmwareprotos.ctrl.Network.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final InterfaceExtFlag[] VALUES = values();
@@ -575,7 +464,7 @@ public final class Network {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.getDescriptor().getEnumTypes().get(3);
+      return io.particle.firmwareprotos.ctrl.Network.getDescriptor().getEnumTypes().get(2);
     }
 
     private static final InterfaceType[] VALUES = values();
@@ -599,5471 +488,6 @@ public final class Network {
     }
 
     // @@protoc_insertion_point(enum_scope:particle.ctrl.InterfaceType)
-  }
-
-  public interface NetworkGetStatusRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:particle.ctrl.NetworkGetStatusRequest)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>int32 interface = 1;</code>
-     */
-    int getInterface();
-  }
-  /**
-   * <pre>
-   * Requests
-   * </pre>
-   *
-   * Protobuf type {@code particle.ctrl.NetworkGetStatusRequest}
-   */
-  public  static final class NetworkGetStatusRequest extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:particle.ctrl.NetworkGetStatusRequest)
-      NetworkGetStatusRequestOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use NetworkGetStatusRequest.newBuilder() to construct.
-    private NetworkGetStatusRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private NetworkGetStatusRequest() {
-      interface_ = 0;
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private NetworkGetStatusRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-
-              interface_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusRequest_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest.Builder.class);
-    }
-
-    public static final int INTERFACE_FIELD_NUMBER = 1;
-    private int interface_;
-    /**
-     * <code>int32 interface = 1;</code>
-     */
-    public int getInterface() {
-      return interface_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (interface_ != 0) {
-        output.writeInt32(1, interface_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (interface_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, interface_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest)) {
-        return super.equals(obj);
-      }
-      io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest other = (io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest) obj;
-
-      boolean result = true;
-      result = result && (getInterface()
-          == other.getInterface());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + INTERFACE_FIELD_NUMBER;
-      hash = (53 * hash) + getInterface();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * <pre>
-     * Requests
-     * </pre>
-     *
-     * Protobuf type {@code particle.ctrl.NetworkGetStatusRequest}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:particle.ctrl.NetworkGetStatusRequest)
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusRequest_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest.Builder.class);
-      }
-
-      // Construct using io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        interface_ = 0;
-
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusRequest_descriptor;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest getDefaultInstanceForType() {
-        return io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest.getDefaultInstance();
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest build() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest buildPartial() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest result = new io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest(this);
-        result.interface_ = interface_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest) {
-          return mergeFrom((io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest other) {
-        if (other == io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest.getDefaultInstance()) return this;
-        if (other.getInterface() != 0) {
-          setInterface(other.getInterface());
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int interface_ ;
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public int getInterface() {
-        return interface_;
-      }
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public Builder setInterface(int value) {
-        
-        interface_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public Builder clearInterface() {
-        
-        interface_ = 0;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:particle.ctrl.NetworkGetStatusRequest)
-    }
-
-    // @@protoc_insertion_point(class_scope:particle.ctrl.NetworkGetStatusRequest)
-    private static final io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest();
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<NetworkGetStatusRequest>
-        PARSER = new com.google.protobuf.AbstractParser<NetworkGetStatusRequest>() {
-      public NetworkGetStatusRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkGetStatusRequest(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<NetworkGetStatusRequest> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkGetStatusRequest> getParserForType() {
-      return PARSER;
-    }
-
-    public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface NetworkGetStatusReplyOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:particle.ctrl.NetworkGetStatusReply)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    boolean hasConfig();
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getConfig();
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder getConfigOrBuilder();
-  }
-  /**
-   * Protobuf type {@code particle.ctrl.NetworkGetStatusReply}
-   */
-  public  static final class NetworkGetStatusReply extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:particle.ctrl.NetworkGetStatusReply)
-      NetworkGetStatusReplyOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use NetworkGetStatusReply.newBuilder() to construct.
-    private NetworkGetStatusReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private NetworkGetStatusReply() {
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private NetworkGetStatusReply(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder subBuilder = null;
-              if (config_ != null) {
-                subBuilder = config_.toBuilder();
-              }
-              config_ = input.readMessage(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(config_);
-                config_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusReply_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusReply_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply.Builder.class);
-    }
-
-    public static final int CONFIG_FIELD_NUMBER = 1;
-    private io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration config_;
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    public boolean hasConfig() {
-      return config_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getConfig() {
-      return config_ == null ? io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance() : config_;
-    }
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder getConfigOrBuilder() {
-      return getConfig();
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (config_ != null) {
-        output.writeMessage(1, getConfig());
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (config_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getConfig());
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply)) {
-        return super.equals(obj);
-      }
-      io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply other = (io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply) obj;
-
-      boolean result = true;
-      result = result && (hasConfig() == other.hasConfig());
-      if (hasConfig()) {
-        result = result && getConfig()
-            .equals(other.getConfig());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasConfig()) {
-        hash = (37 * hash) + CONFIG_FIELD_NUMBER;
-        hash = (53 * hash) + getConfig().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code particle.ctrl.NetworkGetStatusReply}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:particle.ctrl.NetworkGetStatusReply)
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReplyOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusReply_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusReply_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply.Builder.class);
-      }
-
-      // Construct using io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        if (configBuilder_ == null) {
-          config_ = null;
-        } else {
-          config_ = null;
-          configBuilder_ = null;
-        }
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetStatusReply_descriptor;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply getDefaultInstanceForType() {
-        return io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply.getDefaultInstance();
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply build() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply buildPartial() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply result = new io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply(this);
-        if (configBuilder_ == null) {
-          result.config_ = config_;
-        } else {
-          result.config_ = configBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply) {
-          return mergeFrom((io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply other) {
-        if (other == io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply.getDefaultInstance()) return this;
-        if (other.hasConfig()) {
-          mergeConfig(other.getConfig());
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration config_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder> configBuilder_;
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public boolean hasConfig() {
-        return configBuilder_ != null || config_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getConfig() {
-        if (configBuilder_ == null) {
-          return config_ == null ? io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance() : config_;
-        } else {
-          return configBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder setConfig(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration value) {
-        if (configBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          config_ = value;
-          onChanged();
-        } else {
-          configBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder setConfig(
-          io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder builderForValue) {
-        if (configBuilder_ == null) {
-          config_ = builderForValue.build();
-          onChanged();
-        } else {
-          configBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder mergeConfig(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration value) {
-        if (configBuilder_ == null) {
-          if (config_ != null) {
-            config_ =
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.newBuilder(config_).mergeFrom(value).buildPartial();
-          } else {
-            config_ = value;
-          }
-          onChanged();
-        } else {
-          configBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder clearConfig() {
-        if (configBuilder_ == null) {
-          config_ = null;
-          onChanged();
-        } else {
-          config_ = null;
-          configBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder getConfigBuilder() {
-        
-        onChanged();
-        return getConfigFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder getConfigOrBuilder() {
-        if (configBuilder_ != null) {
-          return configBuilder_.getMessageOrBuilder();
-        } else {
-          return config_ == null ?
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance() : config_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder> 
-          getConfigFieldBuilder() {
-        if (configBuilder_ == null) {
-          configBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder>(
-                  getConfig(),
-                  getParentForChildren(),
-                  isClean());
-          config_ = null;
-        }
-        return configBuilder_;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:particle.ctrl.NetworkGetStatusReply)
-    }
-
-    // @@protoc_insertion_point(class_scope:particle.ctrl.NetworkGetStatusReply)
-    private static final io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply();
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<NetworkGetStatusReply>
-        PARSER = new com.google.protobuf.AbstractParser<NetworkGetStatusReply>() {
-      public NetworkGetStatusReply parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkGetStatusReply(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<NetworkGetStatusReply> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkGetStatusReply> getParserForType() {
-      return PARSER;
-    }
-
-    public io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface NetworkGetConfigurationRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:particle.ctrl.NetworkGetConfigurationRequest)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>int32 interface = 1;</code>
-     */
-    int getInterface();
-  }
-  /**
-   * Protobuf type {@code particle.ctrl.NetworkGetConfigurationRequest}
-   */
-  public  static final class NetworkGetConfigurationRequest extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:particle.ctrl.NetworkGetConfigurationRequest)
-      NetworkGetConfigurationRequestOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use NetworkGetConfigurationRequest.newBuilder() to construct.
-    private NetworkGetConfigurationRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private NetworkGetConfigurationRequest() {
-      interface_ = 0;
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private NetworkGetConfigurationRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-
-              interface_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationRequest_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest.Builder.class);
-    }
-
-    public static final int INTERFACE_FIELD_NUMBER = 1;
-    private int interface_;
-    /**
-     * <code>int32 interface = 1;</code>
-     */
-    public int getInterface() {
-      return interface_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (interface_ != 0) {
-        output.writeInt32(1, interface_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (interface_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, interface_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest)) {
-        return super.equals(obj);
-      }
-      io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest other = (io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest) obj;
-
-      boolean result = true;
-      result = result && (getInterface()
-          == other.getInterface());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + INTERFACE_FIELD_NUMBER;
-      hash = (53 * hash) + getInterface();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code particle.ctrl.NetworkGetConfigurationRequest}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:particle.ctrl.NetworkGetConfigurationRequest)
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationRequest_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest.Builder.class);
-      }
-
-      // Construct using io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        interface_ = 0;
-
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationRequest_descriptor;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest getDefaultInstanceForType() {
-        return io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest.getDefaultInstance();
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest build() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest buildPartial() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest result = new io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest(this);
-        result.interface_ = interface_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest) {
-          return mergeFrom((io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest other) {
-        if (other == io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest.getDefaultInstance()) return this;
-        if (other.getInterface() != 0) {
-          setInterface(other.getInterface());
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int interface_ ;
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public int getInterface() {
-        return interface_;
-      }
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public Builder setInterface(int value) {
-        
-        interface_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public Builder clearInterface() {
-        
-        interface_ = 0;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:particle.ctrl.NetworkGetConfigurationRequest)
-    }
-
-    // @@protoc_insertion_point(class_scope:particle.ctrl.NetworkGetConfigurationRequest)
-    private static final io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest();
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<NetworkGetConfigurationRequest>
-        PARSER = new com.google.protobuf.AbstractParser<NetworkGetConfigurationRequest>() {
-      public NetworkGetConfigurationRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkGetConfigurationRequest(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<NetworkGetConfigurationRequest> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkGetConfigurationRequest> getParserForType() {
-      return PARSER;
-    }
-
-    public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface NetworkGetConfigurationReplyOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:particle.ctrl.NetworkGetConfigurationReply)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    boolean hasConfig();
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getConfig();
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder getConfigOrBuilder();
-  }
-  /**
-   * Protobuf type {@code particle.ctrl.NetworkGetConfigurationReply}
-   */
-  public  static final class NetworkGetConfigurationReply extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:particle.ctrl.NetworkGetConfigurationReply)
-      NetworkGetConfigurationReplyOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use NetworkGetConfigurationReply.newBuilder() to construct.
-    private NetworkGetConfigurationReply(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private NetworkGetConfigurationReply() {
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private NetworkGetConfigurationReply(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder subBuilder = null;
-              if (config_ != null) {
-                subBuilder = config_.toBuilder();
-              }
-              config_ = input.readMessage(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(config_);
-                config_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationReply_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationReply_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply.Builder.class);
-    }
-
-    public static final int CONFIG_FIELD_NUMBER = 1;
-    private io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration config_;
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    public boolean hasConfig() {
-      return config_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getConfig() {
-      return config_ == null ? io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance() : config_;
-    }
-    /**
-     * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder getConfigOrBuilder() {
-      return getConfig();
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (config_ != null) {
-        output.writeMessage(1, getConfig());
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (config_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getConfig());
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply)) {
-        return super.equals(obj);
-      }
-      io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply other = (io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply) obj;
-
-      boolean result = true;
-      result = result && (hasConfig() == other.hasConfig());
-      if (hasConfig()) {
-        result = result && getConfig()
-            .equals(other.getConfig());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasConfig()) {
-        hash = (37 * hash) + CONFIG_FIELD_NUMBER;
-        hash = (53 * hash) + getConfig().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code particle.ctrl.NetworkGetConfigurationReply}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:particle.ctrl.NetworkGetConfigurationReply)
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReplyOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationReply_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationReply_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply.class, io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply.Builder.class);
-      }
-
-      // Construct using io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        if (configBuilder_ == null) {
-          config_ = null;
-        } else {
-          config_ = null;
-          configBuilder_ = null;
-        }
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkGetConfigurationReply_descriptor;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply getDefaultInstanceForType() {
-        return io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply.getDefaultInstance();
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply build() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply buildPartial() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply result = new io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply(this);
-        if (configBuilder_ == null) {
-          result.config_ = config_;
-        } else {
-          result.config_ = configBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply) {
-          return mergeFrom((io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply other) {
-        if (other == io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply.getDefaultInstance()) return this;
-        if (other.hasConfig()) {
-          mergeConfig(other.getConfig());
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration config_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder> configBuilder_;
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public boolean hasConfig() {
-        return configBuilder_ != null || config_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getConfig() {
-        if (configBuilder_ == null) {
-          return config_ == null ? io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance() : config_;
-        } else {
-          return configBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder setConfig(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration value) {
-        if (configBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          config_ = value;
-          onChanged();
-        } else {
-          configBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder setConfig(
-          io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder builderForValue) {
-        if (configBuilder_ == null) {
-          config_ = builderForValue.build();
-          onChanged();
-        } else {
-          configBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder mergeConfig(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration value) {
-        if (configBuilder_ == null) {
-          if (config_ != null) {
-            config_ =
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.newBuilder(config_).mergeFrom(value).buildPartial();
-          } else {
-            config_ = value;
-          }
-          onChanged();
-        } else {
-          configBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public Builder clearConfig() {
-        if (configBuilder_ == null) {
-          config_ = null;
-          onChanged();
-        } else {
-          config_ = null;
-          configBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder getConfigBuilder() {
-        
-        onChanged();
-        return getConfigFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder getConfigOrBuilder() {
-        if (configBuilder_ != null) {
-          return configBuilder_.getMessageOrBuilder();
-        } else {
-          return config_ == null ?
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance() : config_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.NetworkConfiguration config = 1;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder> 
-          getConfigFieldBuilder() {
-        if (configBuilder_ == null) {
-          configBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder>(
-                  getConfig(),
-                  getParentForChildren(),
-                  isClean());
-          config_ = null;
-        }
-        return configBuilder_;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:particle.ctrl.NetworkGetConfigurationReply)
-    }
-
-    // @@protoc_insertion_point(class_scope:particle.ctrl.NetworkGetConfigurationReply)
-    private static final io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply();
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<NetworkGetConfigurationReply>
-        PARSER = new com.google.protobuf.AbstractParser<NetworkGetConfigurationReply>() {
-      public NetworkGetConfigurationReply parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkGetConfigurationReply(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<NetworkGetConfigurationReply> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkGetConfigurationReply> getParserForType() {
-      return PARSER;
-    }
-
-    public io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface IPConfigurationOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:particle.ctrl.IPConfiguration)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-     */
-    int getTypeValue();
-    /**
-     * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type getType();
-
-    /**
-     * <code>.particle.ctrl.IPAddress address = 2;</code>
-     */
-    boolean hasAddress();
-    /**
-     * <code>.particle.ctrl.IPAddress address = 2;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddress getAddress();
-    /**
-     * <code>.particle.ctrl.IPAddress address = 2;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getAddressOrBuilder();
-
-    /**
-     * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-     */
-    boolean hasNetmask();
-    /**
-     * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddress getNetmask();
-    /**
-     * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getNetmaskOrBuilder();
-
-    /**
-     * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-     */
-    boolean hasGateway();
-    /**
-     * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddress getGateway();
-    /**
-     * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getGatewayOrBuilder();
-
-    /**
-     * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-     */
-    boolean hasDhcpServer();
-    /**
-     * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddress getDhcpServer();
-    /**
-     * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getDhcpServerOrBuilder();
-
-    /**
-     * <code>string hostname = 6;</code>
-     */
-    java.lang.String getHostname();
-    /**
-     * <code>string hostname = 6;</code>
-     */
-    com.google.protobuf.ByteString
-        getHostnameBytes();
-  }
-  /**
-   * Protobuf type {@code particle.ctrl.IPConfiguration}
-   */
-  public  static final class IPConfiguration extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:particle.ctrl.IPConfiguration)
-      IPConfigurationOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use IPConfiguration.newBuilder() to construct.
-    private IPConfiguration(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private IPConfiguration() {
-      type_ = 0;
-      hostname_ = "";
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private IPConfiguration(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-
-              type_ = rawValue;
-              break;
-            }
-            case 18: {
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder subBuilder = null;
-              if (address_ != null) {
-                subBuilder = address_.toBuilder();
-              }
-              address_ = input.readMessage(io.particle.firmwareprotos.ctrl.Common.IPAddress.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(address_);
-                address_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 26: {
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder subBuilder = null;
-              if (netmask_ != null) {
-                subBuilder = netmask_.toBuilder();
-              }
-              netmask_ = input.readMessage(io.particle.firmwareprotos.ctrl.Common.IPAddress.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(netmask_);
-                netmask_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 34: {
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder subBuilder = null;
-              if (gateway_ != null) {
-                subBuilder = gateway_.toBuilder();
-              }
-              gateway_ = input.readMessage(io.particle.firmwareprotos.ctrl.Common.IPAddress.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(gateway_);
-                gateway_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 42: {
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder subBuilder = null;
-              if (dhcpServer_ != null) {
-                subBuilder = dhcpServer_.toBuilder();
-              }
-              dhcpServer_ = input.readMessage(io.particle.firmwareprotos.ctrl.Common.IPAddress.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(dhcpServer_);
-                dhcpServer_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 50: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              hostname_ = s;
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_IPConfiguration_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_IPConfiguration_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.particle.firmwareprotos.ctrl.Network.IPConfiguration.class, io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder.class);
-    }
-
-    /**
-     * Protobuf enum {@code particle.ctrl.IPConfiguration.Type}
-     */
-    public enum Type
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>NONE = 0;</code>
-       */
-      NONE(0),
-      /**
-       * <code>DHCP = 1;</code>
-       */
-      DHCP(1),
-      /**
-       * <code>STATIC = 2;</code>
-       */
-      STATIC(2),
-      UNRECOGNIZED(-1),
-      ;
-
-      /**
-       * <code>NONE = 0;</code>
-       */
-      public static final int NONE_VALUE = 0;
-      /**
-       * <code>DHCP = 1;</code>
-       */
-      public static final int DHCP_VALUE = 1;
-      /**
-       * <code>STATIC = 2;</code>
-       */
-      public static final int STATIC_VALUE = 2;
-
-
-      public final int getNumber() {
-        if (this == UNRECOGNIZED) {
-          throw new java.lang.IllegalArgumentException(
-              "Can't get the number of an unknown enum value.");
-        }
-        return value;
-      }
-
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
-      @java.lang.Deprecated
-      public static Type valueOf(int value) {
-        return forNumber(value);
-      }
-
-      public static Type forNumber(int value) {
-        switch (value) {
-          case 0: return NONE;
-          case 1: return DHCP;
-          case 2: return STATIC;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<Type>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          Type> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
-              public Type findValueByNumber(int number) {
-                return Type.forNumber(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(ordinal());
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.IPConfiguration.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final Type[] VALUES = values();
-
-      public static Type valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        if (desc.getIndex() == -1) {
-          return UNRECOGNIZED;
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int value;
-
-      private Type(int value) {
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:particle.ctrl.IPConfiguration.Type)
-    }
-
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_;
-    /**
-     * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-     */
-    public int getTypeValue() {
-      return type_;
-    }
-    /**
-     * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type getType() {
-      io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type result = io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type.valueOf(type_);
-      return result == null ? io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type.UNRECOGNIZED : result;
-    }
-
-    public static final int ADDRESS_FIELD_NUMBER = 2;
-    private io.particle.firmwareprotos.ctrl.Common.IPAddress address_;
-    /**
-     * <code>.particle.ctrl.IPAddress address = 2;</code>
-     */
-    public boolean hasAddress() {
-      return address_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress address = 2;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddress getAddress() {
-      return address_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : address_;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress address = 2;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getAddressOrBuilder() {
-      return getAddress();
-    }
-
-    public static final int NETMASK_FIELD_NUMBER = 3;
-    private io.particle.firmwareprotos.ctrl.Common.IPAddress netmask_;
-    /**
-     * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-     */
-    public boolean hasNetmask() {
-      return netmask_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddress getNetmask() {
-      return netmask_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : netmask_;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getNetmaskOrBuilder() {
-      return getNetmask();
-    }
-
-    public static final int GATEWAY_FIELD_NUMBER = 4;
-    private io.particle.firmwareprotos.ctrl.Common.IPAddress gateway_;
-    /**
-     * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-     */
-    public boolean hasGateway() {
-      return gateway_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddress getGateway() {
-      return gateway_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : gateway_;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getGatewayOrBuilder() {
-      return getGateway();
-    }
-
-    public static final int DHCP_SERVER_FIELD_NUMBER = 5;
-    private io.particle.firmwareprotos.ctrl.Common.IPAddress dhcpServer_;
-    /**
-     * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-     */
-    public boolean hasDhcpServer() {
-      return dhcpServer_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddress getDhcpServer() {
-      return dhcpServer_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : dhcpServer_;
-    }
-    /**
-     * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getDhcpServerOrBuilder() {
-      return getDhcpServer();
-    }
-
-    public static final int HOSTNAME_FIELD_NUMBER = 6;
-    private volatile java.lang.Object hostname_;
-    /**
-     * <code>string hostname = 6;</code>
-     */
-    public java.lang.String getHostname() {
-      java.lang.Object ref = hostname_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        hostname_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string hostname = 6;</code>
-     */
-    public com.google.protobuf.ByteString
-        getHostnameBytes() {
-      java.lang.Object ref = hostname_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        hostname_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (type_ != io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type.NONE.getNumber()) {
-        output.writeEnum(1, type_);
-      }
-      if (address_ != null) {
-        output.writeMessage(2, getAddress());
-      }
-      if (netmask_ != null) {
-        output.writeMessage(3, getNetmask());
-      }
-      if (gateway_ != null) {
-        output.writeMessage(4, getGateway());
-      }
-      if (dhcpServer_ != null) {
-        output.writeMessage(5, getDhcpServer());
-      }
-      if (!getHostnameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, hostname_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (type_ != io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type.NONE.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, type_);
-      }
-      if (address_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getAddress());
-      }
-      if (netmask_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getNetmask());
-      }
-      if (gateway_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getGateway());
-      }
-      if (dhcpServer_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, getDhcpServer());
-      }
-      if (!getHostnameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, hostname_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Network.IPConfiguration)) {
-        return super.equals(obj);
-      }
-      io.particle.firmwareprotos.ctrl.Network.IPConfiguration other = (io.particle.firmwareprotos.ctrl.Network.IPConfiguration) obj;
-
-      boolean result = true;
-      result = result && type_ == other.type_;
-      result = result && (hasAddress() == other.hasAddress());
-      if (hasAddress()) {
-        result = result && getAddress()
-            .equals(other.getAddress());
-      }
-      result = result && (hasNetmask() == other.hasNetmask());
-      if (hasNetmask()) {
-        result = result && getNetmask()
-            .equals(other.getNetmask());
-      }
-      result = result && (hasGateway() == other.hasGateway());
-      if (hasGateway()) {
-        result = result && getGateway()
-            .equals(other.getGateway());
-      }
-      result = result && (hasDhcpServer() == other.hasDhcpServer());
-      if (hasDhcpServer()) {
-        result = result && getDhcpServer()
-            .equals(other.getDhcpServer());
-      }
-      result = result && getHostname()
-          .equals(other.getHostname());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + type_;
-      if (hasAddress()) {
-        hash = (37 * hash) + ADDRESS_FIELD_NUMBER;
-        hash = (53 * hash) + getAddress().hashCode();
-      }
-      if (hasNetmask()) {
-        hash = (37 * hash) + NETMASK_FIELD_NUMBER;
-        hash = (53 * hash) + getNetmask().hashCode();
-      }
-      if (hasGateway()) {
-        hash = (37 * hash) + GATEWAY_FIELD_NUMBER;
-        hash = (53 * hash) + getGateway().hashCode();
-      }
-      if (hasDhcpServer()) {
-        hash = (37 * hash) + DHCP_SERVER_FIELD_NUMBER;
-        hash = (53 * hash) + getDhcpServer().hashCode();
-      }
-      hash = (37 * hash) + HOSTNAME_FIELD_NUMBER;
-      hash = (53 * hash) + getHostname().hashCode();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.IPConfiguration prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code particle.ctrl.IPConfiguration}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:particle.ctrl.IPConfiguration)
-        io.particle.firmwareprotos.ctrl.Network.IPConfigurationOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_IPConfiguration_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_IPConfiguration_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                io.particle.firmwareprotos.ctrl.Network.IPConfiguration.class, io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder.class);
-      }
-
-      // Construct using io.particle.firmwareprotos.ctrl.Network.IPConfiguration.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        type_ = 0;
-
-        if (addressBuilder_ == null) {
-          address_ = null;
-        } else {
-          address_ = null;
-          addressBuilder_ = null;
-        }
-        if (netmaskBuilder_ == null) {
-          netmask_ = null;
-        } else {
-          netmask_ = null;
-          netmaskBuilder_ = null;
-        }
-        if (gatewayBuilder_ == null) {
-          gateway_ = null;
-        } else {
-          gateway_ = null;
-          gatewayBuilder_ = null;
-        }
-        if (dhcpServerBuilder_ == null) {
-          dhcpServer_ = null;
-        } else {
-          dhcpServer_ = null;
-          dhcpServerBuilder_ = null;
-        }
-        hostname_ = "";
-
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_IPConfiguration_descriptor;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.IPConfiguration getDefaultInstanceForType() {
-        return io.particle.firmwareprotos.ctrl.Network.IPConfiguration.getDefaultInstance();
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.IPConfiguration build() {
-        io.particle.firmwareprotos.ctrl.Network.IPConfiguration result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.IPConfiguration buildPartial() {
-        io.particle.firmwareprotos.ctrl.Network.IPConfiguration result = new io.particle.firmwareprotos.ctrl.Network.IPConfiguration(this);
-        result.type_ = type_;
-        if (addressBuilder_ == null) {
-          result.address_ = address_;
-        } else {
-          result.address_ = addressBuilder_.build();
-        }
-        if (netmaskBuilder_ == null) {
-          result.netmask_ = netmask_;
-        } else {
-          result.netmask_ = netmaskBuilder_.build();
-        }
-        if (gatewayBuilder_ == null) {
-          result.gateway_ = gateway_;
-        } else {
-          result.gateway_ = gatewayBuilder_.build();
-        }
-        if (dhcpServerBuilder_ == null) {
-          result.dhcpServer_ = dhcpServer_;
-        } else {
-          result.dhcpServer_ = dhcpServerBuilder_.build();
-        }
-        result.hostname_ = hostname_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof io.particle.firmwareprotos.ctrl.Network.IPConfiguration) {
-          return mergeFrom((io.particle.firmwareprotos.ctrl.Network.IPConfiguration)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Network.IPConfiguration other) {
-        if (other == io.particle.firmwareprotos.ctrl.Network.IPConfiguration.getDefaultInstance()) return this;
-        if (other.type_ != 0) {
-          setTypeValue(other.getTypeValue());
-        }
-        if (other.hasAddress()) {
-          mergeAddress(other.getAddress());
-        }
-        if (other.hasNetmask()) {
-          mergeNetmask(other.getNetmask());
-        }
-        if (other.hasGateway()) {
-          mergeGateway(other.getGateway());
-        }
-        if (other.hasDhcpServer()) {
-          mergeDhcpServer(other.getDhcpServer());
-        }
-        if (!other.getHostname().isEmpty()) {
-          hostname_ = other.hostname_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        io.particle.firmwareprotos.ctrl.Network.IPConfiguration parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (io.particle.firmwareprotos.ctrl.Network.IPConfiguration) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int type_ = 0;
-      /**
-       * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-       */
-      public int getTypeValue() {
-        return type_;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-       */
-      public Builder setTypeValue(int value) {
-        type_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type getType() {
-        io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type result = io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type.valueOf(type_);
-        return result == null ? io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-       */
-      public Builder setType(io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Type value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        
-        type_ = value.getNumber();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration.Type type = 1;</code>
-       */
-      public Builder clearType() {
-        
-        type_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Common.IPAddress address_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> addressBuilder_;
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public boolean hasAddress() {
-        return addressBuilder_ != null || address_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress getAddress() {
-        if (addressBuilder_ == null) {
-          return address_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : address_;
-        } else {
-          return addressBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public Builder setAddress(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (addressBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          address_ = value;
-          onChanged();
-        } else {
-          addressBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public Builder setAddress(
-          io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder builderForValue) {
-        if (addressBuilder_ == null) {
-          address_ = builderForValue.build();
-          onChanged();
-        } else {
-          addressBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public Builder mergeAddress(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (addressBuilder_ == null) {
-          if (address_ != null) {
-            address_ =
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.newBuilder(address_).mergeFrom(value).buildPartial();
-          } else {
-            address_ = value;
-          }
-          onChanged();
-        } else {
-          addressBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public Builder clearAddress() {
-        if (addressBuilder_ == null) {
-          address_ = null;
-          onChanged();
-        } else {
-          address_ = null;
-          addressBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder getAddressBuilder() {
-        
-        onChanged();
-        return getAddressFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getAddressOrBuilder() {
-        if (addressBuilder_ != null) {
-          return addressBuilder_.getMessageOrBuilder();
-        } else {
-          return address_ == null ?
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : address_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress address = 2;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-          getAddressFieldBuilder() {
-        if (addressBuilder_ == null) {
-          addressBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder>(
-                  getAddress(),
-                  getParentForChildren(),
-                  isClean());
-          address_ = null;
-        }
-        return addressBuilder_;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Common.IPAddress netmask_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> netmaskBuilder_;
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public boolean hasNetmask() {
-        return netmaskBuilder_ != null || netmask_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress getNetmask() {
-        if (netmaskBuilder_ == null) {
-          return netmask_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : netmask_;
-        } else {
-          return netmaskBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public Builder setNetmask(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (netmaskBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          netmask_ = value;
-          onChanged();
-        } else {
-          netmaskBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public Builder setNetmask(
-          io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder builderForValue) {
-        if (netmaskBuilder_ == null) {
-          netmask_ = builderForValue.build();
-          onChanged();
-        } else {
-          netmaskBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public Builder mergeNetmask(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (netmaskBuilder_ == null) {
-          if (netmask_ != null) {
-            netmask_ =
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.newBuilder(netmask_).mergeFrom(value).buildPartial();
-          } else {
-            netmask_ = value;
-          }
-          onChanged();
-        } else {
-          netmaskBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public Builder clearNetmask() {
-        if (netmaskBuilder_ == null) {
-          netmask_ = null;
-          onChanged();
-        } else {
-          netmask_ = null;
-          netmaskBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder getNetmaskBuilder() {
-        
-        onChanged();
-        return getNetmaskFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getNetmaskOrBuilder() {
-        if (netmaskBuilder_ != null) {
-          return netmaskBuilder_.getMessageOrBuilder();
-        } else {
-          return netmask_ == null ?
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : netmask_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress netmask = 3;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-          getNetmaskFieldBuilder() {
-        if (netmaskBuilder_ == null) {
-          netmaskBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder>(
-                  getNetmask(),
-                  getParentForChildren(),
-                  isClean());
-          netmask_ = null;
-        }
-        return netmaskBuilder_;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Common.IPAddress gateway_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> gatewayBuilder_;
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public boolean hasGateway() {
-        return gatewayBuilder_ != null || gateway_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress getGateway() {
-        if (gatewayBuilder_ == null) {
-          return gateway_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : gateway_;
-        } else {
-          return gatewayBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public Builder setGateway(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (gatewayBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          gateway_ = value;
-          onChanged();
-        } else {
-          gatewayBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public Builder setGateway(
-          io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder builderForValue) {
-        if (gatewayBuilder_ == null) {
-          gateway_ = builderForValue.build();
-          onChanged();
-        } else {
-          gatewayBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public Builder mergeGateway(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (gatewayBuilder_ == null) {
-          if (gateway_ != null) {
-            gateway_ =
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.newBuilder(gateway_).mergeFrom(value).buildPartial();
-          } else {
-            gateway_ = value;
-          }
-          onChanged();
-        } else {
-          gatewayBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public Builder clearGateway() {
-        if (gatewayBuilder_ == null) {
-          gateway_ = null;
-          onChanged();
-        } else {
-          gateway_ = null;
-          gatewayBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder getGatewayBuilder() {
-        
-        onChanged();
-        return getGatewayFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getGatewayOrBuilder() {
-        if (gatewayBuilder_ != null) {
-          return gatewayBuilder_.getMessageOrBuilder();
-        } else {
-          return gateway_ == null ?
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : gateway_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress gateway = 4;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-          getGatewayFieldBuilder() {
-        if (gatewayBuilder_ == null) {
-          gatewayBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder>(
-                  getGateway(),
-                  getParentForChildren(),
-                  isClean());
-          gateway_ = null;
-        }
-        return gatewayBuilder_;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Common.IPAddress dhcpServer_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> dhcpServerBuilder_;
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public boolean hasDhcpServer() {
-        return dhcpServerBuilder_ != null || dhcpServer_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress getDhcpServer() {
-        if (dhcpServerBuilder_ == null) {
-          return dhcpServer_ == null ? io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : dhcpServer_;
-        } else {
-          return dhcpServerBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public Builder setDhcpServer(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (dhcpServerBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          dhcpServer_ = value;
-          onChanged();
-        } else {
-          dhcpServerBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public Builder setDhcpServer(
-          io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder builderForValue) {
-        if (dhcpServerBuilder_ == null) {
-          dhcpServer_ = builderForValue.build();
-          onChanged();
-        } else {
-          dhcpServerBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public Builder mergeDhcpServer(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (dhcpServerBuilder_ == null) {
-          if (dhcpServer_ != null) {
-            dhcpServer_ =
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.newBuilder(dhcpServer_).mergeFrom(value).buildPartial();
-          } else {
-            dhcpServer_ = value;
-          }
-          onChanged();
-        } else {
-          dhcpServerBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public Builder clearDhcpServer() {
-        if (dhcpServerBuilder_ == null) {
-          dhcpServer_ = null;
-          onChanged();
-        } else {
-          dhcpServer_ = null;
-          dhcpServerBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder getDhcpServerBuilder() {
-        
-        onChanged();
-        return getDhcpServerFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getDhcpServerOrBuilder() {
-        if (dhcpServerBuilder_ != null) {
-          return dhcpServerBuilder_.getMessageOrBuilder();
-        } else {
-          return dhcpServer_ == null ?
-              io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance() : dhcpServer_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPAddress dhcp_server = 5;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-          getDhcpServerFieldBuilder() {
-        if (dhcpServerBuilder_ == null) {
-          dhcpServerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder>(
-                  getDhcpServer(),
-                  getParentForChildren(),
-                  isClean());
-          dhcpServer_ = null;
-        }
-        return dhcpServerBuilder_;
-      }
-
-      private java.lang.Object hostname_ = "";
-      /**
-       * <code>string hostname = 6;</code>
-       */
-      public java.lang.String getHostname() {
-        java.lang.Object ref = hostname_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          hostname_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string hostname = 6;</code>
-       */
-      public com.google.protobuf.ByteString
-          getHostnameBytes() {
-        java.lang.Object ref = hostname_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          hostname_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string hostname = 6;</code>
-       */
-      public Builder setHostname(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        hostname_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string hostname = 6;</code>
-       */
-      public Builder clearHostname() {
-        
-        hostname_ = getDefaultInstance().getHostname();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string hostname = 6;</code>
-       */
-      public Builder setHostnameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        hostname_ = value;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:particle.ctrl.IPConfiguration)
-    }
-
-    // @@protoc_insertion_point(class_scope:particle.ctrl.IPConfiguration)
-    private static final io.particle.firmwareprotos.ctrl.Network.IPConfiguration DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Network.IPConfiguration();
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.IPConfiguration getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<IPConfiguration>
-        PARSER = new com.google.protobuf.AbstractParser<IPConfiguration>() {
-      public IPConfiguration parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new IPConfiguration(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<IPConfiguration> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<IPConfiguration> getParserForType() {
-      return PARSER;
-    }
-
-    public io.particle.firmwareprotos.ctrl.Network.IPConfiguration getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface DNSConfigurationOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:particle.ctrl.DNSConfiguration)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    java.util.List<io.particle.firmwareprotos.ctrl.Common.IPAddress> 
-        getServersList();
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddress getServers(int index);
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    int getServersCount();
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    java.util.List<? extends io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-        getServersOrBuilderList();
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getServersOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code particle.ctrl.DNSConfiguration}
-   */
-  public  static final class DNSConfiguration extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:particle.ctrl.DNSConfiguration)
-      DNSConfigurationOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use DNSConfiguration.newBuilder() to construct.
-    private DNSConfiguration(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private DNSConfiguration() {
-      servers_ = java.util.Collections.emptyList();
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private DNSConfiguration(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                servers_ = new java.util.ArrayList<io.particle.firmwareprotos.ctrl.Common.IPAddress>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              servers_.add(
-                  input.readMessage(io.particle.firmwareprotos.ctrl.Common.IPAddress.parser(), extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          servers_ = java.util.Collections.unmodifiableList(servers_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_DNSConfiguration_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_DNSConfiguration_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.class, io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder.class);
-    }
-
-    public static final int SERVERS_FIELD_NUMBER = 1;
-    private java.util.List<io.particle.firmwareprotos.ctrl.Common.IPAddress> servers_;
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    public java.util.List<io.particle.firmwareprotos.ctrl.Common.IPAddress> getServersList() {
-      return servers_;
-    }
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    public java.util.List<? extends io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-        getServersOrBuilderList() {
-      return servers_;
-    }
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    public int getServersCount() {
-      return servers_.size();
-    }
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddress getServers(int index) {
-      return servers_.get(index);
-    }
-    /**
-     * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getServersOrBuilder(
-        int index) {
-      return servers_.get(index);
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      for (int i = 0; i < servers_.size(); i++) {
-        output.writeMessage(1, servers_.get(i));
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < servers_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, servers_.get(i));
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Network.DNSConfiguration)) {
-        return super.equals(obj);
-      }
-      io.particle.firmwareprotos.ctrl.Network.DNSConfiguration other = (io.particle.firmwareprotos.ctrl.Network.DNSConfiguration) obj;
-
-      boolean result = true;
-      result = result && getServersList()
-          .equals(other.getServersList());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      if (getServersCount() > 0) {
-        hash = (37 * hash) + SERVERS_FIELD_NUMBER;
-        hash = (53 * hash) + getServersList().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.DNSConfiguration prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code particle.ctrl.DNSConfiguration}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:particle.ctrl.DNSConfiguration)
-        io.particle.firmwareprotos.ctrl.Network.DNSConfigurationOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_DNSConfiguration_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_DNSConfiguration_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.class, io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder.class);
-      }
-
-      // Construct using io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getServersFieldBuilder();
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        if (serversBuilder_ == null) {
-          servers_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          serversBuilder_.clear();
-        }
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_DNSConfiguration_descriptor;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.DNSConfiguration getDefaultInstanceForType() {
-        return io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.getDefaultInstance();
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.DNSConfiguration build() {
-        io.particle.firmwareprotos.ctrl.Network.DNSConfiguration result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.DNSConfiguration buildPartial() {
-        io.particle.firmwareprotos.ctrl.Network.DNSConfiguration result = new io.particle.firmwareprotos.ctrl.Network.DNSConfiguration(this);
-        int from_bitField0_ = bitField0_;
-        if (serversBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            servers_ = java.util.Collections.unmodifiableList(servers_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.servers_ = servers_;
-        } else {
-          result.servers_ = serversBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof io.particle.firmwareprotos.ctrl.Network.DNSConfiguration) {
-          return mergeFrom((io.particle.firmwareprotos.ctrl.Network.DNSConfiguration)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Network.DNSConfiguration other) {
-        if (other == io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.getDefaultInstance()) return this;
-        if (serversBuilder_ == null) {
-          if (!other.servers_.isEmpty()) {
-            if (servers_.isEmpty()) {
-              servers_ = other.servers_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureServersIsMutable();
-              servers_.addAll(other.servers_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.servers_.isEmpty()) {
-            if (serversBuilder_.isEmpty()) {
-              serversBuilder_.dispose();
-              serversBuilder_ = null;
-              servers_ = other.servers_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              serversBuilder_ = 
-                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getServersFieldBuilder() : null;
-            } else {
-              serversBuilder_.addAllMessages(other.servers_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        io.particle.firmwareprotos.ctrl.Network.DNSConfiguration parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (io.particle.firmwareprotos.ctrl.Network.DNSConfiguration) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      private java.util.List<io.particle.firmwareprotos.ctrl.Common.IPAddress> servers_ =
-        java.util.Collections.emptyList();
-      private void ensureServersIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          servers_ = new java.util.ArrayList<io.particle.firmwareprotos.ctrl.Common.IPAddress>(servers_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> serversBuilder_;
-
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public java.util.List<io.particle.firmwareprotos.ctrl.Common.IPAddress> getServersList() {
-        if (serversBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(servers_);
-        } else {
-          return serversBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public int getServersCount() {
-        if (serversBuilder_ == null) {
-          return servers_.size();
-        } else {
-          return serversBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress getServers(int index) {
-        if (serversBuilder_ == null) {
-          return servers_.get(index);
-        } else {
-          return serversBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder setServers(
-          int index, io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (serversBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureServersIsMutable();
-          servers_.set(index, value);
-          onChanged();
-        } else {
-          serversBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder setServers(
-          int index, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder builderForValue) {
-        if (serversBuilder_ == null) {
-          ensureServersIsMutable();
-          servers_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          serversBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder addServers(io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (serversBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureServersIsMutable();
-          servers_.add(value);
-          onChanged();
-        } else {
-          serversBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder addServers(
-          int index, io.particle.firmwareprotos.ctrl.Common.IPAddress value) {
-        if (serversBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureServersIsMutable();
-          servers_.add(index, value);
-          onChanged();
-        } else {
-          serversBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder addServers(
-          io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder builderForValue) {
-        if (serversBuilder_ == null) {
-          ensureServersIsMutable();
-          servers_.add(builderForValue.build());
-          onChanged();
-        } else {
-          serversBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder addServers(
-          int index, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder builderForValue) {
-        if (serversBuilder_ == null) {
-          ensureServersIsMutable();
-          servers_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          serversBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder addAllServers(
-          java.lang.Iterable<? extends io.particle.firmwareprotos.ctrl.Common.IPAddress> values) {
-        if (serversBuilder_ == null) {
-          ensureServersIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, servers_);
-          onChanged();
-        } else {
-          serversBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder clearServers() {
-        if (serversBuilder_ == null) {
-          servers_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          serversBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public Builder removeServers(int index) {
-        if (serversBuilder_ == null) {
-          ensureServersIsMutable();
-          servers_.remove(index);
-          onChanged();
-        } else {
-          serversBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder getServersBuilder(
-          int index) {
-        return getServersFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder getServersOrBuilder(
-          int index) {
-        if (serversBuilder_ == null) {
-          return servers_.get(index);  } else {
-          return serversBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public java.util.List<? extends io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-           getServersOrBuilderList() {
-        if (serversBuilder_ != null) {
-          return serversBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(servers_);
-        }
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder addServersBuilder() {
-        return getServersFieldBuilder().addBuilder(
-            io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder addServersBuilder(
-          int index) {
-        return getServersFieldBuilder().addBuilder(
-            index, io.particle.firmwareprotos.ctrl.Common.IPAddress.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .particle.ctrl.IPAddress servers = 1;</code>
-       */
-      public java.util.List<io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder> 
-           getServersBuilderList() {
-        return getServersFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder> 
-          getServersFieldBuilder() {
-        if (serversBuilder_ == null) {
-          serversBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Common.IPAddress, io.particle.firmwareprotos.ctrl.Common.IPAddress.Builder, io.particle.firmwareprotos.ctrl.Common.IPAddressOrBuilder>(
-                  servers_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          servers_ = null;
-        }
-        return serversBuilder_;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:particle.ctrl.DNSConfiguration)
-    }
-
-    // @@protoc_insertion_point(class_scope:particle.ctrl.DNSConfiguration)
-    private static final io.particle.firmwareprotos.ctrl.Network.DNSConfiguration DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Network.DNSConfiguration();
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.DNSConfiguration getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<DNSConfiguration>
-        PARSER = new com.google.protobuf.AbstractParser<DNSConfiguration>() {
-      public DNSConfiguration parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new DNSConfiguration(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<DNSConfiguration> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<DNSConfiguration> getParserForType() {
-      return PARSER;
-    }
-
-    public io.particle.firmwareprotos.ctrl.Network.DNSConfiguration getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface NetworkConfigurationOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:particle.ctrl.NetworkConfiguration)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>int32 interface = 1;</code>
-     */
-    int getInterface();
-
-    /**
-     * <code>.particle.ctrl.NetworkState state = 2;</code>
-     */
-    int getStateValue();
-    /**
-     * <code>.particle.ctrl.NetworkState state = 2;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.NetworkState getState();
-
-    /**
-     * <code>string name = 3;</code>
-     */
-    java.lang.String getName();
-    /**
-     * <code>string name = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getNameBytes();
-
-    /**
-     * <code>bytes mac = 4 [(.nanopb) = { ... }</code>
-     */
-    com.google.protobuf.ByteString getMac();
-
-    /**
-     * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-     */
-    boolean hasIpconfig();
-    /**
-     * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.IPConfiguration getIpconfig();
-    /**
-     * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.IPConfigurationOrBuilder getIpconfigOrBuilder();
-
-    /**
-     * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-     */
-    boolean hasDnsconfig();
-    /**
-     * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.DNSConfiguration getDnsconfig();
-    /**
-     * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-     */
-    io.particle.firmwareprotos.ctrl.Network.DNSConfigurationOrBuilder getDnsconfigOrBuilder();
-  }
-  /**
-   * Protobuf type {@code particle.ctrl.NetworkConfiguration}
-   */
-  public  static final class NetworkConfiguration extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:particle.ctrl.NetworkConfiguration)
-      NetworkConfigurationOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use NetworkConfiguration.newBuilder() to construct.
-    private NetworkConfiguration(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private NetworkConfiguration() {
-      interface_ = 0;
-      state_ = 0;
-      name_ = "";
-      mac_ = com.google.protobuf.ByteString.EMPTY;
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private NetworkConfiguration(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-
-              interface_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-
-              state_ = rawValue;
-              break;
-            }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              name_ = s;
-              break;
-            }
-            case 34: {
-
-              mac_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder subBuilder = null;
-              if (ipconfig_ != null) {
-                subBuilder = ipconfig_.toBuilder();
-              }
-              ipconfig_ = input.readMessage(io.particle.firmwareprotos.ctrl.Network.IPConfiguration.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(ipconfig_);
-                ipconfig_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 50: {
-              io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder subBuilder = null;
-              if (dnsconfig_ != null) {
-                subBuilder = dnsconfig_.toBuilder();
-              }
-              dnsconfig_ = input.readMessage(io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(dnsconfig_);
-                dnsconfig_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkConfiguration_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkConfiguration_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.class, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder.class);
-    }
-
-    public static final int INTERFACE_FIELD_NUMBER = 1;
-    private int interface_;
-    /**
-     * <code>int32 interface = 1;</code>
-     */
-    public int getInterface() {
-      return interface_;
-    }
-
-    public static final int STATE_FIELD_NUMBER = 2;
-    private int state_;
-    /**
-     * <code>.particle.ctrl.NetworkState state = 2;</code>
-     */
-    public int getStateValue() {
-      return state_;
-    }
-    /**
-     * <code>.particle.ctrl.NetworkState state = 2;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.NetworkState getState() {
-      io.particle.firmwareprotos.ctrl.Network.NetworkState result = io.particle.firmwareprotos.ctrl.Network.NetworkState.valueOf(state_);
-      return result == null ? io.particle.firmwareprotos.ctrl.Network.NetworkState.UNRECOGNIZED : result;
-    }
-
-    public static final int NAME_FIELD_NUMBER = 3;
-    private volatile java.lang.Object name_;
-    /**
-     * <code>string name = 3;</code>
-     */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        name_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string name = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int MAC_FIELD_NUMBER = 4;
-    private com.google.protobuf.ByteString mac_;
-    /**
-     * <code>bytes mac = 4 [(.nanopb) = { ... }</code>
-     */
-    public com.google.protobuf.ByteString getMac() {
-      return mac_;
-    }
-
-    public static final int IPCONFIG_FIELD_NUMBER = 5;
-    private io.particle.firmwareprotos.ctrl.Network.IPConfiguration ipconfig_;
-    /**
-     * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-     */
-    public boolean hasIpconfig() {
-      return ipconfig_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.IPConfiguration getIpconfig() {
-      return ipconfig_ == null ? io.particle.firmwareprotos.ctrl.Network.IPConfiguration.getDefaultInstance() : ipconfig_;
-    }
-    /**
-     * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.IPConfigurationOrBuilder getIpconfigOrBuilder() {
-      return getIpconfig();
-    }
-
-    public static final int DNSCONFIG_FIELD_NUMBER = 6;
-    private io.particle.firmwareprotos.ctrl.Network.DNSConfiguration dnsconfig_;
-    /**
-     * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-     */
-    public boolean hasDnsconfig() {
-      return dnsconfig_ != null;
-    }
-    /**
-     * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.DNSConfiguration getDnsconfig() {
-      return dnsconfig_ == null ? io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.getDefaultInstance() : dnsconfig_;
-    }
-    /**
-     * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-     */
-    public io.particle.firmwareprotos.ctrl.Network.DNSConfigurationOrBuilder getDnsconfigOrBuilder() {
-      return getDnsconfig();
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (interface_ != 0) {
-        output.writeInt32(1, interface_);
-      }
-      if (state_ != io.particle.firmwareprotos.ctrl.Network.NetworkState.NETWORK_STATUS_NONE.getNumber()) {
-        output.writeEnum(2, state_);
-      }
-      if (!getNameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
-      }
-      if (!mac_.isEmpty()) {
-        output.writeBytes(4, mac_);
-      }
-      if (ipconfig_ != null) {
-        output.writeMessage(5, getIpconfig());
-      }
-      if (dnsconfig_ != null) {
-        output.writeMessage(6, getDnsconfig());
-      }
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (interface_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, interface_);
-      }
-      if (state_ != io.particle.firmwareprotos.ctrl.Network.NetworkState.NETWORK_STATUS_NONE.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, state_);
-      }
-      if (!getNameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
-      }
-      if (!mac_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, mac_);
-      }
-      if (ipconfig_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, getIpconfig());
-      }
-      if (dnsconfig_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, getDnsconfig());
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration)) {
-        return super.equals(obj);
-      }
-      io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration other = (io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration) obj;
-
-      boolean result = true;
-      result = result && (getInterface()
-          == other.getInterface());
-      result = result && state_ == other.state_;
-      result = result && getName()
-          .equals(other.getName());
-      result = result && getMac()
-          .equals(other.getMac());
-      result = result && (hasIpconfig() == other.hasIpconfig());
-      if (hasIpconfig()) {
-        result = result && getIpconfig()
-            .equals(other.getIpconfig());
-      }
-      result = result && (hasDnsconfig() == other.hasDnsconfig());
-      if (hasDnsconfig()) {
-        result = result && getDnsconfig()
-            .equals(other.getDnsconfig());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + INTERFACE_FIELD_NUMBER;
-      hash = (53 * hash) + getInterface();
-      hash = (37 * hash) + STATE_FIELD_NUMBER;
-      hash = (53 * hash) + state_;
-      hash = (37 * hash) + NAME_FIELD_NUMBER;
-      hash = (53 * hash) + getName().hashCode();
-      hash = (37 * hash) + MAC_FIELD_NUMBER;
-      hash = (53 * hash) + getMac().hashCode();
-      if (hasIpconfig()) {
-        hash = (37 * hash) + IPCONFIG_FIELD_NUMBER;
-        hash = (53 * hash) + getIpconfig().hashCode();
-      }
-      if (hasDnsconfig()) {
-        hash = (37 * hash) + DNSCONFIG_FIELD_NUMBER;
-        hash = (53 * hash) + getDnsconfig().hashCode();
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code particle.ctrl.NetworkConfiguration}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:particle.ctrl.NetworkConfiguration)
-        io.particle.firmwareprotos.ctrl.Network.NetworkConfigurationOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkConfiguration_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkConfiguration_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.class, io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.Builder.class);
-      }
-
-      // Construct using io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        interface_ = 0;
-
-        state_ = 0;
-
-        name_ = "";
-
-        mac_ = com.google.protobuf.ByteString.EMPTY;
-
-        if (ipconfigBuilder_ == null) {
-          ipconfig_ = null;
-        } else {
-          ipconfig_ = null;
-          ipconfigBuilder_ = null;
-        }
-        if (dnsconfigBuilder_ == null) {
-          dnsconfig_ = null;
-        } else {
-          dnsconfig_ = null;
-          dnsconfigBuilder_ = null;
-        }
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_NetworkConfiguration_descriptor;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getDefaultInstanceForType() {
-        return io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance();
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration build() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration buildPartial() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration result = new io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration(this);
-        result.interface_ = interface_;
-        result.state_ = state_;
-        result.name_ = name_;
-        result.mac_ = mac_;
-        if (ipconfigBuilder_ == null) {
-          result.ipconfig_ = ipconfig_;
-        } else {
-          result.ipconfig_ = ipconfigBuilder_.build();
-        }
-        if (dnsconfigBuilder_ == null) {
-          result.dnsconfig_ = dnsconfig_;
-        } else {
-          result.dnsconfig_ = dnsconfigBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration) {
-          return mergeFrom((io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration other) {
-        if (other == io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration.getDefaultInstance()) return this;
-        if (other.getInterface() != 0) {
-          setInterface(other.getInterface());
-        }
-        if (other.state_ != 0) {
-          setStateValue(other.getStateValue());
-        }
-        if (!other.getName().isEmpty()) {
-          name_ = other.name_;
-          onChanged();
-        }
-        if (other.getMac() != com.google.protobuf.ByteString.EMPTY) {
-          setMac(other.getMac());
-        }
-        if (other.hasIpconfig()) {
-          mergeIpconfig(other.getIpconfig());
-        }
-        if (other.hasDnsconfig()) {
-          mergeDnsconfig(other.getDnsconfig());
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int interface_ ;
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public int getInterface() {
-        return interface_;
-      }
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public Builder setInterface(int value) {
-        
-        interface_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 interface = 1;</code>
-       */
-      public Builder clearInterface() {
-        
-        interface_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private int state_ = 0;
-      /**
-       * <code>.particle.ctrl.NetworkState state = 2;</code>
-       */
-      public int getStateValue() {
-        return state_;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkState state = 2;</code>
-       */
-      public Builder setStateValue(int value) {
-        state_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkState state = 2;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.NetworkState getState() {
-        io.particle.firmwareprotos.ctrl.Network.NetworkState result = io.particle.firmwareprotos.ctrl.Network.NetworkState.valueOf(state_);
-        return result == null ? io.particle.firmwareprotos.ctrl.Network.NetworkState.UNRECOGNIZED : result;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkState state = 2;</code>
-       */
-      public Builder setState(io.particle.firmwareprotos.ctrl.Network.NetworkState value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        
-        state_ = value.getNumber();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.NetworkState state = 2;</code>
-       */
-      public Builder clearState() {
-        
-        state_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object name_ = "";
-      /**
-       * <code>string name = 3;</code>
-       */
-      public java.lang.String getName() {
-        java.lang.Object ref = name_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          name_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string name = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getNameBytes() {
-        java.lang.Object ref = name_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          name_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string name = 3;</code>
-       */
-      public Builder setName(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        name_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string name = 3;</code>
-       */
-      public Builder clearName() {
-        
-        name_ = getDefaultInstance().getName();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string name = 3;</code>
-       */
-      public Builder setNameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        name_ = value;
-        onChanged();
-        return this;
-      }
-
-      private com.google.protobuf.ByteString mac_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>bytes mac = 4 [(.nanopb) = { ... }</code>
-       */
-      public com.google.protobuf.ByteString getMac() {
-        return mac_;
-      }
-      /**
-       * <code>bytes mac = 4 [(.nanopb) = { ... }</code>
-       */
-      public Builder setMac(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        mac_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>bytes mac = 4 [(.nanopb) = { ... }</code>
-       */
-      public Builder clearMac() {
-        
-        mac_ = getDefaultInstance().getMac();
-        onChanged();
-        return this;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Network.IPConfiguration ipconfig_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.IPConfiguration, io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.IPConfigurationOrBuilder> ipconfigBuilder_;
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public boolean hasIpconfig() {
-        return ipconfigBuilder_ != null || ipconfig_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.IPConfiguration getIpconfig() {
-        if (ipconfigBuilder_ == null) {
-          return ipconfig_ == null ? io.particle.firmwareprotos.ctrl.Network.IPConfiguration.getDefaultInstance() : ipconfig_;
-        } else {
-          return ipconfigBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public Builder setIpconfig(io.particle.firmwareprotos.ctrl.Network.IPConfiguration value) {
-        if (ipconfigBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ipconfig_ = value;
-          onChanged();
-        } else {
-          ipconfigBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public Builder setIpconfig(
-          io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder builderForValue) {
-        if (ipconfigBuilder_ == null) {
-          ipconfig_ = builderForValue.build();
-          onChanged();
-        } else {
-          ipconfigBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public Builder mergeIpconfig(io.particle.firmwareprotos.ctrl.Network.IPConfiguration value) {
-        if (ipconfigBuilder_ == null) {
-          if (ipconfig_ != null) {
-            ipconfig_ =
-              io.particle.firmwareprotos.ctrl.Network.IPConfiguration.newBuilder(ipconfig_).mergeFrom(value).buildPartial();
-          } else {
-            ipconfig_ = value;
-          }
-          onChanged();
-        } else {
-          ipconfigBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public Builder clearIpconfig() {
-        if (ipconfigBuilder_ == null) {
-          ipconfig_ = null;
-          onChanged();
-        } else {
-          ipconfig_ = null;
-          ipconfigBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder getIpconfigBuilder() {
-        
-        onChanged();
-        return getIpconfigFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.IPConfigurationOrBuilder getIpconfigOrBuilder() {
-        if (ipconfigBuilder_ != null) {
-          return ipconfigBuilder_.getMessageOrBuilder();
-        } else {
-          return ipconfig_ == null ?
-              io.particle.firmwareprotos.ctrl.Network.IPConfiguration.getDefaultInstance() : ipconfig_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.IPConfiguration ipconfig = 5;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.IPConfiguration, io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.IPConfigurationOrBuilder> 
-          getIpconfigFieldBuilder() {
-        if (ipconfigBuilder_ == null) {
-          ipconfigBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Network.IPConfiguration, io.particle.firmwareprotos.ctrl.Network.IPConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.IPConfigurationOrBuilder>(
-                  getIpconfig(),
-                  getParentForChildren(),
-                  isClean());
-          ipconfig_ = null;
-        }
-        return ipconfigBuilder_;
-      }
-
-      private io.particle.firmwareprotos.ctrl.Network.DNSConfiguration dnsconfig_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.DNSConfiguration, io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.DNSConfigurationOrBuilder> dnsconfigBuilder_;
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public boolean hasDnsconfig() {
-        return dnsconfigBuilder_ != null || dnsconfig_ != null;
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.DNSConfiguration getDnsconfig() {
-        if (dnsconfigBuilder_ == null) {
-          return dnsconfig_ == null ? io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.getDefaultInstance() : dnsconfig_;
-        } else {
-          return dnsconfigBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public Builder setDnsconfig(io.particle.firmwareprotos.ctrl.Network.DNSConfiguration value) {
-        if (dnsconfigBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          dnsconfig_ = value;
-          onChanged();
-        } else {
-          dnsconfigBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public Builder setDnsconfig(
-          io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder builderForValue) {
-        if (dnsconfigBuilder_ == null) {
-          dnsconfig_ = builderForValue.build();
-          onChanged();
-        } else {
-          dnsconfigBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public Builder mergeDnsconfig(io.particle.firmwareprotos.ctrl.Network.DNSConfiguration value) {
-        if (dnsconfigBuilder_ == null) {
-          if (dnsconfig_ != null) {
-            dnsconfig_ =
-              io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.newBuilder(dnsconfig_).mergeFrom(value).buildPartial();
-          } else {
-            dnsconfig_ = value;
-          }
-          onChanged();
-        } else {
-          dnsconfigBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public Builder clearDnsconfig() {
-        if (dnsconfigBuilder_ == null) {
-          dnsconfig_ = null;
-          onChanged();
-        } else {
-          dnsconfig_ = null;
-          dnsconfigBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder getDnsconfigBuilder() {
-        
-        onChanged();
-        return getDnsconfigFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      public io.particle.firmwareprotos.ctrl.Network.DNSConfigurationOrBuilder getDnsconfigOrBuilder() {
-        if (dnsconfigBuilder_ != null) {
-          return dnsconfigBuilder_.getMessageOrBuilder();
-        } else {
-          return dnsconfig_ == null ?
-              io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.getDefaultInstance() : dnsconfig_;
-        }
-      }
-      /**
-       * <code>.particle.ctrl.DNSConfiguration dnsconfig = 6;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          io.particle.firmwareprotos.ctrl.Network.DNSConfiguration, io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.DNSConfigurationOrBuilder> 
-          getDnsconfigFieldBuilder() {
-        if (dnsconfigBuilder_ == null) {
-          dnsconfigBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              io.particle.firmwareprotos.ctrl.Network.DNSConfiguration, io.particle.firmwareprotos.ctrl.Network.DNSConfiguration.Builder, io.particle.firmwareprotos.ctrl.Network.DNSConfigurationOrBuilder>(
-                  getDnsconfig(),
-                  getParentForChildren(),
-                  isClean());
-          dnsconfig_ = null;
-        }
-        return dnsconfigBuilder_;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:particle.ctrl.NetworkConfiguration)
-    }
-
-    // @@protoc_insertion_point(class_scope:particle.ctrl.NetworkConfiguration)
-    private static final io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration();
-    }
-
-    public static io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<NetworkConfiguration>
-        PARSER = new com.google.protobuf.AbstractParser<NetworkConfiguration>() {
-      public NetworkConfiguration parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkConfiguration(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<NetworkConfiguration> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkConfiguration> getParserForType() {
-      return PARSER;
-    }
-
-    public io.particle.firmwareprotos.ctrl.Network.NetworkConfiguration getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
   }
 
   public interface InterfaceAddressOrBuilder extends
@@ -6132,13 +556,6 @@ public final class Network {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
             case 10: {
               io.particle.firmwareprotos.ctrl.Common.IpAddress.Builder subBuilder = null;
               if (address_ != null) {
@@ -6155,6 +572,13 @@ public final class Network {
             case 16: {
 
               prefixLength_ = input.readUInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
               break;
             }
           }
@@ -6174,6 +598,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceAddress_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceAddress_fieldAccessorTable
@@ -6216,6 +641,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -6225,6 +651,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (address_ != null) {
@@ -6236,6 +663,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -6364,6 +792,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -6371,6 +800,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.InterfaceAddress prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -6394,6 +824,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceAddress_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceAddress_fieldAccessorTable
@@ -6416,6 +847,7 @@ public final class Network {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (addressBuilder_ == null) {
@@ -6429,15 +861,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceAddress_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.InterfaceAddress getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.InterfaceAddress.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.InterfaceAddress build() {
         io.particle.firmwareprotos.ctrl.Network.InterfaceAddress result = buildPartial();
         if (!result.isInitialized()) {
@@ -6446,6 +881,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.InterfaceAddress buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.InterfaceAddress result = new io.particle.firmwareprotos.ctrl.Network.InterfaceAddress(this);
         if (addressBuilder_ == null) {
@@ -6458,32 +894,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.InterfaceAddress) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.InterfaceAddress)other);
@@ -6506,10 +949,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -6682,11 +1127,13 @@ public final class Network {
         onChanged();
         return this;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -6708,6 +1155,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<InterfaceAddress>
         PARSER = new com.google.protobuf.AbstractParser<InterfaceAddress>() {
+      @java.lang.Override
       public InterfaceAddress parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -6725,6 +1173,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.InterfaceAddress getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -6849,13 +1298,6 @@ public final class Network {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
                 addresses_ = new java.util.ArrayList<io.particle.firmwareprotos.ctrl.Network.InterfaceAddress>();
@@ -6891,6 +1333,13 @@ public final class Network {
 
               break;
             }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -6911,6 +1360,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv4Config_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv4Config_fieldAccessorTable
@@ -7021,6 +1471,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -7030,6 +1481,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       for (int i = 0; i < addresses_.size(); i++) {
@@ -7044,6 +1496,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -7187,6 +1640,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -7194,6 +1648,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.Ipv4Config prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -7217,6 +1672,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv4Config_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv4Config_fieldAccessorTable
@@ -7240,6 +1696,7 @@ public final class Network {
           getAddressesFieldBuilder();
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (addressesBuilder_ == null) {
@@ -7263,15 +1720,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv4Config_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Ipv4Config getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.Ipv4Config.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Ipv4Config build() {
         io.particle.firmwareprotos.ctrl.Network.Ipv4Config result = buildPartial();
         if (!result.isInitialized()) {
@@ -7280,6 +1740,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Ipv4Config buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.Ipv4Config result = new io.particle.firmwareprotos.ctrl.Network.Ipv4Config(this);
         int from_bitField0_ = bitField0_;
@@ -7308,32 +1769,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.Ipv4Config) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.Ipv4Config)other);
@@ -7382,10 +1850,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -7950,11 +2420,13 @@ public final class Network {
         }
         return gatewayBuilder_;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -7976,6 +2448,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<Ipv4Config>
         PARSER = new com.google.protobuf.AbstractParser<Ipv4Config>() {
+      @java.lang.Override
       public Ipv4Config parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -7993,6 +2466,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.Ipv4Config getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -8067,13 +2541,6 @@ public final class Network {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
                 addresses_ = new java.util.ArrayList<io.particle.firmwareprotos.ctrl.Network.InterfaceAddress>();
@@ -8081,6 +2548,13 @@ public final class Network {
               }
               addresses_.add(
                   input.readMessage(io.particle.firmwareprotos.ctrl.Network.InterfaceAddress.parser(), extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
               break;
             }
           }
@@ -8103,6 +2577,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv6Config_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv6Config_fieldAccessorTable
@@ -8146,6 +2621,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -8155,6 +2631,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       for (int i = 0; i < addresses_.size(); i++) {
@@ -8163,6 +2640,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -8280,6 +2758,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -8287,6 +2766,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.Ipv6Config prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -8310,6 +2790,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv6Config_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv6Config_fieldAccessorTable
@@ -8333,6 +2814,7 @@ public final class Network {
           getAddressesFieldBuilder();
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (addressesBuilder_ == null) {
@@ -8344,15 +2826,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Ipv6Config_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Ipv6Config getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.Ipv6Config.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Ipv6Config build() {
         io.particle.firmwareprotos.ctrl.Network.Ipv6Config result = buildPartial();
         if (!result.isInitialized()) {
@@ -8361,6 +2846,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Ipv6Config buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.Ipv6Config result = new io.particle.firmwareprotos.ctrl.Network.Ipv6Config(this);
         int from_bitField0_ = bitField0_;
@@ -8377,32 +2863,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.Ipv6Config) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.Ipv6Config)other);
@@ -8445,10 +2938,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -8707,11 +3202,13 @@ public final class Network {
         }
         return addressesBuilder_;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -8733,6 +3230,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<Ipv6Config>
         PARSER = new com.google.protobuf.AbstractParser<Ipv6Config>() {
+      @java.lang.Override
       public Ipv6Config parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -8750,6 +3248,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.Ipv6Config getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -8894,13 +3393,6 @@ public final class Network {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
             case 8: {
 
               index_ = input.readUInt32();
@@ -8969,6 +3461,13 @@ public final class Network {
               metric_ = input.readUInt32();
               break;
             }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -8986,6 +3485,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Interface_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Interface_fieldAccessorTable
@@ -9048,6 +3548,7 @@ public final class Network {
      * <code>.particle.ctrl.InterfaceType type = 3;</code>
      */
     public io.particle.firmwareprotos.ctrl.Network.InterfaceType getType() {
+      @SuppressWarnings("deprecation")
       io.particle.firmwareprotos.ctrl.Network.InterfaceType result = io.particle.firmwareprotos.ctrl.Network.InterfaceType.valueOf(type_);
       return result == null ? io.particle.firmwareprotos.ctrl.Network.InterfaceType.UNRECOGNIZED : result;
     }
@@ -9148,6 +3649,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -9157,6 +3659,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (index_ != 0) {
@@ -9192,6 +3695,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -9387,6 +3891,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -9394,6 +3899,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.Interface prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -9421,6 +3927,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Interface_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Interface_fieldAccessorTable
@@ -9443,6 +3950,7 @@ public final class Network {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         index_ = 0;
@@ -9476,15 +3984,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_Interface_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Interface getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.Interface.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Interface build() {
         io.particle.firmwareprotos.ctrl.Network.Interface result = buildPartial();
         if (!result.isInitialized()) {
@@ -9493,6 +4004,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.Interface buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.Interface result = new io.particle.firmwareprotos.ctrl.Network.Interface(this);
         result.index_ = index_;
@@ -9517,32 +4029,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.Interface) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.Interface)other);
@@ -9590,10 +4109,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -9726,6 +4247,7 @@ public final class Network {
        * <code>.particle.ctrl.InterfaceType type = 3;</code>
        */
       public io.particle.firmwareprotos.ctrl.Network.InterfaceType getType() {
+        @SuppressWarnings("deprecation")
         io.particle.firmwareprotos.ctrl.Network.InterfaceType result = io.particle.firmwareprotos.ctrl.Network.InterfaceType.valueOf(type_);
         return result == null ? io.particle.firmwareprotos.ctrl.Network.InterfaceType.UNRECOGNIZED : result;
       }
@@ -10141,11 +4663,13 @@ public final class Network {
         onChanged();
         return this;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -10167,6 +4691,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<Interface>
         PARSER = new com.google.protobuf.AbstractParser<Interface>() {
+      @java.lang.Override
       public Interface parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -10184,6 +4709,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.Interface getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -10260,13 +4786,6 @@ public final class Network {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
             case 8: {
 
               index_ = input.readUInt32();
@@ -10282,6 +4801,13 @@ public final class Network {
               int rawValue = input.readEnum();
 
               type_ = rawValue;
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
               break;
             }
           }
@@ -10301,6 +4827,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceEntry_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceEntry_fieldAccessorTable
@@ -10363,11 +4890,13 @@ public final class Network {
      * <code>.particle.ctrl.InterfaceType type = 3;</code>
      */
     public io.particle.firmwareprotos.ctrl.Network.InterfaceType getType() {
+      @SuppressWarnings("deprecation")
       io.particle.firmwareprotos.ctrl.Network.InterfaceType result = io.particle.firmwareprotos.ctrl.Network.InterfaceType.valueOf(type_);
       return result == null ? io.particle.firmwareprotos.ctrl.Network.InterfaceType.UNRECOGNIZED : result;
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -10377,6 +4906,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (index_ != 0) {
@@ -10391,6 +4921,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -10520,6 +5051,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -10527,6 +5059,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.InterfaceEntry prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -10550,6 +5083,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceEntry_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceEntry_fieldAccessorTable
@@ -10572,6 +5106,7 @@ public final class Network {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         index_ = 0;
@@ -10583,15 +5118,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_InterfaceEntry_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.InterfaceEntry getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.InterfaceEntry.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.InterfaceEntry build() {
         io.particle.firmwareprotos.ctrl.Network.InterfaceEntry result = buildPartial();
         if (!result.isInitialized()) {
@@ -10600,6 +5138,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.InterfaceEntry buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.InterfaceEntry result = new io.particle.firmwareprotos.ctrl.Network.InterfaceEntry(this);
         result.index_ = index_;
@@ -10609,32 +5148,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.InterfaceEntry) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.InterfaceEntry)other);
@@ -10661,10 +5207,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -10797,6 +5345,7 @@ public final class Network {
        * <code>.particle.ctrl.InterfaceType type = 3;</code>
        */
       public io.particle.firmwareprotos.ctrl.Network.InterfaceType getType() {
+        @SuppressWarnings("deprecation")
         io.particle.firmwareprotos.ctrl.Network.InterfaceType result = io.particle.firmwareprotos.ctrl.Network.InterfaceType.valueOf(type_);
         return result == null ? io.particle.firmwareprotos.ctrl.Network.InterfaceType.UNRECOGNIZED : result;
       }
@@ -10821,11 +5370,13 @@ public final class Network {
         onChanged();
         return this;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -10847,6 +5398,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<InterfaceEntry>
         PARSER = new com.google.protobuf.AbstractParser<InterfaceEntry>() {
+      @java.lang.Override
       public InterfaceEntry parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -10864,6 +5416,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.InterfaceEntry getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -10936,6 +5489,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListRequest_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListRequest_fieldAccessorTable
@@ -10944,6 +5498,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -10953,11 +5508,13 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -11065,6 +5622,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -11072,6 +5630,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -11095,6 +5654,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListRequest_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListRequest_fieldAccessorTable
@@ -11117,20 +5677,24 @@ public final class Network {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListRequest_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest build() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest result = buildPartial();
         if (!result.isInitialized()) {
@@ -11139,38 +5703,46 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest result = new io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest(this);
         onBuilt();
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest)other);
@@ -11187,10 +5759,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -11208,11 +5782,13 @@ public final class Network {
         }
         return this;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -11234,6 +5810,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<GetInterfaceListRequest>
         PARSER = new com.google.protobuf.AbstractParser<GetInterfaceListRequest>() {
+      @java.lang.Override
       public GetInterfaceListRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -11251,6 +5828,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -11325,13 +5903,6 @@ public final class Network {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
                 interfaces_ = new java.util.ArrayList<io.particle.firmwareprotos.ctrl.Network.InterfaceEntry>();
@@ -11339,6 +5910,13 @@ public final class Network {
               }
               interfaces_.add(
                   input.readMessage(io.particle.firmwareprotos.ctrl.Network.InterfaceEntry.parser(), extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
               break;
             }
           }
@@ -11361,6 +5939,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListReply_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListReply_fieldAccessorTable
@@ -11404,6 +5983,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -11413,6 +5993,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       for (int i = 0; i < interfaces_.size(); i++) {
@@ -11421,6 +6002,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -11538,6 +6120,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -11545,6 +6128,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -11568,6 +6152,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListReply_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListReply_fieldAccessorTable
@@ -11591,6 +6176,7 @@ public final class Network {
           getInterfacesFieldBuilder();
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (interfacesBuilder_ == null) {
@@ -11602,15 +6188,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceListReply_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply build() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply result = buildPartial();
         if (!result.isInitialized()) {
@@ -11619,6 +6208,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply result = new io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply(this);
         int from_bitField0_ = bitField0_;
@@ -11635,32 +6225,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply)other);
@@ -11703,10 +6300,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -11965,11 +6564,13 @@ public final class Network {
         }
         return interfacesBuilder_;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -11991,6 +6592,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<GetInterfaceListReply>
         PARSER = new com.google.protobuf.AbstractParser<GetInterfaceListReply>() {
+      @java.lang.Override
       public GetInterfaceListReply parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -12008,6 +6610,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -12063,16 +6666,16 @@ public final class Network {
             case 0:
               done = true;
               break;
+            case 8: {
+
+              index_ = input.readUInt32();
+              break;
+            }
             default: {
               if (!parseUnknownFieldProto3(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
-              break;
-            }
-            case 8: {
-
-              index_ = input.readUInt32();
               break;
             }
           }
@@ -12092,6 +6695,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceRequest_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceRequest_fieldAccessorTable
@@ -12109,6 +6713,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -12118,6 +6723,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (index_ != 0) {
@@ -12126,6 +6732,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -12241,6 +6848,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -12248,6 +6856,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -12271,6 +6880,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceRequest_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceRequest_fieldAccessorTable
@@ -12293,6 +6903,7 @@ public final class Network {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         index_ = 0;
@@ -12300,15 +6911,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceRequest_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest build() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest result = buildPartial();
         if (!result.isInitialized()) {
@@ -12317,6 +6931,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest result = new io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest(this);
         result.index_ = index_;
@@ -12324,32 +6939,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest)other);
@@ -12369,10 +6991,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -12416,11 +7040,13 @@ public final class Network {
         onChanged();
         return this;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -12442,6 +7068,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<GetInterfaceRequest>
         PARSER = new com.google.protobuf.AbstractParser<GetInterfaceRequest>() {
+      @java.lang.Override
       public GetInterfaceRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -12459,6 +7086,7 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -12521,13 +7149,6 @@ public final class Network {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
             case 10: {
               io.particle.firmwareprotos.ctrl.Network.Interface.Builder subBuilder = null;
               if (interface_ != null) {
@@ -12539,6 +7160,13 @@ public final class Network {
                 interface_ = subBuilder.buildPartial();
               }
 
+              break;
+            }
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
               break;
             }
           }
@@ -12558,6 +7186,7 @@ public final class Network {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceReply_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceReply_fieldAccessorTable
@@ -12587,6 +7216,7 @@ public final class Network {
     }
 
     private byte memoizedIsInitialized = -1;
+    @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -12596,6 +7226,7 @@ public final class Network {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (interface_ != null) {
@@ -12604,6 +7235,7 @@ public final class Network {
       unknownFields.writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -12724,6 +7356,7 @@ public final class Network {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -12731,6 +7364,7 @@ public final class Network {
     public static Builder newBuilder(io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -12754,6 +7388,7 @@ public final class Network {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceReply_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceReply_fieldAccessorTable
@@ -12776,6 +7411,7 @@ public final class Network {
                 .alwaysUseFieldBuilders) {
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
         if (interfaceBuilder_ == null) {
@@ -12787,15 +7423,18 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return io.particle.firmwareprotos.ctrl.Network.internal_static_particle_ctrl_GetInterfaceReply_descriptor;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply getDefaultInstanceForType() {
         return io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply.getDefaultInstance();
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply build() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply result = buildPartial();
         if (!result.isInitialized()) {
@@ -12804,6 +7443,7 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply buildPartial() {
         io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply result = new io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply(this);
         if (interfaceBuilder_ == null) {
@@ -12815,32 +7455,39 @@ public final class Network {
         return result;
       }
 
+      @java.lang.Override
       public Builder clone() {
         return (Builder) super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply) {
           return mergeFrom((io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply)other);
@@ -12860,10 +7507,12 @@ public final class Network {
         return this;
       }
 
+      @java.lang.Override
       public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -12998,11 +7647,13 @@ public final class Network {
         }
         return interfaceBuilder_;
       }
+      @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
+      @java.lang.Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -13024,6 +7675,7 @@ public final class Network {
 
     private static final com.google.protobuf.Parser<GetInterfaceReply>
         PARSER = new com.google.protobuf.AbstractParser<GetInterfaceReply>() {
+      @java.lang.Override
       public GetInterfaceReply parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -13041,47 +7693,13 @@ public final class Network {
       return PARSER;
     }
 
+    @java.lang.Override
     public io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_particle_ctrl_NetworkGetStatusRequest_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_particle_ctrl_NetworkGetStatusRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_particle_ctrl_NetworkGetStatusReply_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_particle_ctrl_NetworkGetStatusReply_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_particle_ctrl_NetworkGetConfigurationRequest_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_particle_ctrl_NetworkGetConfigurationRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_particle_ctrl_NetworkGetConfigurationReply_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_particle_ctrl_NetworkGetConfigurationReply_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_particle_ctrl_IPConfiguration_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_particle_ctrl_IPConfiguration_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_particle_ctrl_DNSConfiguration_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_particle_ctrl_DNSConfiguration_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_particle_ctrl_NetworkConfiguration_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_particle_ctrl_NetworkConfiguration_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_particle_ctrl_InterfaceAddress_descriptor;
   private static final 
@@ -13137,65 +7755,42 @@ public final class Network {
   static {
     java.lang.String[] descriptorData = {
       "\n\rnetwork.proto\022\rparticle.ctrl\032\020extensio" +
-      "ns.proto\032\014common.proto\"2\n\027NetworkGetStat" +
-      "usRequest\022\021\n\tinterface\030\001 \001(\005:\004\210\265\030z\"L\n\025Ne" +
-      "tworkGetStatusReply\0223\n\006config\030\001 \001(\0132#.pa" +
-      "rticle.ctrl.NetworkConfiguration\"9\n\036Netw" +
-      "orkGetConfigurationRequest\022\021\n\tinterface\030" +
-      "\001 \001(\005:\004\210\265\030x\"S\n\034NetworkGetConfigurationRe" +
-      "ply\0223\n\006config\030\001 \001(\0132#.particle.ctrl.Netw" +
-      "orkConfiguration\"\256\002\n\017IPConfiguration\0221\n\004" +
-      "type\030\001 \001(\0162#.particle.ctrl.IPConfigurati" +
-      "on.Type\022)\n\007address\030\002 \001(\0132\030.particle.ctrl" +
-      ".IPAddress\022)\n\007netmask\030\003 \001(\0132\030.particle.c" +
-      "trl.IPAddress\022)\n\007gateway\030\004 \001(\0132\030.particl" +
-      "e.ctrl.IPAddress\022-\n\013dhcp_server\030\005 \001(\0132\030." +
-      "particle.ctrl.IPAddress\022\020\n\010hostname\030\006 \001(" +
-      "\t\"&\n\004Type\022\010\n\004NONE\020\000\022\010\n\004DHCP\020\001\022\n\n\006STATIC\020" +
-      "\002\"=\n\020DNSConfiguration\022)\n\007servers\030\001 \003(\0132\030" +
-      ".particle.ctrl.IPAddress\"\335\001\n\024NetworkConf" +
-      "iguration\022\021\n\tinterface\030\001 \001(\005\022*\n\005state\030\002 " +
-      "\001(\0162\033.particle.ctrl.NetworkState\022\014\n\004name" +
-      "\030\003 \001(\t\022\022\n\003mac\030\004 \001(\014B\005\222?\002\010\006\0220\n\010ipconfig\030\005" +
-      " \001(\0132\036.particle.ctrl.IPConfiguration\0222\n\t" +
-      "dnsconfig\030\006 \001(\0132\037.particle.ctrl.DNSConfi" +
-      "guration\"T\n\020InterfaceAddress\022)\n\007address\030" +
-      "\001 \001(\0132\030.particle.ctrl.IpAddress\022\025\n\rprefi" +
-      "x_length\030\002 \001(\r\"\227\001\n\nIpv4Config\0222\n\taddress" +
-      "es\030\001 \003(\0132\037.particle.ctrl.InterfaceAddres" +
-      "s\022(\n\004peer\030\002 \001(\0132\032.particle.ctrl.Ipv4Addr" +
-      "ess\022+\n\007gateway\030\003 \001(\0132\032.particle.ctrl.Ipv" +
-      "4Address\"@\n\nIpv6Config\0222\n\taddresses\030\001 \003(" +
-      "\0132\037.particle.ctrl.InterfaceAddress\"\216\002\n\tI" +
-      "nterface\022\r\n\005index\030\001 \001(\r\022\014\n\004name\030\002 \001(\t\022*\n" +
-      "\004type\030\003 \001(\0162\034.particle.ctrl.InterfaceTyp" +
-      "e\022\r\n\005flags\030\004 \001(\r\022\021\n\text_flags\030\005 \001(\r\022.\n\013i" +
-      "pv4_config\030\006 \001(\0132\031.particle.ctrl.Ipv4Con" +
-      "fig\022.\n\013ipv6_config\030\007 \001(\0132\031.particle.ctrl" +
-      ".Ipv6Config\022\031\n\nhw_address\030\010 \001(\014B\005\222?\002\010\010\022\013" +
-      "\n\003mtu\030\t \001(\r\022\016\n\006metric\030\n \001(\r\"Y\n\016Interface" +
-      "Entry\022\r\n\005index\030\001 \001(\r\022\014\n\004name\030\002 \001(\t\022*\n\004ty" +
-      "pe\030\003 \001(\0162\034.particle.ctrl.InterfaceType\" " +
-      "\n\027GetInterfaceListRequest:\005\210\265\030\220\003\"J\n\025GetI" +
-      "nterfaceListReply\0221\n\ninterfaces\030\001 \003(\0132\035." +
-      "particle.ctrl.InterfaceEntry\"+\n\023GetInter" +
-      "faceRequest\022\r\n\005index\030\001 \001(\r:\005\210\265\030\221\003\"@\n\021Get" +
-      "InterfaceReply\022+\n\tinterface\030\001 \001(\0132\030.part" +
-      "icle.ctrl.Interface*9\n\014NetworkState\022\027\n\023N" +
-      "ETWORK_STATUS_NONE\020\000\022\010\n\004DOWN\020\001\022\006\n\002UP\020\002*\365" +
-      "\001\n\rInterfaceFlag\022\014\n\010IFF_NONE\020\000\022\n\n\006IFF_UP" +
-      "\020\001\022\021\n\rIFF_BROADCAST\020\002\022\r\n\tIFF_DEBUG\020\004\022\020\n\014" +
-      "IFF_LOOPBACK\020\010\022\024\n\020IFF_POINTTOPOINT\020\020\022\017\n\013" +
-      "IFF_RUNNING\020@\022\020\n\014IFF_LOWER_UP\020@\022\016\n\tIFF_N" +
-      "OARP\020\200\001\022\020\n\013IFF_PROMISC\020\200\002\022\021\n\014IFF_ALLMULT" +
-      "I\020\200\004\022\023\n\rIFF_MULTICAST\020\200\200\002\022\017\n\tIFF_NOND6\020\200" +
-      "\200\004\032\002\020\001*y\n\020InterfaceExtFlag\022\r\n\tIFXF_NONE\020" +
-      "\000\022\014\n\010IFXF_WOL\020\020\022\022\n\016IFXF_AUTOCONF6\020 \022\017\n\tI" +
-      "FXF_DHCP\020\200\200\004\022\020\n\nIFXF_DHCP6\020\200\200\010\022\021\n\013IFXF_A" +
-      "UTOIP\020\200\200\020*f\n\rInterfaceType\022\032\n\026INVALID_IN" +
-      "TERFACE_TYPE\020\000\022\014\n\010LOOPBACK\020\001\022\n\n\006THREAD\020\002" +
-      "\022\014\n\010ETHERNET\020\004\022\010\n\004WIFI\020\010\022\007\n\003PPP\020\020B!\n\037io." +
-      "particle.firmwareprotos.ctrlb\006proto3"
+      "ns.proto\032\014common.proto\"T\n\020InterfaceAddre" +
+      "ss\022)\n\007address\030\001 \001(\0132\030.particle.ctrl.IpAd" +
+      "dress\022\025\n\rprefix_length\030\002 \001(\r\"\227\001\n\nIpv4Con" +
+      "fig\0222\n\taddresses\030\001 \003(\0132\037.particle.ctrl.I" +
+      "nterfaceAddress\022(\n\004peer\030\002 \001(\0132\032.particle" +
+      ".ctrl.Ipv4Address\022+\n\007gateway\030\003 \001(\0132\032.par" +
+      "ticle.ctrl.Ipv4Address\"@\n\nIpv6Config\0222\n\t" +
+      "addresses\030\001 \003(\0132\037.particle.ctrl.Interfac" +
+      "eAddress\"\216\002\n\tInterface\022\r\n\005index\030\001 \001(\r\022\014\n" +
+      "\004name\030\002 \001(\t\022*\n\004type\030\003 \001(\0162\034.particle.ctr" +
+      "l.InterfaceType\022\r\n\005flags\030\004 \001(\r\022\021\n\text_fl" +
+      "ags\030\005 \001(\r\022.\n\013ipv4_config\030\006 \001(\0132\031.particl" +
+      "e.ctrl.Ipv4Config\022.\n\013ipv6_config\030\007 \001(\0132\031" +
+      ".particle.ctrl.Ipv6Config\022\031\n\nhw_address\030" +
+      "\010 \001(\014B\005\222?\002\010\010\022\013\n\003mtu\030\t \001(\r\022\016\n\006metric\030\n \001(" +
+      "\r\"Y\n\016InterfaceEntry\022\r\n\005index\030\001 \001(\r\022\014\n\004na" +
+      "me\030\002 \001(\t\022*\n\004type\030\003 \001(\0162\034.particle.ctrl.I" +
+      "nterfaceType\" \n\027GetInterfaceListRequest:" +
+      "\005\210\265\030\220\003\"J\n\025GetInterfaceListReply\0221\n\ninter" +
+      "faces\030\001 \003(\0132\035.particle.ctrl.InterfaceEnt" +
+      "ry\"+\n\023GetInterfaceRequest\022\r\n\005index\030\001 \001(\r" +
+      ":\005\210\265\030\221\003\"@\n\021GetInterfaceReply\022+\n\tinterfac" +
+      "e\030\001 \001(\0132\030.particle.ctrl.Interface*\365\001\n\rIn" +
+      "terfaceFlag\022\014\n\010IFF_NONE\020\000\022\n\n\006IFF_UP\020\001\022\021\n" +
+      "\rIFF_BROADCAST\020\002\022\r\n\tIFF_DEBUG\020\004\022\020\n\014IFF_L" +
+      "OOPBACK\020\010\022\024\n\020IFF_POINTTOPOINT\020\020\022\017\n\013IFF_R" +
+      "UNNING\020@\022\020\n\014IFF_LOWER_UP\020@\022\016\n\tIFF_NOARP\020" +
+      "\200\001\022\020\n\013IFF_PROMISC\020\200\002\022\021\n\014IFF_ALLMULTI\020\200\004\022" +
+      "\023\n\rIFF_MULTICAST\020\200\200\002\022\017\n\tIFF_NOND6\020\200\200\004\032\002\020" +
+      "\001*y\n\020InterfaceExtFlag\022\r\n\tIFXF_NONE\020\000\022\014\n\010" +
+      "IFXF_WOL\020\020\022\022\n\016IFXF_AUTOCONF6\020 \022\017\n\tIFXF_D" +
+      "HCP\020\200\200\004\022\020\n\nIFXF_DHCP6\020\200\200\010\022\021\n\013IFXF_AUTOIP" +
+      "\020\200\200\020*f\n\rInterfaceType\022\032\n\026INVALID_INTERFA" +
+      "CE_TYPE\020\000\022\014\n\010LOOPBACK\020\001\022\n\n\006THREAD\020\002\022\014\n\010E" +
+      "THERNET\020\004\022\010\n\004WIFI\020\010\022\007\n\003PPP\020\020B!\n\037io.parti" +
+      "cle.firmwareprotos.ctrlb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -13211,98 +7806,56 @@ public final class Network {
           io.particle.firmwareprotos.ctrl.Extensions.getDescriptor(),
           io.particle.firmwareprotos.ctrl.Common.getDescriptor(),
         }, assigner);
-    internal_static_particle_ctrl_NetworkGetStatusRequest_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_particle_ctrl_NetworkGetStatusRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_particle_ctrl_NetworkGetStatusRequest_descriptor,
-        new java.lang.String[] { "Interface", });
-    internal_static_particle_ctrl_NetworkGetStatusReply_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_particle_ctrl_NetworkGetStatusReply_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_particle_ctrl_NetworkGetStatusReply_descriptor,
-        new java.lang.String[] { "Config", });
-    internal_static_particle_ctrl_NetworkGetConfigurationRequest_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_particle_ctrl_NetworkGetConfigurationRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_particle_ctrl_NetworkGetConfigurationRequest_descriptor,
-        new java.lang.String[] { "Interface", });
-    internal_static_particle_ctrl_NetworkGetConfigurationReply_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_particle_ctrl_NetworkGetConfigurationReply_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_particle_ctrl_NetworkGetConfigurationReply_descriptor,
-        new java.lang.String[] { "Config", });
-    internal_static_particle_ctrl_IPConfiguration_descriptor =
-      getDescriptor().getMessageTypes().get(4);
-    internal_static_particle_ctrl_IPConfiguration_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_particle_ctrl_IPConfiguration_descriptor,
-        new java.lang.String[] { "Type", "Address", "Netmask", "Gateway", "DhcpServer", "Hostname", });
-    internal_static_particle_ctrl_DNSConfiguration_descriptor =
-      getDescriptor().getMessageTypes().get(5);
-    internal_static_particle_ctrl_DNSConfiguration_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_particle_ctrl_DNSConfiguration_descriptor,
-        new java.lang.String[] { "Servers", });
-    internal_static_particle_ctrl_NetworkConfiguration_descriptor =
-      getDescriptor().getMessageTypes().get(6);
-    internal_static_particle_ctrl_NetworkConfiguration_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_particle_ctrl_NetworkConfiguration_descriptor,
-        new java.lang.String[] { "Interface", "State", "Name", "Mac", "Ipconfig", "Dnsconfig", });
     internal_static_particle_ctrl_InterfaceAddress_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(0);
     internal_static_particle_ctrl_InterfaceAddress_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_InterfaceAddress_descriptor,
         new java.lang.String[] { "Address", "PrefixLength", });
     internal_static_particle_ctrl_Ipv4Config_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(1);
     internal_static_particle_ctrl_Ipv4Config_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_Ipv4Config_descriptor,
         new java.lang.String[] { "Addresses", "Peer", "Gateway", });
     internal_static_particle_ctrl_Ipv6Config_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_particle_ctrl_Ipv6Config_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_Ipv6Config_descriptor,
         new java.lang.String[] { "Addresses", });
     internal_static_particle_ctrl_Interface_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_particle_ctrl_Interface_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_Interface_descriptor,
         new java.lang.String[] { "Index", "Name", "Type", "Flags", "ExtFlags", "Ipv4Config", "Ipv6Config", "HwAddress", "Mtu", "Metric", });
     internal_static_particle_ctrl_InterfaceEntry_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_particle_ctrl_InterfaceEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_InterfaceEntry_descriptor,
         new java.lang.String[] { "Index", "Name", "Type", });
     internal_static_particle_ctrl_GetInterfaceListRequest_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_particle_ctrl_GetInterfaceListRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetInterfaceListRequest_descriptor,
         new java.lang.String[] { });
     internal_static_particle_ctrl_GetInterfaceListReply_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_particle_ctrl_GetInterfaceListReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetInterfaceListReply_descriptor,
         new java.lang.String[] { "Interfaces", });
     internal_static_particle_ctrl_GetInterfaceRequest_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_particle_ctrl_GetInterfaceRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetInterfaceRequest_descriptor,
         new java.lang.String[] { "Index", });
     internal_static_particle_ctrl_GetInterfaceReply_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_particle_ctrl_GetInterfaceReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_particle_ctrl_GetInterfaceReply_descriptor,
