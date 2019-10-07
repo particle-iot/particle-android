@@ -5,6 +5,7 @@ import io.particle.firmwareprotos.ctrl.Network.InterfaceType
 import io.particle.mesh.R
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
+import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.setup.flow.DialogSpec.ResDialogSpec
 import io.particle.mesh.setup.flow.context.SetupContexts
@@ -35,7 +36,7 @@ class StepEnsureEthernetHasIpAddress(private val flowUi: FlowUiDelegate) : MeshS
         val iface = reply.`interface`
         for (addyList in listOf(iface.ipv4Config.addressesList, iface.ipv6Config.addressesList)) {
 
-            val address = addyList.firstOrNull { IpAddressFieldsWorkaround.addressHasValue(it) }
+            val address = addyList.firstOrNull { it.hasAddressValue() }
             if (address != null) {
                 log.debug { "IP address on ethernet (interface ${ethernet.index}) found: $address" }
                 return
@@ -59,4 +60,9 @@ class StepEnsureEthernetHasIpAddress(private val flowUi: FlowUiDelegate) : MeshS
         throw ExpectedFlowException("Ethernet connection not plugged in; user prompted.")
     }
 
+}
+
+
+private fun Network.InterfaceAddress.hasAddressValue(): Boolean {
+    return this.address.v4.address.truthy() || this.address.v6.address.truthy()
 }
