@@ -2,7 +2,6 @@ package io.particle.mesh.setup.flow.setupsteps;
 
 import com.google.protobuf.ByteString;
 
-import io.particle.firmwareprotos.ctrl.Common;
 import io.particle.firmwareprotos.ctrl.Network;
 
 
@@ -12,8 +11,8 @@ import io.particle.firmwareprotos.ctrl.Network;
 public class IpAddressFieldsWorkaround {
 
     public static boolean addressHasValue(Network.InterfaceAddress ifAddress) {
-        Common.IpAddress address = ifAddress.getAddress();
-        return isTruthy(address.getV4().getAddress()) || isTruthy(address.getV6().getAddress());
+        return isTruthy(ifAddress.getAddress().getV4().getAddress())
+                || isTruthy(ifAddress.getAddress().getV6().getAddress());
     }
 
     private static boolean isTruthy(int addressAsInt) {
