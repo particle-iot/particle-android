@@ -1,6 +1,6 @@
 # Particle Android libraries and apps
 
-![Particle](http://oi60.tinypic.com/116jd51.jpg)
+![Particle](particle-mark.png)
 
 [Install the Tinker app on your Android device from the Google Play Store](https://play.google.com/store/apps/details?id=io.particle.android.app)
 
