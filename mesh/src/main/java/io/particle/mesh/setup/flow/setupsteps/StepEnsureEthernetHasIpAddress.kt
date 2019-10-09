@@ -36,9 +36,7 @@ class StepEnsureEthernetHasIpAddress(private val flowUi: FlowUiDelegate) : MeshS
         val iface = reply.`interface`
         for (addyList in listOf(iface.ipv4Config.addressesList, iface.ipv6Config.addressesList)) {
 
-            val address = addyList.firstOrNull {
-                it.address.v4.address.truthy() || it.address.v6.address.truthy()
-            }
+            val address = addyList.firstOrNull { it.hasAddressValue() }
             if (address != null) {
                 log.debug { "IP address on ethernet (interface ${ethernet.index}) found: $address" }
                 return
@@ -62,4 +60,9 @@ class StepEnsureEthernetHasIpAddress(private val flowUi: FlowUiDelegate) : MeshS
         throw ExpectedFlowException("Ethernet connection not plugged in; user prompted.")
     }
 
+}
+
+
+private fun Network.InterfaceAddress.hasAddressValue(): Boolean {
+    return this.address.v4.address.truthy() || this.address.v6.address.truthy()
 }

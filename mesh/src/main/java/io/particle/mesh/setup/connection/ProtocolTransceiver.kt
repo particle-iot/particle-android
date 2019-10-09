@@ -40,10 +40,6 @@ import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceListRequest
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceReply
 import io.particle.firmwareprotos.ctrl.Network.GetInterfaceRequest
-import io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationReply
-import io.particle.firmwareprotos.ctrl.Network.NetworkGetConfigurationRequest
-import io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusReply
-import io.particle.firmwareprotos.ctrl.Network.NetworkGetStatusRequest
 import io.particle.firmwareprotos.ctrl.Storage.FinishFirmwareUpdateReply
 import io.particle.firmwareprotos.ctrl.Storage.FinishFirmwareUpdateRequest
 import io.particle.firmwareprotos.ctrl.Storage.FirmwareUpdateDataReply
@@ -241,24 +237,6 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendGetConnectionStatus(): Result<GetConnectionStatusReply, ResultCode> {
         val response = sendRequest(GetConnectionStatusRequest.newBuilder().build())
         return buildResult(response) { r -> GetConnectionStatusReply.parseFrom(r.payloadData) }
-    }
-
-    suspend fun sendNetworkGetStatus(interfaceIndex: Int): Result<NetworkGetStatusReply, ResultCode> {
-        val response = sendRequest(
-            NetworkGetStatusRequest.newBuilder()
-                .setInterface(interfaceIndex)
-                .build()
-        )
-        return buildResult(response) { r -> NetworkGetStatusReply.parseFrom(r.payloadData) }
-    }
-
-    suspend fun sendNetworkGetConfig(interfaceIndex: Int): Result<NetworkGetConfigurationReply, ResultCode> {
-        val response = sendRequest(
-            NetworkGetConfigurationRequest.newBuilder()
-                .setInterface(interfaceIndex)
-                .build()
-        )
-        return buildResult(response) { r -> NetworkGetConfigurationReply.parseFrom(r.payloadData) }
     }
 
     suspend fun sendGetInterface(interfaceIndex: Int): Result<GetInterfaceReply, ResultCode> {
