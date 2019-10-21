@@ -1,8 +1,8 @@
-# Particle Android libraries and apps
-
 <p align="center" >
 <img src="particle-mark.png" alt="Particle" title="Particle">
 </p>
+
+# Particle Android libraries and apps
 
 [Install the Tinker app on your Android device from the Google Play Store](https://play.google.com/store/apps/details?id=io.particle.android.app)
 
