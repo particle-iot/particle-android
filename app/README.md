@@ -14,9 +14,9 @@ Full documentation, including a getting started guide, lots of API examples, sup
 ## Maintainers
 
 - Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
-- Julius Skripkauskas [Github](https://github.com/cityvibes) | [Twitter](https://www.twitter.com/azemar)
-- Ido Kleinman [Github](https://www.github.com/idokleinman) | [Twitter](https://www.twitter.com/idokleinman)
+
 
 ## License
 
 All code in this repository is available under the Apache License 2.0.  See the `LICENSE` file for the complete text of the license.
+

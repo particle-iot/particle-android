@@ -41,8 +41,7 @@ the toolbar to build and run the app on a device.
 ## Maintainers
 
 - Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
-- Julius Skripkauskas [Github](https://github.com/cityvibes) | [Twitter](https://www.twitter.com/azemar)
-- Ido Kleinman [Github](https://www.github.com/idokleinman) | [Twitter](https://www.twitter.com/idokleinman)
+
 
 ## License
 
