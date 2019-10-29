@@ -45,13 +45,6 @@ public class ConfigureAPStep extends SetupStep {
                 builder.setEncryptedPasswordHex(
                         Crypto.encryptAndEncodeToHex(networkSecretPlaintext, publicKey));
             } catch (Crypto.CryptoException e) {
-                // FIXME: try to throw a more specific exception here.
-                // Don't throw SetupException here -- if this is failing, it's not
-                // going to get any better by the running this SetupStep again, and
-                // it can really only fail if the surrounding app code is doing something
-                // wrong.  To wit: you *want* the app to crash here (or at least
-                // throw out a dialog saying "horrible thing happened!  horrible error
-                // code: ..." and then return to a safe "default" activity.
                 throw new RuntimeException("Error encrypting network credentials", e);
             }
         }

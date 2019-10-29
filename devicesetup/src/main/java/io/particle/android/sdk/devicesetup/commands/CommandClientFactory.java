@@ -12,7 +12,6 @@ public class CommandClientFactory {
                 new NetworkBindingSocketFactory(wifiFacade, softApSSID, DEFAULT_TIMEOUT_SECONDS * 1000));
     }
 
-    // FIXME: set these defaults in a resource file?
     public CommandClient newClientUsingDefaultsForDevices(WifiFacade wifiFacade, SSID softApSSID) {
         return newClient(wifiFacade, softApSSID, "192.168.0.1", 5609);
     }

@@ -58,8 +58,6 @@ public class PermissionsFragment extends Fragment implements OnRequestPermission
         Builder dialogBuilder = new AlertDialog.Builder(getActivity())
                 .setCancelable(false);
 
-        // FIXME: stop referring to these location permission-specific strings here,
-        // try to retrieve them from the client
         if (ActivityCompat.checkSelfPermission(getActivity(), permission) != PERMISSION_GRANTED ||
                 ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
             dialogBuilder.setTitle(R.string.location_permission_dialog_title)

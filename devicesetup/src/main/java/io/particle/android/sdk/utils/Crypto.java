@@ -73,11 +73,6 @@ public class Crypto {
 
     static PublicKey buildPublicKey(byte[] rawBytes) throws CryptoException {
         try {
-            //FIXME replacing X509EncodedKeySpec because of problem with 8.1
-            //Since 8.1 Bouncycastle cryptography was replaced with implementation from Conscrypt
-            //https://developer.android.com/about/versions/oreo/android-8.1.html
-            //either it's a bug in Conscrypt, our public key DER structure or use of X509EncodedKeySpec changed
-            //alternative needed as this adds expensive Spongycastle dependence
             ASN1InputStream bIn = new ASN1InputStream(new ByteArrayInputStream(rawBytes));
             SubjectPublicKeyInfo info = SubjectPublicKeyInfo
                     .getInstance(new ASN1InputStream(bIn.readObject().getEncoded()).readObject());

@@ -18,7 +18,6 @@ import io.particle.android.sdk.utils.TLog;
 
 import static io.particle.android.sdk.utils.Py.truthy;
 
-// FIXME: this naming is no longer really applicable.
 public class DiscoverProcessWorker {
     private static final TLog log = TLog.get(DiscoverProcessWorker.class);
 
@@ -36,9 +35,6 @@ public class DiscoverProcessWorker {
         return this;
     }
 
-    // FIXME: all this should probably become a list of commands to run in a queue,
-    // each with shortcut conditions for when they've already been fulfilled, instead of
-    // this if-else/try-catch ladder.
     public void doTheThing() throws SetupStepException {
         // 1. get device ID
         if (!truthy(detectedDeviceID)) {

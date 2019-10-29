@@ -267,7 +267,6 @@ public class CreateAccountActivity extends BaseActivity {
     }
 
     private void signUpTaskFailure(@NonNull ParticleCloudException error) {
-        // FIXME: look at old Spark app for what we do here UI & workflow-wise
         log.d("onFailed()");
         ParticleUi.showParticleButtonProgress(CreateAccountActivity.this,
                 R.id.action_create_account, false);

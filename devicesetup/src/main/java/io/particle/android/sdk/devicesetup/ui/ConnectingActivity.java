@@ -68,7 +68,6 @@ public class ConnectingActivity extends RequiresWifiScansActivity {
                 .putExtra(EXTRA_NETWORK_SECRET, secret);
     }
 
-    // FIXME: all this state needs to be configured and encapsulated better
     private ConnectingProcessWorkerTask connectingProcessWorkerTask;
     @Inject protected SoftAPConfigRemover softAPConfigRemover;
     @Inject protected WifiFacade wifiFacade;

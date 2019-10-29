@@ -28,8 +28,6 @@ import io.particle.android.sdk.utils.ui.ParticleUi;
 import io.particle.android.sdk.utils.ui.Ui;
 
 
-// FIXME: password validation -- check for correct length based on security type?
-// at least check for minimum.
 public class PasswordEntryActivity extends BaseActivity {
 
     public static Intent buildIntent(Context ctx, SSID softApSSID,

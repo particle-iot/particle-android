@@ -192,7 +192,6 @@ public class SuccessActivity extends BaseActivity {
                 SDKGlobals.getSensitiveDataStorage(),
                 new SetupResult(isSuccess, isSuccess ? DeviceSetupState.deviceToBeSetUpId : null));
 
-        // FIXME: we shouldn't do this in the lib.  looks like another argument for Fragments.
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK

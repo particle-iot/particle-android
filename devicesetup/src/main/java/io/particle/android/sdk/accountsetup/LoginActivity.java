@@ -207,9 +207,6 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     log.d("onFailed(): " + error.getMessage());
                     SEGAnalytics.track("Auth: Login failure");
-                    // FIXME: check specifically for 401 errors
-                    // and set a better error message?  (Seems like
-                    // this works fine already...)
                     passwordView.setError(error.getBestMessage());
                     passwordView.requestFocus();
                 }
