@@ -52,8 +52,7 @@ If you were releasing version `2.4.2`, you'd do the following:
 5. Update the `versionCode` field in `app/build.gradle` to `102040201`[1], and update the 
     `versionName` field to `2.4.2 (1)` (if this will only be released to alpha or beta channels) 
     or just `2.4.2` (if it will be pushed to production)
-6. Uncomment the release-only gradle plugins in `app/build.gradle` (fabric, google services) so 
-    they're active for the release build
+6. Uncomment the Google Services gradle plugins at the bottom of `app/build.gradle`, but don't commit this change. (This is kept commented out to make the app easily buildable by the community; if the plugin is enabled, the app won't build due to the lack of a `google-services.json` file.)
 7. Build a signed release APK
 8. Publish the APK to the appropriate channel (internal, alpha, or beta)
 9. Announce the release internally (i.e.: via Slack) and ask for testers in the appropriate channels
