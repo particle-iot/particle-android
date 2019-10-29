@@ -10,26 +10,6 @@ users a simple initial setup process for Particle-powered devices.  This include
 all the necessary device communication code, an easily customizable UI, and a
 simple developer API.
 
-The setup UI can be easily customized by a modifying Android XML resource files.
-Available customizations include: look & feel, colors, fonts, custom brand logos
-and more.  Customization isn't required for a nice looking setup process,
-though: good defaults are used throughout, with styling generally following
-Google's Material Design guidelines.
-
-With the Device Setup library, you only need to make one simple call from
-your app, and the Particle setup process UI launches to guide the user
-through the device setup process.  When that process finishes, the user is
-returned to the Activity where they were left off, and a broadcast intent
-is sent out with the ID of the device she just set up and claimed.
-
-The wireless setup process for the Photon uses very different underlying
-technology from the Core.  The Core used _SmartConfig_, while the Photon
-uses what we call a “soft AP” mode: during setup, the Photon advertises
-itself as a Wi-Fi network.  The mobile app configures the Android device to
-connect to this soft AP network, and using this connection, it can provide
-the Particle device with the credentials it needs for the Wi-Fi network
-you want the to Photon to use.
-
 
 ## Getting started, getting help, and everything else
 
