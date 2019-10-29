@@ -24,12 +24,6 @@
         https://community.particle.io/t/spark-core-troubleshooting-guide-spark-team/696
     </string>
 
-    <!-- FIXME: support static HTML for all these -->
-    <string name="terms_of_service_html_file">NOT_DEFINED</string>
-    <string name="privacy_policy_html_file">NOT_DEFINED</string>
-    <string name="forgot_password_html_file">NOT_DEFINED</string>
-    <string name="troubleshooting_html_file">NOT_DEFINED</string>
-
     <bool name="show_sign_up_page_fine_print">true</bool>
 
     <color name="page_background_color">#F2F2F2</color>
