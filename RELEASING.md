@@ -67,12 +67,6 @@ If you were releasing version `2.4.2`, you'd do the following:
 
 
 
-## Making official releases: Mesh lib
-
-(TBD)
-
-
-
 [1] the versionCode scheme here is:
 EPOCH (single digit)
 MAJOR VERSION (2 digits)
