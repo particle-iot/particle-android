@@ -5,13 +5,17 @@
 
 # Particle Android Cloud SDK
 
-The Particle Android Cloud SDK is an easy-to-use wrapper for the Particle REST API.  The SDK enables painless interaction between your Android app and Particle-powered connected products, all via the Particle Cloud. SDK features include:
+## Introduction
 
-- Getting a list of a user's Particle devices
-- Reading variables and invoking functions on devices
-- Publishing events from mobile devices, and subscribing to events published by devices & apps
-- Claiming & unclaiming devices for a user
-- Managing access tokens for the Particle Cloud
+The Particle Android Cloud SDK enables Android apps to interact with Particle-powered connected products via the Particle Cloud. As an easy-to-use wrapper for the Particle REST API, the Cloud SDK can:
+
+- Get a list of Particle devices claimed by a user account
+- Read variables from devices
+- Invoke functions on devices
+- Publish events from your mobile app and subscribe to events coming from devices
+- Get data usage information for cellular devices
+- Claim/unclaim devices for a user account
+- Manage & inject user sessions for the Particle Cloud (access tokens, encrypted session management)
 
 
 ## Getting started, getting help, and everything else
@@ -22,8 +26,7 @@ Full documentation, including a getting started guide, lots of API examples, sup
 ## Maintainers
 
 - Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
-- Julius Skripkauskas [Github](https://github.com/cityvibes) | [Twitter](https://www.twitter.com/azemar)
-- Ido Kleinman [Github](https://www.github.com/idokleinman) | [Twitter](https://www.twitter.com/idokleinman)
+
 
 ## License
 

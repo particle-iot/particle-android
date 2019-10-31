@@ -86,7 +86,6 @@ public class NetworkBindingSocketFactory extends SocketFactory {
 
         if (softAp == null) {
             // If this ever fails, fail VERY LOUDLY to make sure we hear about it...
-            // FIXME: report this error via analytics
             throw new SocketBindingException("Could not find Network for SSID " + softAPSSID);
         }
 

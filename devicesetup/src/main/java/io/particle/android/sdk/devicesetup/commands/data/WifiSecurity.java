@@ -42,7 +42,6 @@ public enum WifiSecurity {
 
     private static final int ENTERPRISE_ENABLED_MASK = 0x02000000;
 
-    // FIXME: accommodate this better
     public static boolean isEnterpriseNetwork(int value) {
         return (ENTERPRISE_ENABLED_MASK & value) != 0;
     }

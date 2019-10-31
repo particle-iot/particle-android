@@ -9,7 +9,6 @@ import io.particle.android.sdk.utils.SSID;
 import static io.particle.android.sdk.utils.Py.set;
 
 
-// FIXME: this naming... is not ideal.
 public class ScanResultNetwork implements WifiNetwork {
 
     private static final Set<String> wifiSecurityTypes = set("WEP", "PSK", "EAP");

@@ -53,19 +53,6 @@ public class WaitForCloudConnectivityStep extends SetupStep {
             return false;
         }
 
-        // FIXME: why is this commented out?  See what iOS does here now.
-//        try {
-//            cloud.getDevices();
-//        } catch (Exception e) {
-//            log.e("error checking availability: ", e);
-//            // FIXME:
-//            return false;
-//            // At this stage we're technically READY_TO_ACTIVATE with other types of errors
-//            if (set(Kind.NETWORK, Kind.UNEXPECTED).contains(e.getKind())) {
-//                return false;
-//            }
-//        }
-
         return true;
     }
 

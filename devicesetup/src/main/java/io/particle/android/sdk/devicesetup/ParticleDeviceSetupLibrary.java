@@ -33,14 +33,10 @@ public class ParticleDeviceSetupLibrary {
      */
     public interface DeviceSetupCompleteContract {
 
-        /**
-         * The BroadcastIntent action sent when the device setup process is complete.
-         */
+        /** The BroadcastIntent action sent when the device setup process is complete. */
         String ACTION_DEVICE_SETUP_COMPLETE = "ACTION_DEVICE_SETUP_COMPLETE";
 
-        /**
-         * A boolean extra indicating if the setup was successful
-         */
+        /** A boolean extra indicating if the setup was successful */
         String EXTRA_DEVICE_SETUP_WAS_SUCCESSFUL = "EXTRA_DEVICE_SETUP_WAS_SUCCESSFUL";
 
         /**
@@ -62,7 +58,6 @@ public class ParticleDeviceSetupLibrary {
 
         public abstract void onSetupSuccess(@NonNull String configuredDeviceId);
 
-        // FIXME: add some extra error information in onSetupFailed()
         public abstract void onSetupFailure();
 
 
@@ -122,11 +117,6 @@ public class ParticleDeviceSetupLibrary {
         startDeviceSetup(ctx, (ctx1, result) -> new Intent(ctx1, mainActivity));
     }
 
-
-    // FIXME: allow the SDK consumer to optionally pass in some kind of dynamic intent builder here
-    // instead of a static class
-    // FIXME: or, stop requiring an activity at all and just use a single activity for setup which
-    // uses Fragments internally...
 
     /**
      * Initialize the device setup SDK

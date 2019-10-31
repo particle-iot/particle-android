@@ -80,7 +80,6 @@ public class ConnectingProcessWorkerTask extends SetupStepsRunnerTask {
 
         } else {
             log.d("HUZZAH, VICTORY!");
-            // FIXME: handle "success, no ownership" case
             resultCode = SuccessActivity.RESULT_SUCCESS;
 
             if (!BaseActivity.setupOnly) {
@@ -98,8 +97,6 @@ public class ConnectingProcessWorkerTask extends SetupStepsRunnerTask {
                             device.setName(CoreNameGenerator.generateUniqueName(names));
                         }
                     } catch (Exception e) {
-                        // FIXME: do real error handling here, and only
-                        // handle ParticleCloudException instead of swallowing everything
                         e.printStackTrace();
                     }
                 });

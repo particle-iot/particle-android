@@ -48,7 +48,6 @@ import io.particle.android.sdk.utils.ui.WebViewActivity;
 import static io.particle.android.sdk.utils.Py.truthy;
 
 
-// FIXME: this activity is *far* too complicated.  Split it out into smaller components.
 public class DiscoverDeviceActivity extends RequiresWifiScansActivity
         implements WifiListFragment.Client<ScanResultNetwork>, ApConnector.Client {
 
@@ -302,7 +301,6 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
         }
 
         wifiListFragment.stopAggroLoading();
-        // FIXME: verify first that we're still connected to the intended network
         if (!canStartProcessAgain()) {
             hideProgressDialog();
             onMaxAttemptsReached();
@@ -346,7 +344,6 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
                     onDeviceClaimedByOtherUser();
                 } else {
                     // nope, do it all over again.
-                    // FIXME: this might be a good time to display some feedback...
                     startConnectWorker();
                 }
             }
@@ -389,8 +386,6 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
                         (dialog, which) -> {
                             dialog.dismiss();
                             log.i("Changing owner to " + sparkCloud.getLoggedInUsername());
-                            // FIXME: state mutation from another class.  Not pretty.
-                            // Fix this by breaking DiscoverProcessWorker down into Steps
                             resetWorker();
                             discoverProcessWorker.needToClaimDevice = true;
                             discoverProcessWorker.gotOwnershipInfo = true;
@@ -408,9 +403,6 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
                 .show();
     }
 
-    // FIXME: remove this if we break down discover process worker into Steps
-    // no data to pass along with this at the moment, I just want to specify
-    // that this isn't an error which should necessarily count against retries.
     static class DeviceAlreadyClaimed extends SetupStepException {
 
         DeviceAlreadyClaimed(String msg) {

@@ -3,7 +3,8 @@
 
     <string name="brand_name">Particle</string>
     <string name="app_name">@string/brand_name</string>
-    <string name="device_name">Photon</string>
+    <string name="product_name">Photon</string>
+    <string name="device_name">@string/product_name</string>
     <drawable name="device_image">@drawable/photon_vector</drawable>
     <drawable name="device_image_small">@drawable/product_image_photon</drawable>
 
@@ -22,12 +23,6 @@
     <string name="troubleshooting_uri">
         https://community.particle.io/t/spark-core-troubleshooting-guide-spark-team/696
     </string>
-
-    <!-- FIXME: support static HTML for all these -->
-    <string name="terms_of_service_html_file">NOT_DEFINED</string>
-    <string name="privacy_policy_html_file">NOT_DEFINED</string>
-    <string name="forgot_password_html_file">NOT_DEFINED</string>
-    <string name="troubleshooting_html_file">NOT_DEFINED</string>
 
     <bool name="show_sign_up_page_fine_print">true</bool>
 
@@ -63,14 +58,15 @@
     <string name="header_text_font_name">fonts/roboto_light.ttf</string>
 
     <!-- enable invite codes, other APIs -->
+    <bool name="productMode">false</bool>
+    <integer name="product_id">0</integer>
+
     <!-- {@deprecated Use productMode instead.} -->
     <bool name="organization">false</bool>
-    <bool name="productMode">false</bool>
     <!-- {@deprecated Organization settings have been deprecated - set product name and ID only.} -->
     <string name="organization_slug">CHANGE_ME</string>
     <!-- {@deprecated Set productId number instead.} -->
     <string name="product_slug">CHANGE_ME</string>
-    <integer name="product_id">0</integer>
 
     <!-- FIXME: apparently these values aren't customizable on the iOS app? -->
     <string name="indicator_light">indicator light</string>

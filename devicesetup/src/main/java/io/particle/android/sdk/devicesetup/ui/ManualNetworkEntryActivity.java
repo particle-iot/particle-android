@@ -89,7 +89,6 @@ public class ManualNetworkEntryActivity extends BaseActivity
         finish();
     }
 
-    // FIXME: loader not currently used, see note in onLoadFinished()
     @Override
     public Loader<Set<ScanAPCommandResult>> onCreateLoader(int id, Bundle args) {
         return new ScanApCommandLoader(this, commandClientFactory.newClientUsingDefaultsForDevices(wifiFacade, softApSSID));
@@ -97,8 +96,6 @@ public class ManualNetworkEntryActivity extends BaseActivity
 
     @Override
     public void onLoadFinished(Loader<Set<ScanAPCommandResult>> loader, Set<ScanAPCommandResult> data) {
-        // FIXME: perform process described here?:
-        // https://github.com/spark/mobile-sdk-ios/issues/56
     }
 
     @Override

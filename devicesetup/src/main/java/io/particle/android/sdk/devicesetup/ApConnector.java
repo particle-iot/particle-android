@@ -252,8 +252,6 @@ public class ApConnector {
         SSID newlyConnectedSSID = SSID.from(wifiInfo);
         log.i("Connected to: " + newlyConnectedSSID);
         if (newlyConnectedSSID.equals(SSID.from(config))) {
-            // FIXME: find a way to record success in memory in case this happens to happen
-            // during a config change (etc)?
             client.onApConnectionSuccessful(config);
         }
     }

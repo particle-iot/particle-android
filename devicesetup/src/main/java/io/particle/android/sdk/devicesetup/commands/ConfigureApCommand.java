@@ -56,7 +56,6 @@ public class ConfigureApCommand extends Command {
             this.responseCode = responseCode;
         }
 
-        // FIXME: do this for the other ones with just the "responseCode" field
         public boolean isOk() {
             return responseCode == 0;
         }

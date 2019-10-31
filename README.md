@@ -1,4 +1,4 @@
-<p align="center" >
+<p align="center">
 <img src="particle-mark.png" alt="Particle" title="Particle">
 </p>
 
@@ -26,9 +26,7 @@ Full documentation, including a getting started guide, lots of API examples, sup
 * Find answers to common questions at https://support.particle.io
 
 
-## Open source projects
-
-### Requirements for building
+### Requirements for building the Tinker app
 
 1. Get [the latest stable version of Android Studio](https://d.android.com/studio/)
 2. Once you have Android Studio installed, launch it, and from the "Welcome to 
@@ -41,8 +39,7 @@ the toolbar to build and run the app on a device.
 ## Maintainers
 
 - Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
-- Julius Skripkauskas [Github](https://github.com/cityvibes) | [Twitter](https://www.twitter.com/azemar)
-- Ido Kleinman [Github](https://www.github.com/idokleinman) | [Twitter](https://www.twitter.com/idokleinman)
+
 
 ## License
 

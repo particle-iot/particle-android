@@ -28,7 +28,6 @@ public class ConnectDeviceToNetworkStep extends SetupStep {
 
             log.d("Sending connect-ap command");
             ConnectAPCommand.Response response = commandClient.sendCommand(
-                    // FIXME: is hard-coding zero here correct?  If so, document why
                     new ConnectAPCommand(0), ConnectAPCommand.Response.class);
             if (!response.isOK()) {
                 throw new SetupStepException("ConnectAPCommand returned non-zero response code: " +

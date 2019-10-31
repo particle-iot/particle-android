@@ -73,8 +73,6 @@ public abstract class SetupStepsRunnerTask extends
     }
 
     private void throwIfCancelled() {
-        // FIXME: while it's good that we handle being cancelled, this doesn't seem like
-        // an ideal way to do it...
         if (isCancelled()) {
             throw new RuntimeException("Task was cancelled");
         }

@@ -34,8 +34,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         if (!customFontInitDone) {
-            // FIXME: make actually customizable via resources
-            // (see file extension string formatting nonsense)
             CalligraphyConfig.initDefault(
                     new CalligraphyConfig.Builder()
                             .setDefaultFontPath(newBase.getString(R.string.normal_text_font_name))

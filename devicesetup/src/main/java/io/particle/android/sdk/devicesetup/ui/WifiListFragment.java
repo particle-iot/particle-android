@@ -65,7 +65,6 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
         if (isDetached() || client == null) {
             stopAggroLoading();
         } else {
-            // FIXME: just use a rsrc ID for the loader ID instead of this madness.
             Loader<Object> loader = getLoaderManager().getLoader(getClass().hashCode());
             loader.forceLoad();
         }

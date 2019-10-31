@@ -94,7 +94,6 @@ public class SelectNetworkActivity extends RequiresWifiScansActivity
 
     @Override
     public Loader<Set<ScanAPCommandResult>> createLoader(int id, Bundle args) {
-        // FIXME: make the address below use resources instead of hardcoding
         CommandClient client = commandClientFactory.newClientUsingDefaultsForDevices(wifiFacade, softApSSID);
         return new ScanApCommandLoader(this, client);
     }

@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import io.particle.android.sdk.utils.SSID;
 
-// FIXME: Statically defined, global, mutable state...  refactor this thing into oblivion soon.
+
 public class DeviceSetupState {
 
     static final Set<String> claimedDeviceIds = new ConcurrentSkipListSet<>();

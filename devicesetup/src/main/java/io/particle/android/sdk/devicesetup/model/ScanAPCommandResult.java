@@ -5,7 +5,6 @@ import io.particle.android.sdk.devicesetup.commands.data.WifiSecurity;
 import io.particle.android.sdk.utils.SSID;
 
 
-// FIXME: this naming is not ideal.
 public class ScanAPCommandResult implements WifiNetwork {
 
     public final ScanApCommand.Scan scan;
