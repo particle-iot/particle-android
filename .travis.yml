@@ -5,12 +5,12 @@ jdk:
   - oraclejdk8
 
 env:
- global:
+  global:
     - ANDROID_COMPILE_API_LEVEL=28
     - ANDROID_BUILD_TOOLS_VERSION=29.0.2
 
 android:
- components:
+  components:
     - tools
     - platform-tools
     # The BuildTools version used by your project
@@ -21,20 +21,20 @@ android:
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
-    
+
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
     - sys-img-x86-android-28
-#    - sys-img-armeabi-v7a-android-28
+    #    - sys-img-armeabi-v7a-android-28
 
   licenses:
-      - 'android-sdk-preview-license-.+'
-      - 'android-sdk-license-.+'
-      - 'google-gdk-license-.+'
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 
 script:
-    - ./gradlew :cloudsdk:assembleDebug :cloudsdk:createDebugCoverageReport
+  - ./gradlew :cloudsdk:assembleDebug :cloudsdk:createDebugCoverageReport
 
 
 cache:
