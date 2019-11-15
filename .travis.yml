@@ -37,6 +37,8 @@ android:
 script:
   - ./gradlew :cloudsdk:assembleDebug :cloudsdk:createDebugCoverageReport
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 cache:
   directories:
