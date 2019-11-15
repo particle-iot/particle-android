@@ -1,4 +1,5 @@
 language: android
+os: linux
 dist: trusty
 
 jdk:
