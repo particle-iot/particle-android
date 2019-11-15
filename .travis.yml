@@ -35,7 +35,7 @@ android:
 
 
 script:
-  - ./gradlew :cloudsdk:assembleDebug :cloudsdk:createDebugCoverageReport
+  - ./gradlew :cloudsdk:assembleDebug :cloudsdk:testDebugUnitTest :cloudsdk:createDebugCoverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
