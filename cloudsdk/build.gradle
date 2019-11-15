@@ -48,6 +48,16 @@ android {
         consumerProguardFiles 'consumer-proguard-rules.pro'
     }
 
+    testOptions {
+        unitTests.all {
+            testLogging {
+                events "passed", "failed", "standardError"
+                showCauses true
+                showExceptions true
+            }
+        }
+    }
+
     buildTypes {
         debug {
             testCoverageEnabled = true
