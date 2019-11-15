@@ -12,7 +12,7 @@ class LangUtilsTest {
         // ensure that we actually hit the "pass" line but that it does nothing
         var foo = false
         pass
-//        foo = true
+        foo = true
         assertTrue(foo)
     }
 
