@@ -1,7 +1,4 @@
-<!---
-(WIP Update link once we have CI in place)
-[![Build Status](https://travis-ci.org/AFNetworking/AFNetworking.svg)](https://travis-ci.org/Spark-SDK/Spark-SDK)
--->
+![Build Status](https://api.travis-ci.org/particle-iot/particle-android.svg?branch=master)
 
 # Particle Android Cloud SDK
 
