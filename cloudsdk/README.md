@@ -1,7 +1,5 @@
-<!---
-(WIP Update link once we have CI in place)
-[![Build Status](https://travis-ci.org/AFNetworking/AFNetworking.svg)](https://travis-ci.org/Spark-SDK/Spark-SDK)
--->
+[![Build Status](https://api.travis-ci.org/particle-iot/particle-android.svg?branch=master)](https://travis-ci.com/particle-iot/particle-android)
+[![Coverage Status](https://coveralls.io/repos/github/particle-iot/particle-android/badge.svg?branch=master)](https://coveralls.io/github/particle-iot/particle-android?branch=master)
 
 # Particle Android Cloud SDK
 
