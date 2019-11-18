@@ -8,7 +8,7 @@ public class CoreNameGenerator {
 
     private static final Random random = new Random();
 
-    private static final String[] TROCHEES = new String[]{"aardvark", "bacon", "badger", "banjo",
+    static final String[] TROCHEES = new String[]{"aardvark", "bacon", "badger", "banjo",
             "bobcat", "boomer", "captain", "chicken", "cowboy", "maker", "splendid", "useful",
             "dentist", "doctor", "dozen", "easter", "ferret", "gerbil", "hacker", "hamster",
             "sparkling", "hobbit", "hoosier", "hunter", "jester", "jetpack", "kitty", "laser", "lawyer",
