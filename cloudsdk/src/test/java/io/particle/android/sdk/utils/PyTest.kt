@@ -8,7 +8,7 @@ class PyTest {
 
     @Test
     fun emptyListReturnsEmptyList() {
-        val emptyList =  Py.list(1, 2) // Py.list<Any>()
+        val emptyList =  Py.list<Any>()
         assertTrue(emptyList.isEmpty())
     }
 
