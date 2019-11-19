@@ -344,19 +344,16 @@ private class DataListAdapter(
                 override fun callApi(particleDevice: ParticleDevice): String {
                     return try {
                         if (variable.variableType === VariableType.INT) {
+                            // sometimes ints are serialized as floats, sometimes they're
+                            // serialized as actual ints.  Depends on size, I guess?  ¯\_(ツ)_/¯
                             val value = device.getVariable(variable.name).toString()
-                            val dotIndex = value.indexOf(".")
-                            value.substring(
-                                0,
-                                if (dotIndex > 0) dotIndex else value.length
-                            )
+                            value.toFloat().toInt().toString()
                         } else {
                             device.getVariable(variable.name).toString()
                         }
                     } catch (e: ParticleDevice.VariableDoesNotExistException) {
                         throw ParticleCloudException(e)
                     }
-
                 }
 
                 override fun onSuccess(value: String) {
@@ -391,6 +388,7 @@ private class DataListAdapter(
             VariableType.INT -> "(Integer)"
             VariableType.DOUBLE -> "(Double)"
             VariableType.STRING -> "(String)"
+            VariableType.BOOLEAN -> "(Boolean)"
         }
         holder.type.text = type
     }

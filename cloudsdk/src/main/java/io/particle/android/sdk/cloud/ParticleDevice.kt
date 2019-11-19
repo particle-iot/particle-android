@@ -216,7 +216,8 @@ class ParticleDevice internal constructor(
     enum class VariableType {
         INT,
         DOUBLE,
-        STRING
+        STRING,
+        BOOLEAN
     }
 
 
