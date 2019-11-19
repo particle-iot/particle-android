@@ -284,20 +284,5 @@ class ApiDefs {
         @POST("/v1/user/password-reset")
         fun requestPasswordReset(@Field("username") email: String): Response
 
-        @FormUrlEncoded
-        @POST("/v1/products/{productId}/customers/reset_password")
-        fun requestPasswordResetForCustomer(
-            @Field("email") email: String,
-            @Path("productId") productId: Int?
-        ): Response
-
-        @FormUrlEncoded
-        @POST("/v1/orgs/{orgName}/customers/reset_password")
-        @Deprecated("")
-        fun requestPasswordResetForCustomer(
-            @Field("email") email: String,
-            @Path("orgName") orgName: String
-        ): Response
-
     }
 }
