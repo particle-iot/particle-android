@@ -21,7 +21,7 @@ bintray.apikey=0123456789abcdef0123456789abcdef01234567
 
 ### Making releases
 
-See [`RELEASING.md`](../RELEASING.md) at the root of the repo.
+See [`RELEASING.md`](RELEASING.md) at the root of the repo.
 
 
 ## Publishing App Updates
@@ -38,5 +38,5 @@ See [`RELEASING.md`](../RELEASING.md) at the root of the repo.
 
 ### Making releases
 
-See [`RELEASING.md`](../RELEASING.md) at the root of the repo.
+See [`RELEASING.md`](RELEASING.md) at the root of the repo.
 
