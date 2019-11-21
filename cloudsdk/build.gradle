@@ -8,7 +8,7 @@ plugins {
 
 
 // This is the library version used when deploying the artifact
-version = '0.5.1'
+version = '1.0.0'
 
 ext {
     bintrayRepo = 'android'
@@ -59,12 +59,6 @@ android {
                 showCauses true
                 showExceptions true
             }
-        }
-    }
-
-    buildTypes {
-        debug {
-            testCoverageEnabled = true
         }
     }
 

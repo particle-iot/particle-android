@@ -78,10 +78,10 @@ class InspectorActivity : BaseActivity() {
             return
         }
 
+        device = intent.getParcelableExtra(EXTRA_DEVICE)
+
         setContentView(R.layout.activity_inspector)
 
-        device = intent.getParcelableExtra(EXTRA_DEVICE)
-        
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)

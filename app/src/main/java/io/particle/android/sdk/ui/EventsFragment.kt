@@ -19,7 +19,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -218,8 +217,8 @@ class EventsFragment : Fragment() {
     }
 
     private class Event internal constructor(
-        internal var name: String,
-        internal var particleEvent: ParticleEvent
+        internal var name: String?,
+        internal var particleEvent: ParticleEvent?
     )
 
     private class EventListAdapter : RecyclerView.Adapter<EventListAdapter.ViewHolder>() {
@@ -250,10 +249,11 @@ class EventsFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val event = filteredData[position]
+
             holder.eventName.text = event.name
-            holder.eventData.text = event.particleEvent.dataPayload
+            holder.eventData.text = event.particleEvent?.dataPayload
             holder.eventTime.text = SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault())
-                .format(event.particleEvent.publishedAt)
+                .format(event.particleEvent?.publishedAt)
 
             holder.copyButton.setOnClickListener { _ ->
                 val context = holder.itemView.context
@@ -269,14 +269,14 @@ class EventsFragment : Fragment() {
             val jsonObject = JSONObject()
             try {
                 jsonObject.put("Event", event.name)
-                jsonObject.put("DeviceID", event.particleEvent.deviceId)
-                jsonObject.put("Data", event.particleEvent.dataPayload)
+                jsonObject.put("DeviceID", event.particleEvent?.deviceId)
+                jsonObject.put("Data", event.particleEvent?.dataPayload)
                 val dateTime = SimpleDateFormat(
                     "yyyy-MM-dd HH:mm::ssZ",
                     Locale.getDefault()
-                ).format(event.particleEvent.publishedAt)
+                ).format(event.particleEvent?.publishedAt)
                 jsonObject.put("Time", dateTime)
-                jsonObject.put("TTL", event.particleEvent.timeToLive)
+                jsonObject.put("TTL", event.particleEvent?.timeToLive)
             } catch (ignore: JSONException) {
             }
 
@@ -291,7 +291,7 @@ class EventsFragment : Fragment() {
 
         fun add(event: Event) {
             data.add(0, event)
-            if (event.name.contains(filter)) {
+            if (event.name?.contains(filter) == true) {
                 filteredData.add(0, event)
                 notifyItemInserted(0)
             }
@@ -303,7 +303,8 @@ class EventsFragment : Fragment() {
             notifyDataSetChanged()
 
             for (event in data) {
-                if (event.name.contains(filter) || event.particleEvent.dataPayload.contains(filter)) {
+                if (event.name?.contains(filter) == true
+                    || event.particleEvent?.dataPayload?.contains(filter) == true) {
                     filteredData.add(event)
                     notifyItemInserted(data.indexOf(event))
                 }

@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
+import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.devicesetup.BuildConfig
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.onApplicationCreated
@@ -38,6 +40,11 @@ class TinkerApplication : Application() {
                 "OS version=${Build.VERSION.RELEASE},\n" +
                 "App version=$appVersionName,"
         }
+
+        // Use `Log` class to only log this to the system log, and not the separate logs we store
+        // on disk for export on user request
+        val last4 = ParticleCloudSDK.getCloud().accessToken?.takeLast(4) ?: "No token stored yet!"
+        Log.i("ParticleAuth", "Last 4 digits of auth token: $last4")
     }
 }
 

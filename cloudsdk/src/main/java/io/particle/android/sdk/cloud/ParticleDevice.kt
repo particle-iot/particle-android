@@ -216,7 +216,8 @@ class ParticleDevice internal constructor(
     enum class VariableType {
         INT,
         DOUBLE,
-        STRING
+        STRING,
+        BOOLEAN
     }
 
 
@@ -569,12 +570,16 @@ class ParticleDevice internal constructor(
             val eventBus = EventBus.getDefault()
             subscriptions.add(
                 subscribeToSystemEvent("spark/status") { _, particleEvent ->
-                    sendUpdateStatusChange(eventBus, particleEvent.dataPayload)
+                    particleEvent.dataPayload?.let {
+                        sendUpdateStatusChange(eventBus, particleEvent.dataPayload)
+                    }
                 }
             )
             subscriptions.add(
                 subscribeToSystemEvent("spark/flash/status") { _, particleEvent ->
-                    sendUpdateFlashChange(eventBus, particleEvent.dataPayload)
+                    particleEvent.dataPayload?.let {
+                        sendUpdateFlashChange(eventBus, particleEvent.dataPayload)
+                    }
                 }
             )
             subscriptions.add(

@@ -409,26 +409,6 @@ class ParticleCloud internal constructor(
         } catch (error: RetrofitError) {
             throw ParticleCloudException(error)
         }
-
-    }
-
-    @WorkerThread
-    @Throws(ParticleCloudException::class)
-    fun requestPasswordResetForCustomer(email: String, productId: Int) {
-        return runHandlingCommonErrors {
-            identityApi.requestPasswordResetForCustomer(email, productId)
-        }
-    }
-
-    @WorkerThread
-    @Deprecated("")
-    @Throws(ParticleCloudException::class)
-    fun requestPasswordResetForCustomer(email: String, organizationSlug: String) {
-        return runHandlingCommonErrors {
-            log.w("Use product id instead of organization slug.")
-            @Suppress("DEPRECATION")
-            identityApi.requestPasswordResetForCustomer(email, organizationSlug)
-        }
     }
 
     @WorkerThread
@@ -1060,6 +1040,7 @@ class ParticleCloud internal constructor(
                         "int32" -> VariableType.INT
                         "double" -> VariableType.DOUBLE
                         "string" -> VariableType.STRING
+                        "bool" -> VariableType.BOOLEAN
                         else -> null
                     }
                 }

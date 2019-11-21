@@ -19,6 +19,7 @@ object Toaster {
      *
      * This is safe to call from background/worker threads.
      */
+    @JvmStatic
     fun s(activity: Activity, msg: String?) {
         showToast(activity, msg, Toast.LENGTH_SHORT)
     }
@@ -29,6 +30,7 @@ object Toaster {
      *
      * This is safe to call from background/worker threads.
      */
+    @JvmStatic
     fun l(activity: Activity, msg: String?) {
         showToast(activity, msg, Toast.LENGTH_LONG)
     }
