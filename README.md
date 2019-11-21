@@ -44,6 +44,9 @@ As described at the top of the document, there are three distinct products produ
 
 - Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
 
+### Maintainer docs
+[`RELEASING.md`](RELEASING.md)
+
 
 ## License
 
