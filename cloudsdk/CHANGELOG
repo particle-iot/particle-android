@@ -1,3 +1,13 @@
+1.0.0
+=====
+* Add support for boolean variables
+* Remove requestPasswordResetForCustomer() since this functionality has been removed from the
+  Particle Cloud
+* Change nullability contract of ParticleEvent to reflect that almost anything can be null
+* Bump to 1.0.0, both to signify that we are no longer considered beta, and because this release
+  makes a couple breaking changes.
+
+
 0.5.1
 =====
 * New features - Two factor authentication.
