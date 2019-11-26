@@ -2,126 +2,133 @@ package io.particle.android.sdk.persistance
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import java.util.*
 import javax.annotation.ParametersAreNonnullByDefault
 
-// FIXME: crib the code from the Vault example to do crypto for all these values.
+
+interface SensitiveDataStorage {
+
+    val user: String?
+    val password: String?
+    val token: String?
+    val refreshToken: String?
+    val tokenExpirationDate: Date?
+    val hasEverHadStoredUsername: Boolean
+
+    fun saveUser(user: String?)
+    fun resetUser()
+
+    fun savePassword(password: String?)
+    fun resetPassword()
+
+    fun saveToken(token: String?)
+    fun resetToken()
+
+    fun resetRefreshToken()
+    fun saveRefreshToken(token: String?)
+
+    fun saveTokenExpirationDate(expirationDate: Date)
+    fun resetTokenExpirationDate()
+
+    fun saveHasEverHadStoredUsername(value: Boolean)
+}
+
+
+
+private const val KEY_USERNAME = "KEY_USERNAME"
+private const val KEY_PASSWORD = "KEY_PASSWORD"
+private const val KEY_TOKEN = "KEY_TOKEN"
+private const val KEY_TOKEN_EXPIRATION_DATE = "KEY_TOKEN_EXPIRATION_DATE"
+private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
+private const val KEY_HAS_EVER_HAD_STORED_USERNAME = "KEY_HAS_EVER_HAD_STORED_USERNAME"
+
+
 @ParametersAreNonnullByDefault
-class SensitiveDataStorage(ctx: Context) {
+internal class SensitiveDataStorageImpl(context: Context) : SensitiveDataStorage {
+
     private val sharedPrefs: SharedPreferences
-    fun saveUser(user: String?) {
-        if (user != null && !user.isEmpty()) {
-            saveHasEverHadStoredUsername(true)
-        }
-        sharedPrefs.edit()
-            .putString(KEY_USERNAME, user)
-            .apply()
+
+    init {
+        val ctx = context.applicationContext
+        sharedPrefs = ctx.getSharedPreferences("spark_sdk_sensitive_data", Context.MODE_PRIVATE)
     }
 
-    val user: String
+
+    override val user: String?
         get() = sharedPrefs.getString(KEY_USERNAME, null)
 
-    fun resetUser() {
-        sharedPrefs.edit()
-            .remove(KEY_USERNAME)
-            .apply()
+    override fun saveUser(user: String?) {
+        if (user != null && user.isNotEmpty()) {
+            saveHasEverHadStoredUsername(true)
+        }
+        sharedPrefs.edit { putString(KEY_USERNAME, user) }
     }
 
-    fun savePassword(password: String?) {
-        sharedPrefs.edit()
-            .putString(KEY_PASSWORD, password)
-            .apply()
+    override fun resetUser() {
+        sharedPrefs.edit { remove(KEY_USERNAME) }
     }
 
-    val password: String
+
+    override val password: String?
         get() = sharedPrefs.getString(KEY_PASSWORD, null)
 
-    fun resetPassword() {
-        sharedPrefs.edit()
-            .remove(KEY_PASSWORD)
-            .apply()
+    override fun savePassword(password: String?) {
+        sharedPrefs.edit { putString(KEY_PASSWORD, password) }
     }
 
-    fun saveToken(token: String?) {
-        sharedPrefs.edit()
-            .putString(KEY_TOKEN, token)
-            .apply()
+    override fun resetPassword() {
+        sharedPrefs.edit { remove(KEY_PASSWORD) }
     }
 
-    val token: String
+
+    override val token: String?
         get() = sharedPrefs.getString(KEY_TOKEN, null)
 
-    fun resetToken() {
-        sharedPrefs.edit()
-            .remove(KEY_TOKEN)
-            .apply()
+    override fun saveToken(token: String?) {
+        sharedPrefs.edit { putString(KEY_TOKEN, token) }
     }
 
-    fun resetRefreshToken() {
-        sharedPrefs.edit()
-            .remove(KEY_REFRESH_TOKEN)
-            .apply()
+    override fun resetToken() {
+        sharedPrefs.edit { remove(KEY_TOKEN) }
     }
 
-    fun saveRefreshToken(token: String?) {
-        sharedPrefs.edit()
-            .putString(KEY_REFRESH_TOKEN, token)
-            .apply()
-    }
 
-    val refreshToken: String?
+    override val refreshToken: String?
         get() = sharedPrefs.getString(KEY_REFRESH_TOKEN, null)
 
-    fun saveTokenExpirationDate(expirationDate: Date) {
-        sharedPrefs.edit()
-            .putLong(
-                KEY_TOKEN_EXPIRATION_DATE,
-                expirationDate.time
-            )
-            .apply()
+    override fun resetRefreshToken() {
+        sharedPrefs.edit { remove(KEY_REFRESH_TOKEN) }
     }
 
-    val tokenExpirationDate: Date?
+    override fun saveRefreshToken(token: String?) {
+        sharedPrefs.edit { putString(KEY_REFRESH_TOKEN, token) }
+    }
+
+
+    override val tokenExpirationDate: Date?
         get() {
-            val expirationTs =
-                sharedPrefs.getLong(KEY_TOKEN_EXPIRATION_DATE, -1)
+            val expirationTs = sharedPrefs.getLong(KEY_TOKEN_EXPIRATION_DATE, -1)
             return if (expirationTs == -1L) null else Date(expirationTs)
         }
 
-    fun resetTokenExpirationDate() {
-        sharedPrefs.edit()
-            .remove(KEY_TOKEN_EXPIRATION_DATE)
-            .apply()
+    override fun saveTokenExpirationDate(expirationDate: Date) {
+        sharedPrefs.edit { putLong(KEY_TOKEN_EXPIRATION_DATE, expirationDate.time) }
     }
 
-    val hasEverHadStoredUsername: Boolean
+    override fun resetTokenExpirationDate() {
+        sharedPrefs.edit { remove(KEY_TOKEN_EXPIRATION_DATE) }
+    }
+
+
+    override val hasEverHadStoredUsername: Boolean
         get() = sharedPrefs.getBoolean(
             KEY_HAS_EVER_HAD_STORED_USERNAME,
             false
         )
 
-    private fun saveHasEverHadStoredUsername(value: Boolean) {
-        sharedPrefs.edit()
-            .putBoolean(KEY_HAS_EVER_HAD_STORED_USERNAME, value)
-            .apply()
+    override fun saveHasEverHadStoredUsername(value: Boolean) {
+        sharedPrefs.edit { putBoolean(KEY_HAS_EVER_HAD_STORED_USERNAME, value) }
     }
 
-    companion object {
-        private const val KEY_USERNAME = "KEY_USERNAME"
-        private const val KEY_PASSWORD = "KEY_PASSWORD"
-        private const val KEY_TOKEN = "KEY_TOKEN"
-        private const val KEY_TOKEN_EXPIRATION_DATE = "KEY_TOKEN_EXPIRATION_DATE"
-        private const val KEY_REFRESH_TOKEN = "KEY_REFRESH_TOKEN"
-        private const val KEY_HAS_EVER_HAD_STORED_USERNAME =
-            "KEY_HAS_EVER_HAD_STORED_USERNAME"
-    }
-
-    init {
-        var ctx = ctx
-        ctx = ctx.applicationContext
-        sharedPrefs = ctx.getSharedPreferences(
-            "spark_sdk_sensitive_data",
-            Context.MODE_PRIVATE
-        )
-    }
 }

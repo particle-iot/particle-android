@@ -20,6 +20,7 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
 import io.particle.android.sdk.cloud.models.*
 import io.particle.android.sdk.persistance.AppDataStorage
+import io.particle.android.sdk.utils.Broadcaster
 import io.particle.android.sdk.utils.Py.all
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
@@ -48,7 +49,8 @@ class ParticleCloud internal constructor(
     private val mainApi: ApiDefs.CloudApi,
     private val identityApi: ApiDefs.IdentityApi,
     private val appDataStorage: AppDataStorage,
-    private val broadcastManager: LocalBroadcastManager,
+    private val broadcastManager: Broadcaster,
+
     gson: Gson,
     executor: ExecutorService
 ) {
