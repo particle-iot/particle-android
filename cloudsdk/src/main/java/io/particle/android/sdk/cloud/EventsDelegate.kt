@@ -1,11 +1,11 @@
 package io.particle.android.sdk.cloud
 
 
-import android.net.Uri
 import androidx.annotation.WorkerThread
 import androidx.collection.LongSparseArray
 import androidx.collection.keyIterator
 import com.google.gson.Gson
+import com.squareup.okhttp.HttpUrl
 import io.particle.android.sdk.cloud.ApiDefs.CloudApi
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.utils.Py.truthy
@@ -29,12 +29,17 @@ import javax.annotation.ParametersAreNonnullByDefault
 @ParametersAreNonnullByDefault
 internal class EventsDelegate(
     private val cloudApi: CloudApi,
-    baseApiUri: Uri,
+    baseApiUrl: HttpUrl,
     private val gson: Gson,
     private val executor: ExecutorService,
     cloud: ParticleCloud
 ) {
-    private val uris: EventApiUris
+
+    companion object {
+        private val log = TLog.get(EventsDelegate::class.java)
+    }
+
+    private val uris: EventApiUrls
     private val eventSourceFactory: SseEventSourceFactory
 
     private val subscriptionIdGenerator = AtomicLong(1)
@@ -42,7 +47,7 @@ internal class EventsDelegate(
 
     init {
         this.eventSourceFactory = AuthenticatedEventSourceFactory(cloud)
-        this.uris = EventApiUris(baseApiUri)
+        this.uris = EventApiUrls(baseApiUrl)
     }
 
     @WorkerThread
@@ -64,13 +69,13 @@ internal class EventsDelegate(
     @WorkerThread
     @Throws(IOException::class)
     fun subscribeToAllEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
-        return subscribeToEventWithUri(uris.buildAllEventsUri(eventNamePrefix), handler)
+        return subscribeToEventWithUrl(uris.buildAllEventsUrl(eventNamePrefix), handler)
     }
 
     @WorkerThread
     @Throws(IOException::class)
     fun subscribeToMyDevicesEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
-        return subscribeToEventWithUri(uris.buildMyDevicesEventUri(eventNamePrefix), handler)
+        return subscribeToEventWithUrl(uris.buildMyDevicesEventUrl(eventNamePrefix), handler)
     }
 
     @WorkerThread
@@ -80,8 +85,8 @@ internal class EventsDelegate(
         deviceID: String,
         eventHandler: ParticleEventHandler
     ): Long {
-        return subscribeToEventWithUri(
-            uris.buildSingleDeviceEventUri(eventNamePrefix, deviceID),
+        return subscribeToEventWithUrl(
+            uris.buildSingleDeviceEventUrl(eventNamePrefix, deviceID),
             eventHandler
         )
     }
@@ -131,7 +136,7 @@ internal class EventsDelegate(
     }
 
     @Throws(IOException::class)
-    private fun subscribeToEventWithUri(uri: Uri, handler: ParticleEventHandler): Long {
+    private fun subscribeToEventWithUrl(uri: HttpUrl, handler: ParticleEventHandler): Long {
         val subscriptionId = subscriptionIdGenerator.getAndIncrement()
         val reader = EventReader(handler, executor, gson, uri, eventSourceFactory)
         // log.d("Created event subscription with ID " + subscriptionId + " for URI " + uri);
@@ -147,7 +152,7 @@ internal class EventsDelegate(
         internal val handler: ParticleEventHandler,
         internal val executor: ExecutorService,
         internal val gson: Gson,
-        uri: Uri,
+        uri: HttpUrl,
         factory: SseEventSourceFactory
     ) {
         internal val sseEventSource: SseEventSource
@@ -215,50 +220,45 @@ internal class EventsDelegate(
         }
     }
 
-    private class EventApiUris internal constructor(baseUri: Uri) {
+    private class EventApiUrls internal constructor(baseUrl: HttpUrl) {
 
-        private val EVENTS = "events"
-
-        private val allEventsUri: Uri
-        private val devicesBaseUri: Uri
-        private val myDevicesEventsUri: Uri
+        private val allEventsUrl: HttpUrl
+        private val devicesBaseUrl: HttpUrl
+        private val myDevicesEventsUrl: HttpUrl
 
         init {
-            allEventsUri = baseUri.buildUpon().path("/v1/$EVENTS").build()
-            devicesBaseUri = baseUri.buildUpon().path("/v1/devices").build()
-            myDevicesEventsUri = devicesBaseUri.buildUpon().appendPath(EVENTS).build()
+            allEventsUrl = baseUrl.newBuilder().addPathSegment("/v1/$EVENTS").build()
+            devicesBaseUrl = baseUrl.newBuilder().addPathSegment("/v1/devices").build()
+            myDevicesEventsUrl = devicesBaseUrl.newBuilder().addPathSegment(EVENTS).build()
         }
 
-        internal fun buildAllEventsUri(eventNamePrefix: String?): Uri {
+        internal fun buildAllEventsUrl(eventNamePrefix: String?): HttpUrl {
             return if (truthy(eventNamePrefix)) {
-                allEventsUri.buildUpon().appendPath(eventNamePrefix).build()
+                allEventsUrl.newBuilder().addPathSegment(eventNamePrefix).build()
             } else {
-                allEventsUri
+                allEventsUrl
             }
         }
 
-        internal fun buildMyDevicesEventUri(eventNamePrefix: String?): Uri {
+        internal fun buildMyDevicesEventUrl(eventNamePrefix: String?): HttpUrl {
             return if (truthy(eventNamePrefix)) {
-                myDevicesEventsUri.buildUpon().appendPath(eventNamePrefix).build()
+                myDevicesEventsUrl.newBuilder().addPathSegment(eventNamePrefix).build()
             } else {
-                myDevicesEventsUri
+                myDevicesEventsUrl
             }
         }
 
-        internal fun buildSingleDeviceEventUri(eventNamePrefix: String?, deviceId: String): Uri {
-            val builder = devicesBaseUri.buildUpon()
-                .appendPath(deviceId)
-                .appendPath(EVENTS)
+        internal fun buildSingleDeviceEventUrl(eventNamePrefix: String?, deviceId: String): HttpUrl {
+            val builder = devicesBaseUrl.newBuilder()
+                .addPathSegment(deviceId)
+                .addPathSegment(EVENTS)
             if (truthy(eventNamePrefix)) {
-                builder.appendPath(eventNamePrefix)
+                builder.addPathSegment(eventNamePrefix)
             }
             return builder.build()
         }
     }
 
-    companion object {
-
-        private val log = TLog.get(EventsDelegate::class.java)
-    }
-
 }
+
+private const val EVENTS = "events"
