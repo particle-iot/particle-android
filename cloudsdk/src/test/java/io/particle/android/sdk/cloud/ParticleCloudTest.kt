@@ -82,7 +82,7 @@ class ParticleCloudTest {
         assertEquals(claimCode, claimCodeResponse.claimCode)
         assertEquals("blank=okhttp_appeasement", request.body.readUtf8())
     }
-    
+
     @Test
     fun test_generateClaimCodeWithProductId() {
         val productId = 42
@@ -126,107 +126,18 @@ class ParticleCloudTest {
 
     @Test
     fun test_getDevices() {
-        val deviceId0 = "d34db33f52ca40bd34db33f0"
-        val deviceId1 = "d34db33f52ca40bd34db33f1"
-
-        val deviceState0 = DeviceState(
-            deviceId0,
-            ParticleDeviceType.XENON.intValue,
-            ParticleDeviceType.XENON.intValue,
-            "64.124.183.01",
-            null,
-            "normal",
-            "device0",
-            true,
-            false,
-            null,
-            null,
-            "1.4.0",
-            "1.4.4",
-            setOf(),
-            mapOf(),
-            ParticleDeviceType.XENON,
-            null,
-            "XENKAB8D34DB33F",
-            "ABCDEFG01234567",
-            null,
-            "1.4.0",
-            null
-        )
         val device0 = ParticleDevice(
             mainApi,
             cloud,
-            deviceState0
-        )
-
-        val deviceState1 = DeviceState(
-            deviceId1,
-            ParticleDeviceType.ARGON.intValue,
-            ParticleDeviceType.ARGON.intValue,
-            "64.124.183.02",
-            null,
-            "normal",
-            "device1",
-            true,
-            false,
-            null,
-            null,
-            "1.4.2",
-            "1.4.4",
-            setOf(),
-            mapOf(),
-            ParticleDeviceType.ARGON,
-            null,
-            "ARGHAB8D34DB33F",
-            "ABCDEFG01234567",
-            null,
-            "1.4.2",
-            null
+            DEVICE_STATE_0
         )
         val device1 = ParticleDevice(
             mainApi,
             cloud,
-            deviceState1
+            DEVICE_STATE_1
         )
 
-        val body = """
-            [{"id":"$deviceId0",
-            "name":"device0",
-            "last_app":null,
-            "last_ip_address":"64.124.183.01",
-            "last_heard":null,
-            "product_id":14,
-            "connected":true,
-            "platform_id":14,
-            "cellular":false,
-            "notes":null,
-            "status":"normal",
-            "serial_number":"XENKAB8D34DB33F",
-            "mobile_secret":"ABCDEFG01234567",
-            "current_build_target":"1.4.0",
-            "system_firmware_version":"1.4.0",
-            "default_build_target":"1.4.4"},
-            {"id":"$deviceId1",
-            "name":"device1",
-            "last_app":null,
-            "last_ip_address":"64.124.183.02",
-            "last_heard":null,
-            "product_id":12,
-            "connected":true,
-            "platform_id":12,
-            "cellular":false,
-            "notes":null,
-            "status":"normal",
-            "serial_number":"ARGHAB8D34DB33F",
-            "mobile_secret":"ABCDEFG01234567",
-            "current_build_target":"1.4.2",
-            "system_firmware_version":"1.4.2",
-            "default_build_target":"1.4.4"
-            }
-            ]
-        """
-
-        enqueueNew200ResponseWithBody(body)
+        enqueueNew200ResponseWithBody(DEVICE_LIST_JSON)
         val devices = cloud.getDevices()
         assertEquals(devices[0], device0)
         assertEquals(devices[1], device1)
