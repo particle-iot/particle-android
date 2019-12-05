@@ -1,10 +1,11 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
-import android.net.Uri;
 
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.squareup.okhttp.HttpUrl;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +22,8 @@ import io.particle.android.sdk.cloud.ApiDefs.IdentityApi;
 import io.particle.android.sdk.cloud.ApiFactory.OauthBasicAuthCredentialsProvider;
 import io.particle.android.sdk.cloud.ApiFactory.ResourceValueBasicAuthCredentialsProvider;
 import io.particle.android.sdk.cloud.ApiFactory.TokenGetterDelegate;
+import io.particle.android.sdk.utils.BroadcastImpl;
+import retrofit.RestAdapter.LogLevel;
 
 
 // FIXME: there are a lot of details lacking in this class, but it's not public API, and the
@@ -36,7 +39,7 @@ class SDKProvider {
 
     SDKProvider(Context context,
                 @Nullable OauthBasicAuthCredentialsProvider oAuthCredentialsProvider,
-                Uri uri) {
+                HttpUrl uri) {
         this.ctx = context.getApplicationContext();
 
         if (oAuthCredentialsProvider == null) {
@@ -46,7 +49,8 @@ class SDKProvider {
 
         tokenGetter = new TokenGetterDelegateImpl();
 
-        ApiFactory apiFactory = new ApiFactory(ctx, tokenGetter, oAuthCredentialsProvider, uri);
+        LogLevel httpLogLevel = LogLevel.valueOf(ctx.getString(R.string.http_log_level));
+        ApiFactory apiFactory = new ApiFactory(uri, httpLogLevel, tokenGetter, oAuthCredentialsProvider);
         cloudApi = apiFactory.buildNewCloudApi();
         identityApi = apiFactory.buildNewIdentityApi();
         particleCloud = buildCloud(apiFactory);
@@ -69,17 +73,15 @@ class SDKProvider {
     private ParticleCloud buildCloud(ApiFactory apiFactory) {
         SDKGlobals.init(ctx);
 
-        // FIXME: see if this TokenGetterDelegate setter issue can be resolved reasonably
         ParticleCloud cloud = new ParticleCloud(
                 apiFactory.getApiUri(),
                 cloudApi,
                 identityApi,
                 SDKGlobals.getAppDataStorage(),
-                LocalBroadcastManager.getInstance(ctx),
+                new BroadcastImpl(LocalBroadcastManager.getInstance(ctx)),
                 apiFactory.getGsonInstance(),
                 buildExecutor()
         );
-        // FIXME: gross circular dependency
         tokenGetter.cloud = cloud;
 
         return cloud;

@@ -1,18 +1,21 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
-import android.net.Uri;
-import androidx.annotation.StringRes;
 import android.util.Base64;
 
+import androidx.annotation.StringRes;
+
 import com.google.gson.Gson;
+import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import okio.ByteString;
 import retrofit.RestAdapter;
+import retrofit.RestAdapter.Log;
 import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
@@ -28,7 +31,6 @@ public class ApiFactory {
     private static final int REGULAR_TIMEOUT = 35;
 
 
-    // FIXME: this feels kind of lame... but maybe it's READY_TO_ACTIVATE in practice. Need to think more about it.
     public interface TokenGetterDelegate {
 
         String getTokenValue();
@@ -44,22 +46,24 @@ public class ApiFactory {
     }
 
 
-    private final Context ctx;
     private final TokenGetterDelegate tokenDelegate;
     private final OkHttpClient normalTimeoutClient;
     private final OauthBasicAuthCredentialsProvider basicAuthCredentialsProvider;
     private final Gson gson;
-    private final Uri apiBaseUri;
+    private final LogLevel httpLogLevel;
+    private final HttpUrl apiBaseUri;
 
-    ApiFactory(Context ctx,
-               TokenGetterDelegate tokenGetterDelegate,
-               OauthBasicAuthCredentialsProvider basicAuthProvider,
-               Uri uri) {
-        this.ctx = ctx.getApplicationContext();
+    ApiFactory(
+            HttpUrl uri,
+            LogLevel httpLogLevel,
+            TokenGetterDelegate tokenGetterDelegate,
+            OauthBasicAuthCredentialsProvider basicAuthProvider
+    ) {
         this.tokenDelegate = tokenGetterDelegate;
         this.basicAuthCredentialsProvider = basicAuthProvider;
         this.gson = new Gson();
         this.apiBaseUri = uri;
+        this.httpLogLevel = httpLogLevel;
 
         normalTimeoutClient = buildClientWithTimeout(REGULAR_TIMEOUT);
     }
@@ -89,7 +93,7 @@ public class ApiFactory {
         return restAdapter.create(ApiDefs.IdentityApi.class);
     }
 
-    Uri getApiUri() {
+    HttpUrl getApiUri() {
         return apiBaseUri;
     }
 
@@ -101,7 +105,8 @@ public class ApiFactory {
         String authString = String.format("%s:%s",
                 basicAuthCredentialsProvider.getClientId(),
                 basicAuthCredentialsProvider.getClientSecret());
-        return "Basic " + Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
+        ByteString authBytes = ByteString.of(authString.getBytes());
+        return "Basic " + authBytes.base64();
     }
 
     private RestAdapter.Builder buildCommonRestAdapterBuilder(Gson gson, OkHttpClient client) {
@@ -109,7 +114,7 @@ public class ApiFactory {
                 .setClient(new OkClient(client))
                 .setConverter(new GsonConverter(gson))
                 .setEndpoint(getApiUri().toString())
-                .setLogLevel(LogLevel.valueOf(ctx.getString(R.string.http_log_level)));
+                .setLogLevel(httpLogLevel);
     }
 
 

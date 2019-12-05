@@ -1,9 +1,10 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
-import android.net.Uri;
 
 import androidx.annotation.Nullable;
+
+import com.squareup.okhttp.HttpUrl;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -44,12 +45,12 @@ public class ParticleCloudSDK {
         }
 
         String asString = ctx.getString(R.string.api_base_uri);
-        doInit(ctx, oauthProvider, Uri.parse(asString));
+        doInit(ctx, oauthProvider, HttpUrl.parse(asString));
     }
 
     private static void doInit(Context ctx,
                                @Nullable OauthBasicAuthCredentialsProvider oauthProvider,
-                               Uri uri) {
+                               HttpUrl uri) {
         Context appContext = ctx.getApplicationContext();
         SDKProvider sdkProvider = new SDKProvider(appContext, oauthProvider, uri);
         instance = new ParticleCloudSDK(sdkProvider);
@@ -62,7 +63,7 @@ public class ParticleCloudSDK {
 
     // FIXME: when switching this to Kotlin, find the best way to mark this as
     // usable only from Particle packages
-    static void reinitializeWithNewBaseApiUri(Context ctx, Uri newUri) {
+    static void reinitializeWithNewBaseApiUri(Context ctx, HttpUrl newUri) {
         doInit(ctx, null, newUri);
     }
 

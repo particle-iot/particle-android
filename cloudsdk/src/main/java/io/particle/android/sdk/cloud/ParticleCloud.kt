@@ -9,6 +9,7 @@ import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
+import com.squareup.okhttp.HttpUrl
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.Responses.CardOnFileResponse
@@ -19,6 +20,7 @@ import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException
 import io.particle.android.sdk.cloud.models.*
 import io.particle.android.sdk.persistance.AppDataStorage
+import io.particle.android.sdk.utils.Broadcaster
 import io.particle.android.sdk.utils.Py.all
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
@@ -43,11 +45,12 @@ import kotlin.collections.set
 
 
 class ParticleCloud internal constructor(
-    schemeAndHostname: Uri,
+    schemeAndHostname: HttpUrl,
     private val mainApi: ApiDefs.CloudApi,
     private val identityApi: ApiDefs.IdentityApi,
     private val appDataStorage: AppDataStorage,
-    private val broadcastManager: LocalBroadcastManager,
+    private val broadcastManager: Broadcaster,
+
     gson: Gson,
     executor: ExecutorService
 ) {
