@@ -2,12 +2,10 @@ package io.particle.android.sdk.cloud
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.squareup.okhttp.HttpUrl
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
