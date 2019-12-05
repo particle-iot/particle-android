@@ -1,30 +1,15 @@
 package io.particle.android.sdk.cloud
 
 import android.content.Intent
-import android.net.Uri
 import com.google.gson.Gson
 import com.squareup.okhttp.HttpUrl
 import com.squareup.okhttp.mockwebserver.MockResponse
 import com.squareup.okhttp.mockwebserver.MockWebServer
-import io.particle.android.sdk.cloud.ApiDefs.CloudApi
-import io.particle.android.sdk.cloud.ApiDefs.IdentityApi
+import com.squareup.okhttp.mockwebserver.RecordedRequest
 import io.particle.android.sdk.cloud.ApiFactory.OauthBasicAuthCredentialsProvider
 import io.particle.android.sdk.cloud.ApiFactory.TokenGetterDelegate
-import io.particle.android.sdk.cloud.Responses.CallFunctionResponse
-import io.particle.android.sdk.cloud.Responses.CardOnFileResponse
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.Responses.ClaimCodeResponse
-import io.particle.android.sdk.cloud.Responses.DeviceMeshMembership
-import io.particle.android.sdk.cloud.Responses.FirmwareUpdateInfoResponse
-import io.particle.android.sdk.cloud.Responses.LogInResponse
-import io.particle.android.sdk.cloud.Responses.MeshNetworkRegistrationResponse
-import io.particle.android.sdk.cloud.Responses.Models.CompleteDevice
-import io.particle.android.sdk.cloud.Responses.PingResponse
-import io.particle.android.sdk.cloud.Responses.ReadDoubleVariableResponse
-import io.particle.android.sdk.cloud.Responses.ReadIntVariableResponse
-import io.particle.android.sdk.cloud.Responses.ReadObjectVariableResponse
-import io.particle.android.sdk.cloud.Responses.ReadStringVariableResponse
-import io.particle.android.sdk.cloud.Responses.SimpleResponse
-import io.particle.android.sdk.cloud.models.*
 import io.particle.android.sdk.persistance.AppDataStorage
 import io.particle.android.sdk.persistance.SensitiveDataStorage
 import io.particle.android.sdk.utils.Broadcaster
@@ -33,8 +18,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import retrofit.RestAdapter.LogLevel
-import retrofit.client.Response
-import retrofit.mime.TypedOutput
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -47,6 +30,7 @@ class ParticleCloudTest {
 
     lateinit var cloud: ParticleCloud
     lateinit var mockServer: MockWebServer
+    private lateinit var mainApi: ApiDefs.CloudApi
 
     @Before
     fun setUp() {
@@ -77,10 +61,12 @@ class ParticleCloudTest {
         // use actual ApiFactory to build other dependencies
         val factory = ApiFactory(FAKE_API_URL, LogLevel.FULL, tokenDelegate, credsProvider)
 
+        mainApi = factory.buildNewCloudApi()
+
         // build the cloud itself
         cloud = ParticleCloud(
             FAKE_API_URL,
-            factory.buildNewCloudApi(),
+            mainApi,
             factory.buildNewIdentityApi(),
             SDKGlobals.appDataStorage!!,
             FakeBroadcaster(),
@@ -91,35 +77,166 @@ class ParticleCloudTest {
 
     @Test
     fun test_generateClaimCode() {
+        val (claimCode, request, claimCodeResponse) = setUpClaimCodeTest()
+
+        assertEquals(claimCode, claimCodeResponse.claimCode)
+        assertEquals("blank=okhttp_appeasement", request.body.readUtf8())
+    }
+
+    @Test
+    fun test_generateClaimCodeWithProductId() {
+        val productId = 42
+        val (claimCode, request, claimCodeResponse) = setUpClaimCodeTest(productId)
+
+        assertEquals(claimCode, claimCodeResponse.claimCode)
+        assertEquals("blank=okhttp_appeasement", request.body.readUtf8())
+        // verify that we are using the product ID URL
+        assertEquals("/v1/products/$productId/device_claims", request.path)
+    }
+
+    private fun setUpClaimCodeTest(productId: Int? = null): Triple<String, RecordedRequest, ClaimCodeResponse> {
         val claimCode = "fed14c9c3b04058562b193c992f37b18604ca0e8"
         val deviceId1 = "fa80c4a898849e1bb35ada62"
         val deviceId2 = "afada5fe1b4fa16e9f499416"
 
-        val mockedResponse = MockResponse()
-        mockedResponse.setResponseCode(200)
-        // For many responses with smaller bodies, we could do this JSON inline, right in the test.
-        // For larger response bodies, we can bust it out into separate test  files
-        mockedResponse.setBody(""" {
+        val mockedResponse = enqueueNew200ResponseWithBody(
+            """ {
             claim_code: "$claimCode",
             device_ids: [
                 "$deviceId1",
                 "$deviceId2"
             ]
-        }""".trimIndent()
+        }"""
         )
 
         // set the response
         mockServer.enqueue(mockedResponse)
 
         // make the API call
-        val claimCodeResponse = cloud.generateClaimCode()
+        val claimCodeResponse = if (productId == null) {
+            cloud.generateClaimCode()
+        } else {
+            cloud.generateClaimCode(productId)
+        }
         // grab the request that was given to the mock server
         val request = mockServer.takeRequest()
 
-        // compare our results!
-        assertEquals(claimCode, claimCodeResponse.claimCode)
-        // We don't actually care about this, but it demonstrates the ability to examine requests
-        assertEquals(request.body.readUtf8(), "blank=okhttp_appeasement")
+        return Triple(claimCode, request, claimCodeResponse)
+    }
+
+    @Test
+    fun test_getDevices() {
+        val deviceId0 = "d34db33f52ca40bd34db33f0"
+        val deviceId1 = "d34db33f52ca40bd34db33f1"
+
+        val deviceState0 = DeviceState(
+            deviceId0,
+            ParticleDeviceType.XENON.intValue,
+            ParticleDeviceType.XENON.intValue,
+            "64.124.183.01",
+            null,
+            "normal",
+            "device0",
+            true,
+            false,
+            null,
+            null,
+            "1.4.0",
+            "1.4.4",
+            setOf(),
+            mapOf(),
+            ParticleDeviceType.XENON,
+            null,
+            "XENKAB8D34DB33F",
+            "ABCDEFG01234567",
+            null,
+            "1.4.0",
+            null
+        )
+        val device0 = ParticleDevice(
+            mainApi,
+            cloud,
+            deviceState0
+        )
+
+        val deviceState1 = DeviceState(
+            deviceId1,
+            ParticleDeviceType.ARGON.intValue,
+            ParticleDeviceType.ARGON.intValue,
+            "64.124.183.02",
+            null,
+            "normal",
+            "device1",
+            true,
+            false,
+            null,
+            null,
+            "1.4.2",
+            "1.4.4",
+            setOf(),
+            mapOf(),
+            ParticleDeviceType.ARGON,
+            null,
+            "ARGHAB8D34DB33F",
+            "ABCDEFG01234567",
+            null,
+            "1.4.2",
+            null
+        )
+        val device1 = ParticleDevice(
+            mainApi,
+            cloud,
+            deviceState1
+        )
+
+        val body = """
+            [{"id":"$deviceId0",
+            "name":"device0",
+            "last_app":null,
+            "last_ip_address":"64.124.183.01",
+            "last_heard":null,
+            "product_id":14,
+            "connected":true,
+            "platform_id":14,
+            "cellular":false,
+            "notes":null,
+            "status":"normal",
+            "serial_number":"XENKAB8D34DB33F",
+            "mobile_secret":"ABCDEFG01234567",
+            "current_build_target":"1.4.0",
+            "system_firmware_version":"1.4.0",
+            "default_build_target":"1.4.4"},
+            {"id":"$deviceId1",
+            "name":"device1",
+            "last_app":null,
+            "last_ip_address":"64.124.183.02",
+            "last_heard":null,
+            "product_id":12,
+            "connected":true,
+            "platform_id":12,
+            "cellular":false,
+            "notes":null,
+            "status":"normal",
+            "serial_number":"ARGHAB8D34DB33F",
+            "mobile_secret":"ABCDEFG01234567",
+            "current_build_target":"1.4.2",
+            "system_firmware_version":"1.4.2",
+            "default_build_target":"1.4.4"
+            }
+            ]
+        """
+
+        enqueueNew200ResponseWithBody(body)
+        val devices = cloud.getDevices()
+        assertEquals(devices[0], device0)
+        assertEquals(devices[1], device1)
+    }
+
+    private fun enqueueNew200ResponseWithBody(body: String) {
+        val mockedResponse = MockResponse()
+        mockedResponse.setResponseCode(200)
+        mockedResponse.setBody(body.trimIndent())
+        mockServer.enqueue(mockedResponse)
     }
 
 }
@@ -130,8 +247,10 @@ class FakeAppDataStorage : AppDataStorage {
     override val userHasClaimedDevices: Boolean
         get() = TODO("not implemented")
 
+    var saveUserHasClaimedDevicesWasCalled = false
+
     override fun saveUserHasClaimedDevices(value: Boolean) {
-        TODO("not implemented")
+        saveUserHasClaimedDevicesWasCalled = true
     }
 
     override fun resetUserHasClaimedDevices() {
