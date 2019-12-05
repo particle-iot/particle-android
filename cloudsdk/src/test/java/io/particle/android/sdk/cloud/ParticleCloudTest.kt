@@ -82,7 +82,7 @@ class ParticleCloudTest {
         assertEquals(claimCode, claimCodeResponse.claimCode)
         assertEquals("blank=okhttp_appeasement", request.body.readUtf8())
     }
-
+    
     @Test
     fun test_generateClaimCodeWithProductId() {
         val productId = 42
@@ -232,11 +232,12 @@ class ParticleCloudTest {
         assertEquals(devices[1], device1)
     }
 
-    private fun enqueueNew200ResponseWithBody(body: String) {
+    private fun enqueueNew200ResponseWithBody(body: String): MockResponse {
         val mockedResponse = MockResponse()
         mockedResponse.setResponseCode(200)
         mockedResponse.setBody(body.trimIndent())
         mockServer.enqueue(mockedResponse)
+        return mockedResponse
     }
 
 }
