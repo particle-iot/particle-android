@@ -31,4 +31,30 @@ internal data class DeviceState(
     internal val iccid: String?,
     internal val systemFirmwareVersion: String?,
     internal val notes: String?
-) : Parcelable
+) : Parcelable {
+
+    override fun toString(): String {
+        return "DeviceState(deviceId='$deviceId', " +
+                "platformId=$platformId, " +
+                "productId=$productId, " +
+                "ipAddress=$ipAddress, " +
+                "lastAppName=$lastAppName, " +
+                "status=$status, " +
+                "name=$name, " +
+                "isConnected=$isConnected, " +
+                "cellular=$cellular, " +
+                "imei=$imei, " +
+                "lastIccid=$lastIccid, " +
+                "currentBuild=$currentBuild, " +
+                "defaultBuild=$defaultBuild, " +
+                "functions=$functions, " +
+                "variables=$variables, " +
+                "deviceType=$deviceType, " +
+                "lastHeard=$lastHeard, " +
+                "serialNumber=$serialNumber, " +
+                "mobileSecret=$mobileSecret, " +
+                "iccid=$iccid, " +
+                "systemFirmwareVersion=$systemFirmwareVersion, " +
+                "notes=$notes)"
+    }
+}
