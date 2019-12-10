@@ -8,7 +8,6 @@ import com.squareup.okhttp.mockwebserver.MockWebServer
 import com.squareup.okhttp.mockwebserver.RecordedRequest
 import io.particle.android.sdk.cloud.ApiFactory.OauthBasicAuthCredentialsProvider
 import io.particle.android.sdk.cloud.ApiFactory.TokenGetterDelegate
-import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.Responses.ClaimCodeResponse
 import io.particle.android.sdk.persistance.AppDataStorage
 import io.particle.android.sdk.persistance.SensitiveDataStorage
@@ -76,7 +75,7 @@ class ParticleCloudTest {
     }
 
     @Test
-    fun test_generateClaimCode() {
+    fun test_generateClaimCode_HappyPath() {
         val (claimCode, request, claimCodeResponse) = setUpClaimCodeTest()
 
         assertEquals(claimCode, claimCodeResponse.claimCode)
@@ -84,7 +83,7 @@ class ParticleCloudTest {
     }
 
     @Test
-    fun test_generateClaimCodeWithProductId() {
+    fun test_generateClaimCodeWithProductId_HappyPath() {
         val productId = 42
         val (claimCode, request, claimCodeResponse) = setUpClaimCodeTest(productId)
 
@@ -125,7 +124,7 @@ class ParticleCloudTest {
     }
 
     @Test
-    fun test_getDevices() {
+    fun test_getDevices_PopulatedDeviceListHappyPath() {
         val device0 = ParticleDevice(
             mainApi,
             cloud,
@@ -182,7 +181,7 @@ class FakeBroadcaster : Broadcaster {
 }
 
 
-class FakeSensitiveDataStorage() : SensitiveDataStorage {
+class FakeSensitiveDataStorage : SensitiveDataStorage {
 
     var _user: String? = null
     override val user: String?
