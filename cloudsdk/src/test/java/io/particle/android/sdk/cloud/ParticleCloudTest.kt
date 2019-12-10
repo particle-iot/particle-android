@@ -142,6 +142,14 @@ class ParticleCloudTest {
         assertEquals(devices[1], device1)
     }
 
+    @Test
+    fun test_getDevice_SingleDeviceHappyPath() {
+        val device1 = ParticleDevice(mainApi, cloud, DEVICE_STATE_1_FULL)
+        enqueueNew200ResponseWithBody(DEVICE_1_FULL_JSON)
+        val deviceFromCloud = cloud.getDevice(device1.id)
+        assertEquals(device1, deviceFromCloud)
+    }
+
     private fun enqueueNew200ResponseWithBody(body: String): MockResponse {
         val mockedResponse = MockResponse()
         mockedResponse.setResponseCode(200)
@@ -175,7 +183,7 @@ class FakeAppDataStorage : AppDataStorage {
 class FakeBroadcaster : Broadcaster {
 
     override fun sendBroadcast(intent: Intent) {
-        TODO("not implemented")
+        println("Broadcasting intent (content not shown Because Android Reasons)")
     }
 
 }

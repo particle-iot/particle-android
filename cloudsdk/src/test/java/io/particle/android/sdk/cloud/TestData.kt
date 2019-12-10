@@ -1,6 +1,7 @@
 package io.particle.android.sdk.cloud
 
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
+import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 
 const val DEVICE_ID_0 = "d34db33f52ca40bd34db33f0"
 const val DEVICE_ID_1 = "d34db33f52ca40bd34db33f1"
@@ -48,12 +49,24 @@ internal val DEVICE_STATE_1 = DeviceState(
     mapOf(),
     ParticleDeviceType.ARGON,
     null,
-    "ARGHAB8D34DB33F",
+    "ARGHABD34DB33F1",
     "ABCDEFG01234567",
     null,
     "1.4.2",
     null
 )
+
+
+internal val DEVICE_STATE_1_FULL = DEVICE_STATE_1.copy(
+    functions = setOf("digitalread", "digitalwrite", "analogread", "analogwrite"),
+    variables = mapOf(
+        "somebool" to VariableType.BOOLEAN,
+        "someint" to VariableType.INT,
+        "somedouble" to VariableType.DOUBLE,
+        "somestring" to VariableType.STRING
+    )
+)
+
 
 val DEVICE_0_JSON = """
 {
@@ -90,11 +103,56 @@ val DEVICE_1_JSON = """
     "cellular":false,
     "notes":null,
     "status":"normal",
-    "serial_number":"ARGHAB8D34DB33F",
+    "serial_number":"ARGHABD34DB33F1",
     "mobile_secret":"ABCDEFG01234567",
     "current_build_target":"1.4.2",
     "system_firmware_version":"1.4.2",
     "default_build_target":"1.4.4"
+}
+""".trimIndent()
+
+
+val DEVICE_1_FULL_JSON = """
+{
+    "id":"$DEVICE_ID_1",
+    "name":"device1",
+    "last_app":null,
+    "last_ip_address":"64.124.183.02",
+    "last_heard":null,
+    "product_id":12,
+    "connected":true,
+    "platform_id":12,
+    "cellular":false,
+    "notes":null,
+    "network": {
+        "id":"d34db33fd34db33f0123456A",
+        "name":"fakenet",
+        "type":"micro_wifi",
+        "role":{
+            "gateway":true,
+            "state":"confirmed"
+        }
+    },
+    "status":"normal",
+    "serial_number":"ARGHABD34DB33F1",
+    "mobile_secret":"ABCDEFG01234567",
+    "current_build_target":"1.4.2",
+    "system_firmware_version":"1.4.2",
+    "default_build_target":"1.4.4",
+    "variables":{
+        "somebool":"bool",
+        "someint":"int32",
+        "somedouble":"double",
+        "somestring":"string"
+    },
+    "functions":[
+        "digitalread",
+        "digitalwrite",
+        "analogread",
+        "analogwrite"
+    ],
+    "firmware_updates_enabled":true,
+    "firmware_updates_forced":false
 }
 """.trimIndent()
 
