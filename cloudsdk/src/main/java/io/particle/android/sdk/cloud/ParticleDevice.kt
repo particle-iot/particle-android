@@ -724,13 +724,7 @@ class ParticleDevice internal constructor(
 
     override fun toString(): String {
         return "ParticleDevice{" +
-                "deviceId=" + deviceState.deviceId +
-                ", name=" + deviceState.name +
-                ", serialNumber=" + deviceState.serialNumber +
-                ", isConnected=" + deviceState.isConnected +
-                ", deviceType=" + deviceState.deviceType +
-                ", status=" + deviceState.status +
-                '}'.toString()
+                "deviceState=" + deviceState + "}"
     }
 
     //region Parcelable

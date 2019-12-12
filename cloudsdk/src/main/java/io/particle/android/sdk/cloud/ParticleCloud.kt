@@ -2,12 +2,10 @@ package io.particle.android.sdk.cloud
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.squareup.okhttp.HttpUrl
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
@@ -23,7 +21,7 @@ import io.particle.android.sdk.persistance.AppDataStorage
 import io.particle.android.sdk.utils.Broadcaster
 import io.particle.android.sdk.utils.Py.all
 import io.particle.android.sdk.utils.Py.truthy
-import io.particle.android.sdk.utils.TLog
+import mu.KotlinLogging
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit.RetrofitError
@@ -54,6 +52,7 @@ class ParticleCloud internal constructor(
     gson: Gson,
     executor: ExecutorService
 ) {
+
     private val tokenDelegate = TokenDelegate()
     private val eventsDelegate: EventsDelegate
 
@@ -245,7 +244,7 @@ class ParticleCloud internal constructor(
     @Throws(ParticleCloudException::class)
     fun signUpAndLogInWithCustomer(email: String, password: String, orgSlug: String) {
         try {
-            log.w("Use product id instead of organization slug.")
+            log.warn { "Use product id instead of organization slug." }
             @Suppress("DEPRECATION")
             signUpAndLogInWithCustomer(SignUpInfo(email, password), orgSlug)
         } catch (error: RetrofitError) {
@@ -297,7 +296,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getDevices(): List<ParticleDevice> {
-        log.i("getDevices()")
+        log.info { "getDevices()" }
         return runHandlingCommonErrors {
             val apiDevices = mainApi.getDevices()
             appDataStorage.saveUserHasClaimedDevices(truthy(apiDevices))
@@ -327,7 +326,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun getDevice(deviceID: String): ParticleDevice {
-        log.i("getDevice(): $deviceID")
+        log.info { "getDevice(): $deviceID" }
         val deviceCloudModel = runHandlingCommonErrors {
             mainApi.getDevice(deviceID)
         }
@@ -391,7 +390,7 @@ class ParticleCloud internal constructor(
         productSlug: String
     ): Responses.ClaimCodeResponse {
         return runHandlingCommonErrors {
-            log.w("Use product id instead of organization slug.")
+            log.warn { "Use product id instead of organization slug." }
             // Offer empty string to appease newer OkHttp versions which require a POST body,
             // even if it's empty or (as far as the endpoint cares) nonsense
             @Suppress("DEPRECATION")
@@ -465,7 +464,8 @@ class ParticleCloud internal constructor(
     fun getNetwork(networkId: String): ParticleNetwork {
         return runHandlingCommonErrors {
             val networkData = mainApi.getNetwork(networkId)
-            ParticleNetwork(networkData)        }
+            ParticleNetwork(networkData)
+        }
     }
 
     @WorkerThread
@@ -688,8 +688,10 @@ class ParticleCloud internal constructor(
      * @return a unique subscription ID for the eventListener that's been registered.  This ID is
      * used to unsubscribe this event listener later.
      */
-    @Deprecated("This method will be removed in a future revision of the SDK.  " +
-            "Please use .subscribeToMyDevicesEvents() instead")
+    @Deprecated(
+        "This method will be removed in a future revision of the SDK.  " +
+                "Please use .subscribeToMyDevicesEvents() instead"
+    )
     @WorkerThread
     @Throws(IOException::class)
     fun subscribeToAllEvents(eventNamePrefix: String?, handler: ParticleEventHandler): Long {
@@ -746,7 +748,7 @@ class ParticleCloud internal constructor(
     @WorkerThread
     @Throws(ParticleCloudException::class)
     fun unsubscribeFromEventWithID(eventListenerID: Long) {
-        log.v("Unsubscribing from events where eventListenerID=$eventListenerID")
+        log.trace { "Unsubscribing from events where eventListenerID=$eventListenerID" }
         eventsDelegate.unsubscribeFromEventWithID(eventListenerID)
     }
 
@@ -879,7 +881,7 @@ class ParticleCloud internal constructor(
     }
 
     private fun sendUpdateBroadcast() {
-        log.i("sendUpdateBroadcast()")
+        log.info { "sendUpdateBroadcast()" }
         broadcastManager.sendBroadcast(Intent(BroadcastContract.BROADCAST_DEVICES_UPDATED))
     }
 
@@ -985,7 +987,7 @@ class ParticleCloud internal constructor(
                     refreshAccessToken(refreshToken)
                     return
                 } catch (e: ParticleCloudException) {
-                    log.e("Error while trying to refresh token: ", e)
+                    log.error("Error while trying to refresh token: ", e)
                 }
 
             }
@@ -997,7 +999,7 @@ class ParticleCloud internal constructor(
 
     companion object {
 
-        private val log = TLog.get(ParticleCloud::class.java)
+        private val log = KotlinLogging.logger {}
 
         /**
          * Singleton instance of ParticleCloud class
@@ -1011,10 +1013,10 @@ class ParticleCloud internal constructor(
         @Synchronized
         @JvmStatic
         operator fun get(context: Context): ParticleCloud {
-            log.w(
+            log.warn {
                 "ParticleCloud.get() is deprecated and will be removed before the 1.0 release. " +
                         "Use ParticleCloudSDK.getCloud() instead!"
-            )
+            }
             if (!ParticleCloudSDK.isInitialized()) {
                 ParticleCloudSDK.init(context)
             }
@@ -1031,10 +1033,10 @@ class ParticleCloud internal constructor(
 
             for ((key, value) in completeDevice.variables) {
                 if (!all(key, value)) {
-                    log.w(
+                    log.warn {
                         "Found null key and/or value for variable in device " +
                                 "${completeDevice.name}.  key=$key, value=$value"
-                    )
+                    }
                     continue
                 }
 
@@ -1050,7 +1052,7 @@ class ParticleCloud internal constructor(
 
                 val variableType = value.toVariableType()
                 if (variableType == null) {
-                    log.w("Unknown variable type for device ${completeDevice.name}: '$key'")
+                    log.warn { "Unknown variable type for device ${completeDevice.name}: '$key'" }
                     continue
                 }
 

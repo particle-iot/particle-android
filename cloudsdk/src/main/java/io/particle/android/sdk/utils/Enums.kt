@@ -1,8 +1,8 @@
 package io.particle.android.sdk.utils
 
-import android.util.SparseArray
+
 import androidx.collection.ArrayMap
-import androidx.core.util.containsKey
+import androidx.collection.SparseArrayCompat
 import java.lang.Exception
 
 
@@ -18,8 +18,8 @@ class UnknownEnumStringValueException(stringValue: String) :
  *
  * Useful for writing functions that turn known Ints into a matching enum value.
  */
-fun <T> buildIntValueMap(values: Array<T>, transformer: (T) -> Int): SparseArray<T> {
-    val intValueMap = SparseArray<T>(values.size)
+fun <T> buildIntValueMap(values: Array<T>, transformer: (T) -> Int): SparseArrayCompat<T> {
+    val intValueMap = SparseArrayCompat<T>(values.size)
     for (v in values) {
         val key = transformer(v)
         if (intValueMap.containsKey(key)) {
