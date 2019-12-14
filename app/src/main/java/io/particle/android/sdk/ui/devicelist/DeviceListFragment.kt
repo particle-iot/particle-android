@@ -3,6 +3,7 @@ package io.particle.android.sdk.ui.devicelist
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -39,7 +40,6 @@ import io.particle.android.sdk.cloud.ParticleEventHandler
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
-import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
@@ -53,13 +53,14 @@ import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
-import pl.brightinventions.slf4android.LogRecord
+import pl.brightinventions.slf4android.LogTask
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
+import pl.brightinventions.slf4android.showLogSharingPrompt
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Objects.requireNonNull
 import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.logging.Level
 
 
 //FIXME enabling & disabling system events on each refresh as it collides with fetching devices in parallel
@@ -373,18 +374,15 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun sendLogs() {
-        val lr = LogRecord(Level.WARNING, "")
-
-        NotifyDeveloperDialogDisplayActivity.showDialogIn(
+        showLogSharingPrompt(
             requireActivity(),
-            lr,
-            list(),
+            "",
+            listOf(),
             "Logs from the Particle Android app",
             "",
-            list("pl.brightinventions.slf4android.ReadLogcatEntriesAsyncTask")
+            mutableListOf<AsyncTask<Context, Void, File>>(LogTask())
         )
     }
-
 }
 
 
