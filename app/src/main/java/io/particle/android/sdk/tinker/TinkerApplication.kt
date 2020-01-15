@@ -10,13 +10,19 @@ import io.particle.android.sdk.devicesetup.BuildConfig
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.onApplicationCreated
 import io.particle.android.sdk.ui.devicelist.DeviceListActivity
+import io.particle.android.sdk.utils.logging.FileLogging
 import io.particle.mesh.common.QATool
+import io.particle.mesh.setup.flow.Scopes
 import mu.KotlinLogging
 
 
 class TinkerApplication : Application() {
 
+    val fileLogging = FileLogging(this)
+
+
     private val log = KotlinLogging.logger {}
+
 
     override fun onCreate() {
         super.onCreate()
@@ -33,6 +39,8 @@ class TinkerApplication : Application() {
         // out this line by hand or otherwise prevent calling the code
         // inside ReleaseBuildAppInitializer
         onApplicationCreated(this)
+
+        fileLogging.initLogging(Scopes())
 
         ParticleDeviceSetupLibrary.init(this, DeviceListActivity::class.java)
 
