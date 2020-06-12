@@ -227,8 +227,14 @@ internal class EventsDelegate(
         private val myDevicesEventsUrl: HttpUrl
 
         init {
-            allEventsUrl = baseUrl.newBuilder().addPathSegment("/v1/$EVENTS").build()
-            devicesBaseUrl = baseUrl.newBuilder().addPathSegment("/v1/devices").build()
+            allEventsUrl = baseUrl.newBuilder()
+                .addPathSegment("v1")
+                .addPathSegment(EVENTS)
+                .build()
+            devicesBaseUrl = baseUrl.newBuilder()
+                .addPathSegment("v1")
+                .addPathSegment("devices")
+                .build()
             myDevicesEventsUrl = devicesBaseUrl.newBuilder().addPathSegment(EVENTS).build()
         }
 
