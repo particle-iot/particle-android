@@ -33,13 +33,6 @@ Full documentation, including a getting started guide, lots of API examples, sup
 3. Once AS has finished its initial cogitating on the project, hit the "play" button on the toolbar to build and run the app on a device.
 
 
-## Release Cadence
-
-As described at the top of the document, there are three distinct products produced by this repo.  Any time one of modules for these products changes on `master`, we will ship a release which includes that change within 90 days.
-
-(Note: while it is our intent to release on this schedule, it is not meant as a guarantee. Circumstances may require us to expand the window between a change and when that change ships in a release.)
-
-
 ## Maintainers
 
 - Jens Knutson [Github](https://github.com/jensck/) | [Twitter](https://twitter.com/jensknutson)
