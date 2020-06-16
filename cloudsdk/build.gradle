@@ -7,8 +7,8 @@ plugins {
 }
 
 
-// This is the library version used when deploying the artifact
-version = '1.0.0'
+// This is the library version used when publishing the artifact
+version = '1.0.1'
 
 ext {
     bintrayRepo = 'android'
