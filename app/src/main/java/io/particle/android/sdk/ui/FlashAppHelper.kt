@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B5_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
@@ -44,6 +45,7 @@ fun flashTinkerWithDialog(
         ARGON -> R.raw.tinker_firmware_080_rc27_argon
         BORON -> R.raw.tinker_firmware_080_rc27_boron
         XENON -> R.raw.tinker_firmware_080_rc27_xenon
+        B5_SOM -> R.raw.b5som_tinker_1_4_5_b5som_2
 
         CORE -> {
             flashKnownAppWithDialog(activity, device, ParticleDevice.KnownApp.TINKER)

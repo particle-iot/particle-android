@@ -12,6 +12,11 @@ class StepGetAPINetworks(private val cloud: ParticleCloud) : MeshSetupStep() {
 
     @WorkerThread
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
+        // don't bother with this for non-mesh devices
+        if (ctxs.mesh.hasThreadInterface == false) {
+            return
+        }
+
         val networks = cloud.getNetworks()
         ctxs.cloud.apiNetworks = networks
     }

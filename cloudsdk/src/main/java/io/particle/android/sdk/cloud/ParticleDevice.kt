@@ -187,7 +187,8 @@ class ParticleDevice internal constructor(
         XENON(14),
         A_SOM(22),
         B_SOM(23),
-        X_SOM(24);
+        X_SOM(24),
+        B5_SOM(25);
 
 
         companion object {

@@ -75,6 +75,9 @@ android {
         experimental = true
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -123,7 +126,6 @@ jacoco {
 coveralls {
     jacocoReportPath 'build/reports/jacocoTestReport/jacocoTestReport.xml'
 }
-
 task jacocoTestReport(type: JacocoReport, dependsOn: "testDebugUnitTest") {
     group = "Reporting"
     description = "Generate Jacoco code coverage reports for debug builds"
@@ -155,7 +157,11 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "testDebugUnitTest") {
             excludes: excludes)
     def mainSrc = "${project.projectDir}/src/main/java"
 
-    classDirectories = files([debugTree], [kotlinDebugTree])
-    executionData = files("$buildDir/jacoco/testDebugUnitTest.exec")
-    sourceDirectories = files([mainSrc])
+//    classDirectories = files([debugTree], [kotlinDebugTree])
+    getClassDirectories().setFrom(files([debugTree], [kotlinDebugTree]))
+//    executionData = files("$buildDir/jacoco/testDebugUnitTest.exec")
+    getExecutionData().setFrom(files("$buildDir/jacoco/testDebugUnitTest.exec"))
+//    sourceDirectories = files([mainSrc])
+    getSourceDirectories().setFrom(files([mainSrc]))
 }
+

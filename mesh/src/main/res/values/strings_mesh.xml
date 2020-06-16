@@ -7,6 +7,7 @@
     <string name="product_name_x_series">X SoM</string>
     <string name="product_name_a_series">A SoM</string>
     <string name="product_name_b_series">B SoM</string>
+    <string name="product_name_b5_som">B5 SoM</string>
 
     <string name="p_getreadyforsetup_header_text">Get your {product_type} ready for setup</string>
     <string name="my_device_is_blinking_blue">My device is blinking blue</string>

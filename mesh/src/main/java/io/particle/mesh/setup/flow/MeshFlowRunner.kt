@@ -450,7 +450,7 @@ class MeshFlowRunner(
         log.info { "endCurrentFlow()" }
         deps.flowUi.showGlobalProgressSpinner(false)
         flowExecutor.contexts?.let {
-            log.info { "Clearing state and cancelling scopes..." }
+            log.info { "Clearing state & cancelling scopes..." }
             it.clearState()
         }
     }

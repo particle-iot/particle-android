@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated on 2019-10-29 16:28:19.097536 by write_android_strings.py -->
+<resources>
+    <string name="ParticleSetupStrings_Action_Cancel">Cancel</string>
+    <string name="ParticleSetupStrings_Action_LogOut">Log out</string>
+    <string name="ParticleSetupStrings_Action_Open">Open</string>
+    <string name="ParticleSetupStrings_Action_Yes">Yes</string>
+    <string name="ParticleSetupStrings_Action_No">No</string>
+    <string name="ParticleSetupStrings_Action_Ok">Ok</string>
+    <string name="ParticleSetupStrings_Action_Understood">Understood</string>
+    <string name="ParticleSetupStrings_Action_ExitSetup">Exit setup</string>
+    <string name="ParticleSetupStrings_DeviceCommErrors_PublicKeyNotAvailable">Could not retrieve public key from device</string>
+    <string name="ParticleSetupStrings_DeviceCommErrors_PublicKeyStorageFailed">Could not store public key in device keychain</string>
+    <string name="ParticleSetupStrings_Default_SkipAuthenticationText">Skipping authentication will allow you to configure Wi-Fi credentials to your device but it will not be claimed to your account. Are you sure you want to skip authentication?</string>
+    <string name="ParticleSetupStrings_Default_DeviceName">Particle device</string>
+    <string name="ParticleSetupStrings_Default_ModeButton">Setup button</string>
+    <string name="ParticleSetupStrings_Default_ListenModeLEDColorName">blue</string>
+    <string name="ParticleSetupStrings_Default_PrivacyPolicyLinkURL">https://www.particle.io/legal/privacy</string>
+    <string name="ParticleSetupStrings_Default_TermsOfServiceLinkURL">https://www.particle.io/legal/terms-of-service</string>
+    <string name="ParticleSetupStrings_Default_ForgotPasswordLinkURL">https://login.particle.io/forgot</string>
+    <string name="ParticleSetupStrings_Default_TroubleshootingLinkURL">https://community.spark.io/t/spark-core-troubleshooting-guide-spark-team/696</string>
+    <string name="ParticleSetupStrings_SignUp_Title">Create account</string>
+    <string name="ParticleSetupStrings_SignUp_EmailPlaceholder">email</string>
+    <string name="ParticleSetupStrings_SignUp_PasswordPlaceholder">password</string>
+    <string name="ParticleSetupStrings_SignUp_VerifyPasswordPlaceholder">verify password</string>
+    <string name="ParticleSetupStrings_SignUp_FirstNamePlaceholder">first name</string>
+    <string name="ParticleSetupStrings_SignUp_LastNamePlaceholder">last name</string>
+    <string name="ParticleSetupStrings_SignUp_CompanyNamePlaceholder">company name</string>
+    <string name="ParticleSetupStrings_SignUp_BusinessAccount">This is a business account</string>
+    <string name="ParticleSetupStrings_SignUp_PersonalAccount">This is a personal account</string>
+    <string name="ParticleSetupStrings_SignUp_Note_Text">By clicking \"SIGN UP\" you are indicating that you have read and agreed to the</string>
+    <string name="ParticleSetupStrings_SignUp_Note_ToS">Terms of Service</string>
+    <string name="ParticleSetupStrings_SignUp_Note_And">and</string>
+    <string name="ParticleSetupStrings_SignUp_Note_PP">Privacy Policy</string>
+    <string name="ParticleSetupStrings_SignUp_Button_SignUp">SIGN UP</string>
+    <string name="ParticleSetupStrings_SignUp_Button_SkipAuthentication">Skip authentication</string>
+    <string name="ParticleSetupStrings_SignUp_Button_LogIn">I already have a {brand} account</string>
+    <string name="ParticleSetupStrings_SignUp_Error_PasswordTooShort_Title">Error</string>
+    <string name="ParticleSetupStrings_SignUp_Error_PasswordTooShort_Message">Password must be at least 8 characters long</string>
+    <string name="ParticleSetupStrings_SignUp_Error_PasswordsDoNotMatch_Title">Error</string>
+    <string name="ParticleSetupStrings_SignUp_Error_PasswordsDoNotMatch_Message">Passwords do not match</string>
+    <string name="ParticleSetupStrings_SignUp_Error_WrongCredentials_Title">Could not signup</string>
+    <string name="ParticleSetupStrings_SignUp_Error_WrongCredentials_Message">Make sure your user email does not already exist and that you have entered the activation code correctly and that it was not already used.</string>
+    <string name="ParticleSetupStrings_SignUp_Error_InvalidEmail_Title">Error</string>
+    <string name="ParticleSetupStrings_SignUp_Error_InvalidEmail_Message">Invalid email address</string>
+    <string name="ParticleSetupStrings_SignUp_Error_Generic_Title">Error</string>
+    <string name="ParticleSetupStrings_SignUp_Error_Generic_Message">{error}</string>
+    <string name="ParticleSetupStrings_SignUp_Prompt_SkipAuthentication_Title">Skip Authentication</string>
+    <string name="ParticleSetupStrings_LogIn_Title">Your account</string>
+    <string name="ParticleSetupStrings_LogIn_EmailPlaceholder">email</string>
+    <string name="ParticleSetupStrings_LogIn_PasswordPlaceholder">password</string>
+    <string name="ParticleSetupStrings_LogIn_Button_LogIn">LOG IN</string>
+    <string name="ParticleSetupStrings_LogIn_Button_ForgotPassword">I forgot my password</string>
+    <string name="ParticleSetupStrings_LogIn_Button_SignUp">I don\'t have a {brand} account</string>
+    <string name="ParticleSetupStrings_LogIn_Button_SkipAuthentication">Skip authentication</string>
+    <string name="ParticleSetupStrings_LogIn_Error_InvalidEmail_Title">Cannot Sign In</string>
+    <string name="ParticleSetupStrings_LogIn_Error_InvalidEmail_Message">Invalid email address</string>
+    <string name="ParticleSetupStrings_LogIn_Error_Generic_Title">Cannot Sign In</string>
+    <string name="ParticleSetupStrings_LogIn_Error_Generic_Message">{error}</string>
+    <string name="ParticleSetupStrings_LogIn_Error_EmptyPassword_Title">Cannot Sign In</string>
+    <string name="ParticleSetupStrings_LogIn_Error_EmptyPassword_Message">Password cannot be blank</string>
+    <string name="ParticleSetupStrings_LogIn_Prompt_SkipAuthentication_Title">Skip Authentication</string>
+
+    <string name="ParticleSetupStrings_ForgotPassword_Title">Request password reset</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Text">An email will be sent to you with a link to a webpage where you can create a new password.</string>
+    <string name="ParticleSetupStrings_ForgotPassword_EmailPlaceholder">email</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Button_LogIn">I remember my password</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Button_Reset">RESET PASSWORD</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Prompt_EmailSent_Title">Reset password</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Prompt_EmailSent_Message">Instructions on how to reset your password will be sent to the provided email address. Please check your email and continue according to the instructions.</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Error_InvalidEmail_Title">Reset password</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Error_InvalidEmail_Message">Invalid email address</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Error_InvalidCredentials_Title">Reset password</string>
+    <string name="ParticleSetupStrings_ForgotPassword_Error_InvalidCredentials_Message">Could not find a user with supplied email address, please check the address supplied or create a new user via the signup screen</string>
+
+    <string name="ParticleSetupStrings_MFA_Title">Enter a login code</string>
+    <string name="ParticleSetupStrings_MFA_Text">Open your authenticator app on your mobile device and enter the 6-digit login code</string>
+    <string name="ParticleSetupStrings_MFA_CodePlaceholder">login code</string>
+    <string name="ParticleSetupStrings_MFA_Button_Verify">VERIFY</string>
+    <string name="ParticleSetupStrings_MFA_Button_LostPhone">Lost access to your phone? Recover your account.</string>
+    <string name="ParticleSetupStrings_MFA_Error_EmptyCode_Title">Error</string>
+    <string name="ParticleSetupStrings_MFA_Error_EmptyCode_Message">Please enter the code.</string>
+    <string name="ParticleSetupStrings_MFA_Error_Generic_Title">Two-step Authentication Error</string>
+    <string name="ParticleSetupStrings_MFA_Error_Generic_Message">{error}</string>
+    <string name="ParticleSetupStrings_GetReady_Title">Time to set up your {device}!</string>
+    <string name="ParticleSetupStrings_GetReady_Text1">Plug in your {device} to power it on</string>
+    <string name="ParticleSetupStrings_GetReady_Text2">The on-board LED should be blinking blue. If not, hold the {mode_button} for 3 seconds</string>
+    <string name="ParticleSetupStrings_GetReady_Text3">Make sure your {os_name} device is connected to the Internet</string>
+    <string name="ParticleSetupStrings_GetReady_iPhone4MoreInstructions">Scroll down for more instructions:\n{instructions}</string>
+    <string name="ParticleSetupStrings_GetReady_Button_Ready">READY</string>
+    <string name="ParticleSetupStrings_GetReady_Button_LogIn">Log in</string>
+    <string name="ParticleSetupStrings_GetReady_Error_Generic_Title">Error</string>
+    <string name="ParticleSetupStrings_GetReady_Error_Generic_Message">{error}</string>
+    <string name="ParticleSetupStrings_GetReady_Error_AccessDenied_Title">Access denied</string>
+    <string name="ParticleSetupStrings_GetReady_Error_AccessDenied_Message">Sorry, you must be logged in as a {brand} customer.</string>
+    <string name="ParticleSetupStrings_GetReady_Error_NoInternet_Title">Error</string>
+    <string name="ParticleSetupStrings_GetReady_Error_NoInternet_Message">Could not communicate with Particle cloud. Make sure your {os_name} device is connected to the internet and retry.\n\n{error}</string>
+    <string name="ParticleSetupStrings_GetReady_Error_BadProductId_Title">Error</string>
+    <string name="ParticleSetupStrings_GetReady_Error_BadProductId_Message">Could not communicate with Particle cloud. Are you sure your organization and product slugs are setup correctly?\n\n{error}</string>
+    <string name="ParticleSetupStrings_GetReady_Prompt_LogOut_Title">Log out</string>
+    <string name="ParticleSetupStrings_GetReady_Prompt_LogOut_Message">Are you sure you want to log out?</string>
+
+    <string name="ParticleSetupStrings_GetLocationPermission_Title">Permission to read WIFI SSID</string>
+    <string name="ParticleSetupStrings_GetLocationPermission_Text">Photon setup reads current Wi-Fi SSID to determine when your phone connects to a device.\n\nStarting iOS 13, for apps to have access to Wi-Fi SSID information, user must grant location services permission.\n\nParticle app will only use this permission to read Wi-Fi SSID and not to track your location.</string>
+
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Prompt_LocationServices_Title">Location services required</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Prompt_LocationServices_Text">Location services are required to pair your Android device with your Photon to complete the setup process. Particle will not use your location data for any other purposes.</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Prompt_LocationServices_Button_Enable">Enable Location</string>
+
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Prompt_WiFi_Title">Wi-Fi required</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Prompt_WiFI_Text">Wi-Fi is required to pair your Android device with your Photon to complete the setup process.</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Prompt_WiFi_Button_Enable">Enable Wi-Fi</string>
+
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_SoftApList_Empty_Text">(No {device} devices found)</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Prompt_ConnectingToDevice_Text">Connecting to {device}</string>
+
+    <string name="ParticleSetupStrings_GetLocationPermission_DeniedText_Android">The Location permission has been disabled for this app.  Please change this in Permissions for this app under Settings → Apps.  The Particle app will only use this permission to read Wi-Fi SSID and not to track your location.</string>
+    <string name="ParticleSetupStrings_GetLocationPermission_DeniedText">Photon setup reads current Wi-Fi SSID to determine when your phone connects to a device.\n\nStarting iOS 13, for apps to have access to Wi-Fi SSID information, user must grant location services permission.\n\nYou have previously denied Particle application permission to access location services. Please grant the permission in Settings app.\n\nParticle app will only use this permission to read Wi-Fi SSID and not to track your location.</string>
+    <string name="ParticleSetupStrings_GetLocationPermission_Button_GrantPermission">GRANT PERMISSION</string>
+    <string name="ParticleSetupStrings_GetLocationPermission_Button_OpenSettings">OPEN SETTINGS</string>
+
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Text1">Choose your {device}</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_DeviceNotListed_Text">{device} not listed here? Hold the {mode_button} for three seconds to put it in setup mode; the indicator light should turn blue</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_LoggedInAs">You are logged in as: {username}</string>
+
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Error_CouldntConnectToSoftAp_Title">Error connecting</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Android_Error_CouldntConnectToSoftAp_Text">Please try running setup again after resetting your {device} and putting it back in blinking blue listen mode if needed.</string>
+
+
+
+    <string name="ParticleSetupStrings_DiscoverDevices_Text1">Tap Home &gt; Settings &gt; Wi-Fi</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Text2">Make sure Wi-Fi is turned on, and choose the network below:</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Text3">Once connected, return to this app</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_WiFiCellText">{network prefix}-XXXX</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_WiFiCellNote">XXXX will be a unique 4-digit code</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Button_ShowMeHow">SHOW ME HOW</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Prompt_Notification_Title">Connected</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Prompt_Notification_Message">Your phone has connected to {deviceName}. Tap to continue Setup.</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Prompt_ClaimOwnership_Title">Product ownership</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Prompt_ClaimOwnership_Message">Do you want to claim ownership of this {deviceName} to {userName}</string>
+    <string name="ParticleSetupStrings_DiscoverDevices_Prompt_ClaimOwnership_Android_Button_ChangeOwner">Change owner</string>
+
+    <string name="ParticleSetupStrings_SelectNetwork_Title">Select your Wi-Fi network</string>
+    <string name="ParticleSetupStrings_SelectNetwork_Button_NetworkNotListed">My network is not listed</string>
+    <string name="ParticleSetupStrings_SelectNetwork_Button_Refresh">REFRESH</string>
+
+    <string name="ParticleSetupStrings_SelectNetwork_Android_Error_EnterpriseWifiNotSupported_Text">Enterprise Wi-Fi networks not supported for mobile setup.</string>
+    <string name="ParticleSetupStrings_SelectNetwork_Android_NoWifiNetworksFound">(No Wi-Fi networks found)</string>
+
+    <string name="ParticleSetupStrings_ManualNetwork_Title">Manual network name</string>
+    <string name="ParticleSetupStrings_ManualNetwork_RequiresPassword">Network requires password</string>
+    <string name="ParticleSetupStrings_ManualNetwork_NamePlaceholder">Network name</string>
+    <string name="ParticleSetupStrings_ManualNetwork_Button_Connect">CONNECT</string>
+    <string name="ParticleSetupStrings_NetworkPassword_Title">Secured network password</string>
+    <string name="ParticleSetupStrings_NetworkPassword_PasswordPlaceholder">Password</string>
+    <string name="ParticleSetupStrings_NetworkPassword_HidePassword">Hide password</string>
+    <string name="ParticleSetupStrings_NetworkPassword_Button_Connect">CONNECT</string>
+
+    <string name="ParticleSetupStrings_NetworkPassword_Android_SecuredWithWEP">Secured with WEP</string>
+    <string name="ParticleSetupStrings_NetworkPassword_Android_SecuredWithWPA">Secured with WPA</string>
+    <string name="ParticleSetupStrings_NetworkPassword_Android_SecuredWithWPA2">Secured with WPA2</string>
+
+
+    <string name="ParticleSetupStrings_NetworkPassword_Error_InvalidPassword_Title">Invalid password</string>
+    <string name="ParticleSetupStrings_NetworkPassword_Error_InvalidPassword_Message">Password must be {length} characters or longer</string>
+
+    <string name="ParticleSetupStrings_Connecting_MainTitle">Connecting</string>
+
+    <string name="ParticleSetupStrings_Connecting_Title1">Your {device} is connecting to:</string>
+    <string name="ParticleSetupStrings_Connecting_Title2">This can take about a minute.</string>
+    <string name="ParticleSetupStrings_Connecting_Text1">Configure Wi-Fi credentials</string>
+    <string name="ParticleSetupStrings_Connecting_Text2">Connect to Wi-Fi network</string>
+    <string name="ParticleSetupStrings_Connecting_Text3">Wait for device cloud connection</string>
+    <string name="ParticleSetupStrings_Connecting_Text4">Check for internet connectivity</string>
+    <string name="ParticleSetupStrings_Connecting_Text5">Verify device ownership</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_Success_Title">Setup completed successfully</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_Success_Text">Congrats! You\'ve successfully set up your {device}.</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_DeviceOffline_Title">Setup completed</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_DeviceOffline_Message">Your device has been successfully claimed to your account, however it is offline. If the device was already claimed before this setup, then the Wi-Fi connection may have failed, and you should try setup again.</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_NotClaimed_Title">Setup completed</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_NotClaimed_Message">Setup was successful, but since you do not own this device we cannot know if the {device} has connected to the Internet. If you see the LED breathing cyan this means it worked! If not, please restart the setup process.</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_ClaimingFailed_Title">Setup failed</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_ClaimingFailed_Message">Setup process failed at claiming your {device}, if your {device} LED is blinking in blue or green this means that you provided wrong Wi-Fi credentials, please try setup process again.</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_CannotDisconnectFromDevice_Title">Oops!</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_CannotDisconnectFromDevice_Message">Setup process couldn\'t disconnect from the {device} Wi-fi network. This is an internal problem with the device, so please try running setup again after resetting your {device} and putting it back in listen mode (blinking blue LED) if needed.</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_ConfigurationFailure_Title">Error!</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_ConfigurationFailure_Message">Setup process couldn\'t configure the Wi-Fi credentials for your {device}, please try running setup again after resetting your {device} and putting it back in blinking blue listen mode if needed.</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_Default_Title">Uh oh!</string>
+    <string name="ParticleSetupStrings_SetupResult_Result_Default_Message">Setup lost connection to the device before finalizing configuration process, please try running setup again after putting {device} back in blinking blue listen mode.</string>
+    <string name="ParticleSetupStrings_SetupResult_Prompt_FirmwareUpdate_Title">Firmware update</string>
+    <string name="ParticleSetupStrings_SetupResult_Prompt_FirmwareUpdate_Message">If this is the first time you are setting up this device it might blink its LED in magenta color for a while, this means the device is currently updating its firmware from the cloud to the latest version. Please be patient and do not press the reset button. Device LED will breathe cyan once update has completed and it has come online.</string>
+    <string name="ParticleSetupStrings_SetupResult_DeviceName">Name your new device:</string>
+    <string name="ParticleSetupStrings_SetupResult_DeviceNamePlaceholder">DeviceNamePlaceholder</string>
+
+    <string name="ParticleSetupStrings_SetupResult_Error_NameRequired">This field is required</string>
+    <string name="ParticleSetupStrings_SetupResult_Error_RenameFailed">Failed to change device name</string>
+
+    <string name="ParticleSetupStrings_SetupResult_Button_Done">DONE</string>
+    <string name="ParticleSetupStrings_SetupResult_Button_Troubleshooting">Troubleshooting</string>
+</resources>

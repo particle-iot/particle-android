@@ -22,7 +22,10 @@ class StepEnsureTargetDeviceIsNotOnMeshNetwork(
     private val log = KotlinLogging.logger {}
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
-        if (ctxs.mesh.checkedForExistingNetwork || ctxs.flowIntent != FlowIntent.FIRST_TIME_SETUP) {
+        if (ctxs.mesh.checkedForExistingNetwork
+            || ctxs.flowIntent != FlowIntent.FIRST_TIME_SETUP
+            || ctxs.mesh.hasThreadInterface == false
+        ) {
             return
         }
 

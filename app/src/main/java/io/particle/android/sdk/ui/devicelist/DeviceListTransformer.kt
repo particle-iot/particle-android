@@ -4,6 +4,7 @@ import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B5_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ELECTRON
@@ -37,7 +38,7 @@ enum class OnlineStatusFilter {
 }
 
 enum class DeviceTypeFilter {
-    BORON,    // also B SoM
+    BORON,    // also B SoM/B5 SoM
     ELECTRON, // also E SoM
     ARGON,    // also A SoM
     PHOTON,   // also P1
@@ -102,6 +103,7 @@ private fun ParticleDeviceType?.toDeviceTypeFilter(): DeviceTypeFilter {
         ARGON -> DeviceTypeFilter.ARGON
 
         B_SOM,
+        B5_SOM,
         BORON -> DeviceTypeFilter.BORON
 
         PHOTON,

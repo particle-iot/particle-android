@@ -248,11 +248,6 @@ class ProtocolTransceiver internal constructor(
         return buildResult(response) { r -> GetInterfaceReply.parseFrom(r.payloadData) }
     }
 
-    suspend fun sendGetInterfaceList(): Result<GetInterfaceListReply, ResultCode> {
-        val response = sendRequest(GetInterfaceListRequest.newBuilder().build())
-        return buildResult(response) { r -> GetInterfaceListReply.parseFrom(r.payloadData) }
-    }
-
     suspend fun sendStartListeningMode(): Result<StartListeningModeReply, ResultCode> {
         val response = sendRequest(StartListeningModeRequest.newBuilder().build())
         return buildResult(response) { r -> StartListeningModeReply.parseFrom(r.payloadData) }
@@ -456,6 +451,11 @@ class ProtocolTransceiver internal constructor(
     suspend fun sendStopNyanSignaling(): Result<StopNyanSignalReply, ResultCode> {
         val response = sendRequest(StopNyanSignalRequest.newBuilder().build())
         return buildResult(response) { r -> StopNyanSignalReply.parseFrom(r.payloadData) }
+    }
+
+    suspend fun sendGetInterfaceList(): Result<GetInterfaceListReply, ResultCode>  {
+        val response = sendRequest(GetInterfaceListRequest.newBuilder().build())
+        return buildResult(response) { r -> GetInterfaceListReply.parseFrom(r.payloadData) }
     }
 
     internal fun receiveResponse(responseFrame: DeviceResponse) {

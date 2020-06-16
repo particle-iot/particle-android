@@ -18,6 +18,7 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B5_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
@@ -101,7 +102,7 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
             }
         }
 
-        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SOM)
+        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SOM, B5_SOM)
         p_controlpanel_landing_cellular_item.setOnClickListener {
             flowRunner.startShowControlPanelCellularOptionsFlow(device)
         }
@@ -115,8 +116,12 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
 
         p_controlpanel_landing_mesh_item.isVisible = deviceType in gen3Devices
         p_controlpanel_landing_mesh_item.setOnClickListener {
-            flowScopes.onMain {
-                startFlowWithBarcode(flowRunner::startControlPanelMeshInspectCurrentNetworkFlow)
+            val uri: Uri = Uri.parse(
+                "https://docs.particle.io/reference/developer-tools/cli/#particle-mesh"
+            )
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            if (intent.resolveActivity(requireContext().packageManager) != null) {
+                startActivity(intent)
             }
         }
 
@@ -156,7 +161,7 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     private fun editNotes() {
         val editLD = MutableLiveData<String>()
         DeviceNotesDelegate.editDeviceNotes(
-            activity!!,
+            requireActivity(),
             device,
             flowManagementScope,
             editLD
@@ -172,6 +177,7 @@ private val gen3Devices = setOf(
     ParticleDeviceType.A_SOM,
     ParticleDeviceType.BORON,
     ParticleDeviceType.B_SOM,
+    ParticleDeviceType.B5_SOM,
     ParticleDeviceType.XENON,
     ParticleDeviceType.X_SOM
 )
@@ -184,7 +190,7 @@ private fun showDocumentation(context: Context, deviceType: ParticleDeviceType) 
         P1 -> "datasheets/wi-fi/p1-datasheet"
         ELECTRON -> "electron"
         ARGON, A_SOM -> "argon"
-        BORON, B_SOM -> "boron"
+        BORON, B_SOM, B5_SOM -> "boron"
         XENON, X_SOM -> "xenon"
         RASPBERRY_PI,
         RED_BEAR_DUO,
