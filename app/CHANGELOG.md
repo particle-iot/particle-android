@@ -1,3 +1,12 @@
+3.1.1
+======
+- Fixes for event handling
+
+3.1.0
+======
+- B5 SoM support
+- Begin deprecating mesh features
+
 3.0.2
 ======
 - Crash fixes
