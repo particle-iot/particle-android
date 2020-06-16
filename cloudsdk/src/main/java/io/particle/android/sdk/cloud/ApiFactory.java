@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import okio.ByteString;
+import retrofit.RequestInterceptor.RequestFacade;
 import retrofit.RestAdapter;
 import retrofit.RestAdapter.Log;
 import retrofit.RestAdapter.LogLevel;
@@ -78,8 +79,10 @@ public class ApiFactory {
 
     ApiDefs.CloudApi buildNewCloudApi() {
         RestAdapter restAdapter = buildCommonRestAdapterBuilder(gson, normalTimeoutClient)
-                .setRequestInterceptor(request -> request.addHeader("Authorization", "Bearer " +
-                        tokenDelegate.getTokenValue()))
+                .setRequestInterceptor(request -> {
+                    request.addHeader("Authorization", "Bearer " + tokenDelegate.getTokenValue());
+                    addParticleToolsHeader(request);
+                })
                 .build();
         return restAdapter.create(ApiDefs.CloudApi.class);
     }
@@ -88,7 +91,10 @@ public class ApiFactory {
         final String basicAuthValue = getBasicAuthValue();
 
         RestAdapter restAdapter = buildCommonRestAdapterBuilder(gson, normalTimeoutClient)
-                .setRequestInterceptor(request -> request.addHeader("Authorization", basicAuthValue))
+                .setRequestInterceptor(request -> {
+                    request.addHeader("Authorization", basicAuthValue);
+                    addParticleToolsHeader(request);
+                })
                 .build();
         return restAdapter.create(ApiDefs.IdentityApi.class);
     }
@@ -107,6 +113,10 @@ public class ApiFactory {
                 basicAuthCredentialsProvider.getClientSecret());
         ByteString authBytes = ByteString.of(authString.getBytes());
         return "Basic " + authBytes.base64();
+    }
+
+    private void addParticleToolsHeader(RequestFacade request) {
+        request.addHeader("X-Particle-Tool", "android-cloud-sdk");
     }
 
     private RestAdapter.Builder buildCommonRestAdapterBuilder(Gson gson, OkHttpClient client) {

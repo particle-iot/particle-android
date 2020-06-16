@@ -5,6 +5,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B5_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
@@ -48,7 +49,8 @@ fun ParticleDeviceType.toConnectivityType(): Gen3ConnectivityType {
 
         ELECTRON,
         BORON,
-        B_SOM -> CELLULAR
+        B_SOM,
+        B5_SOM -> CELLULAR
 
         XENON,
         X_SOM -> MESH_ONLY

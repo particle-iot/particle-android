@@ -3,6 +3,7 @@ package io.particle.mesh.setup.flow.setupsteps
 import androidx.annotation.WorkerThread
 import io.particle.firmwareprotos.ctrl.Network.InterfaceEntry
 import io.particle.firmwareprotos.ctrl.Network.InterfaceType
+import io.particle.mesh.common.android.livedata.awaitUpdate
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.flow.*
@@ -67,6 +68,15 @@ class StepDetermineFlowAfterPreflow(private val flowUi: FlowUiDelegate) : MeshSe
         ctxs: SetupContexts,
         scopes: Scopes
     ): List<FlowType> {
+        if (ctxs.mesh.hasThreadInterface != true) {
+            ctxs.device.networkSetupTypeLD.nonNull(scopes).runBlockOnUiThreadAndAwaitUpdate {
+                log.info {
+                    "No Thread interface on target device; forcing network setup type to STANDALONE"
+                }
+                ctxs.device.updateNetworkSetupType(STANDALONE)
+            }
+        }
+
         determineNetworkSetupType(ctxs, scopes)
 
         if (ctxs.device.networkSetupTypeLD.value!! == NetworkSetupType.NODE_JOINER) {

@@ -3,6 +3,7 @@ package io.particle.mesh.setup.flow.setupsteps
 import io.particle.mesh.common.Result
 import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.connection.ResultCode
+import io.particle.mesh.setup.flow.FlowUiDelegate
 import io.particle.mesh.setup.flow.MeshSetupFlowException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
@@ -10,15 +11,18 @@ import io.particle.mesh.setup.flow.context.SetupContexts
 import kotlinx.coroutines.delay
 
 
-class StepFetchIccid : MeshSetupStep() {
+class StepFetchIccid(private val flowUi: FlowUiDelegate) : MeshSetupStep() {
 
     override suspend fun doRunStep(ctxs: SetupContexts, scopes: Scopes) {
         if (ctxs.targetDevice.iccid.truthy()) {
             return
         }
 
+
+
         val targetXceiver = ctxs.requireTargetXceiver()
 
+        flowUi.showGlobalProgressSpinner(true)
         val iccidReply = targetXceiver.sendGetIccId()
         when (iccidReply) {
             is Result.Present -> {

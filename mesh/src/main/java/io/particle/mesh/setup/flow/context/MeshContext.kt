@@ -32,6 +32,7 @@ class MeshContext : Clearable {
     var newNetworkCreatedSuccessfully by log.logged(false)
     var checkedForExistingNetwork by log.logged(false)
     var currentlyJoinedNetwork: Mesh.NetworkInfo? by log.logged()
+    var hasThreadInterface: Boolean? by log.logged()
 
     override fun clearState() {
         log.info { "clearState()" }
@@ -56,6 +57,7 @@ class MeshContext : Clearable {
         showNewNetworkOptionInScanner = false
         shownNetworkPasswordUi = false
         currentlyJoinedNetwork = null
+        hasThreadInterface = null
     }
 
     fun updateSelectedMeshNetworkToJoin(meshNetworkToJoin: Mesh.NetworkInfo) {

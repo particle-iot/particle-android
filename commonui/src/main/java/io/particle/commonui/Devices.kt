@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B5_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
@@ -52,7 +53,8 @@ private val ParticleDeviceType.productImageAndName: ProductImageAndName
 
             BORON -> pian(R.string.product_name_boron, R.drawable.product_image_boron)
 
-            B_SOM -> pian(R.string.product_name_b_series, R.drawable.product_image_boron)
+            B_SOM,
+            B5_SOM -> pian(R.string.product_name_b_series, R.drawable.product_image_boron)
 
             XENON -> pian(R.string.product_name_xenon, R.drawable.product_image_xenon)
 

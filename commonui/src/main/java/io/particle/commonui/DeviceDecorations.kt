@@ -8,6 +8,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B5_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BLUZ
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
@@ -48,7 +49,7 @@ fun ParticleDeviceType.toDecorationColor(): Int {
 
         ARGON, A_SOM -> R.color.spark_blue
 
-        BORON, B_SOM -> R.color.device_color_boron
+        BORON, B_SOM, B5_SOM -> R.color.device_color_boron
 
         XENON, X_SOM -> R.color.device_color_xenon
 
@@ -76,7 +77,8 @@ fun ParticleDeviceType.toDecorationLetter(): String {
         ARGON,
         A_SOM -> "A"
         BORON,
-        B_SOM -> "B"
+        B_SOM,
+        B5_SOM -> "B"
         XENON,
         X_SOM -> "X"
         DIGISTUMP_OAK,

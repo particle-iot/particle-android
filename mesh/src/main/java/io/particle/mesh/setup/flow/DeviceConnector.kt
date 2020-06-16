@@ -6,6 +6,7 @@ import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.A_SOM
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B5_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.BORON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.B_SOM
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
@@ -128,7 +129,8 @@ class DeviceConnector(
             ARGON,
             A_SOM -> "Argon"
             BORON,
-            B_SOM -> "Boron"
+            B_SOM,
+            B5_SOM -> "Boron"
             XENON,
             X_SOM -> "Xenon"
             else -> throw IllegalArgumentException("Not a mesh device: $deviceType")

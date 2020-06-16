@@ -186,6 +186,7 @@ class MeshFlowExecutor(
                 StepEnsureLatestFirmware(deps.flowUi, deps.firmwareUpdateManager),
                 StepStopSignal(),
                 StepFetchDeviceId(),
+                StepCheckTargetDeviceHasThreadInterface(),
                 StepGetAPINetworks(deps.cloud),
                 StepCheckIfTargetDeviceShouldBeClaimed(deps.cloud, deps.flowUi),
                 StepEnsureTargetDeviceIsNotOnMeshNetwork(deps.cloud, deps.dialogTool),
@@ -201,6 +202,7 @@ class MeshFlowExecutor(
                 StepEnsureLatestFirmware(deps.flowUi, deps.firmwareUpdateManager),
                 StepStopSignal(),
                 StepFetchDeviceId(),
+                StepCheckTargetDeviceHasThreadInterface(),
                 StepGetAPINetworks(deps.cloud),
                 StepShowTargetPairingSuccessful(deps.flowUi),
                 StepDetermineFlowAfterPreflow(deps.flowUi)
@@ -277,7 +279,7 @@ class MeshFlowExecutor(
 
             CELLULAR_FLOW -> listOf(
                 StepEnsureCardOnFile(deps.flowUi, deps.cloud),
-                StepFetchIccid(),
+                StepFetchIccid(deps.flowUi),
                 StepEnsureSimActivationStatusUpdated(deps.cloud),
                 StepShowPricingImpact(deps.flowUi, deps.cloud),
                 StepShowShouldConnectToDeviceCloudConfirmation(deps.flowUi),
