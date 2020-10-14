@@ -23,12 +23,12 @@ apply plugin: 'io.fabric'  /* uncomment for release builds */
 
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 30
         // scheme for these version numbers: EPOCH MAJOR MINOR PATCH BUILD
         versionCode 1_03_01_01_01
         versionName  "3.1.1"

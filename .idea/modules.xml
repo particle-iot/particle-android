@@ -2,16 +2,18 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="photon-tinker-android/app" />
-      <module fileurl="file://$PROJECT_DIR$/cloudsdk/cloudsdk.iml" filepath="$PROJECT_DIR$/cloudsdk/cloudsdk.iml" group="photon-tinker-android/cloudsdk" />
-      <module fileurl="file://$PROJECT_DIR$/commonui/commonui.iml" filepath="$PROJECT_DIR$/commonui/commonui.iml" group="photon-tinker-android/commonui" />
-      <module fileurl="file://$PROJECT_DIR$/devicesetup/devicesetup.iml" filepath="$PROJECT_DIR$/devicesetup/devicesetup.iml" group="photon-tinker-android/devicesetup" />
-      <module fileurl="file://$PROJECT_DIR$/ecjpake4j/ecjpake4j.iml" filepath="$PROJECT_DIR$/ecjpake4j/ecjpake4j.iml" group="photon-tinker-android/ecjpake4j" />
-      <module fileurl="file://$PROJECT_DIR$/firmwareprotos/firmwareprotos.iml" filepath="$PROJECT_DIR$/firmwareprotos/firmwareprotos.iml" group="photon-tinker-android/firmwareprotos" />
-      <module fileurl="file://$PROJECT_DIR$/mesh/mesh.iml" filepath="$PROJECT_DIR$/mesh/mesh.iml" group="photon-tinker-android/mesh" />
-      <module fileurl="file://$PROJECT_DIR$/meshui/meshui.iml" filepath="$PROJECT_DIR$/meshui/meshui.iml" group="photon-tinker-android/meshui" />
-      <module fileurl="file://$PROJECT_DIR$/photon-tinker-android.iml" filepath="$PROJECT_DIR$/photon-tinker-android.iml" group="photon-tinker-android" />
-      <module fileurl="file://$PROJECT_DIR$/sdk_example_app/sdk_example_app.iml" filepath="$PROJECT_DIR$/sdk_example_app/sdk_example_app.iml" group="photon-tinker-android/sdk_example_app" />
+      <module fileurl="file://$PROJECT_DIR$/photon-tinker-android.iml" filepath="$PROJECT_DIR$/photon-tinker-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/photon-tinker-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/photon-tinker-android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cloudsdk/photon-tinker-android.cloudsdk.iml" filepath="$PROJECT_DIR$/.idea/modules/cloudsdk/photon-tinker-android.cloudsdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/commonui/photon-tinker-android.commonui.iml" filepath="$PROJECT_DIR$/.idea/modules/commonui/photon-tinker-android.commonui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/devicesetup/photon-tinker-android.devicesetup.iml" filepath="$PROJECT_DIR$/.idea/modules/devicesetup/photon-tinker-android.devicesetup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ecjpake4j/photon-tinker-android.ecjpake4j.iml" filepath="$PROJECT_DIR$/.idea/modules/ecjpake4j/photon-tinker-android.ecjpake4j.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/firmwareprotos/photon-tinker-android.firmwareprotos.iml" filepath="$PROJECT_DIR$/.idea/modules/firmwareprotos/photon-tinker-android.firmwareprotos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mesh/photon-tinker-android.mesh.iml" filepath="$PROJECT_DIR$/.idea/modules/mesh/photon-tinker-android.mesh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/meshui/photon-tinker-android.meshui.iml" filepath="$PROJECT_DIR$/.idea/modules/meshui/photon-tinker-android.meshui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk_example_app/photon-tinker-android.sdk_example_app.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk_example_app/photon-tinker-android.sdk_example_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/setup_exampleapp/photon-tinker-android.setup_exampleapp.iml" filepath="$PROJECT_DIR$/.idea/modules/setup_exampleapp/photon-tinker-android.setup_exampleapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/setup_testapp/photon-tinker-android.setup_testapp.iml" filepath="$PROJECT_DIR$/.idea/modules/setup_testapp/photon-tinker-android.setup_testapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/setup_exampleapp/setup_exampleapp.iml" filepath="$PROJECT_DIR$/setup_exampleapp/setup_exampleapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/setup_testapp/setup_testapp.iml" filepath="$PROJECT_DIR$/setup_testapp/setup_testapp.iml" />
     </modules>
