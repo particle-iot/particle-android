@@ -209,10 +209,10 @@ public class GetReadyActivity extends BaseActivity implements PermissionsFragmen
     }
 
     private void moveToDeviceDiscovery() {
-        if (PermissionsFragment.hasPermission(this, permission.ACCESS_COARSE_LOCATION)) {
+        if (PermissionsFragment.hasPermission(this, permission.ACCESS_FINE_LOCATION)) {
             startActivity(new Intent(GetReadyActivity.this, DiscoverDeviceActivity.class));
         } else {
-            PermissionsFragment.get(this).ensurePermission(permission.ACCESS_COARSE_LOCATION);
+            PermissionsFragment.get(this).ensurePermission(permission.ACCESS_FINE_LOCATION);
         }
     }
 

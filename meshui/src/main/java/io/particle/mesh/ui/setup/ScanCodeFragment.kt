@@ -218,7 +218,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     }
 
     private fun getRequiredPermissions(): Array<String> {
-        return arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_COARSE_LOCATION)
+        return arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     private fun allPermissionsGranted(): Boolean {

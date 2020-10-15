@@ -3,6 +3,9 @@ package io.particle.android.sdk.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 
 import java.util.Set;
 
@@ -31,6 +34,8 @@ public class SoftAPConfigRemover {
     }
 
     public void onSoftApConfigured(SSID newSsid) {
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) return; // not applicable here
+
         // make a defensive copy of what we get back
         Set<SSID> ssids = set(loadSSIDsWithKey(KEY_SOFT_AP_SSIDS));
         ssids.add(newSsid);
@@ -38,6 +43,8 @@ public class SoftAPConfigRemover {
     }
 
     public void removeAllSoftApConfigs() {
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) return; // not applicable here
+
         for (SSID ssid : loadSSIDsWithKey(KEY_SOFT_AP_SSIDS)) {
             wifiFacade.removeNetwork(ssid);
         }
@@ -45,6 +52,8 @@ public class SoftAPConfigRemover {
     }
 
     public void onWifiNetworkDisabled(SSID ssid) {
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) return; // not applicable here
+
         log.v("onWifiNetworkDisabled() " + ssid);
         Set<SSID> ssids = set(loadSSIDsWithKey(KEY_DISABLED_WIFI_SSIDS));
         ssids.add(ssid);
@@ -52,13 +61,14 @@ public class SoftAPConfigRemover {
     }
 
     public void reenableWifiNetworks() {
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) return; // not applicable here
+
         log.v("reenableWifiNetworks()");
         for (SSID ssid : loadSSIDsWithKey(KEY_DISABLED_WIFI_SSIDS)) {
             wifiFacade.reenableNetwork(ssid);
         }
         saveWithKey(KEY_DISABLED_WIFI_SSIDS, set());
     }
-
 
     private Set<SSID> loadSSIDsWithKey(String key) {
         return Funcy.transformSet(prefs.getStringSet(key, set()), SSID::from);

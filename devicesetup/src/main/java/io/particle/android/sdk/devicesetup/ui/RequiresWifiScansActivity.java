@@ -12,7 +12,7 @@ public class RequiresWifiScansActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!PermissionsFragment.hasPermission(this, permission.ACCESS_COARSE_LOCATION)) {
+        if (!PermissionsFragment.hasPermission(this, permission.ACCESS_FINE_LOCATION)) {
             Log.d("RequiresWifiScans", "Location permission appears to have been revoked, finishing activity...");
             finish();
         }
