@@ -157,11 +157,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "testDebugUnitTest") {
             excludes: excludes)
     def mainSrc = "${project.projectDir}/src/main/java"
 
-//    classDirectories = files([debugTree], [kotlinDebugTree])
     getClassDirectories().setFrom(files([debugTree], [kotlinDebugTree]))
-//    executionData = files("$buildDir/jacoco/testDebugUnitTest.exec")
     getExecutionData().setFrom(files("$buildDir/jacoco/testDebugUnitTest.exec"))
-//    sourceDirectories = files([mainSrc])
     getSourceDirectories().setFrom(files([mainSrc]))
 }
 
