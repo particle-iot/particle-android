@@ -7,12 +7,10 @@ import androidx.fragment.app.FragmentActivity;
 
 import javax.inject.Inject;
 
-import io.particle.android.sdk.devicesetup.ApConnector;
-import io.particle.android.sdk.devicesetup.ApConnector.Client;
+import io.particle.android.sdk.devicesetup.apconnector.ApConnector;
+import io.particle.android.sdk.devicesetup.apconnector.ApConnector.Client;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.di.ApModule;
-import io.particle.android.sdk.utils.EZ;
-import io.particle.android.sdk.utils.SSID;
 import io.particle.android.sdk.utils.WifiFacade;
 import io.particle.android.sdk.utils.WorkerFragment;
 import io.particle.android.sdk.utils.ui.Fragments;
@@ -65,11 +63,9 @@ public class ConnectToApFragment extends WorkerFragment {
      * Connect this Android device to the specified AP.
      *
      * @param config the WifiConfiguration defining which AP to connect to
-     * @return the SSID that was connected prior to calling this method.  Will be null if
-     * there was no network connected, or if already connected to the target network.
      */
-    public SSID connectToAP(final WifiConfiguration config) {
-        return apConnector.connectToAP(config, apConnectorClient);
+    public void connectToAP(final WifiConfiguration config) {
+        apConnector.connectToAP(config, apConnectorClient);
     }
 
 }

@@ -1,11 +1,16 @@
 package io.particle.android.sdk.di;
 
 import android.content.Context;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
+
 import androidx.annotation.RestrictTo;
 
 import dagger.Module;
 import dagger.Provides;
-import io.particle.android.sdk.devicesetup.ApConnector;
+import io.particle.android.sdk.devicesetup.apconnector.ApConnector;
+import io.particle.android.sdk.devicesetup.apconnector.ApConnectorApi21;
+import io.particle.android.sdk.devicesetup.apconnector.ApConnectorApi29;
 import io.particle.android.sdk.devicesetup.commands.CommandClientFactory;
 import io.particle.android.sdk.devicesetup.setupsteps.SetupStepsFactory;
 import io.particle.android.sdk.devicesetup.ui.DiscoverProcessWorker;
@@ -44,6 +49,10 @@ public class ApModule {
     @Provides
     protected ApConnector providesApConnector(Context context, SoftAPConfigRemover softAPConfigRemover,
                                               WifiFacade wifiFacade) {
-        return new ApConnector(context, softAPConfigRemover, wifiFacade);
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+            return new ApConnectorApi29(context, wifiFacade);
+        } else {
+            return new ApConnectorApi21(context, softAPConfigRemover, wifiFacade);
+        }
     }
 }
