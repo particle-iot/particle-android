@@ -108,7 +108,8 @@ dependencies {
 //    releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    api 'io.github.inflationx:calligraphy3:3.1.1'
+    api 'io.github.inflationx:viewpump:2.0.3'
 
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'

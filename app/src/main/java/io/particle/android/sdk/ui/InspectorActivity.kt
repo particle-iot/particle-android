@@ -78,7 +78,7 @@ class InspectorActivity : BaseActivity() {
             return
         }
 
-        device = intent.getParcelableExtra(EXTRA_DEVICE)
+        device = intent.getParcelableExtra(EXTRA_DEVICE)!!
 
         setContentView(R.layout.activity_inspector)
 

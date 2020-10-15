@@ -50,9 +50,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
 
     private val log = KotlinLogging.logger {}
 
-    override val device: ParticleDevice by lazy {
-        intent.getParcelableExtra(EXTRA_DEVICE) as ParticleDevice
-    }
+    override val device: ParticleDevice by lazy { intent.getParcelableExtra(EXTRA_DEVICE)!! }
 
     override fun onFlowTerminated(nextAction: FlowTerminationAction) {
         log.info { "onFlowTerminated()" }

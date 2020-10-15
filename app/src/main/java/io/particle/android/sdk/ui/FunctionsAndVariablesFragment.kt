@@ -251,7 +251,7 @@ private class DataListAdapter(
                 val clipboard: ClipboardManager? = context.getSystemService()
                 val clip = ClipData.newPlainText(title, message)
                 if (clipboard != null) {
-                    clipboard.primaryClip = clip
+                    clipboard.setPrimaryClip(clip)
                 }
                 Toast.makeText(context, R.string.clipboard_copy_variable, Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
