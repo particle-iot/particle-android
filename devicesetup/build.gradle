@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.jakewharton.butterknife'
+
 
 // This is the library version used when deploying the artifact
 version = '0.6.3'
@@ -48,6 +51,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -58,7 +65,6 @@ android {
     lintOptions {
         abortOnError true
     }
-
 }
 
 
@@ -67,6 +73,9 @@ dependencies {
 
     implementation project(':cloudsdk')
 //    api 'io.particle:cloudsdk:1.0.0'
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    api "io.github.microutils:kotlin-logging:1.7.8"
 
     api 'com.squareup.phrase:phrase:1.1.0'
     api 'io.github.inflationx:calligraphy3:3.1.1'
