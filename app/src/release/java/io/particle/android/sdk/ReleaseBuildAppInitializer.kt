@@ -14,22 +14,23 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.logging.Handler
 import java.util.logging.Level
 
-import io.fabric.sdk.android.Fabric
 import io.particle.android.sdk.utils.*
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.QAToolImpl
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.LoggerConfiguration
 import pl.brightinventions.slf4android.MessageValueSupplier
+import com.google.firebase.FirebaseApp
 
 
 fun onApplicationCreated(app: Application) {
     val coveredByGDPR = isUserCoveredByGDPR()
+    FirebaseApp.initializeApp(app)
 
     if (!coveredByGDPR) {
         //"MVP" level GDPR support: only enable crash reporting + Analytics if the user is NOT in the EU.
         FirebaseAnalytics.getInstance(app).setAnalyticsCollectionEnabled(true)
-        Fabric.with(app, Crashlytics())
+
 
         // Add Crashlytics logger
         LoggerConfiguration.configuration()
