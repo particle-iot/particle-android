@@ -3,11 +3,14 @@ package io.particle.android.sdk.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 
 import java.util.Set;
+
+import io.particle.android.sdk.devicesetup.ui.DeviceSetupState;
 
 import static io.particle.android.sdk.utils.Funcy.transformSet;
 import static io.particle.android.sdk.utils.Py.set;
@@ -17,7 +20,6 @@ public class SoftAPConfigRemover {
 
     private static final TLog log = TLog.get(SoftAPConfigRemover.class);
 
-
     private static final String
             PREFS_SOFT_AP_NETWORK_REMOVER = "PREFS_SOFT_AP_NETWORK_REMOVER",
             KEY_SOFT_AP_SSIDS = "KEY_SOFT_AP_SSIDS",
@@ -26,11 +28,12 @@ public class SoftAPConfigRemover {
 
     private final SharedPreferences prefs;
     private final WifiFacade wifiFacade;
+    private final Context context;
 
     public SoftAPConfigRemover(Context context, WifiFacade wifiFacade) {
         this.wifiFacade = wifiFacade;
-        Context ctx = context.getApplicationContext();
-        prefs = ctx.getSharedPreferences(PREFS_SOFT_AP_NETWORK_REMOVER, Context.MODE_PRIVATE);
+        this.context = context.getApplicationContext();
+        prefs = this.context.getSharedPreferences(PREFS_SOFT_AP_NETWORK_REMOVER, Context.MODE_PRIVATE);
     }
 
     public void onSoftApConfigured(SSID newSsid) {
@@ -43,7 +46,7 @@ public class SoftAPConfigRemover {
     }
 
     public void removeAllSoftApConfigs() {
-        if (VERSION.SDK_INT >= VERSION_CODES.Q) return; // not applicable here
+        unregisterNetworkCallbacks();
 
         for (SSID ssid : loadSSIDsWithKey(KEY_SOFT_AP_SSIDS)) {
             wifiFacade.removeNetwork(ssid);
@@ -61,7 +64,10 @@ public class SoftAPConfigRemover {
     }
 
     public void reenableWifiNetworks() {
-        if (VERSION.SDK_INT >= VERSION_CODES.Q) return; // not applicable here
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+            unregisterNetworkCallbacks();
+            return;
+        }
 
         log.v("reenableWifiNetworks()");
         for (SSID ssid : loadSSIDsWithKey(KEY_DISABLED_WIFI_SSIDS)) {
@@ -80,5 +86,18 @@ public class SoftAPConfigRemover {
         prefs.edit()
                 .putStringSet(key, asStrings)
                 .apply();
+    }
+
+    private void unregisterNetworkCallbacks() {
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+            ConnectivityManager connMan = (ConnectivityManager) context.getSystemService(
+                    Context.CONNECTIVITY_SERVICE
+            );
+
+            if (DeviceSetupState.networkCallbacks != null) {
+                connMan.unregisterNetworkCallback(DeviceSetupState.networkCallbacks);
+                DeviceSetupState.networkCallbacks = null;
+            }
+        }
     }
 }

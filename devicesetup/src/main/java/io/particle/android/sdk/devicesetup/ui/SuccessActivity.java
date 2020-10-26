@@ -37,6 +37,8 @@ import io.particle.android.sdk.ui.BaseActivity;
 import io.particle.android.sdk.ui.NextActivitySelector;
 import io.particle.android.sdk.utils.Async;
 import io.particle.android.sdk.utils.SEGAnalytics;
+import io.particle.android.sdk.utils.SoftAPConfigRemover;
+import io.particle.android.sdk.utils.WifiFacade;
 import io.particle.android.sdk.utils.ui.ParticleUi;
 import io.particle.android.sdk.utils.ui.Ui;
 import io.particle.android.sdk.utils.ui.WebViewActivity;
@@ -128,6 +130,12 @@ public class SuccessActivity extends BaseActivity {
 
         int resultCode = getIntent().getIntExtra(EXTRA_RESULT_CODE, -1);
         isSuccess = list(RESULT_SUCCESS, RESULT_SUCCESS_UNKNOWN_OWNERSHIP).contains(resultCode);
+
+        SoftAPConfigRemover softAPConfigRemover = new SoftAPConfigRemover(
+                this.getApplicationContext(),
+                WifiFacade.get(this.getApplicationContext())
+        );
+        softAPConfigRemover.removeAllSoftApConfigs();
 
         if (!isSuccess) {
             ImageView image = Ui.findView(this, R.id.result_image);

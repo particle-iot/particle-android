@@ -95,7 +95,7 @@ public class GetReadyActivity extends BaseActivity implements PermissionsFragmen
         if (claimCodeWorker != null && !claimCodeWorker.isCancelled()) {
             return;
         }
-        DeviceSetupState.reset();
+        DeviceSetupState.reset(this.getApplicationContext());
         if (BaseActivity.setupOnly) {
             moveToDeviceDiscovery();
             return;

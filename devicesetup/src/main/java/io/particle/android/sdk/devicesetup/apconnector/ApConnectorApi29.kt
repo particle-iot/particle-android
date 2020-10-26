@@ -10,6 +10,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import io.particle.android.sdk.devicesetup.apconnector.ApConnector.Client
+import io.particle.android.sdk.devicesetup.ui.DeviceSetupState
 import io.particle.android.sdk.utils.SSID
 import io.particle.android.sdk.utils.WifiFacade
 import mu.KotlinLogging
@@ -27,7 +28,7 @@ class ApConnectorApi29(
     private val connectivityManager: ConnectivityManager =
         ctx.applicationContext.getSystemService()!!
     private val decoratingClient: DecoratingClient = DecoratingClient { clearState() }
-    private lateinit var networkCallbacks: ConnectivityManager.NetworkCallback
+    private var networkCallbacks: ConnectivityManager.NetworkCallback? = null
 
     @SuppressLint("NewApi")
     @MainThread
@@ -59,7 +60,7 @@ class ApConnectorApi29(
             .build()
 
         log.info { "Requesting to connect to $configSSID" }
-        connectivityManager.requestNetwork(request, networkCallbacks)
+        connectivityManager.requestNetwork(request, networkCallbacks!!)
     }
 
     @MainThread
@@ -109,10 +110,7 @@ class ApConnectorApi29(
 
     private fun clearState() {
         try {
-            log.info { "clearState()" }
-            log.error { "NEED TO CLEAR THESE CALLBACKS!" }
-            // TODO: clear these callbacks once we're managing this correctly
-//            connectivityManager.unregisterNetworkCallback(networkCallbacks)
+            DeviceSetupState.networkCallbacks = networkCallbacks
         } catch (ex: IllegalArgumentException) {
             // don't worry if we weren't registered.
         }
