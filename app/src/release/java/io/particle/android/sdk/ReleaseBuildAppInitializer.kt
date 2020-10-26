@@ -8,7 +8,7 @@ package io.particle.android.sdk
 import android.app.Application
 import android.util.Log
 
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 
 import java.util.logging.Handler
@@ -49,7 +49,7 @@ fun onApplicationCreated(app: Application) {
             if (coveredByGDPR) {
                 return
             }
-            Crashlytics.logException(exception)
+            FirebaseCrashlytics.getInstance().recordException(exception)
         }
 
         override fun doLog(msg: String) {
@@ -57,7 +57,7 @@ fun onApplicationCreated(app: Application) {
             if (coveredByGDPR) {
                 return
             }
-            Crashlytics.log(msg)
+            FirebaseCrashlytics.getInstance().log(msg)
         }
     }
 
@@ -77,7 +77,7 @@ fun updateUsernameWithCrashlytics(username: String?) {
         return
     }
 
-    Crashlytics.setUserIdentifier(username)
+    username?.let { FirebaseCrashlytics.getInstance().setUserId(it) }
 }
 
 
@@ -96,9 +96,7 @@ internal class CrashlyticsLoggerHandler : Handler() {
         val logRecord = LogRecord.fromRecord(record)
         val messageBuilder = StringBuilder()
         messageValueSupplier.append(logRecord, messageBuilder)
-        val tag = record.loggerName
-        val androidLogLevel = logRecord.logLevel.androidLevel
-        Crashlytics.log(androidLogLevel, tag, messageBuilder.toString())
+        FirebaseCrashlytics.getInstance().log(messageBuilder.toString())
     }
 
     override fun close() {}
