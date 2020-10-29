@@ -1,5 +1,6 @@
 package io.particle.android.sdk.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -205,6 +206,7 @@ public class WifiFacade {
     }
 
     private List<WifiConfiguration> getConfiguredNetworks() {
+        @SuppressLint("MissingPermission")
         List<WifiConfiguration> configuredNetworks = wifiManager.getConfiguredNetworks();
         return (configuredNetworks == null)
                 ? Collections.emptyList()

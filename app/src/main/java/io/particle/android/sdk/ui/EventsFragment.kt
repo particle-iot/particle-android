@@ -259,7 +259,7 @@ class EventsFragment : Fragment() {
                 val context = holder.itemView.context
                 val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Event data", buildEventClipboardCopy(event))
-                clipboard.primaryClip = clip
+                clipboard.setPrimaryClip(clip)
                 Toast.makeText(context, R.string.clipboard_copy_event_msg, Toast.LENGTH_SHORT)
                     .show()
             }

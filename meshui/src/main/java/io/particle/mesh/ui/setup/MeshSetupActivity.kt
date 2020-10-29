@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
@@ -18,7 +19,6 @@ import io.particle.mesh.ui.TitleBarOptionsListener
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import mu.KotlinLogging
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
@@ -54,7 +54,7 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

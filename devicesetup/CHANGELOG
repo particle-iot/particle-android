@@ -1,3 +1,8 @@
+0.7.0
+=====
+* Update to accommodate changes in API 29 and up
+
+
 0.5.3
 =====
 * Particle CloudSdk update.

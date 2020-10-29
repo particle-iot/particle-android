@@ -6,12 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
+import io.particle.android.sdk.devicesetup.ui.DeviceSetupState;
 import io.particle.android.sdk.devicesetup.ui.GetReadyActivity;
 import io.particle.android.sdk.di.ApplicationComponent;
 import io.particle.android.sdk.di.ApplicationModule;

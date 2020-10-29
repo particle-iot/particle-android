@@ -40,11 +40,11 @@ ext {
 
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName project.version
 
@@ -81,7 +81,7 @@ android {
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api "io.github.microutils:kotlin-logging:1.7.8"
 
     api 'com.google.code.findbugs:jsr305:3.0.2'
@@ -157,11 +157,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "testDebugUnitTest") {
             excludes: excludes)
     def mainSrc = "${project.projectDir}/src/main/java"
 
-//    classDirectories = files([debugTree], [kotlinDebugTree])
     getClassDirectories().setFrom(files([debugTree], [kotlinDebugTree]))
-//    executionData = files("$buildDir/jacoco/testDebugUnitTest.exec")
     getExecutionData().setFrom(files("$buildDir/jacoco/testDebugUnitTest.exec"))
-//    sourceDirectories = files([mainSrc])
     getSourceDirectories().setFrom(files([mainSrc]))
 }
 

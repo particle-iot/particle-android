@@ -9,8 +9,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.particle.android.sdk.devicesetup.ApConnector;
-import io.particle.android.sdk.devicesetup.ApConnector.Client;
+import io.particle.android.sdk.devicesetup.apconnector.ApConnector;
+import io.particle.android.sdk.devicesetup.apconnector.ApConnector.Client;
 import io.particle.android.sdk.utils.SSID;
 import io.particle.android.sdk.utils.WifiFacade;
 

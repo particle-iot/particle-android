@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.utils.appHasPermission
 import io.particle.android.sdk.utils.pass
@@ -27,7 +28,6 @@ import io.particle.mesh.ui.TitleBarOptionsListener
 import io.particle.mesh.ui.setup.PermissionsFragment
 import kotlinx.android.synthetic.main.activity_control_panel.*
 import mu.KotlinLogging
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 private const val EXTRA_DEVICE = "EXTRA_DEVICE"
@@ -50,9 +50,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
 
     private val log = KotlinLogging.logger {}
 
-    override val device: ParticleDevice by lazy {
-        intent.getParcelableExtra(EXTRA_DEVICE) as ParticleDevice
-    }
+    override val device: ParticleDevice by lazy { intent.getParcelableExtra(EXTRA_DEVICE)!! }
 
     override fun onFlowTerminated(nextAction: FlowTerminationAction) {
         log.info { "onFlowTerminated()" }
@@ -79,7 +77,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
     private var shouldCheckPermissions = true
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +113,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
     override fun onResume() {
         super.onResume()
         if (shouldCheckPermissions) {
-            shouldCheckPermissions = !appHasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+            shouldCheckPermissions = !appHasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
             ensureLocationPermission()
         }
     }
@@ -152,7 +150,7 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
     }
 
     private fun ensureLocationPermission() {
-        PermissionsFragment.get(this)!!.ensurePermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        PermissionsFragment.get(this)!!.ensurePermission(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     private fun showDeviceInfoView(showDeviceInfoSlider: Boolean) {

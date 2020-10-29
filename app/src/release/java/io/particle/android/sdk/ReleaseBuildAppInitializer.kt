@@ -8,28 +8,29 @@ package io.particle.android.sdk
 import android.app.Application
 import android.util.Log
 
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 
 import java.util.logging.Handler
 import java.util.logging.Level
 
-import io.fabric.sdk.android.Fabric
 import io.particle.android.sdk.utils.*
 import io.particle.mesh.common.QATool
 import io.particle.mesh.common.QAToolImpl
 import pl.brightinventions.slf4android.LogRecord
 import pl.brightinventions.slf4android.LoggerConfiguration
 import pl.brightinventions.slf4android.MessageValueSupplier
+import com.google.firebase.FirebaseApp
 
 
 fun onApplicationCreated(app: Application) {
     val coveredByGDPR = isUserCoveredByGDPR()
+    FirebaseApp.initializeApp(app)
 
     if (!coveredByGDPR) {
         //"MVP" level GDPR support: only enable crash reporting + Analytics if the user is NOT in the EU.
         FirebaseAnalytics.getInstance(app).setAnalyticsCollectionEnabled(true)
-        Fabric.with(app, Crashlytics())
+
 
         // Add Crashlytics logger
         LoggerConfiguration.configuration()
@@ -48,7 +49,7 @@ fun onApplicationCreated(app: Application) {
             if (coveredByGDPR) {
                 return
             }
-            Crashlytics.logException(exception)
+            FirebaseCrashlytics.getInstance().recordException(exception)
         }
 
         override fun doLog(msg: String) {
@@ -56,7 +57,7 @@ fun onApplicationCreated(app: Application) {
             if (coveredByGDPR) {
                 return
             }
-            Crashlytics.log(msg)
+            FirebaseCrashlytics.getInstance().log(msg)
         }
     }
 
@@ -76,7 +77,7 @@ fun updateUsernameWithCrashlytics(username: String?) {
         return
     }
 
-    Crashlytics.setUserIdentifier(username)
+    username?.let { FirebaseCrashlytics.getInstance().setUserId(it) }
 }
 
 
@@ -95,9 +96,7 @@ internal class CrashlyticsLoggerHandler : Handler() {
         val logRecord = LogRecord.fromRecord(record)
         val messageBuilder = StringBuilder()
         messageValueSupplier.append(logRecord, messageBuilder)
-        val tag = record.loggerName
-        val androidLogLevel = logRecord.logLevel.androidLevel
-        Crashlytics.log(androidLogLevel, tag, messageBuilder.toString())
+        FirebaseCrashlytics.getInstance().log(messageBuilder.toString())
     }
 
     override fun close() {}

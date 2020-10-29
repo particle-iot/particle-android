@@ -36,7 +36,7 @@ fun buildMatchingDeviceNameScanner(
     toggleScanLD.value = true
 
     val hasPermissionFunc: () -> Boolean = {
-        ctx.appHasPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        ctx.appHasPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     val scannerLD = buildReactiveBluetoothScanner(
