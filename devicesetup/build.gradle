@@ -71,10 +71,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation project(':cloudsdk')
-//    api 'io.particle:cloudsdk:1.0.0'
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+//    implementation project(':cloudsdk')
+    api 'io.particle:cloudsdk:1.0.1'
 
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api "io.github.microutils:kotlin-logging:1.7.8"
 
     api 'com.squareup.phrase:phrase:1.1.0'
