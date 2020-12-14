@@ -1,3 +1,8 @@
+3.1.2
+======
+- Required updates to target API level 30
+
+
 3.1.1
 ======
 - Fixes for event handling
