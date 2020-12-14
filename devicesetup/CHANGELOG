@@ -1,3 +1,7 @@
+0.7.2
+=====
+* Fix for separate publishing issue with relying on transitive dependencies from the cloud SDK
+
 0.7.1
 =====
 * Fix for publishing problem with 0.7.0
