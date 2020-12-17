@@ -194,13 +194,13 @@ class StickerErrorException(cause: Throwable? = null) : MeshSetupFlowException(
 
 class FailedToActivateSimException(severity: ExceptionType, cause: Throwable? = null) : MeshSetupFlowException(
     cause,
-    userFacingMessage = "SIM activation is taking longer than expected. Please retry your SIM activation. If you have retried multiple times, please contact support.",
+    userFacingMessage = "SIM activation is ongoing and taking a long time to finish. Wait for it to complete and try again.",
     severity = severity
 )
 
 
 class FailedToDeactivateSimException : MeshSetupFlowException(
-    userFacingMessage = "SIM deactivation is taking longer than expected. Please retry your SIM deactivation. If you have retried multiple times, please contact support.",
+    userFacingMessage = "SIM deactivation is ongoing and taking a long time to finish. Wait for it to complete and try again.",
     severity = ERROR_FATAL
 )
 
