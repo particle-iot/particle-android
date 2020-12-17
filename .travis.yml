@@ -7,8 +7,8 @@ jdk:
 
 env:
   global:
-    - ANDROID_COMPILE_API_LEVEL=28
-    - ANDROID_BUILD_TOOLS_VERSION=28.0.3
+    - ANDROID_COMPILE_API_LEVEL=30
+    - ANDROID_BUILD_TOOLS_VERSION=29.0.2
 
 android:
   components:
@@ -32,7 +32,6 @@ android:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
-
 
 script:
   - ./gradlew :cloudsdk:assembleDebug :cloudsdk:testDebugUnitTest :cloudsdk:jacocoTestReport 
