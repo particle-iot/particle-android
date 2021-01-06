@@ -7,6 +7,7 @@ import io.particle.mesh.setup.flow.FailedToActivateSimException
 import io.particle.mesh.setup.flow.MeshSetupStep
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.context.SetupContexts
+import io.particle.mesh.setup.flow.retrySimAction
 
 class StepEnsureSimActivated(private val cloud: ParticleCloud) : MeshSetupStep() {
 
@@ -15,22 +16,9 @@ class StepEnsureSimActivated(private val cloud: ParticleCloud) : MeshSetupStep()
             return
         }
 
-        for (i in 0..2) {
-
-            val statusCode = doActivateSim(ctxs)
-            if (statusCode == 200) {
-                ctxs.targetDevice.updateIsSimActivated(true)
-                return
-
-            } else if (statusCode == 504) {
-                continue
-
-            } else {
-                throw FailedToActivateSimException(ERROR_RECOVERABLE)
-            }
+        retrySimAction {
+            doActivateSim(ctxs)
         }
-
-        throw FailedToActivateSimException(ERROR_FATAL)
     }
 
     private fun doActivateSim(ctxs: SetupContexts): Int {
@@ -38,4 +26,7 @@ class StepEnsureSimActivated(private val cloud: ParticleCloud) : MeshSetupStep()
         return response.status
     }
 
+    override fun wrapException(cause: Exception): Exception {
+        return FailedToActivateSimException(ERROR_FATAL, cause)
+    }
 }
