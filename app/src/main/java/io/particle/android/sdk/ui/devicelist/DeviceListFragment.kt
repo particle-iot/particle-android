@@ -1,5 +1,6 @@
 package io.particle.android.sdk.ui.devicelist
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -25,7 +26,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -33,13 +33,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.snakydesign.livedataextensions.nonNull
 import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.sdk.accountsetup.LoginActivity
-import io.particle.android.sdk.cloud.ParticleCloudSDK
-import io.particle.android.sdk.cloud.ParticleDevice
-import io.particle.android.sdk.cloud.ParticleEvent
-import io.particle.android.sdk.cloud.ParticleEventHandler
+import io.particle.android.sdk.cloud.*
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver
 import io.particle.android.sdk.ui.InspectorActivity
+import io.particle.android.sdk.ui.devicelist.UserServiceAgreementsCheckResult.LimitReached
+import io.particle.android.sdk.ui.devicelist.UserServiceAgreementsCheckResult.NetworkError
+import io.particle.android.sdk.ui.devicelist.UserServiceAgreementsCheckResult.SetupAllowed
 import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
@@ -48,13 +48,13 @@ import io.particle.commonui.styleAsPill
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
 import io.particle.mesh.setup.flow.Scopes
+import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.inflateRow
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import kotlinx.android.synthetic.main.fragment_device_list2.*
 import kotlinx.android.synthetic.main.row_device_list.view.*
 import pl.brightinventions.slf4android.LogTask
-import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import pl.brightinventions.slf4android.showLogSharingPrompt
 import java.io.File
 import java.text.SimpleDateFormat
@@ -81,27 +81,14 @@ class DeviceListFragment : Fragment() {
     private var deviceSetupCompleteReceiver: DeviceSetupCompleteReceiver? = null
 
     private val scopes = Scopes()
-
-    private fun addGen3() {
-        addXenonDevice()
-        add_device_fab.collapse()
-    }
-
-    fun addPhoton() {
-        addPhotonDevice()
-        add_device_fab.collapse()
-    }
-
-    fun addElectron() {
-        addElectronDevice()
-        add_device_fab.collapse()
-    }
+    private var dialog: Dialog? = null
+    private var shouldRefreshOnResume = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val top = inflater.inflate(R.layout.fragment_device_list2, container, false)
 
@@ -129,7 +116,7 @@ class DeviceListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         nameFilterTextWatcher = buildNameFilterTextWatcher()
 
-        refresh_layout.setOnRefreshListener { this.refreshDevices() }
+        refresh_layout.setOnRefreshListener { this.refreshData() }
 
         deviceSetupCompleteReceiver =
             object : ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver() {
@@ -145,9 +132,9 @@ class DeviceListFragment : Fragment() {
 
         refresh_layout.isRefreshing = true
 
-        action_set_up_a_xenon.setOnClickListener { addGen3() }
-        action_set_up_a_photon.setOnClickListener { addPhoton() }
-        action_set_up_an_electron.setOnClickListener { addElectron() }
+        action_set_up_a_xenon.setOnClickListener { onSetupButtonPressed(SetupInitType.GEN3) }
+        action_set_up_a_photon.setOnClickListener { onSetupButtonPressed(SetupInitType.PHOTON) }
+        action_set_up_an_electron.setOnClickListener { onSetupButtonPressed(SetupInitType.ELECTRON) }
 
         toolbar.inflateMenu(R.menu.device_list)
         toolbar.setOnMenuItemClickListener {
@@ -199,8 +186,12 @@ class DeviceListFragment : Fragment() {
         subscribeToSystemEvents()
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
             viewLifecycleOwner,
-            Observer { onDeviceListUpdated(it) }
+            { onDeviceListUpdated(it) }
         )
+        if (shouldRefreshOnResume) {
+            shouldRefreshOnResume = false
+            filterViewModel.refreshDevices()
+        }
     }
 
     override fun onPause() {
@@ -208,6 +199,13 @@ class DeviceListFragment : Fragment() {
         name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
         unsubscribeFromSystemEvents()
         super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        scopes.cancelChildren()
+        dialog?.cancel()
+        dialog = null
     }
 
     override fun onDestroy() {
@@ -350,26 +348,53 @@ class DeviceListFragment : Fragment() {
         }
     }
 
-    private fun addXenonDevice() {
-        startActivity(Intent(activity, MeshSetupActivity::class.java))
+    private fun onSetupButtonPressed(initType: SetupInitType) {
+        add_device_fab.collapse()
+        dialog = showProgressDialog()
+        scopes.onMain {
+            val checkResult = filterViewModel.checkServiceAgreements()
+
+            if (dialog?.isShowing != true) {
+                // dialog was already closed by the user/by leaving this screen
+                return@onMain
+            }
+
+            dialog?.cancel()
+            dialog = null
+
+            when (checkResult) {
+                is SetupAllowed -> continueWithSetup(initType)
+                is LimitReached -> showLimitReachedDialog(checkResult.maxDevices)
+                is NetworkError -> activity.safeToast(
+                    getString(R.string.MeshStrings_Error_NetworkError)
+                )
+            }
+        }
     }
 
-    private fun addPhotonDevice() {
-        ParticleDeviceSetupLibrary.startDeviceSetup(
-            requireNonNull<FragmentActivity>(activity),
-            DeviceListActivity::class.java
-        )
+    private fun continueWithSetup(initType: SetupInitType) {
+        shouldRefreshOnResume = true
+
+        when (initType) {
+
+            SetupInitType.GEN3 -> startActivity(Intent(activity, MeshSetupActivity::class.java))
+
+            SetupInitType.PHOTON -> {
+                ParticleDeviceSetupLibrary.startDeviceSetup(
+                    requireNonNull<FragmentActivity>(activity),
+                    DeviceListActivity::class.java
+                )
+            }
+
+            SetupInitType.ELECTRON -> {
+                val uri = Uri.parse(getString(R.string.electron_setup_uri))
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intent)
+            }
+        }
     }
 
-    private fun addElectronDevice() {
-        //        Intent intent = (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP)
-        //                ? new Intent(getActivity(), ElectronSetupActivity.class)
-        //                : new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)));
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)))
-        startActivity(intent)
-    }
-
-    private fun refreshDevices() {
+    private fun refreshData() {
         filterViewModel.refreshDevices()
     }
 
@@ -437,6 +462,14 @@ internal class DeviceListAdapter(
         }
     }
 }
+
+
+private enum class SetupInitType {
+    GEN3,
+    PHOTON,
+    ELECTRON
+}
+
 
 
 private val log = TLog.get(DeviceListFragment::class.java)

@@ -58,6 +58,8 @@
     <string name="TinkerStrings_DeviceList_Prompt_SetupNewDevice_Title">Setup up a new device</string>
     <string name="TinkerStrings_DeviceList_Prompt_LogOutConfirmation_Title">Log out</string>
     <string name="TinkerStrings_DeviceList_Prompt_LogOutConfirmation_Message">Are you sure you want to log out?</string>
+    <string name="TinkerStrings_DeviceList_Prompt_DeviceLimitReachedError_Title">You\'ve reached the {limit} device limit!</string>
+    <string name="TinkerStrings_DeviceList_Prompt_DeviceLimitReachedError_Message">Please upgrade your Particle account at console.particle.io from a computer.</string>
     <string name="TinkerStrings_DeviceList_Tutorial_Tutorial1_Title">Your devices</string>
     <string name="TinkerStrings_DeviceList_Tutorial_Tutorial1_Message">See and manage your devices.\n\nOnline devices have their indicator \'breathing\' cyan, offline ones are gray.\n\nTap a device to enter Device Inspector mode, device must run Tinker firmware to enter Tinker mode.\n\nSwipe left to remove a device from your account.\n\nPull down to refresh your list.</string>
     <string name="TinkerStrings_DeviceList_Tutorial_Tutorial2_Title">Setup a new device</string>

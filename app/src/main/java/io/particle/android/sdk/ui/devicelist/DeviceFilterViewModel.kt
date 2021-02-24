@@ -15,6 +15,8 @@ import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ALL_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.NONE_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.OFFLINE_ONLY
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ONLINE_ONLY
+import io.particle.android.sdk.utils.hasReachedDeviceLimit
+import io.particle.android.sdk.utils.maxDevices
 import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.android.livedata.castAndSetOnMainThread
@@ -164,8 +166,6 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
     private val scopes = Scopes()
     private var firstRefreshRequested = false
 
-    private val log = KotlinLogging.logger {}
-
     init {
         // arbitrary value that always changes every time we receive the broadcast, telling us to
         // retrieve the new devices
@@ -188,6 +188,21 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
 
     fun refreshDevices() {
         scopes.onMain { doRefreshDevices() }
+    }
+
+    suspend fun checkServiceAgreements(): UserServiceAgreementsCheckResult {
+        return try {
+            scopes.withWorker(5000) {
+                val agreementsResponse = cloud.getServiceAgreements()
+                if (agreementsResponse.hasReachedDeviceLimit()) {
+                    UserServiceAgreementsCheckResult.LimitReached(agreementsResponse.maxDevices ?: -1)
+                } else {
+                    UserServiceAgreementsCheckResult.SetupAllowed
+                }
+            }
+        } catch (ex: Exception) {
+            UserServiceAgreementsCheckResult.NetworkError
+        }
     }
 
     private suspend fun doRefreshDevices() {
