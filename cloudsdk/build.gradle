@@ -8,7 +8,7 @@ plugins {
 
 
 // This is the library version used when publishing the artifact
-version = '1.0.1'
+version = '1.0.2'
 
 ext {
     bintrayRepo = 'android'
