@@ -51,7 +51,7 @@ internal suspend fun retrySimAction(simActionBlock: () -> Unit) {
 
         } catch (ex: ParticleCloudException) {
             error = ex
-            if (ex.responseData?.httpStatusCode == 504) {
+            if (ex.responseData?.httpStatusCode == 504 || ex.responseData?.httpStatusCode == 408) {
                 // this is apparently considered OK from the API and we should just retry...
                 delay(1000)
                 continue
