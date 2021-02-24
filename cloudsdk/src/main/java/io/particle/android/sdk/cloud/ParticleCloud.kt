@@ -641,6 +641,14 @@ class ParticleCloud internal constructor(
             )
         }
     }
+
+    @WorkerThread
+    @Throws(ParticleCloudException::class)
+    fun getServiceAgreements(): UserServiceAgreementsResponse {
+        return runHandlingCommonErrors {
+            mainApi.getServiceAgreements()
+        }
+    }
     //endregion
 
 
@@ -996,6 +1004,7 @@ class ParticleCloud internal constructor(
             token = null
         }
     }
+
 
     companion object {
 

@@ -225,6 +225,9 @@ class ApiDefs {
             @Field("notes") note: String
         ): Response
 
+        @GET("/v1/user/service_agreements")
+        fun getServiceAgreements(): UserServiceAgreementsResponse
+
     }
 
 
