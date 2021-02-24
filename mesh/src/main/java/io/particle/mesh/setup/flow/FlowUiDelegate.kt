@@ -36,8 +36,6 @@ interface FlowUiDelegate {
 
     fun showTargetPairingProgressUi()
 
-    fun showPricingImpactScreen()
-
     fun showConnectingToDeviceCloudUi()
 
     fun showScanForWifiNetworksUi()

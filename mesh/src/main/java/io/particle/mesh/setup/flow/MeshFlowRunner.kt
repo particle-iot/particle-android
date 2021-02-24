@@ -156,7 +156,6 @@ class MeshFlowRunner(
         scopes.onMain {
             val ctxs = initContextWithDeviceIdAndBarcode(device, barcode, scopes)
 
-            ctxs.cloud.updatePricingImpactConfirmed(true)
             ctxs.cloud.updateShouldConnectToDeviceCloudConfirmed(true)
             ctxs.singleStepCongratsMessage = "Wi-Fi credentials were successfully added"
             ctxs.targetDevice.hasLatestFirmware = true  // skip the firmware update at this stage

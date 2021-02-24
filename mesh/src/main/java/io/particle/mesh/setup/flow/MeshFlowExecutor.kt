@@ -249,7 +249,6 @@ class MeshFlowExecutor(
 
 
             ETHERNET_FLOW -> listOf(
-                StepShowPricingImpact(deps.flowUi, deps.cloud),
                 StepShowConnectingToDeviceCloudUi(deps.flowUi),
                 StepSetSetupDone(),
                 StepEnsureListeningStoppedForBothDevices(),
@@ -261,7 +260,6 @@ class MeshFlowExecutor(
 
 
             WIFI_FLOW -> listOf(
-                StepShowPricingImpact(deps.flowUi, deps.cloud),
                 StepShowShouldConnectToDeviceCloudConfirmation(deps.flowUi),
                 StepCollectUserWifiNetworkSelection(deps.flowUi),
                 StepCollectSelectedWifiNetworkPassword(deps.flowUi),
@@ -278,10 +276,8 @@ class MeshFlowExecutor(
 
 
             CELLULAR_FLOW -> listOf(
-                StepEnsureCardOnFile(deps.flowUi, deps.cloud),
                 StepFetchIccid(deps.flowUi),
                 StepEnsureSimActivationStatusUpdated(deps.cloud),
-                StepShowPricingImpact(deps.flowUi, deps.cloud),
                 StepShowShouldConnectToDeviceCloudConfirmation(deps.flowUi),
                 StepShowCellularConnectingToDeviceCloudUi(deps.flowUi),
                 StepEnsureSimActivated(deps.cloud),

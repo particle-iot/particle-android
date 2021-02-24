@@ -120,17 +120,11 @@ class DeviceData(private val ctxs: SetupContexts) {
 
 class CloudData(private val ctxs: SetupContexts) {
 
-    val pricingImpact: ParticlePricingInfo?
-        get() { return ctxs.cloud.pricingImpact }
     val meshNetworksFromAPI: List<ParticleNetwork>?
         get() { return ctxs.cloud.apiNetworks }
 
     fun updateTargetDeviceNameToAssign(name: String) {
         ctxs.cloud.updateTargetDeviceNameToAssign(name)
-    }
-
-    fun updatePricingImpactConfirmed(confirmed: Boolean) {
-        ctxs.cloud.updatePricingImpactConfirmed(confirmed)
     }
 
 }

@@ -44,10 +44,6 @@ abstract class BaseFlowUiDelegate(
         navigate(R.id.action_global_useStandaloneOrInMeshFragment)
     }
 
-    override fun showPricingImpactScreen() {
-        navigate(R.id.action_global_pricingImpactFragment)
-    }
-
     override fun showConnectingToDeviceCloudUi() {
         navigate(R.id.action_global_connectingToDeviceCloudFragment)
     }

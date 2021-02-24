@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -199,6 +200,12 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
     }
 
     private void onWifiDisabled() {
+        if (Build.VERSION.SDK_INT >= VERSION_CODES.Q) {
+            // Wi-Fi disabled, but that's OK because on API 29+ devices, this case is handled
+            // for us by the OS when we prompt to connect to an AP
+            return;
+        }
+
         log.d("Wi-Fi disabled; prompting user");
         new AlertDialog.Builder(this)
                 .setTitle(R.string.wifi_required)

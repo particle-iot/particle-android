@@ -260,16 +260,6 @@
         android:id="@+id/action_global_boronConnectingStatusFragment"
         app:destination="@id/boronConnectingStatusFragment" />
 
-    <fragment
-        android:id="@+id/pricingImpactFragment"
-        android:name="io.particle.mesh.ui.setup.PricingImpactFragment"
-        android:label="fragment_pricing_impact"
-        tools:layout="@layout/fragment_pricing_impact" />
-
-    <action
-        android:id="@+id/action_global_pricingImpactFragment"
-        app:destination="@id/pricingImpactFragment" />
-
     <action
         android:id="@+id/action_global_scanJoinerCodeIntroFragment"
         app:destination="@id/scanJoinerCodeIntroFragment" />

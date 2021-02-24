@@ -3,8 +3,6 @@ package io.particle.mesh.setup.flow.context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.particle.android.sdk.cloud.ParticleNetwork
-import io.particle.android.sdk.cloud.ParticlePricingInfo
-import io.particle.mesh.common.android.livedata.ClearValueOnInactiveLiveData
 import io.particle.mesh.common.android.livedata.castAndPost
 import io.particle.mesh.common.logged
 import io.particle.mesh.setup.flow.Clearable
@@ -18,11 +16,9 @@ class CloudConnectionContext : Clearable {
     val targetDeviceNameToAssignLD: LiveData<String?> = MutableLiveData()
     val isTargetDeviceNamedLD: LiveData<Boolean?> = MutableLiveData()
     val shouldConnectToDeviceCloudConfirmed: LiveData<Boolean?> = MutableLiveData()
-    val pricingImpactConfirmedLD: LiveData<Boolean?> = MutableLiveData()
 
     var apiNetworks: List<ParticleNetwork>? by log.logged()
     var claimCode: String? by log.logged()
-    var pricingImpact: ParticlePricingInfo? by log.logged()
     var shouldBeClaimed: Boolean? by log.logged()
     var connectedToCloudCongratsUiShown by log.logged(false)
     var paymentCardOnFile by log.logged(false)
@@ -33,7 +29,6 @@ class CloudConnectionContext : Clearable {
         log.info { "clearState()" }
 
         claimCode = null
-        pricingImpact = null
         checkEthernetGatewayUiShown = false
         connectedToCloudCongratsUiShown = false
         paymentCardOnFile = false
@@ -43,7 +38,6 @@ class CloudConnectionContext : Clearable {
             targetDeviceNameToAssignLD,
             isTargetDeviceNamedLD,
             shouldConnectToDeviceCloudConfirmed,
-            pricingImpactConfirmedLD
         )
         for (ld in setToNulls) {
             ld.castAndPost(null)
@@ -63,11 +57,6 @@ class CloudConnectionContext : Clearable {
     fun updateShouldConnectToDeviceCloudConfirmed(confirmed: Boolean) {
         log.info { "updateShouldConnectToDeviceCloudConfirmed(): $confirmed" }
         shouldConnectToDeviceCloudConfirmed.castAndPost(confirmed)
-    }
-
-    fun updatePricingImpactConfirmed(clicked: Boolean) {
-        log.info { "updatePricingImpactConfirmed(): $clicked" }
-        pricingImpactConfirmedLD.castAndPost(clicked)
     }
 
 }
