@@ -80,7 +80,7 @@ dependencies {
     api 'com.squareup.phrase:phrase:1.1.0'
     api 'io.github.inflationx:calligraphy3:3.1.1'
     api 'io.github.inflationx:viewpump:2.0.3'
-    api 'com.segment.analytics.android:analytics:4.3.1'
+    api 'com.segment.analytics.android:analytics:4.10.1'
     api 'com.madgag.spongycastle:core:1.58.0.0'
 
     api 'com.google.dagger:dagger:2.27'
