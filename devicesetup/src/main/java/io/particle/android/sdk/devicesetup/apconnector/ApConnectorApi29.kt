@@ -40,7 +40,7 @@ class ApConnectorApi29(
         decoratingClient.wrappedClient = client
         networkCallbacks = buildNetworkCallbacks(config)
 
-        val currentConnectionInfo = wifiFacade.connectionInfo
+        val currentConnectionInfo = wifiFacade.currentlyConnectedSSID
         // are we already connected to the right AP?  (this could happen on retries)
         if (ApConnectorApi21.isAlreadyConnectedToTargetNetwork(currentConnectionInfo, configSSID)) {
             // we're already connected to this AP, nothing to do.

@@ -1,14 +1,22 @@
 package io.particle.android.sdk.utils;
 
+import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
+import static android.net.NetworkCapabilities.NET_CAPABILITY_WIFI_P2P;
+import static android.net.NetworkCapabilities.TRANSPORT_WIFI;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.ConnectivityManager.NetworkCallback;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Build.VERSION_CODES;
 
 import java.util.Arrays;
@@ -22,6 +30,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import io.particle.android.sdk.utils.Funcy.Predicate;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+
 import static io.particle.android.sdk.utils.Py.truthy;
 
 
@@ -29,7 +41,6 @@ import static io.particle.android.sdk.utils.Py.truthy;
 public class WifiFacade {
 
     private static final TLog log = TLog.get(WifiFacade.class);
-
 
     @NonNull
     public static Predicate<ScanResult> is24Ghz = scanResult -> {
@@ -130,10 +141,10 @@ public class WifiFacade {
                         return false;
                     }
                     // Don't try using the P2P Wi-Fi interfaces on recent Samsung devices
-                    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
+                    if (capabilities.hasCapability(NET_CAPABILITY_WIFI_P2P)) {
                         return false;
                     }
-                    return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+                    return capabilities.hasTransport(TRANSPORT_WIFI);
                 }
         );
     }
@@ -165,8 +176,45 @@ public class WifiFacade {
     }
 
     @Nullable
-    public WifiInfo getConnectionInfo() {
-        return wifiManager.getConnectionInfo();
+    private WifiInfo getConnectionInfo() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ) {
+            return wifiManager.getConnectionInfo();
+        }
+
+        final CountDownLatch waitForNetwork = new CountDownLatch(1);
+        final class AnswerBox {
+            public WifiInfo wifiInfo;
+        }
+        final AnswerBox answerBox = new AnswerBox();
+        final NetworkCallback networkCallback =
+                new NetworkCallback(NetworkCallback.FLAG_INCLUDE_LOCATION_INFO) {
+                    @Override
+                    public void onCapabilitiesChanged(@NonNull Network network,
+                                                      @NonNull NetworkCapabilities networkCapabilities) {
+                        if (Build.VERSION.SDK_INT >= VERSION_CODES.Q) {
+                            answerBox.wifiInfo = (WifiInfo) networkCapabilities.getTransportInfo();
+                        }
+                        waitForNetwork.countDown();
+                    }
+                };
+        connectivityManager.registerNetworkCallback(
+                new NetworkRequest.Builder()
+                        .addTransportType(TRANSPORT_WIFI)
+                        //.addCapability(NET_CAPABILITY_WIFI_P2P)
+                        .build(), networkCallback);
+        try {
+            if (!waitForNetwork.await(5, TimeUnit.SECONDS)) {
+                log.e("Timed out waiting for network to connect");
+                return null;
+            }
+            log.v( "Network SSID found: " +  answerBox.wifiInfo.getSSID());
+            return answerBox.wifiInfo;
+        } catch (InterruptedException e) {
+            log.e("Waiting for onAvailable failed", e);
+            return null;
+        } finally {
+            connectivityManager.unregisterNetworkCallback(networkCallback);
+        }
     }
 
     public List<ScanResult> getScanResults() {

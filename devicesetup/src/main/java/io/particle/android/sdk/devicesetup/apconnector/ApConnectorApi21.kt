@@ -42,7 +42,7 @@ class ApConnectorApi21(
         // cancel any currently running timeout, etc
         clearState()
         val configSSID = SSID.from(config)
-        val currentConnectionInfo = wifiFacade.connectionInfo
+        val currentConnectionInfo = wifiFacade.currentlyConnectedSSID
         // are we already connected to the right AP?  (this could happen on retries)
         if (isAlreadyConnectedToTargetNetwork(currentConnectionInfo, configSSID)) {
             // we're already connected to this AP, nothing to do.
@@ -175,17 +175,16 @@ class ApConnectorApi21(
         )
 
         fun isAlreadyConnectedToTargetNetwork(
-            currentConnectionInfo: WifiInfo?,
+            currentConnectionSsid: SSID?,
             targetNetworkSsid: SSID
         ): Boolean {
-            return (isCurrentlyConnectedToAWifiNetwork(currentConnectionInfo)
-                    && targetNetworkSsid == SSID.from(currentConnectionInfo))
+            return (isCurrentlyConnectedToAWifiNetwork(currentConnectionSsid)
+                    && targetNetworkSsid == currentConnectionSsid)
         }
 
-        private fun isCurrentlyConnectedToAWifiNetwork(currentConnectionInfo: WifiInfo?): Boolean {
-            return (currentConnectionInfo != null && Py.truthy(currentConnectionInfo.ssid)
-                    && currentConnectionInfo.networkId != -1 // yes, this happens.  Thanks, Android.
-                    && "0x" != currentConnectionInfo.ssid)
+        private fun isCurrentlyConnectedToAWifiNetwork(currentConnectionSsid: SSID?): Boolean {
+            return (currentConnectionSsid != null && Py.truthy(currentConnectionSsid)
+                    && "0x" != currentConnectionSsid.toString())
         }
     }
 
