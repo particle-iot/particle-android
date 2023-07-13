@@ -121,9 +121,10 @@ public class WifiFacade {
         // Instead, you have to infer it based on the fact that you can only
         // have one connected Wi-Fi connection at a time.
         // (Update: one *regular* Wi-Fi connection, anyway.  See below.)
+        Network[] networks = connectivityManager.getAllNetworks();
 
-        return Funcy.findFirstMatch(
-                Arrays.asList(connectivityManager.getAllNetworks()),
+        Network selectedNetwork = Funcy.findFirstMatch(
+                Arrays.asList(networks),
                 network -> {
                     NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
                     if (capabilities == null) {
@@ -133,9 +134,15 @@ public class WifiFacade {
                     if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
                         return false;
                     }
+                    // Don't use any connections if they have internet!
+                    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                        return false;
+                    }
                     return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
                 }
         );
+
+        return selectedNetwork;
     }
 
     public int addNetwork(WifiConfiguration config) {
