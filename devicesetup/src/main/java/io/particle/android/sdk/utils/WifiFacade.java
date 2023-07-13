@@ -121,9 +121,10 @@ public class WifiFacade {
         // Instead, you have to infer it based on the fact that you can only
         // have one connected Wi-Fi connection at a time.
         // (Update: one *regular* Wi-Fi connection, anyway.  See below.)
+        Network[] networks = connectivityManager.getAllNetworks();
 
-        return Funcy.findFirstMatch(
-                Arrays.asList(connectivityManager.getAllNetworks()),
+        Network selectedNetwork = Funcy.findFirstMatch(
+                Arrays.asList(networks),
                 network -> {
                     NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
                     if (capabilities == null) {
@@ -133,9 +134,36 @@ public class WifiFacade {
                     if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
                         return false;
                     }
+                    // Don't use any connections if they have internet!
+                    // Note: Due to a known issue with certain Android phones (e.g., Pixel 6/7 series) running Android 12 or above, 
+                    // these devices may retain access to their current Wi-Fi network while also connecting to a Particle Wi-Fi Module 
+                    // in SoftAP mode. This behavior is due to a feature introduced in Android 12 known as Wi-Fi STA/STA concurrency, 
+                    // which allows devices to connect to two Wi-Fi networks concurrently.
+                    //
+                    // The correct way to handle this programmatically using Android's ConnectivityManager APIs (SDK 31+) has proven 
+                    // to be unreliable due to the bugs tracked at:
+                    // https://issuetracker.google.com/issues/249023377
+                    // https://issuetracker.google.com/issues/232107693
+                    //
+                    // Exhaustive testing was done after implementing this the correct way and it just didn't work.
+                    // Before giving up, the Android source code was examined to see how the system itself handles this situation.
+                    // In that code, we found a similar hack to the one below, which is used to determine whether a network is
+                    // a "valid" internet connection. If it is, then the system will not bind to it.
+                    //
+                    // The current workaround involves excluding all networks with internet capability when binding to a network. 
+                    // While this is not a perfect fix (as future changes in Android might affect its effectiveness), this solution 
+                    // has proven to be reliable for the time being and manages to address the issue across all Pixel phones tested, 
+                    // ranging from the latest models back to those running Android 5.
+                    //
+                    // For more information, refer to the aforementioned issue trackers.
+                    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                        return false;
+                    }
                     return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
                 }
         );
+
+        return selectedNetwork;
     }
 
     public int addNetwork(WifiConfiguration config) {

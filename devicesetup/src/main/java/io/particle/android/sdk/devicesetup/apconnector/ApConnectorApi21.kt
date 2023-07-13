@@ -6,7 +6,6 @@ import android.content.IntentFilter
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
-import android.os.Build.VERSION
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.MainThread
@@ -53,7 +52,6 @@ class ApConnectorApi21(
         wifiStateChangeListener = SimpleReceiver.newRegisteredReceiver(
             appContext, WIFI_STATE_CHANGE_FILTER
         ) { ctx: Context?, intent: Intent -> onWifiChangeBroadcastReceived(intent, config) }
-        val useMoreComplexConnectionProcess = VERSION.SDK_INT < 18
 
 
         // we don't need this for its atomicity, we just need it as a 'final' reference to an
@@ -64,7 +62,7 @@ class ApConnectorApi21(
         // wonkiness I ran into when trying to do every one of these steps one right after
         // the other on the same thread.
         val alreadyConfiguredId = wifiFacade.getIdForConfiguredNetwork(configSSID)
-        if (alreadyConfiguredId != -1 && !useMoreComplexConnectionProcess) {
+        if (alreadyConfiguredId != -1) {
             // For some unexplained (and probably sad-trombone-y) reason, if the AP specified was
             // already configured and had been connected to in the past, it will often get to
             // the "CONNECTING" event, but just before firing the "CONNECTED" event, the
@@ -82,7 +80,7 @@ class ApConnectorApi21(
                 }
             }
         }
-        if (alreadyConfiguredId == -1 || !useMoreComplexConnectionProcess) {
+        if (alreadyConfiguredId == -1 ) {
             setupRunnables.add {
                 log.d("Adding network $configSSID")
                 networkID.set(wifiFacade.addNetwork(config))
@@ -100,21 +98,9 @@ class ApConnectorApi21(
                 }
             }
         }
-        if (useMoreComplexConnectionProcess) {
-            setupRunnables.add {
-                log.d("Disconnecting from networks; reconnecting momentarily.")
-                wifiFacade.disconnect()
-            }
-        }
         setupRunnables.add {
             log.i("Enabling network " + configSSID + " with network ID " + networkID.get())
-            wifiFacade.enableNetwork(networkID.get(), !useMoreComplexConnectionProcess)
-        }
-        if (useMoreComplexConnectionProcess) {
-            setupRunnables.add {
-                log.d("Disconnecting from networks; reconnecting momentarily.")
-                wifiFacade.reconnect()
-            }
+            wifiFacade.enableNetwork(networkID.get(), true)
         }
         val currentlyConnectedSSID = wifiFacade.currentlyConnectedSSID
         softAPConfigRemover.onWifiNetworkDisabled(currentlyConnectedSSID)

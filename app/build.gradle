@@ -13,12 +13,12 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId 'io.particle.android.app'
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
         // scheme for these version numbers: EPOCH MAJOR MINOR PATCH BUILD
         versionCode 1_03_01_02_01
         versionName  "3.1.2"

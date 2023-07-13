@@ -74,6 +74,7 @@ class ApConnectorApi29(
     ): ConnectivityManager.NetworkCallback {
         return object : ConnectivityManager.NetworkCallback() {
 
+            @RequiresApi(VERSION_CODES.M)
             override fun onAvailable(network: Network) {
                 log.info { "onAvailable: $network" }
                 decoratingClient.onApConnectionSuccessful(config)
@@ -108,6 +109,7 @@ class ApConnectorApi29(
         }
     }
 
+    @RequiresApi(VERSION_CODES.M)
     private fun clearState() {
         try {
             DeviceSetupState.networkCallbacks = networkCallbacks
