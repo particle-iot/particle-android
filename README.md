@@ -43,4 +43,4 @@ Full documentation, including a getting started guide, lots of API examples, sup
 
 ## License
 
-All code in this repository is available under the Apache License 2.0.  See the `LICENSE` file for the complete text of the license.
+All code in this repository is available under the [Apache License 2.0](https://github.com/particle-iot/particle-android/blob/master/LICENSE).  See the `LICENSE` file for the complete text of the license.
