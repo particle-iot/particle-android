@@ -10,6 +10,7 @@
 
         <activity
             android:name="io.particle.mesh.ui.controlpanel.ControlPanelActivity"
+            android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/p_MeshTheme"
@@ -17,6 +18,7 @@
 
         <activity
             android:name="io.particle.mesh.ui.setup.MeshSetupActivity"
+            android:exported="false"
             android:label="Mesh Setup"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"

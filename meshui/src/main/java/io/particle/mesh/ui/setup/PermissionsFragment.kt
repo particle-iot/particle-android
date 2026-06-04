@@ -50,9 +50,14 @@ class PermissionsFragment : Fragment(), OnRequestPermissionsResultCallback {
 
 
     fun ensurePermission(permission: String) {
+        ensurePermissions(listOf(permission))
+    }
+
+    fun ensurePermissions(permissions: List<String>) {
         val aktivity = activity!!
 
-        if (aktivity.appHasPermission(permission)) {
+        val missing = permissions.filter { !aktivity.appHasPermission(it) }
+        if (missing.isEmpty()) {
             return
         }
 
@@ -65,7 +70,7 @@ class PermissionsFragment : Fragment(), OnRequestPermissionsResultCallback {
                 .setMessage(R.string.mesh_location_permission_dialog_text)
                 .setPositiveButton(R.string.mesh_got_it) { dialog, _ ->
                     dialog.dismiss()
-                    requestPermission(permission)
+                    requestPermissionList(missing)
                 }
 //        } else {
 //            // user has explicitly denied this permission to setup.
@@ -99,21 +104,24 @@ class PermissionsFragment : Fragment(), OnRequestPermissionsResultCallback {
 
         if (requestCode != REQUEST_CODE) {
             Log.i(TAG, "Unrecognized request code: $requestCode")
+            return
         }
 
-        // we only ever deal with one permission at a time, so we can always safely grab the first
-        // member of this array.
-        val permission = permissions[0]
-        val client = activity!! as Client
-        if (activity!!.appHasPermission(permissions[0])) {
-            client.onUserAllowedPermission(permission)
+        val aktivity = activity ?: return
+        val client = aktivity as Client
+        val firstPermission = permissions.firstOrNull() ?: return
+
+        // The setup/control-panel flows only proceed if every requested permission is granted,
+        // so treat any denial as a denial of the whole request.
+        if (permissions.all { aktivity.appHasPermission(it) }) {
+            client.onUserAllowedPermission(firstPermission)
         } else {
-            client.onUserDeniedPermission(permission)
+            client.onUserDeniedPermission(firstPermission)
         }
     }
 
-    private fun requestPermission(permission: String) {
-        requestPermissions(arrayOf(permission), REQUEST_CODE)
+    private fun requestPermissionList(permissions: List<String>) {
+        requestPermissions(permissions.toTypedArray(), REQUEST_CODE)
     }
 
 }

@@ -21,6 +21,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.utils.appHasPermission
+import io.particle.android.sdk.utils.bleRuntimePermissions
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.BarcodeData
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
@@ -227,7 +228,9 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     }
 
     private fun getRequiredPermissions(): Array<String> {
-        return arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
+        // Camera for the barcode scan, plus the BLE permissions needed to then connect to the
+        // device (BLUETOOTH_SCAN/CONNECT on API 31+, ACCESS_FINE_LOCATION below).
+        return (listOf(Manifest.permission.CAMERA) + bleRuntimePermissions).toTypedArray()
     }
 
     private fun allPermissionsGranted(): Boolean {

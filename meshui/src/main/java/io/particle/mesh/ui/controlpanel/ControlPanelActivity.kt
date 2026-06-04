@@ -1,6 +1,5 @@
 package io.particle.mesh.ui.controlpanel
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +10,7 @@ import androidx.navigation.findNavController
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.utils.appHasPermission
+import io.particle.android.sdk.utils.bleRuntimePermissions
 import io.particle.android.sdk.utils.pass
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerSystemInterface
@@ -119,8 +119,8 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
     override fun onResume() {
         super.onResume()
         if (shouldCheckPermissions) {
-            shouldCheckPermissions = !appHasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-            ensureLocationPermission()
+            shouldCheckPermissions = !bleRuntimePermissions.all { appHasPermission(it) }
+            ensureBlePermissions()
         }
     }
 
@@ -155,8 +155,8 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
         finish()
     }
 
-    private fun ensureLocationPermission() {
-        PermissionsFragment.get(this)!!.ensurePermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    private fun ensureBlePermissions() {
+        PermissionsFragment.get(this)!!.ensurePermissions(bleRuntimePermissions)
     }
 
     private fun showDeviceInfoView(showDeviceInfoSlider: Boolean) {
