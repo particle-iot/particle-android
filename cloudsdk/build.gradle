@@ -7,36 +7,9 @@ plugins {
 }
 
 
-// This is the library version used when publishing the artifact
+// Library version, also used as the Android versionName below. (Previously this module
+// was published to Bintray/JCenter; that publishing has been removed.)
 version = '1.0.1'
-
-ext {
-    bintrayRepo = 'android'
-    bintrayName = 'cloud-sdk'
-    bintrayOrg = 'particle'
-
-    publishedGroupId = 'io.particle'
-    libraryName = "Particle (formerly Spark) Android Cloud SDK library"
-    artifact = 'cloudsdk'
-
-    libraryDescription = "The Particle Android Cloud SDK enables Android apps to interact with Particle-powered connected products via the Particle Cloud.\n" +
-            "Library will allow you to easily manage active user sessions to Particle cloud, query for device info,\n" +
-            "read and write data to/from Particle Core/Photon devices and (via exposed variables and functions)\n" +
-            "publish and subscribe events to/from the cloud or to/from devices (coming soon)."
-
-    siteUrl = 'https://github.com/particle-iot/particle-android'
-    gitUrl = 'https://github.com/particle-iot/particle-android.git'
-
-    libraryVersion = project.version
-
-    developerId = 'idok'
-    developerName = 'Ido Kleinman'
-    developerEmail = 'ido@particle.io'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
 
 
 android {
@@ -101,18 +74,6 @@ dependencies {
 repositories {
     maven {
         url 'https://maven.google.com'
-    }
-}
-
-// Publishing is configured in Phase 6 (Bintray is shut down; migrating to maven-publish).
-// apply from: '../pom_generator_v1.gradle'
-// apply from: '../bintray_upload_v1.gradle'
-
-// Disable javadoc generation.  See this bug for more info:
-// https://github.com/novoda/bintray-release/issues/71
-allprojects {
-    tasks.withType(Javadoc) {
-        enabled = false
     }
 }
 

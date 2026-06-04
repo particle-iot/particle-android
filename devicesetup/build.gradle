@@ -2,36 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 
-// This is the library version used when deploying the artifact
+// Library version. (Previously this module was published to Bintray/JCenter;
+// that publishing has been removed.)
 version = '0.7.2'
-
-ext {
-    bintrayRepo = 'android'
-    bintrayName = 'devicesetup'
-    bintrayOrg = 'particle'
-
-    publishedGroupId = 'io.particle'
-    libraryName = 'Particle (formerly Spark) Android Device Setup library'
-    artifact = 'devicesetup'
-
-    libraryDescription = "The Particle Device Setup library provides everything you need to " +
-            "offer your users a simple initial setup process for Particle-powered devices.  This " +
-            "includes all the necessary device communication code, an easily customizable UI, and " +
-            "a simple developer API."
-
-    siteUrl = 'https://github.com/particle-iot/particle-android'
-    gitUrl = 'https://github.com/particle-iot/particle-android.git'
-
-    libraryVersion = project.version
-
-    developerId = 'idok'
-    developerName = 'Ido Kleinman'
-    developerEmail = 'ido@particle.io'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
 
 
 android {
@@ -99,18 +72,4 @@ dependencies {
     api 'org.greenrobot:eventbus:3.0.0'
     api 'androidx.collection:collection-ktx:1.4.5'
     api 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
-}
-
-
-// Publishing is configured in Phase 6 (Bintray is shut down; migrating to maven-publish).
-// apply from: '../pom_generator_v1.gradle'
-// apply from: '../bintray_upload_v1.gradle'
-
-
-// Disable javadoc generation.  See this bug for more info:
-// https://github.com/novoda/bintray-release/issues/71
-allprojects {
-    tasks.withType(Javadoc) {
-        enabled = false
-    }
 }
