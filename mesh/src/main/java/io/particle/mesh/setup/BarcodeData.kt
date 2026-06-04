@@ -97,10 +97,12 @@ sealed class BarcodeData {
             }
 
             val serial = SerialNumber(serialValue)
-            return if (mobileSecret.length == 15) {
-                CompleteBarcodeData(serial, mobileSecret)
-            } else {
-                PartialBarcodeData(serial, mobileSecret)
+            return when {
+                // A full mobile secret is exactly 15 chars; a partial scan is shorter.
+                mobileSecret.length == 15 -> CompleteBarcodeData(serial, mobileSecret)
+                mobileSecret.length < 15 -> PartialBarcodeData(serial, mobileSecret)
+                // Anything longer than 15 chars is malformed.
+                else -> null
             }
         }
     }
