@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-        android:angle="135"
-        android:endColor="#0071CE"
-        android:startColor="#041E41"
-        android:type="linear"
-        android:useLevel="false" />
+<!-- Solid Particle brand navy for the app bars (was a blue gradient), matching the
+     current Particle "by DIGI" branding / particle.io and the iOS app chrome. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/p_particle_navy" />
 </shape>

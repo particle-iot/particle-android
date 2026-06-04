@@ -20,9 +20,12 @@ public class SplashActivity extends BaseActivity {
 
     private static final TLog log = TLog.get(SplashActivity.class);
 
-    // FIXME: is it worth putting this in the customization file?
-    private static final int SPLASH_DISPLAY_TIME = 0;
+    // How long the branded splash (logo on navy) is held for a returning, logged-in user
+    // before we continue to the device list, so it reads as a clean logo screen rather
+    // than just flashing by. New users skip it and go straight to the intro screen.
+    private static final long SPLASH_DISPLAY_TIME_MS = 2000;
 
+    private boolean isReturningUser;
     private boolean finished = false;
 
 
@@ -30,26 +33,32 @@ public class SplashActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (SPLASH_DISPLAY_TIME < 1) {
-            // don't display the splash screen at all, immediately move to the next activity.
+        isReturningUser = SDKGlobals.getAppDataStorage().getUserHasClaimedDevices();
+
+        if (!isReturningUser) {
+            // New user: no branded splash needed, the intro screen already shows the logo.
             onShowingSplashComplete();
             return;
         }
 
         this.setContentView(R.layout.activity_splash);
-
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        // For new users we've already routed onward from onCreate().
+        if (!isReturningUser) {
+            return;
+        }
+
         if (finished) {
             onShowingSplashComplete();
             return;
         }
 
-        EZ.runOnMainThreadDelayed(SPLASH_DISPLAY_TIME, () -> {
+        EZ.runOnMainThreadDelayed(SPLASH_DISPLAY_TIME_MS, () -> {
             finished = true;
             onShowingSplashComplete();
         });

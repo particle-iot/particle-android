@@ -70,6 +70,12 @@
     <string name="data_usage">Data usage</string>
     <string name="no_events">(No events)</string>
     <string name="log_out">Log out</string>
+
+    <!-- Navigation drawer -->
+    <string name="menu_documentation">Documentation</string>
+    <string name="menu_console">Console</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
+    <string name="menu_open_navigation">Open navigation menu</string>
     <string name="search">Search</string>
     <string name="tinker">Tinker</string>
     <string name="device_inspector">Device Inspector</string>

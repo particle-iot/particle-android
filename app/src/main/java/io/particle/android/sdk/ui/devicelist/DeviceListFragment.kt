@@ -2,8 +2,8 @@ package io.particle.android.sdk.ui.devicelist
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -19,6 +19,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
@@ -54,9 +58,6 @@ import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
 import io.particle.sdk.app.databinding.FragmentDeviceList2Binding
 import io.particle.sdk.app.databinding.RowDeviceListBinding
-import pl.brightinventions.slf4android.LogTask
-import pl.brightinventions.slf4android.showLogSharingPrompt
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Objects.requireNonNull
@@ -185,33 +186,7 @@ class DeviceListFragment : Fragment() {
             false
         }
 
-        binding.toolbar.inflateMenu(R.menu.device_list)
-        binding.toolbar.setOnMenuItemClickListener {
-            return@setOnMenuItemClickListener when (it.itemId) {
-
-                R.id.action_log_out -> {
-                    AlertDialog.Builder(requireActivity())
-                        .setMessage(R.string.logout_confirm_message)
-                        .setPositiveButton(R.string.log_out) { dialog, _ ->
-                            val cloud = ParticleCloudSDK.getCloud()
-                            cloud.logOut()
-                            startActivity(Intent(requireContext(), LoginActivity::class.java))
-                            requireActivity().finish()
-                            dialog.dismiss()
-                        }
-                        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
-                        .show()
-                    true
-                }
-
-                R.id.action_send_logs -> {
-                    sendLogs()
-                    true
-                }
-
-                else -> false
-            }
-        }
+        setUpNavigationDrawer()
 
         binding.filterButton.setOnClickListener {
             // TODO: replace this with navigation lib calls
@@ -378,11 +353,16 @@ class DeviceListFragment : Fragment() {
     }
 
     fun onBackPressed(): Boolean {
-        return if (binding.addDeviceFab.isOpen) {
-            binding.addDeviceFab.close()
-            true
-        } else {
-            false
+        return when {
+            binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                true
+            }
+            binding.addDeviceFab.isOpen -> {
+                binding.addDeviceFab.close()
+                true
+            }
+            else -> false
         }
     }
 
@@ -409,15 +389,77 @@ class DeviceListFragment : Fragment() {
         filterViewModel.refreshDevices()
     }
 
-    private fun sendLogs() {
-        showLogSharingPrompt(
-            requireActivity(),
-            "",
-            listOf(),
-            "Logs from the Particle Android app",
-            "",
-            mutableListOf<AsyncTask<Context, Void, File>>(LogTask())
-        )
+    private fun setUpNavigationDrawer() {
+        // Hamburger button in the toolbar opens the slide-out drawer.
+        binding.toolbar.navigationIcon =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_menu_white_24dp)
+        binding.toolbar.navigationContentDescription = getString(R.string.menu_open_navigation)
+        binding.toolbar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        // The drawer dims the content behind it with a ~60% black scrim, but the system status
+        // bar above the toolbar isn't covered by that scrim. Darken the status-bar colour in step
+        // with the slide so the whole top of the screen dims together.
+        val window = requireActivity().window
+        val statusBarBase = ContextCompat.getColor(requireContext(), R.color.p_particle_navy)
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                window.statusBarColor = ColorUtils.blendARGB(statusBarBase, Color.BLACK, 0.6f * slideOffset)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                window.statusBarColor = statusBarBase
+            }
+        })
+
+        val drawer = binding.drawer
+        drawer.drawerEmail.text = ParticleCloudSDK.getCloud().loggedInUsername ?: ""
+
+        val version = try {
+            val pInfo = requireContext().packageManager
+                .getPackageInfo(requireContext().packageName, 0)
+            // The build number is the trailing component of our EPOCH.MAJOR.MINOR.PATCH.BUILD
+            // versionCode encoding (e.g. 1_04_00_00_01 -> build 1).
+            val build = PackageInfoCompat.getLongVersionCode(pInfo) % 100
+            "Tinker ${pInfo.versionName} ($build)"
+        } catch (ex: Exception) {
+            "Tinker"
+        }
+        drawer.drawerVersion.text = version
+
+        drawer.drawerDocs.setOnClickListener { openUrlFromDrawer("https://docs.particle.io") }
+        drawer.drawerConsole.setOnClickListener { openUrlFromDrawer("https://console.particle.io") }
+        drawer.drawerPrivacy.setOnClickListener {
+            openUrlFromDrawer("https://www.particle.io/legal/privacy/")
+        }
+        drawer.drawerLogout.setOnClickListener {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            confirmAndLogOut()
+        }
+    }
+
+    private fun openUrlFromDrawer(url: String) {
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (ex: Exception) {
+            Toaster.s(activity, "No app available to open this link")
+        }
+    }
+
+    private fun confirmAndLogOut() {
+        AlertDialog.Builder(requireActivity())
+            .setMessage(R.string.logout_confirm_message)
+            .setPositiveButton(R.string.log_out) { dialog, _ ->
+                val cloud = ParticleCloudSDK.getCloud()
+                cloud.logOut()
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+                requireActivity().finish()
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 }
 

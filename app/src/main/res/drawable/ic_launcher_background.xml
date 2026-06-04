@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Solid Particle brand navy behind the cyan diamond mark (was a blue gradient),
+     matching the iOS "Particle by DIGI" app icon. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-
-    <gradient
-        android:angle="270"
-        android:endColor="#002140"
-        android:startColor="#005787" />
-
+    <solid android:color="#00334F" />
 </shape>
