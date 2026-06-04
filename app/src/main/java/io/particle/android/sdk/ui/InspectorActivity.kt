@@ -14,7 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import io.particle.android.sdk.cloud.BroadcastContract
@@ -243,10 +243,9 @@ class InspectorActivity : BaseActivity() {
     private fun presentPublishDialog() {
         val publishDialogView = View.inflate(this, R.layout.publish_event, null)
 
-        MaterialDialog.Builder(this)
-            .customView(publishDialogView, false)
-            .positiveText(R.string.publish_positive_action)
-            .onPositive { _, _ ->
+        MaterialAlertDialogBuilder(this)
+            .setView(publishDialogView)
+            .setPositiveButton(R.string.publish_positive_action) { _, _ ->
                 val nameView = Ui.findView<TextView>(publishDialogView, R.id.eventName)
                 val valueView = Ui.findView<TextView>(publishDialogView, R.id.eventValue)
                 val privateEventRadio: RadioButton =
@@ -261,9 +260,8 @@ class InspectorActivity : BaseActivity() {
 
                 publishEvent(name, value, eventVisibility)
             }
-            .negativeText(R.string.cancel)
-            .cancelable(true)
-            .cancelListener { it.dismiss() }
+            .setNegativeButton(R.string.cancel, null)
+            .setCancelable(true)
             .show()
     }
 

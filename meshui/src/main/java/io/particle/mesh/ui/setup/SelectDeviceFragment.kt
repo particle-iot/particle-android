@@ -9,7 +9,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.android.common.easyDiffUtilCallback
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.ARGON
@@ -94,9 +94,9 @@ class SelectDeviceFragment : BaseFlowFragment() {
     }
 
     private fun showNoInternetDialog() {
-        MaterialDialog.Builder(requireActivity())
-            .content("Setup requires an internet connection")
-            .positiveText(android.R.string.ok)
+        MaterialAlertDialogBuilder(requireActivity())
+            .setMessage("Setup requires an internet connection")
+            .setPositiveButton(android.R.string.ok, null)
             .show()
     }
 }

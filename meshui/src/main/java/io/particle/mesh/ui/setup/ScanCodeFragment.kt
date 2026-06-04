@@ -16,8 +16,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.mlkit.vision.barcode.common.Barcode
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.utils.appHasPermission
@@ -68,7 +68,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     private lateinit var barcodeScanningProcessor: BarcodeScanningProcessor
     private lateinit var scanViewModel: ScanViewModel
 
-    private val barcodeObserver = Observer<List<FirebaseVisionBarcode>> { onBarcodesScanned(it) }
+    private val barcodeObserver = Observer<List<Barcode>> { onBarcodesScanned(it) }
 
     private var isFetchingCompleteBarcode = false
 
@@ -137,7 +137,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
         }
     }
 
-    private fun onBarcodesScanned(foundBarcodes: List<FirebaseVisionBarcode>?) {
+    private fun onBarcodesScanned(foundBarcodes: List<Barcode>?) {
         if (foundBarcodes == null || isFetchingCompleteBarcode) {
             return
         }
@@ -303,14 +303,12 @@ Full scan results: ${badBarcode.serialNumber} ${badBarcode.partialMobileSecret}
         }
 
 
-        MaterialDialog.Builder(requireContext())
-            .content(R.string.p_sticker_error_dialog_content)
-            .positiveText(R.string.p_action_contact_support)
-            .onPositive { _, _ ->
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.p_sticker_error_dialog_content)
+            .setPositiveButton(R.string.p_action_contact_support) { _, _ ->
                 sendSupportEmail()
                 flowRunner.endSetup()
             }
-            .build()
             .show()
     }
 

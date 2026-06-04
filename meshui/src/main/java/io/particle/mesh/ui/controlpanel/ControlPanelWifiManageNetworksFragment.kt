@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.android.common.easyDiffUtilCallback
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetKnownNetworksReply
 import io.particle.firmwareprotos.ctrl.wifi.WifiNew.Security.NO_SECURITY
@@ -120,12 +120,11 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
     }
 
     private fun onWifiNetworkSelected(network: KnownWifiNetwork) {
-        MaterialDialog.Builder(this.requireContext())
-            .title("Remove Wi-Fi credentials?")
-            .content("Are you sure you want to remove Wi-Fi credentials for '${network.ssid}'?")
-            .positiveText("Remove")
-            .negativeText(android.R.string.cancel)
-            .onPositive { _, _ -> removeWifiNetwork(network) }
+        MaterialAlertDialogBuilder(this.requireContext())
+            .setTitle("Remove Wi-Fi credentials?")
+            .setMessage("Are you sure you want to remove Wi-Fi credentials for '${network.ssid}'?")
+            .setPositiveButton("Remove") { _, _ -> removeWifiNetwork(network) }
+            .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 

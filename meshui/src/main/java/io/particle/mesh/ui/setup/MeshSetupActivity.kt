@@ -3,7 +3,7 @@ package io.particle.mesh.ui.setup
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.common.QATool
@@ -99,11 +99,10 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
             return
         }
 
-        MaterialDialog.Builder(this)
-            .content(R.string.p_exitsetupconfirmation_content)
-            .positiveText(R.string.p_exitsetupconfirmation_exit)
-            .negativeText(android.R.string.cancel)
-            .onPositive { _, _ -> finish() }
+        MaterialAlertDialogBuilder(this)
+            .setMessage(R.string.p_exitsetupconfirmation_content)
+            .setPositiveButton(R.string.p_exitsetupconfirmation_exit) { _, _ -> finish() }
+            .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 

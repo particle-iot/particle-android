@@ -105,19 +105,24 @@ dependencies {
     implementation project(':mesh')
     implementation project(':meshui')
     implementation project(':commonui')
-    implementation('com.github.bright:slf4android:0.1.6') {
-        transitive = true
-    }
     api 'org.greenrobot:eventbus:3.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1'
     implementation "io.github.microutils:kotlin-logging:1.7.8"
+    // SLF4J -> android.util.Log binding. Replaces com.github.bright:slf4android (JCenter-only,
+    // pulled legacy com.android.support:support-compat). The slf4android-specific config/log-sharing
+    // classes are stubbed in-tree under pl.brightinventions.slf4android (file logging + log-attachment
+    // sharing are no-ops in the stub).
+    implementation 'org.slf4j:slf4j-android:1.7.36'
 
-    // FIXME: look into getting rid of this 3rd party button now that the support lib has a FAB.
-    // Support lib doesn't do the "speed dial" pattern off of FABs though, so that would have to be
-    // implemented by hand (and as such, might not be worth it.)
-    implementation 'com.getbase:floatingactionbutton:1.10.1'
+    // Speed-dial FAB (AndroidX). Replaces the unmaintained, JCenter-only
+    // com.getbase:floatingactionbutton, which pulled legacy com.android.support artifacts.
+    implementation 'com.leinardi.android:speed-dial:3.3.0'
 
+    // Firebase. NOTE: not yet on the Firebase BoM (33.x) — the BoM's firebase-perf pulls
+    // protobuf-javalite, which collides at the package level with the full protobuf-java:3.5.1
+    // used by the mesh firmware protos. Migrating to the BoM requires regenerating
+    // :firmwareprotos against the protobuf-lite runtime first (tracked as a follow-up).
     releaseImplementation 'com.google.firebase:firebase-analytics:17.6.0'
     releaseImplementation 'com.google.firebase:firebase-perf:19.0.2'
     releaseImplementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.2'
@@ -137,7 +142,6 @@ dependencies {
     //noinspection GradleDynamicVersion -- (see above)
 //    releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     api 'io.github.inflationx:calligraphy3:3.1.1'
     api 'io.github.inflationx:viewpump:2.0.3'
 

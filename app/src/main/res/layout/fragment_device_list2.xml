@@ -120,55 +120,17 @@
         fab:layout_constraintStart_toStartOf="parent"
         fab:layout_constraintTop_toBottomOf="@id/name_filter_input" />
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
+    <!-- Action items are added programmatically in DeviceListFragment -->
+    <com.leinardi.android.speeddial.SpeedDialView
         android:id="@+id/add_device_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
-        fab:fab_labelStyle="@style/menu_labels_style"
         fab:layout_constraintBottom_toBottomOf="parent"
         fab:layout_constraintEnd_toEndOf="parent"
-        fab:layout_constraintHorizontal_bias="1.0"
-        fab:layout_constraintStart_toStartOf="parent"
-        fab:layout_constraintTop_toTopOf="parent"
-        fab:layout_constraintVertical_bias="1.0">
-
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/action_set_up_a_xenon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_addButtonStrokeVisible="true"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_plusIconColor="@color/accent_color"
-            fab:fab_size="mini"
-            fab:fab_title="Set up an Argon, Boron, or Xenon" />
-
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/action_set_up_a_photon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_addButtonStrokeVisible="true"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_plusIconColor="@color/accent_color"
-            fab:fab_size="mini"
-            fab:fab_title="Set up a Photon" />
-
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/action_set_up_an_electron"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_addButtonStrokeVisible="true"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_plusIconColor="@color/accent_color"
-            fab:fab_size="mini"
-            fab:fab_title="Set up an Electron" />
-
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        fab:sdMainFabClosedSrc="@drawable/ic_add_white_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -19,6 +19,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import com.leinardi.android.speeddial.SpeedDialActionItem
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -54,7 +55,6 @@ import io.particle.sdk.app.R
 import io.particle.sdk.app.databinding.FragmentDeviceList2Binding
 import io.particle.sdk.app.databinding.RowDeviceListBinding
 import pl.brightinventions.slf4android.LogTask
-import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import pl.brightinventions.slf4android.showLogSharingPrompt
 import java.io.File
 import java.text.SimpleDateFormat
@@ -87,17 +87,17 @@ class DeviceListFragment : Fragment() {
 
     private fun addGen3() {
         addXenonDevice()
-        binding.addDeviceFab.collapse()
+        binding.addDeviceFab.close()
     }
 
     fun addPhoton() {
         addPhotonDevice()
-        binding.addDeviceFab.collapse()
+        binding.addDeviceFab.close()
     }
 
     fun addElectron() {
         addElectronDevice()
-        binding.addDeviceFab.collapse()
+        binding.addDeviceFab.close()
     }
 
     override fun onCreateView(
@@ -154,9 +154,36 @@ class DeviceListFragment : Fragment() {
 
         binding.refreshLayout.isRefreshing = true
 
-        binding.actionSetUpAXenon.setOnClickListener { addGen3() }
-        binding.actionSetUpAPhoton.setOnClickListener { addPhoton() }
-        binding.actionSetUpAnElectron.setOnClickListener { addElectron() }
+        val fabIconTint = ContextCompat.getColor(requireContext(), R.color.accent_color)
+        val fabBackground = ContextCompat.getColor(requireContext(), R.color.white)
+        binding.addDeviceFab.addAllActionItems(
+            listOf(
+                SpeedDialActionItem.Builder(R.id.action_set_up_a_xenon, R.drawable.ic_add_white_24dp)
+                    .setLabel("Set up an Argon, Boron, or Xenon")
+                    .setFabBackgroundColor(fabBackground)
+                    .setFabImageTintColor(fabIconTint)
+                    .create(),
+                SpeedDialActionItem.Builder(R.id.action_set_up_a_photon, R.drawable.ic_add_white_24dp)
+                    .setLabel("Set up a Photon")
+                    .setFabBackgroundColor(fabBackground)
+                    .setFabImageTintColor(fabIconTint)
+                    .create(),
+                SpeedDialActionItem.Builder(R.id.action_set_up_an_electron, R.drawable.ic_add_white_24dp)
+                    .setLabel("Set up an Electron")
+                    .setFabBackgroundColor(fabBackground)
+                    .setFabImageTintColor(fabIconTint)
+                    .create()
+            )
+        )
+        binding.addDeviceFab.setOnActionSelectedListener { actionItem ->
+            when (actionItem.id) {
+                R.id.action_set_up_a_xenon -> addGen3()
+                R.id.action_set_up_a_photon -> addPhoton()
+                R.id.action_set_up_an_electron -> addElectron()
+            }
+            // returning false closes the speed-dial menu after the action runs
+            false
+        }
 
         binding.toolbar.inflateMenu(R.menu.device_list)
         binding.toolbar.setOnMenuItemClickListener {
@@ -351,8 +378,8 @@ class DeviceListFragment : Fragment() {
     }
 
     fun onBackPressed(): Boolean {
-        return if (binding.addDeviceFab.isExpanded) {
-            binding.addDeviceFab.collapse()
+        return if (binding.addDeviceFab.isOpen) {
+            binding.addDeviceFab.close()
             true
         } else {
             false

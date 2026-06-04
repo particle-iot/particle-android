@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.Bridge">
         <item name="colorPrimary">@color/primary_color</item>
@@ -10,6 +10,12 @@
         <!-- colorAccent is used as the default value for colorControlActivated,
              which is used to tint widgets -->
         <item name="colorAccent">@color/accent_color</item>
+
+        <!-- Opt out of the Android 15 (targetSdk 35) edge-to-edge enforcement so the system
+             insets content below the status bar / display cutout, instead of drawing the
+             toolbar underneath it. NOTE: this opt-out is ignored from targetSdk 36 (Android 16)
+             onward; the proper fix is to consume WindowInsets per-screen. Ignored on API < 35. -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
 
 <!--        <item name="colorButtonNormal">@color/primary_color</item>-->
 <!--        <item name="colorControlNormal">@color/primary_color</item>-->

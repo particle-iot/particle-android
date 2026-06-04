@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
@@ -39,9 +39,9 @@ class NewMeshNetworkNameFragment : BaseFlowFragment() {
         val name = binding.networkNameInputLayout.editText!!.text.toString()
         val isValid = validateNetworkName(name)
         if (!isValid) {
-            MaterialDialog.Builder(requireActivity())
-                    .content(R.string.p_newmeshnetworkname_invalid_name_dialog_text)
-                    .positiveText(android.R.string.ok)
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setMessage(R.string.p_newmeshnetworkname_invalid_name_dialog_text)
+                    .setPositiveButton(android.R.string.ok, null)
                     .show()
             return
         }

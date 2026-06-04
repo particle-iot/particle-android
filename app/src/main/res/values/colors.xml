@@ -40,7 +40,6 @@
     </array>
 
     <!-- tinker -->
-    <color name="tinker_instructions_bg">#A5000000</color>
     <color name="tinker_pin_bg">#fff5f5f5</color>
     <color name="tinker_pin_bg_selected">#fff5f5f5</color>
     <color name="tinker_pin_bg_muted">#19000000</color>

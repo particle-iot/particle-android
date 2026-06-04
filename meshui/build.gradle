@@ -70,12 +70,9 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.12.0'
 
-    // for barcode scanning in Mesh setup
-    implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
-    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:20.0.0'
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.2'
+    // for barcode scanning in Mesh setup (ML Kit, replaces the removed Firebase ML Vision)
+    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
 
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     // 'com.snakydesign.livedataextensions:lives' (JCenter-only, dead) is vendored into :mesh
     implementation 'com.squareup.phrase:phrase:1.1.0'
     implementation 'io.github.inflationx:calligraphy3:3.1.1'

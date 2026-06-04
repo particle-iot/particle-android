@@ -8,10 +8,6 @@
 
     <application>
 
-        <meta-data
-            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="barcode" />
-
         <activity
             android:name="io.particle.mesh.ui.controlpanel.ControlPanelActivity"
             android:launchMode="singleTop"

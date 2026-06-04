@@ -21,8 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme.LIGHT
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
@@ -247,12 +246,10 @@ private class DataListAdapter(
     }
 
     fun createValuePopup(context: Context, title: String, message: String) {
-        MaterialDialog.Builder(context)
-            .theme(LIGHT)
-            .title(title)
-            .content(message)
-            .positiveText(R.string.action_clipboard)
-            .onPositive { dialog, which ->
+        MaterialAlertDialogBuilder(context)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(R.string.action_clipboard) { dialog, _ ->
                 val clipboard: ClipboardManager? = context.getSystemService()
                 val clip = ClipData.newPlainText(title, message)
                 if (clipboard != null) {
@@ -261,9 +258,7 @@ private class DataListAdapter(
                 Toast.makeText(context, R.string.clipboard_copy_variable, Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
-            .negativeText(R.string.cancel)
-            .autoDismiss(true)
-            .canceledOnTouchOutside(true)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 

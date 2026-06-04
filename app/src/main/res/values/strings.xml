@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="tinker_instructions"><![CDATA[Welcome to Tinker!\n\n
-Tinker is the fastest and easiest way to prototype and play with your Photon.\n\n
-You can access the basic input/output functions of the Photon without writing a line of code.\n\n
-Tap any pin to get started, select a pin function and tinker with the value. Hold a pin to reset its function. Start with pin D7 - select digitalWrite - blink the attached LED.\n\n
-For more information visit: docs.particle.io/photon/tinker/\n\n
-Enjoy!]]></string>
-    <string name="tinker_instructions_signature">
-        <i>-The Particle Team</i>
-    </string>
     <string name="title_device_list">Devices</string>
     <string name="title_device_detail">Device Detail</string>
     <string name="title_inspector_detail">Inspector</string>

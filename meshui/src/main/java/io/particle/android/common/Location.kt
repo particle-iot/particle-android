@@ -5,7 +5,7 @@ import android.content.Intent
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.mesh.ui.R
 import io.particle.mesh.common.QATool
 import mu.KotlinLogging
@@ -40,16 +40,15 @@ fun Context.isLocationServicesAvailable(): Boolean {
 
 
 fun Context.promptUserToEnableLocationServices(onCancelledAction: (() -> Unit)? = null) {
-    MaterialDialog.Builder(this)
-        .positiveText(android.R.string.ok)
-        .negativeText(R.string.p_mesh_action_exit_setup)
-        .onPositive { _, _ -> this.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
-        .onNegative { _, _ -> onCancelledAction?.invoke() }
-        .cancelListener { onCancelledAction?.invoke() }
-        .canceledOnTouchOutside(true)
-        .content(
+    MaterialAlertDialogBuilder(this)
+        .setMessage(
             """Location services are required to find Bluetooth devices.
 
 To continue with setup, enable location services on the next screen.""")
+        .setPositiveButton(android.R.string.ok) { _, _ ->
+            this.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        }
+        .setNegativeButton(R.string.p_mesh_action_exit_setup) { _, _ -> onCancelledAction?.invoke() }
+        .setOnCancelListener { onCancelledAction?.invoke() }
         .show()
 }

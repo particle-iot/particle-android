@@ -106,11 +106,6 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         setupListeners()
 
-        if (TinkerPrefs.getInstance(requireActivity()).isFirstVisit) {
-            binding.instructionsContainer.isVisible = true
-            fragmentManager?.commit { add(R.id.instructions_container, InstructionsFragment()) }
-        }
-
         updateState()
 
         binding.actionDeviceFlashTinker.setOnClickListener {
@@ -592,21 +587,3 @@ data class PinStuff(
     val pinAction: PinAction,
     val currentValue: Int
 )
-
-
-// Doing this as a fragment because I ran into touch issues doing it as just a pinLabelView,
-// and because this gives us back button support at no additional charge.
-class InstructionsFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val v = inflater.inflate(R.layout.tinker_instructions, container, false)
-        v.setOnClickListener {
-            TinkerPrefs.getInstance(activity!!).setVisited(true)
-            fragmentManager?.commit { remove(this@InstructionsFragment) }
-        }
-        return v
-    }
-}

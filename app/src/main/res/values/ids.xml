@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="item_click_support" type="id" />
+    <!-- Speed-dial FAB action item IDs (items are added programmatically in DeviceListFragment) -->
+    <item name="action_set_up_a_xenon" type="id" />
+    <item name="action_set_up_a_photon" type="id" />
+    <item name="action_set_up_an_electron" type="id" />
 </resources>

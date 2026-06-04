@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/teal</item>
         <item name="tabIndicatorHeight">2dp</item>
@@ -94,6 +94,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- Opt out of Android 15 edge-to-edge enforcement (see AppTheme for details). -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
         <item name="android:textAppearance">@style/p_ParticleText</item>
         <item name="buttonStyle">@style/p_mesh_button_style</item>
         <item name="android:buttonStyle">@style/p_mesh_button_style</item>
