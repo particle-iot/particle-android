@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.8.4'
+    id 'com.github.kt3k.coveralls' version '2.12.2'
 }
 
 
@@ -40,11 +40,12 @@ ext {
 
 
 android {
-    compileSdkVersion 30
+    namespace 'io.particle.android.sdk.cloud'
+    compileSdkVersion 35
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 35
         versionCode 1
         versionName project.version
 
@@ -63,20 +64,16 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     lintOptions {
         disable 'InvalidPackage'
     }
 
-    androidExtensions {
-        experimental = true
-    }
-
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -86,18 +83,19 @@ dependencies {
 
     api 'com.google.code.findbugs:jsr305:3.0.2'
     api 'com.google.code.gson:gson:2.8.5'
-    api 'com.squareup.okhttp:okhttp:2.7.5'
-    api 'com.squareup.okio:okio:2.3.0'
-    api 'com.squareup.retrofit:retrofit:1.9.0'
+    api 'com.squareup.okhttp3:okhttp:4.12.0'
+    api 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    api 'com.squareup.retrofit2:retrofit:2.11.0'
+    api 'com.squareup.retrofit2:converter-gson:2.11.0'
     api 'org.greenrobot:eventbus:3.0.0'
-    api 'androidx.collection:collection-ktx:1.1.0'
-    api 'androidx.core:core-ktx:1.1.0'
-    api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    api 'androidx.collection:collection-ktx:1.4.5'
+    api 'androidx.core:core-ktx:1.13.1'
+    api 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'com.squareup.okhttp:mockwebserver:2.7.5'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 
 repositories {
@@ -106,8 +104,9 @@ repositories {
     }
 }
 
-apply from: '../pom_generator_v1.gradle'
-apply from: '../bintray_upload_v1.gradle'
+// Publishing is configured in Phase 6 (Bintray is shut down; migrating to maven-publish).
+// apply from: '../pom_generator_v1.gradle'
+// apply from: '../bintray_upload_v1.gradle'
 
 // Disable javadoc generation.  See this bug for more info:
 // https://github.com/novoda/bintray-release/issues/71
@@ -118,8 +117,8 @@ allprojects {
 }
 
 jacoco {
-    toolVersion = "0.8.5"
-    reportsDir = file("$buildDir/reports")
+    toolVersion = "0.8.12"
+    reportsDirectory = layout.buildDirectory.dir("reports")
 }
 
 
@@ -131,8 +130,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "testDebugUnitTest") {
     description = "Generate Jacoco code coverage reports for debug builds"
 
     reports {
-        xml.enabled = true   // coveralls needs the xml format report
-        html.enabled = false // no need for HTML reports when we have coveralls
+        xml.required = true   // coveralls needs the xml format report
+        html.required = false // no need for HTML reports when we have coveralls
     }
 
     def excludes = ['**/R.class',

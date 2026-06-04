@@ -18,9 +18,9 @@ import io.particle.mesh.setup.WiFiStrength
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.databinding.FragmentScanForWiFiNetworksBinding
+import io.particle.mesh.ui.databinding.PMeshRowWifiScanBinding
 import io.particle.mesh.ui.inflateRow
-import kotlinx.android.synthetic.main.fragment_scan_for_wi_fi_networks.*
-import kotlinx.android.synthetic.main.p_mesh_row_wifi_scan.view.*
 import mu.KotlinLogging
 
 
@@ -30,19 +30,28 @@ class ScanForWiFiNetworksFragment : BaseFlowFragment() {
 
     private val log = KotlinLogging.logger {}
 
+    private var _binding: FragmentScanForWiFiNetworksBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_scan_for_wi_fi_networks, container, false)
+        _binding = FragmentScanForWiFiNetworksBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
         adapter = ScannedWifiNetworksAdapter { onWifiNetworkSelected(it.network) }
-        p_scanforwifi_list.adapter = adapter
+        binding.pScanforwifiList.adapter = adapter
         flowUiListener.wifi.getWifiScannerForTargetDevice().observe(
             this,
             Observer { onNetworksUpdated(it) }
@@ -76,9 +85,10 @@ private data class ScannedWifiNetwork(
 
 
 private class ScannedWifiNetworkHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
-    val ssid = rowRoot.p_scanforwifi_ssid
-    val securityIcon = rowRoot.p_scanforwifi_security_icon
-    val strengthIcon = rowRoot.p_scanforwifi_strength_icon
+    private val binding = PMeshRowWifiScanBinding.bind(rowRoot)
+    val ssid = binding.pScanforwifiSsid
+    val securityIcon = binding.pScanforwifiSecurityIcon
+    val strengthIcon = binding.pScanforwifiStrengthIcon
 }
 
 

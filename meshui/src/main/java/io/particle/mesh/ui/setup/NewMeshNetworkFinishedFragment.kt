@@ -10,23 +10,32 @@ import androidx.navigation.fragment.findNavController
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_new_mesh_network_finished.*
+import io.particle.mesh.ui.databinding.FragmentNewMeshNetworkFinishedBinding
 
 
 class NewMeshNetworkFinishedFragment : BaseFlowFragment() {
 
+    private var _binding: FragmentNewMeshNetworkFinishedBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_new_mesh_network_finished, container, false)
+        _binding = FragmentNewMeshNetworkFinishedBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        action_add_next_mesh_device.setOnClickListener {
+        binding.actionAddNextMeshDevice.setOnClickListener {
             flowRunner.startNewFlowWithCommissioner()
         }
-        action_start_building.setOnClickListener { endSetup() }
+        binding.actionStartBuilding.setOnClickListener { endSetup() }
 
     }
 

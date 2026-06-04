@@ -1,33 +1,28 @@
 package io.particle.android.sdk.cloud.exceptions;
 
 
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import io.particle.android.sdk.utils.EZ;
+import io.particle.android.sdk.cloud.ParticleHttpError;
 import io.particle.android.sdk.utils.ParticleInternalStringUtilsKt;
-import io.particle.android.sdk.utils.TLog;
-import okio.BufferedSource;
-import okio.Okio;
-import retrofit.RetrofitError;
 
 import static io.particle.android.sdk.utils.Py.list;
 
 
-// Heavily inspired by RetrofitError, which we are mostly wrapping here, but
-// we're making our own exception to make it a checked exception, and to avoid
-// tying the API to a particular library used by the API's implementation
+// Heavily inspired by Retrofit's old RetrofitError, which we used to wrap here.  We make our own
+// checked exception both to avoid tying the public API to the HTTP library used by the
+// implementation, and to keep the same shape as before now that the low-level error type is
+// {@link ParticleHttpError}.
 @ParametersAreNonnullByDefault
 public class ParticleCloudException extends Exception {
-
-    private static final TLog log = TLog.get(ParticleCloudException.class);
 
     /**
      * Identifies the event kind which triggered a {@link ParticleCloudException}.
@@ -60,14 +55,11 @@ public class ParticleCloudException extends Exception {
     public static class ResponseErrorData {
 
         private final int httpStatusCode;
-        private final InputStream httpBodyInputStream;
+        @Nullable private final String body;
 
-        private String lazyLoadedBody;
-        private boolean isBodyLoaded;
-
-        ResponseErrorData(int httpStatusCode, InputStream httpBodyInputStream) {
+        ResponseErrorData(int httpStatusCode, @Nullable String body) {
             this.httpStatusCode = httpStatusCode;
-            this.httpBodyInputStream = httpBodyInputStream;
+            this.body = body;
         }
 
         public int getHttpStatusCode() {
@@ -77,49 +69,28 @@ public class ParticleCloudException extends Exception {
         /**
          * @return response body as a String, or null if no body was returned.
          */
+        @Nullable
         public String getBody() {
-            if (!isBodyLoaded) {
-                isBodyLoaded = true;
-                lazyLoadedBody = loadBody();
-            }
-            return lazyLoadedBody;
-        }
-
-        private String loadBody() {
-            if (httpBodyInputStream == null) {
-                return null;
-            }
-            BufferedSource buffer = null;
-            try {
-                buffer = Okio.buffer(Okio.source(httpBodyInputStream));
-                return buffer.readUtf8();
-
-            } catch (IOException e) {
-                log.i("Error reading HTTP response body: ", e);
-                return null;
-
-            } finally {
-                EZ.closeThisThingOrMaybeDont(buffer);
-            }
+            return body;
         }
 
     }
 
-    final ResponseErrorData responseData;
+    @Nullable final ResponseErrorData responseData;
 
-    private final RetrofitError innerError;
+    private final ParticleHttpError innerError;
     private boolean checkedForServerErrorMsg = false;
     private String serverErrorMessage;
 
     public ParticleCloudException(Exception exception) {
         super(exception);
 
-        if (exception instanceof RetrofitError){
-            this.innerError = (RetrofitError) exception;
+        if (exception instanceof ParticleHttpError) {
+            this.innerError = (ParticleHttpError) exception;
             this.responseData = buildResponseData(innerError);
-        }else{
+        } else {
             // FIXME: ugly hack to get around even uglier bug.
-            this.innerError = RetrofitError.unexpectedError("(URL UNKNOWN)", exception);
+            this.innerError = ParticleHttpError.unexpected(exception);
             this.responseData = null;
         }
     }
@@ -129,6 +100,7 @@ public class ParticleCloudException extends Exception {
      * <p>
      * May be null depending on the nature of the error.
      */
+    @Nullable
     public ResponseErrorData getResponseData() {
         return responseData;
     }
@@ -217,20 +189,12 @@ public class ParticleCloudException extends Exception {
     }
 
 
-    private ResponseErrorData buildResponseData(RetrofitError error) {
-        if (error.getResponse() == null) {
+    @Nullable
+    private ResponseErrorData buildResponseData(ParticleHttpError error) {
+        if (error.getHttpStatusCode() == null) {
             return null;
         }
-
-        InputStream in = null;
-        if (error.getResponse().getBody() != null) {
-            try {
-                in = error.getResponse().getBody().in();
-            } catch (IOException e) {
-                // Yo, dawg, I heard you like error handling in your error handling...
-            }
-        }
-        return new ResponseErrorData(error.getResponse().getStatus(), in);
+        return new ResponseErrorData(error.getHttpStatusCode(), error.getBody());
     }
 
 }

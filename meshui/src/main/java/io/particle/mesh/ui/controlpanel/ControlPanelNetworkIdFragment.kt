@@ -10,8 +10,8 @@ import androidx.navigation.fragment.navArgs
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.databinding.FragmentControlPanelNetworkIdBinding
 import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_control_panel_network_id.*
 
 
 class ControlPanelNetworkIdFragment : BaseControlPanelFragment() {
@@ -24,18 +24,28 @@ class ControlPanelNetworkIdFragment : BaseControlPanelFragment() {
 
     private val args: ControlPanelNetworkIdFragmentArgs by navArgs()
 
+    private var _binding: FragmentControlPanelNetworkIdBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_control_panel_network_id)
+        val root = container?.inflateFragment(R.layout.fragment_control_panel_network_id)
+        _binding = root?.let { FragmentControlPanelNetworkIdBinding.bind(it) }
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        network_id_value.text = args.networkId
+        binding.networkIdValue.text = args.networkId
     }
 
 }

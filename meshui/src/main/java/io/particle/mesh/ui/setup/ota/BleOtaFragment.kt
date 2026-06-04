@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_ble_ota.*
+import io.particle.mesh.ui.databinding.FragmentBleOtaBinding
 
 
 data class BleOtaProgressModel(
@@ -21,11 +21,20 @@ data class BleOtaProgressModel(
 
 class BleOtaFragment : BaseFlowFragment() {
 
+    private var _binding: FragmentBleOtaBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_ble_ota, container, false)
+        _binding = FragmentBleOtaBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -41,8 +50,8 @@ class BleOtaFragment : BaseFlowFragment() {
     }
 
     private fun render(model: BleOtaProgressModel) {
-        p_bleota_current_file_progress.progress = model.percentComplete
-        p_bleota_progress_text.text = getString(
+        binding.pBleotaCurrentFileProgress.progress = model.percentComplete
+        binding.pBleotaProgressText.text = getString(
             R.string.p_bleota_progress_format, model.fileNumber, model.percentComplete
         )
     }

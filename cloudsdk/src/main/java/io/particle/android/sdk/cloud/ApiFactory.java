@@ -1,25 +1,22 @@
 package io.particle.android.sdk.cloud;
 
 import android.content.Context;
-import android.util.Base64;
 
 import androidx.annotation.StringRes;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import okio.ByteString;
-import retrofit.RequestInterceptor.RequestFacade;
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.Log;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
-import retrofit.converter.GsonConverter;
+import okhttp3.Credentials;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -48,15 +45,14 @@ public class ApiFactory {
 
 
     private final TokenGetterDelegate tokenDelegate;
-    private final OkHttpClient normalTimeoutClient;
     private final OauthBasicAuthCredentialsProvider basicAuthCredentialsProvider;
     private final Gson gson;
-    private final LogLevel httpLogLevel;
+    private final HttpLoggingInterceptor.Level httpLogLevel;
     private final HttpUrl apiBaseUri;
 
     ApiFactory(
             HttpUrl uri,
-            LogLevel httpLogLevel,
+            HttpLoggingInterceptor.Level httpLogLevel,
             TokenGetterDelegate tokenGetterDelegate,
             OauthBasicAuthCredentialsProvider basicAuthProvider
     ) {
@@ -65,38 +61,27 @@ public class ApiFactory {
         this.gson = new Gson();
         this.apiBaseUri = uri;
         this.httpLogLevel = httpLogLevel;
-
-        normalTimeoutClient = buildClientWithTimeout(REGULAR_TIMEOUT);
-    }
-
-    private static OkHttpClient buildClientWithTimeout(int timeoutInSeconds) {
-        OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(timeoutInSeconds, TimeUnit.SECONDS);
-        client.setReadTimeout(timeoutInSeconds, TimeUnit.SECONDS);
-        client.setWriteTimeout(timeoutInSeconds, TimeUnit.SECONDS);
-        return client;
     }
 
     ApiDefs.CloudApi buildNewCloudApi() {
-        RestAdapter restAdapter = buildCommonRestAdapterBuilder(gson, normalTimeoutClient)
-                .setRequestInterceptor(request -> {
-                    request.addHeader("Authorization", "Bearer " + tokenDelegate.getTokenValue());
-                    addParticleToolsHeader(request);
-                })
+        OkHttpClient client = baseClientBuilder()
+                .addInterceptor(chain -> chain.proceed(
+                        chain.request().newBuilder()
+                                .header("Authorization", "Bearer " + tokenDelegate.getTokenValue())
+                                .build()))
                 .build();
-        return restAdapter.create(ApiDefs.CloudApi.class);
+        return buildRetrofit(client).create(ApiDefs.CloudApi.class);
     }
 
     ApiDefs.IdentityApi buildNewIdentityApi() {
         final String basicAuthValue = getBasicAuthValue();
-
-        RestAdapter restAdapter = buildCommonRestAdapterBuilder(gson, normalTimeoutClient)
-                .setRequestInterceptor(request -> {
-                    request.addHeader("Authorization", basicAuthValue);
-                    addParticleToolsHeader(request);
-                })
+        OkHttpClient client = baseClientBuilder()
+                .addInterceptor(chain -> chain.proceed(
+                        chain.request().newBuilder()
+                                .header("Authorization", basicAuthValue)
+                                .build()))
                 .build();
-        return restAdapter.create(ApiDefs.IdentityApi.class);
+        return buildRetrofit(client).create(ApiDefs.IdentityApi.class);
     }
 
     HttpUrl getApiUri() {
@@ -108,23 +93,36 @@ public class ApiFactory {
     }
 
     private String getBasicAuthValue() {
-        String authString = String.format("%s:%s",
+        return Credentials.basic(
                 basicAuthCredentialsProvider.getClientId(),
                 basicAuthCredentialsProvider.getClientSecret());
-        ByteString authBytes = ByteString.of(authString.getBytes());
-        return "Basic " + authBytes.base64();
     }
 
-    private void addParticleToolsHeader(RequestFacade request) {
-        request.addHeader("X-Particle-Tool", "android-cloud-sdk");
+    private OkHttpClient.Builder baseClientBuilder() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(httpLogLevel);
+
+        // Common "X-Particle-Tool" header added to every request.
+        Interceptor toolsHeader = chain -> chain.proceed(
+                chain.request().newBuilder()
+                        .header("X-Particle-Tool", "android-cloud-sdk")
+                        .build());
+
+        return new OkHttpClient.Builder()
+                .connectTimeout(REGULAR_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(REGULAR_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(REGULAR_TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor(toolsHeader)
+                .addInterceptor(logging);
     }
 
-    private RestAdapter.Builder buildCommonRestAdapterBuilder(Gson gson, OkHttpClient client) {
-        return new RestAdapter.Builder()
-                .setClient(new OkClient(client))
-                .setConverter(new GsonConverter(gson))
-                .setEndpoint(getApiUri().toString())
-                .setLogLevel(httpLogLevel);
+    private Retrofit buildRetrofit(OkHttpClient client) {
+        return new Retrofit.Builder()
+                .baseUrl(getApiUri())
+                .client(client)
+                .addCallAdapterFactory(SynchronousCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
     }
 
 

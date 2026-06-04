@@ -18,26 +18,31 @@ import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_manual_commissioning_add_to_network.*
+import io.particle.mesh.ui.databinding.FragmentManualCommissioningAddToNetworkBinding
 
 
 class ManualCommissioningAddToNetworkFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentManualCommissioningAddToNetworkBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(
-            R.layout.fragment_manual_commissioning_add_to_network,
-            container,
-            false
-        )
+        _binding = FragmentManualCommissioningAddToNetworkBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        action_next.setOnClickListener {
+        binding.actionNext.setOnClickListener {
             // FIXME: this flow logic should live outside the UI
             try {
                 findNavController().navigate(
@@ -54,11 +59,11 @@ class ManualCommissioningAddToNetworkFragment : BaseFlowFragment() {
             }
         }
 
-        setup_header_text.text = Phrase.from(view, R.string.add_xenon_to_mesh_network)
+        binding.setupHeaderText.text = Phrase.from(view, R.string.add_xenon_to_mesh_network)
             .put("product_type", getUserFacingTypeName())
             .format()
 
-        setUpVideoView(videoView)
+        setUpVideoView(binding.videoView)
     }
 
     private fun setUpVideoView(vidView: VideoView) {

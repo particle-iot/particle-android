@@ -25,22 +25,25 @@ import io.particle.mesh.setup.toConnectivityType
 import io.particle.mesh.setup.ui.utils.localDeviceHasInternetConnection
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.databinding.FragmentSelectDeviceBinding
+import io.particle.mesh.ui.databinding.RowSelectDeviceBinding
 import io.particle.mesh.ui.inflateRow
-import kotlinx.android.synthetic.main.fragment_select_device.view.*
-import kotlinx.android.synthetic.main.row_select_device.view.*
 
 
 class SelectDeviceFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentSelectDeviceBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_select_device, container, false)
+        _binding = FragmentSelectDeviceBinding.inflate(inflater, container, false)
 
         // create and populate adapter
         val adapter = MeshDeviceTypesAdapter(this::onItemClicked)
-        root.item_list.adapter = adapter
+        binding.itemList.adapter = adapter
 //        adapter.submitList(
 //            listOf(
 //                DeviceData(
@@ -61,7 +64,12 @@ class SelectDeviceFragment : BaseFlowFragment() {
 //            )
 //        )
 
-        return root
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -108,10 +116,11 @@ private data class DeviceData(
 
 
 private class DeviceDataHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
-    val rowLine1 = rowRoot.row_line_1
-    val rowLine2 = rowRoot.row_line_2
-    val image = rowRoot.row_image
-    val capability2 = rowRoot.p_selectdevice_capability2
+    private val binding = RowSelectDeviceBinding.bind(rowRoot)
+    val rowLine1 = binding.rowLine1
+    val rowLine2 = binding.rowLine2
+    val image = binding.rowImage
+    val capability2 = binding.pSelectdeviceCapability2
 }
 
 

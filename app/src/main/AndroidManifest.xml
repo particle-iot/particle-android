@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="io.particle.sdk.app">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- required by Segment -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -29,6 +28,7 @@
 
         <activity
             android:name="io.particle.android.sdk.ui.SplashActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars.Honeycomb"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -41,12 +41,14 @@
 
         <activity
             android:name="io.particle.android.sdk.ui.IntroActivity"
+            android:exported="false"
             android:label="@string/title_activity_intro"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar.TranslucentSystemBars.Honeycomb" />
 
         <activity
             android:name="io.particle.android.sdk.ui.devicelist.DeviceListActivity"
+            android:exported="true"
             android:label="@string/title_device_list"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -64,6 +66,7 @@
 
         <activity
             android:name="io.particle.android.sdk.ui.InspectorActivity"
+            android:exported="false"
             android:label="@string/title_inspector_detail"
             android:parentActivityName="io.particle.android.sdk.ui.devicelist.DeviceListActivity"
             android:screenOrientation="portrait"
@@ -110,11 +113,13 @@
 <!--        </activity>-->
         <activity
             android:name="io.particle.android.sdk.utils.ui.WebViewActivity"
+            android:exported="false"
             android:label="@string/title_activity_web_view"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar" />
         <activity
             android:name="io.particle.android.sdk.accountsetup.TwoFactorActivity"
+            android:exported="false"
             android:label="@string/title_activity_two_factor"
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar.Honeycomb"

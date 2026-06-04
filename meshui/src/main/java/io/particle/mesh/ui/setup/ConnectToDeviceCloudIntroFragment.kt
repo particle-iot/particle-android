@@ -22,21 +22,26 @@ import io.particle.mesh.ui.setup.SetupType.BORON_GATEWAY_ACTIVE
 import io.particle.mesh.ui.setup.SetupType.BORON_GATEWAY_NOT_ACTIVE
 import io.particle.mesh.ui.setup.SetupType.BORON_STANDALONE_ACTIVE
 import io.particle.mesh.ui.setup.SetupType.BORON_STANDALONE_NOT_ACTIVE
-import kotlinx.android.synthetic.main.fragment_connect_to_device_cloud_intro.*
+import io.particle.mesh.ui.databinding.FragmentConnectToDeviceCloudIntroBinding
 
 
 class ConnectToDeviceCloudIntroFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentConnectToDeviceCloudIntroBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(
-            R.layout.fragment_connect_to_device_cloud_intro,
-            container,
-            false
-        )
+        _binding = FragmentConnectToDeviceCloudIntroBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -44,7 +49,7 @@ class ConnectToDeviceCloudIntroFragment : BaseFlowFragment() {
 
         getSetupType()?.let { showSetupType(it) }
 
-        p_action_next.setOnClickListener {
+        binding.pActionNext.setOnClickListener {
             val ful = this@ConnectToDeviceCloudIntroFragment.flowUiListener
             ful?.updateShouldConnectToDeviceCloudConfirmed(true)
         }
@@ -81,11 +86,11 @@ class ConnectToDeviceCloudIntroFragment : BaseFlowFragment() {
     }
 
     private fun showSetupType(setupType: SetupType) {
-        setup_header_text.text = setupType.header.templated()
-        p_action_next.setText(setupType.buttonLabel)
-        p_mesh_step1.text = setupType.step1.templated()
-        p_mesh_step2.text = setupType.step2.templated()
-        p_mesh_step3.text = if (setupType.step3 == null) "" else setupType.step3.templated()
+        binding.setupHeaderText.text = setupType.header.templated()
+        binding.pActionNext.setText(setupType.buttonLabel)
+        binding.pMeshStep1.text = setupType.step1.templated()
+        binding.pMeshStep2.text = setupType.step2.templated()
+        binding.pMeshStep3.text = if (setupType.step3 == null) "" else setupType.step3.templated()
     }
 
     private fun Int.templated(): CharSequence {

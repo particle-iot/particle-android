@@ -16,14 +16,15 @@ import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.buildIntValueMap
 import io.particle.android.sdk.utils.join
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okio.buffer
 import okio.source
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONException
 import org.json.JSONObject
-import retrofit.RetrofitError
-import retrofit.mime.TypedByteArray
-import retrofit.mime.TypedFile
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -143,7 +144,7 @@ class ParticleDevice internal constructor(
         set(newNote) {
             try {
                 mainApi.setDeviceNote(id, newNote ?: "")
-            } catch (e: RetrofitError) {
+            } catch (e: ParticleHttpError) {
                 throw ParticleCloudException(e)
             }
         }
@@ -247,7 +248,7 @@ class ParticleDevice internal constructor(
         var maxUsage = 0f
         try {
             val response = mainApi.getCurrentDataUsage(deviceState.lastIccid!!)
-            val result = JSONObject(String((response.body as TypedByteArray).bytes))
+            val result = JSONObject(response.string())
             val usages = result.getJSONArray("usage_by_day")
 
             for (i in 0 until usages.length()) {
@@ -261,7 +262,7 @@ class ParticleDevice internal constructor(
             }
         } catch (e: JSONException) {
             throw ParticleCloudException(e)
-        } catch (e: RetrofitError) {
+        } catch (e: ParticleHttpError) {
             throw ParticleCloudException(e)
         }
 
@@ -402,7 +403,7 @@ class ParticleDevice internal constructor(
                 deviceState.deviceId, functionName,
                 FunctionArgs(argsString)
             )
-        } catch (e: RetrofitError) {
+        } catch (e: ParticleHttpError) {
             throw ParticleCloudException(e)
         }
 
@@ -449,7 +450,7 @@ class ParticleDevice internal constructor(
     fun unclaim() {
         try {
             cloud.unclaimDevice(deviceState.deviceId)
-        } catch (e: RetrofitError) {
+        } catch (e: ParticleHttpError) {
             throw ParticleCloudException(e)
         }
     }
@@ -466,7 +467,7 @@ class ParticleDevice internal constructor(
         performFlashingChange {
             mainApi.flashFile(
                 deviceState.deviceId,
-                TypedFile("application/octet-stream", file)
+                filePart(file, "application/octet-stream")
             )
         }
     }
@@ -475,7 +476,12 @@ class ParticleDevice internal constructor(
     @Throws(ParticleCloudException::class, IOException::class)
     fun flashBinaryFile(stream: InputStream) {
         val bytes = stream.source().buffer().readByteArray()
-        performFlashingChange { mainApi.flashFile(deviceState.deviceId, TypedFakeFile(bytes)) }
+        performFlashingChange {
+            mainApi.flashFile(
+                deviceState.deviceId,
+                filePart(bytes, "application/octet-stream", "tinker_firmware.bin")
+            )
+        }
     }
 
     @WorkerThread
@@ -484,7 +490,7 @@ class ParticleDevice internal constructor(
         performFlashingChange {
             mainApi.flashFile(
                 deviceState.deviceId,
-                TypedFile("multipart/form-data", file)
+                filePart(file, "multipart/form-data")
             )
         }
     }
@@ -497,7 +503,7 @@ class ParticleDevice internal constructor(
         performFlashingChange {
             mainApi.flashFile(
                 deviceState.deviceId,
-                TypedFakeFile(bytes, "multipart/form-data", "code.ino")
+                filePart(bytes, "multipart/form-data", "code.ino")
             )
         }
     }
@@ -550,7 +556,7 @@ class ParticleDevice internal constructor(
                 }
             })
             flashingChange()
-        } catch (e: RetrofitError) {
+        } catch (e: ParticleHttpError) {
             throw ParticleCloudException(e)
         } catch (e: IOException) {
             throw ParticleCloudException(e)
@@ -626,7 +632,7 @@ class ParticleDevice internal constructor(
         val signalInt = if (shouldSignal) 1 else 0
         try {
             mainApi.shoutRainbows(deviceState.deviceId, signalInt)
-        } catch (e: RetrofitError) {
+        } catch (e: ParticleHttpError) {
             throw ParticleCloudException(e)
         }
     }
@@ -645,7 +651,7 @@ class ParticleDevice internal constructor(
             // FIXME: update device state here after switching to Kotlin
 
             return response.online
-        } catch (e: RetrofitError) {
+        } catch (e: ParticleHttpError) {
             throw ParticleCloudException(e)
         }
     }
@@ -754,15 +760,14 @@ class ParticleDevice internal constructor(
     //endregion
 
 
-    private class TypedFakeFile @JvmOverloads constructor(
-        bytes: ByteArray,
-        mimeType: String = "application/octet-stream",
-        private val fileName: String = "tinker_firmware.bin"
-    ) : TypedByteArray(mimeType, bytes) {
+    private fun filePart(file: File, mimeType: String): MultipartBody.Part {
+        val body = file.asRequestBody(mimeType.toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("file", file.name, body)
+    }
 
-        override fun fileName(): String {
-            return fileName
-        }
+    private fun filePart(bytes: ByteArray, mimeType: String, fileName: String): MultipartBody.Part {
+        val body = bytes.toRequestBody(mimeType.toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("file", fileName, body)
     }
 
     /**
@@ -795,7 +800,7 @@ class ParticleDevice internal constructor(
             val reply: R
             try {
                 reply = callApi(variableName)
-            } catch (e: RetrofitError) {
+            } catch (e: ParticleHttpError) {
                 throw ParticleCloudException(e)
             }
 

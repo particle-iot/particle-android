@@ -8,19 +8,19 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_joiner_setup_finished.view.*
+import io.particle.mesh.ui.databinding.FragmentJoinerSetupFinishedBinding
 
 
 class JoinerSetupFinishedFragment : BaseFlowFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_joiner_setup_finished, container, false)
+        val binding = FragmentJoinerSetupFinishedBinding.inflate(inflater, container, false)
 
-        root.action_start_building.setOnClickListener{ endSetup() }
-        root.action_add_next_mesh_device.setOnClickListener{ startNewFlow() }
+        binding.actionStartBuilding.setOnClickListener{ endSetup() }
+        binding.actionAddNextMeshDevice.setOnClickListener{ startNewFlow() }
 
-        return root
+        return binding.root
     }
 
     private fun endSetup() {

@@ -14,16 +14,25 @@ import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.utils.markProgress
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_ethernet_connecting_to_device_cloud.*
+import io.particle.mesh.ui.databinding.FragmentEthernetConnectingToDeviceCloudBinding
 
 
 class EthernetConnectingToDeviceCloudFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentEthernetConnectingToDeviceCloudBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_ethernet_connecting_to_device_cloud, container, false)
+        _binding = FragmentEthernetConnectingToDeviceCloudBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -37,7 +46,7 @@ class EthernetConnectingToDeviceCloudFragment : BaseFlowFragment() {
             observeForProgress(target.isClaimedLD, R.id.status_stage_3)
         }
 
-        setup_header_text.text = Phrase.from(view, R.string.p_connectingtodevicecloud_title)
+        binding.setupHeaderText.text = Phrase.from(view, R.string.p_connectingtodevicecloud_title)
             .put("product_type", getUserFacingTypeName())
             .format()
     }

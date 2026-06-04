@@ -30,7 +30,7 @@ class ProtocolTransceiverFactory(
     ): ProtocolTransceiver? {
 
         val packetMTUSplitter = PacketMTUSplitter({ packet ->
-            deviceConnection.packetSendChannel.offer(packet)
+            deviceConnection.packetSendChannel.trySend(packet).isSuccess
         })
         val frameWriter = OutboundFrameWriter { packetMTUSplitter.splitIntoPackets(it) }
         val frameReader = InboundFrameReader(connectionScopes)

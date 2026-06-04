@@ -21,9 +21,9 @@ class StepEnsureSimActivated(private val cloud: ParticleCloud) : MeshSetupStep()
         }
     }
 
-    private fun doActivateSim(ctxs: SetupContexts): Int {
-        val response = cloud.activateSim(ctxs.targetDevice.iccid!!)
-        return response.status
+    private fun doActivateSim(ctxs: SetupContexts) {
+        // Success is signalled by the absence of a thrown ParticleCloudException.
+        cloud.activateSim(ctxs.targetDevice.iccid!!)
     }
 
     override fun wrapException(cause: Exception): Exception {

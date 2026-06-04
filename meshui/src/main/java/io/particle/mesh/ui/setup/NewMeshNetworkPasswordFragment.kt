@@ -10,24 +10,33 @@ import com.afollestad.materialdialogs.MaterialDialog
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_new_mesh_network_password.*
+import io.particle.mesh.ui.databinding.FragmentNewMeshNetworkPasswordBinding
 
 
 class NewMeshNetworkPasswordFragment : BaseFlowFragment() {
 
+    private var _binding: FragmentNewMeshNetworkPasswordBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_new_mesh_network_password, container, false)
+        _binding = FragmentNewMeshNetworkPasswordBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        action_next.setOnClickListener { onNetworkPasswordEntered() }
+        binding.actionNext.setOnClickListener { onNetworkPasswordEntered() }
     }
 
     private fun onNetworkPasswordEntered() {
-        val password = networkPasswordInputLayout.editText!!.text.toString()
+        val password = binding.networkPasswordInputLayout.editText!!.text.toString()
         val isValid = validateNetworkPassword(password)
         if (!isValid) {
             MaterialDialog.Builder(requireActivity())
@@ -37,7 +46,7 @@ class NewMeshNetworkPasswordFragment : BaseFlowFragment() {
             return
         }
 
-        val confirmation = networkPasswordConfirmInputLayout.editText!!.text.toString()
+        val confirmation = binding.networkPasswordConfirmInputLayout.editText!!.text.toString()
         if (password != confirmation) {
             MaterialDialog.Builder(requireActivity())
                     .content(R.string.p_newmeshnetworkpassword_passwords_do_not_match_dialog_content)

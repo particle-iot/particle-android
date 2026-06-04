@@ -7,7 +7,8 @@ import androidx.annotation.WorkerThread
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import com.google.gson.Gson
-import com.squareup.okhttp.HttpUrl
+import okhttp3.HttpUrl
+import okhttp3.ResponseBody
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.Responses.CardOnFileResponse
@@ -24,10 +25,6 @@ import io.particle.android.sdk.utils.Py.truthy
 import mu.KotlinLogging
 import org.json.JSONException
 import org.json.JSONObject
-import retrofit.RetrofitError
-import retrofit.RetrofitError.Kind
-import retrofit.client.Response
-import retrofit.mime.TypedByteArray
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
@@ -118,7 +115,7 @@ class ParticleCloud internal constructor(
         try {
             val response = identityApi.logIn("password", user, password)
             onLogIn(response, user, password)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleLoginException(error)
         }
 
@@ -138,7 +135,7 @@ class ParticleCloud internal constructor(
         try {
             val response = identityApi.authenticate("urn:custom:mfa-otp", mfaToken, otp)
             onLogIn(response, user, password)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleLoginException(error)
         }
     }
@@ -165,7 +162,7 @@ class ParticleCloud internal constructor(
     fun signUpWithUser(signUpInfo: SignUpInfo) {
         try {
             val response = identityApi.signUp(signUpInfo)
-            val bodyString = String((response.body as TypedByteArray).bytes)
+            val bodyString = response.string()
             val obj = JSONObject(bodyString)
 
             //workaround for sign up bug - invalid credentials bug
@@ -180,7 +177,7 @@ class ParticleCloud internal constructor(
                     throw ParticleCloudException(Exception(arr[0]))
                 }
             }
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleCloudException(error)
         } catch (ignore: JSONException) {
             //ignore - who cares if we're not getting error response
@@ -200,7 +197,7 @@ class ParticleCloud internal constructor(
     fun signUpAndLogInWithCustomer(email: String, password: String, productId: Int) {
         try {
             signUpAndLogInWithCustomer(SignUpInfo(email, password), productId)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleLoginException(error)
         }
 
@@ -225,7 +222,7 @@ class ParticleCloud internal constructor(
         try {
             val response = identityApi.signUpAndLogInWithCustomer(signUpInfo, productId)
             onLogIn(response, signUpInfo.username, signUpInfo.password)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleLoginException(error)
         }
 
@@ -247,7 +244,7 @@ class ParticleCloud internal constructor(
             log.warn { "Use product id instead of organization slug." }
             @Suppress("DEPRECATION")
             signUpAndLogInWithCustomer(SignUpInfo(email, password), orgSlug)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleCloudException(error)
         }
 
@@ -274,7 +271,7 @@ class ParticleCloud internal constructor(
             @Suppress("DEPRECATION")
             val response = identityApi.signUpAndLogInWithCustomer(signUpInfo, orgSlug)
             onLogIn(response, signUpInfo.username, signUpInfo.password)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleCloudException(error)
         }
     }
@@ -408,7 +405,7 @@ class ParticleCloud internal constructor(
     fun requestPasswordReset(email: String) {
         try {
             identityApi.requestPasswordReset(email)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleCloudException(error)
         }
     }
@@ -563,20 +560,18 @@ class ParticleCloud internal constructor(
     @Throws(ParticleCloudException::class)
     fun checkSim(iccId: String): Pair<ParticleSimStatus, String> {
         val code = try {
-            val response = mainApi.checkSim(iccId)
-            response.status
-        } catch (ex: RetrofitError) {
-            if (ex.kind != Kind.HTTP) {
-                throw ParticleCloudException(ex)
-            }
-            ex.response.status
+            // A HEAD against /v1/sims/{iccid} maps its HTTP status (success or error) to a SIM
+            // status, so read the raw status code rather than relying on throw-on-error.
+            mainApi.checkSim(iccId).execute().code()
+        } catch (ex: IOException) {
+            throw ParticleCloudException(ex)
         }
         return statusCodeToSimStatus(code)
     }
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
-    fun activateSim(iccId: String): Response {
+    fun activateSim(iccId: String): ResponseBody {
         return runHandlingCommonErrors {
             mainApi.takeActionOnSim(iccId, "activate")
         }
@@ -584,7 +579,7 @@ class ParticleCloud internal constructor(
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
-    fun deactivateSim(iccId: String): Response {
+    fun deactivateSim(iccId: String): ResponseBody {
         return runHandlingCommonErrors {
             mainApi.takeActionOnSim(iccId, "deactivate")
         }
@@ -592,7 +587,7 @@ class ParticleCloud internal constructor(
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
-    fun reactivateSim(iccId: String): Response {
+    fun reactivateSim(iccId: String): ResponseBody {
         return runHandlingCommonErrors {
             mainApi.takeActionOnSim(iccId, "reactivate")
         }
@@ -600,7 +595,7 @@ class ParticleCloud internal constructor(
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
-    fun unpauseSim(iccId: String, limitInMBsForUnpause: Int): Response {
+    fun unpauseSim(iccId: String, limitInMBsForUnpause: Int): ResponseBody {
         return runHandlingCommonErrors {
             mainApi.takeActionOnSim(iccId, "reactivate", limitInMBsForUnpause)
         }
@@ -608,7 +603,7 @@ class ParticleCloud internal constructor(
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
-    fun setDataLimit(iccId: String, limitInMBs: Int): Response {
+    fun setDataLimit(iccId: String, limitInMBs: Int): ResponseBody {
         return runHandlingCommonErrors {
             mainApi.setDataLimit(iccId, limitInMBs)
         }
@@ -787,7 +782,7 @@ class ParticleCloud internal constructor(
         updateDeviceState(particleDevice, stateWithNewName, true)
         try {
             mainApi.nameDevice(originalDeviceState.deviceId, newName)
-        } catch (e: RetrofitError) {
+        } catch (e: ParticleHttpError) {
             // oops, change the name back.
             updateDeviceState(particleDevice, originalDeviceState, true)
             throw ParticleCloudException(e)
@@ -957,7 +952,7 @@ class ParticleCloud internal constructor(
         try {
             return toRun()
 
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleCloudException(error)
 
         } catch (e: MalformedURLException) {
@@ -967,7 +962,7 @@ class ParticleCloud internal constructor(
 
     @WorkerThread
     @Throws(ParticleCloudException::class)
-    private fun modifyMeshNetwork(deviceId: String, action: String, networkId: String): Response {
+    private fun modifyMeshNetwork(deviceId: String, action: String, networkId: String): ResponseBody {
         return runHandlingCommonErrors {
             mainApi.modifyMeshNetwork(
                 networkId,

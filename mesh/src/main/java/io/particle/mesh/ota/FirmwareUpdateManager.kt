@@ -1,7 +1,7 @@
 package io.particle.mesh.ota
 
 import androidx.annotation.WorkerThread
-import com.squareup.okhttp.OkHttpClient
+import okhttp3.OkHttpClient
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.mesh.common.Result

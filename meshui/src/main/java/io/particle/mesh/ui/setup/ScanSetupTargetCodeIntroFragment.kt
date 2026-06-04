@@ -8,7 +8,7 @@ import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_scan_code_intro.*
+import io.particle.mesh.ui.databinding.FragmentScanCodeIntroBinding
 
 
 class ScanSetupTargetCodeIntroFragment : ScanIntroBaseFragment() {
@@ -18,8 +18,9 @@ class ScanSetupTargetCodeIntroFragment : ScanIntroBaseFragment() {
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        setup_header_text.setText( R.string.pair_xenon_with_your_phone)
-        textView.setText(R.string.p_scancodeintro_text_1)
+        val binding = FragmentScanCodeIntroBinding.bind(requireView())
+        binding.setupHeaderText.setText( R.string.pair_xenon_with_your_phone)
+        binding.textView.setText(R.string.p_scancodeintro_text_1)
     }
 
     @MainThread

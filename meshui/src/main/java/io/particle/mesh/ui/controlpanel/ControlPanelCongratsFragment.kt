@@ -10,8 +10,8 @@ import androidx.navigation.fragment.navArgs
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.databinding.FragmentCpCongratsBinding
 import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_cp_congrats.*
 import kotlinx.coroutines.delay
 
 
@@ -21,17 +21,27 @@ class ControlPanelCongratsFragment : BaseControlPanelFragment() {
 
     private val args: ControlPanelCongratsFragmentArgs by navArgs()
 
+    private var _binding: FragmentCpCongratsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_cp_congrats)
+        val root = container?.inflateFragment(R.layout.fragment_cp_congrats)
+        _binding = root?.let { FragmentCpCongratsBinding.bind(it) }
+        return root
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        p_hashtagwinning_message.text = args.congratsMessage
+        binding.pHashtagwinningMessage.text = args.congratsMessage
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

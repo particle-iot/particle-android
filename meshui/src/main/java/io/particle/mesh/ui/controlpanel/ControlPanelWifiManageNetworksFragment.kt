@@ -29,9 +29,9 @@ import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.flow.throwOnErrorOrAbsent
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.databinding.FragmentControlPanelWifiManageNetworksBinding
+import io.particle.mesh.ui.databinding.PMeshRowWifiScanBinding
 import io.particle.mesh.ui.inflateRow
-import kotlinx.android.synthetic.main.fragment_control_panel_wifi_manage_networks.*
-import kotlinx.android.synthetic.main.p_mesh_row_wifi_scan.view.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 
@@ -51,23 +51,23 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
     private var transceiver: ProtocolTransceiver? = null
     private val scopes = Scopes()
 
+    private var _binding: FragmentControlPanelWifiManageNetworksBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(
-            R.layout.fragment_control_panel_wifi_manage_networks,
-            container,
-            false
-        )
+        _binding = FragmentControlPanelWifiManageNetworksBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
         adapter = KnownWifiNetworksAdapter(::onWifiNetworkSelected)
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         scopes.onMain {
             startFlowWithBarcode { _, barcode ->
@@ -85,6 +85,7 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         scopes.cancelChildren()
+        _binding = null
     }
 
     @MainThread
@@ -108,12 +109,12 @@ class ControlPanelWifiManageNetworksFragment : BaseControlPanelFragment() {
             ?.toList()
 
         if (list?.isEmpty() == true) {
-            p_cp_emptyview.isVisible = true
-            recyclerView.isVisible = false
+            binding.pCpEmptyview.isVisible = true
+            binding.recyclerView.isVisible = false
             adapter.submitList(emptyList())
         } else {
-            p_cp_emptyview.isVisible = false
-            recyclerView.isVisible = true
+            binding.pCpEmptyview.isVisible = false
+            binding.recyclerView.isVisible = true
             adapter.submitList(list)
         }
     }
@@ -181,9 +182,10 @@ private data class KnownWifiNetwork(
 
 
 private class KnownWifiNetworkHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
-    val ssid = rowRoot.p_scanforwifi_ssid
-    val securityIcon = rowRoot.p_scanforwifi_security_icon
-    val strengthIcon = rowRoot.p_scanforwifi_strength_icon
+    private val binding = PMeshRowWifiScanBinding.bind(rowRoot)
+    val ssid = binding.pScanforwifiSsid
+    val securityIcon = binding.pScanforwifiSecurityIcon
+    val strengthIcon = binding.pScanforwifiStrengthIcon
 
     init {
         strengthIcon.isVisible = false

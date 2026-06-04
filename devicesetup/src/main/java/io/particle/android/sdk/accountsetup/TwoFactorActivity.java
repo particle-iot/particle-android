@@ -10,15 +10,11 @@ import android.widget.EditText;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.di.ApModule;
 import io.particle.android.sdk.ui.BaseActivity;
 import io.particle.android.sdk.ui.NextActivitySelector;
@@ -61,17 +57,14 @@ public class TwoFactorActivity extends BaseActivity {
     @Inject
     protected ParticleCloud sparkCloud;
 
-    @BindView(R2.id.verificationCode)
     protected EditText verificationCode;
 
-    @OnClick(R2.id.recover_auth)
     public void onRecover() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(getString(R.string.recovery_link)));
         startActivity(intent);
     }
 
-    @OnClick(R2.id.action_verify)
     public void onVerify() {
         if (loginTask != null) {
             log.wtf("Login being attempted again even though the button isn't enabled?!");
@@ -103,7 +96,9 @@ public class TwoFactorActivity extends BaseActivity {
                 .build()
                 .inject(this);
         // Bind views, onclick listeners, etc.
-        ButterKnife.bind(this);
+        verificationCode = findViewById(R.id.verificationCode);
+        findViewById(R.id.recover_auth).setOnClickListener(v -> onRecover());
+        findViewById(R.id.action_verify).setOnClickListener(v -> onVerify());
         SEGAnalytics.screen("Auth: Two Factor Screen");
 
         ParticleUi.enableBrandLogoInverseVisibilityAgainstSoftKeyboard(this);

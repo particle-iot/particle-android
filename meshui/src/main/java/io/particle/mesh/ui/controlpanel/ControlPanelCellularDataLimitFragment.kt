@@ -22,10 +22,10 @@ import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.controlpanel.DataLimitAdapter.DataLimitHolder
+import io.particle.mesh.ui.databinding.ControlpanelRowDataLimitBinding
+import io.particle.mesh.ui.databinding.FragmentControlPanelCellularDataLimitBinding
 import io.particle.mesh.ui.inflateFragment
 import io.particle.mesh.ui.inflateRow
-import kotlinx.android.synthetic.main.controlpanel_row_data_limit.view.*
-import kotlinx.android.synthetic.main.fragment_control_panel_cellular_data_limit.*
 import kotlin.math.roundToInt
 
 
@@ -41,12 +41,22 @@ class ControlPanelCellularDataLimitFragment : BaseControlPanelFragment() {
 
     private var selectedLimit: Int? = null
 
+    private var _binding: FragmentControlPanelCellularDataLimitBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_control_panel_cellular_data_limit)
+        val root = container?.inflateFragment(R.layout.fragment_control_panel_cellular_data_limit)
+        _binding = root?.let { FragmentControlPanelCellularDataLimitBinding.bind(it) }
+        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -56,15 +66,15 @@ class ControlPanelCellularDataLimitFragment : BaseControlPanelFragment() {
         adapter.currentDataLimit = flowUiListener.targetDevice.sim?.monthlyDataRateLimitInMBs
         adapter.currentDataUsage = flowUiListener.targetDevice.dataUsedInMB?.roundToInt()
 
-        limits_list.adapter = adapter
+        binding.limitsList.adapter = adapter
         adapter.submitList(limits)
 
-        action_change_data_limit.setOnClickListener { onChangeLimitClicked() }
+        binding.actionChangeDataLimit.setOnClickListener { onChangeLimitClicked() }
     }
 
     private fun onDataLimitItemClicked(item: Int) {
         selectedLimit = item
-        action_change_data_limit.isEnabled = true
+        binding.actionChangeDataLimit.isEnabled = true
     }
 
     private fun onChangeLimitClicked() {
@@ -86,8 +96,9 @@ private class DataLimitAdapter(
 ) {
 
     class DataLimitHolder(val root: View) : ViewHolder(root) {
-        val limitValue: TextView = root.limit_value
-        val checkbox: ImageView = root.selected_checkmark
+        private val itemBinding = ControlpanelRowDataLimitBinding.bind(root)
+        val limitValue: TextView = itemBinding.limitValue
+        val checkbox: ImageView = itemBinding.selectedCheckmark
     }
 
     var currentDataLimit: Int? = null

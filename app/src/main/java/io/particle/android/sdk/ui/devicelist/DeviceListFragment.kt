@@ -51,8 +51,8 @@ import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.inflateRow
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_device_list2.*
-import kotlinx.android.synthetic.main.row_device_list.view.*
+import io.particle.sdk.app.databinding.FragmentDeviceList2Binding
+import io.particle.sdk.app.databinding.RowDeviceListBinding
 import pl.brightinventions.slf4android.LogTask
 import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
 import pl.brightinventions.slf4android.showLogSharingPrompt
@@ -82,19 +82,22 @@ class DeviceListFragment : Fragment() {
 
     private val scopes = Scopes()
 
+    private var _binding: FragmentDeviceList2Binding? = null
+    private val binding get() = _binding!!
+
     private fun addGen3() {
         addXenonDevice()
-        add_device_fab.collapse()
+        binding.addDeviceFab.collapse()
     }
 
     fun addPhoton() {
         addPhotonDevice()
-        add_device_fab.collapse()
+        binding.addDeviceFab.collapse()
     }
 
     fun addElectron() {
         addElectronDevice()
-        add_device_fab.collapse()
+        binding.addDeviceFab.collapse()
     }
 
     override fun onCreateView(
@@ -103,7 +106,8 @@ class DeviceListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val top = inflater.inflate(R.layout.fragment_device_list2, container, false)
+        _binding = FragmentDeviceList2Binding.inflate(inflater, container, false)
+        val top = binding.root
 
         val rv = Ui.findView<RecyclerView>(top, R.id.device_list)
         rv.setHasFixedSize(true)  // perf. optimization
@@ -125,11 +129,16 @@ class DeviceListFragment : Fragment() {
         return top
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         nameFilterTextWatcher = buildNameFilterTextWatcher()
 
-        refresh_layout.setOnRefreshListener { this.refreshDevices() }
+        binding.refreshLayout.setOnRefreshListener { this.refreshDevices() }
 
         deviceSetupCompleteReceiver =
             object : ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver() {
@@ -143,14 +152,14 @@ class DeviceListFragment : Fragment() {
             }
         deviceSetupCompleteReceiver!!.register(activity)
 
-        refresh_layout.isRefreshing = true
+        binding.refreshLayout.isRefreshing = true
 
-        action_set_up_a_xenon.setOnClickListener { addGen3() }
-        action_set_up_a_photon.setOnClickListener { addPhoton() }
-        action_set_up_an_electron.setOnClickListener { addElectron() }
+        binding.actionSetUpAXenon.setOnClickListener { addGen3() }
+        binding.actionSetUpAPhoton.setOnClickListener { addPhoton() }
+        binding.actionSetUpAnElectron.setOnClickListener { addElectron() }
 
-        toolbar.inflateMenu(R.menu.device_list)
-        toolbar.setOnMenuItemClickListener {
+        binding.toolbar.inflateMenu(R.menu.device_list)
+        binding.toolbar.setOnMenuItemClickListener {
             return@setOnMenuItemClickListener when (it.itemId) {
 
                 R.id.action_log_out -> {
@@ -177,7 +186,7 @@ class DeviceListFragment : Fragment() {
             }
         }
 
-        filter_button.setOnClickListener {
+        binding.filterButton.setOnClickListener {
             // TODO: replace this with navigation lib calls
             requireActivity().supportFragmentManager.commit {
                 replace(R.id.fragment_parent, DeviceFilterFragment.newInstance())
@@ -185,17 +194,17 @@ class DeviceListFragment : Fragment() {
             }
         }
 
-        search_icon.setOnClickListener {
-            name_filter_input.requestFocus()
+        binding.searchIcon.setOnClickListener {
+            binding.nameFilterInput.requestFocus()
             val imm: InputMethodManager? = requireContext().getSystemService()
-            imm?.showSoftInput(name_filter_input, InputMethodManager.SHOW_IMPLICIT)
+            imm?.showSoftInput(binding.nameFilterInput, InputMethodManager.SHOW_IMPLICIT)
         }
-        clear_text_icon.setOnClickListener { name_filter_input.setText("") }
+        binding.clearTextIcon.setOnClickListener { binding.nameFilterInput.setText("") }
     }
 
     override fun onResume() {
         super.onResume()
-        name_filter_input.addTextChangedListener(nameFilterTextWatcher)
+        binding.nameFilterInput.addTextChangedListener(nameFilterTextWatcher)
         subscribeToSystemEvents()
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
             viewLifecycleOwner,
@@ -205,7 +214,7 @@ class DeviceListFragment : Fragment() {
 
     override fun onPause() {
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.removeObservers(viewLifecycleOwner)
-        name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
+        binding.nameFilterInput.removeTextChangedListener(nameFilterTextWatcher)
         unsubscribeFromSystemEvents()
         super.onPause()
     }
@@ -219,7 +228,7 @@ class DeviceListFragment : Fragment() {
         log.i("onDeviceListUpdated(): $devices")
         val ctx = context ?: return
 
-        refresh_layout.isRefreshing = false
+        binding.refreshLayout.isRefreshing = false
 
         val currentConfig = filterViewModel.currentDeviceFilter.deviceListViewConfigLD.value
         val (filterIcon, filterBg) = if (currentConfig == defaultDeviceListConfig) {
@@ -234,12 +243,12 @@ class DeviceListFragment : Fragment() {
             DrawableCompat.setTint(gray, white)
             Pair(gray, ctx.getDrawable(R.drawable.bg_device_filter_active))
         }
-        filter_button.setImageDrawable(filterIcon)
-        filter_button.background = filterBg
+        binding.filterButton.setImageDrawable(filterIcon)
+        binding.filterButton.background = filterBg
 
         updateEmptyMessageAndSearchBox()
 
-        empty_message.isVisible = devices.isNullOrEmpty()
+        binding.emptyMessage.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
         adapter.notifyDataSetChanged()
     }
@@ -247,17 +256,17 @@ class DeviceListFragment : Fragment() {
     private fun updateEmptyMessageAndSearchBox() {
         val config = filterViewModel.currentDeviceFilter.deviceListViewConfigLD.value!!
         if (filterViewModel.fullDeviceListLD.value.isNullOrEmpty()) {
-            empty_message.setText(R.string.device_list_default_empty_message)
+            binding.emptyMessage.setText(R.string.device_list_default_empty_message)
         } else {
             if (config.deviceNameQueryString.isNullOrBlank()) {
-                empty_message.text = "No devices found matching the current filter"
+                binding.emptyMessage.text = "No devices found matching the current filter"
             } else {
                 val msg = "No devices found matching '${config.deviceNameQueryString}'"
-                empty_message.text = msg
+                binding.emptyMessage.text = msg
             }
         }
 
-        clear_text_icon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
+        binding.clearTextIcon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
     }
 
     private fun buildNameFilterTextWatcher(): TextWatcher {
@@ -342,8 +351,8 @@ class DeviceListFragment : Fragment() {
     }
 
     fun onBackPressed(): Boolean {
-        return if (add_device_fab.isExpanded) {
-            add_device_fab.collapse()
+        return if (binding.addDeviceFab.isExpanded) {
+            binding.addDeviceFab.collapse()
             true
         } else {
             false
@@ -387,10 +396,11 @@ class DeviceListFragment : Fragment() {
 
 
 internal class DeviceListViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
-    val modelName: TextView = topLevel.product_model_name
-    val deviceName: TextView = topLevel.product_name
-    val lastHandshake: TextView = topLevel.last_handshake_text
-    val statusDot: ImageView = topLevel.online_status_dot
+    private val binding = RowDeviceListBinding.bind(topLevel)
+    val modelName: TextView = binding.productModelName
+    val deviceName: TextView = binding.productName
+    val lastHandshake: TextView = binding.lastHandshakeText
+    val statusDot: ImageView = binding.onlineStatusDot
 }
 
 

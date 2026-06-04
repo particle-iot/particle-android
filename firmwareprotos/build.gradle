@@ -1,15 +1,19 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
-
-
+    namespace 'io.particle.firmwareprotos'
+    compileSdkVersion 35
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     buildTypes {

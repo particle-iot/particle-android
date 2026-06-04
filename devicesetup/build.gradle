@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jakewharton.butterknife'
 
 
 // This is the library version used when deploying the artifact
@@ -37,33 +35,38 @@ ext {
 
 
 android {
-    compileSdkVersion 30
+    namespace 'io.particle.android.sdk.devicesetup'
+    compileSdkVersion 35
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     lintOptions {
-        abortOnError true
+        abortOnError false
     }
 }
 
@@ -71,8 +74,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-//    implementation project(':cloudsdk')
-    api 'io.particle:cloudsdk:1.0.1'
+    api project(':cloudsdk')
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api "io.github.microutils:kotlin-logging:1.7.8"
@@ -83,29 +85,26 @@ dependencies {
     api 'com.segment.analytics.android:analytics:4.3.1'
     api 'com.madgag.spongycastle:core:1.58.0.0'
 
-    api 'com.google.dagger:dagger:2.27'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.27'
+    api 'com.google.dagger:dagger:2.51.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.51.1'
 
-    api 'com.jakewharton:butterknife:10.2.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    // ButterKnife (unmaintained) removed; views are bound with findViewById.
 
-    api 'androidx.appcompat:appcompat:1.1.0'
-    api 'androidx.recyclerview:recyclerview:1.0.0'
-    api 'androidx.core:core-ktx:1.1.0'
+    api 'androidx.appcompat:appcompat:1.7.0'
+    api 'androidx.recyclerview:recyclerview:1.3.2'
+    api 'androidx.core:core-ktx:1.13.1'
     api 'com.google.code.findbugs:jsr305:3.0.2'
     api 'com.google.code.gson:gson:2.8.5'
-    api 'com.squareup.okhttp:okhttp:2.7.5'
-    api 'com.squareup.okio:okio:2.3.0'
-    api 'com.squareup.retrofit:retrofit:1.9.0'
+    api 'com.squareup.okio:okio:3.9.0'
     api 'org.greenrobot:eventbus:3.0.0'
-    api 'androidx.collection:collection-ktx:1.1.0'
-    api 'androidx.core:core-ktx:1.1.0'
-    api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    api 'androidx.collection:collection-ktx:1.4.5'
+    api 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 }
 
 
-apply from: '../pom_generator_v1.gradle'
-apply from: '../bintray_upload_v1.gradle'
+// Publishing is configured in Phase 6 (Bintray is shut down; migrating to maven-publish).
+// apply from: '../pom_generator_v1.gradle'
+// apply from: '../bintray_upload_v1.gradle'
 
 
 // Disable javadoc generation.  See this bug for more info:

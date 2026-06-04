@@ -20,8 +20,7 @@ import io.particle.mesh.common.android.livedata.BroadcastReceiverLD
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_cp_prepare_for_pairing.*
+import io.particle.mesh.ui.databinding.FragmentCpPrepareForPairingBinding
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
@@ -34,24 +33,33 @@ class PrepareForPairingFragment : BaseControlPanelFragment() {
 
     private val btDeviceFoundLD by lazy { BTBroadcastLD(activity!!) }
 
+    private var _binding: FragmentCpPrepareForPairingBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_cp_prepare_for_pairing)
+        _binding = FragmentCpPrepareForPairingBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        setUpVideoView(videoView)
+        setUpVideoView(binding.videoView)
 
-        p_controlpanel_signal_switch.setOnCheckedChangeListener { _, isChecked ->
+        binding.pControlpanelSignalSwitch.setOnCheckedChangeListener { _, isChecked ->
             onSignalSwitchChanged(isChecked)
         }
 
-        bodyText.text = Phrase.from(bodyText.text)
+        binding.bodyText.text = Phrase.from(binding.bodyText.text)
             .put("device_name", device.name)
             .format()
 

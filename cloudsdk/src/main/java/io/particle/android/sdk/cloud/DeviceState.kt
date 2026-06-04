@@ -3,7 +3,7 @@ package io.particle.android.sdk.cloud
 import android.os.Parcelable
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 

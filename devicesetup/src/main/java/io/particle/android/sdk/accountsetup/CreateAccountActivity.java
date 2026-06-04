@@ -16,10 +16,6 @@ import android.widget.Switch;
 import com.segment.analytics.Properties;
 import com.squareup.phrase.Phrase;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
-import butterknife.OnClick;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
@@ -27,7 +23,6 @@ import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.cloud.models.AccountInfo;
 import io.particle.android.sdk.cloud.models.SignUpInfo;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.ui.BaseActivity;
 import io.particle.android.sdk.ui.NextActivitySelector;
 import io.particle.android.sdk.utils.Async;
@@ -51,21 +46,19 @@ public class CreateAccountActivity extends BaseActivity {
     private Async.AsyncApiWorker<ParticleCloud, Void> createAccountTask = null;
 
     // UI references.
-    @BindView(R2.id.first) protected EditText firstNameView;
-    @BindView(R2.id.last) protected EditText lastNameView;
-    @BindView(R2.id.company) protected EditText companyNameView;
-    @BindView(R2.id.email) protected EditText emailView;
-    @BindView(R2.id.password) protected EditText passwordView;
-    @BindView(R2.id.verify_password) protected EditText verifyPasswordView;
-    @BindView(R2.id.companyAccount) protected Switch companyChoiceView;
+    protected EditText firstNameView;
+    protected EditText lastNameView;
+    protected EditText companyNameView;
+    protected EditText emailView;
+    protected EditText passwordView;
+    protected EditText verifyPasswordView;
+    protected Switch companyChoiceView;
 
-    @OnClick(R2.id.already_have_an_account_text)
     protected void onHasAccountClick(View view) {
         startActivity(new Intent(view.getContext(), LoginActivity.class));
         finish();
     }
 
-    @OnCheckedChanged(R2.id.companyAccount)
     protected void onCompanyCheckedChange(boolean isChecked) {
         if (isChecked) {
             int backgroundDefault = ContextCompat.getColor(CreateAccountActivity.this,
@@ -89,7 +82,16 @@ public class CreateAccountActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        ButterKnife.bind(this);
+        firstNameView = findViewById(R.id.first);
+        lastNameView = findViewById(R.id.last);
+        companyNameView = findViewById(R.id.company);
+        emailView = findViewById(R.id.email);
+        passwordView = findViewById(R.id.password);
+        verifyPasswordView = findViewById(R.id.verify_password);
+        companyChoiceView = findViewById(R.id.companyAccount);
+        findViewById(R.id.already_have_an_account_text).setOnClickListener(v -> onHasAccountClick(v));
+        companyChoiceView.setOnCheckedChangeListener((buttonView, isChecked) -> onCompanyCheckedChange(isChecked));
+        findViewById(R.id.action_create_account).setOnClickListener(v -> attemptCreateAccount());
         SEGAnalytics.screen("Auth: Sign Up screen");
         ParticleUi.enableBrandLogoInverseVisibilityAgainstSoftKeyboard(this);
 
@@ -124,7 +126,6 @@ public class CreateAccountActivity extends BaseActivity {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    @OnClick(R2.id.action_create_account)
     public void attemptCreateAccount() {
         if (createAccountTask != null) {
             log.wtf("Sign up being attempted again even though the sign up button isn't enabled?!");

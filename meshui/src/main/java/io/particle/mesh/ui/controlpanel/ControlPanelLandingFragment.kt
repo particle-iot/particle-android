@@ -40,8 +40,7 @@ import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_control_panel_landing.*
+import io.particle.mesh.ui.databinding.FragmentControlPanelLandingBinding
 import mu.KotlinLogging
 
 
@@ -55,6 +54,9 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     private val flowManagementScope = Scopes()
 
     private val log = KotlinLogging.logger {}
+
+    private var _binding: FragmentControlPanelLandingBinding? = null
+    private val binding get() = _binding!!
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +77,8 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_control_panel_landing)
+        _binding = FragmentControlPanelLandingBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,39 +86,44 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
         devicesUpdatedBroadcast.observe(viewLifecycleOwner, Observer { updateDetails() })
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
         val deviceType = device.deviceType!!
 
-        p_controlpanel_landing_name_frame.setOnClickListener {
+        binding.pControlpanelLandingNameFrame.setOnClickListener {
             RenameHelper.renameDevice(activity, device)
         }
 
-        p_controlpanel_landing_notes_frame.setOnClickListener { editNotes() }
+        binding.pControlpanelLandingNotesFrame.setOnClickListener { editNotes() }
 
-        network_info_header.isVisible = deviceType in gen3Devices
+        binding.networkInfoHeader.isVisible = deviceType in gen3Devices
 
-        p_controlpanel_landing_wifi_item_frame.isVisible = deviceType in listOf(ARGON, A_SOM)
-        p_controlpanel_landing_wifi_item.setOnClickListener {
+        binding.pControlpanelLandingWifiItemFrame.isVisible = deviceType in listOf(ARGON, A_SOM)
+        binding.pControlpanelLandingWifiItem.setOnClickListener {
             flowScopes.onMain {
                 startFlowWithBarcode(flowRunner::startControlPanelInspectCurrentWifiNetworkFlow)
             }
         }
 
-        p_controlpanel_landing_cellular_item_frame.isVisible = deviceType in listOf(BORON, B_SOM, B5_SOM)
-        p_controlpanel_landing_cellular_item.setOnClickListener {
+        binding.pControlpanelLandingCellularItemFrame.isVisible = deviceType in listOf(BORON, B_SOM, B5_SOM)
+        binding.pControlpanelLandingCellularItem.setOnClickListener {
             flowRunner.startShowControlPanelCellularOptionsFlow(device)
         }
 
-        p_controlpanel_landing_ethernet_item_frame.isVisible = deviceType in gen3Devices
-        p_controlpanel_landing_ethernet_item_frame.setOnClickListener {
+        binding.pControlpanelLandingEthernetItemFrame.isVisible = deviceType in gen3Devices
+        binding.pControlpanelLandingEthernetItemFrame.setOnClickListener {
             flowScopes.onMain {
                 startFlowWithBarcode(flowRunner::startShowControlPanelEthernetOptionsFlow)
             }
         }
 
-        p_controlpanel_landing_mesh_item.isVisible = deviceType in gen3Devices
-        p_controlpanel_landing_mesh_item.setOnClickListener {
+        binding.pControlpanelLandingMeshItem.isVisible = deviceType in gen3Devices
+        binding.pControlpanelLandingMeshItem.setOnClickListener {
             val uri: Uri = Uri.parse(
                 "https://docs.particle.io/reference/developer-tools/cli/#particle-mesh"
             )
@@ -125,11 +133,11 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
             }
         }
 
-        p_controlpanel_landing_docs_item.setOnClickListener {
+        binding.pControlpanelLandingDocsItem.setOnClickListener {
             showDocumentation(activity, device.deviceType!!)
         }
 
-        p_controlpanel_landing_unclaim_item.setOnClickListener {
+        binding.pControlpanelLandingUnclaimItem.setOnClickListener {
             navigateToUnclaim()
         }
     }
@@ -145,8 +153,8 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
     }
 
     private fun updateDetails() {
-        p_controlpanel_landing_name_value.text = device.name
-        p_controlpanel_landing_notes_value.text = device.notes
+        binding.pControlpanelLandingNameValue.text = device.name
+        binding.pControlpanelLandingNotesValue.text = device.notes
     }
 
     private fun navigateToUnclaim() {
@@ -167,7 +175,7 @@ class ControlPanelLandingFragment : BaseControlPanelFragment() {
             editLD
         )
         editLD.observe(this, Observer {
-            p_controlpanel_landing_notes_value.text = it
+            binding.pControlpanelLandingNotesValue.text = it
         })
     }
 }

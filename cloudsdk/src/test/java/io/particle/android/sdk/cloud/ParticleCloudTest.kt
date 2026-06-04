@@ -2,10 +2,11 @@ package io.particle.android.sdk.cloud
 
 import android.content.Intent
 import com.google.gson.Gson
-import com.squareup.okhttp.HttpUrl
-import com.squareup.okhttp.mockwebserver.MockResponse
-import com.squareup.okhttp.mockwebserver.MockWebServer
-import com.squareup.okhttp.mockwebserver.RecordedRequest
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.RecordedRequest
 import io.particle.android.sdk.cloud.ApiFactory.OauthBasicAuthCredentialsProvider
 import io.particle.android.sdk.cloud.ApiFactory.TokenGetterDelegate
 import io.particle.android.sdk.cloud.Responses.ClaimCodeResponse
@@ -16,13 +17,12 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import retrofit.RestAdapter.LogLevel
 import java.util.*
 import java.util.concurrent.Executors
 
 
 private const val FAKE_API_PORT = 8080
-private val FAKE_API_URL = HttpUrl.parse("http://localhost:$FAKE_API_PORT")
+private val FAKE_API_URL = "http://localhost:$FAKE_API_PORT".toHttpUrl()
 
 
 class ParticleCloudTest {
@@ -58,7 +58,7 @@ class ParticleCloudTest {
         }
 
         // use actual ApiFactory to build other dependencies
-        val factory = ApiFactory(FAKE_API_URL, LogLevel.FULL, tokenDelegate, credsProvider)
+        val factory = ApiFactory(FAKE_API_URL, HttpLoggingInterceptor.Level.BODY, tokenDelegate, credsProvider)
 
         mainApi = factory.buildNewCloudApi()
 
@@ -100,8 +100,8 @@ class ParticleCloudTest {
 
         val mockedResponse = enqueueNew200ResponseWithBody(
             """ {
-            claim_code: "$claimCode",
-            device_ids: [
+            "claim_code": "$claimCode",
+            "device_ids": [
                 "$deviceId1",
                 "$deviceId2"
             ]

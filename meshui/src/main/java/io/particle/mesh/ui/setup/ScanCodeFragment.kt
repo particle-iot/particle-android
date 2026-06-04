@@ -30,8 +30,8 @@ import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.setup.barcodescanning.CameraSource
 import io.particle.mesh.ui.setup.barcodescanning.barcode.BarcodeScanningProcessor
+import io.particle.mesh.ui.databinding.FragmentScanCodeBinding
 import io.particle.mesh.ui.utils.getViewModel
-import kotlinx.android.synthetic.main.fragment_scan_code.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -76,6 +76,9 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
 
     private val log = KotlinLogging.logger {}
 
+    private var _binding: FragmentScanCodeBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +96,13 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_scan_code, container, false)
+        _binding = FragmentScanCodeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -118,7 +127,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
      */
     override fun onPause() {
         super.onPause()
-        scanPreview.stop()
+        binding.scanPreview.stop()
     }
 
     override fun onDestroy() {
@@ -194,7 +203,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     private fun createCameraSource() {
         // If there's no existing cameraSource, create one.
         if (cameraSource == null) {
-            cameraSource = CameraSource(requireActivity(), scanPreviewOverlay)
+            cameraSource = CameraSource(requireActivity(), binding.scanPreviewOverlay)
         }
         cameraSource!!.setFacing(CameraSource.CAMERA_FACING_BACK)
         cameraSource!!.setMachineLearningFrameProcessor(barcodeScanningProcessor)
@@ -208,7 +217,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     private fun startCameraSource() {
         if (cameraSource != null) {
             try {
-                scanPreview.start(cameraSource, scanPreviewOverlay)
+                binding.scanPreview.start(cameraSource, binding.scanPreviewOverlay)
             } catch (e: IOException) {
                 QATool.report(e)
                 cameraSource!!.release()

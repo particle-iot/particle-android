@@ -1,9 +1,8 @@
 package io.particle.mesh.ota
 
 import androidx.annotation.WorkerThread
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.okhttp.Request
-import com.squareup.okhttp.ResponseBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import io.particle.firmwareprotos.ctrl.Config.DeviceMode
 import io.particle.mesh.bluetooth.connecting.ConnectionPriority
 import io.particle.mesh.common.QATool
@@ -51,7 +50,7 @@ class FirmwareUpdater(
                 .build()
             val call = okHttpClient.newCall(request)
             val response = call.execute()
-            return response.body().use { it.bytes() }
+            return response.body!!.bytes()
         } catch (ex: Exception) {
             throw UnableToDownloadFirmwareBinaryException()
         }

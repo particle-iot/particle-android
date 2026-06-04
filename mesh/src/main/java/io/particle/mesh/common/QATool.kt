@@ -27,7 +27,7 @@ object QATool {
     }
 
     @Suppress("NOTHING_TO_INLINE")  // (same as see above)
-    inline fun runSafely(vararg funcs: () -> Any) {
+    inline fun runSafely(vararg funcs: () -> Any?) {
         for (func in funcs) {
             try {
                 func()

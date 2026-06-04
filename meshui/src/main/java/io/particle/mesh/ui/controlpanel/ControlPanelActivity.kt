@@ -25,8 +25,8 @@ import io.particle.mesh.ui.BaseFlowActivity
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
+import io.particle.mesh.ui.databinding.ActivityControlPanelBinding
 import io.particle.mesh.ui.setup.PermissionsFragment
-import kotlinx.android.synthetic.main.activity_control_panel.*
 import mu.KotlinLogging
 
 
@@ -49,6 +49,12 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
     override val contentViewIdRes: Int = R.layout.activity_control_panel
 
     private val log = KotlinLogging.logger {}
+
+    private val binding by lazy {
+        ActivityControlPanelBinding.bind(
+            findViewById<android.view.ViewGroup>(android.R.id.content).getChildAt(0)
+        )
+    }
 
     override val device: ParticleDevice by lazy { intent.getParcelableExtra(EXTRA_DEVICE)!! }
 
@@ -92,8 +98,8 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
             return
         }
 
-        p_action_close.setOnClickListener { finish() }
-        p_action_back.setOnClickListener {
+        binding.pActionClose.setOnClickListener { finish() }
+        binding.pActionBack.setOnClickListener {
             onUserNavigatedBack()
             if (!navController.navigateUp()) {
                 finish()
@@ -135,9 +141,9 @@ class ControlPanelActivity : DeviceProvider, TitleBarOptionsListener, Permission
 
     override fun setTitleBarOptions(options: TitleBarOptions) {
         val title = options.titleRes ?: R.string.single_space
-        p_title.text = getString(title)
-        p_action_back.visibility = if (options.showBackButton) View.VISIBLE else View.INVISIBLE
-        p_action_close.visibility = if (options.showCloseButton) View.VISIBLE else View.INVISIBLE
+        binding.pTitle.text = getString(title)
+        binding.pActionBack.visibility = if (options.showBackButton) View.VISIBLE else View.INVISIBLE
+        binding.pActionClose.visibility = if (options.showCloseButton) View.VISIBLE else View.INVISIBLE
     }
 
     override fun onUserAllowedPermission(permission: String) {

@@ -14,13 +14,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.devicesetup.apconnector.ApConnector;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.devicesetup.commands.CommandClient;
 import io.particle.android.sdk.devicesetup.commands.CommandClientFactory;
 import io.particle.android.sdk.devicesetup.commands.ScanApCommand;
@@ -82,7 +79,6 @@ public class ConnectingActivity extends RequiresWifiScansActivity {
     @Inject protected ParticleCloud sparkCloud;
     @Inject protected Gson gson;
 
-    @OnClick(R2.id.action_cancel)
     protected void onCancelClick() {
         if (connectingProcessWorkerTask != null && !connectingProcessWorkerTask.isCancelled()) {
             connectingProcessWorkerTask.cancel(false);
@@ -96,7 +92,7 @@ public class ConnectingActivity extends RequiresWifiScansActivity {
         setContentView(R.layout.activity_connecting);
         ParticleDeviceSetupLibrary.getInstance().getApplicationComponent().activityComponentBuilder()
                 .apModule(new ApModule()).build().inject(this);
-        ButterKnife.bind(this);
+        findViewById(R.id.action_cancel).setOnClickListener(v -> onCancelClick());
         SEGAnalytics.screen("Device Setup: Connecting progress screen");
         publicKey = DeviceSetupState.publicKey;
         deviceSoftApSsid = getIntent().getParcelableExtra(EXTRA_SOFT_AP_SSID);

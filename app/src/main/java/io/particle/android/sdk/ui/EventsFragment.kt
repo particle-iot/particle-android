@@ -31,8 +31,7 @@ import io.particle.android.sdk.utils.Async
 import io.particle.android.sdk.utils.Py.list
 import io.particle.android.sdk.utils.ui.Ui
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_events.*
-import kotlinx.android.synthetic.main.fragment_events.view.*
+import io.particle.sdk.app.databinding.FragmentEventsBinding
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -52,20 +51,24 @@ class EventsFragment : Fragment() {
 
     private var eventsLayoutManager: LinearLayoutManager? = null
 
+    private var _binding: FragmentEventsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val top = inflater.inflate(R.layout.fragment_events, container, false)
+        _binding = FragmentEventsBinding.inflate(inflater, container, false)
+        val top = binding.root
 
-        top.events_empty.visibility = View.VISIBLE
+        binding.eventsEmpty.visibility = View.VISIBLE
 
-        top.events_list.setHasFixedSize(true)  // perf. optimization
+        binding.eventsList.setHasFixedSize(true)  // perf. optimization
         eventsLayoutManager = SpeedyLinearLayoutManager(inflater.context)
-        top.events_list.layoutManager = eventsLayoutManager
+        binding.eventsList.layoutManager = eventsLayoutManager
         val adapter = EventListAdapter()
-        top.events_list.adapter = adapter
-        top.events_list.addItemDecoration(
+        binding.eventsList.adapter = adapter
+        binding.eventsList.addItemDecoration(
             DividerItemDecoration(
                 requireNonNull<Context>(context),
                 LinearLayout.VERTICAL
@@ -81,8 +84,13 @@ class EventsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (!subscribed) {
-            startEventSubscription(events_list.adapter as EventListAdapter)
+            startEventSubscription(binding.eventsList.adapter as EventListAdapter)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onPause() {
@@ -98,7 +106,7 @@ class EventsFragment : Fragment() {
             ).setTitle(R.string.clear_events_title)
                 .setMessage(R.string.clear_events_message)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    events_empty.visibility = View.VISIBLE
+                    binding.eventsEmpty.visibility = View.VISIBLE
                     adapter.clear()
                 }
                 .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
@@ -165,9 +173,9 @@ class EventsFragment : Fragment() {
                                 ) {
                                     adapter.add(Event(eventName, particleEvent))
                                     if (eventsLayoutManager!!.findFirstVisibleItemPosition() < 1) {
-                                        events_list.smoothScrollToPosition(0)
+                                        binding.eventsList.smoothScrollToPosition(0)
                                     }
-                                    events_empty.post { events_empty.visibility = View.GONE }
+                                    binding.eventsEmpty.post { binding.eventsEmpty.visibility = View.GONE }
                                 }
                             })
                     } catch (ex: NullPointerException) {

@@ -11,8 +11,7 @@ import io.particle.mesh.setup.utils.runOnMainThread
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_control_panel_ethernet_options.*
+import io.particle.mesh.ui.databinding.FragmentControlPanelEthernetOptionsBinding
 import kotlinx.coroutines.GlobalScope
 import mu.KotlinLogging
 
@@ -26,24 +25,33 @@ class ControlPanelEthernetOptionsFragment : BaseControlPanelFragment() {
 
     private val log = KotlinLogging.logger {}
 
+    private var _binding: FragmentControlPanelEthernetOptionsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_control_panel_ethernet_options)
+        _binding = FragmentControlPanelEthernetOptionsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
         val checked = flowUiListener.deviceData.isEthernetEnabled
-        p_controlpanel_ethernet_options_toggle_pins_switch.isChecked = checked
-        p_controlpanel_ethernet_options_toggle_pins_switch.setOnClickListener {
-            toggleEthernetPins(p_controlpanel_ethernet_options_toggle_pins_switch.isChecked)
+        binding.pControlpanelEthernetOptionsTogglePinsSwitch.isChecked = checked
+        binding.pControlpanelEthernetOptionsTogglePinsSwitch.setOnClickListener {
+            toggleEthernetPins(binding.pControlpanelEthernetOptionsTogglePinsSwitch.isChecked)
         }
 
         val statusText = if (flowUiListener.deviceData.isEthernetEnabled) "Active" else "Inactive"
-        p_controlpanel_ethernet_options_current_pins_status.text = statusText
+        binding.pControlpanelEthernetOptionsCurrentPinsStatus.text = statusText
     }
 
     private fun toggleEthernetPins(shouldEnable: Boolean) {

@@ -22,14 +22,11 @@ import javax.inject.Inject;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.loader.content.Loader;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.devicesetup.apconnector.ApConnector;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.devicesetup.commands.CommandClientFactory;
 import io.particle.android.sdk.devicesetup.loaders.WifiScanResultLoader;
 import io.particle.android.sdk.devicesetup.model.ScanResultNetwork;
@@ -74,13 +71,11 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
 
     private SSID selectedSoftApSSID;
 
-    @OnClick(R2.id.action_troubleshooting)
     protected void onTroubleshootingClick(View v) {
         Uri uri = Uri.parse(v.getContext().getString(R.string.troubleshooting_uri));
         startActivity(WebViewActivity.buildIntent(v.getContext(), uri));
     }
 
-    @OnClick(R2.id.action_log_out)
     protected void onLogoutClick() {
         sparkCloud.logOut();
         log.i("logged out, username is: " + sparkCloud.getLoggedInUsername());
@@ -88,7 +83,6 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
         finish();
     }
 
-    @OnClick(R2.id.action_cancel)
     protected void onCancelClick() {
         finish();
     }
@@ -99,7 +93,9 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
                 .apModule(new ApModule()).build().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover_device);
-        ButterKnife.bind(this);
+        findViewById(R.id.action_troubleshooting).setOnClickListener(v -> onTroubleshootingClick(v));
+        findViewById(R.id.action_log_out).setOnClickListener(v -> onLogoutClick());
+        findViewById(R.id.action_cancel).setOnClickListener(v -> onCancelClick());
         SEGAnalytics.screen("Device Setup: Device discovery screen");
 
         softAPConfigRemover.removeAllSoftApConfigs();

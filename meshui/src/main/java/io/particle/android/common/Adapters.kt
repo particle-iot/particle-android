@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
 
 
-fun <T, I> easyDiffUtilCallback(idFieldGetter: (T) -> I): DiffUtil.ItemCallback<T> {
+fun <T : Any, I> easyDiffUtilCallback(idFieldGetter: (T) -> I): DiffUtil.ItemCallback<T> {
 
     return object: DiffUtil.ItemCallback<T>() {
 

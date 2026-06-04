@@ -11,13 +11,10 @@ import android.widget.EditText;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.di.ApModule;
 import io.particle.android.sdk.ui.BaseActivity;
 import io.particle.android.sdk.utils.Async;
@@ -36,7 +33,7 @@ public class PasswordResetActivity extends BaseActivity {
     public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
 
     @Inject protected ParticleCloud sparkCloud;
-    @BindView(R2.id.email) protected EditText emailView;
+    protected EditText emailView;
 
     public static Intent buildIntent(Context context, String email) {
         Intent i = new Intent(context, PasswordResetActivity.class);
@@ -52,7 +49,7 @@ public class PasswordResetActivity extends BaseActivity {
         setContentView(R.layout.activity_password_reset);
         ParticleDeviceSetupLibrary.getInstance().getApplicationComponent().activityComponentBuilder()
                 .apModule(new ApModule()).build().inject(this);
-        ButterKnife.bind(this);
+        emailView = findViewById(R.id.email);
 
         SEGAnalytics.screen("Auth: Forgot password screen");
         ParticleUi.enableBrandLogoInverseVisibilityAgainstSoftKeyboard(this);

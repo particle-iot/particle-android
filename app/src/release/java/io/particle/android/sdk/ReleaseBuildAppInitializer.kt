@@ -90,7 +90,7 @@ internal class CrashlyticsLoggerHandler : Handler() {
             return
         }
         // don't include OkHttp's HTTP/2 FrameLogger output
-        if (record.loggerName == "com.squareup.okhttp.internal.framed.Http2\$FrameLogger") {
+        if (record.loggerName == "okhttp3.internal.http2.Http2") {
             return
         }
         val logRecord = LogRecord.fromRecord(record)
