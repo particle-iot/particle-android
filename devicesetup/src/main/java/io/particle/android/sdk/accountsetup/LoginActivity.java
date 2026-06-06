@@ -2,9 +2,11 @@ package io.particle.android.sdk.accountsetup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.squareup.phrase.Phrase;
@@ -76,6 +78,11 @@ public class LoginActivity extends BaseActivity {
         emailView = findViewById(R.id.email);
         passwordView = findViewById(R.id.password);
 
+        CheckBox showPasswordBox = findViewById(R.id.show_password);
+        showPasswordBox.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> togglePasswordVisibility(isChecked));
+        togglePasswordVisibility(showPasswordBox.isChecked());
+
         ((android.widget.TextView) findViewById(R.id.password)).setOnEditorActionListener(
                 (tv, actionId, event) -> onPasswordEditorAction(actionId));
 
@@ -114,6 +121,23 @@ public class LoginActivity extends BaseActivity {
                 });
 
         Ui.setTextFromHtml(this, R.id.forgot_password, R.string.msg_forgot_password);
+    }
+
+    private void togglePasswordVisibility(boolean showPassword) {
+        // Preserve the cursor position; changing the input type resets the selection.
+        int selectionStart = passwordView.getSelectionStart();
+        int selectionEnd = passwordView.getSelectionEnd();
+        if (showPassword) {
+            passwordView.setInputType(
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            passwordView.setInputType(
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+        // A password input type forces a monospace typeface; restore the email field's
+        // font so the two inputs look consistent.
+        passwordView.setTypeface(emailView.getTypeface());
+        passwordView.setSelection(selectionStart, selectionEnd);
     }
 
     public void onPasswordResetClicked(View v) {
