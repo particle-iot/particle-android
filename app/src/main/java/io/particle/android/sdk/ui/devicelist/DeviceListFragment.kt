@@ -160,17 +160,17 @@ class DeviceListFragment : Fragment() {
         binding.addDeviceFab.addAllActionItems(
             listOf(
                 SpeedDialActionItem.Builder(R.id.action_set_up_a_xenon, R.drawable.ic_add_white_24dp)
-                    .setLabel("Set up an Argon, Boron, or Xenon")
+                    .setLabel("Setup a Gen 3 device")
                     .setFabBackgroundColor(fabBackground)
                     .setFabImageTintColor(fabIconTint)
                     .create(),
                 SpeedDialActionItem.Builder(R.id.action_set_up_a_photon, R.drawable.ic_add_white_24dp)
-                    .setLabel("Set up a Photon")
+                    .setLabel("Setup a Photon")
                     .setFabBackgroundColor(fabBackground)
                     .setFabImageTintColor(fabIconTint)
                     .create(),
                 SpeedDialActionItem.Builder(R.id.action_set_up_an_electron, R.drawable.ic_add_white_24dp)
-                    .setLabel("Set up an Electron")
+                    .setLabel("Setup an Electron")
                     .setFabBackgroundColor(fabBackground)
                     .setFabImageTintColor(fabIconTint)
                     .create()
