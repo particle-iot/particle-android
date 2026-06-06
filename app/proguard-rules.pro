@@ -46,6 +46,15 @@
 #     during Photon Wi-Fi setup), deserialized by field name. ---
 -keep class io.particle.android.sdk.devicesetup.commands.** { *; }
 
+# --- AndroidX Navigation: fragment destinations and custom argument types are referenced by
+#     name in the nav-graph XML (not from code), so R8 must not rename/remove them — otherwise
+#     graph inflation throws "Error inflating class fragment" (e.g. opening the Control Panel,
+#     or later steps of Gen 3 device setup). Keep the fragments, Parcelable nav args, and the
+#     custom argType enum used by the control-panel graph. (The protobuf argType is kept below.)
+-keep public class * extends androidx.fragment.app.Fragment
+-keepnames class * extends android.os.Parcelable
+-keep class io.particle.mesh.setup.flow.SimStatusChangeMode { *; }
+
 # --- Retrofit 2 interfaces (annotations drive runtime behaviour) ---
 -keep,allowobfuscation,allowshrinking interface io.particle.android.sdk.cloud.ApiDefs$*
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
