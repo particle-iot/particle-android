@@ -37,6 +37,10 @@
         <item name="android:layout_height">48dp</item>
         <item name="android:textStyle">bold</item>
         <item name="fontPath">@string/bold_text_font_name</item>
+        <!-- Explicit cyan outline + text so the button is visible (the Material OutlinedButton
+             style renders no stroke on a plain AppCompatButton). -->
+        <item name="android:background">@drawable/p_mesh_button_outline_bg</item>
+        <item name="android:textColor">@color/p_particle_cyan</item>
     </style>
 
     <style name="p_setup_header_text">
