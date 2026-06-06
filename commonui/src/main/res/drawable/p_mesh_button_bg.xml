@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filled cyan background for p_mesh_button_style. Set explicitly so the button renders
+     visibly on light-background screens (the MaterialComponents.Button style alone produces
+     no visible fill when applied to a plain AppCompatButton). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#9E9E9E" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#0095CC" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/p_particle_cyan" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+</selector>
