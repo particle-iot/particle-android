@@ -25,6 +25,19 @@ import mu.KotlinLogging
 private val log = KotlinLogging.logger {}
 
 
+/**
+ * Match a scan result against the device name from the sticker/barcode using the name advertised
+ * in the BLE scan record. Reading [ScanResult.getDevice].name (i.e. BluetoothDevice.getName())
+ * requires BLUETOOTH_CONNECT on API 31+ and may be null mid-scan; the advertised local name is
+ * available with only BLUETOOTH_SCAN — the same permission the scan itself needs — so matching on
+ * it avoids a SecurityException and an unnecessary permission dependency during scanning.
+ */
+private fun ScanResult.matchesAdvertisedName(deviceName: String): Boolean {
+    val advertisedName = this.scanRecord?.deviceName
+    return advertisedName != null && advertisedName == deviceName
+}
+
+
 fun buildMatchingDeviceNameScanner(
     context: Context,
     deviceName: String
@@ -45,7 +58,7 @@ fun buildMatchingDeviceNameScanner(
         BluetoothAdapterStateLD(ctx),
         BLEScannerLD(
             ctx.btAdapter,
-            { sr -> sr.device.name != null && sr.device.name == deviceName },
+            { sr -> sr.matchesAdvertisedName(deviceName) },
             hasPermissionFunc,
             listOf(Builder().setServiceUuid(ParcelUuid(BT_SETUP_SERVICE_ID)).build())
         )

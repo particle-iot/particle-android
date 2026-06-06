@@ -66,16 +66,23 @@ class BLEScannerLD(
         if (isScanning) {
             return
         }
-        log.info { "Starting scan!" }
 
-        val hasPermission = hasPermissionChecker()
-        val permissionStatus = if (hasPermission) "GRANTED" else "DENIED"
-        log.info { "Starting scan! Location permission status=$permissionStatus" }
-        if (!hasPermission) {
-            QATool.illegalState("Attempting to scan without BT permission!")
+        if (!hasPermissionChecker()) {
+            // On API 31+ startScan() requires BLUETOOTH_SCAN; calling it without the permission
+            // throws SecurityException. Bail rather than crash — the setup flow is responsible for
+            // requesting the permission before scanning starts, and will surface a scan timeout if
+            // it wasn't granted.
+            QATool.illegalState("Attempting to scan without BT permission; skipping scan!")
+            return
         }
-        bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback)
-        isScanning = true
+
+        log.info { "Starting scan!" }
+        try {
+            bluetoothAdapter.bluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback)
+            isScanning = true
+        } catch (ex: SecurityException) {
+            QATool.report(ex)
+        }
     }
 
     override fun onInactive() {
@@ -84,7 +91,11 @@ class BLEScannerLD(
         // stop scanning
         if (bluetoothAdapter.isEnabled) {
             log.info { "Stopping scan!" }
-            bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallback)
+            try {
+                bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallback)
+            } catch (ex: SecurityException) {
+                QATool.report(ex)
+            }
         }
         isScanning = false
 
