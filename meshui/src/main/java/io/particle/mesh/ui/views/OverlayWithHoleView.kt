@@ -63,7 +63,9 @@ class OverlayWithHoleView(
 
     private fun getRektFForFrameOverlay(rect: Rect): RectF {
         val scaleFactor = Resources.getSystem().displayMetrics.density
-        val size = 40 * scaleFactor
+        // Half-extent of the (square) scan window. 120dp -> a 240dp box, ~3x the previous 80dp
+        // box, which was too small to comfortably frame the device's data-matrix sticker.
+        val size = 120 * scaleFactor
         return RectF(
                 rect.centerX() - size,
                 rect.centerY() - size,
