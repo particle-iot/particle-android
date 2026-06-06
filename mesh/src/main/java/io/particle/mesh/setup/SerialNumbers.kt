@@ -9,7 +9,8 @@ import mu.KotlinLogging
 private val log = KotlinLogging.logger {}
 
 
-inline class SerialNumber(val value: String)
+@JvmInline
+value class SerialNumber(val value: String)
 
 
 

@@ -8,20 +8,28 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
-import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_ble_ota_intro.*
+import io.particle.mesh.ui.databinding.FragmentBleOtaIntroBinding
 
 
 class BleOtaIntroFragment : BaseFlowFragment() {
 
+    private var _binding: FragmentBleOtaIntroBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_ble_ota_intro, container, false)
+        _binding = FragmentBleOtaIntroBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
-        action_next.setOnClickListener {
+        binding.actionNext.setOnClickListener {
             flowUiListener.deviceData.updateUserConsentedToFirmwareUpdate(true)
         }
     }

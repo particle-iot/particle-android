@@ -18,7 +18,7 @@ import io.particle.android.sdk.ui.devicelist.DeviceTypeFilter.XENON
 import io.particle.commonui.toDecorationColor
 import io.particle.commonui.toDecorationLetter
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.view_device_type_filter_button.view.*
+import io.particle.sdk.app.databinding.ViewDeviceTypeFilterButtonBinding
 
 
 class DeviceTypeFilterButton : FrameLayout {
@@ -41,6 +41,8 @@ class DeviceTypeFilterButton : FrameLayout {
     private var _filter: DeviceTypeFilter = ARGON
     private var _checked = false
 
+    private lateinit var binding: ViewDeviceTypeFilterButtonBinding
+
     constructor(context: Context) : super(context) {
         init(null, 0)
     }
@@ -59,6 +61,7 @@ class DeviceTypeFilterButton : FrameLayout {
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         inflate(context, R.layout.view_device_type_filter_button, this)
+        binding = ViewDeviceTypeFilterButtonBinding.bind(this)
     }
 
     private fun onCheckedChanged() {
@@ -71,7 +74,7 @@ class DeviceTypeFilterButton : FrameLayout {
     }
 
     private fun updateFromNewFilter() {
-        p_common_device_name.text = when (filter) {
+        binding.pCommonDeviceName.text = when (filter) {
             BORON -> "Boron / B SoM"
             ELECTRON -> "Electron / E SoM"
             ARGON -> "Argon"
@@ -81,8 +84,8 @@ class DeviceTypeFilterButton : FrameLayout {
         }
 
         if (filter == OTHER) {
-            p_common_device_letter_circle.isVisible = false
-            p_common_device_letter.isVisible = false
+            binding.pCommonDeviceLetterCircle.isVisible = false
+            binding.pCommonDeviceLetter.isVisible = false
             return
         }
 
@@ -100,12 +103,12 @@ class DeviceTypeFilterButton : FrameLayout {
             asDeviceType.toDecorationColor()
         )
 
-        val bg = p_common_device_letter_circle.drawable
+        val bg = binding.pCommonDeviceLetterCircle.drawable
         bg.mutate()
         DrawableCompat.setTint(bg, colorValue)
 
         val letter = asDeviceType.toDecorationLetter()
-        p_common_device_letter.text = letter
-        p_common_device_letter.setTextColor(colorValue)
+        binding.pCommonDeviceLetter.text = letter
+        binding.pCommonDeviceLetter.setTextColor(colorValue)
     }
 }

@@ -2,10 +2,11 @@ package io.particle.commonui
 
 import android.text.InputType
 import android.view.Gravity
+import android.widget.EditText
+import android.widget.FrameLayout
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.mesh.setup.flow.Scopes
@@ -39,25 +40,30 @@ class DeviceNotesDelegate private constructor(
 
 
     private fun showDialog() {
-        val md = MaterialDialog.Builder(activity)
-            .title("Notes")
-            .theme(Theme.LIGHT)
-            .inputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
-            .input("Use this space to keep notes on this device",
-                if (device.notes.isNullOrBlank()) null else device.notes,
-                false) { _, _ ->  }
-            .positiveText("Save")
-            .negativeText("Cancel")
-            .onPositive(MaterialDialog.SingleButtonCallback { dialog, _ ->
-                val inputText = dialog.inputEditText ?: return@SingleButtonCallback
-                updateDeviceNotes(inputText.text.toString())
-            })
-            .show()
-        md.inputEditText!!.updateLayoutParams {
-            height = dpToPx(250, md.context)
+        val editText = EditText(activity).apply {
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            hint = "Use this space to keep notes on this device"
+            setText(if (device.notes.isNullOrBlank()) null else device.notes)
+            gravity = Gravity.START or Gravity.TOP
+            setSingleLine(false)
         }
-        md.inputEditText!!.gravity = Gravity.START or Gravity.TOP
-        md.inputEditText!!.setSingleLine(false)
+        val pad = dpToPx(20, activity)
+        val container = FrameLayout(activity).apply {
+            setPadding(pad, 0, pad, 0)
+            addView(editText)
+        }
+        editText.updateLayoutParams {
+            height = dpToPx(250, activity)
+        }
+
+        MaterialAlertDialogBuilder(activity)
+            .setTitle("Notes")
+            .setView(container)
+            .setPositiveButton("Save") { _, _ ->
+                updateDeviceNotes(editText.text.toString())
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun updateDeviceNotes(newNotes: String?) {

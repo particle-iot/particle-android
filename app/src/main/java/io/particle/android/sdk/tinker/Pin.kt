@@ -160,6 +160,7 @@ internal class Pin(
                 pinLabelView.setBackgroundResource(R.drawable.tinker_pin_alizarin)
             }
             PinAction.NONE -> pinLabelView.setBackgroundResource(R.drawable.tinker_pin)
+            else -> pinLabelView.setBackgroundResource(R.drawable.tinker_pin)
         }
     }
 

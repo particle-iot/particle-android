@@ -3,7 +3,7 @@ package io.particle.mesh.ui.setup
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.common.QATool
@@ -17,7 +17,7 @@ import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
 import io.particle.mesh.ui.TitleBarOptionsListener
 import io.particle.mesh.ui.controlpanel.ControlPanelActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import io.particle.mesh.ui.databinding.ActivityMainBinding
 import mu.KotlinLogging
 
 
@@ -36,6 +36,10 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
 
 
     private val log = KotlinLogging.logger {}
+
+    private val binding by lazy {
+        ActivityMainBinding.bind(findViewById<android.view.ViewGroup>(android.R.id.content).getChildAt(0))
+    }
 
     override fun onFlowTerminated(nextAction: FlowTerminationAction) {
         val nextActionFunction = when (nextAction) {
@@ -60,8 +64,8 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        p_meshactivity_username.text = ParticleCloudSDK.getCloud().loggedInUsername
-        p_action_close.setOnClickListener { showCloseSetupConfirmation() }
+        binding.pMeshactivityUsername.text = ParticleCloudSDK.getCloud().loggedInUsername
+        binding.pActionClose.setOnClickListener { showCloseSetupConfirmation() }
     }
 
     override fun onBackPressed() {
@@ -76,7 +80,7 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
             QATool.report(IllegalArgumentException("Back button not yet supported in setup!"))
 //            p_action_back.visibility = if (options.showBackButton) View.VISIBLE else View.INVISIBLE
         }
-        p_action_close.visibility = if (options.showCloseButton) View.VISIBLE else View.INVISIBLE
+        binding.pActionClose.visibility = if (options.showCloseButton) View.VISIBLE else View.INVISIBLE
     }
 
     override fun buildFlowUiDelegate(systemInterface: FlowRunnerSystemInterface): FlowUiDelegate {
@@ -95,11 +99,10 @@ class MeshSetupActivity : TitleBarOptionsListener, BaseFlowActivity() {
             return
         }
 
-        MaterialDialog.Builder(this)
-            .content(R.string.p_exitsetupconfirmation_content)
-            .positiveText(R.string.p_exitsetupconfirmation_exit)
-            .negativeText(android.R.string.cancel)
-            .onPositive { _, _ -> finish() }
+        MaterialAlertDialogBuilder(this)
+            .setMessage(R.string.p_exitsetupconfirmation_content)
+            .setPositiveButton(R.string.p_exitsetupconfirmation_exit) { _, _ -> finish() }
+            .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 

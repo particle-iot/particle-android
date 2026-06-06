@@ -2,11 +2,11 @@ package io.particle.commonui
 
 
 import android.text.InputType
+import android.widget.EditText
+import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback
-import com.afollestad.materialdialogs.Theme
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.utils.Async
@@ -34,20 +34,27 @@ class RenameHelper private constructor(
         //        final String suggestedName = CoreNameGenerator.generateUniqueName(noNames);
         val suggestedName = device.name
 
-        MaterialDialog.Builder(activity)
-            .title("Name")
-            .theme(Theme.LIGHT)
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                    // FIXME: do validation here to prevent short names?
-                    // I think this is already done cloud-side.  Verify.
-            .input("Name your device", suggestedName, false) { _, _ ->  }
-            .positiveText("Save")
-            .negativeText("Cancel")
-            .onPositive(SingleButtonCallback { dialog, _ ->
+        // FIXME: do validation here to prevent short names?
+        // I think this is already done cloud-side.  Verify.
+        val editText = EditText(activity).apply {
+            inputType = InputType.TYPE_CLASS_TEXT
+            hint = "Name your device"
+            setText(suggestedName)
+        }
+        val pad = dpToPx(20, activity)
+        val container = FrameLayout(activity).apply {
+            setPadding(pad, 0, pad, 0)
+            addView(editText)
+        }
+
+        MaterialAlertDialogBuilder(activity)
+            .setTitle("Name")
+            .setView(container)
+            .setPositiveButton("Save") { _, _ ->
                 val onDupeName = Runnable { this@RenameHelper.showDialog() }
-                val inputText = dialog.inputEditText ?: return@SingleButtonCallback
-                rename(inputText.text.toString(), onDupeName)
-            })
+                rename(editText.text.toString(), onDupeName)
+            }
+            .setNegativeButton("Cancel", null)
             .show()
     }
 
@@ -82,19 +89,19 @@ class RenameHelper private constructor(
                 }
 
                 override fun onFailure(exception: ParticleCloudException) {
-                    MaterialDialog.Builder(activity)
-                        .theme(Theme.LIGHT)
-                        .title("Unable to rename core")
-                        .content(exception.bestMessage)
-                        .positiveText("OK")
+                    MaterialAlertDialogBuilder(activity)
+                        .setTitle("Unable to rename core")
+                        .setMessage(exception.bestMessage)
+                        .setPositiveButton("OK", null)
+                        .show()
                 }
             }).andIgnoreCallbacksIfActivityIsFinishing(activity)
         } catch (e: ParticleCloudException) {
-            MaterialDialog.Builder(activity)
-                .theme(Theme.LIGHT)
-                .title("Unable to rename core")
-                .content(e.bestMessage)
-                .positiveText("OK")
+            MaterialAlertDialogBuilder(activity)
+                .setTitle("Unable to rename core")
+                .setMessage(e.bestMessage)
+                .setPositiveButton("OK", null)
+                .show()
         }
 
     }

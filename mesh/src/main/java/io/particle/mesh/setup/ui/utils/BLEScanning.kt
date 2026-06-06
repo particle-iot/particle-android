@@ -11,6 +11,7 @@ import com.snakydesign.livedataextensions.filter
 import com.snakydesign.livedataextensions.map
 import com.snakydesign.livedataextensions.nonNull
 import io.particle.android.sdk.utils.appHasPermission
+import io.particle.android.sdk.utils.bleRuntimePermissions
 import io.particle.mesh.bluetooth.BluetoothAdapterStateLD
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.bluetooth.scanning.BLEScannerLD
@@ -36,7 +37,7 @@ fun buildMatchingDeviceNameScanner(
     toggleScanLD.value = true
 
     val hasPermissionFunc: () -> Boolean = {
-        ctx.appHasPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        bleRuntimePermissions.all { ctx.appHasPermission(it) }
     }
 
     val scannerLD = buildReactiveBluetoothScanner(

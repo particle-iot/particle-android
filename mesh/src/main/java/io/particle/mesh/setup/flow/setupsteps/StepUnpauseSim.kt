@@ -8,8 +8,6 @@ import io.particle.mesh.setup.flow.SIM_ACTION_MAX_RETRY_COUNT
 import io.particle.mesh.setup.flow.context.SetupContexts
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
-import retrofit.RetrofitError
-import java.net.SocketTimeoutException
 
 
 class StepUnpauseSim(

@@ -6,33 +6,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_new_mesh_network_name.*
+import io.particle.mesh.ui.databinding.FragmentNewMeshNetworkNameBinding
 
 
 class NewMeshNetworkNameFragment : BaseFlowFragment() {
 
+    private var _binding: FragmentNewMeshNetworkNameBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_new_mesh_network_name, container, false)
+        _binding = FragmentNewMeshNetworkNameBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        action_next.setOnClickListener { onNetworkNameEntered() }
+        binding.actionNext.setOnClickListener { onNetworkNameEntered() }
     }
 
     private fun onNetworkNameEntered() {
-        val name = networkNameInputLayout.editText!!.text.toString()
+        val name = binding.networkNameInputLayout.editText!!.text.toString()
         val isValid = validateNetworkName(name)
         if (!isValid) {
-            MaterialDialog.Builder(requireActivity())
-                    .content(R.string.p_newmeshnetworkname_invalid_name_dialog_text)
-                    .positiveText(android.R.string.ok)
+            MaterialAlertDialogBuilder(requireActivity())
+                    .setMessage(R.string.p_newmeshnetworkname_invalid_name_dialog_text)
+                    .setPositiveButton(android.R.string.ok, null)
                     .show()
             return
         }

@@ -13,19 +13,28 @@ import com.squareup.phrase.Phrase
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.databinding.FragmentJoiningMeshNetworkProgressBinding
 import io.particle.mesh.ui.utils.markProgress
-import kotlinx.android.synthetic.main.fragment_joining_mesh_network_progress.*
 import kotlinx.coroutines.delay
 
 
 class JoiningMeshNetworkProgressFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentJoiningMeshNetworkProgressBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_joining_mesh_network_progress, container, false)
+        _binding = FragmentJoiningMeshNetworkProgressBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -50,16 +59,16 @@ class JoiningMeshNetworkProgressFragment : BaseFlowFragment() {
 
         val productName = getUserFacingTypeName()
 
-        setup_header_text.text = Phrase.from(view, R.string.p_joiningmesh_header)
+        binding.setupHeaderText.text = Phrase.from(view, R.string.p_joiningmesh_header)
             .put("product_type", productName)
             .format()
 
-        status_stage_1.text =
+        binding.statusStage1.text =
             Phrase.from(view, R.string.requesting_permission_to_add_to_mesh_network)
                 .put("product_type", productName)
                 .format()
 
-        status_stage_2.text = Phrase.from(view, R.string.adding_the_xenon_to_the_mesh_network)
+        binding.statusStage2.text = Phrase.from(view, R.string.adding_the_xenon_to_the_mesh_network)
             .put("product_type", productName)
             .format()
     }

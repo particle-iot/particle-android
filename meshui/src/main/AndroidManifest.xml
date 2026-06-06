@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.particle.mesh.ui">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -9,12 +8,9 @@
 
     <application>
 
-        <meta-data
-            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="barcode" />
-
         <activity
             android:name="io.particle.mesh.ui.controlpanel.ControlPanelActivity"
+            android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/p_MeshTheme"
@@ -22,6 +18,7 @@
 
         <activity
             android:name="io.particle.mesh.ui.setup.MeshSetupActivity"
+            android:exported="false"
             android:label="Mesh Setup"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"

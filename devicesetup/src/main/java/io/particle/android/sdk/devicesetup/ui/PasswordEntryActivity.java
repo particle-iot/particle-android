@@ -12,11 +12,8 @@ import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.devicesetup.commands.ScanApCommand;
 import io.particle.android.sdk.devicesetup.commands.data.WifiSecurity;
 import io.particle.android.sdk.di.ApModule;
@@ -46,8 +43,8 @@ public class PasswordEntryActivity extends BaseActivity {
 
     private static final TLog log = TLog.get(PasswordEntryActivity.class);
 
-    @BindView(R2.id.show_password) protected CheckBox showPwdBox;
-    @BindView(R2.id.password) protected EditText passwordBox;
+    protected CheckBox showPwdBox;
+    protected EditText passwordBox;
     private ScanApCommand.Scan networkToConnectTo;
     private SSID softApSSID;
     @Inject protected Gson gson;
@@ -58,7 +55,8 @@ public class PasswordEntryActivity extends BaseActivity {
         setContentView(R.layout.activity_password_entry);
         ParticleDeviceSetupLibrary.getInstance().getApplicationComponent().activityComponentBuilder()
                 .apModule(new ApModule()).build().inject(this);
-        ButterKnife.bind(this);
+        showPwdBox = findViewById(R.id.show_password);
+        passwordBox = findViewById(R.id.password);
         SEGAnalytics.screen("Device Setup: Password Entry Screen");
         ParticleUi.enableBrandLogoInverseVisibilityAgainstSoftKeyboard(this);
 

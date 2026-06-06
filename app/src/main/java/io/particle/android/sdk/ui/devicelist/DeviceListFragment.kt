@@ -2,8 +2,8 @@ package io.particle.android.sdk.ui.devicelist
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -19,6 +19,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.leinardi.android.speeddial.SpeedDialActionItem
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -51,12 +56,8 @@ import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.inflateRow
 import io.particle.mesh.ui.setup.MeshSetupActivity
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_device_list2.*
-import kotlinx.android.synthetic.main.row_device_list.view.*
-import pl.brightinventions.slf4android.LogTask
-import pl.brightinventions.slf4android.NotifyDeveloperDialogDisplayActivity
-import pl.brightinventions.slf4android.showLogSharingPrompt
-import java.io.File
+import io.particle.sdk.app.databinding.FragmentDeviceList2Binding
+import io.particle.sdk.app.databinding.RowDeviceListBinding
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Objects.requireNonNull
@@ -82,19 +83,22 @@ class DeviceListFragment : Fragment() {
 
     private val scopes = Scopes()
 
+    private var _binding: FragmentDeviceList2Binding? = null
+    private val binding get() = _binding!!
+
     private fun addGen3() {
         addXenonDevice()
-        add_device_fab.collapse()
+        binding.addDeviceFab.close()
     }
 
     fun addPhoton() {
         addPhotonDevice()
-        add_device_fab.collapse()
+        binding.addDeviceFab.close()
     }
 
     fun addElectron() {
         addElectronDevice()
-        add_device_fab.collapse()
+        binding.addDeviceFab.close()
     }
 
     override fun onCreateView(
@@ -103,7 +107,8 @@ class DeviceListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val top = inflater.inflate(R.layout.fragment_device_list2, container, false)
+        _binding = FragmentDeviceList2Binding.inflate(inflater, container, false)
+        val top = binding.root
 
         val rv = Ui.findView<RecyclerView>(top, R.id.device_list)
         rv.setHasFixedSize(true)  // perf. optimization
@@ -125,11 +130,16 @@ class DeviceListFragment : Fragment() {
         return top
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         nameFilterTextWatcher = buildNameFilterTextWatcher()
 
-        refresh_layout.setOnRefreshListener { this.refreshDevices() }
+        binding.refreshLayout.setOnRefreshListener { this.refreshDevices() }
 
         deviceSetupCompleteReceiver =
             object : ParticleDeviceSetupLibrary.DeviceSetupCompleteReceiver() {
@@ -143,41 +153,42 @@ class DeviceListFragment : Fragment() {
             }
         deviceSetupCompleteReceiver!!.register(activity)
 
-        refresh_layout.isRefreshing = true
+        binding.refreshLayout.isRefreshing = true
 
-        action_set_up_a_xenon.setOnClickListener { addGen3() }
-        action_set_up_a_photon.setOnClickListener { addPhoton() }
-        action_set_up_an_electron.setOnClickListener { addElectron() }
-
-        toolbar.inflateMenu(R.menu.device_list)
-        toolbar.setOnMenuItemClickListener {
-            return@setOnMenuItemClickListener when (it.itemId) {
-
-                R.id.action_log_out -> {
-                    AlertDialog.Builder(requireActivity())
-                        .setMessage(R.string.logout_confirm_message)
-                        .setPositiveButton(R.string.log_out) { dialog, _ ->
-                            val cloud = ParticleCloudSDK.getCloud()
-                            cloud.logOut()
-                            startActivity(Intent(requireContext(), LoginActivity::class.java))
-                            requireActivity().finish()
-                            dialog.dismiss()
-                        }
-                        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
-                        .show()
-                    true
-                }
-
-                R.id.action_send_logs -> {
-                    sendLogs()
-                    true
-                }
-
-                else -> false
+        val fabIconTint = ContextCompat.getColor(requireContext(), R.color.accent_color)
+        val fabBackground = ContextCompat.getColor(requireContext(), R.color.white)
+        binding.addDeviceFab.addAllActionItems(
+            listOf(
+                SpeedDialActionItem.Builder(R.id.action_set_up_a_xenon, R.drawable.ic_add_white_24dp)
+                    .setLabel("Setup a Gen 3 device")
+                    .setFabBackgroundColor(fabBackground)
+                    .setFabImageTintColor(fabIconTint)
+                    .create(),
+                SpeedDialActionItem.Builder(R.id.action_set_up_a_photon, R.drawable.ic_add_white_24dp)
+                    .setLabel("Setup a Photon")
+                    .setFabBackgroundColor(fabBackground)
+                    .setFabImageTintColor(fabIconTint)
+                    .create(),
+                SpeedDialActionItem.Builder(R.id.action_set_up_an_electron, R.drawable.ic_add_white_24dp)
+                    .setLabel("Setup an Electron")
+                    .setFabBackgroundColor(fabBackground)
+                    .setFabImageTintColor(fabIconTint)
+                    .create()
+            )
+        )
+        binding.addDeviceFab.setOnActionSelectedListener { actionItem ->
+            when (actionItem.id) {
+                R.id.action_set_up_a_xenon -> addGen3()
+                R.id.action_set_up_a_photon -> addPhoton()
+                R.id.action_set_up_an_electron -> addElectron()
             }
+            // returning false closes the speed-dial menu after the action runs
+            false
         }
 
-        filter_button.setOnClickListener {
+        setUpNavigationDrawer()
+
+        binding.filterButton.setOnClickListener {
             // TODO: replace this with navigation lib calls
             requireActivity().supportFragmentManager.commit {
                 replace(R.id.fragment_parent, DeviceFilterFragment.newInstance())
@@ -185,17 +196,17 @@ class DeviceListFragment : Fragment() {
             }
         }
 
-        search_icon.setOnClickListener {
-            name_filter_input.requestFocus()
+        binding.searchIcon.setOnClickListener {
+            binding.nameFilterInput.requestFocus()
             val imm: InputMethodManager? = requireContext().getSystemService()
-            imm?.showSoftInput(name_filter_input, InputMethodManager.SHOW_IMPLICIT)
+            imm?.showSoftInput(binding.nameFilterInput, InputMethodManager.SHOW_IMPLICIT)
         }
-        clear_text_icon.setOnClickListener { name_filter_input.setText("") }
+        binding.clearTextIcon.setOnClickListener { binding.nameFilterInput.setText("") }
     }
 
     override fun onResume() {
         super.onResume()
-        name_filter_input.addTextChangedListener(nameFilterTextWatcher)
+        binding.nameFilterInput.addTextChangedListener(nameFilterTextWatcher)
         subscribeToSystemEvents()
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.nonNull().observe(
             viewLifecycleOwner,
@@ -205,7 +216,7 @@ class DeviceListFragment : Fragment() {
 
     override fun onPause() {
         filterViewModel.currentDeviceFilter.filteredDeviceListLD.removeObservers(viewLifecycleOwner)
-        name_filter_input.removeTextChangedListener(nameFilterTextWatcher)
+        binding.nameFilterInput.removeTextChangedListener(nameFilterTextWatcher)
         unsubscribeFromSystemEvents()
         super.onPause()
     }
@@ -219,7 +230,7 @@ class DeviceListFragment : Fragment() {
         log.i("onDeviceListUpdated(): $devices")
         val ctx = context ?: return
 
-        refresh_layout.isRefreshing = false
+        binding.refreshLayout.isRefreshing = false
 
         val currentConfig = filterViewModel.currentDeviceFilter.deviceListViewConfigLD.value
         val (filterIcon, filterBg) = if (currentConfig == defaultDeviceListConfig) {
@@ -234,12 +245,12 @@ class DeviceListFragment : Fragment() {
             DrawableCompat.setTint(gray, white)
             Pair(gray, ctx.getDrawable(R.drawable.bg_device_filter_active))
         }
-        filter_button.setImageDrawable(filterIcon)
-        filter_button.background = filterBg
+        binding.filterButton.setImageDrawable(filterIcon)
+        binding.filterButton.background = filterBg
 
         updateEmptyMessageAndSearchBox()
 
-        empty_message.isVisible = devices.isNullOrEmpty()
+        binding.emptyMessage.isVisible = devices.isNullOrEmpty()
         adapter.submitList(devices)
         adapter.notifyDataSetChanged()
     }
@@ -247,17 +258,17 @@ class DeviceListFragment : Fragment() {
     private fun updateEmptyMessageAndSearchBox() {
         val config = filterViewModel.currentDeviceFilter.deviceListViewConfigLD.value!!
         if (filterViewModel.fullDeviceListLD.value.isNullOrEmpty()) {
-            empty_message.setText(R.string.device_list_default_empty_message)
+            binding.emptyMessage.setText(R.string.device_list_default_empty_message)
         } else {
             if (config.deviceNameQueryString.isNullOrBlank()) {
-                empty_message.text = "No devices found matching the current filter"
+                binding.emptyMessage.text = "No devices found matching the current filter"
             } else {
                 val msg = "No devices found matching '${config.deviceNameQueryString}'"
-                empty_message.text = msg
+                binding.emptyMessage.text = msg
             }
         }
 
-        clear_text_icon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
+        binding.clearTextIcon.isVisible = !config.deviceNameQueryString.isNullOrEmpty()
     }
 
     private fun buildNameFilterTextWatcher(): TextWatcher {
@@ -342,11 +353,16 @@ class DeviceListFragment : Fragment() {
     }
 
     fun onBackPressed(): Boolean {
-        return if (add_device_fab.isExpanded) {
-            add_device_fab.collapse()
-            true
-        } else {
-            false
+        return when {
+            binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                true
+            }
+            binding.addDeviceFab.isOpen -> {
+                binding.addDeviceFab.close()
+                true
+            }
+            else -> false
         }
     }
 
@@ -373,24 +389,87 @@ class DeviceListFragment : Fragment() {
         filterViewModel.refreshDevices()
     }
 
-    private fun sendLogs() {
-        showLogSharingPrompt(
-            requireActivity(),
-            "",
-            listOf(),
-            "Logs from the Particle Android app",
-            "",
-            mutableListOf<AsyncTask<Context, Void, File>>(LogTask())
-        )
+    private fun setUpNavigationDrawer() {
+        // Hamburger button in the toolbar opens the slide-out drawer.
+        binding.toolbar.navigationIcon =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_menu_white_24dp)
+        binding.toolbar.navigationContentDescription = getString(R.string.menu_open_navigation)
+        binding.toolbar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        // The drawer dims the content behind it with a ~60% black scrim, but the system status
+        // bar above the toolbar isn't covered by that scrim. Darken the status-bar colour in step
+        // with the slide so the whole top of the screen dims together.
+        val window = requireActivity().window
+        val statusBarBase = ContextCompat.getColor(requireContext(), R.color.p_particle_navy)
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                window.statusBarColor = ColorUtils.blendARGB(statusBarBase, Color.BLACK, 0.6f * slideOffset)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                window.statusBarColor = statusBarBase
+            }
+        })
+
+        val drawer = binding.drawer
+        drawer.drawerEmail.text = ParticleCloudSDK.getCloud().loggedInUsername ?: ""
+
+        val version = try {
+            val pInfo = requireContext().packageManager
+                .getPackageInfo(requireContext().packageName, 0)
+            // The build number is the trailing component of our EPOCH.MAJOR.MINOR.PATCH.BUILD
+            // versionCode encoding (e.g. 1_04_00_00_01 -> build 1).
+            val build = PackageInfoCompat.getLongVersionCode(pInfo) % 100
+            "Tinker ${pInfo.versionName} ($build)"
+        } catch (ex: Exception) {
+            "Tinker"
+        }
+        drawer.drawerVersion.text = version
+
+        drawer.drawerDocs.setOnClickListener { openUrlFromDrawer("https://docs.particle.io") }
+        drawer.drawerConsole.setOnClickListener { openUrlFromDrawer("https://console.particle.io") }
+        drawer.drawerPrivacy.setOnClickListener {
+            openUrlFromDrawer("https://www.particle.io/legal/privacy/")
+        }
+        drawer.drawerLogout.setOnClickListener {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            confirmAndLogOut()
+        }
+    }
+
+    private fun openUrlFromDrawer(url: String) {
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (ex: Exception) {
+            Toaster.s(activity, "No app available to open this link")
+        }
+    }
+
+    private fun confirmAndLogOut() {
+        AlertDialog.Builder(requireActivity())
+            .setMessage(R.string.logout_confirm_message)
+            .setPositiveButton(R.string.log_out) { dialog, _ ->
+                val cloud = ParticleCloudSDK.getCloud()
+                cloud.logOut()
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+                requireActivity().finish()
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 }
 
 
 internal class DeviceListViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel) {
-    val modelName: TextView = topLevel.product_model_name
-    val deviceName: TextView = topLevel.product_name
-    val lastHandshake: TextView = topLevel.last_handshake_text
-    val statusDot: ImageView = topLevel.online_status_dot
+    private val binding = RowDeviceListBinding.bind(topLevel)
+    val modelName: TextView = binding.productModelName
+    val deviceName: TextView = binding.productName
+    val lastHandshake: TextView = binding.lastHandshakeText
+    val statusDot: ImageView = binding.onlineStatusDot
 }
 
 

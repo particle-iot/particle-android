@@ -18,8 +18,7 @@ import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_controlpanel_cellular_options.*
+import io.particle.mesh.ui.databinding.FragmentControlpanelCellularOptionsBinding
 import mu.KotlinLogging
 
 
@@ -32,22 +31,31 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
 
     private val log = KotlinLogging.logger {}
 
+    private var _binding: FragmentControlpanelCellularOptionsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_controlpanel_cellular_options)
+        _binding = FragmentControlpanelCellularOptionsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        p_controlpanel_cellular_options_change_data_limit.setOnClickListener {
+        binding.pControlpanelCellularOptionsChangeDataLimit.setOnClickListener {
             flowRunner.startSetNewDataLimitFlow(device)
         }
 
-        p_controlpanel_cellular_options_change_sim_status.setOnClickListener {
+        binding.pControlpanelCellularOptionsChangeSimStatus.setOnClickListener {
             onChangeSimStatusClicked()
         }
     }
@@ -61,7 +69,7 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
             QATool.report(IllegalStateException("Missing information from cellular device: $msg"))
         }
         val limit = sim?.monthlyDataRateLimitInMBs
-        p_controlpanel_cellular_options_change_data_limit_value.text = "${limit}MB"
+        binding.pControlpanelCellularOptionsChangeDataLimitValue.text = "${limit}MB"
         sim?.let { onSimStatusUpdated(it.simStatus) }
     }
 
@@ -77,9 +85,9 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
             )
         }
 
-        p_controlpanel_cellular_options_current_sim_status.setText(config.statusString)
-        p_controlpanel_cellular_options_fine_print.setText(config.finePrint)
-        p_controlpanel_cellular_options_change_sim_status.isChecked = config.isSwitchChecked
+        binding.pControlpanelCellularOptionsCurrentSimStatus.setText(config.statusString)
+        binding.pControlpanelCellularOptionsFinePrint.setText(config.finePrint)
+        binding.pControlpanelCellularOptionsChangeSimStatus.isChecked = config.isSwitchChecked
     }
     
     private fun onChangeSimStatusClicked() {
@@ -98,7 +106,7 @@ class ControlPanelCellularOptionsFragment : BaseControlPanelFragment() {
     private fun showInvalidPaymentDialog() {
         val aktivity = activity ?: return
 
-        p_controlpanel_cellular_options_change_sim_status.isChecked = false
+        binding.pControlpanelCellularOptionsChangeSimStatus.isChecked = false
 
         AlertDialog.Builder(aktivity, R.style.Theme_MaterialComponents_Light_Dialog_Alert)
             .setTitle("Invalid payment method")

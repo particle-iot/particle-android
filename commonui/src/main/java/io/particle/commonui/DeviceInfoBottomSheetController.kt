@@ -24,7 +24,7 @@ import io.particle.commonui.ShownWhen.EXPANDED
 import io.particle.mesh.setup.flow.Gen3ConnectivityType
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.toConnectivityType
-import kotlinx.android.synthetic.main.view_device_info.view.*
+import io.particle.commonui.databinding.ViewDeviceInfoBinding
 import mu.KotlinLogging
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -44,6 +44,7 @@ class DeviceInfoBottomSheetController(
         }
 
     private val behavior = BottomSheetBehavior.from(root)
+    private val binding = ViewDeviceInfoBinding.bind(root)
     private val lastHeardDateFormat = SimpleDateFormat("MMM d, yyyy, h:mm a")
 
     private val log = KotlinLogging.logger {}
@@ -56,20 +57,20 @@ class DeviceInfoBottomSheetController(
             }
 
             override fun onStop(owner: LifecycleOwner) {
-                root.action_signal_device.isChecked = false
+                binding.actionSignalDevice.isChecked = false
             }
 
         })
 
-        root.action_signal_device.setOnCheckedChangeListener(::onSignalSwitchChanged)
-        root.action_device_rename.setOnClickListener {
+        binding.actionSignalDevice.setOnCheckedChangeListener(::onSignalSwitchChanged)
+        binding.actionDeviceRename.setOnClickListener {
             RenameHelper.renameDevice(activity, device)
         }
-        root.action_edit_device_notes.setOnClickListener {
+        binding.actionEditDeviceNotes.setOnClickListener {
             val liveData = MutableLiveData<String>()
             DeviceNotesDelegate.editDeviceNotes(activity, device, scopes, liveData)
             liveData.observe(activity, Observer {
-                root.notes.setText(it)
+                binding.notes.setText(it)
             })
         }
 
@@ -83,14 +84,14 @@ class DeviceInfoBottomSheetController(
                 }
             }
         }
-        root.expanded_handle.setOnClickListener(toggleOnTapListener)
-        root.collapsed_expander.setOnClickListener(toggleOnTapListener)
-        root.action_ping_device.setOnClickListener { onPingClicked() }
+        binding.expandedHandle.setOnClickListener(toggleOnTapListener)
+        binding.collapsedExpander.setOnClickListener(toggleOnTapListener)
+        binding.actionPingDevice.setOnClickListener { onPingClicked() }
 
         if (device.deviceType!!.toConnectivityType() != Gen3ConnectivityType.CELLULAR) {
-            root.iccid_wrapper.isVisible = false
-            root.data_usage_wrapper.isVisible = false
-            root.data_limit_wrapper.isVisible = false
+            binding.iccidWrapper.isVisible = false
+            binding.dataUsageWrapper.isVisible = false
+            binding.dataLimitWrapper.isVisible = false
         } else {
             initCellularDataFields()
         }
@@ -113,24 +114,24 @@ class DeviceInfoBottomSheetController(
             }
 
             scopes.onMain {
-                root.data_usage.text = dataUsage?.let { "$dataUsage MB used" }
-                root.data_limit.text = dataLimit?.let { "$dataLimit MB per month" }
+                binding.dataUsage.text = dataUsage?.let { "$dataUsage MB used" }
+                binding.dataLimit.text = dataLimit?.let { "$dataLimit MB per month" }
             }
         }
     }
 
     fun updateDeviceDetails() {
-        root.device_type.styleAsPill(device.deviceType!!)
-        root.collapsed_device_pill.styleAsPill(device.deviceType!!)
-        root.product_image.setImageResource(device.deviceType!!.productImage)
-        root.device_name.text = device.name
-        root.device_id.text = device.id.toUpperCase()
-        root.serial.text = device.serialNumber
-        root.os_version.text = device.version ?: "(Unknown)"
-        root.last_handshake.text = device.lastHeard?.let { lastHeardDateFormat.format(it) } ?: "(Unknown)"
+        binding.deviceType.styleAsPill(device.deviceType!!)
+        binding.collapsedDevicePill.styleAsPill(device.deviceType!!)
+        binding.productImage.setImageResource(device.deviceType!!.productImage)
+        binding.deviceName.text = device.name
+        binding.deviceId.text = device.id.toUpperCase()
+        binding.serial.text = device.serialNumber
+        binding.osVersion.text = device.version ?: "(Unknown)"
+        binding.lastHandshake.text = device.lastHeard?.let { lastHeardDateFormat.format(it) } ?: "(Unknown)"
         // FIXME: add notes editing functionality
-        root.notes.setText(device.notes)
-        root.iccid.text = device.iccid
+        binding.notes.setText(device.notes)
+        binding.iccid.text = device.iccid
 
         setUpStatusDotAndText(device.isConnected)
     }
@@ -138,19 +139,19 @@ class DeviceInfoBottomSheetController(
     private fun initAnimations() {
         val mutators = mutableListOf(
             Mutator(
-                root.collapsed_expander,
+                binding.collapsedExpander,
                 listOf(FADE),
                 ShownWhen.COLLAPSED
             ),
 
             Mutator(
-                root.online_status_dot_collapsed,
+                binding.onlineStatusDotCollapsed,
                 listOf(FADE),
                 ShownWhen.COLLAPSED
             ),
 
             Mutator(
-                root.collapsed_device_pill,
+                binding.collapsedDevicePill,
                 listOf(FADE, RESIZE_HEIGHT),
                 ShownWhen.COLLAPSED
             )
@@ -158,17 +159,17 @@ class DeviceInfoBottomSheetController(
 
         mutators.addAll(
             listOf(
-                root.expanded_handle,
-                root.action_device_rename,
-                root.online_status_text,
-                root.online_status_dot,
-                root.action_ping_device,
-                root.action_signal_device
+                binding.expandedHandle,
+                binding.actionDeviceRename,
+                binding.onlineStatusText,
+                binding.onlineStatusDot,
+                binding.actionPingDevice,
+                binding.actionSignalDevice
             ).map { Mutator(it, listOf(FADE, RESIZE_HEIGHT)) }
         )
 
         mutators.add(
-            Mutator(root.product_image, listOf(RESIZE_WIDTH))
+            Mutator(binding.productImage, listOf(RESIZE_WIDTH))
         )
 
         val cb = object : BottomSheetCallback() {
@@ -190,7 +191,7 @@ class DeviceInfoBottomSheetController(
     }
 
     private fun setUpStatusDotAndText(isOnline: Boolean) {
-        root.online_status_text.text = if (isOnline) "Online" else "Offline"
+        binding.onlineStatusText.text = if (isOnline) "Online" else "Offline"
 
         fun setUpDot(imageView: ImageView) {
             imageView.setImageResource(getStatusColoredDot(device, isOnline))
@@ -202,7 +203,7 @@ class DeviceInfoBottomSheetController(
             }
         }
 
-        for (dotView in listOf(root.online_status_dot, root.online_status_dot_collapsed)) {
+        for (dotView in listOf(binding.onlineStatusDot, binding.onlineStatusDotCollapsed)) {
             setUpDot(dotView)
         }
     }
@@ -225,8 +226,8 @@ class DeviceInfoBottomSheetController(
 
     private fun onPingClicked() {
         scopes.onMain {
-            root.action_ping_device.isEnabled = false
-            root.ping_progress_bar.isVisible = true
+            binding.actionPingDevice.isEnabled = false
+            binding.pingProgressBar.isVisible = true
 
             val online = scopes.withWorker {
                 try {
@@ -236,8 +237,8 @@ class DeviceInfoBottomSheetController(
                 }
             }
 
-            root.ping_progress_bar.isVisible = false
-            root.action_ping_device.isEnabled = true
+            binding.pingProgressBar.isVisible = false
+            binding.actionPingDevice.isEnabled = true
             online?.let { setUpStatusDotAndText(it) }
         }
     }

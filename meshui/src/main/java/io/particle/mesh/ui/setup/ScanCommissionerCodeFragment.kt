@@ -6,7 +6,7 @@ import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_scan_commissioner_code.*
+import io.particle.mesh.ui.databinding.FragmentScanCommissionerCodeBinding
 import mu.KotlinLogging
 
 
@@ -19,8 +19,9 @@ class ScanCommissionerCodeFragment :  ScanIntroBaseFragment() {
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
+        val binding = FragmentScanCommissionerCodeBinding.bind(requireView())
         val productName = getUserFacingTypeName()
-        p_commissionerscan_hint_text.text = Phrase.from(view, R.string.p_scancommissionercode_tip_content)
+        binding.pCommissionerscanHintText.text = Phrase.from(view, R.string.p_scancommissionercode_tip_content)
             .put("product_type", productName)
             .format()
     }

@@ -16,7 +16,7 @@ import io.particle.mesh.setup.flow.DialogSpec.StringDialogSpec
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import kotlinx.android.synthetic.main.fragment_controlpanel_mesh_network_info.*
+import io.particle.mesh.ui.databinding.FragmentControlpanelMeshNetworkInfoBinding
 import mu.KotlinLogging
 
 
@@ -34,19 +34,28 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
     private var cachedMeshNetworkDataFromDevice: Mesh.NetworkInfo? = null
     private var cachedMeshNetworkDataFromCloud: ParticleNetwork? = null
 
+    private var _binding: FragmentControlpanelMeshNetworkInfoBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_controlpanel_mesh_network_info, container, false)
+        _binding = FragmentControlpanelMeshNetworkInfoBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
         log.info { "onFragmentReady()" }
 
-        p_controlpanel_action_leave_network.setOnClickListener { leaveNetwork() }
+        binding.pControlpanelActionLeaveNetwork.setOnClickListener { leaveNetwork() }
 
         updateLocalNetworkInfoCaches(flowUiListener)
 
@@ -67,11 +76,11 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
     private fun onNetworkInfoUpdated(networkInfo: Mesh.NetworkInfo) {
         log.info { "onNetworkInfoUpdated(): $networkInfo" }
 
-        p_controlpanel_mesh_inspect_network_name.text = networkInfo.name
-        p_controlpanel_mesh_inspect_network_pan_id.text = networkInfo.panId.toString()
-        p_controlpanel_mesh_inspect_network_xpan_id.text = networkInfo.extPanId.toString()
-        p_controlpanel_mesh_inspect_network_channel.text = networkInfo.channel.toString()
-        p_controlpanel_mesh_inspect_network_network_id.text = networkInfo.networkId
+        binding.pControlpanelMeshInspectNetworkName.text = networkInfo.name
+        binding.pControlpanelMeshInspectNetworkPanId.text = networkInfo.panId.toString()
+        binding.pControlpanelMeshInspectNetworkXpanId.text = networkInfo.extPanId.toString()
+        binding.pControlpanelMeshInspectNetworkChannel.text = networkInfo.channel.toString()
+        binding.pControlpanelMeshInspectNetworkNetworkId.text = networkInfo.networkId
 
         flowScopes.onMain {
             flowSystemInterface.showGlobalProgressSpinner(true)
@@ -86,8 +95,8 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
             }
 
             val roleLabel = if (isGateway == true) "Gateway" else "Node"
-            p_controlpanel_mesh_inspect_network_device_role.text = roleLabel
-            p_controlpanel_mesh_inspect_network_device_count.text = count.toString()
+            binding.pControlpanelMeshInspectNetworkDeviceRole.text = roleLabel
+            binding.pControlpanelMeshInspectNetworkDeviceCount.text = count.toString()
 
             flowSystemInterface.showGlobalProgressSpinner(false)
         }
@@ -111,12 +120,12 @@ class ControlPanelMeshInspectNetworkFragment : BaseControlPanelFragment() {
                 }
 
             when (result) {
-                NEGATIVE -> { /* no-op */
-                }
                 POSITIVE -> {
                     startFlowWithBarcode(
                         flowRunner::startControlPanelMeshLeaveCurrentMeshNetworkFlow
                     )
+                }
+                else -> { /* no-op */
                 }
             }
         }

@@ -1,5 +1,9 @@
 <resources>
 
+    <!-- Current Particle ("by DIGI") brand colours, matching particle.io and the iOS app -->
+    <color name="p_particle_navy">#00334F</color>
+    <color name="p_brand_cyan">#00D2E6</color>
+
     <!-- named colors from app spec -->
     <color name="cyan">#00ACED</color>
     <color name="emerald">#2ECC71</color>
@@ -40,7 +44,6 @@
     </array>
 
     <!-- tinker -->
-    <color name="tinker_instructions_bg">#A5000000</color>
     <color name="tinker_pin_bg">#fff5f5f5</color>
     <color name="tinker_pin_bg_selected">#fff5f5f5</color>
     <color name="tinker_pin_bg_muted">#19000000</color>

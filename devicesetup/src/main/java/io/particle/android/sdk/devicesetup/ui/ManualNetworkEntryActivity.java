@@ -12,11 +12,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.devicesetup.commands.CommandClientFactory;
 import io.particle.android.sdk.devicesetup.commands.ScanApCommand;
 import io.particle.android.sdk.devicesetup.commands.data.WifiSecurity;
@@ -49,7 +46,6 @@ public class ManualNetworkEntryActivity extends BaseActivity
     private SSID softApSSID;
     protected Integer wifiSecurityType = WifiSecurity.WPA2_AES_PSK.asInt();
 
-    @OnCheckedChanged(R2.id.network_requires_password)
     protected void onSecureCheckedChange(boolean isChecked) {
         if (isChecked) {
             SEGAnalytics.track("Device Setup: Selected secured network");
@@ -69,7 +65,8 @@ public class ManualNetworkEntryActivity extends BaseActivity
         softApSSID = getIntent().getParcelableExtra(EXTRA_SOFT_AP);
 
         setContentView(R.layout.activity_manual_network_entry);
-        ButterKnife.bind(this);
+        ((CheckBox) findViewById(R.id.network_requires_password)).setOnCheckedChangeListener(
+                (buttonView, isChecked) -> onSecureCheckedChange(isChecked));
         ParticleUi.enableBrandLogoInverseVisibilityAgainstSoftKeyboard(this);
     }
 

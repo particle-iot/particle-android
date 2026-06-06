@@ -16,11 +16,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.mlkit.vision.barcode.common.Barcode
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
 import io.particle.android.sdk.utils.appHasPermission
+import io.particle.android.sdk.utils.bleRuntimePermissions
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.BarcodeData
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
@@ -30,8 +31,8 @@ import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.setup.barcodescanning.CameraSource
 import io.particle.mesh.ui.setup.barcodescanning.barcode.BarcodeScanningProcessor
+import io.particle.mesh.ui.databinding.FragmentScanCodeBinding
 import io.particle.mesh.ui.utils.getViewModel
-import kotlinx.android.synthetic.main.fragment_scan_code.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -68,13 +69,16 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     private lateinit var barcodeScanningProcessor: BarcodeScanningProcessor
     private lateinit var scanViewModel: ScanViewModel
 
-    private val barcodeObserver = Observer<List<FirebaseVisionBarcode>> { onBarcodesScanned(it) }
+    private val barcodeObserver = Observer<List<Barcode>> { onBarcodesScanned(it) }
 
     private var isFetchingCompleteBarcode = false
 
     private var cameraSource: CameraSource? = null
 
     private val log = KotlinLogging.logger {}
+
+    private var _binding: FragmentScanCodeBinding? = null
+    private val binding get() = _binding!!
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +97,13 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_scan_code, container, false)
+        _binding = FragmentScanCodeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -118,7 +128,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
      */
     override fun onPause() {
         super.onPause()
-        scanPreview.stop()
+        binding.scanPreview.stop()
     }
 
     override fun onDestroy() {
@@ -128,7 +138,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
         }
     }
 
-    private fun onBarcodesScanned(foundBarcodes: List<FirebaseVisionBarcode>?) {
+    private fun onBarcodesScanned(foundBarcodes: List<Barcode>?) {
         if (foundBarcodes == null || isFetchingCompleteBarcode) {
             return
         }
@@ -194,7 +204,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     private fun createCameraSource() {
         // If there's no existing cameraSource, create one.
         if (cameraSource == null) {
-            cameraSource = CameraSource(requireActivity(), scanPreviewOverlay)
+            cameraSource = CameraSource(requireActivity(), binding.scanPreviewOverlay)
         }
         cameraSource!!.setFacing(CameraSource.CAMERA_FACING_BACK)
         cameraSource!!.setMachineLearningFrameProcessor(barcodeScanningProcessor)
@@ -208,7 +218,7 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     private fun startCameraSource() {
         if (cameraSource != null) {
             try {
-                scanPreview.start(cameraSource, scanPreviewOverlay)
+                binding.scanPreview.start(cameraSource, binding.scanPreviewOverlay)
             } catch (e: IOException) {
                 QATool.report(e)
                 cameraSource!!.release()
@@ -218,7 +228,9 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
     }
 
     private fun getRequiredPermissions(): Array<String> {
-        return arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
+        // Camera for the barcode scan, plus the BLE permissions needed to then connect to the
+        // device (BLUETOOTH_SCAN/CONNECT on API 31+, ACCESS_FINE_LOCATION below).
+        return (listOf(Manifest.permission.CAMERA) + bleRuntimePermissions).toTypedArray()
     }
 
     private fun allPermissionsGranted(): Boolean {
@@ -294,14 +306,12 @@ Full scan results: ${badBarcode.serialNumber} ${badBarcode.partialMobileSecret}
         }
 
 
-        MaterialDialog.Builder(requireContext())
-            .content(R.string.p_sticker_error_dialog_content)
-            .positiveText(R.string.p_action_contact_support)
-            .onPositive { _, _ ->
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.p_sticker_error_dialog_content)
+            .setPositiveButton(R.string.p_action_contact_support) { _, _ ->
                 sendSupportEmail()
                 flowRunner.endSetup()
             }
-            .build()
             .show()
     }
 

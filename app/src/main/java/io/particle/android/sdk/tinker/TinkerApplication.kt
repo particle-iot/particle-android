@@ -70,7 +70,7 @@ private val Context.appVersionName: String
     get() {
         return try {
             val pInfo = packageManager.getPackageInfo(packageName, 0)
-            pInfo.versionName
+            pInfo.versionName ?: "(Unknown version)"
         } catch (e: PackageManager.NameNotFoundException) {
             QATool.report(e)
             "(Error getting version)"

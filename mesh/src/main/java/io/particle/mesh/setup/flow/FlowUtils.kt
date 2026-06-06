@@ -11,9 +11,9 @@ import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.XENON
 import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType.X_SOM
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.mesh.R
+import io.particle.android.sdk.cloud.ParticleHttpError
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
-import retrofit.RetrofitError
 import java.net.SocketTimeoutException
 
 // Junk-drawer classes aren't great, but these functions doesn't really belong anywhere else.
@@ -58,8 +58,8 @@ internal suspend fun retrySimAction(simActionBlock: () -> Unit) {
             }
 
             // FIXME: verify that this is OK, too
-            if (ex.cause is RetrofitError
-                && (ex.cause as RetrofitError).cause is SocketTimeoutException
+            if (ex.cause is ParticleHttpError
+                && (ex.cause as ParticleHttpError).cause is SocketTimeoutException
             ) {
                 delay(1000)
                 continue

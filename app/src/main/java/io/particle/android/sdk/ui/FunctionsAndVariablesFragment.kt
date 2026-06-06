@@ -21,8 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme.LIGHT
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.particle.android.sdk.cloud.ParticleDevice
 import io.particle.android.sdk.cloud.ParticleDevice.VariableType
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
@@ -39,10 +38,10 @@ import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.ui.inflateFragment
 import io.particle.mesh.ui.inflateRow
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.data_header_list.view.*
-import kotlinx.android.synthetic.main.fragment_data.*
-import kotlinx.android.synthetic.main.row_function_list.view.*
-import kotlinx.android.synthetic.main.row_variable_list.view.*
+import io.particle.sdk.app.databinding.DataHeaderListBinding
+import io.particle.sdk.app.databinding.FragmentDataBinding
+import io.particle.sdk.app.databinding.RowFunctionListBinding
+import io.particle.sdk.app.databinding.RowVariableListBinding
 import java.io.IOException
 
 
@@ -57,9 +56,9 @@ sealed class RowItem {
 
     companion object {
 
-        const val HEADER_ROW = R.layout.data_header_list
-        const val VARIABLE_ROW = R.layout.row_variable_list
-        const val FUNCTION_ROW = R.layout.row_function_list
+        val HEADER_ROW = R.layout.data_header_list
+        val VARIABLE_ROW = R.layout.row_variable_list
+        val FUNCTION_ROW = R.layout.row_function_list
     }
 }
 
@@ -115,13 +114,15 @@ class FunctionsAndVariablesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val binding = FragmentDataBinding.bind(view)
+
         val device: ParticleDevice = arguments!!.getParcelable(ARG_DEVICE)!!
         val displayMode = arguments!!.getSerializable(ARG_DISPLAY_MODE) as DisplayMode
 
-        data_list.setHasFixedSize(true)  // perf. optimization
-        data_list.layoutManager = LinearLayoutManager(context)
-        data_list.adapter = DataListAdapter(device, displayMode, viewLifecycleScopes)
-        data_list.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+        binding.dataList.setHasFixedSize(true)  // perf. optimization
+        binding.dataList.layoutManager = LinearLayoutManager(context)
+        binding.dataList.adapter = DataListAdapter(device, displayMode, viewLifecycleScopes)
+        binding.dataList.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
     }
 
 }
@@ -136,24 +137,27 @@ private class DataListAdapter(
     internal open class BaseViewHolder(val topLevel: View) : RecyclerView.ViewHolder(topLevel)
 
     internal class HeaderViewHolder(itemView: View) : BaseViewHolder(itemView) {
-        val headerText: TextView = itemView.header_text
-        val emptyText: TextView = itemView.header_empty
+        private val binding = DataHeaderListBinding.bind(itemView)
+        val headerText: TextView = binding.headerText
+        val emptyText: TextView = binding.headerEmpty
     }
 
     internal class FunctionViewHolder(itemView: View) : BaseViewHolder(itemView) {
-        val name: TextView = itemView.function_name
-        val value: TextView = itemView.function_value
-        val argument: EditText = itemView.function_argument
-        val toggle: ImageView = itemView.function_toggle
-        val argumentIcon: ImageView = itemView.function_argument_icon
-        val progressBar: ProgressBar = itemView.function_progress
+        private val binding = RowFunctionListBinding.bind(itemView)
+        val name: TextView = binding.functionName
+        val value: TextView = binding.functionValue
+        val argument: EditText = binding.functionArgument
+        val toggle: ImageView = binding.functionToggle
+        val argumentIcon: ImageView = binding.functionArgumentIcon
+        val progressBar: ProgressBar = binding.functionProgress
     }
 
     internal class VariableViewHolder(itemView: View) : BaseViewHolder(itemView) {
-        val name: TextView = itemView.variable_name
-        val type: TextView = itemView.variable_type
-        val value: TextView = itemView.variable_value
-        val progressBar: ProgressBar = itemView.variable_progress
+        private val binding = RowVariableListBinding.bind(itemView)
+        val name: TextView = binding.variableName
+        val type: TextView = binding.variableType
+        val value: TextView = binding.variableValue
+        val progressBar: ProgressBar = binding.variableProgress
     }
 
     private val data = list<RowItem>()
@@ -242,12 +246,10 @@ private class DataListAdapter(
     }
 
     fun createValuePopup(context: Context, title: String, message: String) {
-        MaterialDialog.Builder(context)
-            .theme(LIGHT)
-            .title(title)
-            .content(message)
-            .positiveText(R.string.action_clipboard)
-            .onPositive { dialog, which ->
+        MaterialAlertDialogBuilder(context)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(R.string.action_clipboard) { dialog, _ ->
                 val clipboard: ClipboardManager? = context.getSystemService()
                 val clip = ClipData.newPlainText(title, message)
                 if (clipboard != null) {
@@ -256,9 +258,7 @@ private class DataListAdapter(
                 Toast.makeText(context, R.string.clipboard_copy_variable, Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
-            .negativeText(R.string.cancel)
-            .autoDismiss(true)
-            .canceledOnTouchOutside(true)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 

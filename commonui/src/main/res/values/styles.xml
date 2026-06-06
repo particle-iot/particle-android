@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="p_MeshTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -7,6 +7,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- Opt out of Android 15 edge-to-edge enforcement (matches the app's AppTheme). -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
         <item name="android:textAppearance">@style/p_ParticleText</item>
         <item name="buttonStyle">@style/p_mesh_button_style</item>
         <item name="android:buttonStyle">@style/p_mesh_button_style</item>
@@ -101,7 +103,7 @@
         <item name="android:textColor">@color/p_mesh_element_border</item>
     </style>
 
-    <style name="p_spinner" parent="Widget.MaterialProgressBar.ProgressBar">
+    <style name="p_spinner" parent="android:Widget.ProgressBar">
         <item name="android:layout_width">64dp</item>
         <item name="android:layout_height">64dp</item>
         <item name="android:indeterminate">true</item>

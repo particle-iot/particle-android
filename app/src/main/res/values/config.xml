@@ -7,6 +7,7 @@
 
     <color name="element_background_color">#FFFFFF</color>
     <color name="element_text_color">@color/teal</color>
-    <color name="primary_color_dark">#0C2D4D</color>
-    <color name="accent_color">@color/teal</color>
+    <!-- Status bar and accent adopt the current Particle brand navy/cyan (matches iOS chrome) -->
+    <color name="primary_color_dark">@color/p_particle_navy</color>
+    <color name="accent_color">@color/p_brand_cyan</color>
 </resources>

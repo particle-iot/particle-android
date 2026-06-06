@@ -199,13 +199,20 @@ class DeviceFilterViewModel(app: Application) : AndroidViewModel(app) {
             return
         }
 
-        fullDeviceListLD.castAndPost(deviceList)
+        // Hide devices this app doesn't recognise. Newer platforms that postdate this app come
+        // back from the cloud as ParticleDeviceType.OTHER ("Unknown") and aren't supported here,
+        // so we drop them entirely rather than show unusable rows.
+        val supportedDevices = deviceList.filter {
+            it.deviceType != null && it.deviceType != ParticleDevice.ParticleDeviceType.OTHER
+        }
+
+        fullDeviceListLD.castAndPost(supportedDevices)
         val config = currentDeviceFilter.deviceListViewConfigLD.value!!
         currentDeviceFilter.applyNewConfig(config)
 
         if (!firstRefreshRequested) {
             // make sure devices are as "live" as possible
-            loadDeviceDetails(deviceList)
+            loadDeviceDetails(supportedDevices)
             firstRefreshRequested = true
         }
     }

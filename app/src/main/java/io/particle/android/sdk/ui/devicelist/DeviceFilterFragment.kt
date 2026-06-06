@@ -17,7 +17,7 @@ import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.NONE_SELECTED
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.OFFLINE_ONLY
 import io.particle.android.sdk.ui.devicelist.OnlineStatusFilter.ONLINE_ONLY
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_filter_fragment.*
+import io.particle.sdk.app.databinding.FragmentFilterFragmentBinding
 import mu.KotlinLogging
 
 
@@ -27,23 +27,26 @@ class DeviceFilterFragment : Fragment() {
         fun newInstance() = DeviceFilterFragment()
     }
 
+    private var _binding: FragmentFilterFragmentBinding? = null
+    private val binding get() = _binding!!
+
     private val filterViewModel: DeviceFilterViewModel by activityViewModels()
     private val draftDeviceFilter: DraftDeviceFilter by lazy { filterViewModel.draftDeviceFilter }
 
     private val onlineStatusFilterButtons: Map<CheckedTextView, OnlineStatusFilter> by lazy {
         arrayMapOf(
-            action_filter_online_status_online to OnlineStatusFilter.ONLINE_ONLY,
-            action_filter_online_status_offline to OnlineStatusFilter.OFFLINE_ONLY
+            binding.actionFilterOnlineStatusOnline to OnlineStatusFilter.ONLINE_ONLY,
+            binding.actionFilterOnlineStatusOffline to OnlineStatusFilter.OFFLINE_ONLY
         )
     }
     private val deviceTypeFilterbuttons: Map<DeviceTypeFilter, DeviceTypeFilterButton> by lazy {
         arrayMapOf(
-            DeviceTypeFilter.BORON to action_filter_device_type_boron,
-            DeviceTypeFilter.ELECTRON to action_filter_device_type_electron,
-            DeviceTypeFilter.ARGON to action_filter_device_type_argon,
-            DeviceTypeFilter.PHOTON to action_filter_device_type_photon,
-            DeviceTypeFilter.XENON to action_filter_device_type_xenon,
-            DeviceTypeFilter.OTHER to action_filter_device_type_other
+            DeviceTypeFilter.BORON to binding.actionFilterDeviceTypeBoron,
+            DeviceTypeFilter.ELECTRON to binding.actionFilterDeviceTypeElectron,
+            DeviceTypeFilter.ARGON to binding.actionFilterDeviceTypeArgon,
+            DeviceTypeFilter.PHOTON to binding.actionFilterDeviceTypePhoton,
+            DeviceTypeFilter.XENON to binding.actionFilterDeviceTypeXenon,
+            DeviceTypeFilter.OTHER to binding.actionFilterDeviceTypeOther
         )
     }
 
@@ -61,15 +64,21 @@ class DeviceFilterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_filter_fragment, container, false)
+        _binding = FragmentFilterFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        action_reset.setOnClickListener { filterViewModel.draftDeviceFilter.resetConfig() }
+        binding.actionReset.setOnClickListener { filterViewModel.draftDeviceFilter.resetConfig() }
 
-        p_action_back.setOnClickListener {
+        binding.pActionBack.setOnClickListener {
             draftDeviceFilter.updateFromLiveConfig()
             closeFilterView()
         }
@@ -82,7 +91,7 @@ class DeviceFilterFragment : Fragment() {
             setUpDeviceTypeFilter(v, deviceType)
         }
 
-        action_filter_device_list.setOnClickListener {
+        binding.actionFilterDeviceList.setOnClickListener {
             draftDeviceFilter.commitDraftConfig()
             closeFilterView()
         }
@@ -135,7 +144,7 @@ class DeviceFilterFragment : Fragment() {
             SortCriteria.NAME -> R.id.action_sort_by_name
             SortCriteria.LAST_HEARD -> R.id.action_sort_by_last_heard
         }
-        sort_by_radiogroup.check(sortButtonId)
+        binding.sortByRadiogroup.check(sortButtonId)
 
 
         // ONLINE/OFFLINE STATUS FILTER
@@ -146,8 +155,8 @@ class DeviceFilterFragment : Fragment() {
             OFFLINE_ONLY -> Pair(false, true)
         }
 
-        updateCheckedButton(action_filter_online_status_online, onlineChecked)
-        updateCheckedButton(action_filter_online_status_offline, offlineChecked)
+        updateCheckedButton(binding.actionFilterOnlineStatusOnline, onlineChecked)
+        updateCheckedButton(binding.actionFilterOnlineStatusOffline, offlineChecked)
 
 
         // DEVICE TYPE FILTER
@@ -159,7 +168,7 @@ class DeviceFilterFragment : Fragment() {
 
         // set this last to avoid some observer loops
         if (!setUpRadioGroupListener) {
-            sort_by_radiogroup.setOnCheckedChangeListener { _, checkedId ->
+            binding.sortByRadiogroup.setOnCheckedChangeListener { _, checkedId ->
                 val newSortCriteria = when (checkedId) {
                     R.id.action_sort_by_device_type -> SortCriteria.DEVICE_TYPE
                     R.id.action_sort_by_name -> SortCriteria.NAME
@@ -174,7 +183,7 @@ class DeviceFilterFragment : Fragment() {
 
     private fun updateCommitButton(newFilteredDeviceList: List<ParticleDevice>) {
         val actionLabel = "Show ${newFilteredDeviceList.size} devices"
-        action_filter_device_list.text = actionLabel
+        binding.actionFilterDeviceList.text = actionLabel
     }
 
 }

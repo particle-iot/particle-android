@@ -37,7 +37,7 @@ import io.particle.android.sdk.utils.ui.Ui
 import io.particle.mesh.setup.flow.Scopes
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.sdk.app.R
-import kotlinx.android.synthetic.main.fragment_tinker.*
+import io.particle.sdk.app.databinding.FragmentTinkerBinding
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import java.io.IOException
@@ -65,6 +65,9 @@ class TinkerFragment : Fragment(), OnClickListener {
     private var selectedPin: Pin? = null
     private var selectDialog: AlertDialog? = null
 
+    private var _binding: FragmentTinkerBinding? = null
+    private val binding get() = _binding!!
+
     private val pinInWriteMode: Pin?
         get() {
             for (pin in allPins) {
@@ -87,7 +90,13 @@ class TinkerFragment : Fragment(), OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_tinker, container, false)
+        _binding = FragmentTinkerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,14 +106,9 @@ class TinkerFragment : Fragment(), OnClickListener {
 
         setupListeners()
 
-        if (TinkerPrefs.getInstance(requireActivity()).isFirstVisit) {
-            instructions_container.isVisible = true
-            fragmentManager?.commit { add(R.id.instructions_container, InstructionsFragment()) }
-        }
-
         updateState()
 
-        action_device_flash_tinker.setOnClickListener {
+        binding.actionDeviceFlashTinker.setOnClickListener {
             flashTinkerWithDialog(
                 requireActivity(),
                 requireActivity().findViewById(R.id.inspector_tab_section),
@@ -195,7 +199,7 @@ class TinkerFragment : Fragment(), OnClickListener {
         }
 
         // Set up other listeners
-        tinker_main.setOnClickListener {
+        binding.tinkerMain.setOnClickListener {
             for (pin in allPins) {
                 if (pin.isAnalogWriteMode) {
                     pin.showAnalogWriteValue()
@@ -583,21 +587,3 @@ data class PinStuff(
     val pinAction: PinAction,
     val currentValue: Int
 )
-
-
-// Doing this as a fragment because I ran into touch issues doing it as just a pinLabelView,
-// and because this gives us back button support at no additional charge.
-class InstructionsFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val v = inflater.inflate(R.layout.tinker_instructions, container, false)
-        v.setOnClickListener {
-            TinkerPrefs.getInstance(activity!!).setVisited(true)
-            fragmentManager?.commit { remove(this@InstructionsFragment) }
-        }
-        return v
-    }
-}

@@ -52,13 +52,24 @@
                 android:id="@+id/password"
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="4dp"
                 android:hint="@string/prompt_password"
                 android:imeActionId="@+id/action_log_in"
                 android:imeActionLabel="@string/action_log_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 tools:ignore="InvalidImeActionId"/>
+
+            <CheckBox
+                android:id="@+id/show_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="4dp"
+                android:buttonTint="@color/normal_text_color"
+                android:checked="false"
+                android:text="@string/show_password"
+                android:textColor="@color/normal_text_color"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

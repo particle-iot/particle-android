@@ -20,9 +20,6 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
@@ -30,7 +27,6 @@ import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary.DeviceSetupCompleteContract;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.devicesetup.SetupResult;
 import io.particle.android.sdk.di.ApModule;
 import io.particle.android.sdk.ui.BaseActivity;
@@ -94,12 +90,11 @@ public class SuccessActivity extends BaseActivity {
                 R.string.setup_failure_lost_connection_to_device));
     }
 
-    @BindView(R2.id.device_name) protected EditText deviceNameView;
-    @BindView(R2.id.device_name_label) protected TextView deviceNameLabelView;
+    protected EditText deviceNameView;
+    protected TextView deviceNameLabelView;
     @Inject protected ParticleCloud particleCloud;
     boolean isSuccess = false;
 
-    @OnClick(R2.id.action_done)
     protected void onDoneClick(View v) {
         deviceNameView.setError(null);
         if (isSuccess && !BaseActivity.setupOnly) {
@@ -113,7 +108,6 @@ public class SuccessActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R2.id.action_troubleshooting)
     protected void onTroubleshootingClick(View v) {
         Uri uri = Uri.parse(v.getContext().getString(R.string.troubleshooting_uri));
         startActivity(WebViewActivity.buildIntent(v.getContext(), uri));
@@ -125,7 +119,10 @@ public class SuccessActivity extends BaseActivity {
         setContentView(R.layout.activity_success);
         ParticleDeviceSetupLibrary.getInstance().getApplicationComponent().activityComponentBuilder()
                 .apModule(new ApModule()).build().inject(this);
-        ButterKnife.bind(this);
+        deviceNameView = findViewById(R.id.device_name);
+        deviceNameLabelView = findViewById(R.id.device_name_label);
+        findViewById(R.id.action_done).setOnClickListener(v -> onDoneClick(v));
+        findViewById(R.id.action_troubleshooting).setOnClickListener(v -> onTroubleshootingClick(v));
         SEGAnalytics.screen("Device Setup: Setup Result Screen");
 
         int resultCode = getIntent().getIntExtra(EXTRA_RESULT_CODE, -1);

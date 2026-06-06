@@ -5,7 +5,8 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.squareup.okhttp.HttpUrl;
+import okhttp3.HttpUrl;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -23,7 +24,6 @@ import io.particle.android.sdk.cloud.ApiFactory.OauthBasicAuthCredentialsProvide
 import io.particle.android.sdk.cloud.ApiFactory.ResourceValueBasicAuthCredentialsProvider;
 import io.particle.android.sdk.cloud.ApiFactory.TokenGetterDelegate;
 import io.particle.android.sdk.utils.BroadcastImpl;
-import retrofit.RestAdapter.LogLevel;
 
 
 // FIXME: there are a lot of details lacking in this class, but it's not public API, and the
@@ -49,13 +49,31 @@ class SDKProvider {
 
         tokenGetter = new TokenGetterDelegateImpl();
 
-        LogLevel httpLogLevel = LogLevel.valueOf(ctx.getString(R.string.http_log_level));
+        HttpLoggingInterceptor.Level httpLogLevel = parseLogLevel(ctx.getString(R.string.http_log_level));
         ApiFactory apiFactory = new ApiFactory(uri, httpLogLevel, tokenGetter, oAuthCredentialsProvider);
         cloudApi = apiFactory.buildNewCloudApi();
         identityApi = apiFactory.buildNewIdentityApi();
         particleCloud = buildCloud(apiFactory);
     }
 
+
+    // Maps the legacy Retrofit-1 log-level names (from the http_log_level string resource) onto
+    // OkHttp's HttpLoggingInterceptor levels.
+    private static HttpLoggingInterceptor.Level parseLogLevel(String value) {
+        switch (value == null ? "" : value.toUpperCase()) {
+            case "BASIC":
+                return HttpLoggingInterceptor.Level.BASIC;
+            case "HEADERS":
+                return HttpLoggingInterceptor.Level.HEADERS;
+            case "FULL":
+            case "HEADERS_AND_ARGS":
+            case "BODY":
+                return HttpLoggingInterceptor.Level.BODY;
+            case "NONE":
+            default:
+                return HttpLoggingInterceptor.Level.NONE;
+        }
+    }
 
     CloudApi getCloudApi() {
         return cloudApi;

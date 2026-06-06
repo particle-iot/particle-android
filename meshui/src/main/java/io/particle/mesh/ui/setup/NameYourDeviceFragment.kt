@@ -11,22 +11,31 @@ import io.particle.android.sdk.utils.CoreNameGenerator
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_name_your_device.*
+import io.particle.mesh.ui.databinding.FragmentNameYourDeviceBinding
 
 
 class NameYourDeviceFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentNameYourDeviceBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_name_your_device, container, false)
+        _binding = FragmentNameYourDeviceBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        setup_header_text.text = Phrase.from(view, R.string.p_namedevice_header)
+        binding.setupHeaderText.text = Phrase.from(view, R.string.p_namedevice_header)
             .put("product_type", getUserFacingTypeName())
             .format()
 
@@ -34,7 +43,7 @@ class NameYourDeviceFragment : BaseFlowFragment() {
         val currentName = flowUiListener.targetDevice.currentDeviceName ?: ""
 
         // set the current name on the field
-        val nameField = deviceNameInputLayout.editText!!
+        val nameField = binding.deviceNameInputLayout.editText!!
         nameField.setText(currentName)
 
         // is the name blank/null/empty?  Make one up.
@@ -43,8 +52,8 @@ class NameYourDeviceFragment : BaseFlowFragment() {
             val uniqueName = CoreNameGenerator.generateUniqueName(setOf())
             nameField.setText(uniqueName)
         }
-        action_next.setOnClickListener {
-            val name = deviceNameInputLayout.editText!!.text.toString()
+        binding.actionNext.setOnClickListener {
+            val name = binding.deviceNameInputLayout.editText!!.text.toString()
             this@NameYourDeviceFragment.flowUiListener?.cloud?.updateTargetDeviceNameToAssign(name)
         }
     }

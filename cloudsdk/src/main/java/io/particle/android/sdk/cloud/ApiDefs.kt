@@ -14,9 +14,10 @@ import io.particle.android.sdk.cloud.Responses.ReadObjectVariableResponse
 import io.particle.android.sdk.cloud.Responses.ReadStringVariableResponse
 import io.particle.android.sdk.cloud.Responses.SimpleResponse
 import io.particle.android.sdk.cloud.models.*
-import retrofit.client.Response
-import retrofit.http.*
-import retrofit.mime.TypedOutput
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.http.*
 
 
 /** Particle cloud REST APIs, modelled for the Retrofit library */
@@ -26,7 +27,7 @@ class ApiDefs {
     internal interface CloudApi {
 
         @GET("/v1/sims/{lastIccid}/data_usage")
-        fun getCurrentDataUsage(@Path("lastIccid") lastIccid: String): Response
+        fun getCurrentDataUsage(@Path("lastIccid") lastIccid: String): ResponseBody
 
         @GET("/v1/devices")
         fun getDevices(): List<Models.CompleteDevice>
@@ -37,18 +38,18 @@ class ApiDefs {
         // FIXME: put a real response type on this?
         @FormUrlEncoded
         @PUT("/v1/devices/{deviceID}")
-        fun nameDevice(@Path("deviceID") deviceID: String, @Field("name") name: String): Response
+        fun nameDevice(@Path("deviceID") deviceID: String, @Field("name") name: String): ResponseBody
 
         @FormUrlEncoded
         @PUT("/v1/devices/{deviceID}")
         fun flashKnownApp(
             @Path("deviceID") deviceID: String,
             @Field("app") appName: String
-        ): Response
+        ): ResponseBody
 
         @Multipart
         @PUT("/v1/devices/{deviceID}")
-        fun flashFile(@Path("deviceID") deviceID: String, @Part("file") file: TypedOutput): Response
+        fun flashFile(@Path("deviceID") deviceID: String, @Part file: MultipartBody.Part): ResponseBody
 
         @POST("/v1/devices/{deviceID}/{function}")
         fun callFunction(
@@ -151,10 +152,10 @@ class ApiDefs {
         fun modifyMeshNetwork(
             @Path("network_id") networkId: String,
             @Body change: MeshNetworkChange
-        ): Response
+        ): ResponseBody
 
         @DELETE("/v1/devices/{deviceId}/network")
-        fun removeDeviceFromAnyNetwork(@Path("deviceId") deviceId: String): Response
+        fun removeDeviceFromAnyNetwork(@Path("deviceId") deviceId: String): ResponseBody
 
         @GET("/v1/system_firmware/upgrade")
         fun getFirmwareUpdateInfo(
@@ -167,8 +168,10 @@ class ApiDefs {
         @GET("/v1/card")
         fun getPaymentCard(): CardOnFileResponse
 
+        // Returns a raw Call so the caller can read the HTTP status code (the SIM status is
+        // derived from it) on both success and error responses.
         @HEAD("/v1/sims/{iccid}")
-        fun checkSim(@Path("iccid") iccid: String): Response
+        fun checkSim(@Path("iccid") iccid: String): Call<ResponseBody>
 
         @FormUrlEncoded
         @PUT("/v1/sims/{iccid}")
@@ -177,11 +180,11 @@ class ApiDefs {
             @Field("action") action: String,
             @Field("mb_limit") limitInMBsForUnpause: Int? = null,
             @Field("country") isoAlpha2CountryCode: String? = "US"
-        ): Response
+        ): ResponseBody
 
         @FormUrlEncoded
         @PUT("/v1/sims/{iccid}")
-        fun setDataLimit(@Path("iccid") iccid: String, @Field("mb_limit") limitInMBs: Int): Response
+        fun setDataLimit(@Path("iccid") iccid: String, @Field("mb_limit") limitInMBs: Int): ResponseBody
 
         @GET("/v1/sims/{iccid}")
         fun getSim(@Path("iccid") iccid: String): ParticleSim
@@ -209,7 +212,7 @@ class ApiDefs {
         fun shoutRainbows(
             @Path("deviceID") deviceID: String,
             @Field("signal") shouldSignal: Int  // "0" for no, "1" for yes
-        ): Response
+        ): ResponseBody
 
         @FormUrlEncoded
         @PUT("/v1/devices/{deviceID}/ping")
@@ -223,7 +226,7 @@ class ApiDefs {
         fun setDeviceNote(
             @Path("deviceID") deviceID: String,
             @Field("notes") note: String
-        ): Response
+        ): ResponseBody
 
     }
 
@@ -238,7 +241,7 @@ class ApiDefs {
     interface IdentityApi {
 
         @POST("/v1/users")
-        fun signUp(@Body signUpInfo: SignUpInfo): Response
+        fun signUp(@Body signUpInfo: SignUpInfo): ResponseBody
 
         // NOTE: the `LogInResponse` used here as a return type is intentional.  It looks
         // a little odd, but that's how this endpoint works.
@@ -282,7 +285,7 @@ class ApiDefs {
 
         @FormUrlEncoded
         @POST("/v1/user/password-reset")
-        fun requestPasswordReset(@Field("username") email: String): Response
+        fun requestPasswordReset(@Field("username") email: String): ResponseBody
 
     }
 }

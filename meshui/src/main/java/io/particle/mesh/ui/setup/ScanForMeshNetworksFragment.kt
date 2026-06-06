@@ -17,9 +17,9 @@ import io.particle.android.common.easyDiffUtilCallback
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.databinding.FragmentScanForMeshNetworksBinding
+import io.particle.mesh.ui.databinding.PScanformeshnetworkRowSelectMeshNetworkBinding
 import io.particle.mesh.ui.inflateRow
-import kotlinx.android.synthetic.main.fragment_scan_for_mesh_networks.*
-import kotlinx.android.synthetic.main.p_scanformeshnetwork_row_select_mesh_network.view.*
 
 
 class ScanForMeshNetworksFragment : BaseFlowFragment() {
@@ -27,11 +27,20 @@ class ScanForMeshNetworksFragment : BaseFlowFragment() {
     private lateinit var adapter: ScannedMeshNetworksAdapter
     private lateinit var meshNetworkScannerLD: LiveData<List<NetworkInfo>?>
 
+    private var _binding: FragmentScanForMeshNetworksBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_scan_for_mesh_networks, container, false)
+        _binding = FragmentScanForMeshNetworksBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -43,15 +52,15 @@ class ScanForMeshNetworksFragment : BaseFlowFragment() {
             Observer { onNetworksUpdated(it) }
         )
         adapter = ScannedMeshNetworksAdapter { onMeshNetworkSelected(it.meshNetworkInfo) }
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
-        action_create_new_network.setOnClickListener {
-            progressBar2.visibility = View.INVISIBLE
+        binding.actionCreateNewNetwork.setOnClickListener {
+            binding.progressBar2.visibility = View.INVISIBLE
             flowUiListener.mesh.updateNetworkSetupType(NetworkSetupType.AS_GATEWAY)
             flowUiListener.mesh.onUserSelectedCreateNewNetwork()
         }
 
-        action_create_new_network.isVisible = flowUiListener.mesh.showNewNetworkOptionInScanner
+        binding.actionCreateNewNetwork.isVisible = flowUiListener.mesh.showNewNetworkOptionInScanner
     }
 
     private fun onNetworksUpdated(networks: List<NetworkInfo>?) {
@@ -77,7 +86,7 @@ private data class ScannedMeshNetwork(
 
 
 private class ScannedMeshNetworkHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
-    val rowLine1 = rowRoot.row_line_1
+    val rowLine1 = PScanformeshnetworkRowSelectMeshNetworkBinding.bind(rowRoot).rowLine1
 }
 
 

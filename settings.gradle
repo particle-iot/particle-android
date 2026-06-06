@@ -5,7 +5,8 @@ include ':app',
         ':firmwareprotos',
         ':cloudsdk',
         ':devicesetup',
-        ':sdk_example_app',
-        ':setup_testapp',
-        ':setup_exampleapp',
         ':ecjpake4j'
+
+// The sample/test apps (:sdk_example_app, :setup_testapp, :setup_exampleapp) are not
+// shipped and are excluded from the build to focus on the app + publishable SDKs.
+// Re-add them here if they need to be maintained.

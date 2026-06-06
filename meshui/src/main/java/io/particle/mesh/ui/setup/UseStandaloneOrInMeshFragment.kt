@@ -11,16 +11,25 @@ import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.setup.flow.context.NetworkSetupType
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
-import kotlinx.android.synthetic.main.fragment_use_standalone_or_in_mesh.*
+import io.particle.mesh.ui.databinding.FragmentUseStandaloneOrInMeshBinding
 
 
 class UseStandaloneOrInMeshFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentUseStandaloneOrInMeshBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_use_standalone_or_in_mesh, container, false)
+        _binding = FragmentUseStandaloneOrInMeshBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -28,20 +37,20 @@ class UseStandaloneOrInMeshFragment : BaseFlowFragment() {
 
         val name = getUserFacingTypeName()
 
-        setup_header_text.text = Phrase.from(view, R.string.p_usestandaloneorinmesh_header)
+        binding.setupHeaderText.text = Phrase.from(view, R.string.p_usestandaloneorinmesh_header)
             .put("product_type", name)
             .format()
 
-        p_usestandaloneorinmesh_subheader.text =
+        binding.pUsestandaloneorinmeshSubheader.text =
             Phrase.from(view, R.string.p_usestandaloneorinmesh_subheader)
                 .put("product_type", name)
                 .format()
 
-        p_action_use_in_mesh_network.setOnClickListener {
+        binding.pActionUseInMeshNetwork.setOnClickListener {
             findNavController().navigate(R.id.action_global_scanForMeshNetworksFragment)
         }
 
-        p_action_do_not_use_in_mesh_network.setOnClickListener {
+        binding.pActionDoNotUseInMeshNetwork.setOnClickListener {
             flowUiListener.setNetworkSetupType(NetworkSetupType.STANDALONE)
         }
 

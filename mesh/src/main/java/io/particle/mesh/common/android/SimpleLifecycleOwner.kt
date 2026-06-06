@@ -12,10 +12,11 @@ class SimpleLifecycleOwner : LifecycleOwner {
     private val registry = LifecycleRegistry(this)
     private val scopes = Scopes()
 
-    override fun getLifecycle(): Lifecycle = registry
+    override val lifecycle: Lifecycle
+        get() = registry
 
     fun setNewState(newState: Lifecycle.State) {
-        scopes.onMain { registry.markState(newState) }
+        scopes.onMain { registry.currentState = newState }
     }
 
 }

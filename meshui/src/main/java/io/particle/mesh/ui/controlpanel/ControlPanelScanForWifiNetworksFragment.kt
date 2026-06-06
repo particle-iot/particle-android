@@ -16,9 +16,9 @@ import io.particle.mesh.common.truthy
 import io.particle.mesh.setup.WiFiStrength
 import io.particle.mesh.setup.flow.WifiScanData
 import io.particle.mesh.ui.R
+import io.particle.mesh.ui.databinding.FragmentCpScanForWifiNetworksBinding
+import io.particle.mesh.ui.databinding.PControlpanelRowWifiScanBinding
 import io.particle.mesh.ui.inflateRow
-import kotlinx.android.synthetic.main.fragment_cp_scan_for_wifi_networks.*
-import kotlinx.android.synthetic.main.p_controlpanel_row_wifi_scan.view.*
 import mu.KotlinLogging
 
 
@@ -29,11 +29,20 @@ class ControlPanelScanForWiFiNetworksFragment : BaseControlPanelFragment() {
     private lateinit var adapter: ScannedWifiNetworksAdapter
     private lateinit var wifiScannerLD: LiveData<List<WifiScanData>?>
 
+    private var _binding: FragmentCpScanForWifiNetworksBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_cp_scan_for_wifi_networks, container, false)
+        _binding = FragmentCpScanForWifiNetworksBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -41,7 +50,7 @@ class ControlPanelScanForWiFiNetworksFragment : BaseControlPanelFragment() {
 
         adapter = ScannedWifiNetworksAdapter { onWifiNetworkSelected(it.network) }
 
-        p_scanforwifi_list.adapter = adapter
+        binding.pScanforwifiList.adapter = adapter
 
         wifiScannerLD = flowUiListener!!.wifi.getWifiScannerForTargetDevice()
         wifiScannerLD.observe(this, Observer { onNetworksUpdated(it) })
@@ -74,9 +83,10 @@ private data class ScannedWifiNetwork(
 
 
 private class ScannedWifiNetworkHolder(var rowRoot: View) : RecyclerView.ViewHolder(rowRoot) {
-    val ssid = rowRoot.p_scanforwifi_ssid
-    val securityIcon = rowRoot.p_scanforwifi_security_icon
-    val strengthIcon = rowRoot.p_scanforwifi_strength_icon
+    private val rowBinding = PControlpanelRowWifiScanBinding.bind(rowRoot)
+    val ssid = rowBinding.pScanforwifiSsid
+    val securityIcon = rowBinding.pScanforwifiSecurityIcon
+    val strengthIcon = rowBinding.pScanforwifiStrengthIcon
 }
 
 

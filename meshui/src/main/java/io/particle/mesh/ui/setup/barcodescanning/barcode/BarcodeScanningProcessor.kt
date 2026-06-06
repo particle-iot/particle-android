@@ -16,11 +16,11 @@ package io.particle.mesh.ui.setup.barcodescanning.barcode
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions.Builder
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.common.InputImage
 import io.particle.mesh.common.android.livedata.setOnMainThread
 import io.particle.mesh.ui.setup.barcodescanning.FrameMetadata
 import io.particle.mesh.ui.setup.barcodescanning.GraphicOverlay
@@ -29,24 +29,24 @@ import mu.KotlinLogging
 import java.io.IOException
 
 
-class BarcodeScanningProcessor : VisionProcessorBase<List<FirebaseVisionBarcode>>() {
+class BarcodeScanningProcessor : VisionProcessorBase<List<Barcode>>() {
 
-    val foundBarcodes: LiveData<List<FirebaseVisionBarcode>>
+    val foundBarcodes: LiveData<List<Barcode>>
         get() = mutableFoundBarcodes
 
-    private val mutableFoundBarcodes = MutableLiveData<List<FirebaseVisionBarcode>>()
+    private val mutableFoundBarcodes = MutableLiveData<List<Barcode>>()
 
-    private val detector: FirebaseVisionBarcodeDetector
+    private val detector: BarcodeScanner
 
     private val log = KotlinLogging.logger {}
 
     init {
         // Note that if you know which format of barcode your app is dealing with, detection will be
         // faster to specify the supported barcode formats
-        val options = Builder()
-                .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_DATA_MATRIX)
+        val options = BarcodeScannerOptions.Builder()
+                .setBarcodeFormats(Barcode.FORMAT_DATA_MATRIX)
                 .build()
-        detector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
+        detector = BarcodeScanning.getClient(options)
     }
 
     override fun stop() {
@@ -58,12 +58,12 @@ class BarcodeScanningProcessor : VisionProcessorBase<List<FirebaseVisionBarcode>
 
     }
 
-    override fun detectInImage(image: FirebaseVisionImage): Task<List<FirebaseVisionBarcode>> {
-        return detector.detectInImage(image)
+    override fun detectInImage(image: InputImage): Task<List<Barcode>> {
+        return detector.process(image)
     }
 
     override fun onSuccess(
-            barcodes: List<FirebaseVisionBarcode>,
+            barcodes: List<Barcode>,
             frameMetadata: FrameMetadata,
             graphicOverlay: GraphicOverlay) {
 

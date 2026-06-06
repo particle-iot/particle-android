@@ -2,9 +2,11 @@ package io.particle.android.sdk.accountsetup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.squareup.phrase.Phrase;
@@ -12,18 +14,12 @@ import com.squareup.phrase.Phrase;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnEditorAction;
-import butterknife.OnTextChanged;
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.SDKGlobals;
 import io.particle.android.sdk.cloud.exceptions.ParticleLoginException;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.di.ApModule;
 import io.particle.android.sdk.ui.BaseActivity;
 import io.particle.android.sdk.ui.NextActivitySelector;
@@ -47,12 +43,9 @@ public class LoginActivity extends BaseActivity {
     private Async.AsyncApiWorker<ParticleCloud, Void> loginTask = null;
 
     // UI references.
-    @BindView(R2.id.email)
     protected EditText emailView;
-    @BindView(R2.id.password)
     protected EditText passwordView;
 
-    @OnEditorAction(R2.id.password)
     protected boolean onPasswordEditorAction(int id) {
         if (id == R.id.action_log_in || id == EditorInfo.IME_NULL) {
             attemptLogin();
@@ -61,7 +54,6 @@ public class LoginActivity extends BaseActivity {
         return false;
     }
 
-    @OnTextChanged(value = {R2.id.email, R2.id.password}, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     protected void afterInput() {
         emailView.setError(null);
         passwordView.setError(null);
@@ -83,7 +75,36 @@ public class LoginActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
-        ButterKnife.bind(this);
+        emailView = findViewById(R.id.email);
+        passwordView = findViewById(R.id.password);
+
+        CheckBox showPasswordBox = findViewById(R.id.show_password);
+        showPasswordBox.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> togglePasswordVisibility(isChecked));
+        togglePasswordVisibility(showPasswordBox.isChecked());
+
+        ((android.widget.TextView) findViewById(R.id.password)).setOnEditorActionListener(
+                (tv, actionId, event) -> onPasswordEditorAction(actionId));
+
+        android.text.TextWatcher afterInputWatcher = new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+                afterInput();
+            }
+        };
+        emailView.addTextChangedListener(afterInputWatcher);
+        passwordView.addTextChangedListener(afterInputWatcher);
+
+        findViewById(R.id.action_log_in).setOnClickListener(v -> attemptLogin());
+
         ParticleUi.enableBrandLogoInverseVisibilityAgainstSoftKeyboard(this);
         SEGAnalytics.screen("Auth: Login Screen");
 
@@ -102,6 +123,23 @@ public class LoginActivity extends BaseActivity {
         Ui.setTextFromHtml(this, R.id.forgot_password, R.string.msg_forgot_password);
     }
 
+    private void togglePasswordVisibility(boolean showPassword) {
+        // Preserve the cursor position; changing the input type resets the selection.
+        int selectionStart = passwordView.getSelectionStart();
+        int selectionEnd = passwordView.getSelectionEnd();
+        if (showPassword) {
+            passwordView.setInputType(
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            passwordView.setInputType(
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+        // A password input type forces a monospace typeface; restore the email field's
+        // font so the two inputs look consistent.
+        passwordView.setTypeface(emailView.getTypeface());
+        passwordView.setSelection(selectionStart, selectionEnd);
+    }
+
     public void onPasswordResetClicked(View v) {
         Intent intent;
         intent = PasswordResetActivity.buildIntent(this, emailView.getText().toString());
@@ -113,7 +151,6 @@ public class LoginActivity extends BaseActivity {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    @OnClick(R2.id.action_log_in)
     public void attemptLogin() {
         if (loginTask != null) {
             log.wtf("Login being attempted again even though the button isn't enabled?!");

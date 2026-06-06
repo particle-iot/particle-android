@@ -12,8 +12,8 @@ import io.particle.firmwareprotos.ctrl.wifi.WifiNew.GetCurrentNetworkReply
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
+import io.particle.mesh.ui.databinding.FragmentControlPanelWifiInspectNetworkBinding
 import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_control_panel_wifi_inspect_network.*
 
 
 class ControlPanelWifiInspectNetworkFragment : BaseControlPanelFragment() {
@@ -25,12 +25,17 @@ class ControlPanelWifiInspectNetworkFragment : BaseControlPanelFragment() {
 
     private val args: ControlPanelWifiInspectNetworkFragmentArgs by navArgs()
 
+    private var _binding: FragmentControlPanelWifiInspectNetworkBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_control_panel_wifi_inspect_network)
+        val root = container?.inflateFragment(R.layout.fragment_control_panel_wifi_inspect_network)
+        _binding = root?.let { FragmentControlPanelWifiInspectNetworkBinding.bind(it) }
+        return root
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -42,11 +47,11 @@ class ControlPanelWifiInspectNetworkFragment : BaseControlPanelFragment() {
             onWifiNetworkPresent(currentNetwork)
         }
 
-        p_controlpanel_wifi_join_new_network_frame.setOnClickListener {
+        binding.pControlpanelWifiJoinNewNetworkFrame.setOnClickListener {
             flowScopes.onMain { startFlowWithBarcode(flowRunner::startControlPanelWifiConfigFlow) }
         }
 
-        p_controlpanel_wifi_manage_wifi_frame.setOnClickListener {
+        binding.pControlpanelWifiManageWifiFrame.setOnClickListener {
             flowScopes.onMain {
                 startFlowWithBarcode(flowRunner::startControlPanelManageWifiNetworksFlow)
             }
@@ -54,15 +59,20 @@ class ControlPanelWifiInspectNetworkFragment : BaseControlPanelFragment() {
     }
 
     private fun onWifiNetworkPresent(currentNetwork: GetCurrentNetworkReply) {
-        p_controlpanel_wifi_inspect_ssid_value.text = currentNetwork.ssid
-        p_controlpanel_wifi_inspect_rssi_value.text = currentNetwork.rssi.toString()
-        p_controlpanel_wifi_inspect_channel.text = currentNetwork.channel.toString()
+        binding.pControlpanelWifiInspectSsidValue.text = currentNetwork.ssid
+        binding.pControlpanelWifiInspectRssiValue.text = currentNetwork.rssi.toString()
+        binding.pControlpanelWifiInspectChannel.text = currentNetwork.channel.toString()
     }
 
     private fun onNoWifiNetwork() {
-        p_controlpanel_wifi_inspect_ssid_value.text = "(No network)"
-        p_controlpanel_wifi_inspect_rssi.isVisible = false
-        p_controlpanel_wifi_inspect_channel_frame.isVisible = false
+        binding.pControlpanelWifiInspectSsidValue.text = "(No network)"
+        binding.pControlpanelWifiInspectRssi.isVisible = false
+        binding.pControlpanelWifiInspectChannelFrame.isVisible = false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

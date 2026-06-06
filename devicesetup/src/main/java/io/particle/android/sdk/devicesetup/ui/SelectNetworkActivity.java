@@ -11,11 +11,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 import io.particle.android.sdk.devicesetup.R;
-import io.particle.android.sdk.devicesetup.R2;
 import io.particle.android.sdk.devicesetup.commands.CommandClient;
 import io.particle.android.sdk.devicesetup.commands.CommandClientFactory;
 import io.particle.android.sdk.devicesetup.commands.data.WifiSecurity;
@@ -46,7 +43,6 @@ public class SelectNetworkActivity extends RequiresWifiScansActivity
     @Inject protected CommandClientFactory commandClientFactory;
     private SSID softApSSID;
 
-    @OnClick(R2.id.action_rescan)
     protected void onRescanClick() {
         ParticleUi.showParticleButtonProgress(SelectNetworkActivity.this, R.id.action_rescan, true);
         wifiListFragment.scanAsync();
@@ -60,7 +56,7 @@ public class SelectNetworkActivity extends RequiresWifiScansActivity
         SEGAnalytics.screen("Device Setup: Select Network Screen");
         softApSSID = getIntent().getParcelableExtra(EXTRA_SOFT_AP);
         setContentView(R.layout.activity_select_network);
-        ButterKnife.bind(this);
+        findViewById(R.id.action_rescan).setOnClickListener(v -> onRescanClick());
 
         wifiListFragment = Ui.findFrag(this, R.id.wifi_list_fragment);
     }

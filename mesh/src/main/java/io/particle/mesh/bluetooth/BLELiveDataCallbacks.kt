@@ -99,7 +99,7 @@ class BLELiveDataCallbacks : BluetoothGattCallback() {
         log.trace { "Packet received, size=${packet.size} contents=${packet.toHex()}" }
 
         if (!mutableReceiveChannel.isClosedForSend) {
-            QATool.runSafely({ mutableReceiveChannel.offer(packet) })
+            QATool.runSafely({ mutableReceiveChannel.trySend(packet) })
         } else {
             log.warn { "Channel is closed, cannot pass along packet" }
         }

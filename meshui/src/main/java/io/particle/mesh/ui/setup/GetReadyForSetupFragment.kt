@@ -36,38 +36,47 @@ import io.particle.mesh.ui.setup.HelpTextConfig.FEATHERWING
 import io.particle.mesh.ui.setup.HelpTextConfig.XENON
 import io.particle.mesh.ui.setup.HelpTextConfig.X_SERIES
 import io.particle.mesh.ui.setup.HelpTextConfig.X_SERIES_ETHERNET
-import kotlinx.android.synthetic.main.fragment_get_ready_for_setup.*
+import io.particle.mesh.ui.databinding.FragmentGetReadyForSetupBinding
 
 
 class GetReadyForSetupFragment : BaseFlowFragment() {
+
+    private var _binding: FragmentGetReadyForSetupBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_get_ready_for_setup, container, false)
+        _binding = FragmentGetReadyForSetupBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        action_next.setOnClickListener { onNext() }
+        binding.actionNext.setOnClickListener { onNext() }
 
-        p_getreadyforsetup_use_ethernet_switch.setOnCheckedChangeListener { _, _ ->
+        binding.pGetreadyforsetupUseEthernetSwitch.setOnCheckedChangeListener { _, _ ->
             setContentFromDeviceModel()
         }
 
-        p_getreadyforsetup_antenna_confirmation_speedbump.setOnCheckedChangeListener { _, isChecked ->
-            action_next.isEnabled = isChecked
+        binding.pGetreadyforsetupAntennaConfirmationSpeedbump.setOnCheckedChangeListener { _, isChecked ->
+            binding.actionNext.isEnabled = isChecked
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // stop pausing the user's music when showing the video!
-            videoView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE)
+            binding.videoView.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE)
         }
         setContentFromDeviceModel()
 
-        setUpVideoView(videoView)
+        setUpVideoView(binding.videoView)
 
     }
 
@@ -76,7 +85,7 @@ class GetReadyForSetupFragment : BaseFlowFragment() {
 
         val isSomSerial = ful.targetDevice.deviceType?.isSoM() ?: false
 
-        val config = if (p_getreadyforsetup_use_ethernet_switch.isChecked) {
+        val config = if (binding.pGetreadyforsetupUseEthernetSwitch.isChecked) {
             when (ful.targetDevice.deviceType) {
                 A_SOM -> A_SERIES_ETHERNET
                 B_SOM -> B_SERIES_ETHERNET
@@ -97,13 +106,13 @@ class GetReadyForSetupFragment : BaseFlowFragment() {
             }
         }
 
-        p_getreadyforsetup_antenna_confirmation_speedbump.isVisible = when (config) {
+        binding.pGetreadyforsetupAntennaConfirmationSpeedbump.isVisible = when (config) {
             FEATHERWING,
             A_SERIES_ETHERNET,
             B_SERIES_ETHERNET,
             X_SERIES_ETHERNET,
             XENON -> {
-                action_next.isEnabled = true
+                binding.actionNext.isEnabled = true
                 false
             }
 
@@ -113,7 +122,7 @@ class GetReadyForSetupFragment : BaseFlowFragment() {
             A_SERIES,
             B_SERIES,
             X_SERIES -> {
-                action_next.isEnabled = p_getreadyforsetup_antenna_confirmation_speedbump.isChecked
+                binding.actionNext.isEnabled = binding.pGetreadyforsetupAntennaConfirmationSpeedbump.isChecked
                 true
             }
         }
@@ -122,7 +131,7 @@ class GetReadyForSetupFragment : BaseFlowFragment() {
     }
 
     private fun onNext() {
-        val shouldDetect = p_getreadyforsetup_use_ethernet_switch.isChecked
+        val shouldDetect = binding.pGetreadyforsetupUseEthernetSwitch.isChecked
         flowUiListener?.deviceData?.shouldDetectEthernet = shouldDetect
         flowUiListener?.onGetReadyNextButtonClicked()
     }
@@ -130,13 +139,13 @@ class GetReadyForSetupFragment : BaseFlowFragment() {
     private fun onConfigChanged(config: HelpTextConfig) {
         val productName = getUserFacingTypeName()
 
-        setup_header_text.setTextMaybeWithProductTypeFormat(productName, config.headerText)
-        videoView.setVideoURI(requireActivity().buildRawResourceUri(config.videoUrlRes))
+        binding.setupHeaderText.setTextMaybeWithProductTypeFormat(productName, config.headerText)
+        binding.videoView.setVideoURI(requireActivity().buildRawResourceUri(config.videoUrlRes))
         config.speedbumpCheckboxText?.let {
-            p_getreadyforsetup_antenna_confirmation_speedbump.setText(it)
+            binding.pGetreadyforsetupAntennaConfirmationSpeedbump.setText(it)
         }
         val label  = getString(config.ethernetSwitchLabel)
-        p_getreadyforsetup_use_ethernet_switch.text = label
+        binding.pGetreadyforsetupUseEthernetSwitch.text = label
     }
 
     private fun setUpVideoView(vidView: VideoView) {

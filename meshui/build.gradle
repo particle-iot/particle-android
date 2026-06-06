@@ -1,28 +1,32 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 
 android {
-    compileSdkVersion 30
+    namespace 'io.particle.mesh.ui'
+    compileSdkVersion 35
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -49,35 +53,32 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1'
     implementation "io.github.microutils:kotlin-logging:1.7.8"
 
-    implementation "androidx.activity:activity-ktx:1.0.0"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.fragment:fragment-ktx:1.1.0"
+    implementation "androidx.activity:activity-ktx:1.9.3"
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.fragment:fragment-ktx:1.8.5"
 
-    implementation 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    implementation "androidx.lifecycle:lifecycle-livedata-core:2.1.0"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.7"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
 
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
 
-    implementation "androidx.navigation:navigation-fragment-ktx:2.1.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.1.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.8.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.8.5"
 
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
-    // for barcode scanning in Mesh setup
-    implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
-    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:20.0.0'
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.2'
+    // for barcode scanning in Mesh setup (ML Kit, replaces the removed Firebase ML Vision)
+    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
 
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.snakydesign.livedataextensions:lives:1.3.0'
+    // 'com.snakydesign.livedataextensions:lives' (JCenter-only, dead) is vendored into :mesh
     implementation 'com.squareup.phrase:phrase:1.1.0'
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
     implementation 'io.github.inflationx:viewpump:2.0.3'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

@@ -16,8 +16,7 @@ import io.particle.mesh.setup.utils.ToastDuration
 import io.particle.mesh.setup.utils.safeToast
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_control_panel_unclaim_device.*
+import io.particle.mesh.ui.databinding.FragmentControlPanelUnclaimDeviceBinding
 
 
 class ControlPanelUnclaimDeviceFragment : BaseControlPanelFragment() {
@@ -30,22 +29,31 @@ class ControlPanelUnclaimDeviceFragment : BaseControlPanelFragment() {
     private val args: ControlPanelUnclaimDeviceFragmentArgs by navArgs()
     private val cloud = ParticleCloudSDK.getCloud()
 
+    private var _binding: FragmentControlPanelUnclaimDeviceBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_control_panel_unclaim_device)
+        _binding = FragmentControlPanelUnclaimDeviceBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
 
-        unclaim_body.text = Phrase.from(unclaim_body.text)
+        binding.unclaimBody.text = Phrase.from(binding.unclaimBody.text)
             .put("device_name", args.deviceName)
             .format()
 
-        action_unclaim_device.setOnClickListener {
+        binding.actionUnclaimDevice.setOnClickListener {
             flowScopes.onWorker { unclaimDevice() }
         }
     }

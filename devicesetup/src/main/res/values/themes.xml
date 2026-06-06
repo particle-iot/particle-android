@@ -18,6 +18,9 @@
         <!-- You can also set colorControlNormal, colorControlActivated
              colorControlHighlight, and colorSwitchThumbNormal. -->
 
+        <!-- Opt out of Android 15 edge-to-edge enforcement (matches the app's AppTheme). -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+
         <!--        <item name="android:textColor">@color/normal_text_color</item>-->
         <item name="android:windowBackground">@drawable/screen_background</item>
 

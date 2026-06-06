@@ -5,7 +5,7 @@ import androidx.annotation.WorkerThread
 import androidx.collection.LongSparseArray
 import androidx.collection.keyIterator
 import com.google.gson.Gson
-import com.squareup.okhttp.HttpUrl
+import okhttp3.HttpUrl
 import io.particle.android.sdk.cloud.ApiDefs.CloudApi
 import io.particle.android.sdk.cloud.exceptions.ParticleCloudException
 import io.particle.android.sdk.utils.Py.truthy
@@ -15,7 +15,6 @@ import org.kaazing.net.sse.SseEventSource
 import org.kaazing.net.sse.SseEventSourceFactory
 import org.kaazing.net.sse.SseEventType
 import org.kaazing.net.sse.impl.AuthenticatedEventSourceFactory
-import retrofit.RetrofitError
 import java.io.IOException
 import java.net.URI
 import java.net.URISyntaxException
@@ -61,7 +60,7 @@ internal class EventsDelegate(
         val isPrivate = eventVisibility != ParticleEventVisibility.PUBLIC
         try {
             cloudApi.publishEvent(eventName, event, isPrivate, timeToLive)
-        } catch (error: RetrofitError) {
+        } catch (error: ParticleHttpError) {
             throw ParticleCloudException(error)
         }
     }
@@ -240,7 +239,7 @@ internal class EventsDelegate(
 
         internal fun buildAllEventsUrl(eventNamePrefix: String?): HttpUrl {
             return if (truthy(eventNamePrefix)) {
-                allEventsUrl.newBuilder().addPathSegment(eventNamePrefix).build()
+                allEventsUrl.newBuilder().addPathSegment(eventNamePrefix!!).build()
             } else {
                 allEventsUrl
             }
@@ -248,7 +247,7 @@ internal class EventsDelegate(
 
         internal fun buildMyDevicesEventUrl(eventNamePrefix: String?): HttpUrl {
             return if (truthy(eventNamePrefix)) {
-                myDevicesEventsUrl.newBuilder().addPathSegment(eventNamePrefix).build()
+                myDevicesEventsUrl.newBuilder().addPathSegment(eventNamePrefix!!).build()
             } else {
                 myDevicesEventsUrl
             }
@@ -259,7 +258,7 @@ internal class EventsDelegate(
                 .addPathSegment(deviceId)
                 .addPathSegment(EVENTS)
             if (truthy(eventNamePrefix)) {
-                builder.addPathSegment(eventNamePrefix)
+                builder.addPathSegment(eventNamePrefix!!)
             }
             return builder.build()
         }

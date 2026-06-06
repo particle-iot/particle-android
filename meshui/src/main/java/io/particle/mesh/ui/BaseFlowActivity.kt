@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.snakydesign.livedataextensions.filter
 import com.snakydesign.livedataextensions.nonNull
@@ -134,7 +134,7 @@ abstract class BaseFlowActivity : AppCompatActivity() {
         }
         flowSystemInterface.dialogHack.clearDialogRequest()
 
-        val builder = MaterialDialog.Builder(this)
+        val builder = MaterialAlertDialogBuilder(this)
 
         val strSpec: DialogSpec.StringDialogSpec = when (spec) {
             is DialogSpec.StringDialogSpec? -> spec
@@ -150,27 +150,25 @@ abstract class BaseFlowActivity : AppCompatActivity() {
             }
         }
 
-        builder.content(strSpec.text)
-            .positiveText(strSpec.positiveText)
+        builder.setMessage(strSpec.text)
+            .setPositiveButton(strSpec.positiveText) { dialog, _ ->
+                dialog.dismiss()
+                flowSystemInterface.dialogHack.updateDialogResult(DialogResult.POSITIVE)
+            }
 
         strSpec.negativeText?.let {
-            builder.negativeText(it)
-            builder.onNegative { dialog, _ ->
+            builder.setNegativeButton(it) { dialog, _ ->
                 dialog.dismiss()
                 flowSystemInterface.dialogHack.updateDialogResult(DialogResult.NEGATIVE)
             }
         }
 
-        strSpec.title?.let { builder.title(it) }
-
-        builder.canceledOnTouchOutside(false)
-            .onPositive { dialog, _ ->
-                dialog.dismiss()
-                flowSystemInterface.dialogHack.updateDialogResult(DialogResult.POSITIVE)
-            }
+        strSpec.title?.let { builder.setTitle(it) }
 
         log.info { "Showing dialog for: $spec" }
-        builder.show()
+        val dialog = builder.create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
     }
 
     private fun onSnackbarRequestReceived(message: String?) {

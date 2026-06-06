@@ -10,8 +10,7 @@ import io.particle.mesh.setup.flow.FlowRunnerUiListener
 import io.particle.mesh.ui.navigateOnClick
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.inflateFragment
-import kotlinx.android.synthetic.main.fragment_controlpanel_mesh_network_options.*
+import io.particle.mesh.ui.databinding.FragmentControlpanelMeshNetworkOptionsBinding
 
 
 class ControlPanelMeshOptionsFragment : BaseControlPanelFragment() {
@@ -21,17 +20,26 @@ class ControlPanelMeshOptionsFragment : BaseControlPanelFragment() {
         showBackButton = true
     )
 
+    private var _binding: FragmentControlpanelMeshNetworkOptionsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_controlpanel_mesh_network_options)
+        _binding = FragmentControlpanelMeshNetworkOptionsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
         super.onFragmentReady(activity, flowUiListener)
-        p_controlpanel_mesh_add_to_network_frame.setOnClickListener { addToMesh() }
+        binding.pControlpanelMeshAddToNetworkFrame.setOnClickListener { addToMesh() }
     }
 
     private fun addToMesh() {

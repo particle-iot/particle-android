@@ -20,9 +20,8 @@ import io.particle.mesh.setup.flow.SimStatusChangeMode.REACTIVATE
 import io.particle.mesh.setup.flow.SimStatusChangeMode.UNPAUSE
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.TitleBarOptions
-import io.particle.mesh.ui.inflateFragment
+import io.particle.mesh.ui.databinding.FragmentControlPanelSimStatusChangeBinding
 import io.particle.mesh.ui.setBackgroundTint
-import kotlinx.android.synthetic.main.fragment_control_panel_sim_status_change.*
 import mu.KotlinLogging
 
 
@@ -35,12 +34,21 @@ class ControlPanelSimStatusChangeFragment : BaseControlPanelFragment() {
 
     private val args: ControlPanelSimStatusChangeFragmentArgs by navArgs()
 
+    private var _binding: FragmentControlPanelSimStatusChangeBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflateFragment(R.layout.fragment_control_panel_sim_status_change)
+        _binding = FragmentControlPanelSimStatusChangeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onFragmentReady(activity: FragmentActivity, flowUiListener: FlowRunnerUiListener) {
@@ -56,40 +64,40 @@ class ControlPanelSimStatusChangeFragment : BaseControlPanelFragment() {
     }
 
     private fun initViewFromConfig(cfg: SimStatusConfig) {
-        simstatus_big_icon.setImageResource(cfg.bigIcon)
-        simstatus_header.text = getString(cfg.headerText)
-        simstatus_fine_print.text = getString(cfg.finePrintText)
+        binding.simstatusBigIcon.setImageResource(cfg.bigIcon)
+        binding.simstatusHeader.text = getString(cfg.headerText)
+        binding.simstatusFinePrint.text = getString(cfg.finePrintText)
 
-        action_change_sim_status.text = getString(cfg.actionButtonText)
-        cfg.actionButtonColor?.let { action_change_sim_status.setBackgroundTint(it) }
-        action_change_sim_status.isEnabled = cfg.actionButtonInitiallyEnabled
+        binding.actionChangeSimStatus.text = getString(cfg.actionButtonText)
+        cfg.actionButtonColor?.let { binding.actionChangeSimStatus.setBackgroundTint(it) }
+        binding.actionChangeSimStatus.isEnabled = cfg.actionButtonInitiallyEnabled
         if (!cfg.actionButtonInitiallyEnabled) {
             flowUiListener!!.cellular.newSelectedDataLimitLD.observe(this, Observer {
-                it?.let { action_change_sim_status.isEnabled = true }
+                it?.let { binding.actionChangeSimStatus.isEnabled = true }
             })
         }
 
-        simstatus_body.text = Phrase.from(simstatus_body, cfg.bodyText)
+        binding.simstatusBody.text = Phrase.from(binding.simstatusBody, cfg.bodyText)
             .putOptional(TEMPLATE_KEY_LAST_4_DIGITS, device.iccid?.takeLast(4))
             .format()
 
-        simstatus_data_limit_control.isVisible = cfg.showDataLimitRow
+        binding.simstatusDataLimitControl.isVisible = cfg.showDataLimitRow
         if (cfg.showDataLimitRow) {
 
             val limitFromApi = flowUiListener?.targetDevice?.sim?.monthlyDataRateLimitInMBs
             val userSelectedLimit = flowUiListener?.cellular?.newSelectedDataLimitLD?.value
             val limit = userSelectedLimit ?: limitFromApi
 
-            p_controlpanel_data_limit_value.text = "$limit MB"
+            binding.pControlpanelDataLimitValue.text = "$limit MB"
 
-            simstatus_data_limit_control.setOnClickListener {
+            binding.simstatusDataLimitControl.setOnClickListener {
                 findNavController().navigate(
                     R.id.action_global_controlPanelCellularDataLimitFragment
                 )
             }
         }
 
-        action_change_sim_status.setOnClickListener {
+        binding.actionChangeSimStatus.setOnClickListener {
             flowUiListener?.cellular?.updateChangeSimStatusButtonClicked()
         }
     }
