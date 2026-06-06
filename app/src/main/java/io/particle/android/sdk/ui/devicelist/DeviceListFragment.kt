@@ -1,5 +1,7 @@
 package io.particle.android.sdk.ui.devicelist
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -19,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -378,11 +381,24 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun addElectronDevice() {
-        //        Intent intent = (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP)
-        //                ? new Intent(getActivity(), ElectronSetupActivity.class)
-        //                : new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)));
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)))
-        startActivity(intent)
+        // Electron (cellular) setup moved to the web (setup.particle.io) and needs a USB
+        // connection, so it can't be done on-device. Explain where to go rather than opening a
+        // mobile browser, and offer to copy the link.
+        val setupUrl = getString(R.string.electron_setup_uri)
+        val message = HtmlCompat.fromHtml(
+            getString(R.string.electron_setup_moved_message),
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+        AlertDialog.Builder(requireActivity())
+            .setTitle(R.string.electron_setup_moved_title)
+            .setMessage(message)
+            .setPositiveButton(R.string.got_it, null)
+            .setNeutralButton(R.string.copy_link) { _, _ ->
+                val clipboard = requireContext().getSystemService<ClipboardManager>()
+                clipboard?.setPrimaryClip(ClipData.newPlainText("Particle setup", setupUrl))
+                Toaster.s(activity, getString(R.string.link_copied))
+            }
+            .show()
     }
 
     private fun refreshDevices() {
