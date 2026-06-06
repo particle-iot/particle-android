@@ -20,13 +20,16 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.barcode.common.Barcode
 import io.particle.android.sdk.cloud.ParticleCloud
 import io.particle.android.sdk.cloud.ParticleCloudSDK
+import io.particle.android.sdk.cloud.ParticleDevice.ParticleDeviceType
 import io.particle.android.sdk.utils.appHasPermission
 import io.particle.android.sdk.utils.bleRuntimePermissions
 import io.particle.mesh.common.QATool
 import io.particle.mesh.setup.BarcodeData
 import io.particle.mesh.setup.BarcodeData.CompleteBarcodeData
 import io.particle.mesh.setup.BarcodeData.PartialBarcodeData
+import io.particle.mesh.setup.toDeviceType
 import io.particle.mesh.setup.flow.FlowRunnerUiListener
+import io.particle.mesh.setup.flow.isMeshSetupable
 import io.particle.mesh.ui.BaseFlowFragment
 import io.particle.mesh.ui.R
 import io.particle.mesh.ui.setup.barcodescanning.CameraSource
@@ -162,8 +165,42 @@ class ScanCodeFragment : BaseFlowFragment(), OnRequestPermissionsResultCallback 
 
     private fun onCompleteBarcode(barcodeData: CompleteBarcodeData) {
         barcodeScanningProcessor.foundBarcodes.removeObserver(barcodeObserver)
-        scanViewModel.updateBarcode(barcodeData)
-        findNavController().popBackStack()
+        isFetchingCompleteBarcode = true
+        // Gen 3 setup only supports mesh devices. Resolve the scanned device's type and reject
+        // anything else (a Photon/Electron, or an unrecognised/newer device that maps to OTHER) —
+        // proceeding would crash the downstream flow ("Not a mesh device: OTHER").
+        GlobalScope.launch {
+            val deviceType = try {
+                barcodeData.toDeviceType(cloud)
+            } catch (ex: Exception) {
+                QATool.report(ex)
+                ParticleDeviceType.OTHER
+            }
+            withContext(Dispatchers.Main) {
+                if (!isAdded) return@withContext
+                if (deviceType.isMeshSetupable()) {
+                    scanViewModel.updateBarcode(barcodeData)
+                    findNavController().popBackStack()
+                } else {
+                    showUnsupportedDeviceDialog()
+                }
+            }
+        }
+    }
+
+    private fun showUnsupportedDeviceDialog() {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setTitle("Unsupported device")
+            .setMessage(
+                "That doesn't look like an Argon, Boron, or Xenon. This app can only set up " +
+                        "Particle Gen 3 (mesh) devices from here."
+            )
+            .setCancelable(false)
+            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+                findNavController().popBackStack()
+            }
+            .show()
     }
 
     private fun onPartialSecretBarcode(barcodeData: PartialBarcodeData) {
