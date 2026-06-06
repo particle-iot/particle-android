@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -49,6 +48,7 @@ import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.commonui.BreathingGlow
 import io.particle.commonui.styleAsPill
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
@@ -470,6 +470,7 @@ internal class DeviceListViewHolder(val topLevel: View) : RecyclerView.ViewHolde
     val deviceName: TextView = binding.productName
     val lastHandshake: TextView = binding.lastHandshakeText
     val statusDot: ImageView = binding.onlineStatusDot
+    val statusGlow = BreathingGlow(statusDot)
 }
 
 
@@ -485,6 +486,11 @@ internal class DeviceListAdapter(
         return DeviceListViewHolder(parent.inflateRow(R.layout.row_device_list))
     }
 
+    override fun onViewRecycled(holder: DeviceListViewHolder) {
+        // Stop the glow ticker so recycled rows don't keep posting callbacks.
+        holder.statusGlow.stop()
+    }
+
     override fun onBindViewHolder(holder: DeviceListViewHolder, position: Int) {
         val device = getItem(position)
 
@@ -493,11 +499,8 @@ internal class DeviceListAdapter(
         holder.modelName.styleAsPill(device.deviceType!!)
         holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
         holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
-        holder.statusDot.animation?.cancel()
-        if (device.isConnected) {
-            val animFade = AnimationUtils.loadAnimation(ctx, R.anim.fade_in_out)
-            holder.statusDot.startAnimation(animFade)
-        }
+        // "Breathing" glow for online devices, throttled to ~15fps (see BreathingGlow).
+        if (device.isConnected) holder.statusGlow.start() else holder.statusGlow.stop()
 
         val name = if (truthy(device.name))
             device.name
