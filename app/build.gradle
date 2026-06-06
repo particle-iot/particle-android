@@ -18,8 +18,6 @@ if (keystorePropsFile.exists()) {
     keystoreProps.load(new FileInputStream(keystorePropsFile))
 }
 
-//apply plugin: 'com.google.firebase.firebase-perf'  /* uncomment for release builds */
-//apply plugin: 'com.google.firebase.crashlytics'    /* uncomment for release builds */
 
 
 android {
@@ -119,28 +117,7 @@ dependencies {
     // com.getbase:floatingactionbutton, which pulled legacy com.android.support artifacts.
     implementation 'com.leinardi.android:speed-dial:3.3.0'
 
-    // Firebase. NOTE: not yet on the Firebase BoM (33.x) — the BoM's firebase-perf pulls
-    // protobuf-javalite, which collides at the package level with the full protobuf-java:3.5.1
-    // used by the mesh firmware protos. Migrating to the BoM requires regenerating
-    // :firmwareprotos against the protobuf-lite runtime first (tracked as a follow-up).
-    releaseImplementation 'com.google.firebase:firebase-analytics:17.6.0'
-    releaseImplementation 'com.google.firebase:firebase-perf:19.0.2'
-    releaseImplementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.2'
-
     // okhttp/okio come transitively from :cloudsdk (okhttp3 4.x / okio 3.x)
-
-    // Segment
-    //noinspection GradleDynamicVersion -- this is what the docs want (even if it's a bad idea)
-//    releaseImplementation 'com.segment.analytics.android:analytics:4.+'
-    //noinspection GradleDynamicVersion -- (see above)
-//    releaseImplementation 'com.segment.analytics.android.integrations:firebase:+'
-    //noinspection GradleDynamicVersion -- (see above)
-//    releaseImplementation 'com.segment.analytics.android.integrations:intercom:+'
-
-    //noinspection GradleDynamicVersion -- (see above)
-//    releaseImplementation 'io.intercom.android:intercom-sdk-base:5.+'
-    //noinspection GradleDynamicVersion -- (see above)
-//    releaseImplementation 'io.intercom.android:intercom-sdk-fcm:5.+'
 
     api 'io.github.inflationx:calligraphy3:3.1.1'
     api 'io.github.inflationx:viewpump:2.0.3'
@@ -172,5 +149,3 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 }
-
-//apply plugin: 'com.google.gms.google-services'  /* uncomment for release builds */
