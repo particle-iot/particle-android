@@ -2,7 +2,6 @@ package io.particle.commonui
 
 import android.view.View
 import android.view.animation.AccelerateInterpolator
-import android.view.animation.AnimationUtils
 import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +47,9 @@ class DeviceInfoBottomSheetController(
     private val lastHeardDateFormat = SimpleDateFormat("MMM d, yyyy, h:mm a")
 
     private val log = KotlinLogging.logger {}
+
+    // ~15fps "breathing" glow per status dot (see BreathingGlow), reused across updates.
+    private val statusDotGlows = mutableMapOf<ImageView, BreathingGlow>()
 
     fun initializeBottomSheet() {
         activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
@@ -196,11 +198,8 @@ class DeviceInfoBottomSheetController(
         fun setUpDot(imageView: ImageView) {
             imageView.setImageResource(getStatusColoredDot(device, isOnline))
 
-            imageView.animation?.cancel()
-            if (isOnline) {
-                val animFade = AnimationUtils.loadAnimation(root.context, R.anim.fade_in_out)
-                imageView.startAnimation(animFade)
-            }
+            val glow = statusDotGlows.getOrPut(imageView) { BreathingGlow(imageView) }
+            if (isOnline) glow.start() else glow.stop()
         }
 
         for (dotView in listOf(binding.onlineStatusDot, binding.onlineStatusDotCollapsed)) {

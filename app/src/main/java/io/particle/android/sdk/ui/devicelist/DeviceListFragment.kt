@@ -1,5 +1,7 @@
 package io.particle.android.sdk.ui.devicelist
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -10,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -49,6 +51,7 @@ import io.particle.android.sdk.utils.Py.truthy
 import io.particle.android.sdk.utils.TLog
 import io.particle.android.sdk.utils.ui.Toaster
 import io.particle.android.sdk.utils.ui.Ui
+import io.particle.commonui.BreathingGlow
 import io.particle.commonui.styleAsPill
 import io.particle.mesh.common.android.livedata.nonNull
 import io.particle.mesh.common.android.livedata.runBlockOnUiThreadAndAwaitUpdate
@@ -378,11 +381,24 @@ class DeviceListFragment : Fragment() {
     }
 
     private fun addElectronDevice() {
-        //        Intent intent = (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP)
-        //                ? new Intent(getActivity(), ElectronSetupActivity.class)
-        //                : new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)));
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.electron_setup_uri)))
-        startActivity(intent)
+        // Electron (cellular) setup moved to the web (setup.particle.io) and needs a USB
+        // connection, so it can't be done on-device. Explain where to go rather than opening a
+        // mobile browser, and offer to copy the link.
+        val setupUrl = getString(R.string.electron_setup_uri)
+        val message = HtmlCompat.fromHtml(
+            getString(R.string.electron_setup_moved_message),
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+        AlertDialog.Builder(requireActivity())
+            .setTitle(R.string.electron_setup_moved_title)
+            .setMessage(message)
+            .setPositiveButton(R.string.got_it, null)
+            .setNeutralButton(R.string.copy_link) { _, _ ->
+                val clipboard = requireContext().getSystemService<ClipboardManager>()
+                clipboard?.setPrimaryClip(ClipData.newPlainText("Particle setup", setupUrl))
+                Toaster.s(activity, getString(R.string.link_copied))
+            }
+            .show()
     }
 
     private fun refreshDevices() {
@@ -470,6 +486,7 @@ internal class DeviceListViewHolder(val topLevel: View) : RecyclerView.ViewHolde
     val deviceName: TextView = binding.productName
     val lastHandshake: TextView = binding.lastHandshakeText
     val statusDot: ImageView = binding.onlineStatusDot
+    val statusGlow = BreathingGlow(statusDot)
 }
 
 
@@ -485,6 +502,11 @@ internal class DeviceListAdapter(
         return DeviceListViewHolder(parent.inflateRow(R.layout.row_device_list))
     }
 
+    override fun onViewRecycled(holder: DeviceListViewHolder) {
+        // Stop the glow ticker so recycled rows don't keep posting callbacks.
+        holder.statusGlow.stop()
+    }
+
     override fun onBindViewHolder(holder: DeviceListViewHolder, position: Int) {
         val device = getItem(position)
 
@@ -493,11 +515,8 @@ internal class DeviceListAdapter(
         holder.modelName.styleAsPill(device.deviceType!!)
         holder.lastHandshake.text = device.lastHeard?.let { dateFormatter.format(it) }
         holder.statusDot.setImageDrawable(ctx.getDrawable(getStatusDotRes(device)))
-        holder.statusDot.animation?.cancel()
-        if (device.isConnected) {
-            val animFade = AnimationUtils.loadAnimation(ctx, R.anim.fade_in_out)
-            holder.statusDot.startAnimation(animFade)
-        }
+        // "Breathing" glow for online devices, throttled to ~15fps (see BreathingGlow).
+        if (device.isConnected) holder.statusGlow.start() else holder.statusGlow.stop()
 
         val name = if (truthy(device.name))
             device.name

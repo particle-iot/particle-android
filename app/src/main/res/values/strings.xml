@@ -71,6 +71,13 @@
     <string name="no_events">(No events)</string>
     <string name="log_out">Log out</string>
 
+    <!-- Electron setup moved to the web -->
+    <string name="electron_setup_moved_title">Electron setup has moved</string>
+    <string name="electron_setup_moved_message">Setting up an Electron now happens on the web at setup.particle.io.\n\nOn a computer, open <b>setup.particle.io</b> and connect your Electron with a USB cable to set it up.</string>
+    <string name="copy_link">Copy link</string>
+    <string name="got_it">Got it</string>
+    <string name="link_copied">Link copied to clipboard</string>
+
     <!-- Navigation drawer -->
     <string name="menu_documentation">Documentation</string>
     <string name="menu_console">Console</string>

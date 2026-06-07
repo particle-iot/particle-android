@@ -31,7 +31,13 @@ class GattConnector(private val ctx: Context) {
     ): Pair<BluetoothGatt, BLELiveDataCallbacks>? {
         lifecycleOwner.setNewState(Lifecycle.State.RESUMED)
 
-        this.ctx.btAdapter.cancelDiscovery()
+        try {
+            this.ctx.btAdapter.cancelDiscovery()
+        } catch (ex: SecurityException) {
+            // cancelDiscovery() needs BLUETOOTH_SCAN on API 31+. It's best-effort cleanup of any
+            // in-progress classic discovery, so a missing permission must not abort the connection.
+            log.warn(ex) { "cancelDiscovery() failed; continuing with connection" }
+        }
 
         val callbacks = BLELiveDataCallbacks()
         val gatt = try {

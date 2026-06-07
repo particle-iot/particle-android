@@ -113,6 +113,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/ParticleSetupTheme.NoActionBar.Honeycomb"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- Crash reporter UI. Runs in its own ":crash" process so it survives the dying main
+             process (see CrashReporter / TinkerApplication). -->
+        <activity
+            android:name="io.particle.android.sdk.ui.CrashReportActivity"
+            android:exported="false"
+            android:process=":crash"
+            android:screenOrientation="portrait"
+            android:theme="@style/ParticleSetupTheme.NoActionBar" />
     </application>
 
 </manifest>

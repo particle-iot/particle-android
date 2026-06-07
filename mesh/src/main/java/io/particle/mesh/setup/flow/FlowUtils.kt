@@ -33,6 +33,19 @@ fun ParticleDeviceType.toUserFacingName(): Int {
 }
 
 
+/**
+ * Whether this device type can be set up by the (Gen 3) mesh setup flow. Anything else — a
+ * Photon/Electron, or an unrecognised/newer device that resolves to OTHER — must be rejected
+ * before entering the flow, which assumes a mesh device and otherwise crashes.
+ */
+fun ParticleDeviceType.isMeshSetupable(): Boolean {
+    return when (this) {
+        ARGON, BORON, XENON, A_SOM, B_SOM, B5_SOM, X_SOM -> true
+        else -> false
+    }
+}
+
+
 private val log = KotlinLogging.logger {}
 
 

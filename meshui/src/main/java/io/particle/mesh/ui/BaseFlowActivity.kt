@@ -1,8 +1,10 @@
 package io.particle.mesh.ui
 
+import android.Manifest
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.IdRes
@@ -18,6 +20,7 @@ import com.snakydesign.livedataextensions.filter
 import com.snakydesign.livedataextensions.nonNull
 import io.particle.android.common.isLocationServicesAvailable
 import io.particle.android.common.promptUserToEnableLocationServices
+import io.particle.android.sdk.utils.appHasPermission
 import io.particle.mesh.bluetooth.btAdapter
 import io.particle.mesh.setup.flow.*
 import io.particle.mesh.ui.utils.getViewModel
@@ -91,12 +94,32 @@ abstract class BaseFlowActivity : AppCompatActivity() {
 
     override fun onPostResume() {
         super.onPostResume()
+        maybePromptToEnableBluetooth()
+        if (!isLocationServicesAvailable()) {
+            promptUserToEnableLocationServices { finish() }
+        }
+    }
+
+    /**
+     * Prompt the user to turn Bluetooth on if it's off.
+     *
+     * On API 31+ both reading the adapter state and firing [BluetoothAdapter.ACTION_REQUEST_ENABLE]
+     * require the BLUETOOTH_CONNECT runtime permission. onPostResume runs *before* the
+     * permission flow (started in the subclass's onResume) has had a chance to grant it, so we must
+     * guard here: without the permission, skip the prompt rather than crash. Firing the intent
+     * without BLUETOOTH_CONNECT throws a SecurityException on Android 16 (earlier versions silently
+     * showed the system dialog instead). Once the permission is granted the activity resumes again
+     * and this runs cleanly.
+     */
+    private fun maybePromptToEnableBluetooth() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+            && !appHasPermission(Manifest.permission.BLUETOOTH_CONNECT)
+        ) {
+            return
+        }
         if (!btAdapter.isEnabled) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-        }
-        if (!isLocationServicesAvailable()) {
-            promptUserToEnableLocationServices { finish() }
         }
     }
 
