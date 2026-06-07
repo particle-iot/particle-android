@@ -133,6 +133,29 @@ public class WifiFacade {
                     if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
                         return false;
                     }
+                    // Don't use any connections if they have internet! (workaround for issue #111)
+                    //
+                    // Due to a known issue with certain Android phones (e.g. Pixel 6/7 series)
+                    // running Android 12 or above, these devices may retain access to their current
+                    // Wi-Fi network while also connecting to a Particle Wi-Fi Module in SoftAP mode.
+                    // This is the Android 12 "Wi-Fi STA/STA concurrency" feature, which lets a
+                    // device connect to two Wi-Fi networks at once and which the user can't disable.
+                    //
+                    // The "correct" approach via the ConnectivityManager APIs (SDK 31+) proved
+                    // unreliable due to the bugs tracked at:
+                    //   https://issuetracker.google.com/issues/249023377
+                    //   https://issuetracker.google.com/issues/232107693
+                    // After exhaustive testing of that approach, the Android system source itself
+                    // was examined; it uses a similar internet-capability check to decide whether a
+                    // network is a "valid" internet connection it should not bind to.
+                    //
+                    // Excluding all internet-capable networks here forces binding to the local-only
+                    // SoftAP network (the Particle device). Not a perfect fix (future Android
+                    // changes could affect it), but reliable across Pixel phones from the latest
+                    // models back to Android 5. See the issue trackers above for more.
+                    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                        return false;
+                    }
                     return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
                 }
         );
