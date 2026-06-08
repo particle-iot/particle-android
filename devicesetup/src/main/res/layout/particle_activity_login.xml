@@ -45,6 +45,8 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:autofillHints="emailAddress"
+                android:importantForAutofill="yes"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"/>
 
@@ -53,6 +55,8 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="4dp"
+                android:autofillHints="password"
+                android:importantForAutofill="yes"
                 android:hint="@string/prompt_password"
                 android:imeActionId="@+id/action_log_in"
                 android:imeActionLabel="@string/action_log_in_short"
