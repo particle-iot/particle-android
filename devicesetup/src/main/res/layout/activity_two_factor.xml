@@ -54,8 +54,9 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:autofillHints="smsOTPCode"
                 android:hint="@string/login_code_hint"
-                android:importantForAutofill="no"
+                android:importantForAutofill="yes"
                 android:inputType="number"/>
 
             <RelativeLayout

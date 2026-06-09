@@ -42,6 +42,8 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:autofillHints="personGivenName"
+                android:importantForAutofill="yes"
                 android:hint="@string/prompt_first_name"
                 android:inputType="textPersonName|textCapWords"/>
 
@@ -50,6 +52,8 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:autofillHints="personFamilyName"
+                android:importantForAutofill="yes"
                 android:hint="@string/prompt_last_name"
                 android:inputType="textPersonName|textCapWords"/>
 
@@ -58,6 +62,8 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:autofillHints="emailAddress"
+                android:importantForAutofill="yes"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"/>
 
@@ -66,6 +72,8 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:autofillHints="newPassword"
+                android:importantForAutofill="yes"
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"/>
 
@@ -74,6 +82,8 @@
                 style="@style/SparkEditText"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/edittext_form_element_gap"
+                android:autofillHints="newPassword"
+                android:importantForAutofill="yes"
                 android:hint="@string/prompt_verify_password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"/>
